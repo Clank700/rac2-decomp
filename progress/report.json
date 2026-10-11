@@ -1,0 +1,23 @@
+{
+ "game": "Ratchet & Clank: Going Commando",
+ "version": "SCUS_972.68 (USA v1.01)",
+ "functions": 9101,
+ "bytes": 5538056,
+ "matched_functions": 1028,
+ "matched_bytes": 112164,
+ "percent": 2.03,
+ "parts": {
+  "boot": {
+   "functions": 3390,
+   "bytes": 1049464,
+   "matched_functions": 699,
+   "matched_bytes": 82108
+  },
+  "levels": {
+   "functions": 5711,
+   "bytes": 4488592,
+   "matched_functions": 329,
+   "matched_bytes": 30056
+  }
+ }
+}

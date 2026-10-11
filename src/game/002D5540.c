@@ -1,0 +1,283 @@
+#include "include_asm.h"
+
+/*
+ * Disassembled at 0x002cd220
+ * Signature: int FUN_002cd220(void)
+ * Behavior:
+ *   - Saves RA on stack
+ *   - Calls func_0027C540(0)
+ *   - Calls func_0029C138()
+ *   - Calls func_0027C660()
+ *   - Restores RA from stack
+ *   - Returns 0
+ */
+extern void func_0027C540(long);
+
+extern void func_0027C660(void);
+
+void func_0027C540(long);
+
+void func_0027C660(void);
+
+/* 
+ * Function: func_002D2EE0
+ * 
+ * Disassembly summary:
+ * - Saves return address on stack
+ * - Calls func_0027C540(0) (with zero argument)
+ * - Calls func_0029C7A0()
+ * - Calls func_0027C660()
+ * - Restores return address
+ * - Returns 0
+ *
+ * Notes:
+ * - The function follows standard MIPS ABI prologue/epilogue.
+ * - Delay slots are filled with NOP or argument setup as seen in disassembly.
+ * - No local variables used.
+ * - All external function addresses come from the assigned externals list.
+ */
+
+extern void func_0027C540(long arg0);
+
+/* External functions declared with exact aliases from task.externals */
+extern void func_0027C540(long param_1);
+
+extern void func_0029CED8(void);
+
+/* func_002D7AC8: owner ABI/declaration review retained. */
+extern int D_001C51D4;
+
+extern void F70997ba9_FUN_002FC560(int a, int b);
+
+extern void F70997ba9_FUN_0027C540(int a);
+
+extern void *F70997ba9_FUN_00288FB8(int id);
+
+extern int F70997ba9_FUN_0027F198(void *p, int i);
+
+extern void F70997ba9_FUN_0027F120(void);
+
+extern void F70997ba9_FUN_0027F5B8(int a, int b, long c, void *d, int e);
+
+extern void F70997ba9_FUN_0027F110(void);
+
+extern void F70997ba9_FUN_0027C660(void);
+
+long long func_002D5540(void)
+{
+    func_0027C540(0);
+    func_0029CED8();
+    func_0027C660();
+    return 0;
+}
+
+INCLUDE_ASM("asm/game", func_002D5570);
+
+INCLUDE_ASM("asm/game", func_002D55D8);
+
+INCLUDE_ASM("asm/game", func_002D55E0);
+
+INCLUDE_ASM("asm/game", func_002D5718);
+
+INCLUDE_ASM("asm/game", func_002D5748);
+
+INCLUDE_ASM("asm/game", func_002D57A0);
+
+INCLUDE_ASM("asm/game", func_002D5870);
+
+INCLUDE_ASM("asm/game", func_002D58A0);
+
+INCLUDE_ASM("asm/game", func_002D58F8);
+
+INCLUDE_ASM("asm/game", func_002D5920);
+
+INCLUDE_ASM("asm/game", func_002D5950);
+
+INCLUDE_ASM("asm/game", func_002D5968);
+
+INCLUDE_ASM("asm/game", func_002D5970);
+
+INCLUDE_ASM("asm/game", func_002D5B08);
+
+INCLUDE_ASM("asm/game", func_002D5B38);
+
+INCLUDE_ASM("asm/game", func_002D5B58);
+
+INCLUDE_ASM("asm/game", func_002D5E38);
+
+INCLUDE_ASM("asm/game", func_002D5E70);
+
+INCLUDE_ASM("asm/game", func_002D5E98);
+
+INCLUDE_ASM("asm/game", func_002D5EC0);
+
+INCLUDE_ASM("asm/game", func_002D6230);
+
+INCLUDE_ASM("asm/game", func_002D68D8);
+
+INCLUDE_ASM("asm/game", func_002D6970);
+
+INCLUDE_ASM("asm/game", func_002D6E78);
+
+INCLUDE_ASM("asm/game", func_002D6F38);
+
+INCLUDE_ASM("asm/game", func_002D75E8);
+
+INCLUDE_ASM("asm/game", func_002D7698);
+
+INCLUDE_ASM("asm/game", func_002D7AC0);
+
+int func_002D7AC8(void)
+{
+    D_001C51D4 = -1;
+    return 0;
+}
+
+INCLUDE_ASM("asm/game", func_002D7AE0);
+
+INCLUDE_ASM("asm/game", func_002D7B00);
+
+INCLUDE_ASM("asm/game", func_002D7B18);
+
+INCLUDE_ASM("asm/game", func_002D7DB8);
+
+INCLUDE_ASM("asm/game", func_002D8120);
+
+INCLUDE_ASM("asm/game", func_002D81A8);
+
+INCLUDE_ASM("asm/game", func_002D81B0);
+
+INCLUDE_ASM("asm/game", func_002D82C8);
+
+INCLUDE_ASM("asm/game", func_002D8338);
+
+INCLUDE_ASM("asm/game", func_002D84B0);
+
+INCLUDE_ASM("asm/game", func_002D89D8);
+
+INCLUDE_ASM("asm/game", func_002D8EC0);
+
+INCLUDE_ASM("asm/game", func_002D9008);
+
+INCLUDE_ASM("asm/game", func_002D95D8);
+
+INCLUDE_ASM("asm/game", func_002D9600);
+
+INCLUDE_ASM("asm/game", func_002D9730);
+
+int func_002D9798(int *arg0)
+{
+    int min;
+    int v;
+    int slot;
+    int count;
+    int off;
+
+    F70997ba9_FUN_002FC560(66, 68);
+    F70997ba9_FUN_002FC560(71, 11);
+    F70997ba9_FUN_0027C540(0);
+    min = F70997ba9_FUN_0027F198(F70997ba9_FUN_00288FB8(11613), -1);
+    v = F70997ba9_FUN_0027F198(F70997ba9_FUN_00288FB8(11625), -1);
+    if (v >= min)
+        min = v;
+    if (*(int *)0x1A79F0 != 0) {
+        v = F70997ba9_FUN_0027F198(F70997ba9_FUN_00288FB8(11614), -1);
+        if (v >= min)
+            min = v;
+    }
+    v = F70997ba9_FUN_0027F198(F70997ba9_FUN_00288FB8(11626), -1);
+    if (v >= min)
+        min = v;
+    v = F70997ba9_FUN_0027F198(F70997ba9_FUN_00288FB8(11627), -1);
+    if (v >= min)
+        min = v;
+    v = F70997ba9_FUN_0027F198(F70997ba9_FUN_00288FB8(11599), -1);
+    if (v >= min)
+        min = v;
+    slot = (arg0[8] - min) >> 1;
+    if (slot <= 1)
+        slot = 2;
+    count = arg0[9] / (*(int *)0x1A79F0 != 0 ? 7 : 6);
+    F70997ba9_FUN_0027F120();
+    off = count - 6;
+    F70997ba9_FUN_0027F5B8(slot, off, 0x80FFA888L, F70997ba9_FUN_00288FB8(11613), -1);
+    off += count;
+    F70997ba9_FUN_0027F5B8(slot, off, 0x80FFA888L, F70997ba9_FUN_00288FB8(11625), -1);
+    off += count;
+    F70997ba9_FUN_0027F5B8(slot, off, 0x80FFA888L, F70997ba9_FUN_00288FB8(11626), -1);
+    off += count;
+    F70997ba9_FUN_0027F5B8(slot, off, 0x80FFA888L, F70997ba9_FUN_00288FB8(11627), -1);
+    off += count;
+    F70997ba9_FUN_0027F5B8(slot, off, 0x80FFA888L, F70997ba9_FUN_00288FB8(11599), -1);
+    F70997ba9_FUN_0027F110();
+    F70997ba9_FUN_0027C660();
+    return 2;
+}
+
+INCLUDE_ASM("asm/game", func_002D99E8);
+
+INCLUDE_ASM("asm/game", func_002D9CF8);
+
+INCLUDE_ASM("asm/game", func_002D9DA0);
+
+INCLUDE_ASM("asm/game", func_002DA118);
+
+INCLUDE_ASM("asm/game", func_002DA238);
+
+INCLUDE_ASM("asm/game", func_002DA2D0);
+
+INCLUDE_ASM("asm/game", func_002DA328);
+
+INCLUDE_ASM("asm/game", func_002DA9A8);
+
+INCLUDE_ASM("asm/game", func_002DAD18);
+
+INCLUDE_ASM("asm/game", func_002DAE90);
+
+INCLUDE_ASM("asm/game", func_002DAF68);
+
+INCLUDE_ASM("asm/game", func_002DB1B0);
+
+INCLUDE_ASM("asm/game", func_002DB3C0);
+
+INCLUDE_ASM("asm/game", func_002DB648);
+
+INCLUDE_ASM("asm/game", func_002DB7F0);
+
+INCLUDE_ASM("asm/game", func_002DB988);
+
+INCLUDE_ASM("asm/game", func_002DBAA8);
+
+INCLUDE_ASM("asm/game", func_002DBAD0);
+
+INCLUDE_ASM("asm/game", func_002DBB08);
+
+INCLUDE_ASM("asm/game", func_002DBB48);
+
+INCLUDE_ASM("asm/game", func_002DBB78);
+
+INCLUDE_ASM("asm/game", func_002DBC10);
+
+INCLUDE_ASM("asm/game", func_002DBE80);
+
+INCLUDE_ASM("asm/game", func_002DBEC0);
+
+INCLUDE_ASM("asm/game", func_002DBF98);
+
+INCLUDE_ASM("asm/game", func_002DC090);
+
+INCLUDE_ASM("asm/game", func_002DC228);
+
+INCLUDE_ASM("asm/game", func_002DC3C8);
+
+INCLUDE_ASM("asm/game", func_002DC720);
+
+INCLUDE_ASM("asm/game", func_002DC900);
+
+INCLUDE_ASM("asm/game", func_002DCAB8);
+
+INCLUDE_ASM("asm/game", func_002DCB28);
+
+INCLUDE_ASM("asm/game", func_002DCB58);
+
+INCLUDE_ASM("asm/game", func_002DCFE8);
