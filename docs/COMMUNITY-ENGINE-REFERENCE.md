@@ -1,6 +1,6 @@
 # Ratchet & Clank: Going Commando (RaC2) Reverse-Engineering Intelligence
 
-Synthesized from the `#rac-ps2-reverse-engineering` community research archive (2018–2026), Aug 8 2002 prototype datamining, and cross-game engine analysis.
+Synthesized from community research, Aug 8 2002 prototype datamining, and cross-game engine analysis.
 
 > **How to read this document — and what it is not.**
 >
@@ -38,7 +38,6 @@ Synthesized from the `#rac-ps2-reverse-engineering` community research archive (
 | JP / KR / Greatest Hits | Various | According to @foas (2020), **UYA's multiplayer engine was branched from the RaC2 JP/KR/GH codebase**. Symbols and shared structures in UYA (`ratchet-uya-decomp`) map closely to this target. |
 | Aug 8 2002 Prototype | Debug build | Core ELF is larger (`.lit` at `0x001af780` vs retail `0x001a8300`). Certain level overlays were compiled against a different internal build, causing broken overlay links. Rich in assert strings, symbols, and author initials. |
 | PS3 HD Port (Idol Minds) | EBOOT.BIN | Contains level-stacking artifacts; EBOOT retains ~8 never-called duplicates of the hero movement code. |
-| Vita Port (Mass Media) | `boot.cpp` leak | Path leak: `C:\projects\RCVita\RC_Vita\rc2\code\game\boot.cpp`. Exposes a centralized `switch(LevelId)` function-pointer dispatch and an 8,192-entry global Moby update table. |
 
 ---
 
@@ -83,49 +82,14 @@ The game uses dynamic level overlays loaded over the high memory region:
 
 ## 4. Reverse-Engineered Core Subsystems
 
-### 4.1 Moby Object Model (`include/moby.h`)
+### 4.1 Moby Object Model
 - All dynamic entities (Ratchet, enemies, crates, hazards, projectiles) are **Mobies**.
-- **Authentic Structure Layout (`MobyInstance`, 256 bytes / 0x100)**:
-  Recovered from unstripped `.mdebug` STABS types (Deadlocked prototype) and verified against retail function signatures (`InitMobyInstance` clears 0x100 bytes):
-  - `0x00`: `bSphere` (BSphere: x, y, z, rad)
-  - `0x10`: `pos` (vec4: world position X, Y, Z, W)
-  - `0x20`: `state` (u8) — current state (`0xFE` = free slot, `0xFF` = array tail)
-  - `0x21`: `group` (u8, collision / grouping index)
-  - `0x22`: `mclass` (u8, class sub-type / moby class byte)
-  - `0x23`: `alpha` (u8, opacity / blend alpha, default `0x80`)
-  - `0x24`: `pClass` (pointer to class definition record)
-  - `0x28`: `pChain` (next moby pointer in active update chain)
-  - `0x2C`: `collDamage` (u8)
-  - `0x2D`: `deathCnt` (u8)
-  - `0x2E`: `occlIndex` (u16)
-  - `0x30`: `updateDist` (u8)
-  - `0x31`: `drawn` (u8)
-  - `0x32`: `drawDist` (u16)
-  - `0x34`: `modeBits` (u16) — bit `0x40` indicates **No Pre-Update** (`MOBY_MODE_NO_PRE_UPDATE`)
-  - `0x36`: `modeBits2` (u16, default `0x7F80`)
-  - `0x38`: `lights` (u64 lighting bitmask)
-  - `0x40`: `animSeq` (pointer)
-  - `0x44`: `animSeqT` (f32)
-  - `0x48`: `animSpeed` (f32)
-  - `0x58`: `jointCache` (joint matrix cache pointer)
-  - `0x5C`: `pManipulator` (joint / IK manipulator)
-  - `0x60`: `glow_rgba` (u32)
-  - `0x70`: `scale` (f32)
-  - `0x80`: `lSphere` (BSphere: local bounding sphere)
-  - `0x98`: `collData` (collision mesh / pill data)
-  - `0x9C`: `collActive` (u32)
-  - `0xA8`: `pUpdate` — per-tick function pointer (`void (*)(Moby *)`)
-  - `0xAC`: `pVar` — pointer to moby-specific state structure (0x80 bytes per actor)
-  - `0xB2`: `UID` — unique actor ID in loaded level
-  - `0xB8`: `pParent` — parent joint / moby pointer
-  - `0xBC`: `oClass` — Object Class ID (e.g. `4351` = Clank-switch debug trigger in Nebula G34)
-  - `0xC0`: `rMtx` (3x4 orientation / rotation matrix, 48 bytes)
-  - `0xF0`: `rot` (vec4: Pitch, Yaw, Roll Euler angles)
+- A moby is a 256-byte record (`InitMobyInstance` clears 0x100 bytes). Its field offsets are
+  still to be measured from this game's own code.
 - **Dispatch**:
   - `CreateMobyChain(void)`
   - `PreUpdateMoby(Moby *moby)`
   - `PostUpdateMoby(Moby *moby)`
-  - Vita port confirms global moby update table capacity of **8,192 entries**.
 
 ### 4.2 Weapon Modification System (`include/weapons.h`)
 - In RaC2 (and shared with RaC3), weapon mods are stored as bitmasks per byte in a global table indexed by `weaponId`:

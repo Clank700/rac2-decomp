@@ -2,7 +2,7 @@
 #define ENGINE_H
 
 #include "common.h"
-#include "moby.h"
+struct Moby;
 
 /*
  * Insomniac Engine Core Geometry Systems:

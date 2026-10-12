@@ -29,6 +29,12 @@ people as much as for agents.
 
 ## Rules
 
+- **Sources.** Use the retail programs of your own disc, SDK library *binaries*, open-source code
+  under its licence, public decompilations and tools, and public hardware documentation. Never
+  use Sony's SDK source, samples or headers, or leaked or NDA material of any kind (leaked
+  builds, symbol dumps from them, leaked source), not even as a reference. Publicly distributed
+  prototype discs may be cited, naming the build, never as the evidence for a match. OpenRAC's
+  docs/policy/SOURCING.md is the full policy.
 - Plain C. No inline assembly in a function, no register pins, no tricks to defeat the
   compiler. Flags are per file (`config/cflags.txt`), never per function.
 - The build only does what the retail assembler and linker did; nothing edits compiler

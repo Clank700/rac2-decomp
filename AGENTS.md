@@ -53,6 +53,12 @@ If you get close but not exact, move your C to `nonmatching/<area>/func_XXXXXXXX
 
 ## Rules
 
+- **Sources.** Use the retail programs of your own disc, SDK library *binaries*, open-source code
+  under its licence, public decompilations and tools, and public hardware documentation. Never
+  use Sony's SDK source, samples or headers, or leaked or NDA material of any kind (leaked
+  builds, symbol dumps from them, leaked source), not even as a reference. Publicly distributed
+  prototype discs may be cited, naming the build, never as the evidence for a match. OpenRAC's
+  docs/policy/SOURCING.md is the full policy.
 - **Plain C.** No inline assembly in a function, no register pins, no artificial barriers.
 - **Flags per file, never per function** (`config/cflags.txt`). If one function needs other flags,
   it belongs in a file of its own with those flags.

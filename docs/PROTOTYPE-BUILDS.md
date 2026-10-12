@@ -18,9 +18,8 @@ build is the closest to the retail**, not the latest.
 The 8 August, 18 August and 4 September builds could not be obtained: the public file
 links for them return 404, so nothing is claimed about them here.
 
-**No build carries symbols.** All three boots have zero `.symtab` / `.mdebug` sections —
-the shortcut that gave the community an authentic `MobyInstance` on a Deadlocked
-prototype does not exist for Going Commando, on any disc we hold.
+**No build carries symbols.** All three boots have zero `.symtab` sections, on any disc
+we hold.
 
 **The 7 and 9 September boots are the same code.** Their section tables are identical
 (same entry point `0x1344b8`, same `core.*` sizes, same 52 `.DVP.overlay.*` sections), and
