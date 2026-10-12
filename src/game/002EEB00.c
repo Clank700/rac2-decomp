@@ -177,7 +177,14 @@ INCLUDE_ASM("asm/game", func_002F0B78);
 
 INCLUDE_ASM("asm/game", func_002F0D00);
 
-INCLUDE_ASM("asm/game", func_002F0E08);
+void func_002F0E08(void)
+{
+    extern int D_001A72D0 __attribute__((sda));
+    extern void func_002F3300(int);
+    extern void func_002FC748(void);
+    func_002F3300(D_001A72D0);
+    func_002FC748();
+}
 
 /* apply nonzero signed halfword overrides to selected object rows; observed count0F, rows1C, stride50 and key33 */
 void func_002F0E38(void)

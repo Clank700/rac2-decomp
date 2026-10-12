@@ -59,6 +59,22 @@ If you get close but not exact, move your C to `nonmatching/<area>/func_XXXXXXXX
 - `r1_...` names were carried from rac1-decomp and have no rac2 name yet: rename them to the
   `D_`/`func_` name of their address when you know it.
 
+## Use the machine
+
+Builds and checks are the slow part of this work, and most of them are independent. Run them
+side by side instead of one after another:
+
+- `python3 tools/build.py all` builds the 28 programs in parallel by itself (`--jobs N`). Never
+  build them one at a time in a loop.
+- `tools/check.py` runs for different functions can overlap; so can the tests, the repository
+  check and a build.
+- When verifying many functions (after a wave, after a merge), fan the checks out, eight or so at
+  a time, and collect the verdicts.
+- Start long steps in the background and keep working; do not sit on a build.
+
+The exception: never run two builds of the same program in the same checkout at once. Workers
+each have their own worktree for that reason (docs/AGENT_WORKFLOW.md).
+
 ## Rules
 
 - **Sources.** Use the retail programs of your own disc, SDK library *binaries*, open-source code
@@ -136,6 +152,54 @@ docs/AGENT_WORKFLOW.md is the whole procedure. In short, sort by size with `pyth
   leading (the full build, landing, the report).
 
 A worker stops at its bound and hands its attempt up a tier; it never keeps grinding.
+
+## Coordinating work between contributors
+
+All contributors actively matching functions must coordinate through the shared GitHub issue:
+
+https://github.com/OpenRAC/rac2-gc-decomp/issues/152
+
+The purpose of this issue is to prevent contributors and their AI agents from duplicating work.
+
+This is a lightweight coordination noticeboard only. It is **not** a task queue, campaign
+register, reservation database, match proof or source of truth for completed work. The repository
+and `master` remain authoritative.
+
+### Every active contributor must have one comment
+
+Each contributor working on the project must have exactly **one persistent coordination comment**
+in issue #152.
+
+If you are beginning work and do not already have your own comment in that issue, you are
+**required to create one before starting matching work**.
+
+Each contributor edits only their own comment. Do not modify another contributor's comment.
+
+Do not create a new comment every time work changes. Update your existing comment in place.
+
+AI agents acting on behalf of a contributor must verify that their contributor has a coordination
+comment before beginning or assigning matching work. If no comment exists, create one before
+continuing.
+
+### Scope-first coordination
+
+Coordination should use **scopes whenever possible**.
+
+A scope may be:
+
+- one level;
+- one shared source unit;
+- one source directory;
+- one source file;
+- a related group of source files.
+
+For example:
+
+owner: Thorpen
+updated: 2026-10-13T04:10:00+11:00
+
+scope:
+  - src/levels/07_siberius/
 
 ## If something seems to need a new mechanism
 

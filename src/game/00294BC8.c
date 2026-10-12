@@ -159,7 +159,18 @@ INCLUDE_ASM("asm/game", func_002956E8);
 
 INCLUDE_ASM("asm/game", func_00295788);
 
-INCLUDE_ASM("asm/game", func_00295828);
+int func_00295828(int id) {
+    extern int D_001C4FA0[];
+    int *base = D_001C4FA0;
+    int *p = base + 0x29C / 4;
+    int i = 0;
+    do {
+        if (p[-5] != 0 && p[0] == id) return i;
+        i++;
+        p++;
+    } while (i < 5);
+    return -1;
+}
 
 INCLUDE_ASM("asm/game", func_00295870);
 

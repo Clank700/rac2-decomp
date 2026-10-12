@@ -160,7 +160,15 @@ float func_002B08A8(int a0, int a1)
     return 2.0f * r * 3.1415927f / s - 3.1415927f;
 }
 
-INCLUDE_ASM("asm/game", func_002B0910);
+extern float func_002B08A8(int, int);
+extern float func_00283198(float);
+extern void func_00283D38(int, int, float);
+void func_002B0910(int a0, int a1, int a2, int a3)
+{
+    float v = func_002B08A8(a0, a1);
+    v = func_00283198(v);
+    func_00283D38(a2, a3, v * 0.5f + 0.5f);
+}
 
 INCLUDE_ASM("asm/game", func_002B0968);
 
@@ -168,7 +176,12 @@ INCLUDE_ASM("asm/game", func_002B0990);
 
 INCLUDE_ASM("asm/game", func_002B0A08);
 
-INCLUDE_ASM("asm/game", func_002B0A18);
+void func_002B0A18(int first, int second)
+{
+    extern int func_00288FB8(int);
+    extern void func_0029CC98(int, int);
+    func_0029CC98(func_00288FB8(first), second);
+}
 
 extern void func_0029CC50(int, int, int);
 
@@ -215,7 +228,14 @@ INCLUDE_ASM("asm/game", func_002B0CE0);
 
 s32 func_002B0D60(void) { return D_00139648; }
 
-INCLUDE_ASM("asm/game", func_002B0D70);
+extern int func_002B0DB8(void);
+int func_002B0D70(void) {
+    int count = func_002B0DB8();
+    int diff = count - func_002B0D60();
+    if (diff < 0) diff = 0;
+    if (diff > 40) diff = 40;
+    return diff;
+}
 
 int func_002B0DB8(void)
 {

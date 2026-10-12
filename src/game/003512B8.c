@@ -66,7 +66,14 @@ void func_00351868(char *object) {
 /* Measured target: byte-identical across all 27 levels. */
 void func_00351888(u8 *a0) { *(s32 *)(a0 + 0xa8) = 0; }
 
-INCLUDE_ASM("asm/game", func_00351890);
+extern void func_00351210(void *);
+extern int func_0012F940(void *);
+
+int func_00351890(u8 *a0) {
+    func_00351210(a0 + 0x48);
+    func_0012F940(a0);
+    return 1;
+}
 
 void func_003518C8(u8 *a0) {s32 v=1;*(s32 *)(a0+0xa8)=v;}
 
@@ -86,6 +93,8 @@ INCLUDE_ASM("asm/game", func_00351958);
 
 INCLUDE_ASM("asm/game", func_00351960);
 
+extern int func_0012F9B8(void *);
+
 INCLUDE_ASM("asm/game", func_00351A38);
 
 INCLUDE_ASM("asm/game", func_00351A80);
@@ -100,7 +109,15 @@ int func_00351CD8(void *unused, int *object) {
     return 1;
 }
 
-INCLUDE_ASM("asm/game", func_00351D00);
+int func_00351D00(void)
+{
+    extern void func_0034F3B8(void);
+    extern char *D_001B23CC[] __attribute__((sda));
+    extern void func_00350BC8(void *);
+    func_0034F3B8();
+    func_00350BC8(D_001B23CC[0] + 0xD9090);
+    return 1;
+}
 
 extern char *D_001B23CC[] __attribute__((sda));
 extern void func_00350DC8(void *);
@@ -118,9 +135,36 @@ int func_00351D68(void) {
     return 1;
 }
 
-INCLUDE_ASM("asm/game", func_00351D98);
+extern char *D_001B23CC[] __attribute__((sda));
+extern void func_00351578(void *, void *);
 
-INCLUDE_ASM("asm/game", func_00351DE8);
+int func_00351D98(void *a0, void *a1) {
+    unsigned long long result[4];
+    func_00351578(D_001B23CC[0] + 0xD9090, result);
+    *(unsigned long long *)((u8 *)a1 + 8) = result[0];
+    *(unsigned long long *)((u8 *)a1 + 0x10) = result[1];
+    return 1;
+}
+
+void func_00351DE8(volatile s32 *a0, s32 a1, s32 a2, s32 a3) {
+    s32 i;
+    a0[3] = 0;
+    i = 0;
+    a0[0] = a1;
+    a0[1] = a2;
+    a0[4] = a3;
+    a0[2] = 0;
+    if (a3 > 0) {
+        a2 = 0x138C0;
+        a1 = 0;
+        do {
+            *(s32 *)(a1 + a0[1]) = 0;
+            *(s32 *)(a1 + a0[1] + 4) = i;
+            i++;
+            a1 += a2;
+        } while (i < a3);
+    }
+}
 
 void func_00351E40(void)
 {

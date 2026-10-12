@@ -204,7 +204,16 @@ INCLUDE_ASM("asm/game", func_002AB250);
 
 INCLUDE_ASM("asm/game", func_002AB378);
 
-INCLUDE_ASM("asm/game", func_002AB600);
+extern void func_00283658(void *, void *);
+extern void func_002AB378(void *, void *);
+extern void func_00283678(void *, void *);
+
+void func_002AB600(void *a0, void *a1) {
+    unsigned char local[0x40];
+    func_00283658(local, a1);
+    func_002AB378(a0, local);
+    func_00283678(a1, local);
+}
 
 void func_002AB650(u8 *a0) {
     u8 *p = *(u8 **)D_0018C0B0;
@@ -302,7 +311,9 @@ INCLUDE_ASM("asm/game", func_002AC728);
 
 INCLUDE_ASM("asm/game", func_002AC9F0);
 
-INCLUDE_ASM("asm/game", func_002AC9F8);
+extern void func_00282F20(float *, float);
+extern float func_00282DF0(float *);
+void func_002AC9F8(float *p, float threshold) { if (threshold < func_00282DF0(p)) ((void (*)(float *, float *, float))func_00282F20)(p, p, threshold); }
 
 INCLUDE_ASM("asm/game", func_002ACA48);
 
@@ -361,7 +372,10 @@ INCLUDE_ASM("asm/game", func_002ACDC8);
 
 INCLUDE_ASM("asm/game", func_002ACDE8);
 
-INCLUDE_ASM("asm/game", func_002ACE78);
+extern void func_00282F20(float *p, float x);
+extern float func_00282C10(float x);
+
+void func_002ACE78(float *p, float x) { func_00282F20(p, x); p[3] = func_00282C10(1.0f - x * x); }
 
 INCLUDE_ASM("asm/game", func_002ACEC0);
 
@@ -462,7 +476,7 @@ INCLUDE_ASM("asm/game", func_002AEB60);
 
 INCLUDE_ASM("asm/game", func_002AEBF0);
 
-INCLUDE_ASM("asm/game", func_002AEC18);
+void func_002AEC18(void *a0, int a1) { extern void func_002A0488(void *, unsigned char, unsigned char, unsigned char); int high = a1 >> 16; int middle = a1 >> 8; func_002A0488(a0, (unsigned char)a1, (unsigned char)middle, (unsigned char)high); }
 
 INCLUDE_ASM("asm/game", func_002AEC48);
 
@@ -558,7 +572,15 @@ INCLUDE_ASM("asm/game", func_002AF580);
 
 INCLUDE_ASM("asm/game", func_002AFD70);
 
-INCLUDE_ASM("asm/game", func_002AFD88);
+void func_002AFD88(float x, float y, float z, char *a0, char *a1)
+{
+    float buf[3];
+    buf[0] = x;
+    buf[1] = y;
+    buf[2] = z;
+    F10bf3d29_FUN_00283098((char *)buf, (char *)buf, a0 + 0xC0);
+    F904cc63b_FUN_00282CC0((V4_F904cc63b *)a1, (V4_F904cc63b *)a1, (char *)buf);
+}
 
 void func_002AFDD8(char *a0, char *a1, char *a2, char *a3)
 {

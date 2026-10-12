@@ -161,7 +161,7 @@ int func_00336EF0(void) {
     return D_001ADB10;
 }
 
-INCLUDE_ASM("asm/game", func_00336EF8);
+
 
 INCLUDE_ASM("asm/game", func_00336F20);
 
