@@ -1,12 +1,72 @@
 #include "include_asm.h"
 
+extern float func_00283C80_3(float, float);
+
+extern float func_00283B98_12(float, float);
+
+extern float func_00283BE0_7(float, float);
+
+extern void func_002833F0_2(void *, void *);
+
+extern void func_002E5DA0(int, int, void *, int);
+
+struct Sub {
+    float f0;
+    int f4;
+    int p8;
+    int p12;
+    int p16;
+    int f20;
+};
+
+struct Elem {
+    char pad[104];
+    struct Sub *sub;
+    char pad2[140];
+    float f248;
+};
+
+struct G {
+    char pad[192];
+    struct Elem *arr[22];
+    int count;
+};
+
+struct Outer {
+    char pad[104];
+    struct G *g;
+};
+
 typedef int BatchA_A17_s32;
 
 typedef short BatchA_A17_BatchAs16;
 
 INCLUDE_ASM("asm/levels", func_L02_003C43F0);
 
-INCLUDE_ASM("asm/levels", func_L02_003C46E0);
+/* Walks an inline array of element pointers; for each element whose sub-object flag at +4 is zero it rewrites a 270-degree angle to -90, scales it by pi/180, compares a helper result against 0.001 and routes it through one of two pi/2 helpers, toggles the flag, then calls a two-pointer helper with element+192 and element+240. */
+void func_L02_003C46E0(struct Outer *p)
+{
+    struct G *g = p->g;
+    int i;
+
+    for (i = 0; i < g->count; i++) {
+        struct Sub *s = g->arr[i]->sub;
+
+        if (s->f4 == 0) {
+            if (s->f0 == 270.0f)
+                s->f0 = -90.0f;
+            if (func_00283C80_3(g->arr[i]->f248, s->f0 * 1.7453294247388839721680e-02f)
+                < 1.0000000474974513053894e-03f)
+                g->arr[i]->f248 = func_00283B98_12(g->arr[i]->f248, 1.5707964897155761718750e+00f);
+            else
+                g->arr[i]->f248 = func_00283BE0_7(g->arr[i]->f248, 1.5707964897155761718750e+00f);
+            s->f20 = !s->f20;
+            func_002833F0_2((char *)g->arr[i] + 192, (char *)g->arr[i] + 240);
+        }
+    }
+    if (g->count != 0)
+        func_002E5DA0(1, 0, g->arr[0], 2198);
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003C4848);
 

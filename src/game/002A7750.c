@@ -14,6 +14,14 @@ typedef float f32;
 /* func_002A77E0 : random draw bounded by the argument */
 extern s32 func_001163B0(void);
 
+extern f32 func_002A7940_5(void);
+
+extern f32 func_002A7878_10(f32, f32);
+
+extern void func_002AF000_2(s32, f32, f32, f32);
+
+extern f32 func_00283180_3 (f32);
+
 struct family_27f9_object {
     unsigned char reserved[248];
     float heading;
@@ -99,61 +107,22 @@ typedef struct {
 } Obj_Ff454dd77;
 #endif
 
-extern void Fa5914967_FUN_00282F20(float *a, float *b, float c);
-
-/* lot14 -- measured bodies with sizes recorded in the catalogue. */
-extern u8 D_0018C0B0[];
-
-extern float F500f9762_FUN_00283CE0(int index);
-
-extern int F500f9762_FUN_00283CF0(float value);
-
-extern void F500f9762_FUN_002A04B8(int first, char *a, char *b, char *c);
-
-extern int D_L02_001B359C __attribute__((sda));
-
-#ifndef RAC2_T_V4_F904CC63B
-#define RAC2_T_V4_F904CC63B
-typedef __attribute__((mode(TI))) int V4_F904cc63b;
+#ifndef RAC2_T_V4_FC6BD459E
+#define RAC2_T_V4_FC6BD459E
+typedef int V4_Fc6bd459e __attribute__((mode(TI)));
 #endif
 
-extern char *F904cc63b_FUN_002AD0B0(char *p);
+extern void func_00282CF0_16(float *local, void *a1, void *a0);
 
-extern void F904cc63b_FUN_00283410(V4_F904cc63b *dst, char *src);
+extern float func_00282DF0_4(float *local);
 
-extern void F904cc63b_FUN_00282CC0(V4_F904cc63b *dst, V4_F904cc63b *a, char *b);
+extern void func_002AA198_2(void *a2, float r, float f1, float f2, float f3);
 
-extern void F904cc63b_FUN_00282CF0(V4_F904cc63b *dst, V4_F904cc63b *a, char *b);
+extern void func_00282F20_12(float *local, float *local2, float v);
 
-extern void F904cc63b_FUN_00283698(V4_F904cc63b *dst, V4_F904cc63b *src);
+extern void func_00282CC0_32(void *a0, void *a0b, float *local);
 
-extern void F904cc63b_FUN_00283098(V4_F904cc63b *dst, V4_F904cc63b *a, V4_F904cc63b *b);
-
-/* Family 0e7bb6a8908d30dc -- 244 bytes, 28 placements (1 boot + 27 levels). */
-
-extern char *F0e7bb6a8_FUN_002AD0B0(char *a);
-
-extern void F0e7bb6a8_FUN_00283410(char *dst, char *src);
-
-extern void F0e7bb6a8_FUN_00283698(char *dst, char *src);
-
-extern void F0e7bb6a8_FUN_00282CF0(char *dst, char *a, char *b);
-
-extern void F0e7bb6a8_FUN_002830C0(char *a, char *b, char *c);
-
-extern void F0e7bb6a8_FUN_00283788(char *a, char *b, char *c);
-
-extern void F0e7bb6a8_FUN_002AB6D8(char *a, char *b);
-
-extern float Fb5729173_FUN_00282E48(char *a, char *b);
-
-extern float Fb5729173_FUN_00283248(float x, float y);
-
-extern float Fb5729173_FUN_00283C80(float x, float y);
-
-extern float Fb5729173_FUN_00282E80(char *a, char *b);
-
-extern int Fb5729173_FUN_002ABB78(char *a);
+extern float func_00282C48_9(float t);
 
 void func_002A7750(u8 *a0,u8 a1,s32 a2) {
  u8 old=a0[0x20];a0[0x20]=a1;a0[0x94]=old;*(short *)(a0+0x96)=0;
@@ -194,7 +163,13 @@ f32 func_002A7940(void) {
     return (f32)((func_001163B0() >> 16 & 0xfff) - 0x800) * 0.0015339808f;
 }
 
-INCLUDE_ASM("asm/game", func_002A7988);
+/* draws two bounded random angles and an interval random value from the two float arguments, then forwards the pointer, the interval draw and both angles to a fourth callee */
+void func_002A7988(s32 a0, f32 a1, f32 a2) {
+    f32 x = func_002A7940_5();
+    f32 y = func_002A7940_5();
+    f32 z = func_002A7878_10(a1, a2);
+    func_002AF000_2(a0, z, x, y);
+}
 
 INCLUDE_ASM("asm/game", func_002A7A00);
 
@@ -208,7 +183,17 @@ float func_002A7AA8(float a, float b, float c, float d, float t) {
 
 INCLUDE_ASM("asm/game", func_002A7AE0);
 
-INCLUDE_ASM("asm/game", func_002A7C00);
+/* Eased scalar interpolation between a and b: returns a for t==0.0, b for t==1.0, otherwise a + (b-a)*((1-cos(t*pi))*0.5). */
+f32 func_002A7C00 (f32 a, f32 b, f32 t)
+{
+  f32 u;
+  if (t == 0.0f)
+    return a;
+  if (t == 1.0f)
+    return b;
+  u = (1.0f - func_00283180_3 (t * 3.1415927f)) * 0.5f;
+  return a + (b - a) * u;
+}
 
 INCLUDE_ASM("asm/game", func_002A7C98);
 
@@ -436,331 +421,27 @@ INCLUDE_ASM("asm/game", func_002AA3A0);
 
 INCLUDE_ASM("asm/game", func_002AA3A8);
 
-INCLUDE_ASM("asm/game", func_002AA458);
+/* shared native family */
+float func_002AA458(void *a0, void *a1, void *a2, float f1, float f2, float f3)
+{
+    float local[4];
+    float r;
+    float u;
+
+    func_00282CF0_16(local, a1, a0);
+    r = func_00282DF0_4(local);
+    func_002AA198_2(a2, r, f1, f2, f3);
+    func_00282F20_12(local, local, *(float *)a2);
+    func_00282CC0_32(a0, a0, local);
+    r = r - *(float *)a2;
+    u = func_00282C48_9(r);
+    if (!(u < f3 * 0.01f))
+        return r;
+    *(V4_Fc6bd459e *)a0 = *(V4_Fc6bd459e *)a1;
+    *(float *)a2 = 0.0f;
+    return *(float *)a2;
+}
 
 INCLUDE_ASM("asm/game", func_002AA548);
 
 INCLUDE_ASM("asm/game", func_002AA738);
-
-INCLUDE_ASM("asm/game", func_002AA800);
-
-INCLUDE_ASM("asm/game", func_002AA898);
-
-INCLUDE_ASM("asm/game", func_002AAA00);
-
-INCLUDE_ASM("asm/game", func_002AAC80);
-
-INCLUDE_ASM("asm/game", func_002AAE98);
-
-void func_002AAF40(int *a, int *b, int *c, int mask) {
-    int x, y;
-    if (mask & 1) { x = *b; y = *a; *a = x; *b = y; }
-    if (mask & 2) { x = *c; y = *b; *b = x; *c = y; }
-    if (mask & 4) { x = *a; y = *c; *c = x; *a = y; }
-}
-
-INCLUDE_ASM("asm/game", func_002AAFA0);
-
-void func_002AB028(float (*m)[4])
-{
-    int k;
-    int i;
-    float v[4];
-
-    for (k = 0; k < 3; k++) {
-        v[3] = 0.0f;
-        for (i = 0; i < 3; i++)
-            v[i] = m[i][k];
-        Fa5914967_FUN_00282F20(v, v, 1.0f);
-        for (i = 0; i < 3; i++)
-            m[i][k] = v[i];
-    }
-}
-
-INCLUDE_ASM("asm/game", func_002AB0E8);
-
-INCLUDE_ASM("asm/game", func_002AB168);
-
-s32 func_002AB1F0(u8 *a0) {
- if(a0==0) return 0;
- if((*(unsigned short *)(a0+0x34)&0x20)!=0) return (*(s32 **)(a0+0x68))[0];
- return 0;
-}
-
-s32 func_002AB220(u8 *a0) {
- if(a0==0) return 0;
- if((*(unsigned short *)(a0+0x34)&0x20)!=0) return (*(s32 **)(a0+0x68))[4];
- return 0;
-}
-
-INCLUDE_ASM("asm/game", func_002AB250);
-
-INCLUDE_ASM("asm/game", func_002AB378);
-
-INCLUDE_ASM("asm/game", func_002AB600);
-
-void func_002AB650(u8 *a0) {
-    u8 *p = *(u8 **)D_0018C0B0;
-    *(long *)(a0 + 0x38) = *(long *)(p + 0x38);
-}
-
-INCLUDE_ASM("asm/game", func_002AB668);
-
-INCLUDE_ASM("asm/game", func_002AB6D0);
-
-INCLUDE_ASM("asm/game", func_002AB6D8);
-
-void func_002AB800(int first, char *object)
-{
-    char *s0 = object;
-    short s1 = *(short *)(s0 + 0);
-    unsigned short total;
-    float limit;
-    int result;
-
-    if (s1 != 0 && *(short *)(s0 + 2) == 0)
-        return;
-    total = *(unsigned short *)(s0 + 12);
-    *(short *)(s0 + 2) = 0;
-    *(short *)(s0 + 0) = total;
-    if (s1 != 0) {
-        limit = F500f9762_FUN_00283CE0(*(short *)(s0 + 14));
-        result = F500f9762_FUN_00283CF0((float)*(short *)(s0 + 12) * ((float)s1 / limit));
-        *(short *)(s0 + 0) = (short)result;
-        if ((short)result <= 0)
-            *(short *)(s0 + 0) = 1;
-    } else {
-        int a, b, c;
-        F500f9762_FUN_002A04B8(first, (char *)&a, (char *)&b, (char *)&c);
-        *(char *)(s0 + 4) = (unsigned char)a;
-        *(char *)(s0 + 5) = (unsigned char)b;
-        *(char *)(s0 + 6) = (unsigned char)c;
-    }
-}
-
-INCLUDE_ASM("asm/game", func_002AB8C0);
-
-INCLUDE_ASM("asm/game", func_002ABB10);
-
-INCLUDE_ASM("asm/game", func_002ABB18);
-
-INCLUDE_ASM("asm/game", func_002ABB70);
-
-INCLUDE_ASM("asm/game", func_002ABB78);
-
-INCLUDE_ASM("asm/game", func_002ABBB8);
-
-INCLUDE_ASM("asm/game", func_002AC728);
-
-INCLUDE_ASM("asm/game", func_002AC9F0);
-
-INCLUDE_ASM("asm/game", func_002AC9F8);
-
-INCLUDE_ASM("asm/game", func_002ACA48);
-
-/* shared native body of family 354e785cbdee35b5 */
-void func_002ACA50(int param_1, short *param_2, short param_3)
-{
-    int i;
-
-    param_1 = (param_1 - *(int *)0x001B359C) << 8 >> 16;
-    for (i = 1; i <= param_2[0]; i++) {
-        if (param_2[i] == param_1) return;
-    }
-    if (param_2[0] < param_3) {
-        param_2[0] = param_2[0] + 1;
-        param_2[param_2[0]] = param_1;
-    }
-}
-
-/* shared native body of family bef45185f2ede0ad */
-void func_002ACAD0(int param_1, unsigned short *param_2)
-{
-    int i;
-
-    for (i = 1; i <= (short)param_2[0]; i++) {
-        if (D_L02_001B359C + ((short)param_2[i] << 8) == param_1) {
-            param_2[i] = param_2[(short)param_2[0]];
-            param_2[0] = param_2[0] - 1;
-            return;
-        }
-    }
-}
-
-INCLUDE_ASM("asm/game", func_002ACB48);
-
-INCLUDE_ASM("asm/game", func_002ACBC8);
-
-INCLUDE_ASM("asm/game", func_002ACCA0);
-
-INCLUDE_ASM("asm/game", func_002ACCA8);
-
-INCLUDE_ASM("asm/game", func_002ACD30);
-
-INCLUDE_ASM("asm/game", func_002ACD38);
-
-INCLUDE_ASM("asm/game", func_002ACDC8);
-
-INCLUDE_ASM("asm/game", func_002ACDE8);
-
-INCLUDE_ASM("asm/game", func_002ACE78);
-
-INCLUDE_ASM("asm/game", func_002ACEC0);
-
-INCLUDE_ASM("asm/game", func_002ACF68);
-
-INCLUDE_ASM("asm/game", func_002AD0A8);
-
-s32 func_002AD0B0(u8 *a0) {
- if(a0==0) return 0;
- if((*(unsigned short *)(a0+0x34)&0x20)==0) return 0;
- return (*(s32 **)(a0+0x68))[2];
-}
-
-INCLUDE_ASM("asm/game", func_002AD0E0);
-
-INCLUDE_ASM("asm/game", func_002AD250);
-
-int func_002AD330(char *a0, char *a1, char *a2, char *a3)
-{
-    V4_F904cc63b b0[4];
-    V4_F904cc63b b1[1];
-    V4_F904cc63b b2[4];
-    V4_F904cc63b b3[4];
-    char *p;
-
-    p = F904cc63b_FUN_002AD0B0(a1);
-    if (p == 0)
-    {
-        *(V4_F904cc63b *)a3 = 0;
-        return 0;
-    }
-    F904cc63b_FUN_00283410(b0, p);
-    F904cc63b_FUN_00282CC0(b1, (V4_F904cc63b *)a2, p + 16);
-    F904cc63b_FUN_00282CF0(b1, b1, a1 + 16);
-    if (*(int *)(p + 60) & 2)
-    {
-        F904cc63b_FUN_00283410(b3, p + 32);
-        F904cc63b_FUN_00283698(b2, b3);
-        F904cc63b_FUN_00283098(b1, b1, b2);
-        F904cc63b_FUN_00283098(b1, b1, (V4_F904cc63b *)(a1 + 192));
-    }
-    else
-    {
-        F904cc63b_FUN_00283098(b1, b1, b0);
-    }
-    F904cc63b_FUN_00282CC0(b1, b1, a1 + 16);
-    F904cc63b_FUN_00282CF0((V4_F904cc63b *)a3, b1, a2);
-    return 1;
-}
-
-INCLUDE_ASM("asm/game", func_002AD470);
-
-int func_002AD5F8(char *unused, char *obj, char *arg2, char *arg3, char *arg4, char *arg5)
-{
-    char buf0[64];
-    char buf1[16];
-    char buf2[64];
-    char *p;
-
-    p = F0e7bb6a8_FUN_002AD0B0(obj);
-    if (p == 0)
-        return 0;
-    if (*(int *)(p + 60) & 0x40) {
-        F0e7bb6a8_FUN_00283410(buf0, obj + 240);
-        F0e7bb6a8_FUN_00283698(buf0, buf0);
-    } else {
-        F0e7bb6a8_FUN_00283698(buf0, obj + 192);
-    }
-    F0e7bb6a8_FUN_00282CF0(buf1, arg2, obj + 16);
-    F0e7bb6a8_FUN_002830C0(arg4, buf1, buf0);
-    F0e7bb6a8_FUN_00283410(buf2, arg3);
-    F0e7bb6a8_FUN_00283788(buf2, buf0, buf2);
-    F0e7bb6a8_FUN_002AB6D8(buf2, arg5);
-    return 1;
-}
-
-INCLUDE_ASM("asm/game", func_002AD6F0);
-
-INCLUDE_ASM("asm/game", func_002AD7B8);
-
-INCLUDE_ASM("asm/game", func_002AD860);
-
-INCLUDE_ASM("asm/game", func_002AD980);
-
-INCLUDE_ASM("asm/game", func_002ADB78);
-
-INCLUDE_ASM("asm/game", func_002AE728);
-
-INCLUDE_ASM("asm/game", func_002AE730);
-
-INCLUDE_ASM("asm/game", func_002AE838);
-
-INCLUDE_ASM("asm/game", func_002AE8C0);
-
-INCLUDE_ASM("asm/game", func_002AEAE0);
-
-INCLUDE_ASM("asm/game", func_002AEB60);
-
-INCLUDE_ASM("asm/game", func_002AEBF0);
-
-INCLUDE_ASM("asm/game", func_002AEC18);
-
-INCLUDE_ASM("asm/game", func_002AEC48);
-
-INCLUDE_ASM("asm/game", func_002AEE70);
-
-INCLUDE_ASM("asm/game", func_002AEF28);
-
-INCLUDE_ASM("asm/game", func_002AEFF0);
-
-INCLUDE_ASM("asm/game", func_002AF000);
-
-INCLUDE_ASM("asm/game", func_002AF0A0);
-
-INCLUDE_ASM("asm/game", func_002AF0A8);
-
-INCLUDE_ASM("asm/game", func_002AF1D0);
-
-float func_002AF2E8(char *a0, char *a1, int *a2,
-                                       float p1, float p2, float p3, float p4)
-{
-    float best = p4;
-    float hi = p3;
-    float radius;
-    float reach = p2;
-    float far;
-    float near;
-    float tmp;
-
-    *a2 = 0;
-    far = Fb5729173_FUN_00282E48(a0, a1 + 16);
-    if (reach < far) {
-        *a2 = 1;
-    }
-
-    reach = 0.0f;
-    radius = Fb5729173_FUN_00283C80(Fb5729173_FUN_00283248(((float *)(a1 + 16))[0] - ((float *)a0)[0],
-                             ((float *)(a1 + 16))[1] - ((float *)a0)[1]), p1);
-    near = Fb5729173_FUN_00282E80(a0, a1 + 16);
-    tmp = Fb5729173_FUN_00283C80(Fb5729173_FUN_00283248(near, ((float *)(a1 + 16))[2] - ((float *)a0)[2]), 0.0f);
-
-    if (reach < hi) {
-        if (hi < radius) {
-            *a2 = 1;
-        }
-    }
-    if (0.0f < best) {
-        if (best < tmp) {
-            *a2 = 1;
-        }
-    }
-
-    reach = far + radius * far;
-    if (Fb5729173_FUN_002ABB78(a1) != 0) {
-        reach = reach + 8.0f;
-    }
-    return reach;
-}
-
-INCLUDE_ASM("asm/game", func_002AF460);

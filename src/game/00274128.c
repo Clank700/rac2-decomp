@@ -70,6 +70,16 @@ extern void func_00283098(float *, const float *, const float *);
 
 extern void func_00274B58(OozlaAppendObject164 *, float *, const float *);
 
+extern void func_00283028(void *a, void *b, void *c);
+
+extern float func_00282DF0_5(void *a);
+
+extern float func_00282DB0_3(void *a, void *b);
+
+extern void func_002AA2E8_2(float *p, float a, float b);
+
+extern void func_00282F20_16(void *a, void *b, float f);
+
 /* Measured partial layouts; original type and game roles are unknown. */
 struct Rac2Native_00169805055547ed_Rec31cd0302 {
     int v[10];
@@ -139,7 +149,25 @@ INCLUDE_ASM("asm/game", func_00274A88);
 
 INCLUDE_ASM("asm/game", func_00274B58);
 
-INCLUDE_ASM("asm/game", func_00274BA8);
+/* Keeps the float one helper returns, and when a later helper reports a ratio above 0.7 scales it by a factor with a floor, hands it to a setter through a local, then reports whether the kept value is non-zero. */
+int func_00274BA8(void *p, void *q, void *r, float f12, float f13)
+{
+    float saved;
+    float t;
+    float v;
+
+    func_00283028(p, p, q);
+    saved = func_00282DF0_5(p);
+    v = func_00282DB0_3(r, q);
+    if (v > 0.7f) {
+        t = saved * f12;
+        if (t < f13) t = f13;
+        func_002AA2E8_2(&saved, 0.0f, t);
+        func_00282F20_16(p, p, saved);
+    }
+    if (saved != 0.0f) return 1;
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_00274C90);
 

@@ -21,9 +21,3 @@ int func_00351EE8(int *owner)
 }
 
 s32 func_00351F28(u8 *a0) { return *(u32 *)(a0 + 0xc) < 1; }
-
-INCLUDE_ASM("asm/game", func_00351F38);
-
-void func_00351FA0(u8 *a0) {
- if(*(volatile s32 *)(a0+0xc)>0) *(volatile s32 *)(a0+0xc)=*(volatile s32 *)(a0+0xc)-1;
-}

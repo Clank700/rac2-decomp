@@ -4,9 +4,84 @@ typedef int s32;
 
 typedef float f32;
 
+extern float func_00283BE0_4(float x, float y);
+
+extern float func_00283180_7(float x);
+
+extern float func_00283B98_7(float x, float y);
+
+extern float func_00283180_5(float x);
+
+extern float func_00283BE0_2(float a, float b);
+
+extern float func_00283B98_5(float a, float b);
+
+typedef unsigned char u8;
+
+#ifndef RAC2_T_V4_F36D8A248
+#define RAC2_T_V4_F36D8A248
+typedef struct {
+    f32 x, y, z, w;
+} V4_F36d8a248;
+#endif
+
+#ifndef RAC2_T_M4_F36D8A248
+#define RAC2_T_M4_F36D8A248
+typedef struct {
+    V4_F36d8a248 r[4];
+} M4_F36d8a248;
+#endif
+
+extern void func_00283410_3(M4_F36d8a248 *, V4_F36d8a248 *);
+
+extern void func_00283788_2(M4_F36d8a248 *, M4_F36d8a248 *, V4_F36d8a248 *);
+
+extern void func_002AB6D8_2(M4_F36d8a248 *, V4_F36d8a248 *);
+
 typedef int BatchA_A06_s32;
 
 typedef short BatchA_A06_BatchAs16;
+
+#ifndef RAC2_T_SRC_F66766F2B
+#define RAC2_T_SRC_F66766F2B
+typedef struct {
+    char pad0[35];        /* 0   */
+    unsigned char f35;    /* 35  */
+    char pad36[8];        /* 36  */
+    float f44;            /* 44  */
+    unsigned char f48;    /* 48  */
+    unsigned char f49;    /* 49  */
+    unsigned short f50;   /* 50  */
+    unsigned short f52;   /* 52  */
+    char pad54[2];        /* 54  */
+    long long f56;        /* 56  */
+    char pad64[34];       /* 64  */
+    unsigned char f98;    /* 98  */
+    char pad99[21];       /* 99  */
+    int f120;             /* 120 */
+    unsigned short f124;  /* 124 */
+    char pad126[26];      /* 126 */
+    int f152;             /* 152 */
+    char pad156[14];      /* 156 */
+    short f170;           /* 170 */
+} Src_F66766f2b;
+#endif
+
+#ifndef RAC2_T_LIST_F66766F2B
+#define RAC2_T_LIST_F66766F2B
+typedef struct {
+    char pad0[256];       /* 0   */
+    int a[4];             /* 256 */
+    int b[4];             /* 272 */
+    Src_F66766f2b *c[4];            /* 288 */
+    float d[4];           /* 304 */
+    int pad320;           /* 320 */
+    Src_F66766f2b *src;             /* 324 */
+    int count;            /* 328 */
+} List_F66766f2b;
+#endif
+
+extern Src_F66766f2b *func_0029EFD0(short);
 
 /* Measured partial layouts; original type and game roles are unknown. */
 typedef struct Rac2Native_5b4b17178a13f443_SmallSlotReset128Owner {
@@ -17,8 +92,6 @@ typedef struct Rac2Native_5b4b17178a13f443_SmallSlotReset128Owner {
 } Rac2Native_5b4b17178a13f443_SmallSlotReset128Owner;
 
 extern void func_0029F338_3(void *object);
-
-typedef unsigned char u8;
 
 typedef unsigned int u32;
 
@@ -32,6 +105,12 @@ typedef struct {
     u8 selector;
     u8 tail[3];
 } GornRecordWrite64;
+
+extern f32 func_00283198_4(f32);
+
+extern f32 func_00283B98_4(f32, f32);
+
+extern void func_00283D38_2(s32, s32, f32);
 
 INCLUDE_ASM("asm/levels", func_L00_00316F60);
 
@@ -48,11 +127,30 @@ INCLUDE_ASM("asm/levels", func_L00_0031A710);
 
 INCLUDE_ASM("asm/levels", func_L00_0031AA28);
 
-INCLUDE_ASM("asm/levels", func_L00_0031ABE0);
+/* Blends a value toward a target: helper(second,first) halved, scaled by (1 - helper(third*pi)); the first argument and that product go to a two-float helper whose float result is returned. */
+float func_L00_0031ABE0(float a, float b, float c)
+{
+    float t;
+    float u;
+
+    t = func_00283BE0_4(b, a);
+    u = func_00283180_7(c * 3.1415927f);
+    t = t * 0.5f;
+    return func_00283B98_7(a, t * (1.0f - u));
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0031AC60);
 
-INCLUDE_ASM("asm/levels", func_L00_0031AD40);
+/* converts a normalised phase to radians, derives a blend factor of half the complement of a phase helper's result, and applies it to a two-argument helper over three consecutive float components written back over the first vector. */
+void func_L00_0031AD40(float *a0, float *a1, float *a2, float t)
+{
+    float k;
+
+    k = (1.0f - func_00283180_5(t * 3.1415927f)) * 0.5f;
+    a0[0] = func_00283B98_5(a1[0], func_00283BE0_2(a2[0], a1[0]) * k);
+    a0[1] = func_00283B98_5(a1[1], func_00283BE0_2(a2[1], a1[1]) * k);
+    a0[2] = func_00283B98_5(a1[2], func_00283BE0_2(a2[2], a1[2]) * k);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0031AFF0);
 
@@ -116,7 +214,19 @@ INCLUDE_ASM("asm/levels", func_L00_00322428);
 
 INCLUDE_ASM("asm/levels", func_L00_00322A10);
 
-INCLUDE_ASM("asm/levels", func_L00_00322A18);
+/* builds two 64-byte blocks from a 3-float vector and from a vector inside the caller object, combines them, then scales one block again from the same source vector */
+void func_L00_00322A18(u8 *a0, f32 a1, f32 a2, f32 a3) {
+    V4_F36d8a248 in;
+    M4_F36d8a248 m1;
+    M4_F36d8a248 m2;
+    in.x = a1;
+    in.y = a2;
+    in.z = a3;
+    func_00283410_3(&m1, &in);
+    func_00283410_3(&m2, (V4_F36d8a248 *)(a0 + 240));
+    func_00283788_2(&m2, &m2, &m1);
+    func_002AB6D8_2(&m2, (V4_F36d8a248 *)(a0 + 240));
+}
 
 /* A06-inline-init-40 freshly exact-verified under family reservation */
 void func_L00_00322A98(void *a0, char *a1){
@@ -129,7 +239,41 @@ void func_L00_00322A98(void *a0, char *a1){
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00322AC0);
+/* Appends a record to a fixed four-entry table: aborts when the table is full or an index argument is out of range, copies selected fields from one linked record into a helper-allocated record, then stores the three inputs and that record into four parallel tables and bumps the count. */
+void func_L00_00322AC0(List_F66766f2b *obj, int a1, int a2, float v)
+{
+    Src_F66766f2b *q;
+    short n;
+
+    if (obj->count == 4)
+        return;
+    if (a2 >= 9)
+        return;
+
+    q = func_0029EFD0(obj->src->f170);
+    if (q == 0)
+        return;
+
+    n = q->f170;
+    q->f124 = obj->src->f124;
+    q->f50 = obj->src->f50;
+    q->f56 = obj->src->f56;
+    q->f44 = obj->src->f44;
+    q->f120 = obj->src->f120;
+    q->f49 = 1;
+    q->f52 = 2058;
+    q->f48 = 0;
+    q->f152 = 0;
+    if (n == 0)
+        q->f98 = 0;
+    q->f35 = a1;
+
+    obj->b[obj->count] = a2;
+    obj->a[obj->count] = a1;
+    obj->d[obj->count] = v;
+    obj->c[obj->count] = q;
+    obj->count = obj->count + 1;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00322BE0);
 
@@ -207,7 +351,13 @@ INCLUDE_ASM("asm/levels", func_L00_00325CC0);
 
 INCLUDE_ASM("asm/levels", func_L00_00325FC0);
 
-INCLUDE_ASM("asm/levels", func_L00_00325FC8);
+/* stores a wrapped angle back into the caller field and forwards its [0,1] rescaled value (x*0.5+0.5) with two pointer arguments to a second callee */
+void func_L00_00325FC8(f32 *a0, s32 a1, s32 a2, f32 a3) {
+    f32 v = func_00283198_4(a0[0]);
+    f32 s = v * 0.5f + 0.5f;
+    a0[0] = func_00283B98_4(a0[0], a3);
+    func_00283D38_2(a1, a2, s);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00326048);
 

@@ -1,5 +1,15 @@
 #include "include_asm.h"
 
+extern void func_L00_002B39F0(int arg0, float arg1);
+
+extern float func_L00_002B9B38(char *arg0, int arg1);
+
+extern float func_00283BE0(float arg0, float arg1);
+
+extern float func_00283C80(float arg0, float arg1);
+
+extern char D_00189E20_4[];
+
 typedef unsigned char u8;
 
 typedef int s32;
@@ -44,6 +54,15 @@ typedef struct {
 } Res_F458c670e;
 #endif
 
+extern char D_00189E20_29[];
+
+extern void func_0029F338_5(int);
+
+struct S {
+    char pad[52];
+    unsigned short flags;
+};
+
 INCLUDE_ASM("asm/levels", func_L00_002C2DE8);
 
 INCLUDE_ASM("asm/levels", func_L00_002C30B0);
@@ -52,7 +71,40 @@ INCLUDE_ASM("asm/levels", func_L00_002C3838);
 
 INCLUDE_ASM("asm/levels", func_L00_002C3A40);
 
-INCLUDE_ASM("asm/levels", func_L00_002C3A78);
+/* reads a 16-bit state word out of a fixed global block and, when it is non-zero, maps a second byte of that block onto a return code 0/1/2/3; otherwise it runs a reset call, builds a float either from a query on a sub-object of the block or from two floats stored in the block, and classifies it against a stored angle */
+int func_L00_002C3A78(void)
+{
+    char *p = D_00189E20_4;
+    float value;
+    int result;
+    int state;
+
+    result = 2;
+    if (*(short *)(p + 5204) != 0) {
+        state = *(unsigned char *)(p + 5207);
+        if (state == 0)
+            result = 0;
+        else if (state == 3)
+            result = 3;
+        else if (state == 2)
+            result = 2;
+        else
+            result = 1;
+    } else {
+        func_L00_002B39F0(0, 1.0f);
+        if (*(unsigned char *)(p + 8899) != 0)
+            value = func_L00_002B9B38(p + 400, 0);
+        else
+            value = func_00283BE0(*(float *)(p + 416), *(float *)(p + 152));
+        if (func_00283C80(value, 3.1415929794311523437500e+00f) < 7.8539824485778808593750e-01f)
+            result = 3;
+        else if (func_00283C80(value, -1.5707964897155761718750e+00f) < 7.8539824485778808593750e-01f)
+            result = 1;
+        else if (func_00283C80(value, 1.5707964897155761718750e+00f) < 7.8539824485778808593750e-01f)
+            result = 0;
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002C3BB0);
 
@@ -126,7 +178,26 @@ INCLUDE_ASM("asm/levels", func_L00_002C9FC8);
 
 INCLUDE_ASM("asm/levels", func_L00_002CA0B0);
 
-INCLUDE_ASM("asm/levels", func_L00_002CA478);
+/* On a byte-addressable root base: if the word at +6228 is set, calls a helper with it and clears it, then clears bits 0 and 6 of the 16-bit field at +52 of each object pointed to by the base words at +4880 and +4884. */
+void func_L00_002CA478(void)
+{
+    char *g = D_00189E20_29;
+    int v;
+    struct S *p;
+    struct S *q;
+
+    v = *(int *)(g + 6228);
+    if (v != 0) {
+        func_0029F338_5(v);
+        *(int *)(g + 6228) = 0;
+    }
+    p = *(struct S **)(g + 4880);
+    if (p != 0)
+        p->flags &= ~0x41;
+    q = *(struct S **)(g + 4884);
+    if (q != 0)
+        q->flags &= ~0x41;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002CA4E0);
 

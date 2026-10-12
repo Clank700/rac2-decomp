@@ -116,6 +116,8 @@ def check_hygiene(errors: list) -> None:
         files = [p.relative_to(ROOT).as_posix() for p in ROOT.rglob("*") if p.is_file() and ".git/" not in p.as_posix()]
     for f in files:
         path = ROOT / f
+        if not path.exists():        # deleted in the working tree, not yet committed
+            continue
         if f.endswith((".gz", ".cfrag", ".iso", ".elf", ".bin", ".o")):
             errors.append(f"{f}: no {Path(f).suffix} files in the repository (generated or game data)")
         if f.startswith(FORBIDDEN_DIRS):

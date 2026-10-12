@@ -23,7 +23,65 @@ typedef struct {
 
 extern ResidentState_Fd160fb9c D_00189E20_16;
 
+extern int D_001A79F0_3 __attribute__((sda));
+
+extern int func_L00_002D67A8_1(int);
+
 extern char D_00189E20_2[];
+
+extern float func_002AA2E8(float *p, float a, float b);
+
+extern char D_00189E20_24[];
+
+extern int func_00283CF0_6(float value);
+
+extern float func_00283CC8(float *buffer, float value);
+
+#ifndef RAC2_T_V4_FBFDC087A
+#define RAC2_T_V4_FBFDC087A
+typedef int V4_Fbfdc087a __attribute__((mode(TI)));
+#endif
+
+extern char D_00189EB0[];
+
+extern void func_00283410_9(float *m, char *p);
+
+extern void func_002830C0_8(float *dst, float *src, float *m);
+
+extern void func_00283788_6(float *m, float *m2, float *e);
+
+extern void func_00282CF0_14(float *c, float *a, float *b);
+
+extern void func_00282CC0_29(char *a, char *b, float *c);
+
+extern void func_002AB6D8_4(float *m, char *p);
+
+extern void func_00282C88_2(void *);
+
+extern void func_L00_002A9FE8_1(void *, float, float, float);
+
+extern unsigned char D_0018C0D4[];
+
+#ifndef RAC2_T_S36_F39E097FB
+#define RAC2_T_S36_F39E097FB
+typedef struct { int w[9]; } S36_F39e097fb;
+#endif
+
+extern int D_0018C0B0_1;
+
+extern char D_0018AA70[];
+
+extern S36_F39e097fb D_L00_001A7F68;
+
+extern void func_L00_003116A8_1(int, int, S36_F39e097fb *, char *);
+
+extern char D_00189E20_20[];
+
+extern float func_002A7878_6(float a0, float a1);
+
+extern void func_002C19D8(float *a0, float *a1, int a2, float a3, float a4);
+
+extern int func_002A77E0_2(char *a0);
 
 extern void func_L00_002D3638(char *target, int mode, float value, float zero, float scale);
 
@@ -112,7 +170,19 @@ INCLUDE_ASM("asm/levels", func_L00_002A67F8);
 
 INCLUDE_ASM("asm/levels", func_L00_002A6DD0);
 
-INCLUDE_ASM("asm/levels", func_L00_002A7000);
+/* reads a global mode value; for 8, 9 or 19 probes two engine queries and returns 1 if either reports true, else 0 */
+int func_L00_002A7000(void)
+{
+    int v = D_001A79F0_3;
+    int r = 0;
+    if (v >= 8) {
+        if (v < 10 || v == 19) {
+            if (func_L00_002D67A8_1(1) != 0 || func_L00_002D67A8_1(2) != 0)
+                r = 1;
+        }
+    }
+    return r;
+}
 
 /* shared native body of family 0be97c76a107 */
 void func_L00_002A7070(void)
@@ -164,21 +234,118 @@ INCLUDE_ASM("asm/levels", func_L00_002A9600);
 
 INCLUDE_ASM("asm/levels", func_L00_002A9760);
 
-INCLUDE_ASM("asm/levels", func_L00_002A9D38);
+/* Clamps two float fields of one object into [-1,1] through a repeated helper call and copies the clamped values into a second object. */
+void func_L00_002A9D38(float *a0, float *a1, float f12)
+{
+    char *base = D_00189E20_2;
+    float v[2];
+
+    v[0] = -*(float *)(base + 8112);
+    v[1] = *(float *)(base + 8116);
+    func_002AA2E8(a1 + 2, v[0], f12);
+    if (a1[2] > 1.0f) a1[2] = 1.0f;
+    if (a1[2] < -1.0f) a1[2] = -1.0f;
+    a0[0] = a1[2];
+    func_002AA2E8(a1 + 1, v[1], f12);
+    if (a1[1] > 1.0f) a1[1] = 1.0f;
+    if (a1[1] < -1.0f) a1[1] = -1.0f;
+    a0[1] = a1[1];
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002A9E30);
 
-INCLUDE_ASM("asm/levels", func_L00_002A9F30);
+/* blends two table entries by the fractional part of a clock value: the integer part is the index, one step back is wrapped over a count unless a flag selects the last slot, and the result is frac*table[index] + (scale-frac)*table[previous] */
+float func_L00_002A9F30(float *table, int count)
+{
+    char *base = D_00189E20_24;
+    float buffer[4];
+    float t;
+    int index;
+    int last;
+    int previous;
+    index = func_00283CF0_6(*(float *)(base + 3128));
+    last = count - 1;
+    previous = (index + last) % count;
+    if (*(int *)(base + 3112) & 2)
+        previous = last;
+    t = func_00283CC8(buffer, *(float *)(base + 3128));
+    return t * table[index] + (*(float *)(base + 3132) - t) * table[previous];
+}
 
-INCLUDE_ASM("asm/levels", func_L00_002A9FE8);
+/* Copies a 16-byte block pointed to by the first argument into a stack buffer, stores the three float arguments into a 16-byte stack vector, fills two 64-byte matrices through helper routines, applies copies of the buffer through them into two more 16-byte stack vectors, and finishes by passing the destination, the source and a composed vector to a closing routine. */
+void func_L00_002A9FE8(V4_Fbfdc087a *src, float x, float y, float z)
+{
+    char *p = D_00189EB0;
+    float q[4];
+    float a[4];
+    float b[4];
+    float c[4];
+    float m[16];
+    float e[16];
+    float v[4];
 
-INCLUDE_ASM("asm/levels", func_L00_002AA0F0);
+    *(V4_Fbfdc087a *)q = *src;
+    func_00283410_9(m, p);
+    func_002830C0_8(a, q, m);
+    v[0] = x;
+    v[1] = y;
+    v[2] = z;
+    func_00283410_9(e, v);
+    func_00283788_6(m, m, e);
+    func_002830C0_8(b, q, m);
+    func_00282CF0_14(c, a, b);
+    func_00282CC0_29(p - 16, p - 16, c);
+    func_002AB6D8_4(m, p);
+}
 
-INCLUDE_ASM("asm/levels", func_L00_002AA178);
+/* runs a setup routine on a 16-byte stack buffer, selects 0.35f or 0.6f into buffer slot 2 from a flag byte in fixed data, then forwards the buffer with three float arguments */
+void func_L00_002AA0F0(float a, float b, float c)
+{
+    float buf[4];
+
+    func_00282C88_2(buf);
+
+    if (D_0018C0D4[0] == 1)
+        buf[2] = 0.35f;
+    else
+        buf[2] = 0.6f;
+
+    func_L00_002A9FE8_1(buf, a, b, c);
+}
+
+/* Copies a 36-byte global record onto the stack, substitutes a default id when the argument is zero, and calls one helper with the id, the count 9 and two fixed global addresses. */
+void func_L00_002AA178(int a0)
+{
+    S36_F39e097fb buf;
+
+    if (a0 == 0)
+        a0 = D_0018C0B0_1;
+    buf = D_L00_001A7F68;
+    func_L00_003116A8_1(a0, 9, &buf, D_0018AA70);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002AA200);
 
-INCLUDE_ASM("asm/levels", func_L00_002AA478);
+/* Bumps a 16-bit counter in a fixed data block and, when the new value exceeds the caller's threshold, builds a three-float jittered position from two globals plus three random calls, hands it to a spawn helper and stores the helper's return value back into the counter. */
+void func_L00_002AA478(char *self, int arg1)
+{
+    float v[3];
+    int n;
+    char *p;
+    float r;
+
+    p = D_00189E20_20;
+    n = *(unsigned short *)(p + 2628) + 1;
+    *(unsigned short *)(p + 2628) = n;
+    if (arg1 < (short)n) {
+        v[0] = *(float *)(p + 128) + func_002A7878_6(-0.05f, 0.05f);
+        v[1] = *(float *)(p + 132) + func_002A7878_6(-0.05f, 0.05f);
+        v[2] = *(float *)(p + 816);
+        r = func_002A7878_6(0.4f, 0.6f);
+        func_002C19D8(v, (float *)(p + 816), -1, r, 5250.0f);
+        *(unsigned short *)(p + 2628) = func_002A77E0_2(self);
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002AA570);
 

@@ -9,6 +9,14 @@ extern int D_L06_001B21C0 __attribute__((sda));
 
 extern void (*D_L06_001B2180[])(void);
 
+extern float func_00282C48(float t);
+
+extern float func_00283BE0_3(float, float);
+
+extern float func_00282C48_5(float);
+
+extern void func_00283B98_6(float, float);
+
 typedef unsigned char u8;
 
 typedef unsigned short u16;
@@ -16,6 +24,16 @@ typedef unsigned short u16;
 typedef struct {u8 prefix[0x190];u8 *object;} NativeObjectRefView;
 
 extern NativeObjectRefView D_L24_001B8580;
+
+extern void func_00282CF0_9(float *p);
+
+extern float func_00282E20_4(float *p);
+
+extern float func_00283248_7(float a, float b);
+
+extern void func_00283BE0_5(float a, float b);
+
+extern float func_00282DF0_3(float *p);
 
 extern void Fdb046c5d_FUN_002742E8(void *);
 
@@ -228,9 +246,63 @@ INCLUDE_ASM("asm/game", func_00270280);
 
 INCLUDE_ASM("asm/game", func_002702B8);
 
-INCLUDE_ASM("asm/game", func_002702C8);
+/* Integrates one float field with a spring-damper step, clamps it to a symmetric limit, then lets a helper raise or lower it, returning a bias plus the field. */
+float func_002702C8(float *p, float a, float b, float c, float d, float lim)
+{
+    float t = b - a;
+    float x = *p;
+    float r;
 
-INCLUDE_ASM("asm/game", func_002703B0);
+    x += c * t - d * x;
+    *p = x;
+    if (lim != 0.0f) {
+        if (x > lim) *p = lim;
+        else if (x < -lim) *p = -lim;
+    }
+    r = func_00282C48(t);
+    if (r < *p) {
+        *p = func_00282C48(t);
+    } else {
+        float s = -func_00282C48(t);
+        if (*p < s) {
+            *p = -func_00282C48(t);
+        }
+    }
+    return a + *p;
+}
+
+/* Advances a stored float by a scaled helper result, then clamps it against a positive limit, then clamps it again with a second helper and finally rescales it through a third helper. */
+void func_002703B0(char *obj, float p1, float p2, float p3, float p4, float p5)
+{
+    float r;
+    float t;
+    float d;
+    float neg;
+
+    r = func_00283BE0_3(p2, p1);
+    t = *(float *)obj;
+    d = p3 * r - p4 * t;
+    t = t + d;
+    *(float *)obj = t;
+
+    if (p5 != 0.0f) {
+        if (t > p5) {
+            *(float *)obj = p5;
+        } else {
+            neg = -p5;
+            if (t < neg)
+                *(float *)obj = neg;
+        }
+    }
+
+    if (func_00282C48_5(r) < *(float *)obj) {
+        *(float *)obj = func_00282C48_5(r);
+    } else if (*(float *)obj < -func_00282C48_5(r)) {
+        *(float *)obj = -func_00282C48_5(r);
+    }
+
+    func_00283B98_6(p1, *(float *)obj);
+}
 
 /* sets the referenced object halfword at 0x7e and clears its byte at 0x7d */
 void func_002704D0(void) {
@@ -284,7 +356,23 @@ INCLUDE_ASM("asm/game", func_00272368);
 
 INCLUDE_ASM("asm/game", func_00272540);
 
-INCLUDE_ASM("asm/game", func_00272550);
+/* Fills a three-float local through two setup calls, stores a two-argument float helper result into a field, then stores a second helper result into two more fields and returns zero. */
+int func_00272550(float *a0)
+{
+    float local[3];
+    float t;
+
+    func_00282CF0_9(local);
+    a0[1] = func_00283248_7(func_00282E20_4(local), local[2]);
+
+    t = func_00283248_7(local[0], local[1]);
+    func_00283BE0_5(t, a0[0]);
+    a0[0] = t;
+
+    a0[2] = func_00282DF0_3(local);
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002725C8);
 

@@ -37,6 +37,7 @@ src/core/001253A8.c	sdk -O2 -G2 -ffunction-sections
 src/core/00125970.c	sdk -O2 -G2 -ffunction-sections
 src/core/00125E58.c	sdk -O2 -G2 -ffunction-sections
 src/core/001261F0.c	sdk -O2 -G2 -ffunction-sections
+src/core/00126E60.c	sdk -O2 -G2 -ffunction-sections
 src/core/00127040.c	sdk -O2 -G2 -ffunction-sections
 src/core/00127630.c	sdk -O2 -G2 -ffunction-sections
 src/core/00127888.c	sdk -O2 -G2 -ffunction-sections
@@ -85,6 +86,7 @@ src/game/0027B7E0.c	-O2 -G8 -ffunction-sections
 src/game/0027F110.c	sdk -O2 -G2 -ffunction-sections
 src/game/00284FC0.c	-O2 -G8 -ffunction-sections
 src/game/00285828.c	-O2 -G8 -ffunction-sections
+src/game/00287BD8.c	-O2 -G8 -ffunction-sections
 src/game/00287E60.c	-O2 -G8 -ffunction-sections
 src/game/00287E98.c	sdk -O2 -G2 -ffunction-sections
 src/game/00288D30.c	-O2 -G8 -ffunction-sections
@@ -100,13 +102,28 @@ src/game/002A0430.c	-O2 -G8 -ffunction-sections
 src/game/002B1C20.c	-O2 -G8 -ffunction-sections
 src/game/002DF1B8.c	sdk -O2 -G2 -ffunction-sections
 src/game/002ED260.c	-O2 -G8 -ffunction-sections
+src/game/002F5220.c	-O2 -G8 -ffunction-sections
 src/game/002FC3C0.c	-O2 -G8 -ffunction-sections
+src/game/003005A0.c	-O2 -G8 -ffunction-sections
+src/game/00336828.c	-O2 -G8 -ffunction-sections
+src/game/00339630.c	-O2 -G8 -ffunction-sections
+src/game/003398A8.c	-O2 -G8 -ffunction-sections
+src/game/0033BD70.c	-O2 -G8 -ffunction-sections
+src/game/0033C468.c	-O2 -G8 -ffunction-sections
+src/game/0033C9F0.c	-O2 -G8 -ffunction-sections
+src/game/0033EC98.c	-O2 -G8 -ffunction-sections
+src/game/003418C0.c	-O2 -G8 -ffunction-sections
+src/game/00341A88.c	-O2 -G8 -ffunction-sections
+src/game/00342668.c	-O2 -G8 -ffunction-sections
 src/game/00343068.c	-O2 -G8 -ffunction-sections
+src/game/00343798.c	-O2 -G8 -ffunction-sections
+src/game/00344848.c	-O2 -G8 -ffunction-sections
 src/game/003506A8.c	sdk -O2 -G2 -ffunction-sections
 src/levels/shared/L00_002A3B80.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002D64B8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002D6FD8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002D7938.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L00_002E3B38.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002F08D0.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002F3488.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002F43E0.c	-O2 -G8 -ffunction-sections
@@ -115,4 +132,4 @@ src/levels/shared/L00_0032B270.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_0037B6F0.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_0037E668.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_0042C818.c	-O2 -G8 -ffunction-sections
-src/levels/shared/L05_004459B0.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L05_00446E28.c	-O2 -G8 -ffunction-sections

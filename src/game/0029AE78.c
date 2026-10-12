@@ -12,6 +12,10 @@ typedef int BatchA_A08_s32;
 
 extern BatchA_A08_s32 D_L00_001A904C[] __attribute__((sda));
 
+extern int D_L00_001A904C_6 __attribute__((sda));
+
+extern void func_003380B0(int *p, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10);
+
 s32 func_0029AE78(s32 *a0) {
  s32 n=8;
  while(a0[0]!=0) {
@@ -100,7 +104,14 @@ INCLUDE_ASM("asm/game", func_0029B848);
 
 INCLUDE_ASM("asm/game", func_0029B858);
 
-INCLUDE_ASM("asm/game", func_0029B888);
+/* Loads a 32-bit global pointer from a fixed data address; if non-null, tail-forwards it (offset by 0x36F28) plus ten incoming arguments to an overlay-local callee. */
+void func_0029B888(int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9)
+{
+    int value = D_L00_001A904C_6;
+
+    if (value != 0)
+        func_003380B0((int *)(value + 0x36F28), a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+}
 
 INCLUDE_ASM("asm/game", func_0029B910);
 

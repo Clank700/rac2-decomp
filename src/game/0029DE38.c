@@ -16,6 +16,8 @@ typedef unsigned char u8;
 
 extern u8 D_L03_001D2540[];
 
+extern float func_00283CE0_4(int a);
+
 extern void Ff2d8e5ad_FUN_002A3110(unsigned char *a, int b, unsigned char *c);
 
 extern void Ff2d8e5ad_FUN_00283130(unsigned char *a, long long v);
@@ -34,9 +36,37 @@ typedef float f32;
 
 typedef unsigned int u32;
 
+extern void func_00282A60_1 (char *node, int zero, int size);
+
 extern void *D_L00_001B1E00[16];
 
 extern u32 D_L00_001B1E40[16];
+
+extern void func_002A3F10_1(char *, int, int *, char *);
+
+extern void func_00282D30_4(char *, char *, float);
+
+extern void func_00283658(char *, char *);
+
+extern void func_00283788_1(char *, char *, char *);
+
+extern void func_00282CC0_7(char *, char *, char *);
+
+extern void func_002A3F10_2(char *a, int b, char *c, char *d);
+
+extern void func_00282D30_19(char *a, char *b, float f);
+
+extern void func_00283098_6(char *a, char *b, char *c);
+
+extern void func_00282CC0_20(char *a, char *b, char *c);
+
+extern void func_002A3DB8(char *);
+
+extern void func_00282D30_7(char *, char *, float);
+
+extern void func_00283098_3(char *, char *, char *);
+
+extern void func_00282CC0_9(char *, char *, char *);
 
 typedef struct {
     unsigned char key;
@@ -106,7 +136,30 @@ INCLUDE_ASM("asm/game", func_0029F450);
 
 INCLUDE_ASM("asm/game", func_0029F528);
 
-INCLUDE_ASM("asm/game", func_0029F530);
+/* Picks one of two pointers held at +88 and +92 of the receiver, choosing +92 when the byte at +66 equals 255, then returns a value derived from the scale word at +68: either a halved table lookup, or a weighted blend of two table lookups plus the scale, or an interpolation between a lookup at +92 and a lookup at +88 weighted by one minus the scale. */
+float func_0029F530(char *s1)
+{
+    char *p;
+    char *q;
+    float t;
+
+    if (*(unsigned char *)(s1 + 66) != 255)
+        p = *(char **)(s1 + 88);
+    else
+        p = *(char **)(s1 + 92);
+
+    if (*(float *)(s1 + 68) == 0.0f)
+        return func_00283CE0_4(*(short *)(p + 4)) * 0.0625f;
+
+    if (*(unsigned char *)(s1 + 66) != *(unsigned char *)(s1 + 67) ||
+        *(unsigned char *)(s1 + 64) > *(unsigned char *)(s1 + 65))
+        return func_00283CE0_4(*(short *)(p + 4)) * 0.0625f + *(float *)(s1 + 68);
+
+    q = *(char **)(s1 + 92);
+    t = func_00283CE0_4(*(short *)(p + 4)) * (1.0f - *(float *)(s1 + 68));
+    t = t + func_00283CE0_4(*(short *)(q + 4)) * *(float *)(s1 + 68);
+    return t * 0.0625f;
+}
 
 INCLUDE_ASM("asm/game", func_0029F628);
 
@@ -168,7 +221,28 @@ void func_0029F978(u8 *a0,u32 a1,u8 *a2) {
  *(u8 **)(a0+0x54)=a2;
 }
 
-INCLUDE_ASM("asm/game", func_0029F9F0);
+/* unlinks a node from a singly linked list (head case and inner-chain case) and calls a release routine on it; does nothing for a null node */
+void func_0029F9F0 (char *list, char *node)
+{
+  char *cur;
+
+  if (node == 0)
+    return;
+
+  if (*(char **) (list + 84) == node)
+    {
+      *(char **) (list + 84) = *(char **) (node + 8);
+    }
+  else if (*(char **) (list + 84) != 0)
+    {
+      cur = *(char **) (list + 84);
+      while (*(char **) (cur + 8) != 0 && *(char **) (cur + 8) != node)
+        cur = *(char **) (cur + 8);
+      if (*(char **) (cur + 8) == node)
+        *(char **) (cur + 8) = *(char **) (node + 8);
+    }
+  func_00282A60_1 (node, 0, 64);
+}
 
 /* Reserve or reuse an object slot, reset its associated state and return signed slot index */
 int func_0029FA88(void *object)
@@ -189,11 +263,52 @@ INCLUDE_ASM("asm/game", func_0029FAE0);
 
 INCLUDE_ASM("asm/game", func_0029FB20);
 
-INCLUDE_ASM("asm/game", func_0029FC20);
+/* Copies an int argument into a 64-byte stack local, scales the float at offset 44 of the first pointer by 1/1024, and runs five helpers over the two pointers and that local buffer. */
+void func_0029FC20(char *p1, int p2, char *p3)
+{
+    int n;
+    char buf[64];
+    float f;
 
-INCLUDE_ASM("asm/game", func_0029FCC0);
+    n = p2;
+    f = *(float *)(p1 + 44) * 0.0009765625f;
+    func_002A3F10_1(p1, 1, &n, p3);
+    func_00282D30_4(p3 + 48, p3 + 48, f);
+    func_00283658(buf, p1 + 192);
+    func_00283788_1(p3, buf, p3);
+    func_00282CC0_7(p3 + 48, p3 + 48, p1 + 16);
+}
 
-INCLUDE_ASM("asm/game", func_0029FD48);
+/* scales a float field by 1/1024, stores an int argument in a stack record, and drives four helper calls with frame and object-field pointers */
+void func_0029FCC0(char *a0, int a1, char *a2)
+{
+    char buf[80];
+    float x;
+
+    x = *(float *)(a0 + 44);
+    *(int *)(buf + 64) = a1;
+    x = x * 0.0009765625f;
+    func_002A3F10_2(a0, 1, buf + 64, buf);
+    func_00282D30_19(a2, buf + 48, x);
+    func_00283098_6(a2, a2, a0 + 192);
+    func_00282CC0_20(a2, a2, a0 + 16);
+}
+
+/* Loops n times over a 16-byte-strided pointer, scaling the first pointer float at offset 44 by 1/1024 and calling three helpers with that pointer and two offsets of the first argument. */
+void func_0029FD48(char *p1, int n, char *p3, char *p4)
+{
+    float f = *(float *)(p1 + 44) * 0.0009765625f;
+
+    func_002A3DB8(p1);
+    if (n > 0) {
+        do {
+            func_00282D30_7(p4, p4, f);
+            func_00283098_3(p4, p4, p1 + 192);
+            func_00282CC0_9(p4, p4, p1 + 16);
+            p4 += 16;
+        } while (--n != 0);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_0029FDE8);
 

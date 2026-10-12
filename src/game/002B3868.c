@@ -4,6 +4,10 @@ typedef int s32;
 
 typedef unsigned char u8;
 
+extern float func_00282E80_1(char *, float *);
+
+extern float func_00282C48_6(float);
+
 s32 func_002B3868(u8 *a0) {
  u8 flags=a0[0xbe];
  if(((flags^1)&1)!=0) {a0[0xbe]=flags|1;return 1;}
@@ -18,7 +22,17 @@ INCLUDE_ASM("asm/game", func_002B38C8);
 
 INCLUDE_ASM("asm/game", func_002B39A0);
 
-INCLUDE_ASM("asm/game", func_002B3B20);
+/* Calls a callee on (second pointer, first pointer + 16); if the result is not below the first float argument it returns 0, otherwise it evaluates a second callee on (a float at second+8 minus a float at first+24) and returns 1 when that is below the second float argument, else 0. */
+int func_002B3B20(char *p, char *q, float f12, float f13)
+{
+    float v = func_00282E80_1(q, (float *)(p + 16));
+
+    if (!(v < f12))
+        return 0;
+    if (func_00282C48_6(*(float *)(q + 8) - *(float *)(p + 24)) < f13)
+        return 1;
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002B3BA8);
 

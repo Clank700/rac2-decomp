@@ -63,6 +63,43 @@ extern void F70997ba9_FUN_0027F110(void);
 
 extern void F70997ba9_FUN_0027C660(void);
 
+typedef int s32;
+
+extern s32 func_002DE550 (s32);
+
+#ifndef RAC2_T_TWO_F73AF1964
+#define RAC2_T_TWO_F73AF1964
+typedef struct { signed char a, b; } TWO_F73af1964;
+#endif
+
+extern void func_0027C540_1(int);
+
+extern void func_0027F538(int, int, long, signed char *, int);
+
+extern int  func_0028E588(int, int);
+
+extern int  func_0028E640(int);
+
+extern void func_0028F410(float, float, float, float, float, int, int, int);
+
+extern void func_0027C660_1(void);
+
+extern signed char D_L01_001ABE90[];
+
+extern signed char D_L01_001ABE98[];
+
+extern int func_002DE3A0(int);
+
+extern int func_002DE550_1(int);
+
+extern int func_002C9A60(void);
+
+extern int func_L00_002F3478(void);
+
+extern int func_00339760(int);
+
+extern int D_L00_001A904C_8 __attribute__((sda));
+
 long long func_002D5540(void)
 {
     func_0027C540(0);
@@ -222,7 +259,24 @@ INCLUDE_ASM("asm/game", func_002D9DA0);
 
 INCLUDE_ASM("asm/game", func_002DA118);
 
-INCLUDE_ASM("asm/game", func_002DA238);
+/* Re-initialises a state block: clears field 68, builds two sub-records from the flag word at field 52 masked with 0x200, substitutes a default record for any that came back zero, then clears field 92, sets fields 84 and 80 to -1 and returns 0. */
+s32 func_002DA238 (s32 self)
+{
+  *(s32 *) (self + 68) = 0;
+  *(s32 *) (self + 72) = func_002DE550 (*(s32 *) (self + 52) & 0x200);
+  *(s32 *) (self + 76) = func_002DE550 (*(s32 *) (self + 52) & 0x200);
+  if ((*(s32 *) (self + 52) & 0x200) == 0)
+    {
+      if (*(s32 *) (self + 72) == 0)
+        *(s32 *) (self + 72) = func_002DE550 (1);
+      if (*(s32 *) (self + 76) == 0)
+        *(s32 *) (self + 76) = func_002DE550 (1);
+    }
+  *(s32 *) (self + 92) = 0;
+  *(s32 *) (self + 80) = -1;
+  *(s32 *) (self + 84) = -1;
+  return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002DA2D0);
 
@@ -264,7 +318,27 @@ INCLUDE_ASM("asm/game", func_002DBEC0);
 
 INCLUDE_ASM("asm/game", func_002DBF98);
 
-INCLUDE_ASM("asm/game", func_002DC090);
+/* Two-branch draw set-up: copies a 2-byte record from one of two tables into a 16-byte local, then issues a draw call with five float arguments (scale, per-instance angle, two constants, colour value) plus a 64-bit attribute word, a geometry handle, a fifth integer argument -1 and a local buffer. */
+int func_002DC090(char *s0)
+{
+    signed char local[16];
+    float y;
+
+    func_0027C540_1(0);
+    if (*(int *)(s0 + 56) != 0) {
+        *(TWO_F73af1964 *)local = *(TWO_F73af1964 *)D_L01_001ABE90;
+        func_0027F538(4, *(int *)(s0 + 36) / 2 - 8, 0x80FFA888, local, -1);
+        y = (float)(*(int *)(s0 + 36) * 8);
+        func_0028F410(640.0f, y, 128.0f, 256.0f, 0.0f, 32, 16, func_0028E640(func_0028E588(0xE99D, 6)));
+    } else {
+        *(TWO_F73af1964 *)local = *(TWO_F73af1964 *)D_L01_001ABE98;
+        func_0027F538(*(int *)(s0 + 32) - 24, *(int *)(s0 + 36) / 2 - 8, 0x80FFA888, local, -1);
+        y = (float)(*(int *)(s0 + 36) * 8);
+        func_0028F410(192.0f, y, 128.0f, 256.0f, 3.1415927f, 32, 16, func_0028E640(func_0028E588(0xE99D, 6)));
+    }
+    func_0027C660_1();
+    return 2;
+}
 
 INCLUDE_ASM("asm/game", func_002DC228);
 
@@ -274,7 +348,26 @@ INCLUDE_ASM("asm/game", func_002DC720);
 
 INCLUDE_ASM("asm/game", func_002DC900);
 
-INCLUDE_ASM("asm/game", func_002DCAB8);
+/* Initialises an object: runs setup helpers, clears word +0x4C, stores one helper result at +0x48, then calls a final helper with (small-data global + 0x3CAA8) only when two globals are non-zero, and returns 0. */
+int func_002DCAB8(char *a0)
+{
+    int v;
+
+    func_002DE3A0(1);
+    v = func_002DE550_1(0);
+    *(int *)(a0 + 76) = 0;
+    *(int *)(a0 + 72) = v;
+    func_002C9A60();
+    func_L00_002F3478();
+    v = *(int *)0x1A8FD8;
+    if (v != 0) {
+        v = D_L00_001A904C_8;
+        if (v != 0) {
+            func_00339760(v + 0x3CAA8);
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002DCB28);
 

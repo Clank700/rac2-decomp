@@ -21,6 +21,10 @@ typedef int BatchA_A07_s32;
 
 extern BatchA_A07_s32 D_001A79F0[] __attribute__((sda));
 
+extern int func_L00_002D6788(void);
+
+extern int D_0018C0B4_1;
+
 typedef unsigned int u32;
 
 extern u32 D_0018C0B4;
@@ -98,7 +102,19 @@ unsigned int func_L00_002D6878(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002D6880);
+/* returns 1 when a global state word is 49 and a global mode word is 4 or 11, otherwise 0; a callee returning nonzero short-circuits the result to 0 */
+int func_L00_002D6880(void)
+{
+    int result = 0;
+    int mode;
+    if (func_L00_002D6788() != 0) goto out;
+    if (D_0018C0B4_1 != 49) goto out;
+    mode = *(int *)0x001A79F0;
+    if (mode != 4 && mode != 11) goto out;
+    result = 1;
+out:
+    return result;
+}
 
 /* returns the resident 32-bit field at core address 0x0018c0b4 */
 u32 func_L00_002D68E8(void) {

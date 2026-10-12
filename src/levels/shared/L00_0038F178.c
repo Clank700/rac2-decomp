@@ -10,6 +10,8 @@ extern float func_002A7878_1(float low, float high);
 
 extern void func_002BF728(char *object, char *local, float amount, float base);
 
+extern char *func_0029EFD0_1(int);
+
 /* Measured partial layouts; original type and game roles are unknown. */
 typedef struct Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner {
     unsigned char prefix_00[0x68];
@@ -68,7 +70,25 @@ INCLUDE_ASM("asm/levels", func_L00_0038FC48);
 
 INCLUDE_ASM("asm/levels", func_L00_0038FE10);
 
-INCLUDE_ASM("asm/levels", func_L00_00390938);
+/* Calls a callee with the constant 167 and, when it returns a non-zero object, stores the argument pointer at +4 of the object held at +104, clears the words at +0, +8 and +12 of that object, sets byte +48 to 255, the halfword at +50 to 126 and bytes +49 and +32 to 0, then returns the object. */
+char *func_L00_00390938(char *p)
+{
+    char *o = func_0029EFD0_1(167);
+    int *v;
+
+    if (o != 0) {
+        v = *(int **)(o + 104);
+        v[1] = (int)p;
+        v[0] = 0;
+        v[2] = 0;
+        v[3] = 0;
+        *(unsigned char *)(o + 48) = 255;
+        *(short *)(o + 50) = 126;
+        o[49] = 0;
+        o[32] = 0;
+    }
+    return o;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00390E10);
 

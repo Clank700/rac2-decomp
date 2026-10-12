@@ -47,7 +47,3 @@ void func_00343068(VEC_F6bf9ce42 **pobj)
             D_001A7340, D_001A7344, 0x60241700);
 
 }
-
-INCLUDE_ASM("asm/game", func_00343200);
-
-INCLUDE_ASM("asm/game", func_00343260);

@@ -20,6 +20,36 @@ typedef struct {
 } Vec16_Fc936841d;
 #endif
 
+extern int func_002A7820_2(int, int);
+
+extern float func_002A7878_5(float, float);
+
+extern float func_002A7940_2(void);
+
+extern void func_00281EB8(char *, int, int, int, float, float, float);
+
+extern void func_002A3F10(char *p, int one, int *w, char *out);
+
+extern void func_00282D30_3(char *a, char *out, float f);
+
+extern void func_00282CC0_4(char *a, char *b, char *c);
+
+extern void func_00283098_2(char *a, char *b, char *c);
+
+extern char D_L00_001A8F20[] __attribute__((sda));
+
+extern void func_0029FCC0_1(int a, int b, void *c);
+
+extern int func_L00_003AB9C0(int a, void *b, int c, char *d, float e, float f, float g, float h);
+
+extern void func_00282F20_1(char *, char *, float);
+
+extern void func_00282DD8(char *, char *, char *);
+
+extern char *func_L00_0032A088_1();
+
+extern int *func_L00_0032A0B8_1();
+
 INCLUDE_ASM("asm/levels", func_L00_003A0F30);
 
 INCLUDE_ASM("asm/levels", func_L00_003A1580);
@@ -69,7 +99,20 @@ void func_L00_003A2570(Vec16_Fc936841d *object, int index)
     func_00282CC0_15((char *)&object[index - 1], (char *)&object[index - 2], local);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003A25D8);
+/* Derives a value from half of one argument, merges a helper's low byte into a packed word, then scales an input float, doubles a second helper's result and dispatches a seven-argument spawn. */
+void func_L00_003A25D8(int p0, int p1, int p2, int p3, float v)
+{
+    int r;
+    float s;
+    float t;
+
+    r = func_002A7820_2(p3 >> 1, p3);
+    p2 = p2 | (r << 24);
+    s = func_002A7878_5(v * 0.75f, v);
+    s = s + s;
+    t = func_002A7940_2();
+    func_00281EB8((char *)p1, 44, p2, 1, s, 0.08f, t);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003A2668);
 
@@ -106,7 +149,22 @@ void func_L00_003A2B28(char *p)
     *(float *)(p + 60) = 1.0f;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003A2BB8);
+/* scales a float field by 1/1024, passes a caller word and two 16/48-byte scratch buffers to a four-argument helper, then forwards the second buffer with the scaled float to one helper and two sub-objects of the same parameter to three more helpers */
+void func_L00_003A2BB8(char *p, int v, char *a, char *b)
+{
+    char out0[48];
+    char out48[16];
+    int w;
+    float f;
+
+    f = *(float *)(p + 44) * 0.0009765625f;
+    w = v;
+    func_002A3F10(p, 1, &w, out0);
+    func_00282D30_3(a, out48, f);
+    func_00282CC0_4(a, a, b);
+    func_00283098_2(a, a, p + 192);
+    func_00282CC0_4(a, a, p + 16);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003A2C60);
 
@@ -124,7 +182,20 @@ INCLUDE_ASM("asm/levels", func_L00_003A48D0);
 
 INCLUDE_ASM("asm/levels", func_L00_003A5368);
 
-INCLUDE_ASM("asm/levels", func_L00_003A5370);
+/* Runs one helper over the object and a stack buffer, then builds a second call from the object's field 104 sub-object - its field 24 as a float, the constants 2.0f/5.0f/0.6f and a bound data address - and stores the object into field 184 of the returned pointer when it is non-null. */
+void func_L00_003A5370(int a0)
+{
+    int buf[4];
+    int s0;
+    int v;
+
+    s0 = *(int *)(a0 + 104);
+    func_0029FCC0_1(a0, 0, buf);
+    v = func_L00_003AB9C0(a0, buf, *(int *)(s0 + 16), D_L00_001A8F20, *(float *)(s0 + 24), 2.0f, 5.0f, 0.6f);
+    if (v != 0) {
+        *(int *)(v + 184) = a0;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003A53E8);
 
@@ -144,13 +215,50 @@ INCLUDE_ASM("asm/levels", func_L00_003A7C30);
 
 INCLUDE_ASM("asm/levels", func_L00_003A7E78);
 
-INCLUDE_ASM("asm/levels", func_L00_003A8060);
+/* Computes two sub-record addresses of a 192-byte block and hands three of its sub-records to four helpers, threading a second argument through two of them. */
+void func_L00_003A8060(char *obj, char *arg)
+{
+    char *base = obj + 192;
+    char *other = obj + 208;
+    float one = 1.0f;
+
+    func_00282F20_1(base, (char *)(*(int *)(obj + 104)), one);
+    func_00282DD8(other, base, arg);
+    func_00282F20_1(other, other, one);
+    func_00282DD8(obj + 224, other, base);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003A80F8);
 
 INCLUDE_ASM("asm/levels", func_L00_003A8238);
 
-INCLUDE_ASM("asm/levels", func_L00_003A8508);
+/* Two size-driven clear loops over one buffer: calls two helpers with a fixed id to obtain a base and an offset, clears 80 records of 112 bytes walking backwards, then clears three fields at offsets 80/84/88 of every 96-byte record up to the buffer end. */
+void func_L00_003A8508(char *a0)
+{
+	int s1;
+	int v1;
+	int x;
+	int i;
+	int end;
+	short *p;
+
+	s1 = (int)func_L00_0032A088_1(1483, a0);
+	v1 = *func_L00_0032A0B8_1(1483, a0);
+	x = s1 + v1;
+	p = (short *)(s1 + 8866);
+	for (i = 79; i >= 0; i--) {
+		*p = 0;
+		p = p - 56;
+	}
+	s1 = x;
+	end = s1 + 288;
+	do {
+		*(short *)(s1 + 80) = 0;
+		*(int *)(s1 + 84) = 0;
+		*(int *)(s1 + 88) = 0;
+		s1 = s1 + 96;
+	} while (s1 < end);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003A85A0);
 

@@ -15,6 +15,24 @@ extern char D_L00_001A9000[] __attribute__((sda));
 
 extern float func_00282E48_1(char *a, char *b);
 
+extern void func_00282F20_6(void *, float);
+
+extern void func_00282DD8_2(void *, void *, void *);
+
+extern void func_00282D30_12(void *, void *, float);
+
+extern float func_00282DF0_1(void *);
+
+extern float func_00282C10(float);
+
+extern void func_00283958(void *, void *);
+
+extern void func_00283738(void *, void *, void *);
+
+extern void func_00282AB0_1(void *, void *, int);
+
+extern float func_00283CE0_2(int);
+
 extern float func_002A7940_1(void);
 
 extern float func_002A7878_3(float, float);
@@ -73,7 +91,24 @@ float func_002B0360(char *p)
 
 INCLUDE_ASM("asm/game", func_002B03B8);
 
-INCLUDE_ASM("asm/game", func_002B0408);
+/* Builds a 4-float value from a unit seed and a 0.5f-scaled blend against a region 32 bytes into the first argument, squares a scalar returned by a fourth callee, stores the negated complement of that square into a fifth word, converts the value into a 48-byte record and copies that record into the third argument when it is non-null. */
+void func_002B0408(void *a0, void *a1, void *a2)
+{
+    float buf[12];
+    float m[4];
+    float q[4];
+    float x;
+
+    func_00282F20_6(q, 1.0f);
+    func_00282DD8_2(m, q, (char *)a0 + 32);
+    func_00282D30_12(m, m, 0.5f);
+    x = func_00282DF0_1(m);
+    m[3] = -func_00282C10(1.0f - x * x);
+    func_00283958(m, buf);
+    func_00283738(a0, buf, a0);
+    if (a2 != 0)
+        func_00282AB0_1(a2, buf, 48);
+}
 
 INCLUDE_ASM("asm/game", func_002B04D8);
 
@@ -87,7 +122,14 @@ INCLUDE_ASM("asm/game", func_002B0668);
 
 INCLUDE_ASM("asm/game", func_002B08A0);
 
-INCLUDE_ASM("asm/game", func_002B08A8);
+/* Calls one float-conversion helper on (a0 %% a1) and again on a1, then returns 2*pi times the quotient minus pi. */
+float func_002B08A8(int a0, int a1)
+{
+    float r = func_00283CE0_2(a0 % a1);
+    float s = func_00283CE0_2(a1);
+
+    return 2.0f * r * 3.1415927f / s - 3.1415927f;
+}
 
 INCLUDE_ASM("asm/game", func_002B0910);
 

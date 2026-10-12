@@ -20,25 +20,3 @@ INCLUDE_ASM("asm/game", func_00290758);
 INCLUDE_ASM("asm/game", func_002908D0);
 
 INCLUDE_ASM("asm/game", func_00290978);
-
-INCLUDE_ASM("asm/game", func_00290A40);
-
-INCLUDE_ASM("asm/game", func_00290AA8);
-
-INCLUDE_ASM("asm/game", func_00290AB0);
-
-INCLUDE_ASM("asm/game", func_00290B48);
-
-INCLUDE_ASM("asm/game", func_00290C60);
-
-INCLUDE_ASM("asm/game", func_00291108);
-
-INCLUDE_ASM("asm/game", func_00291128);
-
-INCLUDE_ASM("asm/game", func_00291148);
-
-INCLUDE_ASM("asm/game", func_00291158);
-
-INCLUDE_ASM("asm/game", func_00291268);
-
-INCLUDE_ASM("asm/game", func_002912E8);

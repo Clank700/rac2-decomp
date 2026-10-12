@@ -34,21 +34,13 @@ typedef struct {
 } Vec16_Fc936841d;
 #endif
 
-/* Measured partial layouts; original type and game roles are unknown. */
-typedef struct Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner {
-    unsigned char prefix_00[0x68];
-    void *context_68;
-} Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner;
+extern int func_002A7820_2(int, int);
 
-typedef struct Rac2Native_9cdc323a4d0c2fbd_AnalysisConditionalContext {
-    unsigned char prefix_00[0x10];
-    float vector_10[4];
-    unsigned int field_20;
-    unsigned int active_24;
-} Rac2Native_9cdc323a4d0c2fbd_AnalysisConditionalContext;
+extern float func_002A7878_5(float, float);
 
-extern void func_002FDBD8_4(float scale, Rac2Native_9cdc323a4d0c2fbd_AnalysisConditionalContext *context,
-                                    float *vector, int mode);
+extern float func_002A7940_2(void);
+
+extern void func_00281EB8(char *, int, int, int, float, float, float);
 
 INCLUDE_ASM("asm/levels", func_L00_003E3258);
 
@@ -241,7 +233,20 @@ void func_L00_003E9A98(Vec16_Fc936841d *object, int index)
     func_00282CC0_15((char *)&object[index - 1], (char *)&object[index - 2], local);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003E9B00);
+/* Derives a value from half of one argument, merges a helper's low byte into a packed word, then scales an input float, doubles a second helper's result and dispatches a seven-argument spawn. */
+void func_L00_003E9B00(int p0, int p1, int p2, int p3, float v)
+{
+    int r;
+    float s;
+    float t;
+
+    r = func_002A7820_2(p3 >> 1, p3);
+    p2 = p2 | (r << 24);
+    s = func_002A7878_5(v * 0.75f, v);
+    s = s + s;
+    t = func_002A7940_2();
+    func_00281EB8((char *)p1, 44, p2, 1, s, 0.08f, t);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003E9B90);
 
@@ -277,61 +282,3 @@ void func_L00_003EA050(char *p)
     *(float *)(p + 52) = 2.0f;
     *(float *)(p + 60) = 1.0f;
 }
-
-INCLUDE_ASM("asm/levels", func_L00_003EA0E0);
-
-INCLUDE_ASM("asm/levels", func_L00_003EA188);
-
-INCLUDE_ASM("asm/levels", func_L00_003EA408);
-
-INCLUDE_ASM("asm/levels", func_L00_003EA540);
-
-INCLUDE_ASM("asm/levels", func_L00_003EA7D0);
-
-/* shared native body of family 5a97ab89858c */
-void func_L00_003EA860(char *p)
-{
-    *(long long *)(p + 112) = 0;
-    *(float *)(p + 8) = -1.0f;
-    *(float *)(p + 24) = 1.0f;
-    *(float *)(p + 40) = -1.0f;
-    *(float *)(p + 56) = 1.0f;
-    *(float *)(p + 4) = -1.0f;
-    *(float *)(p + 36) = 1.0f;
-    *(float *)(p + 52) = 1.0f;
-    *(int *)(p + 0) = 0;
-    *(int *)(p + 16) = 0;
-    *(int *)(p + 32) = 0;
-    *(int *)(p + 48) = 0;
-    *(float *)(p + 12) = 1.0f;
-    *(float *)(p + 28) = 1.0f;
-    *(float *)(p + 44) = 1.0f;
-    *(long long *)(p + 128) = 0x0000FF9000000260LL;
-    *(float *)(p + 20) = -1.0f;
-    *(float *)(p + 60) = 1.0f;
-}
-
-INCLUDE_ASM("asm/levels", func_L00_003EA8C8);
-
-INCLUDE_ASM("asm/levels", func_L00_003EAA58);
-
-/* When the context flag at offset 0x24 is nonzero, pass scale 1.0, the context, its vector at offset 0x10 and mode zero to the bound helper; original game role is unknown. */
-void func_L00_003EAC88(Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner *owner)
-{
-    Rac2Native_9cdc323a4d0c2fbd_AnalysisConditionalContext *context = owner->context_68;
-    if (context->active_24 != 0) {
-        func_002FDBD8_4(1.0f, context, context->vector_10, 0);
-    }
-}
-
-INCLUDE_ASM("asm/levels", func_L00_003EAEF8);
-
-INCLUDE_ASM("asm/levels", func_L00_003EB0C0);
-
-INCLUDE_ASM("asm/levels", func_L00_003EB400);
-
-INCLUDE_ASM("asm/levels", func_L00_003EB610);
-
-INCLUDE_ASM("asm/levels", func_L00_003EB7B8);
-
-INCLUDE_ASM("asm/levels", func_L00_003EB7C0);

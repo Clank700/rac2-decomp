@@ -45,7 +45,15 @@ extern void func_0034E478(int);
 
 extern void func_0034E4F8(int);
 
+extern int func_003418C0(int a, int b);
+
 extern void func_0034CE98(int value, int argument);
+
+extern int D_L00_001A904C_7 __attribute__((sda));
+
+extern int func_003387A0_1(int a, int b, int c);
+
+extern int func_00338040_1(int a, int b, int c);
 
 extern void func_L00_0042D9D0(int);
 
@@ -92,6 +100,16 @@ typedef struct Ctx {
 extern Slot0820eb11 D_L03_001D23C0[6];
 
 extern unsigned char D_L03_001CA5C0[];
+
+extern void func_00283658_1(char *a, char *b);
+
+extern void func_002A3F10_3(char *a, int b, int c, char *d);
+
+extern void func_00283788_5(char *a, char *b, char *c);
+
+extern void func_00282D30_21(char *a, char *b, float c);
+
+extern void func_00282CC0_24(char *a, char *b, char *c);
 
 void func_L00_002FC7A0(void)
 {
@@ -313,11 +331,29 @@ INCLUDE_ASM("asm/levels", func_L00_0030D558);
 
 INCLUDE_ASM("asm/levels", func_L00_0030D598);
 
-INCLUDE_ASM("asm/levels", func_L00_0030D5C8);
+/* Reads a bound global word; when it is non-zero it calls a helper with that value plus a fixed base offset as the first argument and the function's own argument as the second, otherwise returns 0. */
+int func_L00_0030D5C8(int a0)
+{
+    int v = D_L00_001A904C_1;
+
+    if (v != 0) {
+        return func_003418C0(v + 0x3BE08, a0);
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0030D608);
 
-INCLUDE_ASM("asm/levels", func_L00_0030D638);
+/* Reads a bound global word; when it is non-zero it calls a helper with that value plus a fixed base offset as the first argument and the function's own argument as the second, otherwise returns 0. */
+int func_L00_0030D638(int a0)
+{
+    int v = D_L00_001A904C_1;
+
+    if (v != 0) {
+        return func_003418C0(v + 0x3BE08, a0);
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0030D678);
 
@@ -388,9 +424,23 @@ INCLUDE_ASM("asm/levels", func_L00_0030DCB8);
 
 INCLUDE_ASM("asm/levels", func_L00_0030DCF8);
 
-INCLUDE_ASM("asm/levels", func_L00_0030DD70);
+/* Reads a bound global word; when it is zero it returns its first argument, otherwise it calls a helper with that value plus a fixed base offset and both of its arguments. */
+int func_L00_0030DD70(int a0, int a1)
+{
+    int v = D_L00_001A904C_7;
 
-INCLUDE_ASM("asm/levels", func_L00_0030DDB0);
+    if (v == 0) return a0;
+    return func_003387A0_1(v + 0x36F28, a0, a1);
+}
+
+/* Reads a bound global word; when it is zero it returns its first argument, otherwise it calls a helper with that value plus a fixed base offset and both of its arguments. */
+int func_L00_0030DDB0(int a0, int a1)
+{
+    int v = D_L00_001A904C_7;
+
+    if (v == 0) return a0;
+    return func_00338040_1(v + 0x36F28, a0, a1);
+}
 
 /* Reads a word from a shared global; when it is non-zero, calls a one-argument helper with that word plus a fixed byte offset. */
 void func_L00_0030DDF0(void)
@@ -469,7 +519,22 @@ INCLUDE_ASM("asm/levels", func_L00_00311080);
 
 INCLUDE_ASM("asm/levels", func_L00_003110E8);
 
-INCLUDE_ASM("asm/levels", func_L00_003116A8);
+/* scales a float field by 1/1024, fills a 64-byte stack buffer from the object, then applies three per-element helper calls over n 64-byte records. */
+void func_L00_003116A8(char *a0, int n, int a2, char *a3)
+{
+    char buf[64];
+    float f20;
+    int i;
+
+    f20 = *(float *)(a0 + 44) * 0.0009765625f;
+    func_00283658_1(buf, a0 + 192);
+    func_002A3F10_3(a0, n, a2, a3);
+    for (i = 0; i < n; i++) {
+        func_00283788_5(a3 + i * 64, buf, a3 + i * 64);
+        func_00282D30_21(a3 + i * 64 + 48, a3 + i * 64 + 48, f20);
+        func_00282CC0_24(a3 + i * 64 + 48, a3 + i * 64 + 48, a0 + 16);
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00311DC0);
 

@@ -1,5 +1,7 @@
 #include "include_asm.h"
 
+extern void func_0028B650(char *, int);
+
 /* Update the measured fields of the first matching key among13records. */
 typedef struct { unsigned int fields[25]; int key; unsigned int busy; unsigned int tail[9]; } UpdateRecord;
 
@@ -99,7 +101,23 @@ INCLUDE_ASM("asm/game", func_0028B338);
 
 INCLUDE_ASM("asm/game", func_0028B3D0);
 
-INCLUDE_ASM("asm/game", func_0028B4D8);
+/* Calls a callee with (this, word at +32), copies six words from +36..+56 down to +4..+24, calls the function pointer at +48 with this when non-zero, then clears +104. */
+void func_0028B4D8(char *p)
+{
+    int fp;
+
+    func_0028B650(p, *(int *)(p + 32));
+    fp = *(int *)(p + 48);
+    *(int *)(p + 4) = *(int *)(p + 36);
+    *(int *)(p + 20) = *(int *)(p + 52);
+    *(int *)(p + 24) = *(int *)(p + 56);
+    *(int *)(p + 12) = *(int *)(p + 44);
+    *(int *)(p + 8) = *(int *)(p + 40);
+    *(int *)(p + 16) = fp;
+    if (fp != 0)
+        ((void (*)(char *))fp)(p);
+    *(int *)(p + 104) = 0;
+}
 
 INCLUDE_ASM("asm/game", func_0028B540);
 
