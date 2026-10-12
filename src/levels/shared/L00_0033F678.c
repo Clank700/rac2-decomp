@@ -370,7 +370,15 @@ int func_L00_00346B50(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00346CD8);
+extern int func_00344378(int x);
+
+/* When the global is set, derives a pointer from it plus a fixed offset, runs it through a callee and stores the result into a field of the argument. */
+int func_L00_00346CD8(int *obj)
+{
+    if (D_L00_001A904C_3 != 0)
+        obj[13] = func_00344378(D_L00_001A904C_3 + 0x39F38);
+    return 0;
+}
 
 /* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
 long long func_L00_00346D20(void)
@@ -476,7 +484,6 @@ unsigned long long func_L00_0034C340(void)
 }
 
 INCLUDE_ASM("asm/levels", func_L00_0034C370);
-
 int func_L00_0034C3F8(void)
 {
     func_0027C540(0);
@@ -486,17 +493,41 @@ int func_L00_0034C3F8(void)
 }
 
 INCLUDE_ASM("asm/levels", func_L00_0034C428);
+extern void func_L00_0030DB18(void);
 
-INCLUDE_ASM("asm/levels", func_L00_0034C4B0);
+/* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
+int func_L00_0034C4B0(void)
+{
+    func_0027C540(0);
+    func_L00_0030DB18();
+    func_0027C660();
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0034C4E0);
+extern void func_L00_0030DAA8(void);
 
-INCLUDE_ASM("asm/levels", func_L00_0034C568);
+/* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
+int func_L00_0034C568(void)
+{
+    func_0027C540(0);
+    func_L00_0030DAA8();
+    func_0027C660();
+    return 0;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_0034C638);
+extern void func_L00_0030D958(void);
+
+/* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
+int func_L00_0034C638(void)
+{
+    func_0027C540(0);
+    func_L00_0030D958();
+    func_0027C660();
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0034C668);
-
 /* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
 /* Implementation matching decompiled output */
 long func_L00_0034C6F0(void)
@@ -519,7 +550,16 @@ unsigned long long func_L00_0034C7F0(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0034C8E8);
+extern void func_L00_0030D678(void);
+
+/* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
+int func_L00_0034C8E8(void)
+{
+    func_0027C540(0);
+    func_L00_0030D678();
+    func_0027C660();
+    return 0;
+}
 
 /* When a global flag is set, derives a pointer from that global plus a fixed offset, runs it through one callee and stores the callee result into a field of the argument. */
 int func_L00_0034E6F0(int *obj)
@@ -554,11 +594,29 @@ int func_L00_0034EA38(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0034EB78);
+extern void func_L00_0030DBF8(void);
+
+/* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
+int func_L00_0034EB78(void)
+{
+    func_0027C540(0);
+    func_L00_0030DBF8();
+    func_0027C660();
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0034EC00);
 
-INCLUDE_ASM("asm/levels", func_L00_0034ECD0);
+extern void func_L00_0030DB88(void);
+
+/* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
+int func_L00_0034ECD0(void)
+{
+    func_0027C540(0);
+    func_L00_0030DB88();
+    func_0027C660();
+    return 0;
+}
 
 int func_L00_0034ED58(void)
 {
@@ -566,7 +624,16 @@ int func_L00_0034ED58(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0034ED80);
+extern void func_L00_0030D448(void);
+
+/* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
+int func_L00_0034ED80(void)
+{
+    func_0027C540(0);
+    func_L00_0030D448();
+    func_0027C660();
+    return 0;
+}
 
 extern int D_L00_001C95D4;
 
@@ -579,7 +646,16 @@ int func_L00_0034EDC8(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0034EF68);
+extern void func_L00_0030D4B8(void);
+
+/* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
+int func_L00_0034EF68(void)
+{
+    func_0027C540(0);
+    func_L00_0030D4B8();
+    func_0027C660();
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00350F20);
 
