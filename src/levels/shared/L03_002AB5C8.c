@@ -6,7 +6,14 @@ INCLUDE_ASM("asm/levels", func_L03_002AD540);
 
 INCLUDE_ASM("asm/levels", func_L03_002ADC00);
 
-INCLUDE_ASM("asm/levels", func_L03_002ADCA0);
+extern unsigned char D_L03_00189E20[];
+
+void func_L03_002ADCA0(void) {
+    unsigned char *g = D_L03_00189E20;
+
+    if (*(short *)(g + 0x6BC) != 0 && *(int *)(g + 0x660) == 0)
+        *(float *)(*(unsigned char **)(g + 0x2290) + 0xF4) = *(float *)(g + 0x6B0);
+}
 
 INCLUDE_ASM("asm/levels", func_L03_002B0958);
 
@@ -38,7 +45,16 @@ INCLUDE_ASM("asm/levels", func_L03_0032AD10);
 
 INCLUDE_ASM("asm/levels", func_L03_00339128);
 
-INCLUDE_ASM("asm/levels", func_L03_00339268);
+extern int func_2EEC20(void *);
+extern void func_331270(void *);
+
+void func_L03_00339268(unsigned char *a0) {
+    if (*(short *)(a0 + 0xA) == -1)
+        return;
+    if (func_2EEC20(a0 + 0xA) == 0)
+        return;
+    func_331270(a0);
+}
 
 INCLUDE_ASM("asm/levels", func_L03_003564C0);
 
@@ -64,7 +80,16 @@ INCLUDE_ASM("asm/levels", func_L03_0038B5D8);
 
 INCLUDE_ASM("asm/levels", func_L03_0038BCC0);
 
-INCLUDE_ASM("asm/levels", func_L03_00393228);
+extern float func_2EF158(void *, void *);
+extern void func_2B8300(int, int, void *);
+
+void func_L03_00393228(unsigned char *a0) {
+    unsigned char *g = D_L03_00189E20;
+
+    if (*(unsigned char *)(g + 0x22B4) == 0)
+        if (func_2EF158(g + 0x80, a0 + 0x10) < 1.7f)
+            func_2B8300(1, 0x3F, a0);
+}
 
 INCLUDE_ASM("asm/levels", func_L03_003A40A0);
 
@@ -74,7 +99,23 @@ INCLUDE_ASM("asm/levels", func_L03_003C1BF0);
 
 INCLUDE_ASM("asm/levels", func_L03_003C3220);
 
-INCLUDE_ASM("asm/levels", func_L03_003C41B8);
+extern int func_419B10(void *, void *, int, void *, void *, void *, float, float);
+extern void func_32D0F0(void *, int, float);
+float func_L03_003C5AB8(unsigned char *);
+
+int func_L03_003C41B8(unsigned char *a0, int a1, int a2) {
+    unsigned char *s0 = *(unsigned char **)(a0 + 0x68);
+    float f = 0.0f;
+    float out;
+    int r;
+
+    if (a2 != 0)
+        f = func_L03_003C5AB8(a0);
+    r = func_419B10(*(void **)(s0 + 0x220), a0 + 0x10, a1, &out, s0 + 0x368, s0 + 0x36C, f,
+                    *(float *)(s0 + 0x110));
+    func_32D0F0(a0, a1, out);
+    return r;
+}
 
 INCLUDE_ASM("asm/levels", func_L03_003C4240);
 
