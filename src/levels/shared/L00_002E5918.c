@@ -49,10 +49,6 @@ INCLUDE_ASM("asm/levels", func_L00_002E8428);
 
 INCLUDE_ASM("asm/levels", func_L00_002E8DD8);
 
-INCLUDE_ASM("asm/levels", func_L00_002E9098);
-
-INCLUDE_ASM("asm/levels", func_L00_002E90A8);
-
 extern void func_0027F128(void *a0, void *a1, void *a2);
 extern char D_L00_0028C590[];
 
