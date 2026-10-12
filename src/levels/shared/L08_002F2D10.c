@@ -139,12 +139,7 @@ INCLUDE_ASM("asm/levels", func_L08_003CD488);
 extern u8 *D_0018C0B0;
 extern void func_002A0F48();
 
-void func_L08_003CD600(u8 *ctx) {
-    u8 *s = D_0018C0B0;
-    qcopy(ctx + 0x10, s + 0x10);
-    qcopy(ctx + 0xF0, s + 0xF0);
-    func_002A0F48(ctx);
-}
+INCLUDE_ASM("asm/levels", func_L08_003CD600);
 
 INCLUDE_ASM("asm/levels", func_L08_003CD648);
 
@@ -152,12 +147,7 @@ INCLUDE_ASM("asm/levels", func_L08_003CD6C8);
 
 INCLUDE_ASM("asm/levels", func_L08_003CD708);
 
-void func_L08_003CDB38(u8 *p) {
-    u8 *s = *(u8 **)(p + 0x68);
-    qcopy(p + 0x10, s);
-    qcopy(p + 0xF0, s + 0x10);
-    func_002A0F48(p);
-}
+INCLUDE_ASM("asm/levels", func_L08_003CDB38);
 
 INCLUDE_ASM("asm/levels", func_L08_003CDB78);
 

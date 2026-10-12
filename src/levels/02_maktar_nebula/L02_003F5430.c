@@ -6,7 +6,22 @@ typedef unsigned int u32;
 typedef short s16;
 typedef int s32;
 
-INCLUDE_ASM("asm/levels", func_L02_003F5430);
+extern char *D_L02_001B3AF8 __attribute__((sda));
+extern s32 func_002F3220(char *, float);
+
+void func_L02_003F5430(char *a0) {
+    char *s0 = *(char **)(a0 + 0x68);
+    s32 i;
+    s16 *s2;
+    *(u32 *)(s0 + 0x84) = 0;
+    for (i = 0; i < *(s32 *)(s0 + 0x80); i++) {
+        char *q;
+        s2 = (s16 *)(s0 + 0x40 + i * 2);
+        q = D_L02_001B3AF8 + *s2 * 32;
+        if (func_002F3220(q, *(float *)(q + 0x10)) != -1)
+            *(u32 *)(s0 + 0x84) |= 1 << i;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003F54D8);
 
@@ -56,7 +71,21 @@ INCLUDE_ASM("asm/levels", func_L02_003FB6C0);
 
 INCLUDE_ASM("asm/levels", func_L02_003FB7E0);
 
-INCLUDE_ASM("asm/levels", func_L02_003FBA58);
+extern s32 func_003D77F8(char *);
+extern void func_003D78A8(char *);
+
+void func_L02_003FBA58(char *a0) {
+    char **p;
+    char *s1 = *(char **)(a0 + 0x68);
+    s32 i;
+    for (i = 0; i <= *(s32 *)(s1 + 0xD8); i++) {
+        p = (char **)(s1 + 0xA8 + i * 4);
+        if (*p != 0) {
+            if (func_003D77F8(*p) != 0)
+                func_003D78A8(*p);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003FBAD0);
 
@@ -85,9 +114,17 @@ void func_L02_003FC020(char *a0, char *a1) {
         func_L02_00400650(a0, 0x15);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003FC098);
+extern char *D_L02_001B368C __attribute__((sda));
 
-INCLUDE_ASM("asm/levels", func_L02_003FC0B8);
+char *func_L02_003FC098(char *a0) {
+    char *a1 = *(char **)(a0 + 0x68);
+    return D_L02_001B368C + *(u32 *)(a1 + 0x88) * 128 + 0x30;
+}
+
+s32 func_L02_003FC0B8(char *a0) {
+    char *v1 = *(char **)(a0 + 0x68);
+    return *(s32 *)(v1 + 0x84);
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003FC0D0);
 

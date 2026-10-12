@@ -1,4 +1,5 @@
 #include "include_asm.h"
+#include "common.h"
 
 INCLUDE_ASM("asm/levels", func_L05_003D33E8);
 
@@ -57,7 +58,10 @@ INCLUDE_ASM("asm/levels", func_L05_00419CC8);
 
 INCLUDE_ASM("asm/levels", func_L05_00419F10);
 
-INCLUDE_ASM("asm/levels", func_L05_0041A218);
+void func_L05_0041A218(void)
+{
+    char buf[0x20];
+}
 
 INCLUDE_ASM("asm/levels", func_L05_0041A228);
 
@@ -67,7 +71,36 @@ INCLUDE_ASM("asm/levels", func_L05_0041C118);
 
 INCLUDE_ASM("asm/levels", func_L05_0041C1F0);
 
-INCLUDE_ASM("asm/levels", func_L05_0041C410);
+extern int func_332AB8(int kind);
+
+void func_L05_0041C410(char *object)
+{
+    char *state = *(char **)(object + 0x68);
+    float *f = (float *)state;
+    int *w;
+    int i;
+    int j;
+    int v;
+
+    for (i = 3; i >= 0; i--)
+        *f++ = (float)func_332AB8(0xFF);
+    *(float *)(state + 0x10) = -1.0f;
+    *(float *)(state + 0x14) = -2.25f;
+    *(float *)(state + 0x18) = 1.25f;
+    *(float *)(state + 0x1C) = 2.5f;
+    j = 3;
+    w = (int *)(state + 0x2C);
+    v = 0xFF;
+    for (; j >= 0; j--) {
+        *w = v;
+        w = (int *)((char *)w - 4);
+        v -= 0x40;
+    }
+    *(float *)(state + 0x30) = 3.0f;
+    *(float *)(state + 0x34) = 3.7f;
+    *(float *)(state + 0x3C) = 3.0f;
+    *(float *)(state + 0x38) = 3.7f;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_0041C4E8);
 
@@ -104,9 +137,19 @@ void func_L05_00424780(char *object)
 
 INCLUDE_ASM("asm/levels", func_L05_004247C8);
 
-INCLUDE_ASM("asm/levels", func_L05_00424970);
+void func_L05_00424970(char *object, int value)
+{
+    char *state = *(char **)(object + 0x68);
 
-INCLUDE_ASM("asm/levels", func_L05_00424980);
+    *(int *)(state + 0x8) = value;
+}
+
+void func_L05_00424980(char *object, int value)
+{
+    char *state = *(char **)(object + 0x68);
+
+    *(int *)(state + 0xC) = value;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_00424990);
 
@@ -138,7 +181,34 @@ INCLUDE_ASM("asm/levels", func_L05_00425FE0);
 
 INCLUDE_ASM("asm/levels", func_L05_004260B8);
 
-INCLUDE_ASM("asm/levels", func_L05_00426270);
+void func_L05_00426270(char *object)
+{
+    char *state = *(char **)(object + 0x68);
+    float *f = (float *)state;
+    int *w;
+    int i;
+    int j;
+    int v;
+
+    for (i = 3; i >= 0; i--)
+        *f++ = (float)func_332AB8(0xFF);
+    *(float *)(state + 0x10) = -1.0f;
+    *(float *)(state + 0x14) = -2.25f;
+    *(float *)(state + 0x18) = 1.25f;
+    *(float *)(state + 0x1C) = 2.5f;
+    j = 3;
+    w = (int *)(state + 0x2C);
+    v = 0xFF;
+    for (; j >= 0; j--) {
+        *w = v;
+        w = (int *)((char *)w - 4);
+        v -= 0x40;
+    }
+    *(float *)(state + 0x30) = 2.4f;
+    *(float *)(state + 0x34) = 3.0f;
+    *(float *)(state + 0x3C) = 2.4f;
+    *(float *)(state + 0x38) = 3.0f;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_00426348);
 

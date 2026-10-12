@@ -17,7 +17,6 @@ void func_L00_002E5918(void) {
  func_00284EA8();
 }
 
-
 INCLUDE_ASM("asm/levels", func_L00_002E6440);
 
 /* calls the measured callee with zero */
@@ -117,8 +116,6 @@ void func_L00_002E6EF8(DrawCallback_r002E6EF8 fn, void *arg) {
 
 INCLUDE_ASM("asm/levels", func_L00_002E6F48);
 
-INCLUDE_ASM("asm/levels", func_L00_002E73E0);
-
 INCLUDE_ASM("asm/levels", func_L00_002E7F98);
 
 INCLUDE_ASM("asm/levels", func_L00_002E8120);
@@ -204,7 +201,43 @@ void func_L00_002ED420(void)
 
 INCLUDE_ASM("asm/levels", func_L00_002ED7F8);
 
-INCLUDE_ASM("asm/levels", func_L00_002ED808);
+/* Measured partial layout of the 0x20-byte slots of D_L00_001BECC0. */
+typedef struct {
+    char pad_00[0x10];
+    unsigned short f10;
+    unsigned short f12;
+    char pad_14[4];
+    float f18;
+    char pad_1c[4];
+} Entry_r002ED808;
+
+extern Entry_r002ED808 D_L00_001BECC0[];
+
+extern float ref_L00_002ED808_00(float, float);
+
+extern void ref_L00_002ED808_01(void *, int, int);
+
+/* Steps the sixteen slots: eases the angle down by five degrees a tick and drops a slot
+   when its countdown reaches zero. 0.087266475f is 0x3DB2B8C4 as retail materialises it. */
+void func_L00_002ED808(void) {
+    Entry_r002ED808 *e = D_L00_001BECC0;
+    int i = 15;
+
+    do {
+        if ((short)e->f10 > 0) {
+            e->f18 = ref_L00_002ED808_00(e->f18, 0.087266475f);
+            if ((short)e->f10 >= 13)
+                e->f12 += 5;
+            else
+                e->f12 -= 5;
+            e->f10--;
+            if ((short)e->f10 <= 0)
+                ref_L00_002ED808_01(e, 0, 0x20);
+        }
+        i--;
+        e++;
+    } while (i >= 0);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002EDC90);
 
