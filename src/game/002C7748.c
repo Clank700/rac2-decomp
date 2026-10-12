@@ -355,7 +355,15 @@ INCLUDE_ASM("asm/game", func_002CA790);
 
 INCLUDE_ASM("asm/game", func_002CA8A8);
 
-INCLUDE_ASM("asm/game", func_002CAA58);
+extern void func_002CA070(void);
+extern unsigned int D_L00_001FEC40[2];
+void func_002CAA58(void)
+{
+    func_002CA070();
+    D_L00_001FEC40[0] = 2;
+    D_L00_001FEC40[1] = 0;
+}
+
 
 /* A12-struct-2field-24 freshly exact-verified under family reservation */
 void func_002CAA88(void) {

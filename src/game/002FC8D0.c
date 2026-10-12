@@ -161,7 +161,14 @@ INCLUDE_ASM("asm/game", func_002FE8D8);
 
 INCLUDE_ASM("asm/game", func_002FE9D0);
 
-INCLUDE_ASM("asm/game", func_002FEC50);
+extern char D_0021F9C0[];
+
+void *func_002FEC50(int index) {
+    void *result = 0;
+    if ((unsigned int)index < 64u)
+        result = D_0021F9C0 + index * 0x50;
+    return result;
+}
 
 INCLUDE_ASM("asm/game", func_002FEC78);
 
@@ -171,7 +178,14 @@ INCLUDE_ASM("asm/game", func_002FED78);
 
 INCLUDE_ASM("asm/game", func_002FED90);
 
-INCLUDE_ASM("asm/game", func_002FEE50);
+extern char D_002212E0[];
+
+void func_002FEE50(int index) {
+    int *p;
+    if (index < 0) return;
+    p = (int *)((unsigned int)D_002212E0 + (index << 5));
+    p[7] = 0;
+}
 
 INCLUDE_ASM("asm/game", func_002FEE70);
 
@@ -209,7 +223,7 @@ INCLUDE_ASM("asm/game", func_00300190);
 
 INCLUDE_ASM("asm/game", func_003001E0);
 
-INCLUDE_ASM("asm/game", func_00300248);
+
 
 s32 func_00300280(s32 *a0,s32 a1) {
  s32 out=-1,i=0,flag=1; s32 *p=a0;
@@ -239,7 +253,26 @@ INCLUDE_ASM("asm/game", func_00300330);
 
 INCLUDE_ASM("asm/game", func_003004A8);
 
-INCLUDE_ASM("asm/game", func_003004B0);
+typedef struct {
+    int padding;
+    float value;
+    int reserved[2];
+} Record003004B0;
+
+typedef struct {
+    Record003004B0 records[64];
+    int enabled;
+    int index;
+} State003004B0;
+
+extern State003004B0 D_00220DC0;
+
+float func_003004B0(float value) {
+    float result = value;
+    if (D_00220DC0.enabled != 0)
+        result = D_00220DC0.records[D_00220DC0.index].value;
+    return result;
+}
 
 /* shared native body of family 8a42bc68419c7402 */
 int func_003004E0(int value)

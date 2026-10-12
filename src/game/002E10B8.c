@@ -299,7 +299,11 @@ INCLUDE_ASM("asm/game", func_002E5F00);
 
 INCLUDE_ASM("asm/game", func_002E5F38);
 
-INCLUDE_ASM("asm/game", func_002E5F40);
+s32 func_002E5F40(s32 index, s32 callback) {
+    u8 *p = D_00188660 + index * 0x70;
+    *(s32 *)(p + 0x84) = callback;
+    return 1;
+}
 
 void func_002E5F60(void) {
     s32 i=0;

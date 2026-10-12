@@ -55,7 +55,20 @@ INCLUDE_ASM("asm/game", func_00292078);
 
 INCLUDE_ASM("asm/game", func_00292328);
 
-INCLUDE_ASM("asm/game", func_002923C0);
+extern void func_00292078(void *);
+extern void func_00292328(void *);
+extern u8 *D_L03_001DAB80[];
+extern void func_002934B8(u8 *, u8 *);
+extern unsigned char *D_001BAF38;
+
+void func_002923C0(void *param)
+{
+    func_00292078(param);
+    func_00292328(param);
+    func_002934B8((u8 *)D_L03_001DAB80[0], D_001BAF38);
+    *(int *)0x001A7290 = (int)param;
+}
+
 
 INCLUDE_ASM("asm/game", func_00292408);
 
@@ -137,7 +150,17 @@ INCLUDE_ASM("asm/game", func_00293F98);
 
 INCLUDE_ASM("asm/game", func_00294070);
 
-INCLUDE_ASM("asm/game", func_002940C0);
+void func_002940C0(void)
+{
+    extern void func_00282A60(unsigned int *, unsigned int, int);
+    struct Table2 *table = &Fee2b87d1_D_00152CD0;
+    int i;
+    func_00282A60((unsigned int *)table, 0, 0x35840);
+    *(short *)((char *)table + 0x14) = -1;
+    for (i = 2; i >= 0; --i)
+        table->slots[i] = -1;
+}
+
 
 INCLUDE_ASM("asm/game", func_00294130);
 
@@ -149,7 +172,14 @@ INCLUDE_ASM("asm/game", func_00294398);
 
 INCLUDE_ASM("asm/game", func_00294420);
 
-INCLUDE_ASM("asm/game", func_002945E8);
+extern void func_00294398(void *a0, void *a1);
+
+void func_002945E8(void *a0, void *a1)
+{
+    F46b43b72_FUN_002B7CE0(1);
+    func_00294398(a0, a1);
+    F46b43b72_FUN_002B7CE0(1);
+}
 
 s32 func_00294630(s32 value) {
     s32 i = 0;
