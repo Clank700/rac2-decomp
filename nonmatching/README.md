@@ -34,13 +34,13 @@ level address written as a number, which only fits one level.
 - [`func_001317E8`](core/func_001317E8.c)
 - [`func_0027F110`](game/func_0027F110.c)
 - [`func_00287E98`](game/func_00287E98.c)
-- [`func_00288BE8`](game/func_00288BE8.c)
+- [`func_00288BE8`](game/func_00288BE8.c) â€” recovered in [maintained C](../src/game/00288BB8-g8.c); the earlier draft is retained.
 - [`func_00288D70`](game/func_00288D70.c)
 - [`func_00290670`](game/func_00290670.c)
-- [`func_002985F0`](game/func_002985F0.c)
-- [`func_00298780`](game/func_00298780.c)
-- [`func_L00_00309AE8`](levels/shared/func_L00_00309AE8.c)
-- [`func_L00_00309B10`](levels/shared/func_L00_00309B10.c)
-- [`func_L00_00309B58`](levels/shared/func_L00_00309B58.c)
-- [`func_L00_00309B80`](levels/shared/func_L00_00309B80.c)
-- [`func_L03_0043ACD8`](levels/shared/func_L03_0043ACD8.c)
+- [`func_002985F0`](game/func_002985F0.c) â€” recovered in [maintained C](../src/game/002985F0-g8.c); the earlier draft is retained.
+- [`func_00298780`](game/func_00298780.c) â€” recovered in [maintained C](../src/game/00298780-g8.c); the earlier draft is retained.
+- [`func_L00_00309AE8`](levels/shared/func_L00_00309AE8.c) â€” recovered in [maintained C](../src/levels/shared/L00_00309AE8-g8.c); the earlier draft is retained.
+- [`func_L00_00309B10`](levels/shared/func_L00_00309B10.c) â€” recovered in [maintained C](../src/levels/shared/L00_00309AE8-g8.c); the earlier draft is retained.
+- [`func_L00_00309B58`](levels/shared/func_L00_00309B58.c) â€” recovered in [maintained C](../src/levels/shared/L00_00309AE8-g8.c); the earlier draft is retained.
+- [`func_L00_00309B80`](levels/shared/func_L00_00309B80.c) â€” recovered in [maintained C](../src/levels/shared/L00_00309AE8-g8.c); the earlier draft is retained.
+- [`func_L03_0043ACD8`](levels/shared/func_L03_0043ACD8.c) â€” recovered in [maintained C](../src/levels/shared/L03_003C5B28-g8.c); the earlier draft is retained.

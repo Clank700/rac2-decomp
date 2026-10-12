@@ -306,12 +306,14 @@ INCLUDE_ASM("asm/game", func_002AC9F8);
 
 INCLUDE_ASM("asm/game", func_002ACA48);
 
-/* shared native body of family 354e785cbdee35b5 */
+extern int D_L02_001B359C;
+
+/* The subtraction uses the corresponding global in each program. */
 void func_002ACA50(int param_1, short *param_2, short param_3)
 {
     int i;
 
-    param_1 = (param_1 - *(int *)0x001B359C) << 8 >> 16;
+    param_1 = (param_1 - D_L02_001B359C) << 8 >> 16;
     for (i = 1; i <= param_2[0]; i++) {
         if (param_2[i] == param_1) return;
     }

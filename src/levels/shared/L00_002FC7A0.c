@@ -197,17 +197,9 @@ INCLUDE_ASM("asm/levels", func_L00_00309140);
 void func_L00_00309368(void)
 {
 }
-extern void func_L00_00309AE8(void);
-INCLUDE_ASM("asm/levels", func_L00_00309AE8);
 
-extern void func_L00_00309B10(void);
-INCLUDE_ASM("asm/levels", func_L00_00309B10);
 
-extern void func_L00_00309B58(void);
-INCLUDE_ASM("asm/levels", func_L00_00309B58);
 
-extern void func_L00_00309B80(void);
-INCLUDE_ASM("asm/levels", func_L00_00309B80);
 
 
 INCLUDE_ASM("asm/levels", func_L00_00309DB0);
