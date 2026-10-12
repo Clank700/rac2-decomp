@@ -500,12 +500,16 @@ def level_reference(number: int) -> Path:
     d = levels.DUMP / levels.level_dir(number)
     m = json.loads((d / "manifest.json").read_text())
     path = BUILD / "reference" / f"{levels.level_dir(number)}.elf"
+    if path.is_file() and path.stat().st_mtime >= max(f.stat().st_mtime for f in d.iterdir()):
+        return path           # current: tools/check.py runs side by side must not rewrite it
     sections = [{"name": "." + s["name"] if s["name"] in ("text", "data", "bss") else s["name"],
                  "address": s["address"], "type": s["type"],
                  "data": (d / f"{s['name']}.bin").read_bytes() if s["type"] != elf.SHT_NOBITS else b"\0" * s["size"]}
                 for s in m["sections"]]
     path.parent.mkdir(parents=True, exist_ok=True)
-    elf.write_exec(path, m["entry"], sections)
+    fresh = path.with_suffix(f".{os.getpid()}.tmp")
+    elf.write_exec(fresh, m["entry"], sections)
+    os.replace(fresh, path)   # whole or not at all, for a reader in another process
     return path
 
 
