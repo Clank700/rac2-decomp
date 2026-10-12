@@ -96,7 +96,8 @@ compiles one file and compares one function in seconds.
 The lead, for each finished worker:
 
 1. takes the worker's branch into its own (`git merge` or cherry-pick), one worker at a time;
-2. runs `python3 tools/build.py all`: every program must print `OK`. A function that passed
+2. runs `python3 tools/build.py all` (it builds the programs in parallel; give it the cores):
+   every program must print `OK`. A function that passed
    `tools/check.py` but breaks a program goes back to `nonmatching/`, it is not fixed up by hand
    in the build;
 3. runs `python3 tools/progress.py`, the tests, `tests/check_repository.py` and
