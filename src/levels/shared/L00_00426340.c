@@ -57,6 +57,18 @@ typedef struct Rac2Native_6af85cabb56d3b41_SmallConditional52Owner {
     short identity_86;
 } Rac2Native_6af85cabb56d3b41_SmallConditional52Owner;
 
+extern void ref_L00_00428EB0_00(char *);
+
+extern void ref_L00_00428EB0_01(char *);
+
+extern void func_L00_004276E8(char *);
+
+extern void func_L00_002DA1E0(char *, float);
+
+extern void func_L00_00426680(char *);
+
+extern void func_0035F3A8(int, int, int);
+
 typedef struct Rac2Native_6af85cabb56d3b41_SmallConditional52Global {
     unsigned char unknown_00[0x2294];
     int mode_2294;
@@ -118,7 +130,26 @@ INCLUDE_ASM("asm/levels", func_L00_004266E8);
 
 INCLUDE_ASM("asm/levels", func_L00_00426C78);
 
-INCLUDE_ASM("asm/levels", func_L00_00427008);
+void func_L00_00427008(char *self)
+{
+    char *a = D_L00_001B8C80_1;
+    char *b;
+    short v = *(short *)(a + 0x290);
+
+    if (v != 0) {
+        *(short *)(a + 0x290) = 2;
+    } else {
+        *(short *)(a + 0x290) = 1;
+    }
+    b = D_L00_001B8C80_1;
+    *(char *)(b + 0x293) = 0;
+    *(float *)(b + 0x2B4) = 0.075f;
+    *(float *)(b + 0x2A8) = 0.075f;
+    func_L00_00426680(self);
+    if (*(int *)(b + 0x264) != 0) {
+        func_0035F3A8(0, 0, *(int *)(b + 0x264));
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00427078);
 
@@ -137,7 +168,18 @@ unsigned int func_L00_00427AD8(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00427AE0);
+/* When the sub-object at +0x70 gains its flag word at +0x40, clears the byte at +0x89 and
+   fades the block at +0x30 to a half-turn target. */
+void func_L00_00427AE0(char *a0)
+{
+    char *p = *(char **)(a0 + 0x70) + 0xE0;
+
+    func_L00_004276E8(a0);
+    if (*(int *)(p + 0x40)) {
+        *(char *)(a0 + 0x89) = 0;
+        func_L00_002DA1E0(a0 + 0x30, 0.5f);
+    }
+}
 
 void func_L00_00427B38(void)
 {
@@ -245,7 +287,12 @@ INCLUDE_ASM("asm/levels", func_L00_004287E8);
 
 INCLUDE_ASM("asm/levels", func_L00_00428CE0);
 
-INCLUDE_ASM("asm/levels", func_L00_00428EB0);
+/* runs a fixed pair of callees on the same object handle */
+void func_L00_00428EB0(char *a0)
+{
+    ref_L00_00428EB0_00(a0);
+    ref_L00_00428EB0_01(a0);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00428EE0);
 
@@ -308,10 +355,6 @@ INCLUDE_ASM("asm/levels", func_L00_0042AD98);
 
 INCLUDE_ASM("asm/levels", func_L00_0042B038);
 
-
-INCLUDE_ASM("asm/levels", func_L00_0042B6A8);
-
-INCLUDE_ASM("asm/levels", func_L00_0042B6C8);
 
 INCLUDE_ASM("asm/levels", func_L00_0042B730);
 
