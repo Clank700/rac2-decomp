@@ -120,23 +120,7 @@ void func_L00_003B7190(float *a0, float *a1)
 
 INCLUDE_ASM("asm/levels", func_L00_003B72B0);
 
-void *func_L00_003B7410(char *a0, void *a1, void *a2, int a3)
-{
-    NODE *o = func_3100D8(0x88D);
-
-    if (o != 0) {
-        char *d = (char *)o + 0x10;
-        void *s = o->f68;
-
-        o->fB8 = (int)a0;
-        o->f30 = 0xFF;
-        o->fBC = a3;
-        qcopy(d, a1);
-        qcopy(s, a2);
-        func_31A658(o, 2, -1);
-    }
-    return o;
-}
+INCLUDE_ASM("asm/levels", func_L00_003B7410);
 
 INCLUDE_ASM("asm/levels", func_L00_003B74A8);
 

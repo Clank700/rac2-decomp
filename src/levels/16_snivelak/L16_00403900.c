@@ -90,20 +90,7 @@ INCLUDE_ASM("asm/levels", func_L16_00411D00);
 
 /* Builds a 16-byte query record from the game speed and the handle's byte field and
    hands it with a prepared buffer to the generic path. */
-void func_L16_00411ED0(u8 *arg)
-{
-    u8 *s0 = arg;
-    u8 *s1 = *(u8 **)(arg + 0x68);
-    s32 buf[4];
-    s32 rec[4];
-    float t;
-
-    func_30AD48(s0, func_313EA0(2), buf);
-    qzero(rec);
-    t = func_313F38(5.0f, 10.0f);
-    *(float *)((u8 *)rec + 8) = -(t * (1.0f / 60.0f));
-    func_41F1F0(s0, buf, rec, 1, 1.0f / 180.0f, (float)*(u8 *)(s1 + 0x36));
-}
+INCLUDE_ASM("asm/levels", func_L16_00411ED0);
 
 INCLUDE_ASM("asm/levels", func_L16_00411F80);
 

@@ -127,33 +127,7 @@ extern void func_00310440(char *arg);
 extern void func_L00_00404168(char *arg);
 extern void func_L00_00403F90(char *arg, void *p);
 
-void func_L00_00403D58(char *arg)
-{
-    int *o = *(int **)(arg + 104);
-    unsigned char state = *(unsigned char *)(arg + 32);
-    TI128 tmp;
-
-    switch (state) {
-    case 0:
-        arg[32] = 1;
-    case 1:
-        qcopy(&tmp, arg + 16);
-        func_002EE108(arg + 16, o, arg + 16);
-        func_0037F9A0(arg + 16, arg + 16);
-        func_0037E1D8(o[7], o, 0);
-        func_L00_00403F90(arg, &tmp);
-        if (func_002EDD48((char *)o + 16) != 0)
-            arg[32] = 2;
-        break;
-    case 2:
-        func_0037E1B8(o[7]);
-        func_00310440(arg);
-        return;
-    default:
-        break;
-    }
-    func_002E6EF8(func_L00_00404168, arg);
-}
+INCLUDE_ASM("asm/levels", func_L00_00403D58);
 
 INCLUDE_ASM("asm/levels", func_L00_00403F90);
 
@@ -170,24 +144,7 @@ extern void func_00310440(char *arg);
 extern int func_002DE4B0(void *a, void *b, int c, void *d, int e);
 extern void func_0035F450(int a, int b, void *c, int d);
 
-void func_L00_00404DD8(char *arg, void *a1)
-{
-    if (*(float *)(arg + 16) < 2.0f || *(float *)(arg + 16) > 1021.0f ||
-        *(float *)(arg + 20) < 2.0f || *(float *)(arg + 20) > 1021.0f ||
-        *(float *)(arg + 24) < 2.0f || *(float *)(arg + 24) > 1021.0f) {
-        func_00310440(arg);
-        return;
-    }
-    {
-        char *p = arg + 16;
-
-        if (func_002DE4B0(a1, p, 0, arg, 0) != 0) {
-            qcopy(p, &D_L00_001BF220);
-            arg[32] = 2;
-            func_0035F450(5, 0, arg, 3705);
-        }
-    }
-}
+INCLUDE_ASM("asm/levels", func_L00_00404DD8);
 
 INCLUDE_ASM("asm/levels", func_L00_00404ED8);
 

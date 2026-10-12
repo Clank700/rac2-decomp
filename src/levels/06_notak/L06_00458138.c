@@ -87,20 +87,7 @@ INCLUDE_ASM("asm/levels", func_L06_00459D08);
 
 INCLUDE_ASM("asm/levels", func_L06_00459EC0);
 
-void func_L06_0045A0D0(char *a0, char *a1, float f, float g, float h)
-{
-    char buf[16];
-    char *q = a1;
-
-    if (*(float *)(*(char **)(a1 + 0x11C)) - 0.3f < *(float *)(a0 + 0x18)) {
-        *(float *)(a1 + 0xC8) -= 0.163333335f;
-    }
-    qcopy(buf, a0 + 0x10);
-    func_002AA548(buf + 8, q + 0xC8, *(float *)(q + 0x128), f, g, h);
-    if (func_L04_0033CB08(a0, q + 0xC0, 0x400, 0x10, 1.0f, 0.0f) != 0) {
-        func_00282D30(q + 0xC0, q + 0xC0, 0.5f);
-    }
-}
+INCLUDE_ASM("asm/levels", func_L06_0045A0D0);
 
 int func_L06_0045A1B0(char *a0, char *a1, float p1, float p2, float p3, float p4, float p5,
                       float p6, float p7)

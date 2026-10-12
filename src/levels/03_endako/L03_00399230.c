@@ -44,13 +44,7 @@ void func_L03_003C7A88(char *a0)
     *(s32 *)(a0 + 0x9C) = 1;
 }
 
-void func_L03_003C7AA0(char *a0, char *a1)
-{
-    char *a2 = *(char **)(a0 + 0x68);
-
-    qcopy(a1, a0 + 0x10);
-    *(f32 *)(a1 + 8) = *(f32 *)(a2 + 0xF8);
-}
+INCLUDE_ASM("asm/levels", func_L03_003C7AA0);
 
 INCLUDE_ASM("asm/levels", func_L03_003C7AC0);
 
@@ -58,15 +52,7 @@ INCLUDE_ASM("asm/levels", func_L03_003C7E20);
 
 INCLUDE_ASM("asm/levels", func_L03_003C85F8);
 
-void func_L03_003C8660(char *a0, char *a1)
-{
-    char *v1 = *(char **)(a0 + 0x68);
-
-    *(s32 *)(v1 + 0xAC) = 0;
-    *(s32 *)(v1 + 0xA0) = 0;
-    qcopy(v1 + 0x80, a1);
-    func_002A7750(a0, 3, -1);
-}
+INCLUDE_ASM("asm/levels", func_L03_003C8660);
 
 INCLUDE_ASM("asm/levels", func_L03_003C8698);
 

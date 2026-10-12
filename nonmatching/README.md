@@ -312,6 +312,36 @@ what was tried. None of these links, and none is counted. Move a file into `src/
 | [`func_L00_003ECB00`](levels/func_L00_003ECB00.c) | 52 | Draft w49: exact 52 bytes, only the first two instructions permuted (retail addiu $v1,$zero,0x3 before lui $v0,0x1B, ours emits ori $v0,$v0,0x7A4); the matching twin func_L00_003FF7B8 starts from a register, so cc1 always hoists this pair. |
 | [`func_L00_003ECC90`](levels/func_L00_003ECC90.c) | 236 | Draft w49: exact 236 bytes; everything matches except a $s1/$s2 permutation (retail $s1 = i, $s2 = pa, ours reversed); declaration order, parameter copies and do/while do not change it; the addresses must stay symbols (addiu, not ori). |
 
+
+## Matched, but not landable under the Plain C rule (2026-10-13)
+
+Bodies the build placed, removed from `src/` because they call `qcopy`/`qzero` from
+`include/common.h`, which are inline assembly - AGENTS.md's "Plain C" rule (no inline
+assembly in a function) rules that out as a matching route, and docs/COMPILER-NOTES.md says
+so. They are kept as starting points: the shape is right, and only the 128-bit copies need a
+plain-C spelling. Their markers are back in `src/`.
+
+| Function | Size | Why it is here |
+| --- | ---: | --- |
+| [`func_L07_003F8BB0`](levels/func_L07_003F8BB0.c) | 160 | plain C, and it matched until the four `qcopy` bodies above it in the same file were taken out: one compilation unit, so a body's register allocation depends on its neighbours |
+| [`func_L00_003B7410`](levels/func_L00_003B7410.c) | 152 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L00_003E5650`](levels/func_L00_003E5650.c) | 188 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L00_003EFA00`](levels/func_L00_003EFA00.c) | 152 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L00_003F34D8`](levels/func_L00_003F34D8.c) | 64 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L00_00403D58`](levels/func_L00_00403D58.c) | 240 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L00_00404DD8`](levels/func_L00_00404DD8.c) | 256 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L03_003C7AA0`](levels/func_L03_003C7AA0.c) | 28 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L03_003C8660`](levels/func_L03_003C8660.c) | 56 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L05_00416E08`](levels/func_L05_00416E08.c) | 180 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L06_0045A0D0`](levels/func_L06_0045A0D0.c) | 224 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L07_003F4C18`](levels/func_L07_003F4C18.c) | 168 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L07_003F8010`](levels/func_L07_003F8010.c) | 168 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L07_003F8828`](levels/func_L07_003F8828.c) | 108 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L07_003F8898`](levels/func_L07_003F8898.c) | 112 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L11_004565D8`](levels/func_L11_004565D8.c) | 228 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L16_00411ED0`](levels/func_L16_00411ED0.c) | 172 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+| [`func_L19_00422178`](levels/func_L19_00422178.c) | 192 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
+
 ## Linked at some of their places only (2026-10-12)
 
 C that was in `src/` and links in some programs but not in all: a level address written into
