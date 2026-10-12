@@ -414,7 +414,6 @@ s32 func_002CC6A0(u8 *p) { *(s32 *)(p + 0x44) = -1; return 0; }
 
 INCLUDE_ASM("asm/game", func_002CC6B0);
 
-INCLUDE_ASM("asm/game", func_002CCED0);
 
 INCLUDE_ASM("asm/game", func_002CCF68);
 

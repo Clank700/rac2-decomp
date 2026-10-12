@@ -34,9 +34,16 @@ level address written as a number, which only fits one level.
 - [`func_001317E8`](core/func_001317E8.c)
 - [`func_0027F110`](game/func_0027F110.c)
 - [`func_00287E98`](game/func_00287E98.c)
-- [`func_00288BE8`](game/func_00288BE8.c)
+- [`func_00288BE8`](game/func_00288BE8.c) â€” recovered in [maintained C](../src/game/00288BB8-g8.c); the earlier draft is retained.
 - [`func_00288D70`](game/func_00288D70.c)
 - [`func_00290670`](game/func_00290670.c)
+- [`func_002985F0`](game/func_002985F0.c) â€” recovered in [maintained C](../src/game/002985F0-g8.c); the earlier draft is retained.
+- [`func_00298780`](game/func_00298780.c) â€” recovered in [maintained C](../src/game/00298780-g8.c); the earlier draft is retained.
+- [`func_L00_00309AE8`](levels/shared/func_L00_00309AE8.c) â€” recovered in [maintained C](../src/levels/shared/L00_00309AE8-g8.c); the earlier draft is retained.
+- [`func_L00_00309B10`](levels/shared/func_L00_00309B10.c) â€” recovered in [maintained C](../src/levels/shared/L00_00309AE8-g8.c); the earlier draft is retained.
+- [`func_L00_00309B58`](levels/shared/func_L00_00309B58.c) â€” recovered in [maintained C](../src/levels/shared/L00_00309AE8-g8.c); the earlier draft is retained.
+- [`func_L00_00309B80`](levels/shared/func_L00_00309B80.c) â€” recovered in [maintained C](../src/levels/shared/L00_00309AE8-g8.c); the earlier draft is retained.
+- [`func_L03_0043ACD8`](levels/shared/func_L03_0043ACD8.c) â€” recovered in [maintained C](../src/levels/shared/L03_003C5B28-g8.c); the earlier draft is retained.
 - [`func_002985F0`](game/func_002985F0.c)
 - [`func_00298780`](game/func_00298780.c)
 - [`func_L00_00309AE8`](levels/shared/func_L00_00309AE8.c)
@@ -54,7 +61,6 @@ handwritten routines.
 | Function | Size | What the worker found |
 | --- | ---: | --- |
 | [`func_L00_00309DB0`](levels/func_L00_00309DB0.c) | 28 | 7 instructions in retail, 12 in ours; no jr ra in the retail bytes (addiu sp,+0x20 / daddu / addiu sp,+0x40), so no C of this shape can equal them. Catalogue size or split is suspect. Stub below is a guess only. |
-| [`func_L00_00309B58`](levels/func_L00_00309B58.c) | 36 | 9 instructions, 2 swapped (+0x10 and +0x14): retail puts the constant 3 in the branch delay slot and the store address as lui $at; ours puts lui $v1 (the address) in the slot. Missing: how retail schedules the store of sym (assembler-expand… |
 | [`func_L00_0031BE88`](levels/func_L00_0031BE88.c) | 36 | 28 bytes against retail's 36: retail is a beql on the null test with the 0 result in its delay slot, then a bnez with addiu 1 / daddu 0 tail; the compiler gives beqz or bnel plus sltu, so the branch-likely shape is missing. |
 | [`func_L00_0032A088`](levels/func_L00_0032A088.c) | 48 | 1 of 12 instructions differs (27 places, all at +0x10): retail adds the element address as base + index (addu a2,a1); the compiler emits index + base (addu a1,a2). Reordering the operands, a cast, or a base local did not change it. |
 | [`func_L00_00341798`](levels/func_L00_00341798.c) | 28 | No attempt: all 7 instructions would differ. The retail bytes at 0x341798 are not code: seven words 0x27bd0030, 0, 0x27bd0050, 0, 0x27bd0080, 0, 0x27bd0020 (addiu sp,sp,imm with nops between), directly after the epilogue of the function end… |
@@ -109,11 +115,7 @@ counts when it links at every place it has.
 
 | Function | Places it links at | What the build says elsewhere |
 | --- | --- | --- |
-| [`func_0027A0F8`](game/func_0027A0F8.c) | 2 of 28 | instruction at +0x4 differs |
-| [`func_002ACA50`](game/func_002ACA50.c) | 2 of 28 | instruction at +0x4 differs |
-| [`func_002CCED0`](game/func_002CCED0.c) | 3 of 28 | instruction at +0x20 differs |
 | [`func_002DCAB8`](game/func_002DCAB8.c) | 26 of 28 | instruction at +0x38 differs |
-| [`func_003418C0`](game/func_003418C0.c) | 7 of 28 | func_L00_004370F8 would be at 0x00443778 |
 | [`func_L00_002B1308`](levels/func_L00_002B1308.c) | 0 of 27 | needs .rodata at its place, which is not C |
 | [`func_L00_002D4A38`](levels/func_L00_002D4A38.c) | 26 of 27 | instruction at +0x2c differs |
 | [`func_L00_003DC350`](levels/func_L00_003DC350.c) | 2 of 27 | instruction at +0x4 differs |

@@ -256,8 +256,6 @@ INCLUDE_ASM("asm/game", func_00279D18);
 
 INCLUDE_ASM("asm/game", func_00279FF0);
 
-INCLUDE_ASM("asm/game", func_0027A0F8);
-
 int func_0027A1D0(float x, int a, int b, int c, int d, int e, int g)
 {
     int r, p, q, s;
