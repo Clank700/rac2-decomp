@@ -44,9 +44,13 @@ INCLUDE_ASM("asm/levels", func_L05_00379968);
 
 INCLUDE_ASM("asm/levels", func_L05_00379B60);
 
-INCLUDE_ASM("asm/levels", func_L05_00379C68);
+extern char *func_002ED688(int, int);
 
-INCLUDE_ASM("asm/levels", func_L05_00379E60);
+void func_L05_00379C68(int arg0, int value) {
+    char *object = func_002ED688(arg0, value);
+    if (object != 0)
+        *(int *)(object + 0x150) = value;
+}
 
 extern int D_L05_00225DD0[];
 
