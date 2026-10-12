@@ -19,7 +19,7 @@ equals the retail programs.
 | `config/cflags.txt` | compiler flags per file | by hand, when a whole file needs other flags |
 | `include/` | headers shared with rac1-decomp | by hand |
 | `nonmatching/` | near misses, never linked | you |
-| `progress/report.json`, the README table | progress | `tools/progress.py` only |
+| `progress/report.json`, the README table | progress | `tools/progress.py` only, on `master` by a maintainer |
 | `tools/` | disc reader, build, check, progress, compiler recipes | by hand, with tests |
 | `docs/` | how to build, the level format, the compiler, game research | by hand |
 | `baserom/`, `build/`, `toolchain/`, `work/` | game data, build output, proprietary tools, scratch | never committed |
@@ -34,7 +34,8 @@ equals the retail programs.
    each of its places in seconds.
 4. `python3 tools/build.py boot` / `level N` / `all`: the real check. A function counts only when
    it links into a program that equals retail byte for byte; the build prints `OK` per program.
-5. `python3 tools/progress.py` and commit (see Commits).
+5. Commit (see Commits). Do not regenerate or commit the progress report: see "The progress
+   report" below.
 
 If you get close but not exact, move your C to `nonmatching/<area>/func_XXXXXXXX.c` with a line in
 `nonmatching/README.md`, and put the `INCLUDE_ASM` marker back.
@@ -136,10 +137,24 @@ work in. It was removed on purpose. Do not recreate any of it:
 
 - Conventional commit subjects with a scope: `feat(src):`, `fix(tools):`, `build(compiler):`,
   `docs:`, `chore:`. The body says what changed and how it was checked: the commands and what
-  they printed (e.g. "tools/build.py all: 28 programs OK; tools/progress.py: 1,028 -> 1,031").
+  they printed (e.g. "tools/build.py all: 28 programs OK; 3 functions added").
 - Small, coherent commits: one function or one small family per commit is fine.
-- Commit `progress/report.json` and the README table only as `tools/progress.py` wrote them, after
-  a full `tools/build.py all`.
+- Leave `progress/report.json` and the README table out of your commits (see "The progress
+  report").
+
+## The progress report
+
+`progress/report.json` and the README table are generated, and every pull request that
+regenerates them conflicts with every other one. So pull requests do not touch them:
+
+- In a pull request, say what `tools/build.py all` printed and how many functions you added.
+  `tools/progress.py --check` passes with the report behind; it only fails if the report counts
+  something that is no longer C.
+- After merging, a maintainer runs `tools/build.py all` and `tools/progress.py` on `master` and
+  commits the two files alone (`chore(progress): N of 9,101 functions`). Several merged pull
+  requests can share one regeneration.
+- If your branch already has the two files changed, restore them before pushing:
+  `git checkout origin/master -- progress/report.json README.md`.
 
 ## Pushing changes
 
@@ -147,7 +162,6 @@ work in. It was removed on purpose. Do not recreate any of it:
    Never commit to `master` directly and never push to it.
 2. Before pushing, run all of these and keep their output for the PR:
    - `python3 tools/build.py all` (every program `OK`),
-   - `python3 tools/progress.py`,
    - `python3 -m unittest discover -s tests`, `python3 tests/check_repository.py` and `python3 tools/progress.py --check`.
 3. Push your branch and open a pull request to `master` with the template filled in: what you
    matched or changed, the commands you ran and what they printed, and what you did not run.

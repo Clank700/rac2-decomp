@@ -3,6 +3,10 @@
 How much of the game's code is C: progress/report.json, in objdiff's report format (the one
 decomp.dev reads, as rac1-decomp's), and the table in README.md.
 
+  python3 tools/progress.py            # write both, after tools/build.py all (maintainers, on master)
+  python3 tools/progress.py --check    # the report counts nothing that is not C; it may be behind
+  python3 tools/progress.py --check --strict   # and it is not behind either
+
   python3 tools/progress.py           # after tools/build.py all
   python3 tools/progress.py --check   # CI: fail if src/ and the committed report disagree
 
@@ -74,11 +78,20 @@ def check() -> None:
     report = json.loads(REPORT.read_text())
     matched = {f["name"] for u in report["units"] for f in u["functions"] if f["fuzzy_match_percent"] == 100.0}
     in_c = {n for fns in source_functions().values() for n, c in fns if c} | handwritten()
-    problems = sorted(in_c ^ matched)
-    if problems:
-        sys.exit(f"progress/report.json is out of date for {len(problems)} function(s), e.g. "
-                 f"{', '.join(problems[:5])}: run tools/build.py all, then tools/progress.py")
-    print(f"progress/report.json is current: {len(matched)} matched functions")
+    gone = sorted(matched - in_c)
+    if gone:
+        sys.exit(f"progress/report.json counts {len(gone)} function(s) that are not C in src/, e.g. "
+                 f"{', '.join(gone[:5])}: run tools/build.py all, then tools/progress.py")
+    ahead = sorted(in_c - matched)
+    if ahead and "--strict" in sys.argv:
+        sys.exit(f"progress/report.json is behind src/ by {len(ahead)} function(s), e.g. "
+                 f"{', '.join(ahead[:5])}: run tools/build.py all, then tools/progress.py")
+    if ahead:
+        # A pull request does not carry the report: a maintainer regenerates it on master.
+        print(f"progress/report.json: {len(matched)} matched functions; {len(ahead)} more are C in src/ "
+              f"and not in it yet (regenerated on master after merging)")
+    else:
+        print(f"progress/report.json is current: {len(matched)} matched functions")
 
 
 def main() -> None:
