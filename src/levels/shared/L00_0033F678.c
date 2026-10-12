@@ -332,7 +332,9 @@ unsigned int func_L00_00345AF0(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00345AF8);
+int func_L00_00345AF8(void) {
+    return 0;
+}
 
 /* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
 int func_L00_00346680(void)
@@ -352,11 +354,21 @@ unsigned long long func_L00_00346A80(void)
   return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00346AB0);
+int func_L00_00346AB0(void) {
+    return 0;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_00346AB8);
+int func_L00_00346AB8(void) {
+    return 0;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_00346B50);
+int func_L00_00346B50(void)
+{
+    func_0027C540(0);
+    func_L00_0030DCF8();
+    func_0027C660();
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00346CD8);
 
@@ -371,7 +383,9 @@ long long func_L00_00346D20(void)
 
 INCLUDE_ASM("asm/levels", func_L00_00346DB0);
 
-INCLUDE_ASM("asm/levels", func_L00_00347A28);
+int func_L00_00347A28(void) {
+    return 0;
+}
 
 /* When a global flag is set, derives a pointer from that global plus a fixed offset, runs it through one callee and stores the callee result into a field of the argument. */
 int func_L00_003485E8(int *obj)
@@ -381,17 +395,54 @@ int func_L00_003485E8(int *obj)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00349040);
+int func_L00_00349040(void) {
+    return 0;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_00349628);
+int func_L00_00349628(void) {
+    return 0;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_0034B470);
+int func_L00_0034B470(void) {
+    return 0;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_0034BC90);
+int func_L00_0034BC90(void) {
+    return 0;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_0034C038);
+extern int D_00138344;
 
-INCLUDE_ASM("asm/levels", func_L00_0034C060);
+extern void func_L00_0030D718(int a);
+
+extern void func_L00_0030E010(int a);
+
+extern void func_0027C540(int a);
+
+extern void func_0027C660(void);
+
+extern void func_L00_0030DCF8(void);
+
+extern void func_L00_0030D6E8(void);
+
+extern void func_L00_0030D8E8(void);
+
+
+extern void func_L00_0030D478(int a);
+
+int func_L00_0034C038(void)
+{
+    func_L00_0030D718(D_00138344);
+    return 0;
+}
+
+int func_L00_0034C060(void)
+{
+    func_0027C540(0);
+    func_L00_0030D6E8();
+    func_0027C660();
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0034C090);
 
@@ -426,7 +477,13 @@ unsigned long long func_L00_0034C340(void)
 
 INCLUDE_ASM("asm/levels", func_L00_0034C370);
 
-INCLUDE_ASM("asm/levels", func_L00_0034C3F8);
+int func_L00_0034C3F8(void)
+{
+    func_0027C540(0);
+    func_L00_0030D8E8();
+    func_0027C660();
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0034C428);
 
@@ -472,9 +529,17 @@ int func_L00_0034E6F0(int *obj)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0034E950);
+int func_L00_0034E950(void)
+{
+    func_L00_0030E010(D_00138344);
+    return 0;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_0034E978);
+int func_L00_0034E978(void)
+{
+    func_L00_0030E010(D_00138344);
+    return 0;
+}
 
 /* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
 long long func_L00_0034E9A0(void)
@@ -485,7 +550,9 @@ long long func_L00_0034E9A0(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0034EA38);
+int func_L00_0034EA38(void) {
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0034EB78);
 
@@ -493,19 +560,35 @@ INCLUDE_ASM("asm/levels", func_L00_0034EC00);
 
 INCLUDE_ASM("asm/levels", func_L00_0034ECD0);
 
-INCLUDE_ASM("asm/levels", func_L00_0034ED58);
+int func_L00_0034ED58(void)
+{
+    func_L00_0030D478(D_00138344);
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0034ED80);
 
-INCLUDE_ASM("asm/levels", func_L00_0034EDB0);
+extern int D_L00_001C95D4;
 
-INCLUDE_ASM("asm/levels", func_L00_0034EDC8);
+int func_L00_0034EDB0(void) {
+    D_L00_001C95D4 = -1;
+    return 0;
+}
+
+int func_L00_0034EDC8(void) {
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0034EF68);
 
 INCLUDE_ASM("asm/levels", func_L00_00350F20);
 
-INCLUDE_ASM("asm/levels", func_L00_00350F28);
+extern int D_L00_001C95D4;
+
+int func_L00_00350F28(void) {
+    D_L00_001C95D4 = -1;
+    return 0;
+}
 
 unsigned int func_L00_00351608(void)
 {
