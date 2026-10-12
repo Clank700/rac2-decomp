@@ -48,6 +48,14 @@ If you get close but not exact, move your C to `nonmatching/<area>/func_XXXXXXXX
 - **Never write a level address as a number.** A level function is linked into every level that
   has it, each with its own addresses; the build reads each symbol's value per program from the
   retail bytes. A hard-coded address only works in one level.
+- **A call or symbol whose target differs from level to level** gets no address in its name:
+  `ref_LNN_XXXXXXXX_kk`, the kk-th such external of function `func_LNN_XXXXXXXX` (declare it
+  `extern`). `tools/check.py` tells you when you need one: the function is `OK` in some levels
+  and `<name> would be at 0x...` in others.
+- **Small data reached through `$gp`** (`lw v0,0xBD0($gp)`, `addiu v0,$gp,-0x1388`) only comes
+  out of a file built with `-G8`. Put such a function in a sibling file named `<file>-g8.c`
+  (it gets `-G8` by its name; see `config/cflags.txt`) and take its marker out of the original.
+  If its size is one or two instructions over retail and the difference is a `lui`, this is why.
 - `r1_...` names were carried from rac1-decomp and have no rac2 name yet: rename them to the
   `D_`/`func_` name of their address when you know it.
 

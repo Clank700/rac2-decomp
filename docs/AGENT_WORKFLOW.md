@@ -69,6 +69,16 @@ Give each worker a brief with exactly this, nothing else to look up:
 - what to report: for each function, matched or not, the last `tools/check.py` line, and anything
   it learned about the compiler that the next worker should know.
 
+Three things every brief should say, because the first trial (16 Haiku workers, 128 small level
+functions) lost a third of its misses to them:
+
+- `tools/check.py` only finds a function that has a C definition, so put a stub in place of the
+  marker first; `--diff` then shows retail's instructions.
+- `$gp`-relative access needs a `-g8.c` sibling file, and a call whose target differs per level
+  needs a `ref_LNN_XXXXXXXX_kk` name (AGENTS.md, "Naming in C").
+- A catalogue row can be wrong: bytes with no `jr ra`, or a body that starts mid-function, are
+  not a function. Report it and move on; that is a fix in `tools/levels.py`, not in C.
+
 A worker's claim is not a match. Only the lead's `tools/build.py` is.
 
 ## Keeping workers apart
