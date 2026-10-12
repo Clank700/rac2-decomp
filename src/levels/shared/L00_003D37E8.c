@@ -114,8 +114,6 @@ INCLUDE_ASM("asm/levels", func_L00_003DBF50);
 
 INCLUDE_ASM("asm/levels", func_L00_003DC1C0);
 
-INCLUDE_ASM("asm/levels", func_L00_003DC2D0);
-
 INCLUDE_ASM("asm/levels", func_L00_003DC350);
 
 INCLUDE_ASM("asm/levels", func_L00_003DC3E0);
@@ -207,7 +205,13 @@ INCLUDE_ASM("asm/levels", func_L00_003DCC48);
 
 INCLUDE_ASM("asm/levels", func_L00_003DD2B8);
 
-INCLUDE_ASM("asm/levels", func_L00_003DD680);
+void func_L00_003DD680(char *p)
+{
+    if (*(unsigned char *)(p + 0x20) == 0) {
+        *(unsigned short *)(p + 0x34) |= 0x800;
+        *(unsigned char *)(p + 0x20) = 1;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003DD6A8);
 
@@ -217,19 +221,13 @@ INCLUDE_ASM("asm/levels", func_L00_003DE088);
 
 INCLUDE_ASM("asm/levels", func_L00_003DE258);
 
-INCLUDE_ASM("asm/levels", func_L00_003DE260);
-
 INCLUDE_ASM("asm/levels", func_L00_003DE490);
 
 INCLUDE_ASM("asm/levels", func_L00_003DE950);
 
 INCLUDE_ASM("asm/levels", func_L00_003DF030);
 
-INCLUDE_ASM("asm/levels", func_L00_003DF108);
-
 INCLUDE_ASM("asm/levels", func_L00_003DF338);
-
-INCLUDE_ASM("asm/levels", func_L00_003DF6B0);
 
 INCLUDE_ASM("asm/levels", func_L00_003DF710);
 
@@ -367,3 +365,4 @@ INCLUDE_ASM("asm/levels", func_L00_003E2510);
 INCLUDE_ASM("asm/levels", func_L00_003E2BD0);
 
 INCLUDE_ASM("asm/levels", func_L00_003E2E80);
+

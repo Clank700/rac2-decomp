@@ -45,3 +45,41 @@ void func_L00_003B92D0(void)
     for (i = 0; i < n; i++)
         D_L00_0023DBA0[i]->f98 = D_L00_0023DCA0[i];
 }
+
+void func_L00_003B9290(void)
+{
+    int n = D_L00_001AFD7C;
+    int i;
+
+    for (i = 0; i < n; i++) {
+        D_L00_0023DCA0[i] = D_L00_0023DBA0[i]->f98;
+        D_L00_0023DBA0[i]->f98 = 0;
+    }
+}
+
+extern int D_L00_001AFB98 __attribute__((sda));
+
+extern int D_L00_001AFBA8 __attribute__((sda));
+
+extern char D_L00_001AFBB0[];
+
+extern void func_115DA8();
+
+extern void func_2E95C0();
+
+void func_L00_003B7908(void *a0)
+{
+    float buf[16];
+    int *p = (int *)(*(char **)((char *)a0 + 0x68) + 0x58);
+    int *q = &D_L00_001AFB98;
+    int i;
+    int *r = &D_L00_001AFBA8;
+
+    for (i = 1; i >= 0; i--) {
+        func_115DA8(buf, D_L00_001AFBB0, *p);
+        p++;
+        func_2E95C0(q[0], q[1], r[0], buf, -1);
+        q += 2;
+        r++;
+    }
+}

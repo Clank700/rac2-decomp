@@ -35,6 +35,14 @@ extern float func_00282DF0(float *v);
 
 extern void func_00282F20_3(float *out, float *in, float k);
 
+extern char *D_L00_001BB040;
+
+extern void func_00282CF0_8(char *dst, char *a, char *b);
+
+extern void func_L00_00424EB0(char *a0, char *a1, float t);
+
+extern void func_L00_00424C90(char *a0, char *a1, float t);
+
 INCLUDE_ASM("asm/levels", func_L00_004224D0);
 
 INCLUDE_ASM("asm/levels", func_L00_00423038);
@@ -47,7 +55,12 @@ INCLUDE_ASM("asm/levels", func_L00_004237C8);
 
 INCLUDE_ASM("asm/levels", func_L00_004239A8);
 
-INCLUDE_ASM("asm/levels", func_L00_00423BB0);
+int func_L00_00423BB0(void)
+{
+    char buf[80];
+
+    return 0;
+}
 
 /* reads a pointer from the field at +112 of the first argument, advances it by 176, then runs three 16-byte records and two float parameters through a fixed sequence of seven calls that alternate between three helpers */
 void func_L00_00423BC0(char *a0, void *a1, void *a2, void *a3,
@@ -127,11 +140,54 @@ void func_L00_00424A08(int a0, float a, float b)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00424A50);
+/* Stores the two incoming floats and a flag into the block at +352 of the owner object. */
+void func_L00_00424A50(float a, float b)
+{
+    char *p = D_L00_001B8E10;
 
-INCLUDE_ASM("asm/levels", func_L00_00424A88);
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        char *r = q + 352;
 
-INCLUDE_ASM("asm/levels", func_L00_00424AD8);
+        *(short *)(r + 62) = 1;
+        *(float *)(r + 76) = a;
+        *(float *)(r + 84) = b;
+    }
+}
+
+/* Sets a flag and a value on the block at +96; the value is offset by a shared float when a0 is set. */
+void func_L00_00424A88(int a0, float a, float b)
+{
+    char *p = D_L00_001B8E10;
+
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        char *r = q + 0x60;
+
+        *(short *)(r + 0xDA) = 1;
+        *(float *)(r + 0xB8) = b;
+        if (a0) {
+            *(float *)(r + 0xB4) = *(float *)(D_L00_001BB040 + 0x110) + a;
+        } else {
+            *(float *)(r + 0xB4) = a;
+        }
+    }
+}
+
+/* Stores one float and two scaled by an arcsecond-sized constant into the block at +32. */
+void func_L00_00424AD8(float a, float b, float c)
+{
+    char *p = D_L00_001B8E10;
+
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        char *r = q + 32;
+
+        *(float *)(r + 44) = a;
+        *(float *)(r + 52) = b * 4.848137450608192e-06f;
+        *(float *)(r + 56) = c * 4.848137450608192e-06f;
+    }
+}
 
 void func_L00_00424B20(float t)
 {
@@ -153,7 +209,23 @@ void func_L00_00424B48(int t)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00424B70);
+/* Stores each incoming float only when it is not zero. */
+void func_L00_00424B70(float a, float b)
+{
+    char *p = D_L00_001B8E10;
+
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        char *r = q + 0x60;
+
+        if (a != 0.0f) {
+            *(float *)(r + 0xDC) = a;
+        }
+        if (b != 0.0f) {
+            *(float *)(r + 0xE0) = b;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00424BB8);
 
@@ -191,11 +263,40 @@ void func_L00_00424C60(void)
 
 INCLUDE_ASM("asm/levels", func_L00_00424C90);
 
-INCLUDE_ASM("asm/levels", func_L00_00424EB0);
+/* Builds a vector from a1 and the +96 source block, then feeds it to the inner routine. */
+void func_L00_00424EB0(char *a0, char *a1, float t)
+{
+    char local[16];
 
-INCLUDE_ASM("asm/levels", func_L00_00424F00);
+    func_00282CF0_8(local, a1, *(char **)(a0 + 112) + 96);
+    func_L00_00424C90(a0, local, t);
+}
 
-INCLUDE_ASM("asm/levels", func_L00_00424F58);
+/* Stores a non-zero value, then hands it to the inner routine. */
+void func_L00_00424F00(char *a0, float a, float b)
+{
+    char *p = D_L00_001B8E10;
+
+    if (*(short *)(p + 134) == 0 && a != 0.0f) {
+        char *q = *(char **)(p + 112);
+
+        *(float *)(q + 468) = a;
+        func_L00_00424C90(p, a0, b);
+    }
+}
+
+/* Stores the value, then builds a vector and hands it to the inner routine. */
+void func_L00_00424F58(char *a0, float a, float b)
+{
+    char *p = D_L00_001B8E10;
+
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+
+        *(float *)(q + 468) = a;
+        func_L00_00424EB0(p, a0, b);
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00424F98);
 
@@ -236,4 +337,5 @@ INCLUDE_ASM("asm/levels", func_L00_00425A98);
 
 INCLUDE_ASM("asm/levels", func_L00_00425CD0);
 
+/* Walks the 64x64 owner table and dispatches every type-5 entry of each populated block. */
 INCLUDE_ASM("asm/levels", func_L00_00426248);
