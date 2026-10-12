@@ -103,10 +103,8 @@ each have their own worktree for that reason (docs/AGENT_WORKFLOW.md).
   docs/policy/SOURCING.md is the full policy.
 - **Plain C.** No inline assembly in a function, no register pins, no artificial barriers.
 - **English.** Everything that lands here is in English: code, comments, commit messages,
-  issues, pull requests and reviews. Speak whatever language you like with the people you work
-  with - a worker's notes and its final report to its lead can be in any language - but what is
-  published in this repository, including what you paste into an issue, is translated first.
-  Notes kept in `nonmatching/` are published material and follow the same rule.
+  issues, pull requests, reviews, and the notes kept in `nonmatching/`. Translate before it is
+  published.
 - **Flags per file, never per function** (`config/cflags.txt`). If one function needs other flags,
   it belongs in a file of its own with those flags.
 - **Nothing edits compiler output.** The build only does what the retail assembler and linker did.
