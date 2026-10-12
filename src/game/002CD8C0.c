@@ -56,7 +56,9 @@ long long func_002CD8C0(void)
     return 0LL;
 }
 
-INCLUDE_ASM("asm/game", func_002CD8F0);
+extern char *D_001A8CFC[] __attribute__((sda));
+extern void func_00341550(void *, int);
+int func_002CD8F0(void *object) { char *root=D_001A8CFC[0]; if (root != 0) { func_00341550(root+0x3BE08,1); *(void **)((char *)object+0x34)=func_00341558(D_001A8CFC[0]+0x3BE08); } return 0; }
 
 INCLUDE_ASM("asm/game", func_002CD950);
 
