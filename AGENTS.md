@@ -137,6 +137,54 @@ docs/AGENT_WORKFLOW.md is the whole procedure. In short, sort by size with `pyth
 
 A worker stops at its bound and hands its attempt up a tier; it never keeps grinding.
 
+## Coordinating work between contributors
+
+All contributors actively matching functions must coordinate through the shared GitHub issue:
+
+https://github.com/OpenRAC/rac2-gc-decomp/issues/152
+
+The purpose of this issue is to prevent contributors and their AI agents from duplicating work.
+
+This is a lightweight coordination noticeboard only. It is **not** a task queue, campaign
+register, reservation database, match proof or source of truth for completed work. The repository
+and `master` remain authoritative.
+
+### Every active contributor must have one comment
+
+Each contributor working on the project must have exactly **one persistent coordination comment**
+in issue #152.
+
+If you are beginning work and do not already have your own comment in that issue, you are
+**required to create one before starting matching work**.
+
+Each contributor edits only their own comment. Do not modify another contributor's comment.
+
+Do not create a new comment every time work changes. Update your existing comment in place.
+
+AI agents acting on behalf of a contributor must verify that their contributor has a coordination
+comment before beginning or assigning matching work. If no comment exists, create one before
+continuing.
+
+### Scope-first coordination
+
+Coordination should use **scopes whenever possible**.
+
+A scope may be:
+
+- one level;
+- one shared source unit;
+- one source directory;
+- one source file;
+- a related group of source files.
+
+For example:
+
+owner: Thorpen
+updated: 2026-10-13T04:10:00+11:00
+
+scope:
+  - src/levels/07_siberius/
+
 ## If something seems to need a new mechanism
 
 Stop and ask a human first. A new tool belongs in `tools/` with a test and a short docstring; a new
