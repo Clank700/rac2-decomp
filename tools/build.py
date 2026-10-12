@@ -225,12 +225,12 @@ def compile_c(source: Path) -> Path:
         # the SDK compiler's driver (integrated cpp), then the game compiler's assembler
         script = (f"set -e; t=$(mktemp -d); cd $t; cp '{source}' x.c; "
                   f"'{SDK_COMPILER}/xgcc' -B'{SDK_COMPILER}/' -S {flags[3:]} -I'{ROOT}/include' -I'{SDK_COMPILER}/include' "
-                  f"-I'{source.parent}' x.c -o x.s; '{COMPILER}/as' -o x.o x.s; cp x.o '{out}.new'; mv '{out}.new' '{out}'; rm -rf $t")
+                  f"-I'{source.parent}' x.c -o x.s; '{COMPILER}/as' -o x.o x.s; cp x.o '{out}'.$$; mv '{out}'.$$ '{out}'; rm -rf $t")
     else:
         script = (f"set -e; t=$(mktemp -d); cd $t; cp '{source}' x.c; "
                   f"'{COMPILER}/cpp' -I'{ROOT}/include' -I'{source.parent}' x.c > x.i; "
                   f"'{COMPILER}/cc1' -quiet {flags} x.i -o x.s; '{COMPILER}/as' -o x.o x.s; "
-                  f"cp x.o '{out}.new'; mv '{out}.new' '{out}'; rm -rf $t")
+                  f"cp x.o '{out}'.$$; mv '{out}'.$$ '{out}'; rm -rf $t")
     result = subprocess.run([*runner, "bash", "-c", script], capture_output=True, text=True)
     if result.returncode:
         sys.exit(f"{source.relative_to(ROOT)} does not compile:\n{result.stderr[-3000:]}")
