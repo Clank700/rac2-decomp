@@ -7,6 +7,14 @@ typedef unsigned long long QwenRecovery_00beefd949f6_AbiFlag15;
 
 extern void func_002AFFD8(QwenRecovery_00beefd949f6_AbiByte15 *input, float *output, QwenRecovery_00beefd949f6_AbiFlag15 mode);
 
+extern void func_002AFFD8_1(void *a, void *b, int c);
+
+extern void func_00282F20_14(float f, void *a, void *b);
+
+extern void func_00282CC0_35(char *target, char *first, char *local);
+
+extern int D_L00_001A8FF0_3 __attribute__((sda));
+
 extern int D_L00_001A8FF4 __attribute__((sda));
 
 extern char D_L00_001B1B10[] __attribute__((sda));
@@ -68,7 +76,19 @@ void func_002B00B0(QwenRecovery_00beefd949f6_AbiByte15 *param_1, float *output, 
 
 INCLUDE_ASM("asm/game", func_002B00D0);
 
-INCLUDE_ASM("asm/game", func_002B00D8);
+/* If the linked global word is zero, stores (second_float_field - f) into the first object's float field; otherwise runs a three-call path over a 16-byte local buffer. */
+void func_002B00D8(void *p, float *a1, float *a2, float f)
+{
+    float buf[4];
+
+    if (D_L00_001A8FF0_3 == 0) {
+        a1[2] = a2[2] - f;
+    } else {
+        func_002AFFD8_1(p, buf, 0);
+        func_00282F20_14(f, buf, buf);
+        func_00282CC0_35((char *)a1, (char *)a2, (char *)buf);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002B0158);
 

@@ -4,6 +4,9 @@ extern int func_002886C8(int a, char *b);
 
 extern void func_002883E8(int a);
 
+/* Qwen draft (branch qwen/autonomy, d969a356), checked by tools/check.py */
+void func_00278EB0(void);
+
 /* loops 56 times calling a two-argument helper and, unless the current index is zero, a second one-argument helper with that index. */
 void func_00290A40(char *a0)
 {
@@ -24,9 +27,6 @@ INCLUDE_ASM("asm/game", func_00290AB0);
 INCLUDE_ASM("asm/game", func_00290B48);
 
 INCLUDE_ASM("asm/game", func_00290C60);
-
-/* Qwen draft (branch qwen/autonomy, d969a356), checked by tools/check.py */
-void func_00278EB0(void);
 
 void func_00291108(void)
 {

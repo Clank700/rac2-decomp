@@ -20,6 +20,14 @@ extern f32 func_002A7878_10(f32, f32);
 
 extern void func_002AF000_2(s32, f32, f32, f32);
 
+extern float Fc3394786_FUN_002A7878(void);
+
+extern float Fc3394786_FUN_002A7940(void);
+
+extern float Fc3394786_FUN_00283180(float);
+
+extern float Fc3394786_FUN_00283198(float);
+
 extern f32 func_00283180_3 (f32);
 
 struct family_27f9_object {
@@ -107,6 +115,10 @@ typedef struct {
 } Obj_Ff454dd77;
 #endif
 
+extern void F8cb0f4c0_FUN_002AA198(float *, float);
+
+extern float F8cb0f4c0_FUN_00282C48(float);
+
 #ifndef RAC2_T_V4_FC6BD459E
 #define RAC2_T_V4_FC6BD459E
 typedef int V4_Fc6bd459e __attribute__((mode(TI)));
@@ -171,7 +183,21 @@ void func_002A7988(s32 a0, f32 a1, f32 a2) {
     func_002AF000_2(a0, z, x, y);
 }
 
-INCLUDE_ASM("asm/game", func_002A7A00);
+void func_002A7A00(float *out)
+{
+    float back = Fc3394786_FUN_002A7878();
+    float a = Fc3394786_FUN_002A7940();
+    float b = Fc3394786_FUN_002A7940();
+    float value;
+
+    value = Fc3394786_FUN_00283180(a) * Fc3394786_FUN_00283198(b);
+    value = value * back;
+    out[0] = value;
+    value = Fc3394786_FUN_00283198(a) * Fc3394786_FUN_00283198(b);
+    value = value * back;
+    out[1] = value;
+    out[2] = Fc3394786_FUN_00283180(b) * back;
+}
 
 float func_002A7AA8(float a, float b, float c, float d, float t) {
     float p = (d - c) - (a - b);
@@ -419,7 +445,26 @@ INCLUDE_ASM("asm/game", func_002AA340);
 
 INCLUDE_ASM("asm/game", func_002AA3A0);
 
-INCLUDE_ASM("asm/game", func_002AA3A8);
+float func_002AA3A8(float *a0, float *a1, float f1, float f2,
+                                         float f3, float f4)
+{
+    float s = f1;
+    float u = f4;
+    float t;
+    float r;
+
+    F8cb0f4c0_FUN_002AA198(a1, s - a0[0]);
+    t = s - (a0[0] + a1[0]);
+    a0[0] = a0[0] + a1[0];
+    r = F8cb0f4c0_FUN_00282C48(t);
+    u = u * 0.01f;
+    if (r < u) {
+        a0[0] = s;
+        a1[0] = 0.0f;
+        return a1[0];
+    }
+    return t;
+}
 
 /* shared native family */
 float func_002AA458(void *a0, void *a1, void *a2, float f1, float f2, float f3)

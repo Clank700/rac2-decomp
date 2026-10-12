@@ -132,6 +132,8 @@ extern void F01bd4546_FUN_00349630(char *p, int v);
 
 extern void F01bd4546_FUN_00349678(char *p, float v);
 
+extern void F076896f4_FUN_00349AB8(void *, int);
+
 void func_00345358(char *obj)
 {
     if (*(int *)(obj + 1080) != 0) {
@@ -641,7 +643,17 @@ void func_0034CB88(char *self, int x)
 
 INCLUDE_ASM("asm/game", func_0034CD70);
 
-INCLUDE_ASM("asm/game", func_0034CE28);
+void func_0034CE28(int *self, int value)
+{
+    self[1371] = value;
+    if (self[1372] != 0) {
+        self[1372] = 0;
+        F076896f4_FUN_00349AB8((char *)self + 4596, 0);
+        F076896f4_FUN_00349AB8((char *)self + 4744, 0);
+        F076896f4_FUN_00349AB8((char *)self + 4892, 0);
+        F076896f4_FUN_00349AB8((char *)self + 5040, 0);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_0034CE88);
 

@@ -12,6 +12,12 @@ extern volatile unsigned char Fc558ca70_D_001A7B94 __attribute__((sda));
 
 extern void Ffb202470_FUN_0033AB50(char *p);
 
+extern void F5979c03f_FUN_0033AE28 (char *object);
+
+extern void F5979c03f_FUN_0033B018 (char *object, float x, float y);
+
+extern int F5979c03f_FUN_002E5E58 (int a, int b, int c);
+
 extern void Fb7feb893_FUN_0033AE28(char *p);
 
 extern void Fb7feb893_FUN_0033B018(char *p, float a, float b);
@@ -91,7 +97,25 @@ INCLUDE_ASM("asm/game", func_0033D470);
 
 INCLUDE_ASM("asm/game", func_0033D478);
 
-INCLUDE_ASM("asm/game", func_0033D5A0);
+int func_0033D5A0 (char *object, int flags)
+{
+  volatile unsigned char *g = (volatile unsigned char *) 0x1A7B96;
+  float *vec;
+  int discarded;
+
+  F5979c03f_FUN_0033AE28 (object + 8);
+  vec = *(float **) (object + 684);
+  F5979c03f_FUN_0033B018 (object + 8, vec[0], vec[1]);
+
+  if ((flags & 0x40) && *(int *) (object + 680) == 0)
+    {
+      discarded = F5979c03f_FUN_002E5E58 (4, 0, 0);
+      (void) discarded;
+      *g = (*g < 1);
+    }
+
+  return (flags >> 6) & 1;
+}
 
 INCLUDE_ASM("asm/game", func_0033D638);
 

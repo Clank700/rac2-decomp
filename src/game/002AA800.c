@@ -109,6 +109,10 @@ extern float Fb5729173_FUN_00282E80(char *a, char *b);
 
 extern int Fb5729173_FUN_002ABB78(char *a);
 
+extern void F10bf3d29_FUN_00283698(char *a, char *b);
+
+extern void F10bf3d29_FUN_00283098(char *a, char *b, char *c);
+
 /* clamps a float read through a pointer to plus/minus the second float argument, passes it through two helpers and stores the result back */
 void func_002AA800 (float *p, int a1, float fx, float fl)
 {
@@ -554,29 +558,20 @@ INCLUDE_ASM("asm/game", func_002AFD70);
 
 INCLUDE_ASM("asm/game", func_002AFD88);
 
-INCLUDE_ASM("asm/game", func_002AFDD8);
+void func_002AFDD8(char *a0, char *a1, char *a2, char *a3)
+{
+    char buf[64];
+
+    if (a3 == 0) {
+        F10bf3d29_FUN_00283698(buf, a0 + 192);
+        F10bf3d29_FUN_00283098(a1, a2, buf);
+    } else {
+        F10bf3d29_FUN_00283098(a1, a2, a3);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002AFE40);
 
 INCLUDE_ASM("asm/game", func_002AFE58);
 
 INCLUDE_ASM("asm/game", func_002AFEB8);
-
-/* Qwen draft (branch qwen/autonomy, 9650d156), checked by tools/check.py */
-// Helper function declarations, using exact symbol names from externals
-void func_002AFDD8(unsigned long, unsigned long, unsigned long, unsigned long);
-unsigned int func_00282E20(unsigned char (*)[16]);
-
-// Implementation of func_002AFF08
-void func_002AFF08(unsigned long arg1, unsigned long arg2, unsigned long arg3) {
-    unsigned char stack_buffer[16];
-
-    func_002AFDD8(arg1, (unsigned long)stack_buffer, arg2, arg3);
-    func_00282E20((unsigned char (*)[16])stack_buffer);
-}
-
-INCLUDE_ASM("asm/game", func_002AFF38);
-
-INCLUDE_ASM("asm/game", func_002AFF60);
-
-INCLUDE_ASM("asm/game", func_002AFFD8);

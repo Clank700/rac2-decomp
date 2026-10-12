@@ -1,5 +1,10 @@
 #include "include_asm.h"
 
+/* Qwen draft (branch qwen/autonomy, c8b09022), checked by tools/check.py */
+void func_002B9180(void *);
+
+int func_00282978(short *);
+
 extern int func_00282978_9(char *p);
 
 extern void func_002B9180_13(char *self);
@@ -133,17 +138,24 @@ extern int Fc3cb9262_FUN_00282978(char *a);
 
 extern void Fc3cb9262_FUN_002B9180(char *a);
 
-extern int F250fbfa4_FUN_00282978(char *p);
+void func_002BF6F0(void *param_1)
+{
+  int lVar1;
 
-extern void F250fbfa4_FUN_002B9180(char *p);
+  lVar1 = func_00282978((short *)((char *)param_1 + 10));
+  if (lVar1 != 0) {
+    func_002B9180(param_1);
+  }
+  return;
+}
 
-extern void F250fbfa4_FUN_00282CC0(char *p0, char *p1, char *p2);
+INCLUDE_ASM("asm/game", func_002BF728);
 
-extern int Ff4dd22f3_FUN_00282978(char *p);
+INCLUDE_ASM("asm/game", func_002BF8F0);
 
-extern void Ff4dd22f3_FUN_002B9180(char *p);
+INCLUDE_ASM("asm/game", func_002BFB38);
 
-extern void Ff4dd22f3_FUN_00282CC0(char *p, char *q, float *v);
+INCLUDE_ASM("asm/game", func_002BFC50);
 
 INCLUDE_ASM("asm/game", func_002BFE80);
 
@@ -551,63 +563,3 @@ void func_002C7538(char *a0)
 }
 
 INCLUDE_ASM("asm/game", func_002C7620);
-
-INCLUDE_ASM("asm/game", func_002C7748);
-
-INCLUDE_ASM("asm/game", func_002C7888);
-
-INCLUDE_ASM("asm/game", func_002C7970);
-
-void func_002C7AE8(char *a0)
-{
-    char local[16];
-    char *s1 = a0;
-    char *s0;
-    int a1;
-    int v1;
-    char *p;
-
-    if (F250fbfa4_FUN_00282978(a0 + 10) != 0) {
-        F250fbfa4_FUN_002B9180(a0);
-        return;
-    }
-    s0 = a0 + 32;
-    a1 = *(int *)(s1 + 4);
-    v1 = (a1 >> 24) + *(unsigned char *)(s0 + 20);
-    *(int *)(s1 + 4) = (a1 & 0x00ffffff) | (v1 << 24);
-    p = s1 + 16;
-    *(float *)(local + 0) = *(float *)(s1 + 32);
-    *(float *)(local + 4) = *(float *)(s0 + 4);
-    *(float *)(local + 8) = *(float *)(s0 + 8);
-    *(int *)(local + 12) = 0;
-    F250fbfa4_FUN_00282CC0(p, p, local);
-    *(float *)(s0 + 8) = *(float *)(s0 + 8) - *(float *)(s0 + 12);
-    *(unsigned char *)(s1 + 8) = *(unsigned char *)(s1 + 8) + *(unsigned char *)(s0 + 21);
-    *(float *)(s1 + 12) = *(float *)(s1 + 12) + *(float *)(s0 + 16);
-}
-
-INCLUDE_ASM("asm/game", func_002C7BB8);
-
-void func_002C7D58(char *self)
-{
-    char *p = self + 32;
-    float v[4];
-    int a1;
-
-    if (Ff4dd22f3_FUN_00282978(self + 10) != 0)
-    {
-        Ff4dd22f3_FUN_002B9180(self);
-        return;
-    }
-
-    a1 = *(int *)(self + 4);
-    *(int *)(self + 4) = (a1 & 0xffffff) | (((a1 >> 24) + (int)*(unsigned char *)(p + 20)) << 24);
-    v[0] = *(float *)(self + 32);
-    v[1] = *(float *)(p + 4);
-    v[2] = *(float *)(p + 8);
-    v[3] = 0.0f;
-    Ff4dd22f3_FUN_00282CC0(self + 16, self + 16, v);
-    *(unsigned char *)(self + 8) += *(unsigned char *)(p + 21);
-    *(float *)(self + 12) += *(float *)(p + 16);
-    *(float *)(p + 8) -= *(float *)(p + 12);
-}

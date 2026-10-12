@@ -447,26 +447,3 @@ INCLUDE_ASM("asm/game", func_002BEE70);
 INCLUDE_ASM("asm/game", func_002BF390);
 
 INCLUDE_ASM("asm/game", func_002BF518);
-
-/* Qwen draft (branch qwen/autonomy, c8b09022), checked by tools/check.py */
-void func_002B9180(void *);
-int func_00282978(short *);
-
-void func_002BF6F0(void *param_1)
-{
-  int lVar1;
-
-  lVar1 = func_00282978((short *)((char *)param_1 + 10));
-  if (lVar1 != 0) {
-    func_002B9180(param_1);
-  }
-  return;
-}
-
-INCLUDE_ASM("asm/game", func_002BF728);
-
-INCLUDE_ASM("asm/game", func_002BF8F0);
-
-INCLUDE_ASM("asm/game", func_002BFB38);
-
-INCLUDE_ASM("asm/game", func_002BFC50);

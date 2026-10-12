@@ -61,6 +61,16 @@ extern void func_L00_002D3B58(FamilyC94396F4Vector_Fc94396f4 *destination,
 extern void func_00282CC0_16(FamilyC94396F4Vector_Fc94396f4 *destination,
                     FamilyC94396F4Vector_Fc94396f4 *source, u8 *buffer);
 
+extern float func_00283180_1(float v);
+
+extern float func_00283198_1(float v);
+
+extern void func_002830C0_2(void *p, void *q, char *data);
+
+extern void func_00282CC0_2(void *p, void *q, char *data);
+
+extern char D_00189E20_6[];
+
 /* Measured partial layouts; original type and game roles are unknown. */
 typedef float Rac2Native_5fc519c90e0e763a_f32;
 
@@ -114,7 +124,16 @@ void func_L00_002D34C0(FamilyC94396F4Vector_Fc94396f4 *destination,
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002D3638);
+/* Fills a three-float record from two helper results scaled by a factor and a third float argument, then runs a setup routine on the record with a bound data root and, when the flag argument is non-zero, a second routine with that root plus 128. */
+void func_L00_002D3638(float *p, int flag, float scale, float value, float height)
+{
+    p[0] = func_00283180_1(value) * scale;
+    p[1] = func_00283198_1(value) * scale;
+    p[2] = height;
+    func_002830C0_2(p, p, D_00189E20_6);
+    if (flag != 0)
+        func_00282CC0_2(p, p, D_00189E20_6 + 128);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002D36E0);
 

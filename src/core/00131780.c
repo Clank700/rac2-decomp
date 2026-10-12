@@ -7,6 +7,9 @@ typedef struct { char b[0xC]; } Cfg12;
 
 extern Cfg12 r1_D_00153D40 NOT_SDA;
 
+/* Qwen draft (branch qwen/autonomy, bb52125e), checked by tools/check.py */
+void func_00132DF0(int, int, int, long, int);
+
    /* current buffer */
 extern short r1_D_0015EDC4;
 
@@ -193,9 +196,6 @@ INCLUDE_ASM("asm/core", func_00132A58);
 INCLUDE_ASM("asm/core", func_00132AA0);
 
 INCLUDE_ASM("asm/core", func_00132AF8);
-
-/* Qwen draft (branch qwen/autonomy, bb52125e), checked by tools/check.py */
-void func_00132DF0(int, int, int, long, int);
 
 void func_00132B28(int param_1) {
   int auStack_20[4];

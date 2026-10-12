@@ -12,6 +12,23 @@ extern void func_002FC560(unsigned int reg, unsigned long value);
 
 extern void func_00285398(int width, int height);
 
+/* Qwen draft (branch qwen/autonomy, 00dc80b4), checked by tools/check.py */
+/* Wrapper function that calls func_00284EA8 and returns.
+ * Stack frame is used only to save/restore the return address (ra).
+ * The function follows standard MIPS ABI conventions:
+ * - addiu sp,sp,-0x10 allocates 16 bytes on the stack
+ * - sd ra,0x(sp) saves the return address
+ * - jal calls the external helper
+ * - delay slot is a nop
+ * - ld ra,0x(sp) restores the return address
+ * - jr ra returns to caller
+ * - _addiu sp,sp,0x10 deallocates stack
+ */
+void func_0027BA48(void);
+
+/* Qwen draft (branch qwen/autonomy, b9c5326c), checked by tools/check.py */
+void func_002CBC58(int);
+
 /* Family 489bf28ebf58470c (120 B, 2 placements): call every registered
  * callback with its paired argument, bounded by a resident count word.
  *
@@ -69,20 +86,6 @@ void func_0027B9C0(int width, int height)
     func_002FC560(0x42, 0x8000000044UL);
 }
 
-/* Qwen draft (branch qwen/autonomy, 00dc80b4), checked by tools/check.py */
-/* Wrapper function that calls func_00284EA8 and returns.
- * Stack frame is used only to save/restore the return address (ra).
- * The function follows standard MIPS ABI conventions:
- * - addiu sp,sp,-0x10 allocates 16 bytes on the stack
- * - sd ra,0x(sp) saves the return address
- * - jal calls the external helper
- * - delay slot is a nop
- * - ld ra,0x(sp) restores the return address
- * - jr ra returns to caller
- * - _addiu sp,sp,0x10 deallocates stack
- */
-void func_0027BA48(void);
-
 void func_0027BA48(void)
 {
   func_00284EA8();
@@ -100,9 +103,6 @@ INCLUDE_ASM("asm/game", func_0027C480);
 INCLUDE_ASM("asm/game", func_0027C4A8);
 
 INCLUDE_ASM("asm/game", func_0027C510);
-
-/* Qwen draft (branch qwen/autonomy, b9c5326c), checked by tools/check.py */
-void func_002CBC58(int);
 
 void func_0027C520(void)
 {

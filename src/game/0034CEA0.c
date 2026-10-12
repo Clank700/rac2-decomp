@@ -16,6 +16,12 @@ extern void F476e86a4_FUN_00336508(char *p, int a, int b);
 
 extern void F476e86a4_FUN_00336CE0(char *p, int a);
 
+/* Qwen draft (branch qwen/autonomy, 56f9a59b), checked by tools/check.py */
+void func_00338A60(int);
+
+/* Qwen draft (branch qwen/autonomy, 576906e6), checked by tools/check.py */
+void func_00338F58(int);
+
 extern char F45821cfb_D_001C2740[];
 
 extern void F45821cfb_FUN_00282C88(char *);
@@ -104,16 +110,10 @@ INCLUDE_ASM("asm/game", func_0034E2E0);
 
 INCLUDE_ASM("asm/game", func_0034E478);
 
-/* Qwen draft (branch qwen/autonomy, 56f9a59b), checked by tools/check.py */
-void func_00338A60(int);
-
 void func_0034E4B8(int param_1)
 {
   func_00338A60(param_1 + 0x1d6c);
 }
-
-/* Qwen draft (branch qwen/autonomy, 576906e6), checked by tools/check.py */
-void func_00338F58(int);
 
 void func_0034E4D8(int param_1)
 {

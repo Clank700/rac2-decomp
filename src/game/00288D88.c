@@ -1,5 +1,8 @@
 #include "include_asm.h"
 
+/* Qwen draft (branch qwen/autonomy, 2e797515), checked by tools/check.py */
+void func_0028A180(int, int);
+
 extern void func_0028B650(char *, int);
 
 /* Update the measured fields of the first matching key among13records. */
@@ -66,9 +69,6 @@ INCLUDE_ASM("asm/game", func_00289AA8);
 INCLUDE_ASM("asm/game", func_00289FC8);
 
 INCLUDE_ASM("asm/game", func_0028A030);
-
-/* Qwen draft (branch qwen/autonomy, 2e797515), checked by tools/check.py */
-void func_0028A180(int, int);
 
 void
 func_0028A130(int param_1)

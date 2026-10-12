@@ -4,6 +4,9 @@ extern int func_0033E348(int);
 
 extern int func_00348128(unsigned char *);
 
+/* Qwen draft (branch qwen/autonomy, 4419d477), checked by tools/check.py */
+void func_0033AF48(int);
+
 extern void func_0033AB50_1(void *);
 
 extern void func_L00_0042BFF8(void *);
@@ -31,8 +34,6 @@ INCLUDE_ASM("asm/game", func_0033E4C0);
 
 INCLUDE_ASM("asm/game", func_0033E5C0);
 
-/* Qwen draft (branch qwen/autonomy, 4419d477), checked by tools/check.py */
-void func_0033AF48(int);
 void func_0033E620(int param_1) {
   func_0033AF48(param_1 + 8);
 }

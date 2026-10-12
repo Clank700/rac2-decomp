@@ -10,12 +10,6 @@ extern u32 D_L24_001B1B74[] __attribute__((sda));
 
 typedef unsigned char u8;
 
-INCLUDE_ASM("asm/game", func_002DD400);
-
-INCLUDE_ASM("asm/game", func_002DDA10);
-
-INCLUDE_ASM("asm/game", func_002DDEB0);
-
 INCLUDE_ASM("asm/game", func_002DDEC8);
 
 INCLUDE_ASM("asm/game", func_002DE0D0);

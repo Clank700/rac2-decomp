@@ -2,6 +2,12 @@
 
 typedef int s32;
 
+extern float func_00283180_13(float x);
+
+extern float func_00283198_14(float x);
+
+extern void func_00282CC0_42(float *out, float *in, void *q);
+
 typedef unsigned char u8;
 
 typedef float f32;
@@ -63,7 +69,19 @@ INCLUDE_ASM("asm/levels", func_L00_002D9D98);
 
 INCLUDE_ASM("asm/levels", func_L00_002D9E80);
 
-INCLUDE_ASM("asm/levels", func_L00_002DA0B8);
+/* Builds a 3-component vector from a spherical radius/elevation/azimuth triple using two unary float helpers, clears the 4th component, then forwards the destination twice plus a third argument to a final helper. */
+void func_L00_002DA0B8(float *out, float *p, void *q)
+{
+    float t;
+
+    t = func_00283180_13(p[1]);
+    out[0] = p[2] * t * func_00283180_13(p[0]);
+    t = func_00283180_13(p[1]);
+    out[1] = p[2] * t * func_00283198_14(p[0]);
+    out[2] = p[2] * func_00283198_14(p[1]);
+    out[3] = 0.0f;
+    func_00282CC0_42(out, out, q);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002DA1E0);
 

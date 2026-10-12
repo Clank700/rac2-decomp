@@ -36,6 +36,12 @@ typedef unsigned char u8;
 
 typedef int s32;
 
+extern int func_0033AB50(int);
+
+extern void F7d9c8805_FUN_003361A8(int);
+
+extern void F7d9c8805_FUN_00336968(int);
+
 extern void func_0033AE18(unsigned char *owner, int value);
 
 /* Lazily initialises a sub-object of the argument behind two global flags and a field, runs one guarded setup step on it, then hands it to two callees. */
@@ -138,7 +144,20 @@ void func_0033A9F8(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x20c) = a1; }
 
 INCLUDE_ASM("asm/game", func_0033AA00);
 
-INCLUDE_ASM("asm/game", func_0033AB50);
+int func_0033AB50(int a0)
+{
+	char *p = (char *)a0 + 12;
+	int i;
+
+	for (i = 4; i != -1; i--) {
+		F7d9c8805_FUN_003361A8(p);
+		p += 76;
+	}
+	F7d9c8805_FUN_00336968(a0 + 408);
+	F7d9c8805_FUN_00336968(a0 + 480);
+	F7d9c8805_FUN_00336968(a0 + 552);
+	return a0;
+}
 
 INCLUDE_ASM("asm/game", func_0033ABD0);
 

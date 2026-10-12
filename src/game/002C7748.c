@@ -6,6 +6,16 @@ extern void F250fbfa4_FUN_002B9180(char *p);
 
 extern void F250fbfa4_FUN_00282CC0(char *p0, char *p1, char *p2);
 
+extern int Ff4dd22f3_FUN_00282978(char *p);
+
+extern void Ff4dd22f3_FUN_002B9180(char *p);
+
+extern void Ff4dd22f3_FUN_00282CC0(char *p, char *q, float *v);
+
+extern int Fc40b1162_FUN_00282978();
+
+extern void Fc40b1162_FUN_002B9180();
+
 extern void Fbdd4a4aa_FUN_00300190(char *a, char *b);
 
 extern void Fbdd4a4aa_FUN_00282CC0(char *a, char *b, char *c);
@@ -96,6 +106,66 @@ extern void func_0027C540(long arg0);
 /* External functions declared with exact aliases from task.externals */
 extern void func_0027C540(long param_1);
 
+INCLUDE_ASM("asm/game", func_002C7748);
+
+INCLUDE_ASM("asm/game", func_002C7888);
+
+INCLUDE_ASM("asm/game", func_002C7970);
+
+void func_002C7AE8(char *a0)
+{
+    char local[16];
+    char *s1 = a0;
+    char *s0;
+    int a1;
+    int v1;
+    char *p;
+
+    if (F250fbfa4_FUN_00282978(a0 + 10) != 0) {
+        F250fbfa4_FUN_002B9180(a0);
+        return;
+    }
+    s0 = a0 + 32;
+    a1 = *(int *)(s1 + 4);
+    v1 = (a1 >> 24) + *(unsigned char *)(s0 + 20);
+    *(int *)(s1 + 4) = (a1 & 0x00ffffff) | (v1 << 24);
+    p = s1 + 16;
+    *(float *)(local + 0) = *(float *)(s1 + 32);
+    *(float *)(local + 4) = *(float *)(s0 + 4);
+    *(float *)(local + 8) = *(float *)(s0 + 8);
+    *(int *)(local + 12) = 0;
+    F250fbfa4_FUN_00282CC0(p, p, local);
+    *(float *)(s0 + 8) = *(float *)(s0 + 8) - *(float *)(s0 + 12);
+    *(unsigned char *)(s1 + 8) = *(unsigned char *)(s1 + 8) + *(unsigned char *)(s0 + 21);
+    *(float *)(s1 + 12) = *(float *)(s1 + 12) + *(float *)(s0 + 16);
+}
+
+INCLUDE_ASM("asm/game", func_002C7BB8);
+
+void func_002C7D58(char *self)
+{
+    char *p = self + 32;
+    float v[4];
+    int a1;
+
+    if (Ff4dd22f3_FUN_00282978(self + 10) != 0)
+    {
+        Ff4dd22f3_FUN_002B9180(self);
+        return;
+    }
+
+    a1 = *(int *)(self + 4);
+    *(int *)(self + 4) = (a1 & 0xffffff) | (((a1 >> 24) + (int)*(unsigned char *)(p + 20)) << 24);
+    v[0] = *(float *)(self + 32);
+    v[1] = *(float *)(p + 4);
+    v[2] = *(float *)(p + 8);
+    v[3] = 0.0f;
+    Ff4dd22f3_FUN_00282CC0(self + 16, self + 16, v);
+    *(unsigned char *)(self + 8) += *(unsigned char *)(p + 21);
+    *(float *)(self + 12) += *(float *)(p + 16);
+    *(float *)(p + 8) -= *(float *)(p + 12);
+}
+
 INCLUDE_ASM("asm/game", func_002C7E28);
 
 INCLUDE_ASM("asm/game", func_002C7F78);
@@ -106,7 +176,12 @@ INCLUDE_ASM("asm/game", func_002C8348);
 
 INCLUDE_ASM("asm/game", func_002C8428);
 
-INCLUDE_ASM("asm/game", func_002C85D8);
+void func_002C85D8(char *p)
+{
+    if (Fc40b1162_FUN_00282978(p + 10)) {
+        Fc40b1162_FUN_002B9180(p);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002C8610);
 
