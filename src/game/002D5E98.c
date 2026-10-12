@@ -99,9 +99,18 @@ int func_002D7AC8(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002D7AE0);
+int func_002D7AE0(void) {
+    func_002DE3A0(1);
+    return 0;
+}
 
-INCLUDE_ASM("asm/game", func_002D7B00);
+extern int D_001A7BA0[] __attribute__((sda));
+extern int D_001886B0[];
+
+int func_002D7B00(void) {
+    D_001886B0[0] = D_001A7BA0[0];
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002D7B18);
 
@@ -109,7 +118,9 @@ INCLUDE_ASM("asm/game", func_002D7DB8);
 
 INCLUDE_ASM("asm/game", func_002D8120);
 
-INCLUDE_ASM("asm/game", func_002D81A8);
+int func_002D81A8(void) {
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002D81B0);
 
@@ -207,7 +218,24 @@ s32 func_002DA238 (s32 self)
   return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002DA2D0);
+typedef struct {
+    char reserved[0x44];
+    int state;
+    unsigned int first, second;
+    int index, pending;
+} Handles_2DCB28;
+
+extern void func_002B7CE0(int);
+
+int func_002DA2D0(Handles_2DCB28 *object) {
+    object->first = func_002DE618(object->first);
+    object->second = func_002DE618(object->second);
+    object->index = -1;
+    object->pending = -1;
+    object->state = -1;
+    func_002B7CE0(1);
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002DA328);
 
@@ -233,7 +261,13 @@ INCLUDE_ASM("asm/game", func_002DBAA8);
 
 INCLUDE_ASM("asm/game", func_002DBAD0);
 
-INCLUDE_ASM("asm/game", func_002DBB08);
+extern char *D_001F2854;
+
+int func_002DBB08(char *object) {
+    *(int *)(D_001F2854 + 0x12C) = 0;
+    *(int *)(object + 0x54) = func_002DE550(0);
+    return 0;
+}
 
 undefined8 func_002DBB48(int param_1)
 {
@@ -283,28 +317,12 @@ INCLUDE_ASM("asm/game", func_002DC720);
 
 INCLUDE_ASM("asm/game", func_002DC900);
 
-/* Initialises an object: runs setup helpers, clears word +0x4C, stores one helper result at +0x48, then calls a final helper with (small-data global + 0x3CAA8) only when two globals are non-zero, and returns 0. */
-int func_002DCAB8(char *a0)
-{
-    int v;
+INCLUDE_ASM("asm/game", func_002DCAB8);
 
-    func_002DE3A0(1);
-    v = func_002DE550_1(0);
-    *(int *)(a0 + 76) = 0;
-    *(int *)(a0 + 72) = v;
-    func_002C9A60();
-    func_L00_002F3478();
-    v = *(int *)0x1A8FD8;
-    if (v != 0) {
-        v = D_L00_001A904C_8;
-        if (v != 0) {
-            func_00339760(v + 0x3CAA8);
-        }
-    }
+int func_002DCB28(Handles_2DCB28 *object) {
+    object->first = func_002DE618(object->first);
     return 0;
 }
-
-INCLUDE_ASM("asm/game", func_002DCB28);
 
 INCLUDE_ASM("asm/game", func_002DCB58);
 

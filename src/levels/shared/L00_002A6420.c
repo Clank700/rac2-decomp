@@ -357,13 +357,33 @@ INCLUDE_ASM("asm/levels", func_L00_002AABE0);
 
 INCLUDE_ASM("asm/levels", func_L00_002AAE00);
 
-INCLUDE_ASM("asm/levels", func_L00_002AB0A8);
+typedef struct {
+    char reserved00[0xA4];
+    float first;
+    float second;
+    int reservedAC;
+} FloatPairRow;
+extern FloatPairRow D_L00_0025BE10[4];
 
-INCLUDE_ASM("asm/levels", func_L00_002AB0C0);
+void func_L00_002AB0A8(float first, float second) {
+    D_L00_0025BE10[0].first = first;
+    D_L00_0025BE10[0].second = second;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_002AB0D8);
+void func_L00_002AB0C0(float first, float second) {
+    D_L00_0025BE10[1].first = first;
+    D_L00_0025BE10[1].second = second;
+}
 
-INCLUDE_ASM("asm/levels", func_L00_002AB0F0);
+void func_L00_002AB0D8(float first, float second) {
+    D_L00_0025BE10[2].first = first;
+    D_L00_0025BE10[2].second = second;
+}
+
+void func_L00_002AB0F0(float first, float second) {
+    D_L00_0025BE10[3].first = first;
+    D_L00_0025BE10[3].second = second;
+}
 
 /* scales and blends two 16-byte samples through a helper, and on a successful comparison writes a table-derived value to the caller's output */
 int func_L00_002AB108(float *out, float scale, float amount)

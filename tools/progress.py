@@ -76,13 +76,16 @@ def main() -> None:
     if "--check" in sys.argv:
         check()
         return
-    placed = set()
+    placed, differ = set(), set()
     programs = ["boot"] + [levels.level_dir(n) for n in sorted(levels.NAMES)]
     for program in programs:
         path = ROOT / "build" / program / "placed.json"
         if not path.is_file():
             sys.exit(f"no build of {program}: run tools/build.py all first")
-        placed |= set(json.loads(path.read_text())["functions"])
+        result = json.loads(path.read_text())
+        placed |= set(result["functions"])
+        differ |= set(result["differ"])
+    placed -= differ      # a function counts when it links at every place it has, not at some
     where = {n: (a, s) for n, a, s in levels.read_boot_functions()}
     for name, kind, size, _, places in levels.read_catalogue():
         if kind != "boot":

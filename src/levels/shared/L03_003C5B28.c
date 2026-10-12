@@ -193,6 +193,7 @@ INCLUDE_ASM("asm/levels", func_L03_0042B930);
 INCLUDE_ASM("asm/levels", func_L03_0043AC40);
 
 INCLUDE_ASM("asm/levels", func_L03_0043AC78);
+
 extern void func_L03_0043ACD8(void);
 
 

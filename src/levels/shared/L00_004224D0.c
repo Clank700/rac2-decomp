@@ -90,11 +90,42 @@ INCLUDE_ASM("asm/levels", func_L00_004240D8);
 
 INCLUDE_ASM("asm/levels", func_L00_004243C0);
 
-INCLUDE_ASM("asm/levels", func_L00_00424940);
+extern char *D_L00_001B8E10;
+
+int func_L00_00424940(int a0)
+{
+    char *p = D_L00_001B8E10;
+    char *q;
+
+    if (*(short *)(p + 134) != 0) {
+        return -1;
+    }
+    q = *(char **)(p + 112);
+    if (*(int *)(q + 576) == a0) {
+        *(int *)(q + 576) = 0;
+        return 1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00424978);
 
-INCLUDE_ASM("asm/levels", func_L00_00424A08);
+void func_L00_00424A08(int a0, float a, float b)
+{
+    char *p = D_L00_001B8E10;
+
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        char *r = q + 352;
+
+        *(short *)(r + 60) = 1;
+        *(float *)(r + 72) = b;
+        *(float *)(r + 64) = a;
+        if (a0) {
+            *(float *)(r + 88) = a;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00424A50);
 
@@ -102,19 +133,61 @@ INCLUDE_ASM("asm/levels", func_L00_00424A88);
 
 INCLUDE_ASM("asm/levels", func_L00_00424AD8);
 
-INCLUDE_ASM("asm/levels", func_L00_00424B20);
+void func_L00_00424B20(float t)
+{
+    char *p = D_L00_001B8E10;
 
-INCLUDE_ASM("asm/levels", func_L00_00424B48);
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        *(float *)(q + 484) = t;
+    }
+}
+
+void func_L00_00424B48(int t)
+{
+    char *p = D_L00_001B8E10;
+
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        *(short *)(q + 16) = (short)t;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00424B70);
 
 INCLUDE_ASM("asm/levels", func_L00_00424BB8);
 
-INCLUDE_ASM("asm/levels", func_L00_00424C00);
+void func_L00_00424C00(void)
+{
+    char *p = D_L00_001B8E10;
 
-INCLUDE_ASM("asm/levels", func_L00_00424C28);
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        *(short *)(q + 582) = 1;
+    }
+}
 
-INCLUDE_ASM("asm/levels", func_L00_00424C60);
+void func_L00_00424C28(void)
+{
+    char *p = D_L00_001B8E10;
+
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        *(char *)(q + 310) = 1;
+    }
+}
+
+void func_L00_00424C60(void)
+{
+    char *p = D_L00_001B8E10;
+
+    if (*(short *)(p + 134) == 0) {
+        char *q = *(char **)(p + 112);
+        char *r = q + 448;
+
+        *(int *)(r + 16) |= 3;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00424C90);
 

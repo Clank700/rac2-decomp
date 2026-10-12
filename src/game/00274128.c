@@ -235,7 +235,12 @@ void func_00279828(void)
 
 INCLUDE_ASM("asm/game", func_002798A0);
 
-INCLUDE_ASM("asm/game", func_00279988);
+extern int func_00282948(void *);
+extern char D_001B7FA8[];
+
+int func_00279988(void) {
+    return func_00282948(D_001B7FA8);
+}
 
 INCLUDE_ASM("asm/game", func_002799A8);
 

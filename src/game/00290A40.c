@@ -34,7 +34,11 @@ void func_00291108(void)
   return;
 }
 
-INCLUDE_ASM("asm/game", func_00291128);
+extern void func_00278F80(void);
+
+void func_00291128(void) {
+    func_00278F80();
+}
 
 INCLUDE_ASM("asm/game", func_00291148);
 

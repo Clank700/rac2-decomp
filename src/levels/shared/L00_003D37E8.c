@@ -116,21 +116,7 @@ INCLUDE_ASM("asm/levels", func_L00_003DC1C0);
 
 INCLUDE_ASM("asm/levels", func_L00_003DC2D0);
 
-/* shared native body of family beb4059b71338403 */
-void func_L00_003DC350(void)
-{
-    int *p;
-    int i;
-
-    p = *(int **)0x1B32A0 + 60;
-    for (i = 3; i >= 0; i--) { *p = 0; p -= 16; }
-
-    p = *(int **)0x1B32A4 + 4799;
-    for (i = 149; i >= 0; i--) { *p = 0; p -= 32; }
-
-    p = *(int **)0x1B32A8;
-    for (i = 9; i >= 0; i--) { p[1] = 0; p[0] = 0; p += 4; }
-}
+INCLUDE_ASM("asm/levels", func_L00_003DC350);
 
 INCLUDE_ASM("asm/levels", func_L00_003DC3E0);
 

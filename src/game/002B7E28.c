@@ -166,7 +166,18 @@ INCLUDE_ASM("asm/game", func_002B80B8);
 
 INCLUDE_ASM("asm/game", func_002B8108);
 
-INCLUDE_ASM("asm/game", func_002B8518);
+typedef struct {
+    char reserved[0x18E];
+    short active;
+    int value;
+} State_2B8518;
+
+extern State_2B8518 D_00138180;
+
+void func_002B8518(void) {
+    D_00138180.active = 0;
+    D_00138180.value = 0;
+}
 
 INCLUDE_ASM("asm/game", func_002B8530);
 
@@ -215,7 +226,8 @@ INCLUDE_ASM("asm/game", func_002BAA28);
 
 INCLUDE_ASM("asm/game", func_002BABE8);
 
-INCLUDE_ASM("asm/game", func_002BAE48);
+void func_002BAE48(void) {
+}
 
 INCLUDE_ASM("asm/game", func_002BAE50);
 
@@ -345,7 +357,8 @@ INCLUDE_ASM("asm/game", func_002BCF18);
 
 INCLUDE_ASM("asm/game", func_002BD0D0);
 
-INCLUDE_ASM("asm/game", func_002BD390);
+void func_002BD390(void) {
+}
 
 void func_002BD398(OBJ_F3c007b59 *o)
 {

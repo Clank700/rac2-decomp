@@ -48,7 +48,11 @@ INCLUDE_ASM("asm/game", func_00341E50);
 
 INCLUDE_ASM("asm/game", func_00341E58);
 
-INCLUDE_ASM("asm/game", func_00341E90);
+extern void func_00348128(void *);
+
+void func_00341E90(char *object) {
+    func_00348128(object + 0x10);
+}
 
 INCLUDE_ASM("asm/game", func_00341EB0);
 

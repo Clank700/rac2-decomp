@@ -140,7 +140,13 @@ INCLUDE_ASM("asm/game", func_002F5AE8);
 
 INCLUDE_ASM("asm/game", func_002F5AF8);
 
-INCLUDE_ASM("asm/game", func_002F5CB8);
+extern int D_001A8C80[] __attribute__((sda));
+extern int D_001A8C84 __attribute__((sda));
+
+void func_002F5CB8(int first, int second) {
+    D_001A8C80[0] = first;
+    D_001A8C84 = second;
+}
 
 INCLUDE_ASM("asm/game", func_002F5CC8);
 

@@ -263,7 +263,11 @@ INCLUDE_ASM("asm/game", func_002C9828);
 
 INCLUDE_ASM("asm/game", func_002C9A40);
 
-INCLUDE_ASM("asm/game", func_002C9A50);
+extern int D_001F2A30;
+
+int func_002C9A50(void) {
+    return D_001F2A30;
+}
 
 /* A15-struct-pad-20 freshly exact-verified under family reservation */
 void func_002C9A60(void) {
@@ -297,9 +301,23 @@ void func_002C9AD8(s32 *a0) {
  } while(*(s32 *)((u32)base+(v<<2))==0);
 }
 
-INCLUDE_ASM("asm/game", func_002C9B18);
+extern char *D_001A8CFC[] __attribute__((sda));
+extern void func_00339770(void *, int);
 
-INCLUDE_ASM("asm/game", func_002C9B50);
+int func_002C9B18(void) {
+    if (D_001A8CFC[0] != 0)
+        func_00339770(D_001A8CFC[0] + 0x3CAA8, 0);
+    return 0;
+}
+
+extern char *D_001A8CFC[] __attribute__((sda));
+extern void func_00339770(void *, int);
+
+int func_002C9B50(void) {
+    if (D_001A8CFC[0] != 0)
+        func_00339770(D_001A8CFC[0] + 0x3CAA8, 1);
+    return 0;
+}
 
 /* reads two object fields, forms centre plus and minus half of a third, and issues two five-argument draw calls taking an id-derived value and a fixed 64-bit attribute */
 int func_002C9B88 (int *p)
@@ -384,9 +402,13 @@ INCLUDE_ASM("asm/game", func_002CC528);
 
 INCLUDE_ASM("asm/game", func_002CC550);
 
-INCLUDE_ASM("asm/game", func_002CC690);
+int func_002CC690(void) {
+    return 0;
+}
 
-INCLUDE_ASM("asm/game", func_002CC698);
+int func_002CC698(void) {
+    return 0;
+}
 
 s32 func_002CC6A0(u8 *p) { *(s32 *)(p + 0x44) = -1; return 0; }
 

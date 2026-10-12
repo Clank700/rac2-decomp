@@ -67,7 +67,6 @@ INCLUDE_ASM("asm/levels", func_L00_004005B0);
 
 INCLUDE_ASM("asm/levels", func_L00_00400F30);
 
-INCLUDE_ASM("asm/levels", func_L00_00400F38);
 
 INCLUDE_ASM("asm/levels", func_L00_00401168);
 
@@ -75,7 +74,6 @@ INCLUDE_ASM("asm/levels", func_L00_00401668);
 
 INCLUDE_ASM("asm/levels", func_L00_00401D50);
 
-INCLUDE_ASM("asm/levels", func_L00_00401E28);
 
 INCLUDE_ASM("asm/levels", func_L00_00402068);
 
@@ -83,9 +81,23 @@ INCLUDE_ASM("asm/levels", func_L00_004028C0);
 
 INCLUDE_ASM("asm/levels", func_L00_004029E8);
 
-INCLUDE_ASM("asm/levels", func_L00_00402DB8);
 
-INCLUDE_ASM("asm/levels", func_L00_00402DD8);
+extern void func_002FDBD8(void *obj, float f, void *p, void *q);
+typedef struct __attribute__((packed)) { unsigned char b[8]; } Blob8;
+extern Blob8 D_L00_001B0DB8 __attribute__((nosda));
+
+void func_L00_00402DD8(char *arg)
+{
+    int *o = *(int **)(arg + 104);
+    if (o[9] != 0) {
+        if (o[11] == 0) {
+            func_002FDBD8(o, 1.0f, (char *)o + 16, 0);
+        } else {
+            Blob8 tmp = D_L00_001B0DB8;
+            func_002FDBD8(o, 1.0f, (char *)o + 16, &tmp);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00402E50);
 

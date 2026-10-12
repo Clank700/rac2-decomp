@@ -228,11 +228,12 @@ void func_L00_004283C8(char *o)
     *(char *)(o + 125) = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_004284A8);
+int func_L00_004284A8(void) {
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_004284B0);
 
-INCLUDE_ASM("asm/levels", func_L00_00428560);
 
 void func_L00_00428580(void)
 {
@@ -292,13 +293,14 @@ INCLUDE_ASM("asm/levels", func_L00_0042A698);
 
 INCLUDE_ASM("asm/levels", func_L00_0042A908);
 
-INCLUDE_ASM("asm/levels", func_L00_0042AB40);
+int func_L00_0042AB40(void) {
+    return -1;
+}
 
 void func_L00_0042AB48(void)
 {
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0042ABF8);
 
 INCLUDE_ASM("asm/levels", func_L00_0042AC18);
 
@@ -306,7 +308,6 @@ INCLUDE_ASM("asm/levels", func_L00_0042AD98);
 
 INCLUDE_ASM("asm/levels", func_L00_0042B038);
 
-INCLUDE_ASM("asm/levels", func_L00_0042B688);
 
 INCLUDE_ASM("asm/levels", func_L00_0042B6A8);
 

@@ -119,7 +119,14 @@ INCLUDE_ASM("asm/levels", func_L00_002FC980);
 
 INCLUDE_ASM("asm/levels", func_L00_002FCF18);
 
-INCLUDE_ASM("asm/levels", func_L00_002FD308);
+extern void func_00291788(unsigned long long);
+extern void func_00291640(unsigned long long);
+
+void func_L00_002FD308(unsigned long long argument)
+{
+    func_00291788(argument);
+    func_00291640(argument);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002FD400);
 
@@ -383,9 +390,7 @@ INCLUDE_ASM("asm/levels", func_L00_0030DBB8);
 
 INCLUDE_ASM("asm/levels", func_L00_0030DBF8);
 
-INCLUDE_ASM("asm/levels", func_L00_0030DC30);
 
-INCLUDE_ASM("asm/levels", func_L00_0030DC58);
 
 /* Call the registered handler with a table pointer built from one module base word plus the constant 36808, forwarding the incoming argument; do nothing when the base word is zero. */
 void func_L00_0030DC80(int argument)

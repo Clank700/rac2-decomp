@@ -60,4 +60,8 @@ int func_003418C0(char *self, int arg1)
     return *(int *)(self + (*(int *)(self + 764) << 2) + 440);
 }
 
-INCLUDE_ASM("asm/game", func_00341A48);
+extern void func_00336320(void *);
+
+void func_00341A48(char *object) {
+    func_00336320(object + 0x130);
+}
