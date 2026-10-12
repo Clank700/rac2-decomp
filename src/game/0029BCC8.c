@@ -75,7 +75,14 @@ int func_0029C208(int value) {
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_0029C248);
+extern int func_00345F70(void *, int, int);
+
+int func_0029C248(int first, int second)
+{
+    if (D_001A8CFC != 0)
+        return func_00345F70(D_001A8CFC + 0x39A98, first, second);
+    return 0;
+}
 
 extern int func_00339320(void *, int);
 
@@ -411,7 +418,8 @@ void func_0029CC20(void) {
         func_00340250(D_001A8CFC + 0x3A388);
 }
 
-INCLUDE_ASM("asm/game", func_0029CC50);
+extern void func_00338718(void *, int, int, int);
+void func_0029CC50(int a0, int a1, int a2) { if (D_001A8CFC != 0) func_00338718(D_001A8CFC + 0x36F28, a0, a1, a2); }
 
 extern void func_003387A0(void *, int, int);
 
@@ -439,7 +447,18 @@ void func_0029CD20(void) {
 
 INCLUDE_ASM("asm/game", func_0029CD48);
 
-INCLUDE_ASM("asm/game", func_0029CE38);
+void func_0029CE38(void)
+{
+    extern int D_001A8C64;
+    extern void func_0028E138(int);
+    extern void func_0029BCD8(void);
+    if (D_001A8CFC != 0) {
+        if (D_001A8C64 == 0) {
+            func_0028E138(1);
+            func_0029BCD8();
+        }
+    }
+}
 
 INCLUDE_ASM("asm/game", func_0029CE78);
 

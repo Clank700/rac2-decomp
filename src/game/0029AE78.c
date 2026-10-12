@@ -27,7 +27,16 @@ s32 func_0029AE78(s32 *a0) {
 
 INCLUDE_ASM("asm/game", func_0029AEB0);
 
-INCLUDE_ASM("asm/game", func_0029AF58);
+int func_0029AF58(char *a0)
+{
+    extern int func_0029AEB0(char *, int);
+    int expected = *(int *)(a0 + 4);
+    int first = *(int *)a0;
+    int result = 0;
+    if (expected != 0)
+        result = func_0029AEB0(a0 + 8, first) == expected;
+    return result;
+}
 
 int func_0029AF98(char *out, int mult, int *recs)
 {

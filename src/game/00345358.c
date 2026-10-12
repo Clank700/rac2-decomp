@@ -607,7 +607,19 @@ unsigned int func_0034CA68(unsigned char *owner)
     return *(unsigned int *)address & 0xff000000u;
 }
 
-INCLUDE_ASM("asm/game", func_0034CA90);
+extern void func_00336920(char *, int, int);
+void func_0034CA90(char *self, int mode)
+{
+    *(int *)(self + 0x1584) = mode;
+    switch (mode) {
+    case 0:
+        func_00336920(self + 0x280, 0x7567, 0);
+        break;
+    case 1:
+        func_00336920(self + 0x280, 0xEAA2, 0);
+        break;
+    }
+}
 
 void func_0034CAE8(char *p, void *a1, int a2)
 {

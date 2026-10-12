@@ -236,7 +236,17 @@ INCLUDE_ASM("asm/game", func_002B7380);
 
 INCLUDE_ASM("asm/game", func_002B7578);
 
-INCLUDE_ASM("asm/game", func_002B7AD0);
+extern char D_001AA1E8[];
+extern void func_0026FEB8(void *);
+extern int func_00133640(void);
+void func_002B7AD0(void) {
+    u8 *state = D_001A63A8;
+    if (*(short *)(state + 4) != 0) {
+        func_0026FEB8(D_001AA1E8);
+        func_00133640();
+        state[6] = 1;
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002B7B18);
 
