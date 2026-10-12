@@ -197,34 +197,18 @@ INCLUDE_ASM("asm/levels", func_L00_00309140);
 void func_L00_00309368(void)
 {
 }
+extern void func_L00_00309AE8(void);
+INCLUDE_ASM("asm/levels", func_L00_00309AE8);
 
-/* Write state value 3 when bit 0x40 is clear in the absolute flag word; preserve the existing value otherwise. */
-void func_L00_00309AE8(void)
-{
-    if ((D_001A7424 & 0x40u) == 0)
-        D_001A7420_1 = 3;
-}
+extern void func_L00_00309B10(void);
+INCLUDE_ASM("asm/levels", func_L00_00309B10);
 
-/* Write state value 3 when bit 0x40 is clear in the absolute flag word; preserve the existing value otherwise. */
-void func_L00_00309B10(void)
-{
-    if ((D_001A7424_1 & 0x40u) == 0)
-        D_001A7420_2 = 3;
-}
+extern void func_L00_00309B58(void);
+INCLUDE_ASM("asm/levels", func_L00_00309B58);
 
-/* Write state value 3 when bit 0x40 is clear in the absolute flag word; preserve the existing value otherwise. */
-void func_L00_00309B58(void)
-{
-    if ((D_001A7424_2 & 0x40u) == 0)
-        D_001A7420_3 = 3;
-}
+extern void func_L00_00309B80(void);
+INCLUDE_ASM("asm/levels", func_L00_00309B80);
 
-/* Write state value 3 when bit 0x40 is clear in the absolute flag word; preserve the existing value otherwise. */
-void func_L00_00309B80(void)
-{
-    if ((D_001A7424_3 & 0x40u) == 0)
-        D_001A7420_4 = 3;
-}
 
 INCLUDE_ASM("asm/levels", func_L00_00309DB0);
 

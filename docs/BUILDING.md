@@ -31,24 +31,39 @@ Each program prints `OK` with its C functions, or stops at the first byte that d
 A C function that does not match where the catalogue places it is listed with the reason
 and stays assembly there; the program still has to come out equal.
 
-## On macOS (Apple Silicon) and other hosts
+## On macOS, Windows or any host: the build image
 
-The compilers are 32-bit Linux programs and the SN tools are 32-bit Windows programs. Two
-containers run them; mount the repository at the same path in both:
+`tools/docker/run.sh` runs a command in the `rac2-build` image (32-bit Debian with Wine, Python
+and the build tools; `tools/docker/Dockerfile`, published to GHCR by CI), with the repository
+mounted at the same path. It uses a local image, else pulls the published one, else builds it.
 
 ```sh
-docker run -d --init --name rac2-gnu --platform linux/amd64 --tmpfs /rac2tmp:exec \
-  -v "$PWD:$PWD" ubuntu:24.04 sleep infinity          # then: apt install gcc-multilib make git python3
-docker run -d --init --name rac2-wine --platform linux/386 -v "$PWD:$PWD" <an i386 Wine image> sleep infinity
-docker exec -w "$PWD" -e WORK=/rac2tmp/cc rac2-gnu tools/compiler/build.sh
-docker exec -w "$PWD" rac2-gnu python3 tools/compiler/sdk/build.py --work /rac2tmp/sdk
+bash tools/docker/run.sh python3 tools/levels.py dump
+bash tools/docker/run.sh tools/compiler/build.sh
+bash tools/docker/run.sh python3 tools/compiler/sdk/build.py
+bash tools/docker/run.sh python3 tools/build.py all
+bash tools/docker/run.sh python3 tools/progress.py
+```
+
+On Apple Silicon the image runs under QEMU (Rosetta cannot run 32-bit code), so it is slow.
+A faster split: run Python on the host and only the tools in containers, a linux/amd64 one for
+the compilers and the linux/386 image for the SN tools, with the repository at the same path:
+
+```sh
 RAC2_LINUX="docker exec rac2-gnu" RAC2_WINE="docker exec -w {cwd} rac2-wine wine" \
   python3 tools/build.py all
 ```
 
-`RAC2_LINUX` prefixes the compiler commands and `RAC2_WINE` the SN tools (`{cwd}` becomes
-the directory they run in). On x86-64 Linux with Wine installed, neither is needed. Rosetta
-cannot run 32-bit Wine, hence the `linux/386` container.
+`RAC2_LINUX` prefixes the compiler commands and `RAC2_WINE` the SN tools (`{cwd}` becomes the
+directory they run in). On x86-64 Linux with Wine and `gcc -m32`, neither is needed.
+
+## CI
+
+`.github/workflows/checks.yml` runs the tool tests and the repository check;
+`progress.yml` checks that `progress/report.json` is current (`tools/progress.py --check`),
+validates it with objdiff and uploads it as `SCUS_972.68_report` for decomp.dev;
+`docker-publish.yml` publishes the build image. None of them builds the game: CI has no disc and
+no SN tools, so the build is run locally and its result committed.
 
 ## The compilers
 

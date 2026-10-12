@@ -37,5 +37,6 @@ people as much as for agents.
   `toolchain/` and `build/` stay local.
 - Conventional commit subjects (`feat(src):`, `fix(tools):`, `docs:` ...), with a body that
   says what changed and how it was checked.
-- `python -m unittest discover -s tests` and `python tests/check_repository.py` pass (CI runs
+- `python -m unittest discover -s tests`, `python tests/check_repository.py` and
+  `python tools/progress.py --check` pass (CI runs
   them; it cannot build, having no game data).

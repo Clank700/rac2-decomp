@@ -63,7 +63,7 @@ If you get close but not exact, move your C to `nonmatching/<area>/func_XXXXXXXX
   SN ProDG binaries. `baserom/`, `build/` and `toolchain/` are ignored; keep it so.
 - **Keep the catalogue generated.** Do not edit `config/*/functions.tsv` by hand; change
   `tools/levels.py` and rerun `catalogue`.
-- Before a commit: `python3 -m unittest discover -s tests` and `python3 tests/check_repository.py`.
+- Before a commit: `python3 -m unittest discover -s tests`, `python3 tests/check_repository.py` and `python3 tools/progress.py --check`.
 
 ## Do not bring back what was removed
 
@@ -101,7 +101,7 @@ work in. It was removed on purpose. Do not recreate any of it:
 2. Before pushing, run all of these and keep their output for the PR:
    - `python3 tools/build.py all` (every program `OK`),
    - `python3 tools/progress.py`,
-   - `python3 -m unittest discover -s tests` and `python3 tests/check_repository.py`.
+   - `python3 -m unittest discover -s tests`, `python3 tests/check_repository.py` and `python3 tools/progress.py --check`.
 3. Push your branch and open a pull request to `master` with the template filled in: what you
    matched or changed, the commands you ran and what they printed, and what you did not run.
 4. CI runs the tests and the repository check; it cannot build (it has no game data), so the
