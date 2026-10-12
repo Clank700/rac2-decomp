@@ -153,3 +153,4 @@ counts when it links at every place it has.
 | [`func_L00_002B1308`](levels/func_L00_002B1308.c) | 0 of 27 | needs .rodata at its place, which is not C |
 | [`func_L00_002D4A38`](levels/func_L00_002D4A38.c) | 26 of 27 | instruction at +0x2c differs |
 | [`func_L00_003DC350`](levels/func_L00_003DC350.c) | 2 of 27 | instruction at +0x4 differs |
+| [`func_L00_00424BB8`](levels/func_L00_00424BB8.c) | 23 of 27 | instruction at +0x28 differs: `16_snivelak`, `22_dobbo_orbit`, `23_damosel_orbit` and `26_jamming_array` hold other constants |

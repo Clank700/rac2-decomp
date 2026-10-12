@@ -31,3 +31,23 @@ void func_L00_00402DB8(char *arg)
         q[10] = 1;
     }
 }
+
+extern void func_L00_00402DB8(char *arg);
+
+void func_L00_004028C0(char *arg, int value)
+{
+    unsigned char *p = D_L00_001B0CA0;
+    int *o;
+
+    if (!p) {
+        return;
+    }
+    o = *(int **)(p + 104);
+    p[32] = (arg != 0) ? 5 : 7;
+    func_L00_00402DB8(arg);
+    if (value != -1) {
+        o[24] = value;
+    } else {
+        o[24] = 10;
+    }
+}
