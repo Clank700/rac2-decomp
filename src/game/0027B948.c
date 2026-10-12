@@ -98,7 +98,14 @@ INCLUDE_ASM("asm/game", func_0027BD70);
 
 INCLUDE_ASM("asm/game", func_0027C478);
 
-INCLUDE_ASM("asm/game", func_0027C480);
+void func_0027C480(void) {
+    extern void func_00284F40(int);
+    extern void func_0027BD70(void);
+    extern int D_001B1594 __attribute__((sda));
+    func_00284F40(0);
+    D_001B1594 = 0x7F;
+    func_0027BD70();
+}
 
 INCLUDE_ASM("asm/game", func_0027C4A8);
 
