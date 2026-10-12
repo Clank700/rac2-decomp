@@ -25,7 +25,19 @@ char *func_00336968(char *object) {
 
 INCLUDE_ASM("asm/game", func_003369A0);
 
-INCLUDE_ASM("asm/game", func_003369A8);
+extern void func_00335FC8(void *);
+extern unsigned char D_00263B50[];
+
+void func_003369A8(char *self)
+{
+    func_00335FC8(self);
+    *(char **)(self + 0x34) = (char *)D_00263B50;
+    *(long long *)(self + 0x38) = 1;
+    *(int *)(self + 0x40) = 0;
+    **(float **)(self + 4) = 1.0f;
+    (*(float **)(self + 4))[1] = 1.0f;
+    *(int *)(self + 0x44) = 1;
+}
 
 extern char D_001ADA18[] __attribute__((sda));
 extern void func_003360F8(void *);
@@ -47,6 +59,11 @@ void func_00336A38(int param_1, unsigned int param_2)
   return;
 }
 
-INCLUDE_ASM("asm/game", func_00336A40);
+extern void func_0027F1D8(void *a0, s32 a1, void *a2, f32 a3);
+
+void func_00336A40(u8 *self)
+{
+    func_0027F1D8(*(void **)(self + 0x40), -1, *(void **)(self + 0x34), *(f32 *)*(void **)(self + 4));
+}
 
 INCLUDE_ASM("asm/game", func_00336A70);

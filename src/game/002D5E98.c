@@ -257,9 +257,19 @@ INCLUDE_ASM("asm/game", func_002DB7F0);
 
 INCLUDE_ASM("asm/game", func_002DB988);
 
-INCLUDE_ASM("asm/game", func_002DBAA8);
+int func_002DBAA8(void)
+{
+    extern s32 D_00138344;
+    extern s32 D_001F2858;
+    extern void func_0025E680(void);
+    if (D_00138344 & 0x40)
+        D_001F2858 = (s32)func_0025E680;
+    return 0;
+}
 
-INCLUDE_ASM("asm/game", func_002DBAD0);
+extern void func_00288D88(int, int, int, int);
+
+int func_002DBAD0(char *p) { int x = *(int *)(p + 0x18); int y = *(int *)(p + 0x1C); int w = *(int *)(p + 0x20); int h = *(int *)(p + 0x24); func_00288D88(x, x + w, y, y + h); return 2; }
 
 extern char *D_001F2854;
 

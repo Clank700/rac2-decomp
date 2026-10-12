@@ -59,6 +59,22 @@ If you get close but not exact, move your C to `nonmatching/<area>/func_XXXXXXXX
 - `r1_...` names were carried from rac1-decomp and have no rac2 name yet: rename them to the
   `D_`/`func_` name of their address when you know it.
 
+## Use the machine
+
+Builds and checks are the slow part of this work, and most of them are independent. Run them
+side by side instead of one after another:
+
+- `python3 tools/build.py all` builds the 28 programs in parallel by itself (`--jobs N`). Never
+  build them one at a time in a loop.
+- `tools/check.py` runs for different functions can overlap; so can the tests, the repository
+  check and a build.
+- When verifying many functions (after a wave, after a merge), fan the checks out, eight or so at
+  a time, and collect the verdicts.
+- Start long steps in the background and keep working; do not sit on a build.
+
+The exception: never run two builds of the same program in the same checkout at once. Workers
+each have their own worktree for that reason (docs/AGENT_WORKFLOW.md).
+
 ## Rules
 
 - **Sources.** Use the retail programs of your own disc, SDK library *binaries*, open-source code

@@ -423,7 +423,12 @@ void func_00284E40(void) {
     func_00125A20(*(u8 **)0x001a742c,D_001A6480.c,D_001A6480.a,D_001A6480.b,D_001A6480.d,D_001A6480.e);
 }
 
-INCLUDE_ASM("asm/game", func_00284E80);
+int func_00284E80(void)
+{
+    extern int func_00125D98(void *);
+    return func_00125D98((void *)D_001A742C);
+}
+
 
 /* shared native body of family c1edda5cc3fa91ec */
 void func_00284EA8(void)

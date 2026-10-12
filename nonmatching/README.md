@@ -6,8 +6,31 @@ and never counted. Move a file into `src/` once `tools/build.py` places it.
 | Function | Size | Bytes that differ |
 | --- | ---: | ---: |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
+| [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
+| [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |
+| [`func_00288970`](game/func_00288970.c) | 64 | Candidate is 68 bytes; retail branch-likely delay-slot store is missing |
 | [`func_0028B288`](boot/func_0028B288.c) | 44 | 14 |
+| [`func_00295870`](game/func_00295870.c) | 68 | Candidate is 64 bytes; mask is not in the retail branch delay slot |
+| [`func_0029B658`](game/func_0029B658.c) | 60 | 60-byte candidate swaps the retail global-pointer and saved-object registers |
+| [`func_0029B810`](game/func_0029B810.c) | 52 | Candidate is 48 bytes; retail has an extra pointer copy before jr |
+| [`func_0029DC58`](game/func_0029DC58.c) | 52 | 26 bytes differ; retail uses bnel with a zero delay-slot result then tests bit 27 |
+| [`func_0029FAE0`](game/func_0029FAE0.c) | 60 | 4 bytes differ; retail uses literal lui high halves, not %hi relocations |
+| [`func_002A0380`](game/func_002A0380.c) | 60 | 2 bytes differ; table load and branch use v1 instead of retail v0 |
+| [`func_002A0488`](game/func_002A0488.c) | 48 | 4 bytes differ; store placement at +0x24 is outside jr delay slot |
+| [`func_002C38A0`](game/func_002C38A0.c) | 64 | Candidate is 56 bytes; retail begins with stack adjustment and nop |
+| [`func_002C5020`](game/func_002C5020.c) | 68 | Candidate is 72 bytes; retail GP-relative load needs file-level -G8 |
 | [`func_002C9A60`](boot/func_002C9A60.c) | 20 | 9 |
+| [`func_002C9C60`](game/func_002C9C60.c) | 44 | 8 |
+| [`func_002CC528`](game/func_002CC528.c) | 40 | 4 |
+| [`func_002D33C0`](game/func_002D33C0.c) | 60 | 2 instructions differ; global-address lui and stack adjustment order differs |
+| [`func_002E5F40`](game/func_002E5F40.c) | 32 | 1 |
+| [`func_002FCF90`](game/func_002FCF90.c) | 52 | 12 bytes differ; retail schedules zero stores in the return delay slot |
+| [func_0031AAB0](game/func_0031AAB0.c) | 88 | check.py 3/3, but level 00 cannot place it: needs .text.func_0031AB08 at its place, which is not C |
+| [`func_0031E528`](game/func_0031E528.c) | 52 | 19 bytes differ; loop pointer schedule and beql delay-slot store differ |
+| [`func_00327D08`](game/func_00327D08.c) | 72 | Candidate is 76 bytes; retail threshold load is GP-relative |
+| [func_00341E58](game/func_00341E58.c) | 52 | check.py 28/28, but level 00 cannot place it: needs .text.func_00341E90 at its place, which is not C |
+| [func_0034E478](game/func_0034E478.c) | 64 | check.py 28/28, but level 00 cannot place it: needs .text.func_0034E4B8 at its place, which is not C |
+| [func_00351A38](game/func_00351A38.c) | 72 | check.py 28/28, but level 00 cannot place it: needs .text.func_00351938 at its place, which is not C |
 
 ## USA v2.00 trials
 

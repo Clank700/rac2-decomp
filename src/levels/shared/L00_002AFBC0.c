@@ -313,7 +313,13 @@ int func_L00_002B3998(f32 value)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002B39D8);
+/* clears the two floats at the head of the window block; the second store is the one the
+   scheduler parks in the jr delay slot, so it is written second */
+void func_L00_002B39D8(void)
+{
+    D_00189E20.f1B0 = 0.0f;
+    D_00189E20.f1B4 = 0.0f;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002B39F0);
 
