@@ -190,7 +190,11 @@ INCLUDE_ASM("asm/levels", func_L00_0031CDD0);
 
 INCLUDE_ASM("asm/levels", func_L00_0031D618);
 
-INCLUDE_ASM("asm/levels", func_L00_0031D620);
+extern int func_002EF250(float);
+
+int func_L00_0031D620(int a0, int a1, float x) {
+    return a0 + func_002EF250((float)(a1 - a0) * x);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0031D670);
 
@@ -407,7 +411,18 @@ INCLUDE_ASM("asm/levels", func_L00_003266D8);
 
 INCLUDE_ASM("asm/levels", func_L00_003268E8);
 
-INCLUDE_ASM("asm/levels", func_L00_00326950);
+extern unsigned char D_001395B8[];
+extern int func_L00_003269F0(void);
+
+int func_L00_00326950(int a0) {
+    unsigned char *base;
+
+    if (func_L00_003269F0() < a0)
+        return 0;
+    base = D_001395B8;
+    base[0x90] = base[0x90] + a0;
+    return 1;
+}
 
 /* One fixed ordinary scalar source hypothesis. Byte offset and mask are
    measured; no original object/class/field name or allocation claim. The

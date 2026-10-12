@@ -18,8 +18,6 @@ void func_L00_002E5918(void) {
 }
 
 
-INCLUDE_ASM("asm/levels", func_L00_002E6400);
-
 INCLUDE_ASM("asm/levels", func_L00_002E6440);
 
 /* calls the measured callee with zero */
@@ -83,13 +81,28 @@ void func_L00_002E9210(void *a0, void *a1) {
 
 INCLUDE_ASM("asm/levels", func_L00_002E94B8);
 
-INCLUDE_ASM("asm/levels", func_L00_002E95C0);
+extern int func_0027C878(int);
+
+extern void func_0027F2A8(void *, void *, void *, void *, void *, int, void *);
+
+void func_L00_002E95C0(void *a0, void *a1, void *a2, void *a3, void *a4) {
+ int t = func_0027C878(3);
+ func_0027F2A8(a0, a1, a2, a3, a4, t, D_L00_0028CCD0);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002E9AA0);
 
 INCLUDE_ASM("asm/levels", func_L00_002EA318);
 
-INCLUDE_ASM("asm/levels", func_L00_002EA600);
+extern void func_0027A9F0(void);
+
+extern void func_0027AB40(void);
+
+void func_L00_002EA600(void) {
+ func_00284EA8();
+ func_0027A9F0();
+ func_0027AB40();
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002EA660);
 
