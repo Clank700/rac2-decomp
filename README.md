@@ -25,10 +25,10 @@ retail one ([`progress/report.json`](progress/report.json), `tools/progress.py`)
 | | Functions | Code |
 | --- | ---: | ---: |
 | Boot executable | 1,093 of 3,390 | 114,052 of 1,049,464 bytes |
-| Levels | 574 of 5,711 | 49,224 of 4,488,592 bytes |
-| **Total** | 1,667 of 9,101 | 163,276 of 5,538,056 bytes (2.95%) |
+| Levels | 628 of 5,711 | 54,228 of 4,488,592 bytes |
+| **Total** | 1,721 of 9,101 | 168,280 of 5,538,056 bytes (3.04%) |
 
-The 27 levels hold 106,337 function placements; C covers 25,697 of them.
+The 27 levels hold 106,337 function placements; C covers 25,894 of them.
 <!-- /progress -->
 
 
