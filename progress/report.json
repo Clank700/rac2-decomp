@@ -3,15 +3,15 @@
  "version": "SCUS_972.68 (USA v1.01)",
  "functions": 9101,
  "bytes": 5538056,
- "matched_functions": 1182,
- "matched_bytes": 138272,
- "percent": 2.5,
+ "matched_functions": 1196,
+ "matched_bytes": 138856,
+ "percent": 2.51,
  "parts": {
   "boot": {
    "functions": 3390,
    "bytes": 1049464,
-   "matched_functions": 787,
-   "matched_bytes": 97716
+   "matched_functions": 801,
+   "matched_bytes": 98300
   },
   "levels": {
    "functions": 5711,

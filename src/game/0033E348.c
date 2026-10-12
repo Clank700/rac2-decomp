@@ -31,7 +31,11 @@ INCLUDE_ASM("asm/game", func_0033E4C0);
 
 INCLUDE_ASM("asm/game", func_0033E5C0);
 
-INCLUDE_ASM("asm/game", func_0033E620);
+/* Qwen draft (branch qwen/autonomy, 4419d477), checked by tools/check.py */
+void func_0033AF48(int);
+void func_0033E620(int param_1) {
+  func_0033AF48(param_1 + 8);
+}
 
 /* Calls twelve sub-object handlers in sequence, each with the object base plus a fixed byte offset (8, 684, 744, 816, 888, 960, 1040, 1112, 1184, 1256, 1328, 1400), then returns the object pointer. */
 char *func_0033E640(char *object)

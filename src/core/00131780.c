@@ -194,7 +194,16 @@ INCLUDE_ASM("asm/core", func_00132AA0);
 
 INCLUDE_ASM("asm/core", func_00132AF8);
 
-INCLUDE_ASM("asm/core", func_00132B28);
+/* Qwen draft (branch qwen/autonomy, bb52125e), checked by tools/check.py */
+void func_00132DF0(int, int, int, long, int);
+
+void func_00132B28(int param_1) {
+  int auStack_20[4];
+
+  auStack_20[0] = param_1;
+  func_00132DF0(0x17, 4, (int)auStack_20, 0, 0);
+  return;
+}
 
 INCLUDE_ASM("asm/core", func_00132B58);
 

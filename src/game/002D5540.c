@@ -144,7 +144,17 @@ INCLUDE_ASM("asm/game", func_002D5E38);
 
 INCLUDE_ASM("asm/game", func_002D5E70);
 
-INCLUDE_ASM("asm/game", func_002D5E98);
+/* Qwen draft (branch qwen/autonomy, 385de342), checked by tools/check.py */
+void func_002D5B58(short param_1, int param_2, int *param_3);
+
+void func_002D5E98(int param_1)
+{
+  int auStack_20[4];
+
+  auStack_20[0] = 0;
+  func_002D5B58(*(short *)(param_1 + 2), *(int *)(param_1 + 4), &auStack_20[0]);
+  return;
+}
 
 INCLUDE_ASM("asm/game", func_002D5EC0);
 
@@ -306,7 +316,19 @@ INCLUDE_ASM("asm/game", func_002DBAD0);
 
 INCLUDE_ASM("asm/game", func_002DBB08);
 
-INCLUDE_ASM("asm/game", func_002DBB48);
+/* Qwen draft (branch qwen/autonomy, f0b23b24), checked by tools/check.py */
+typedef unsigned long long undefined8;
+typedef unsigned int undefined4;
+
+extern undefined4 func_002DE618(undefined4);
+
+undefined8 func_002DBB48(int param_1)
+{
+  undefined4 uVar1;
+  uVar1 = func_002DE618(*(undefined4 *)(param_1 + 0x54));
+  *(undefined4 *)(param_1 + 0x54) = uVar1;
+  return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002DBB78);
 

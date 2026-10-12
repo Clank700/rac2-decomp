@@ -69,7 +69,25 @@ void func_0027B9C0(int width, int height)
     func_002FC560(0x42, 0x8000000044UL);
 }
 
-INCLUDE_ASM("asm/game", func_0027BA48);
+/* Qwen draft (branch qwen/autonomy, 00dc80b4), checked by tools/check.py */
+/* Wrapper function that calls func_00284EA8 and returns.
+ * Stack frame is used only to save/restore the return address (ra).
+ * The function follows standard MIPS ABI conventions:
+ * - addiu sp,sp,-0x10 allocates 16 bytes on the stack
+ * - sd ra,0x(sp) saves the return address
+ * - jal calls the external helper
+ * - delay slot is a nop
+ * - ld ra,0x(sp) restores the return address
+ * - jr ra returns to caller
+ * - _addiu sp,sp,0x10 deallocates stack
+ */
+void func_0027BA48(void);
+
+void func_0027BA48(void)
+{
+  func_00284EA8();
+  return;
+}
 
 INCLUDE_ASM("asm/game", func_0027BA68);
 
@@ -83,7 +101,14 @@ INCLUDE_ASM("asm/game", func_0027C4A8);
 
 INCLUDE_ASM("asm/game", func_0027C510);
 
-INCLUDE_ASM("asm/game", func_0027C520);
+/* Qwen draft (branch qwen/autonomy, b9c5326c), checked by tools/check.py */
+void func_002CBC58(int);
+
+void func_0027C520(void)
+{
+  func_002CBC58(0);
+  return;
+}
 
 INCLUDE_ASM("asm/game", func_0027C540);
 

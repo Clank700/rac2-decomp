@@ -25,7 +25,14 @@ INCLUDE_ASM("asm/game", func_00290B48);
 
 INCLUDE_ASM("asm/game", func_00290C60);
 
-INCLUDE_ASM("asm/game", func_00291108);
+/* Qwen draft (branch qwen/autonomy, d969a356), checked by tools/check.py */
+void func_00278EB0(void);
+
+void func_00291108(void)
+{
+  func_00278EB0();
+  return;
+}
 
 INCLUDE_ASM("asm/game", func_00291128);
 
