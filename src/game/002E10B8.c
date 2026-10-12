@@ -328,7 +328,11 @@ void func_002E5FE0(void) {
     }
 }
 
-INCLUDE_ASM("asm/game", func_002E6088);
+void func_002E6088(int value, long target) {
+    int *destination = (int *)(int)target;
+    if (destination != 0)
+        *destination = value;
+}
 
 void func_002E60A0(int arg0, long arg1) {
     unsigned char *p = (unsigned char *)(int)arg1;

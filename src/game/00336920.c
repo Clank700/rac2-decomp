@@ -14,13 +14,26 @@ void func_00336920(u8 *a0,s32 a1,s32 a2) {
 /* reads a float through double indirection and returns its integer value; byte-identical across all 27 levels. */
 s32 func_00336950(u8 *a0) { return (s32)*(f32 *)(*(u8 **)(a0 + 0x34)); }
 
-INCLUDE_ASM("asm/game", func_00336968);
+extern void func_00335FB0(void *);
+extern char D_001ADA18[] __attribute__((sda));
+
+char *func_00336968(char *object) {
+    func_00335FB0(object);
+    *(char **)(object + 0x30) = D_001ADA18;
+    return object;
+}
 
 INCLUDE_ASM("asm/game", func_003369A0);
 
 INCLUDE_ASM("asm/game", func_003369A8);
 
-INCLUDE_ASM("asm/game", func_00336A08);
+extern char D_001ADA18[] __attribute__((sda));
+extern void func_003360F8(void *);
+
+void func_00336A08(char *object) {
+    *(char **)(object + 0x30) = D_001ADA18;
+    func_003360F8(object);
+}
 
 void func_00336A30(int param_1, unsigned int param_2)
 {

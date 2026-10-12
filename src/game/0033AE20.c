@@ -53,7 +53,10 @@ void func_0033AF48(char *object)
     }
 }
 
-INCLUDE_ASM("asm/game", func_0033B018);
+void func_0033B018(float **position, float x, float y) {
+    (*position)[0] = x;
+    (*position)[1] = y;
+}
 
 void func_0033B030(u8 *a0, f32 a1, f32 a2, f32 a3, f32 a4, f32 a5, f32 a6) {
     *(f32 *)(a0 + 0x278) = a1;

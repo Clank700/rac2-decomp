@@ -302,7 +302,11 @@ INCLUDE_ASM("asm/game", func_002A88A0);
 
 INCLUDE_ASM("asm/game", func_002A89A8);
 
-INCLUDE_ASM("asm/game", func_002A8A20);
+extern void func_002A89A8(void *, int, float);
+
+void func_002A8A20(void *object) {
+    func_002A89A8(object, 32, 0.5f);
+}
 
 INCLUDE_ASM("asm/game", func_002A8A48);
 
@@ -366,9 +370,17 @@ INCLUDE_ASM("asm/game", func_002A9288);
 
 INCLUDE_ASM("asm/game", func_002A93B0);
 
-INCLUDE_ASM("asm/game", func_002A9548);
+extern void func_002A93B0(void *);
 
-INCLUDE_ASM("asm/game", func_002A9568);
+void func_002A9548(void *object) {
+    func_002A93B0(object);
+}
+
+extern int func_00283D38(int, int, float);
+
+int func_002A9568(int first, int second, float amount) {
+    return func_00283D38(first, second, amount);
+}
 
 INCLUDE_ASM("asm/game", func_002A9588);
 

@@ -270,7 +270,12 @@ INCLUDE_ASM("asm/game", func_00305310);
 
 INCLUDE_ASM("asm/game", func_00305408);
 
-INCLUDE_ASM("asm/game", func_00305418);
+extern char D_00227DA0[];
+extern void func_00300330(void *);
+
+void func_00305418(void) {
+    func_00300330(D_00227DA0);
+}
 
 INCLUDE_ASM("asm/game", func_00305438);
 
@@ -370,7 +375,12 @@ void func_003079E8(Owner_F9e2cd219 *self)
 
 INCLUDE_ASM("asm/game", func_00307AD0);
 
-INCLUDE_ASM("asm/game", func_00307BD0);
+extern char D_00228610[];
+extern void func_00300330(void *);
+
+void func_00307BD0(void) {
+    func_00300330(D_00228610);
+}
 
 INCLUDE_ASM("asm/game", func_00307BF0);
 
