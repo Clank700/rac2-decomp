@@ -278,7 +278,24 @@ INCLUDE_ASM("asm/game", func_002A84E0);
 
 INCLUDE_ASM("asm/game", func_002A8508);
 
-INCLUDE_ASM("asm/game", func_002A8598);
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+extern unsigned short *r1_D_L01_001ABFC0[];
+
+extern char *r1_D_L01_00160058 MACRO_ADDR;
+
+/* rac1-decomp src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F040 */
+// Set byte 0xBC of each entry in a negative-terminated index list.
+void func_002A8598(int i, int v) {
+    unsigned short *t = r1_D_L01_001ABFC0[i];
+    unsigned short *p;
+    if (t != 0) {
+        p = t;
+        do {
+            r1_D_L01_00160058[(*p & 0x7FFF) * 256 + 0xBC] = v;
+        } while (*(short *)p++ >= 0);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002A85F0);
 

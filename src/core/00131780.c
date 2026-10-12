@@ -178,7 +178,7 @@ void func_00131A98(unsigned char *clock) {
     func_00131A08(clock, zone + offset);
 }
 
-INCLUDE_ASM("asm/core", func_00131AE8);
+ASM_FUNC("asm/core", func_00131AE8);
 
 INCLUDE_ASM("asm/core", func_00131CA8);
 

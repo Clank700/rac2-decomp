@@ -175,7 +175,29 @@ void func_002B7F08(int arg0, long arg1)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002B7F58);
+#define NOT_SDA __attribute__((section(".data")))
+
+extern short r1_D_001517F0 NOT_SDA;
+
+/* rac1-decomp src/game/stream.c: func_00217970 */
+void func_002B7F58(int arg0, long arg1) {
+    short *p = (short *)(int)arg1;
+    if (p != 0) {
+        if (arg0 < 0) {
+            *(int *)p = arg0;
+        }
+        if (arg0 != 0) {
+            if (p[5] == 9) {
+                p[5] = 4;
+                if (p[8] != 0) {
+                    r1_D_001517F0 = 1;
+                }
+            }
+        } else {
+            p[5] = 0;
+        }
+    }
+}
 
 void func_002B7FB0(int arg0, long arg1) {
     short *p = (short *)(int)arg1;

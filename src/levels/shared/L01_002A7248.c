@@ -109,7 +109,30 @@ INCLUDE_ASM("asm/levels", func_L01_00310BC0);
 
 extern unsigned short *D_L01_001FB020[];
 
-INCLUDE_ASM("asm/levels", func_L01_003115E8);
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+extern unsigned short *r1_D_L01_001ABFC0[];
+
+extern char *r1_D_L01_00160058 MACRO_ADDR;
+
+extern int r1_D_L01_00160058_m __asm__("r1_D_L01_00160058") MACRO_ADDR;
+
+/* rac1-decomp src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F090 */
+// Walks a list of moby indices and sets the state byte of each one that is non-negative.
+void func_L01_003115E8(int list, int state)
+{
+    unsigned short *p;
+    unsigned short *q = (unsigned short *)r1_D_L01_001ABFC0[list];
+    if (q != 0) {
+        p = q;
+        do {
+            char *m = (char *)(((*p & 0x7FFF) << 8) + r1_D_L01_00160058_m);
+            if (m[0x20] >= 0) {
+                m[0x20] = state;
+            }
+        } while (*(short *)p++ >= 0);
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L01_00311C18);
 

@@ -325,7 +325,14 @@ INCLUDE_ASM("asm/levels", func_L00_003425F8);
 
 INCLUDE_ASM("asm/levels", func_L00_00342C80);
 
-INCLUDE_ASM("asm/levels", func_L00_00342EB0);
+#define NOT_SDA __attribute__((section(".data")))
+
+extern void *r1_D_0012F86C NOT_SDA;
+
+/* rac1-decomp src/core/001138A8.c: func_001138A8 */
+int func_L00_00342EB0(void) {
+    return (int)r1_D_0012F86C;
+}
 
 unsigned int func_L00_00345AF0(void)
 {

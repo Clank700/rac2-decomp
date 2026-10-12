@@ -21,7 +21,26 @@ INCLUDE_ASM("asm/levels", func_L03_002B8D10);
 
 INCLUDE_ASM("asm/levels", func_L03_002BC430);
 
-INCLUDE_ASM("asm/levels", func_L03_002D84F0);
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+extern int r1_D_L02_0015F04C MACRO_ADDR;
+
+extern int r1_D_L02_00169670[];
+
+/* rac1-decomp src/overlays/shared/camera_001FC308.c: func_L02_001FC308 */
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay/camera/001fc008.c, FUN_L02_001fc008. */
+void func_L03_002D84F0(int x) {
+    int i;
+
+    if (r1_D_L02_0015F04C < 16) {
+        for (i = 0; i < r1_D_L02_0015F04C; i++) {
+            if (x == r1_D_L02_00169670[i]) {
+                return;
+            }
+        }
+        r1_D_L02_00169670[r1_D_L02_0015F04C++] = x;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L03_002EC508);
 

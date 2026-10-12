@@ -199,7 +199,23 @@ INCLUDE_ASM("asm/levels", func_L00_00308538);
 
 INCLUDE_ASM("asm/levels", func_L00_00308700);
 
-INCLUDE_ASM("asm/levels", func_L00_00309140);
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+extern int r1_D_0015EE84_m __asm__("r1_D_0015EE84") MACRO_ADDR;
+
+extern int r1_D_L00_001C47B8[];
+
+extern int r1_D_L00_001792B8[];
+
+/* rac1-decomp src/overlays/shared/menu_00249720.c: func_L00_0024B1B0 */
+/* stores a value into a table slot chosen by the current index */
+void func_L00_00309140(int a, int b) {
+    int i = r1_D_0015EE84_m;
+    if (i < 19) {
+        b += r1_D_L00_001C47B8[i];
+        r1_D_L00_001792B8[b] = a;
+    }
+}
 
 void func_L00_00309368(void)
 {
@@ -465,7 +481,16 @@ INCLUDE_ASM("asm/levels", func_L00_00310630);
 
 INCLUDE_ASM("asm/levels", func_L00_00310748);
 
-INCLUDE_ASM("asm/levels", func_L00_00310838);
+/* rac1-decomp src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8 */
+void func_L00_00310838(unsigned char *a, int dx, int dy) {
+    int i;
+    int n = a[4] + a[5];
+    int *t = *(int **)a;
+    for (i = 0; i < n; i++, t += 4) {
+        unsigned short *e = *(unsigned short **)t;
+        int c = ((unsigned char *)e)[2]; int cnt; e += 2; if (c != 0) { cnt = c; do { e[0] = e[0] + dx; e[1] = e[1] + dy; e += 2; cnt--; } while (cnt != 0); }
+    }
+}
 
 /* shared native body of family 0820eb1123250c0b */
 Slot0820eb11 *func_L00_00310BC8(Ctx *ctx, int index)
