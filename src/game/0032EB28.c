@@ -450,7 +450,12 @@ s32 func_00336318(u8 *a0) { return *(s32 *)(a0 + 0x38); }
 
 INCLUDE_ASM("asm/game", func_00336320);
 
-INCLUDE_ASM("asm/game", func_00336390);
+extern s32 func_00336D50(u8 *a0, s32 a1);
+
+void func_00336390(u8 *self, u8 *a1, s32 a2)
+{
+    *(s32 *)(self + 0x40) = func_00336D50(a1, a2);
+}
 
 void func_003363C0(u8 *a0, f32 a1) { f32 *p = *(f32 **)(a0 + 0x38); *p = a1; }
 
