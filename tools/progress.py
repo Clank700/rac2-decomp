@@ -87,9 +87,9 @@ def main() -> None:
     for name, kind, size, _, places in levels.read_catalogue():
         if kind != "boot":
             where[name] = (places[0][1], size)
-    # Units as rac1-decomp's report has them: one per file of the boot (core/, game/) and of the
-    # shared level code ("Shared level code/<file>"), and one per level holding all of that
-    # level's own functions ("Level 04: Barlow").
+    # Units as rac1-decomp's report has them: one per file of the boot (core/, game/), one for the
+    # shared level code ("Shared level code") and one per level holding all of that level's own
+    # functions ("Level 04: Barlow").
     title = lambda number: f"Level {number:02d}: {levels.NAMES[number].replace('_', ' ').title()}"
     groups, in_c = {}, set()          # unit name -> {"rows", "source_path", "categories"}
     for path, fns in source_functions().items():
@@ -104,8 +104,8 @@ def main() -> None:
         if path.startswith(("src/core/", "src/game/")):
             unit, source, cats_of = path.removeprefix("src/").removesuffix(".c"), path, ["executable", "game"]
         elif path.startswith("src/levels/shared/"):
-            unit = "Shared level code/" + Path(path).stem
-            source, cats_of = path, ["level_code", "common"]
+            unit, source = "Shared level code", "src/levels/shared"
+            cats_of = ["level_code", "common"]
         else:
             number = int(Path(path).parent.name[:2])
             unit, source = title(number), Path(path).parent.as_posix()
