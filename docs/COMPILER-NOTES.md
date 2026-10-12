@@ -1089,3 +1089,13 @@ full `tools/build.py all`). These are source-shape habits of cc1 that decide the
 * **Catalogue rows that are not functions.** `tools/levels.py` binds rows whose bytes are the
   linker's padding between two functions (`addiu $sp,$sp,N; nop` chains with no `jr $ra`); ten
   were found in `0032EB28.c` alone. That is a `tools/levels.py` fix, not C.
+
+## Quadword copy source shapes
+
+For func_L08_003D3D80 and func_L08_003D82F0, the current game profile folds
+TI scalar pointer offsets into lq/sq operands, while retail materializes the
+vector pointers and uses zero-offset copies. Aligned float aggregates and
+TI/float unions emitted ld/sd pairs; memcpy variants emitted unaligned word
+copies. Neither candidate matched. The retail shape resembles the qcopy
+helpers in include/common.h, but those helpers use inline assembly and cannot
+be used as a matching route under AGENTS.md.

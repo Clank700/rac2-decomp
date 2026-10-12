@@ -134,6 +134,12 @@ handwritten routines.
 | [`func_L05_00324DB8`](shared/func_L05_00324DB8.c) | 48 | 0 of 4 places: two C forms emitted 64 and 60 bytes; both missed the call/branch and return shape. |
 | [func_L00_002EDCB8](levels/func_L00_002EDCB8.c) | 16 | 12 bytes vs retail 16: candidate is one instruction short; object comparison cannot validate the relocation until the size matches. |
 | [func_L00_002EE0C0](levels/func_L00_002EE0C0.c) | 16 | 12 bytes vs retail 16: the stores compile in the wrong order or without the retail nop; no plain C form found that preserves the exact delay-slot layout. |
+| [func_L08_003CCD28](levels/func_L08_003CCD28.c) | 48 | 44-byte candidate; if-conversion changes the final branch and register allocation. |
+| [func_L08_003D0098](levels/func_L08_003D0098.c) | 48 | 44-byte G8 candidate; branch and pointer calculation differ. |
+| [func_L08_003D0508](levels/func_L08_003D0508.c) | 192 | 152-byte candidate; vector copy, frame and register scheduling differ. |
+| [func_L08_003D3D80](levels/func_L08_003D3D80.c) | 128 | 120-byte candidate; retail materializes vector pointers before zero-offset quadword copies. Aggregate and memcpy variants also failed. |
+| [func_L08_003D8290](levels/func_L08_003D8290.c) | 96 | 96-byte candidate; local quadword copy order and registers differ. |
+| [func_L08_003D82F0](levels/func_L08_003D82F0.c) | 84 | 84-byte candidate; vector pointer formation and copy/FP scheduling differ. |
 
 ## Linked at some of their places only (2026-10-12)
 
