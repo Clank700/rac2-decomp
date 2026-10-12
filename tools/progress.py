@@ -49,6 +49,15 @@ def source_functions() -> dict[str, list[tuple[str, bool]]]:
     return out
 
 
+HANDWRITTEN = re.compile(rf'^ASM_FUNC\("[^"]*",\s*({NAME})\);', re.M)
+
+
+def handwritten() -> set[str]:
+    """Functions marked ASM_FUNC: assembly in the original too (VU0 and other routines no C
+    compiles to), kept as assembly and counted as finished, as rac1-decomp counts them."""
+    return {n for path in (ROOT / "src").rglob("*.c") for n in HANDWRITTEN.findall(path.read_text(errors="replace"))}
+
+
 def measures(fns: list[dict]) -> dict:
     total = sum(f["size"] for f in fns)
     matched = sum(f["size"] for f in fns if f["matched"])
@@ -64,7 +73,7 @@ def measures(fns: list[dict]) -> dict:
 def check() -> None:
     report = json.loads(REPORT.read_text())
     matched = {f["name"] for u in report["units"] for f in u["functions"] if f["fuzzy_match_percent"] == 100.0}
-    in_c = {n for fns in source_functions().values() for n, c in fns if c}
+    in_c = {n for fns in source_functions().values() for n, c in fns if c} | handwritten()
     problems = sorted(in_c ^ matched)
     if problems:
         sys.exit(f"progress/report.json is out of date for {len(problems)} function(s), e.g. "
@@ -94,7 +103,7 @@ def main() -> None:
     # shared level code ("Shared level code") and one per level holding all of that level's own
     # functions ("Level 04: Barlow").
     title = lambda number: f"Level {number:02d}: {levels.NAMES[number].replace('_', ' ').title()}"
-    groups, in_c = {}, set()          # unit name -> {"rows", "source_path", "categories"}
+    groups, in_c, by_hand = {}, set(), handwritten()          # unit name -> {"rows", "source_path", "categories"}
     for path, fns in source_functions().items():
         if not fns:
             continue
@@ -103,7 +112,8 @@ def main() -> None:
             address, size = where[name]
             if has_c:
                 in_c.add(name)
-            rows.append({"name": name, "size": size, "matched": has_c and name in placed, "address": address})
+            rows.append({"name": name, "size": size, "address": address,
+                         "matched": has_c and name in placed or name in by_hand})
         if path.startswith(("src/core/", "src/game/")):
             unit, source, cats_of = path.removeprefix("src/").removesuffix(".c"), path, ["executable", "game"]
         elif path.startswith("src/levels/shared/"):
@@ -157,7 +167,9 @@ def main() -> None:
                        row("Boot executable", cats[0]["measures"]), row("Levels", cats[1]["measures"]),
                        row("**Total**", total)[:-2] + f" ({total['matched_code_percent']:.2f}%) |", "",
                        f"The 27 levels hold {sum(len(r[4]) for r in levels.read_catalogue()):,} function "
-                       f"placements; C covers {placements:,} of them."])
+                       f"placements; C covers {placements:,} of them.",
+                       f"{len(by_hand):,} of the matched functions are the original's own assembly "
+                       f"(`ASM_FUNC`), kept as assembly."])
     readme = ROOT / "README.md"
     text = readme.read_text()
     a, b = text.index("<!-- progress -->") + len("<!-- progress -->"), text.index("<!-- /progress -->")
