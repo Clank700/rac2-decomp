@@ -103,8 +103,6 @@ INCLUDE_ASM("asm/levels", func_L01_002F1FD0);
 
 INCLUDE_ASM("asm/levels", func_L01_00304270);
 
-INCLUDE_ASM("asm/levels", func_L01_00305E18);
-
 INCLUDE_ASM("asm/levels", func_L01_00310BC0);
 
 extern unsigned short *D_L01_001FB020[];
@@ -312,7 +310,27 @@ void func_L01_003909E0(int a0, int a1, int a2, int a3) {
 
 INCLUDE_ASM("asm/levels", func_L01_00390A50);
 
-INCLUDE_ASM("asm/levels", func_L01_00390C60);
+void func_L01_00390C60(char *a0)
+{
+    char *v0 = *(char **)(a0 + 0x68);
+    char *v1;
+    unsigned char a1;
+
+    if (v0 == 0)
+        return;
+    v1 = *(char **)v0;
+    if (v1 == 0)
+        return;
+    a1 = *(unsigned char *)(v1 + 0x20);
+    if (a1 == 0xFE)
+        return;
+    if (a1 == 0xFD)
+        return;
+    if (*(unsigned short *)(v1 + 0x34) & 1)
+        *(unsigned short *)(a0 + 0x34) |= 0x41;
+    else
+        *(unsigned short *)(a0 + 0x34) &= 0xFFBE;
+}
 
 INCLUDE_ASM("asm/levels", func_L01_00394148);
 

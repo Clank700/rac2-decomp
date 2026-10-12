@@ -1,5 +1,9 @@
 #include "include_asm.h"
 
+typedef int TI128 __attribute__((mode(TI)));
+
+extern int D_L20_001B1FD8 __attribute__((sda));
+
 extern int D_L20_001B20B0 __attribute__((sda));
 
 extern float D_L20_001B2110 __attribute__((sda));
@@ -44,4 +48,18 @@ void func_L20_00442740(char *arg0, float f) {
 void func_L20_00444C18(char *arg0, char *arg1) {
     func_00283098(arg1, &D_L20_001B20B0, arg0 + 0xC0);
     func_00282CC0(arg1, arg1, arg0 + 0x10);
+}
+
+extern void func_L00_002EC608(char *, int);
+
+extern void func_L00_002EC970(TI128 *, char *, int, int, float, float);
+
+void func_L20_0043F510(char *arg0) {
+    TI128 tmp;
+    char *state = *(char **)(arg0 + 0x68);
+
+    func_L00_002EC608(arg0 + 0x10, D_L20_001B1FD8);
+    tmp = *(TI128 *)(arg0 + 0x10);
+    func_L00_002EC970(&tmp, state + 0x10, D_L20_001B1FD8, 3,
+                      *(float *)(state + 0x74), 0.25f);
 }

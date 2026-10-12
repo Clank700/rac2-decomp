@@ -1,10 +1,13 @@
 #include "include_asm.h"
+#include "common.h"
 
 INCLUDE_ASM("asm/levels", func_L02_003DB310);
 
 INCLUDE_ASM("asm/levels", func_L02_003DB6D8);
 
-INCLUDE_ASM("asm/levels", func_L02_003DB870);
+void func_L02_003DB870(char *arg0, int arg1) {
+    *(int *)(*(char **)(arg0 + 0x68) + 0x264) = arg1;
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003DB880);
 
@@ -131,7 +134,20 @@ INCLUDE_ASM("asm/levels", func_L02_003F0798);
 
 INCLUDE_ASM("asm/levels", func_L02_003F1298);
 
-INCLUDE_ASM("asm/levels", func_L02_003F1578);
+extern void func_002B0990(char *, char *, float, int, int);
+
+extern void func_002A8C28(char *, char *, int, float, float, float, int, int, int);
+
+void func_L02_003F1578(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    if (*(unsigned short *)(arg0 + 0x96) < 0xFFFF)
+        (*(unsigned short *)(arg0 + 0x96))++;
+    func_002B0990(arg0, state + 0x220, 2.5f, 7, 1);
+    func_002A8C28(arg0, arg0 + 0x10, 0x4000000, 1.3f, 1.0f, 1.0f, 0, 1, 0);
+}
+
+extern void func_002A91F0(char *, char *);
 
 INCLUDE_ASM("asm/levels", func_L02_003F1608);
 

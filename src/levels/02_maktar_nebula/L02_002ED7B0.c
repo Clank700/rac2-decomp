@@ -17,18 +17,9 @@ extern void func_002B0990(char *, char *, float, int, int);
 
 extern void func_002A8C28(char *, char *, int, float, float, float, int, int, int);
 
-void func_L02_003CADA8(char *arg0, char *arg1) {
-    char *p = *(char **)(arg0 + 0x68);
-    func_002A7750(arg0, 7, -1);
-    qcopy(p + 0xF0, arg1);
-}
+INCLUDE_ASM("asm/levels", func_L02_003CADA8);
 
-void func_L02_003D01F0(char *arg0, char *arg1) {
-    char *self = arg0;
-    char *p = *(char **)(self + 0x68);
-    func_002A7750(self, 4, -1);
-    qcopy(p + 0xB0, arg1);
-}
+INCLUDE_ASM("asm/levels", func_L02_003D01F0);
 
 int func_L02_003D1880(char *arg0) {
     int v = 0;

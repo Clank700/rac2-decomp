@@ -1,4 +1,5 @@
 #include "include_asm.h"
+#include "common.h"
 
 /* Frozen Batch A A18-void-store-16; acknowledged claim 4cf4f8b91176606a7af1fd853f7ccd89fa63964199d0883686e46fb6a47255a8. */
 typedef unsigned char BatchA_A18_u8;
@@ -11,6 +12,8 @@ typedef short BatchA_A18_BatchAs16;
 typedef unsigned char BatchA_A09_u8;
 
 typedef int BatchA_A09_s32;
+
+extern void func_00335668(BatchA_A18_u8 *a0, BatchA_A18_s32 a1, BatchA_A18_s32 a2);
 
 
 extern BatchA_A18_u8 D_0018C0D4;
@@ -58,7 +61,19 @@ INCLUDE_ASM("asm/levels", func_L18_003044B8);
 
 INCLUDE_ASM("asm/levels", func_L18_00307C60);
 
-INCLUDE_ASM("asm/levels", func_L18_0032B768);
+BatchA_A18_s32 func_L18_0032B768(BatchA_A18_u8 *s, BatchA_A18_s32 a1, BatchA_A18_s32 a2) {
+    BatchA_A18_u8 *p = *(BatchA_A18_u8 **)(s + 0x98);
+    BatchA_A18_u8 *q;
+    if (p == 0) {
+        return 0;
+    }
+    if (a1 >= (*(BatchA_A18_s32 *)(p + 0x4) >> 5)) {
+        return 0;
+    }
+    p += ((a1 << 5) + 0x10);
+    *(p + 2) = (BatchA_A18_u8)a2;
+    return 1;
+}
 
 INCLUDE_ASM("asm/levels", func_L18_0033B628);
 
@@ -106,7 +121,16 @@ void func_L18_003F72D8(BatchA_A18_u8 *a0, BatchA_A18_u8 *a1) {
 
 INCLUDE_ASM("asm/levels", func_L18_003F7320);
 
-INCLUDE_ASM("asm/levels", func_L18_003F7358);
+extern float func_00308AD0(BatchA_A18_u8 *a0, BatchA_A18_u8 *a1);
+extern BatchA_A18_s32 func_L18_003F8E40(BatchA_A18_u8 *s);
+
+BatchA_A18_s32 func_L18_003F7358(BatchA_A18_u8 *a0, BatchA_A18_u8 *a1) {
+    BatchA_A18_s32 r = 0;
+    if (func_00308AD0(a0 + 0x10, a1 + 0x10) < 5.0f) {
+        r = func_L18_003F8E40(a1) != 0;
+    }
+    return r;
+}
 
 INCLUDE_ASM("asm/levels", func_L18_003F73B8);
 
@@ -137,7 +161,22 @@ INCLUDE_ASM("asm/levels", func_L18_003F7818);
 
 INCLUDE_ASM("asm/levels", func_L18_003F7988);
 
-INCLUDE_ASM("asm/levels", func_L18_003F7A08);
+void func_L18_003F7A08(BatchA_A18_u8 *a0) {
+    BatchA_A18_u8 *s0 = a0;
+    BatchA_A18_s32 p;
+    if (s0[0x95] != 1) {
+        return;
+    }
+    p = *(BatchA_A18_s32 *)(s0 + 0x68);
+    if (*(BatchA_A18_s32 *)(p + 0x258) != 0) {
+        func_00335668(s0, 0xB, 2);
+    } else if (*(BatchA_A18_s32 *)(p + 0x278) != -1) {
+        func_00335668(s0, 0xD, 2);
+    } else {
+        func_00335668(s0, 0xC, 2);
+    }
+    func_00335668(s0, 7, -1);
+}
 
 extern void func_L18_003F7A08(BatchA_A18_u8 *a0);
 void func_L18_003F7A88(BatchA_A18_u8 *a0) {
@@ -167,7 +206,20 @@ BatchA_A09_s32 func_L18_003F8E80(BatchA_A09_u8 *s) {
 
 INCLUDE_ASM("asm/levels", func_L18_003F8EA8);
 
-INCLUDE_ASM("asm/levels", func_L18_003F8FA8);
+extern void func_00335388(BatchA_A18_u8 *a0, BatchA_A18_s32 a1, BatchA_A18_s32 a2,
+                          BatchA_A18_s32 a3);
+
+void func_L18_003F8FA8(BatchA_A18_u8 *a0) {
+    BatchA_A18_s32 p = *(BatchA_A18_s32 *)(a0 + 0x68);
+    func_00335388(a0, 0, 0, 3);
+    *(BatchA_A18_s32 *)(a0 + 0x48) = 0;
+    *(unsigned short *)((char *)p + 0x98) = 0;
+    *(BatchA_A18_s32 *)(a0 + 0x98) = 0;
+    *(unsigned short *)(a0 + 0x34) =
+        (unsigned short)((*(unsigned short *)(a0 + 0x34) | 0x41) & 0xEFFF);
+    func_00335668(a0, 1, 1);
+    *(BatchA_A18_s32 *)(a0 + 0x98) = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L18_003F9DA0);
 
@@ -205,7 +257,16 @@ INCLUDE_ASM("asm/levels", func_L18_003FB500);
 
 INCLUDE_ASM("asm/levels", func_L18_003FB5E8);
 
-INCLUDE_ASM("asm/levels", func_L18_003FC958);
+void func_L18_003FC958(BatchA_A18_u8 *a0, BatchA_A18_s32 a1) {
+    if (a1 != 0) {
+        func_00335668(a0, 3, -1);
+    } else {
+        func_00335668(a0, 2, -1);
+    }
+    *(BatchA_A18_s32 *)(a0 + 0x98) = 0;
+    *(unsigned short *)(a0 + 0x34) =
+        (unsigned short)((*(unsigned short *)(a0 + 0x34) | 0x41) & 0xEFFF);
+}
 
 INCLUDE_ASM("asm/levels", func_L18_003FC9B8);
 
@@ -225,17 +286,43 @@ void func_L18_003FE010(BatchA_A18_u8 *s) {
     *(BatchA_A18_s32 *)((char *)p + 0x74) = -1;
 }
 
-INCLUDE_ASM("asm/levels", func_L18_003FE020);
+void func_L18_003FE020(BatchA_A18_u8 *s) {
+    BatchA_A18_s32 p = *(BatchA_A18_s32 *)(s + 0x68);
+    *(BatchA_A18_s32 *)((char *)p + 0x74) = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L18_00426AB0);
 
-INCLUDE_ASM("asm/levels", func_L18_00426D98);
+extern void func_0033A0B0(BatchA_A18_u8 *a0, BatchA_A18_u8 *a1);
+extern void func_0032D118(BatchA_A18_u8 *a0, BatchA_A18_s32 a1, BatchA_A18_s32 a2,
+                          BatchA_A18_s32 a3);
+
+void func_L18_00426D98(BatchA_A18_u8 *a0) {
+    BatchA_A18_s32 p = *(BatchA_A18_s32 *)(a0 + 0x68);
+    *(unsigned short *)((char *)p + 0x50) = 0;
+    *(unsigned short *)((char *)p + 0x52) = 1;
+    func_0033A0B0(a0, (BatchA_A18_u8 *)p + 0x50);
+    *(BatchA_A18_u8 *)((char *)p + 0x54) = 0x80;
+    *(BatchA_A18_u8 *)((char *)p + 0x55) = 0x80;
+    *(BatchA_A18_u8 *)((char *)p + 0x56) = 0x80;
+    func_0032D118(a0, 0x80, 0x80, 0x80);
+}
 
 INCLUDE_ASM("asm/levels", func_L18_00426E00);
 
 INCLUDE_ASM("asm/levels", func_L18_00426E48);
 
-INCLUDE_ASM("asm/levels", func_L18_00426F28);
+extern void func_002EC9C8(BatchA_A18_u8 *a0, BatchA_A18_s32 a1);
+
+void func_L18_00426F28(BatchA_A18_u8 *a0, BatchA_A18_s32 a1, BatchA_A18_s32 a2, float f12) {
+    if (a0[0xBC] == 0) {
+        if (a0[0x43] != a1) {
+            func_00335388(a0, a1, a2, (BatchA_A18_s32)f12);
+        }
+    } else {
+        func_002EC9C8((BatchA_A18_u8 *)a1, a2);
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L18_00426F78);
 

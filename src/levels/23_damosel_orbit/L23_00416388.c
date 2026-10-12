@@ -40,7 +40,24 @@ INCLUDE_ASM("asm/levels", func_L23_00418BC8);
 
 INCLUDE_ASM("asm/levels", func_L23_00418DC0);
 
-INCLUDE_ASM("asm/levels", func_L23_00418F30);
+extern s32 func_L23_00419CA0(s32 arg0);
+
+/* Collects the set bits of the mask whose index the shared predicate accepts. */
+s32 func_L23_00418F30(char *arg0, u64 arg1, s32 *arg2, s32 arg3) {
+    s32 count = 0;
+    s32 *out = arg2;
+    s32 i;
+
+    for (i = 0; i < 0x40; i++) {
+        if ((arg1 & 1) != 0 && (arg3 == 0 || func_L23_00419CA0(i) != 0)) {
+            *out = i;
+            count++;
+            out++;
+        }
+        arg1 >>= 1;
+    }
+    return count;
+}
 
 INCLUDE_ASM("asm/levels", func_L23_00418FD0);
 
@@ -102,8 +119,6 @@ INCLUDE_ASM("asm/levels", func_L23_0041B6D8);
 
 INCLUDE_ASM("asm/levels", func_L23_0041B940);
 
-INCLUDE_ASM("asm/levels", func_L23_0041B960);
-
 INCLUDE_ASM("asm/levels", func_L23_0041B968);
 
 INCLUDE_ASM("asm/levels", func_L23_0041B9F0);
@@ -111,8 +126,6 @@ INCLUDE_ASM("asm/levels", func_L23_0041B9F0);
 INCLUDE_ASM("asm/levels", func_L23_0041BE70);
 
 INCLUDE_ASM("asm/levels", func_L23_0041BF18);
-
-INCLUDE_ASM("asm/levels", func_L23_0041C040);
 
 INCLUDE_ASM("asm/levels", func_L23_0041C0B0);
 
@@ -138,8 +151,6 @@ INCLUDE_ASM("asm/levels", func_L23_0041D1F0);
 
 INCLUDE_ASM("asm/levels", func_L23_0041D398);
 
-INCLUDE_ASM("asm/levels", func_L23_0041D930);
-
 INCLUDE_ASM("asm/levels", func_L23_0041D9B0);
 
 INCLUDE_ASM("asm/levels", func_L23_0041DA48);
@@ -147,4 +158,3 @@ INCLUDE_ASM("asm/levels", func_L23_0041DA48);
 INCLUDE_ASM("asm/levels", func_L23_0041E220);
 
 INCLUDE_ASM("asm/levels", func_L23_0041E290);
-

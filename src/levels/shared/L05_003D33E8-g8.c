@@ -33,3 +33,6 @@ void func_L05_00418200(char *object)
     func_00282CC0(local, local, object + 0x10);
     D_L05_001B0FA4 = func_L00_002FCF18(local, 0.0f, 0.0f, 0.0f, one, 0.0f);
 }
+
+/* func_L05_0041C118 is catalogued with the native file's marker: its body needs
+   the -G8 sibling if it is ever resumed (it reaches D_L05_001B1300 through $gp). */

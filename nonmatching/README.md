@@ -342,6 +342,32 @@ plain-C spelling. Their markers are back in `src/`.
 | [`func_L16_00411ED0`](levels/func_L16_00411ED0.c) | 172 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
 | [`func_L19_00422178`](levels/func_L19_00422178.c) | 192 | matched byte for byte, but the body needs `qcopy`/`qzero` (inline assembly): not a route under the Plain C rule |
 
+
+### Found on the second pass (2026-10-13)
+
+The first sweep used a pattern that missed definitions whose opening brace sits on the same line as
+the signature, and these bodies call the helpers through a local `__asm__` copy. Same rule, same
+treatment.
+
+| Function | Size | Why it is here |
+| --- | ---: | --- |
+| [`func_L01_003DCD40`](levels/func_L01_003DCD40.c) | 148 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L01_003DCDD8`](levels/func_L01_003DCDD8.c) | 152 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L02_003CADA8`](levels/func_L02_003CADA8.c) | 72 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L02_003D01F0`](levels/func_L02_003D01F0.c) | 72 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L02_003F1608`](levels/func_L02_003F1608.c) | 160 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L02_0040BAB8`](levels/func_L02_0040BAB8.c) | 228 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L08_003CD600`](levels/func_L08_003CD600.c) | 68 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L08_003CDB38`](levels/func_L08_003CDB38.c) | 60 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L14_00328E70`](levels/func_L14_00328E70.c) | 32 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L14_00390DF8`](levels/func_L14_00390DF8.c) | 196 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L18_003FB5E8`](levels/func_L18_003FB5E8.c) | 40 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L20_0039C448`](levels/func_L20_0039C448.c) | 248 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L20_0039C540`](levels/func_L20_0039C540.c) | 140 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L20_0039E158`](levels/func_L20_0039E158.c) | 140 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L20_0039F210`](levels/func_L20_0039F210.c) | 32 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L20_0043D470`](levels/func_L20_0043D470.c) | 100 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+
 ## Linked at some of their places only (2026-10-12)
 
 C that was in `src/` and links in some programs but not in all: a level address written into

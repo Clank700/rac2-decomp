@@ -118,7 +118,18 @@ INCLUDE_ASM("asm/levels", func_L04_0033D0C0);
 
 INCLUDE_ASM("asm/levels", func_L04_0033D158);
 
-INCLUDE_ASM("asm/levels", func_L04_0033D4B0);
+extern s32 func_002A8600(u32 *out, s32 kind, s32 arg2, s32 arg3);
+extern s32 func_002A86E8(u32 *out, u32 value, s32 arg2, s32 arg3);
+s32 func_L04_0033D4B0(u8 *a0) {
+    u32 out = 0;
+    if (func_002A8600(&out, *(u8 *)(a0 + 0x21), 0, 0) == -1)
+        return 0;
+    if (out != (u32)a0)
+        return out;
+    if (func_002A86E8(&out, out, 0, 0) != -1)
+        return out;
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L04_003429F8);
 
