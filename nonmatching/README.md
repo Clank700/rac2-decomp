@@ -129,6 +129,11 @@ handwritten routines.
 | [`func_L00_003E6F48`](levels/func_L00_003E6F48.c) | 124 | 0 of 27 exact: the loop, the call and its arguments match; the base-pointer load is hoisted above the saves (retail: after s1=a0) and the back-edge reload uses v1 where retail uses v0 (lw v0,0x3B64(gp) in the bgez-like delay slot). |
 | [`func_L00_003E80A8`](levels/func_L00_003E80A8.c) | 164 | 0 of 27 exact: 144 bytes, retail 164 (5 instructions short: retail keeps base, offset and record pointer live across the calls and saves s0-s4). The calls and the 96.0f scale match; the compiler folds base+off and loses the saved registers. |
 | [`func_L00_003E9490`](levels/func_L00_003E9490.c) | 172 | 0 of 27 exact: 164 bytes, retail 172. The 128-bit copies (lq/sq) and the calls match; the copy store lands in the branch delay slot (retail: lq, sq, b, ld in the delay slot), so the two copy paths are 2 instructions off. |
+| [func_L01_003115E8](shared/func_L01_003115E8.c) | 88 | Candidate is 84 bytes; table pointer register selection and small global load order differ |
+| [`func_L05_0030C930`](shared/func_L05_0030C930.c) | 24 | 0 of 4 places: store order and global-base relocation differ; candidate stores fields at +0x40/+0x44 in reverse order and the declared base symbol did not resolve. |
+| [`func_L05_00324DB8`](shared/func_L05_00324DB8.c) | 48 | 0 of 4 places: two C forms emitted 64 and 60 bytes; both missed the call/branch and return shape. |
+| [func_L00_002EDCB8](levels/func_L00_002EDCB8.c) | 16 | 12 bytes vs retail 16: candidate is one instruction short; object comparison cannot validate the relocation until the size matches. |
+| [func_L00_002EE0C0](levels/func_L00_002EE0C0.c) | 16 | 12 bytes vs retail 16: the stores compile in the wrong order or without the retail nop; no plain C form found that preserves the exact delay-slot layout. |
 
 ## Linked at some of their places only (2026-10-12)
 
