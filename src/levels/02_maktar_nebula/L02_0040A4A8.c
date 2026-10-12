@@ -210,7 +210,12 @@ INCLUDE_ASM("asm/levels", func_L02_0043E150);
 
 INCLUDE_ASM("asm/levels", func_L02_00445200);
 
-INCLUDE_ASM("asm/levels", func_L02_00456258);
+/* rac1-decomp src/core/00118A40.c: func_00119100 */
+/* Takes an argument its callers pass (e.g. r1_func_00112468) and ignores
+   it; an unused parameter costs no codegen. */
+int func_L02_00456258(int arg0) {
+    return -1;
+}
 
 extern void func_00335870(void);
 

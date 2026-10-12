@@ -308,7 +308,20 @@ void func_L00_00428FE8(Rac2Native_6af85cabb56d3b41_SmallConditional52Owner *owne
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00429020);
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+extern char * r1_D_L10_0015F050 MACRO_ADDR;
+
+extern char *r1_D_L10_0015F050 MACRO_ADDR;
+
+/* rac1-decomp src/overlays/shared/vendor_00299AF0.c: func_L10_002F6E10 */
+/* Adapted from Lombyte (MIT) for PAL by OpenRAC's tools/port.py: src/overlays/shared/gameplay_vendor_002e3de8.c, FUN_L10_002f5a50. */
+void func_L00_00429020(int i) {
+    unsigned char *q;
+    q = *(unsigned char **)(r1_D_L10_0015F050 + i * 0x20 + 0x1C);
+    q[0x38] = 1;
+    q[0x39] = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00429048);
 

@@ -34,7 +34,14 @@ INCLUDE_ASM("asm/levels", func_L00_002F7298);
 
 INCLUDE_ASM("asm/levels", func_L00_002F74F0);
 
-INCLUDE_ASM("asm/levels", func_L00_002F7568);
+extern int r1_func_0011CC38();
+
+/* rac1-decomp src/core/00119D88.c: func_0011CCB0 */
+/* Returns its callee's value: retail keeps the frame and calls, and
+   2.9-ee would tail-call it (a bare `j`) if it were void. */
+int func_L00_002F7568(void) {
+    return r1_func_0011CC38();
+}
 
 int func_L00_002F7588(void) {
     return 0;

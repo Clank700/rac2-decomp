@@ -96,7 +96,12 @@ INCLUDE_ASM("asm/levels", func_L04_00456860);
 
 INCLUDE_ASM("asm/levels", func_L04_00459408);
 
-INCLUDE_ASM("asm/levels", func_L04_0046B740);
+/* rac1-decomp src/game/stub.c: func_001E97C8 */
+/* Takes an argument (callers pass one, e.g. r1_func_001EC210) and ignores
+   it -- the unused parameter costs no codegen, still 0/8. */
+int func_L04_0046B740(void *arg0) {
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L04_0046CD68);
 

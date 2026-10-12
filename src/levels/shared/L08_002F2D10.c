@@ -6,7 +6,31 @@ typedef u64 TI128 __attribute__((mode(TI)));
 extern f32 D_L08_001BE0B0;
 extern void func_0027AB40();
 
-INCLUDE_ASM("asm/levels", func_L08_002F2D10);
+extern int r1_D_0015F564_002F2D10 MACRO_ADDR;
+
+ /* GetEffectTex(int, int) */
+
+/*
+ * Four parallel callback lists, each a (function, argument) pair of
+ * arrays with its own count, plus a "register" and a "run them all"
+ * function per list. The counts are reached with retail's one-register
+ * macro form, so they are MACRO_ADDR.
+ */
+typedef void (*DrawCallback_r002F2D10)(void *);
+
+extern DrawCallback_r002F2D10 r1_D_0018DC40_002F2D10[];
+
+extern void *r1_D_0018DD40_002F2D10[];
+
+/* rac1-decomp src/game/draw.c: func_001F49B0 */
+void func_L08_002F2D10(DrawCallback_r002F2D10 fn, void *arg) {
+    int count = r1_D_0015F564_002F2D10;
+    if (count < 0x40) {
+        r1_D_0018DC40_002F2D10[count] = fn;
+        r1_D_0018DD40_002F2D10[count] = arg;
+        r1_D_0015F564_002F2D10 = count + 1;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L08_002F5CB8);
 

@@ -133,11 +133,42 @@ void func_002FCDA8(void)
     D_L03_001B31A4 = 0;
 }
 
-INCLUDE_ASM("asm/game", func_002FCE18);
+ASM_FUNC("asm/game", func_002FCE18);
 
 INCLUDE_ASM("asm/game", func_002FCF18);
 
-INCLUDE_ASM("asm/game", func_002FCF90);
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+/*
+ * The VU1 chain state. r1_D_00161000 (the write pointer), r1_D_00161010 (the
+ * buffer index) and the two limits r1_D_0015F718/r1_D_0015F71C are all reached
+ * with retail's one-instruction macro form, so they are MACRO_ADDR: the
+ * assembler expands them through $at, or through $gp where the access
+ * lands in a delay slot.
+ */
+extern int *r1_D_00161000 MACRO_ADDR;
+
+/*
+ * Append one quadword to the packet at r1_D_00161000. This one wants the
+ * pointer typed as a quadword: stepping an `int *` by 4 folds the copy
+ * retail keeps (`daddu $5,$2,$0`) into the increment and comes out one
+ * instruction short, so the same symbol is declared a second time under
+ * a quadword type.
+ */
+typedef struct {
+    int w[4];
+} Qword_r002FCF90;
+
+extern Qword_r002FCF90 *r1_D_00161000_q __asm__("r1_D_00161000") MACRO_ADDR;
+
+/* rac1-decomp src/game/vuchain.c: func_00235290 */
+void func_002FCF90(int arg0) {
+    Qword_r002FCF90 *p = r1_D_00161000_q++;
+    p->w[0] = arg0 + 0x90000000;
+    p->w[1] = 0;
+    p->w[2] = 0;
+    p->w[3] = 0;
+}
 
 INCLUDE_ASM("asm/game", func_002FCFC8);
 

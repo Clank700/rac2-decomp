@@ -59,6 +59,23 @@ If you get close but not exact, move your C to `nonmatching/<area>/func_XXXXXXXX
 - `r1_...` names were carried from rac1-decomp and have no rac2 name yet: rename them to the
   `D_`/`func_` name of their address when you know it.
 
+## Handwritten assembly
+
+Some of the game was written in assembly: VU0 vector routines, the renderer's inner loops,
+a few wait loops. No C compiles to them, so they stay assembly and are marked
+`ASM_FUNC("asm/...", name);` in place of `INCLUDE_ASM`. `tools/progress.py` counts an `ASM_FUNC`
+function as finished, as rac1-decomp does.
+
+Mark a function `ASM_FUNC` only on evidence, never because it resisted matching:
+
+- it is byte-identical (apart from addresses) to a routine rac1-decomp classifies as
+  handwritten, and longer than 16 bytes, so the identity is not a coincidence; or
+- it uses instructions the compiler never emits (COP2/VU0 macro instructions, `$at` as a
+  working register, a return with a live instruction after its delay slot) and a maintainer
+  agrees in review.
+
+Say which in the commit. A function that is merely hard is a near miss, not handwritten.
+
 ## Use the machine
 
 Builds and checks are the slow part of this work, and most of them are independent. Run them

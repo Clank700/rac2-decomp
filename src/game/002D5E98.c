@@ -136,7 +136,29 @@ INCLUDE_ASM("asm/game", func_002D8EC0);
 
 INCLUDE_ASM("asm/game", func_002D9008);
 
-INCLUDE_ASM("asm/game", func_002D95D8);
+#define NOT_SDA __attribute__((section(".data")))
+
+extern unsigned char r1_D_001414F4 NOT_SDA;
+
+/* A short-returning inline keeps retail's branch: the select happens in
+   HImode, which has no movcc pattern, so jump.c cannot turn it into the
+   xori/movz a promoted `short` local gets. */
+static inline short pauseFlagState_r002D95D8(void) {
+    if (r1_D_001414F4 != 1) {
+        return 3;
+    }
+    return 0;
+}
+
+/* rac1-decomp src/game/pause.c: func_0021EDD8 */
+/* The select sits in a `static inline short` helper so that it stays a
+   branch: jump.c turns an if into movz/movn only when its arm sets a
+   full register, and the inline's short return value is a subreg. */
+int func_002D95D8(char *arg0) {
+    char *p = *(char **)(arg0 + 0x34);
+    *(short *)(p + 2) = pauseFlagState_r002D95D8();
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002D9600);
 
@@ -291,7 +313,21 @@ INCLUDE_ASM("asm/game", func_002DBB78);
 
 INCLUDE_ASM("asm/game", func_002DBC10);
 
-INCLUDE_ASM("asm/game", func_002DBE80);
+#define MACRO_ADDR __attribute__((section(".sdata")))
+
+/* MACRO_ADDR: lui/lw where retail has them, $gp-relative in a delay slot
+   (r1_func_0021F7D0, r1_func_002229B0). */
+extern int r1_D_0015EE84 MACRO_ADDR;
+
+extern int r1_D_001D48A8[];
+
+/* rac1-decomp src/game/pause.c: func_00222D70 */
+/* `r1_D_001D48A8[(unsigned)r1_D_0015EE84 % 19]`; the older near-miss
+   predated MACRO_ADDR. */
+int func_002DBE80(char *arg0) {
+    *(int *)(arg0 + 0x34) = r1_D_001D48A8[(unsigned int)r1_D_0015EE84 % 19];
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002DBEC0);
 

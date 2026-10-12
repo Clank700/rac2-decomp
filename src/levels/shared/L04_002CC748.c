@@ -60,7 +60,14 @@ INCLUDE_ASM("asm/levels", func_L04_002DBE70);
 
 INCLUDE_ASM("asm/levels", func_L04_002DCE78);
 
-INCLUDE_ASM("asm/levels", func_L04_002FB920);
+#define NOT_SDA __attribute__((section(".data")))
+
+extern int r1_D_0012FCF0 NOT_SDA;
+
+/* rac1-decomp src/core/00118A40.c: func_00118EC0 */
+void func_L04_002FB920(void) {
+    r1_D_0012FCF0 = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L04_0030C4C0);
 
