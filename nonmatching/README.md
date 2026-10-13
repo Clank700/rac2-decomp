@@ -3,6 +3,10 @@
 C that compiles close to a function but not to its bytes: a starting point, never linked
 and never counted. Move a file into `src/` once `tools/build.py` places it.
 
+Recorded candidate sizes, profiles and differences describe the retained experiments, not
+verified behavior. Declaration repairs and symbol renaming are not new match measurements.
+Drafts marked G8 need a `-g8.c` source unit when checked again.
+
 | Function | Size | Bytes that differ |
 | --- | ---: | ---: |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
@@ -31,6 +35,84 @@ and never counted. Move a file into `src/` once `tools/build.py` places it.
 | [func_00341E58](game/func_00341E58.c) | 52 | check.py 28/28, but level 00 cannot place it: needs .text.func_00341E90 at its place, which is not C |
 | [func_0034E478](game/func_0034E478.c) | 64 | check.py 28/28, but level 00 cannot place it: needs .text.func_0034E4B8 at its place, which is not C |
 | [func_00351A38](game/func_00351A38.c) | 72 | check.py 28/28, but level 00 cannot place it: needs .text.func_00351938 at its place, which is not C |
+
+## Level functions
+
+| Function | Retail size | Remaining differences |
+| --- | ---: | --- |
+| [`func_L00_002B1F90`](levels/func_L00_002B1F90.c) | 400 | 360-byte draft; 0/27 places. Seven-slot callback/state loop remains approximate. |
+| [`func_L00_002B2120`](levels/func_L00_002B2120.c) | 220 | 212-byte draft; 0/27 places. State/predicate paths remain 8 bytes short after four source forms. |
+| [`func_L00_002B2200`](levels/func_L00_002B2200.c) | 280 | G8 candidate is 304 bytes; 0/27 places. Alternate switch forms grew the body; jump-table linking was not verified. |
+| [`func_L00_002B2A40`](levels/func_L00_002B2A40.c) | 400 | 364-byte draft; 0/16 places. Global-state setup and mode-one counter paths remain approximate. |
+| [`func_L00_002B30E8`](levels/func_L00_002B30E8.c) | 348 | 296-byte draft; 0/27 places. Counter-table and progress updates remain 52 bytes short. |
+| [`func_L00_002B35A0`](levels/func_L00_002B35A0.c) | 320 | 244-byte draft; 0/27 places. Approximate animation update; substantial instructions remain unmatched. |
+| [`func_L00_002B4208`](levels/func_L00_002B4208.c) | 208 | 216-byte draft; 0/27 places. Argument signature and helper order remain uncertain. |
+| [`func_L00_002B4308`](levels/func_L00_002B4308.c) | 336 | 316-byte draft; 0/27 places. Threshold literal and vector/result flow remain uncertain. |
+| [`func_L00_002B47A8`](levels/func_L00_002B47A8.c) | 344 | 260-byte draft; 0/27 places. Signature is provisional; expected quadword copies and the retail 0x60 frame are missing. |
+| [`func_L00_002B75A0`](levels/func_L00_002B75A0.c) | 372 | 360-byte draft; 0/27 places. Float/vector update remains 12 bytes short. |
+| [`func_L00_002EDC90`](levels/func_L00_002EDC90.c) | 40 | G8 candidate is 44 bytes; 0/27 places. Separate multiply/add does not reproduce the retail COP1 accumulation sequence. |
+| [`func_L00_002EDCC8`](levels/func_L00_002EDCC8.c) | 40 | G8 candidate is 44 bytes; 0/27 places. Separate multiply/add does not reproduce the retail COP1 accumulation sequence. |
+| [`func_L00_002EDD00`](levels/func_L00_002EDD00.c) | 40 | G8 candidate is 44 bytes; 0/27 places. Separate multiply/add does not reproduce the retail COP1 accumulation sequence. |
+| [`func_L00_002FC7A8`](levels/func_L00_002FC7A8.c) | 468 | G8 candidate is 464 bytes; base lifetime, hoisted count and register allocation differ. |
+| [`func_L00_002FCBE8`](levels/func_L00_002FCBE8.c) | 492 | 452-byte candidate; base lifetime and repeated loop references differ. |
+| [`func_L00_0031B9F8`](levels/shared/func_L00_0031B9F8.c) | 164 | 172-byte float/index calculation candidate; 8 bytes larger; compile profile not recorded. |
+| [`func_L00_0031D670`](levels/shared/func_L00_0031D670.c) | 152 | 188-byte four-component interpolation attempt with local vector copies; 36 bytes larger. |
+| [`func_L00_00324120`](levels/shared/func_L00_00324120.c) | 88 | 84-byte conditional state-field comparison candidate; 4 bytes short. |
+| [`func_L00_003252C8`](levels/shared/func_L00_003252C8.c) | 56 | Exact-size two-helper dispatch candidate; instruction differences remain; compile profile not recorded. |
+| [`func_L00_003296C0`](levels/shared/func_L00_003296C0.c) | 112 | 108-byte indexed record update candidate; 4 bytes short; repeated volatile accesses still need semantic justification. |
+| [`func_L00_00329FF0`](levels/shared/func_L00_00329FF0.c) | 108 | 96-byte modulo-16/random rounding candidate; 12 bytes short. |
+| [`func_L00_0032A0B8`](levels/shared/func_L00_0032A0B8.c) | 48 | 40-byte keyed entry lookup candidate; 8 bytes short. |
+| [`func_L00_00338E90`](levels/func_L00_00338E90.c) | 292 | 296-byte candidate; quadword copies are present, but entry scheduling and saved-register allocation differ. |
+| [`func_L00_00354DF8`](levels/func_L00_00354DF8.c) | 272 | G8 candidate is 284 bytes; pointer/base allocation differs at the corrected entry. |
+| [`func_L00_0035F640`](levels/func_L00_0035F640.c) | 148 | Exact-size candidate; branch layout at +0x20 and store order differ. Overlay data names corrected; bindings still need rechecking. |
+| [`func_L00_0035F7E8`](levels/func_L00_0035F7E8.c) | 112 | 116-byte table-search candidate; caller-saved register allocation and table-base shape differ. |
+| [`func_L00_00368F58`](levels/func_L00_00368F58.c) | 176 | Earlier 180-byte candidate differed in float allocation/scheduling. Retained draft has corrected symbolic global stores; placement and bindings need rechecking. |
+| [`func_L00_0036EF40`](levels/func_L00_0036EF40.c) | 40 | 36-byte polling attempt; retail uses the assembler temporary as a working register, extra nops and a live LUI in the return delay slot. No assembly classification claimed. |
+| [`func_L00_0037FF98`](levels/func_L00_0037FF98.c) | 188 | 156-byte candidate; 0/27 places. Two-stage table scan and GP-load scheduling remain different. |
+| [`func_L00_003827E0`](levels/func_L00_003827E0.c) | 304 | 524-byte candidate; switch/table-loop control flow, register allocation and state-2 stack quadword setup differ. |
+| [`func_L00_00382BF0`](levels/func_L00_00382BF0.c) | 248 | Exact-size candidate; 0/3 places. First recorded mismatch +0x3C involves float spills/argument order; GP global uses mixed access forms. |
+| [`func_L00_00383300`](levels/func_L00_00383300.c) | 1620 | G0 candidate is 1576 bytes; recorded first instruction mismatch +0x8. Behavior and linked-image equality remain unverified. |
+| [`func_L00_00383958`](levels/func_L00_00383958.c) | 568 | 528-byte candidate; dead TI local copies disappear, shrinking the frame and changing registers. |
+| [`func_L00_00384CA8`](levels/func_L00_00384CA8.c) | 152 | 148-byte candidate; 0/27 places. Saved-register allocation differs and one instruction is absent. |
+| [`func_L00_00384D40`](levels/func_L00_00384D40.c) | 196 | G8 candidate is 192 bytes; 0/27 places. Object/child register allocation and instruction scheduling differ. |
+| [`func_L00_003851A0`](levels/func_L00_003851A0.c) | 256 | 268-byte interpolation/packing candidate; 0/27 places. Extracted unused declarations were repaired; helper prototype restored; candidate not remeasured. |
+| [`func_L00_003852A0`](levels/func_L00_003852A0.c) | 204 | Exact-size candidate; 0/27 places. Helper argument/global-load ordering differs; source and worker notes disagree on the exact offset. |
+| [`func_L00_00387370`](levels/func_L00_00387370.c) | 148 | G8 candidate is 152 bytes; 0/27 places. Register-save ordering differs and one instruction is extra. |
+| [`func_L00_00389E18`](levels/func_L00_00389E18.c) | 148 | G8 candidate has exact size; 0/27 places. First recorded mismatch +0xC is s1/ra save ordering. |
+| [`func_L00_0038B6F8`](levels/func_L00_0038B6F8.c) | 252 | 240-byte candidate; 0/27 places. State-gating/transition draft remains 12 bytes short. |
+| [`func_L00_0038D750`](levels/func_L00_0038D750.c) | 1044 | G8 candidate is 1036 bytes; recorded first instruction mismatch +0x4. Behavior and linked-image equality remain unverified. |
+| [`func_L00_0038DB68`](levels/func_L00_0038DB68.c) | 776 | 740-byte candidate; TI zero materialization and collision-base lifetime differ. |
+| [`func_L00_00393148`](levels/func_L00_00393148.c) | 5868 | G0 candidate is 5620 bytes; recorded first instruction mismatch +0x4. Behavior and linked-image equality remain unverified. |
+| [`func_L00_003B9CD8`](levels/func_L00_003B9CD8.c) | 2444 | G0 candidate is 2388 bytes; recorded first instruction mismatch +0x0. Behavior and linked-image equality remain unverified. |
+| [`func_L00_003C5B88`](levels/func_L00_003C5B88.c) | 1804 | G0 candidate is 1740 bytes; recorded first instruction mismatch +0x4. Behavior and linked-image equality remain unverified. |
+| [`func_L00_003CD160`](levels/func_L00_003CD160.c) | 1268 | G0 candidate is 1188 bytes; recorded first instruction mismatch +0x4C. Behavior and linked-image equality remain unverified. |
+| [`func_L00_003CD658`](levels/func_L00_003CD658.c) | 644 | 632-byte candidate; TI zero, register scheduling and two pre-division nops differ. |
+| [`func_L00_003CD8E0`](levels/func_L00_003CD8E0.c) | 2456 | G8 candidate is 2444 bytes; recorded first instruction mismatch +0x0. Behavior and linked-image equality remain unverified. |
+| [`func_L00_003CE278`](levels/func_L00_003CE278.c) | 2516 | G0 candidate is 2444 bytes; recorded first instruction mismatch +0x0. Behavior and linked-image equality remain unverified. |
+| [`func_L00_003CF438`](levels/func_L00_003CF438.c) | 248 | 244-byte candidate; compiler removes a dead ADDIU retained in the retail BEQZ delay slot, shifting the body by one word. |
+| [`func_L00_003CF530`](levels/func_L00_003CF530.c) | 220 | 216-byte candidate; compiler removes a dead ADDIU retained in the retail BEQZ delay slot, shifting the body by one word. |
+| [`func_L00_003CF610`](levels/func_L00_003CF610.c) | 924 | 920-byte candidate; bank absolute/GP access and TI-copy reloads differ. |
+| [`func_L00_003CFB00`](levels/func_L00_003CFB00.c) | 1288 | G0 candidate is 1260 bytes; recorded first instruction mismatch +0x0. Behavior and linked-image equality remain unverified. |
+| [`func_L00_003D0008`](levels/func_L00_003D0008.c) | 2312 | G0 candidate is 2284 bytes; recorded first instruction mismatch +0x0. Behavior and linked-image equality remain unverified. |
+| [`func_L00_003D0910`](levels/func_L00_003D0910.c) | 2376 | G0 candidate is 2348 bytes; recorded first instruction mismatch +0x4. Behavior and linked-image equality remain unverified. |
+| [`func_L00_003D54B0`](levels/func_L00_003D54B0.c) | 4424 | G8 candidate is 4404 bytes; 0/2 places. TI offsets fold into LQ/SQ, changing pointer materialization and saved-register allocation. |
+| [`func_L00_003DA548`](levels/func_L00_003DA548.c) | 636 | Exact-size candidate; 17 non-relocation instruction words differ (20 bytes). Position/color s1/s2 allocation and two 64-bit packet-store positions differ. |
+| [`func_L00_003EACC0`](levels/func_L00_003EACC0.c) | 568 | G0 candidate is 560 bytes; TI copies fold +0x10 offsets instead of materializing zero-offset bases. Object/state allocation and FPU scheduling also differ. |
+| [`func_L00_003EE288`](levels/func_L00_003EE288.c) | 564 | G0 candidate has exact size; TI copy addressing, quadword register and callee-saved/FPU allocation differ; first recorded mismatch +0x28. |
+| [`func_L00_0040D648`](levels/func_L00_0040D648.c) | 1472 | 1460-byte candidate; nibble-path tail merging, object/state allocation and phase scheduling differ after typed-field variants. |
+| [`func_L00_0040EAA0`](levels/func_L00_0040EAA0.c) | 1540 | Exact-size candidate; frame is 0x60 instead of 0x50. Retained bitset base or shift-one and a spilled flag change mask lowering and branch scheduling. |
+| [`func_L00_00412E68`](levels/func_L00_00412E68.c) | 400 | G8 candidate is 384 bytes; TI zero folds to SQ zero instead of POR/SQ, and stack-copy offsets fold away two retained pointers. |
+| [`func_L00_00412FF8`](levels/func_L00_00412FF8.c) | 300 | G8 candidate is 276 bytes; table-index setup remains unresolved. Overlay data names corrected; helper argument/layout assumptions remain provisional. |
+| [`func_L00_00413128`](levels/func_L00_00413128.c) | 364 | 208-byte first attempt; incomplete table-driven paths and quadword handling. Treat semantics and helper prototypes as provisional. |
+| [`func_L00_00413298`](levels/func_L00_00413298.c) | 188 | 140-byte initialization attempt; two array-loop variants produced the same differing instruction/register/store order. |
+| [`func_L00_00413870`](levels/func_L00_00413870.c) | 164 | G8 candidate has exact size; first recorded mismatch +0x54 is helper-call argument placement in the delay slot. |
+| [`func_L00_004143D0`](levels/func_L00_004143D0.c) | 368 | 360-byte candidate; saved-register ordering and arithmetic scheduling differ. |
+| [`func_L00_00416F68`](levels/func_L00_00416F68.c) | 316 | 376-byte aggregate-vector candidate; retail quadword transfers and saved-register layout are not reproduced. |
+| [`func_L00_004170A8`](levels/func_L00_004170A8.c) | 368 | 380-byte candidate; transform/stack quadword transfers and scheduling remain different. |
+| [`func_L00_00417700`](levels/func_L00_00417700.c) | 360 | 368-byte candidate; 24-entry loop shape, register allocation and instruction scheduling differ. |
+| [`func_L00_0041A490`](levels/func_L00_0041A490.c) | 108 | 96-byte candidate; modulo-16 arithmetic, register allocation and return scheduling remain different. |
+| [`func_L00_0041A500`](levels/func_L00_0041A500.c) | 192 | G8 candidate has exact size; first recorded mismatch +0x4 is prologue/register allocation and placement of -1. |
+| [`func_L00_004263B8`](levels/func_L00_004263B8.c) | 188 | G8 candidate has exact size; 0/27 places. First recorded mismatch +0x20 is table-base register allocation (a2 versus retail a1). |
 
 ## USA v2.00 trials
 
@@ -378,7 +460,7 @@ counts when it links at every place it has.
 | --- | --- | --- |
 | [`func_002DCAB8`](game/func_002DCAB8.c) | 26 of 28 | instruction at +0x38 differs |
 | [`func_L00_002B1308`](levels/func_L00_002B1308.c) | 0 of 27 | needs .rodata at its place, which is not C |
-| [`func_L00_002D4A38`](levels/func_L00_002D4A38.c) | 26 of 27 | instruction at +0x2c differs |
+| [`func_L00_002D4A38`](levels/func_L00_002D4A38.c) | recovered: 27 of 27 | Current C in `src/levels/shared/L00_002D3798.c` uses an opaque `sda` reference under G0; the old partial draft is retained here for reference. |
 | [`func_L00_003DC350`](levels/func_L00_003DC350.c) | 2 of 27 | instruction at +0x4 differs |
 | [`func_L00_00424BB8`](levels/func_L00_00424BB8.c) | 23 of 27 | instruction at +0x28 differs: `16_snivelak`, `22_dobbo_orbit`, `23_damosel_orbit` and `26_jamming_array` hold other constants |
 | [`func_L02_003F9AF0`](levels/func_L02_003F9AF0.c) | 0 of 1 | needs .rodata at its place, which is not C |

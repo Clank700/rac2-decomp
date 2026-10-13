@@ -52,7 +52,16 @@ void func_L00_002E6CF0(DrawCallback_r002E6CF0 fn, void *arg) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002E6D40);
+/* Runs the queued callbacks. */
+typedef void (*Callback_r002E6D40)(void *);
+extern volatile int D_L00_001B1948 __attribute__((sda));
+extern Callback_r002E6D40 D_L00_001BE0C0[];
+extern void *D_L00_001BE1C0[];
+void func_L00_002E6D40(void) {
+    int i;
+    for (i = 0; i < D_L00_001B1948; i++)
+        D_L00_001BE0C0[i](D_L00_001BE1C0[i]);
+}
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
@@ -82,9 +91,27 @@ void func_L00_002E6DB8(DrawCallback_r002E6DB8 fn, void *arg) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002E6E08);
+/* Runs the next queued callback set. */
+typedef void (*Callback_r002E6E08)(void *);
+extern volatile int D_L00_001B1950 __attribute__((sda));
+extern Callback_r002E6E08 D_L00_001BE4C0[];
+extern void *D_L00_001BE5C0[];
+void func_L00_002E6E08(void) {
+    int i;
+    for (i = 0; i < D_L00_001B1950; i++)
+        D_L00_001BE4C0[i](D_L00_001BE5C0[i]);
+}
 
-INCLUDE_ASM("asm/levels", func_L00_002E6E80);
+/* Runs the next queued callback set. */
+typedef void (*Callback_r002E6E80)(void *);
+extern volatile int D_L00_001B1954 __attribute__((sda));
+extern Callback_r002E6E80 D_L00_001BE6C0[];
+extern void *D_L00_001BE7C0[];
+void func_L00_002E6E80(void) {
+    int i;
+    for (i = 0; i < D_L00_001B1954; i++)
+        D_L00_001BE6C0[i](D_L00_001BE7C0[i]);
+}
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
@@ -114,7 +141,16 @@ void func_L00_002E6EF8(DrawCallback_r002E6EF8 fn, void *arg) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002E6F48);
+/* Runs the next queued callback set. */
+typedef void (*Callback_r002E6F48)(void *);
+extern volatile int D_L00_001B194C __attribute__((sda));
+extern Callback_r002E6F48 D_L00_001BE2C0[];
+extern void *D_L00_001BE3C0[];
+void func_L00_002E6F48(void) {
+    int i;
+    for (i = 0; i < D_L00_001B194C; i++)
+        D_L00_001BE2C0[i](D_L00_001BE3C0[i]);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002E7F98);
 
