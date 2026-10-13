@@ -66,7 +66,6 @@ void func_L11_004401C0(u8 *obj) {
 }
 
 INCLUDE_ASM("asm/levels", func_L11_00440238);
-
 INCLUDE_ASM("asm/levels", func_L11_00440360);
 
 INCLUDE_ASM("asm/levels", func_L11_00440790);
@@ -100,12 +99,47 @@ extern s32 func_417238(s32);
 
 extern void func_4172E8(s32);
 
-INCLUDE_ASM("asm/levels", func_L11_00441090);
+void func_L11_00441090(u8 *obj) {
+    u8 *state = *(u8 **)(obj + 0x68);
+    s32 i;
+    for (i = 0; i <= *(s32 *)(state + 0x18C); i++) {
+        s32 *slot = (s32 *)(state + 0x120 + i * 4);
+        if (slot[0] == 0) {
+            continue;
+        }
+        if (func_417238(slot[0]) == 0) {
+            continue;
+        }
+        func_4172E8(slot[0]);
+    }
+}
 
 /* Clears the state's 0x120 slot table once every live entry has been accepted. */
 extern s32 func_417270(s32);
 
-INCLUDE_ASM("asm/levels", func_L11_00441108);
+void func_L11_00441108(u8 *obj) {
+    u8 *state = *(u8 **)(obj + 0x68);
+    s32 i;
+    s32 accepted = 1;
+    for (i = 0; i <= *(s32 *)(state + 0x18C); i++) {
+        s32 *slot = (s32 *)(state + 0x120 + i * 4);
+        if (slot[0] == 0) {
+            continue;
+        }
+        if (func_417270(slot[0]) != 0) {
+            continue;
+        }
+        accepted = 0;
+        break;
+    }
+    if (accepted != 0) {
+        s32 j;
+        for (j = 0; j <= *(s32 *)(state + 0x18C); j++) {
+            *(s32 *)(state + 0x120 + j * 4) = 0;
+        }
+        *(s32 *)(state + 0x18C) = 0;
+    }
+}
 
 /* hands every entry of the class list to its measured handler */
 extern u8 *D_L11_001FC420[];
@@ -277,8 +311,10 @@ typedef struct {
 
 extern u8 D_001A63A8[];
 
-INCLUDE_ASM("asm/levels", func_L11_00445D28);
+/* Claims the shared call slot for the state entry the caller's class identifier
+   selects, unless the slot is already busy or waiting. */
 
+INCLUDE_ASM("asm/levels", func_L11_00445D28);
 INCLUDE_ASM("asm/levels", func_L11_00445DF8);
 
 INCLUDE_ASM("asm/levels", func_L11_00446020);

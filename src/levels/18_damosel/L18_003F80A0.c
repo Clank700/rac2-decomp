@@ -1,5 +1,7 @@
 #include "include_asm.h"
 
+typedef int TI128 __attribute__((mode(TI)));
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -69,6 +71,8 @@ INCLUDE_ASM("asm/levels", func_L18_0042EBB8);
 
 INCLUDE_ASM("asm/levels", func_L18_0042F308);
 
+extern int *D_L18_001FE480[];
+
 INCLUDE_ASM("asm/levels", func_L18_0042F688);
 
 extern void func_002A7750(u8 *arg0, s32 arg1, s32 arg2);
@@ -83,10 +87,6 @@ void func_L18_0042F768(u8 *a0) {
 }
 
 INCLUDE_ASM("asm/levels", func_L18_0042F7B8);
-
-INCLUDE_ASM("asm/levels", func_L18_0042FAA8);
-
-
 
 INCLUDE_ASM("asm/levels", func_L18_0042FBC8);
 
@@ -265,8 +265,6 @@ void func_L18_00432F18(u8 *a0) {
     func_L18_00433168(a0, 3);
     func_L18_00433168(a0, 4);
 }
-
-INCLUDE_ASM("asm/levels", func_L18_00433088);
 
 INCLUDE_ASM("asm/levels", func_L18_004331D0);
 

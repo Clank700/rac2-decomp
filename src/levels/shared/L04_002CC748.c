@@ -181,7 +181,54 @@ INCLUDE_ASM("asm/levels", func_L04_0039FEF0);
 
 INCLUDE_ASM("asm/levels", func_L04_003A0008);
 
-INCLUDE_ASM("asm/levels", func_L04_003A00E8);
+typedef struct {
+    u8 pad00[0x20];
+    f32 field20;
+    f32 field24;
+    f32 field28;
+    f32 field2C;
+    f32 field30;
+    f32 field34;
+    f32 field38;
+    f32 field3C;
+    f32 field40;
+} D002A00E8Self;
+extern f32 D_002A7A40[];
+extern f32 D_002A7BC0[];
+extern s32 D_002A7D90[];
+extern f32 func_30F3A0(f32 x);
+extern f32 func_30F3B8(f32 x);
+extern f32 func_30FE40(f32 a, f32 b);
+
+void func_L04_003A00E8(D002A00E8Self *p) {
+    f32 a, b, c, d;
+    s32 i;
+    p->field20 = p->field20 + p->field28;
+    if (p->field20 > 1.0f)
+        p->field20 = p->field20 - 1.0f;
+    if (p->field20 < 0.0f)
+        p->field20 = p->field20 + 1.0f;
+    p->field24 = p->field24 + p->field2C;
+    if (p->field24 > 1.0f)
+        p->field24 = p->field24 - 1.0f;
+    if (p->field24 < 0.0f)
+        p->field24 = p->field24 + 1.0f;
+    p->field30 = func_30FE40(p->field30, p->field38);
+    p->field34 = func_30FE40(p->field34, p->field3C);
+    a = p->field20 + func_30F3A0(p->field30) * p->field40;
+    b = p->field24 + func_30F3B8(p->field30) * p->field40;
+    c = p->field20 + func_30F3A0(p->field34) * p->field40;
+    d = p->field24 + func_30F3B8(p->field34) * p->field40;
+    for (i = 0; i < 0x5C; i += 2) {
+        if (D_002A7D90[i >> 1] == 0) {
+            D_002A7A40[i] = D_002A7BC0[i] + a;
+            D_002A7A40[i + 1] = D_002A7BC0[i + 1] + b;
+        } else {
+            D_002A7A40[i] = D_002A7BC0[i] + c;
+            D_002A7A40[i + 1] = D_002A7BC0[i + 1] + d;
+        }
+    }
+}
 
 extern void func_002FD1B8(u32 a0, u32 a1, void *a2);
 void func_L04_003A02A0(u32 a0, u32 a1) {

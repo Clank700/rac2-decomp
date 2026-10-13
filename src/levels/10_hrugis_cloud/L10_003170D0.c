@@ -7,9 +7,11 @@ typedef unsigned short u16;
 typedef unsigned int u32;
 typedef float f32;
 
+typedef int TI128 __attribute__((mode(TI)));
+
 extern u32 *func_0037BA88(u8 *arg0);
 extern s32 func_003351C0(s32 mode);
-extern void func_003737B8(s32 a, s32 b, u8 *c, s32 d);
+extern s32 func_003737B8(s32 a, s32 b, u8 *c, s32 d);
 extern void func_0037BD88(u8 *arg0, u32 flags, s32 a, s32 b, s32 c, s32 d, s32 e,
                           f32 f0, f32 f1, f32 f2, f32 f3);
 extern void func_0037CCB0(u8 *arg0, s32 a1);
@@ -18,6 +20,40 @@ extern void func_0032CBA0(u8 *arg0, s32 a1, s32 a2, s32 a3);
 extern f32 func_00335320(void);
 extern void func_L10_00417F30(u8 *arg0);
 extern void func_L10_00418088(u8 *arg0);
+extern u8 *func_0037B670(u8 *arg0);
+extern void func_0037BC48(u8 *arg0, s32 a1, s32 a2, s32 a3);
+extern s32 func_003062A0(u8 *a0);
+extern s32 func_0037D390(u8 *arg0, s32 a1, s32 a2, s32 a3);
+extern s32 func_00335200(s32 a0, s32 a1);
+extern void func_0032BD98(s32 a0, u8 *a1);
+extern void func_0032AF78(s32 a0);
+extern void func_00308BB8(f32 *a0, u8 *a1, f32 f12);
+extern f32 func_00309138(f32 f12);
+extern f32 func_00309120(f32 f12);
+extern void func_003098F8(f32 *a0, f32 *a1);
+extern void func_003096D8(u8 *a0, f32 *a1, u8 *a2);
+extern void func_00308B30(u8 *a0, u8 *a1, u8 *a2);
+extern void func_00335258(f32 f12, f32 f13);
+extern void func_0033D090(u8 *a0, f32 f12, f32 f13, f32 f14);
+extern void func_00373410(s32 a0);
+extern void func_L10_004184F0(u8 *arg0);
+extern void func_L10_00418588(u8 *arg0);
+extern void func_L10_004189D8(u8 *arg0);
+extern void func_L10_00418AD8(u8 *arg0);
+extern void func_L10_00418BA0(u8 *arg0);
+extern void func_00308AF8(u8 *a0);
+extern void func_0037DFB8(u8 *a0);
+extern void func_0037D7A0(u8 *a0, s32 a1, f32 f12);
+extern s32 func_0037D6E0(u8 *a0);
+extern void func_0037D528(u8 *a0);
+
+extern u8 *D_L10_0020B1E0[];
+extern u8 *D_001B251C;
+extern u8 D_L10_00265BA0[];
+extern u8 D_L10_00188660[];
+extern u8 D_L10_00221CD0[];
+extern s32 D_001B0F44 __attribute__((sda));
+extern s32 D_001B0F48 __attribute__((sda));
 
 
 INCLUDE_ASM("asm/levels", func_L10_003170D0);
@@ -86,7 +122,28 @@ INCLUDE_ASM("asm/levels", func_L10_00417440);
 
 INCLUDE_ASM("asm/levels", func_L10_004174C8);
 
-INCLUDE_ASM("asm/levels", func_L10_004175C8);
+void func_L10_004175C8(u8 *arg0) {
+    u8 *s = *(u8 **)(arg0 + 0x68);
+
+    switch (arg0[0x20]) {
+    case 1:
+        *(f32 *)(s + 0x2CC) = *(f32 *)(s + 0x2CC) + 3.87851e-05f;
+        *(f32 *)(s + 0x2D0) = *(f32 *)(s + 0x2D0) + 3.87851e-05f;
+        if (*(f32 *)(s + 0x2CC) > 0.023271061f)
+            *(f32 *)(s + 0x2CC) = 0.023271061f;
+        if (*(f32 *)(s + 0x2D0) > 0.011635531f)
+            *(f32 *)(s + 0x2D0) = 0.011635531f;
+        break;
+    case 2:
+        *(f32 *)(s + 0x2CC) = *(f32 *)(s + 0x2CC) - 5.8177648e-05f;
+        *(f32 *)(s + 0x2D0) = *(f32 *)(s + 0x2D0) - 5.8177648e-05f;
+        if (*(f32 *)(s + 0x2CC) < 0.0f)
+            *(f32 *)(s + 0x2CC) = 0.0f;
+        if (*(f32 *)(s + 0x2D0) < 0.0f)
+            *(f32 *)(s + 0x2D0) = 0.0f;
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L10_004176C0);
 
@@ -131,7 +188,19 @@ INCLUDE_ASM("asm/levels", func_L10_00418588);
 
 INCLUDE_ASM("asm/levels", func_L10_00418768);
 
-INCLUDE_ASM("asm/levels", func_L10_00418968);
+
+void func_L10_00418968(u8 *arg0) {
+    u8 *s0 = *(u8 **)(arg0 + 0x68);
+    s32 id = *(s32 *)(s0 + 0x26C);
+
+    if (id != -1) {
+        u8 *p = D_L10_00188660 + id * 0x70;
+
+        if (*(u8 **)(p + 0x88) == arg0 && *(u8 *)(p + 0x74) != 0)
+            func_00373410(id);
+    }
+    *(s32 *)(s0 + 0x26C) = -1;
+}
 
 INCLUDE_ASM("asm/levels", func_L10_004189D8);
 

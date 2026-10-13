@@ -58,13 +58,20 @@ extern void func_00340828(void *arg0, s32 arg1, float arg2, float arg3);
 extern int D_L18_001B15F0 __attribute__((sda));
 extern float D_L18_001B15F4 __attribute__((sda));
 extern float D_L18_001B15F8 __attribute__((sda));
-extern u8 D_L18_001B1600[];
+extern u8 D_L18_001B1600[] __attribute__((sda));
 extern float D_L18_001B1610 __attribute__((sda));
 extern u8 D_001C97C0[];
 extern float D_L18_001B1520 __attribute__((sda));
 extern float D_L18_001B1524 __attribute__((sda));
 extern int D_L18_001B1528 __attribute__((sda));
 extern float D_L18_001B152C __attribute__((sda));
+
+extern char D_L18_001B1480[] __attribute__((sda));
+extern char D_L18_001B1490[] __attribute__((nosda));
+
+INCLUDE_ASM("asm/levels", func_L18_0042FAA8);
+
+INCLUDE_ASM("asm/levels", func_L18_00433088);
 
 void func_L18_0042FAE0(u8 *a0, void *a1) {
     u8 buf[0x30];

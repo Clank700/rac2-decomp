@@ -1,5 +1,9 @@
 #include "include_asm.h"
 
+typedef int TI128 __attribute__((mode(TI)));
+
+extern int func_2B3760(int);
+
 INCLUDE_ASM("asm/levels", func_L03_002AB5C8);
 
 INCLUDE_ASM("asm/levels", func_L03_002AD540);
@@ -79,7 +83,11 @@ INCLUDE_ASM("asm/levels", func_L03_0038A6D8);
 
 INCLUDE_ASM("asm/levels", func_L03_0038AB30);
 
-INCLUDE_ASM("asm/levels", func_L03_0038B238);
+/* func_L03_0038B238 is defined in L03_002AB5C8-g8.c (this unit has no $gp access for it). */
+
+extern TI128 D_001A8F20;
+extern void func_2EEFB0(void *, void *, void *);
+extern void func_2EF020(void *, float);
 
 INCLUDE_ASM("asm/levels", func_L03_0038B2E8);
 
@@ -106,6 +114,8 @@ void func_L03_0038B390(unsigned char *a0, int a1, int a2, int a3) {
 }
 
 INCLUDE_ASM("asm/levels", func_L03_0038B408);
+
+extern int D_001AEF60 __attribute__((sda));
 
 INCLUDE_ASM("asm/levels", func_L03_0038B4E8);
 

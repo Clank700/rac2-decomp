@@ -142,7 +142,42 @@ int func_L06_0045A500(char *a0, int a1, int a2)
 
 INCLUDE_ASM("asm/levels", func_L06_0045A5B0);
 
-INCLUDE_ASM("asm/levels", func_L06_0045BD38);
+extern float D_L06_001B234C __attribute__((sda));
+
+extern float D_001B2350 __attribute__((sda));
+
+extern int func_0035CBA0(char *, int, int);
+
+extern void func_L06_0045BE30(char *, int, float, float, float, float);
+
+extern int func_003A0948(int, int, char *);
+
+extern void func_00350388(char *);
+
+void func_L06_0045BD38(char *a0)
+{
+    char *p;
+    int n;
+
+    if (*(unsigned char *)(a0 + 0x20) == 0) {
+        *(unsigned char *)(a0 + 0x20) = 1;
+        *(unsigned short *)(a0 + 0x34) |= 0x800;
+    }
+
+    p = (char *)func_0035CBA0(a0, 0x4010000, 0);
+    if (p != 0 && *(short *)(*(char **)(p + 0x20) + 0xAA) != 0xFE5) {
+        n = 3;
+        if (D_L06_001B234C < 0.8999999761581421f && D_001B2350 < 0.8999999761581421f)
+            n = 0xE;
+
+        func_L06_0045BE30(a0, n, 0.0f, 3.263000011444092f, 1.9739999771118164f,
+                          0.11666667461395264f);
+        func_003A0948(0, 0, a0);
+        func_00350388(a0);
+    } else {
+        *(unsigned char *)(a0 + 0xA8) = 0xFF;
+    }
+}
 
 void func_L06_0045BFC0(unsigned char *a0)
 {

@@ -141,3 +141,10 @@ void func_L23_0041D930(void) {
         *(char **)(state + 0x614) = 0;
     }
 }
+
+/* Zero while the counter is negative. */
+int func_L23_0041C0B0(void) {
+    if (D_L23_001B1694 < 0)
+        return 1;
+    return 0;
+}

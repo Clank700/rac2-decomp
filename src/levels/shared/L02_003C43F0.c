@@ -5,6 +5,14 @@ typedef int TI128 __attribute__((mode(TI)));
 
 extern void func_00282978(void *);
 
+extern void func_00282CF0(float *, const float *, const float *);
+
+extern void func_002AFDD8(unsigned char *, unsigned char *, unsigned char *, int);
+
+extern float func_00283248(float, float);
+
+extern float func_00282E20(char *);
+
 extern float func_002A7878(void *, void *, float, float);
 
 extern float func_002A7940(void);
@@ -21,7 +29,7 @@ extern void func_002B0990(void *, void *, int, float, int);
 
 extern void func_L02_002F1FB8(void *, void *, void *);
 
-extern void func_00282F20(void *, void *, float);
+extern void func_00282F20(char *, char *, float);
 
 extern void func_00282DB0(void *, void *);
 
@@ -138,12 +146,16 @@ void func_L02_003C46E0(struct Outer *p)
         func_002E5DA0(1, 0, g->arr[0], 2198);
 }
 
+/* Clears the sub-object flags of three inline pointer arrays, turns a frame counter into a
+   rotation, and pushes each element's 128-bit block one object forward. */
 INCLUDE_ASM("asm/levels", func_L02_003C4848);
 
 INCLUDE_ASM("asm/levels", func_L02_003C49A0);
 
 INCLUDE_ASM("asm/levels", func_L02_003C4C80);
 
+/* Reads three angles through a helper, converts them, and hands them to the placement call
+   together with the object's own angle. */
 INCLUDE_ASM("asm/levels", func_L02_003C4E18);
 
 INCLUDE_ASM("asm/levels", func_L02_003C4ED8);
@@ -170,8 +182,6 @@ INCLUDE_ASM("asm/levels", func_L02_003CCEA0);
 
 INCLUDE_ASM("asm/levels", func_L02_003CCFE8);
 
-/* Near miss (see work/wave7-20261013/w04/drafts): one instruction over retail, an extra
-   `daddu $v0,$a0,$zero` this compiler inserts before the first call's delay-slot load. */
 INCLUDE_ASM("asm/levels", func_L02_003CD1E8);
 
 INCLUDE_ASM("asm/levels", func_L02_003CD298);
@@ -225,7 +235,28 @@ INCLUDE_ASM("asm/levels", func_L02_003CEA28);
 
 INCLUDE_ASM("asm/levels", func_L02_003CEBB8);
 
-INCLUDE_ASM("asm/levels", func_L02_003CEC70);
+/* Reads the object's basis, clamps its pitch and yaw, and stores them back. */
+void func_L02_003CEC70(char *a0) {
+    char *p = *(char **)(a0 + 0x68);
+    float v[4];
+    float x;
+    float y;
+
+    func_00282CF0(v, (const float *)(p + 0x1F0), (const float *)(a0 + 0x10));
+    func_002AFDD8((unsigned char *)a0, (unsigned char *)v, (unsigned char *)v, 0);
+    x = func_00283248(v[0], v[1]);
+    *(float *)(p + 0x2C0) = x;
+    if (x > 0.7853982448577881f)
+        *(float *)(p + 0x2C0) = 0.7853982448577881f;
+    else if (x < -0.7853982448577881f)
+        *(float *)(p + 0x2C0) = -0.7853982448577881f;
+    y = -func_00283248(func_00282E20((char *)v), v[2]);
+    *(float *)(p + 0x2C8) = y;
+    if (y > 0.523598849773407f)
+        *(float *)(p + 0x2C8) = 0.523598849773407f;
+    else if (y < -0.523598849773407f)
+        *(float *)(p + 0x2C8) = -0.523598849773407f;
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003CED70);
 
@@ -266,7 +297,7 @@ void func_L02_003D1820(char *a0, char *a1) {
 
 INCLUDE_ASM("asm/levels", func_L02_003D1FA0);
 
-INCLUDE_ASM("asm/levels", func_L02_003D28E0);
+/* func_L02_003D28E0 lives in the -g8 sibling: it reads five $gp-relative scalars. */
 
 /* When the +0x3C counter of the object at +0x68 is clear, runs the reset, then the dispatch. */
 void func_L02_003D29D0(char *a0) {
@@ -388,9 +419,7 @@ void func_L02_003FC248(void *a0) {
     func_002A6C58(a0, 0, 3);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003FCDF8);
-
-INCLUDE_ASM("asm/levels", func_L02_003FCF08);
+/* The two entry scalers live in the -g8 sibling: retail reads the table through $gp. */
 
 INCLUDE_ASM("asm/levels", func_L02_003FE768);
 
@@ -417,7 +446,7 @@ INCLUDE_ASM("asm/levels", func_L02_00400D08);
 
 INCLUDE_ASM("asm/levels", func_L02_004012A0);
 
-INCLUDE_ASM("asm/levels", func_L02_004013C0);
+/* func_L02_004013C0 lives in the -g8 sibling: it reads a $gp-relative scalar. */
 
 INCLUDE_ASM("asm/levels", func_L02_00401480);
 
@@ -427,7 +456,7 @@ INCLUDE_ASM("asm/levels", func_L02_00401ED8);
 
 INCLUDE_ASM("asm/levels", func_L02_00402300);
 
-INCLUDE_ASM("asm/levels", func_L02_00402440);
+/* func_L02_00402440 lives in the -g8 sibling: it reads four $gp-relative scalars. */
 
 int func_L02_004024A0(char *a0) {
     return *(short *)(*(char **)(a0 + 0x68) + 0x30);

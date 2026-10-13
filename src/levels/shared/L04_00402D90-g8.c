@@ -26,3 +26,18 @@ void func_L04_0040AC98(void)
 
 /* func_L04_0040AC30 reaches its globals off $gp too, but its body is not matched
    yet; its marker stays in L04_00402D90.c and the attempt is in the wave-8 drafts. */
+
+/* 0x001A8ED0 is absolute in func_L04_0040AC80 and $gp-relative here, so it is
+   reached under a second name, declared small data.  The store to 0x001A8EE4 is
+   written last in the source: cc1 emits the last store of a straight-line run
+   first and then the source order, which is the order retail has. */
+extern unsigned int D_L04_001A8ED0_1 __attribute__((sda));
+
+extern unsigned int D_L04_001A8EE4;
+
+void func_L04_0040ACA8(void)
+{
+    D_L04_001A8EE4 = 1;
+    D_L04_001A8ED0_1 = 2;
+    D_L04_001B0908 = 2;
+}

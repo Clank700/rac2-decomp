@@ -27,3 +27,4 @@ int func_L01_00305E18(int a0)
     return *(short *)(p + a1 * 0x28 + 0x24);
 }
 
+/* func_L01_002F1F70 is defined in L01_002A7248.c (this unit has no $gp access for it). */
