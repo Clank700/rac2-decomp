@@ -166,7 +166,6 @@ extern void func_2CF938(char *, char *);
 
 typedef int TI128 __attribute__((mode(TI)));
 
-INCLUDE_ASM("asm/levels", func_L01_0042A6F0);
 
 INCLUDE_ASM("asm/levels", func_L01_0042DE20);
 

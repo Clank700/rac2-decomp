@@ -27,7 +27,6 @@ extern void func_L04_0046CE68(char *);
 INCLUDE_ASM("asm/levels", func_L04_0046CD68);
 
 /* Arm one queue entry: seed its timers, scale them when it repeats, and start it. */
-INCLUDE_ASM("asm/levels", func_L04_0046CD68);
 void func_L04_0046CE28(char *a0)
 {
     char *s0 = a0;

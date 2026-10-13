@@ -73,7 +73,6 @@ extern void func_L20_00444C18(char *arg0, char *arg1);
 
 INCLUDE_ASM("asm/levels", func_L20_00449AE8);
 
-INCLUDE_ASM("asm/levels", func_L20_00449AE8);
 
 INCLUDE_ASM("asm/levels", func_L20_0044A838);
 
