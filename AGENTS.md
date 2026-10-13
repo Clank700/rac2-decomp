@@ -129,8 +129,10 @@ work in. It was removed on purpose. Do not recreate any of it:
   evidence or binding archives, no code-reuse reports. Anything regenerated belongs in `build/`.
 - **No proofs, receipts, attestations or hash ledgers** for matches. The build is the proof and
   anyone can rerun it.
-- **No campaign machinery**: no queues, registers, reservations, lots, "owner-local" publication
-  routes, merge-queue scripts or PR-description validators.
+- **No in-repository campaign machinery**: no committed queues, registers, reservation databases,
+  lots, "owner-local" publication routes, merge-queue scripts or PR-description validators.
+  Contributor scope coordination through issue #152 is separate from this rule and must not be
+  represented by committed reservation files or databases.
 - **No document per batch of work** ("Nth C lot", evidence notes, experiment registers). Put what
   was learned in a commit message, or in an existing doc if it is lasting knowledge.
 - **No progress that counts a function more than once.** `tools/progress.py` counts each distinct
@@ -173,8 +175,10 @@ regenerates them conflicts with every other one. So pull requests do not touch t
 5. Never force-push a shared branch, never rewrite `master`, never merge your own PR unless you
    are a maintainer and the checks pass.
 
-If several agents work at once, give each its own branch (or worktree) and its own functions;
-they meet in pull requests, not in a shared queue or reservation system.
+If several agents work at once, give each its own branch (or worktree) and its own functions.
+Coordinate contributor scopes through issue #152; agents within the same contributor's claimed
+scope may divide work locally. Their code meets in pull requests, not through committed queues or
+reservation files.
 
 ## Which model does what
 
@@ -226,6 +230,23 @@ A scope may be:
 - one source directory;
 - one source file;
 - a related group of source files.
+
+### Active scopes are exclusive
+
+Before starting matching work, read the current comments in issue #152.
+
+Do not work inside another contributor's active scope unless they explicitly agree. A directory
+claim includes the files and functions beneath it.
+
+Before claiming a new scope, fetch `origin/master`, check issue #152, update your existing comment,
+then re-check for overlap before starting.
+
+Claims remain active until the work reaches `master` or the contributor explicitly abandons them.
+
+Prefer level, directory, file, or related-file scopes; use individual functions only when necessary.
+
+These rules apply to all matching work, including AI/automated matching and matches carried from
+another OpenRAC decompilation.
 
 For example:
 
