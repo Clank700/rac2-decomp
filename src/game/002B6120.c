@@ -7,7 +7,7 @@ typedef struct { float x; float y; int pad[2]; } T16_Fd6e0d08a;
 
 extern void *func_L00_0032C638_1(void *, void *);
 
-extern void func_002B6228(void *, void *, int, int);
+extern int func_002B6228(void *, void *, int, int);
 
 extern float func_00283248_9(float, float);
 
@@ -120,9 +120,24 @@ int func_002B6120(char *s1, char *s2)
 
 INCLUDE_ASM("asm/game", func_002B6220);
 
-INCLUDE_ASM("asm/game", func_002B6228);
+extern char *func_002B5D28(void *);
 
-INCLUDE_ASM("asm/game", func_002B62A0);
+int func_002B6228(void *kind, void *raw_data, int count, int value)
+{
+    unsigned short *data = raw_data;
+    char *p = func_002B5D28(kind);
+    if (p == 0)
+        return 0;
+    *(unsigned short **)(p + 0xC4) = data;
+    if (count == -1)
+        *(short *)(p + 0xCA) = data[0] - 1;
+    else
+        *(short *)(p + 0xCA) = count;
+    *(short *)(p + 0xC8) = value;
+    return 1;
+}
+
+/* func_002B62A0 is matched in 002B6120-g8.c (-G8 small data). */
 
 INCLUDE_ASM("asm/game", func_002B62F8);
 
@@ -156,9 +171,22 @@ void func_002B6770(int arg0, long arg1) {
     }
 }
 
+extern char D_00188660[];
+
 INCLUDE_ASM("asm/game", func_002B6788);
 
-INCLUDE_ASM("asm/game", func_002B67E0);
+extern void func_001325E8(int, void (*)(int, long), unsigned long);
+
+void func_002B67E0(int a0, int index) {
+    char *b = D_00188660;
+    char *q;
+    unsigned long addr;
+    b = b + 0x17A0;
+    q = b + index * 4;
+    *(unsigned int *)q = 0xFFFFFFFFu;
+    addr = (unsigned long)(unsigned int)q;
+    func_001325E8(a0, func_002B6770, addr);
+}
 
 INCLUDE_ASM("asm/game", func_002B6828);
 
@@ -250,7 +278,20 @@ void func_002B7AD0(void) {
 
 INCLUDE_ASM("asm/game", func_002B7B18);
 
-INCLUDE_ASM("asm/game", func_002B7BC0);
+extern int func_002B7B18(int, int, int);
+
+typedef struct { u8 pad[0x18]; int first, second; } PairState;
+
+int func_002B7BC0(int a, int b, int c, int first, int second)
+{
+    int result = func_002B7B18(a, b, c);
+    if (result != 0) {
+        PairState *state = (PairState *)D_001A63A8;
+        state->first = first;
+        state->second = second;
+    }
+    return result;
+}
 
 s32 func_002B7C10(s32 a0, s32 a1, s32 a2) {
     CdMode mode = D_001A63E8;

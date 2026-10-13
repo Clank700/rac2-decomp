@@ -73,7 +73,19 @@ void func_00336A78(char *o)
 /* Complete boot bodies from liolu PRs #72 and #75; refreshed in one combined batch. */
 void func_00336B90(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x40) = a1; }
 
-INCLUDE_ASM("asm/game", func_00336B98);
+void func_00336B98(char *object, int value)
+{
+    unsigned int limit = *(unsigned int *)(object + 0x40);
+    unsigned int clamped;
+    if (limit < (unsigned int)value) clamped = limit;
+    else clamped = value;
+    if ((float)limit == 0.0f) {
+        **(float **)(object + 4) = 0.0f;
+        return;
+    }
+    **(float **)(object + 4) = ((float)clamped / (float)*(unsigned int *)(object + 0x40)) * (float)*(unsigned int *)(object + 0x3C);
+}
+
 
 /* Measured target: byte-identical across all 27 levels. */
 void func_00336CC0(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x38) = a1; }

@@ -104,7 +104,16 @@ INCLUDE_ASM("asm/game", func_0028AFE8);
 
 INCLUDE_ASM("asm/game", func_0028B160);
 
-INCLUDE_ASM("asm/game", func_0028B288);
+extern char *D_001BAF3C;
+extern char * volatile D_001B1880 __attribute__((sda));
+extern char * volatile D_001B1884 __attribute__((sda));
+
+void func_0028B288(void)
+{
+    char *p = D_001BAF3C;
+    D_001B1880 = p;
+    D_001B1884 = p + 0x64000;
+}
 
 INCLUDE_ASM("asm/game", func_0028B2B8);
 

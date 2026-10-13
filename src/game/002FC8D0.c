@@ -186,7 +186,17 @@ INCLUDE_ASM("asm/game", func_002FDF40);
 
 INCLUDE_ASM("asm/game", func_002FE5A0);
 
-INCLUDE_ASM("asm/game", func_002FE880);
+extern void func_002FE8D8(void *, float *);
+extern void func_00282D30(float *, float *, float);
+extern void func_00282CF0(float *, float *, float *);
+
+void func_002FE880(void *object, float *destination, float scale)
+{
+    float vector[4];
+    func_002FE8D8(object, vector);
+    func_00282D30(vector, vector, scale);
+    func_00282CF0(destination, destination, vector);
+}
 
 INCLUDE_ASM("asm/game", func_002FE8D8);
 
@@ -233,7 +243,21 @@ INCLUDE_ASM("asm/game", func_002FF290);
 
 INCLUDE_ASM("asm/game", func_002FF300);
 
-INCLUDE_ASM("asm/game", func_002FF3F8);
+extern char *D_001B2348 __attribute__((sda));
+extern void func_002FF290(char *, int);
+
+void func_002FF3F8(void)
+{
+    char *object;
+    func_002FF290(D_001B2348, 0x3EF);
+    object = D_001B2348;
+    *(unsigned char *)(object + 0x30) = 255;
+    *(unsigned short *)(object + 0x34) |= 0x43;
+    *(int *)(object + 0x98) = 0;
+    *(float *)(object + 0x18) = 5.0f;
+    *(float *)(object + 0x14) = 5.0f;
+    *(float *)(object + 0x10) = 5.0f;
+}
 
 INCLUDE_ASM("asm/game", func_002FF450);
 

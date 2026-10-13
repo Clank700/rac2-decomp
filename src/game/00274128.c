@@ -176,7 +176,39 @@ int func_00274BA8(void *p, void *q, void *r, float f12, float f13)
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_00274C90);
+extern float func_00283CE0(int);
+extern void func_00282D30(void *, void *, float);
+int func_00274C90(char *object, float *output, int limit)
+{
+    char *data = *(char **)(*(char **)(object + 0x24) + 0x10);
+    char *entry, *base;
+    float scale;
+    int count, remaining;
+    float *cursor;
+    if (!data)
+        return 0;
+    count = *(int *)(data + 0xC) / 8;
+    base = data + *(int *)(data + 4);
+    scale = *(float *)(object + 0x2C) * (1.0f / 1024.0f);
+    if (limit < count)
+        count = limit;
+    entry = base + 16;
+    if (count > 0) {
+    cursor = output;
+    remaining = count;
+    do {
+        remaining--;
+        cursor[0] = func_00283CE0(*(short *)entry);
+        cursor[1] = func_00283CE0(*(short *)(entry + 2));
+        cursor[2] = func_00283CE0(*(short *)(entry + 4));
+        entry += 8;
+        func_00282D30(cursor, cursor, scale);
+        cursor[3] = 1.0f;
+        cursor += 4;
+    } while (remaining);
+    }
+    return count;
+}
 
 INCLUDE_ASM("asm/game", func_00274D90);
 
@@ -297,7 +329,18 @@ int func_0027A1D0(float x, int a, int b, int c, int d, int e, int g)
 
 INCLUDE_ASM("asm/game", func_0027A288);
 
-INCLUDE_ASM("asm/game", func_0027A9A0);
+extern int D_001B1710 __attribute__((sda));
+extern char D_001BADC0[];
+extern void func_00282A60(void *, int, int);
+extern void func_0027A288(void);
+
+void func_0027A9A0(void)
+{
+    if (D_001B1710 == 0)
+        func_00282A60(D_001BADC0, -1, 0x80);
+    else if (D_001B1710 == 2)
+        func_0027A288();
+}
 
 INCLUDE_ASM("asm/game", func_0027A9F0);
 

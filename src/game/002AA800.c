@@ -610,6 +610,19 @@ void func_002AFDD8(char *a0, char *a1, char *a2, char *a3)
 
 INCLUDE_ASM("asm/game", func_002AFE40);
 
-INCLUDE_ASM("asm/game", func_002AFE58);
+extern void func_00282F70(char *, char *, float);
+extern void func_00283098(char *, char *, char *);
 
-INCLUDE_ASM("asm/game", func_002AFEB8);
+void func_002AFE58(char *object, char *out, char *in, char *transform, float scale)
+{
+    func_002AFDD8(object, out, in, transform);
+    func_00282F70(out, out, scale);
+    func_00283098(out, out, object + 0xC0);
+}
+
+void func_002AFEB8(char *object, char *out, char *in, char *transform, float z)
+{
+    func_002AFDD8(object, out, in, transform);
+    *(float *)(out + 8) = z;
+    func_00283098(out, out, object + 0xC0);
+}
