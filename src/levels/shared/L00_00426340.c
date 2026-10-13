@@ -376,7 +376,35 @@ INCLUDE_ASM("asm/levels", func_L00_004291A0);
 
 INCLUDE_ASM("asm/levels", func_L00_00429568);
 
-INCLUDE_ASM("asm/levels", func_L00_00429C18);
+extern int D_0018C0BC;
+extern int D_0018C0B4;
+extern int func_L00_004290C0(char *, char *);
+
+int func_L00_00429C18(char *self, char *target)
+{
+    char *entry = *(char **)(D_L00_001B1844 + *(short *)(self + 0x84) * 0x20 + 0x1C);
+
+    if (*(unsigned char *)(entry + 0x39) != 0) {
+        return -1;
+    }
+    if (*(unsigned char *)(entry + 0x38) != 0 && *(short *)(target + 0x86) != 0x13) {
+        return 1;
+    }
+    if (target != 0 && *(short *)(target + 0x7E) == 0 &&
+        *(unsigned char *)(target + 0x7C) >= *(unsigned char *)(self + 0x7C)) {
+        return 0;
+    }
+    if (func_L00_004290C0(self, target) == 0) {
+        return 0;
+    }
+    if (*(int *)(entry + 0x48) >= 0 && D_0018C0BC != *(int *)(entry + 0x48)) {
+        return 0;
+    }
+    if (*(int *)(entry + 0x44) >= 0 && D_0018C0B4 != *(int *)(entry + 0x44)) {
+        return 0;
+    }
+    return 1;
+}
 
 void func_L00_00429CE0(void)
 {

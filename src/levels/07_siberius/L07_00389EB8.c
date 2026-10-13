@@ -129,7 +129,7 @@ void func_L07_003EBBE8(char *arg, int a1, int a2, int a3, int a4)
     func_L07_002E2090(arg, a1, a2, arg + 0xF0, r, a3, a4);
 }
 
-INCLUDE_ASM("asm/levels", func_L07_003EBC90);
+
 
 INCLUDE_ASM("asm/levels", func_L07_003EE3B0);
 

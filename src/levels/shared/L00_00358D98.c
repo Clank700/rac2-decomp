@@ -128,7 +128,24 @@ int func_L00_0035F6D8(int a0, int a1, int a2, int a3, int a4, int a5)
 
 INCLUDE_ASM("asm/levels", func_L00_0035F7E8);
 
-INCLUDE_ASM("asm/levels", func_L00_0035F8D0);
+void func_L00_0035F8D0(int value60, int selector68, int value64, int axis69, int mode6A)
+{
+    Rac2Native_acdcf1600d770d3b_ScalarConfigure116State *state = D_00188660_2;
+    state->value_60 = value60;
+    if (state->selector_68 != selector68) {
+        state->selector_68 = selector68;
+        state->dirty_6b |= 1;
+    }
+    if (state->value_64 != value64) {
+        state->value_64 = value64;
+        state->dirty_6b |= 4;
+    }
+    if (state->axis_69 != axis69 || state->mode_6a != mode6A) {
+        state->mode_6a = mode6A;
+        state->axis_69 = axis69;
+        state->dirty_6b |= 2;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0035F9F0);
 
@@ -187,7 +204,7 @@ int func_L00_00367720(void) {
 
 INCLUDE_ASM("asm/levels", func_L00_00368F58);
 
-INCLUDE_ASM("asm/levels", func_L00_0036ADB0);
+
 
 INCLUDE_ASM("asm/levels", func_L00_0036AE00);
 

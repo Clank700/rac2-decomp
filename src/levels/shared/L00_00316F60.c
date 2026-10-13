@@ -95,6 +95,9 @@ extern void func_0029F338_3(void *object);
 
 typedef unsigned int u32;
 
+extern u8 D_L00_00268E20;
+extern s32 D_L00_001A902C __attribute__((sda));
+
 typedef struct {
     u8 prefix[0x40];
     void *payload;
@@ -348,7 +351,18 @@ void func_L00_00323F28(void *a0, void *a1) {
     func_00282CC0(a0, buf, a1);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00323F70);
+extern int D_001A7350 __attribute__((sda));
+extern int D_001A7354 __attribute__((sda));
+extern void func_00279BD8(void *, void *);
+extern int func_00283CF0(f32);
+
+void func_L00_00323F70(void *input, int *out_x, int *out_y) {
+    u8 temporary[8];
+
+    func_00279BD8(temporary, input);
+    *out_x = func_00283CF0(((*(f32 *)temporary) - (f32)D_001A7350) * 0.0625f);
+    *out_y = func_00283CF0(((*(f32 *)(temporary + 4)) - (f32)D_001A7354) * 0.0625f);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00324120);
 
@@ -442,7 +456,7 @@ INCLUDE_ASM("asm/levels", func_L00_00326620);
 
 INCLUDE_ASM("asm/levels", func_L00_003266D8);
 
-INCLUDE_ASM("asm/levels", func_L00_003268E8);
+
 
 extern unsigned char D_001395B8[];
 extern int func_L00_003269F0(void);
@@ -479,11 +493,21 @@ INCLUDE_ASM("asm/levels", func_L00_0032A088);
 
 INCLUDE_ASM("asm/levels", func_L00_0032A0B8);
 
-INCLUDE_ASM("asm/levels", func_L00_0032A0E8);
+void func_L00_0032A0E8(void) {
+    u8 *current = &D_L00_00268E20;
+    u8 *end = current + 0x14860;
 
-INCLUDE_ASM("asm/levels", func_L00_0032A138);
+    D_L00_001A902C = 0;
+    do {
+        *(s32 *)(current + 4) = -1;
+        *(s32 *)current = 0;
+        current += 0xA430;
+    } while ((s32)current < (s32)end);
+}
 
-INCLUDE_ASM("asm/levels", func_L00_0032A170);
+
+
+
 
 INCLUDE_ASM("asm/levels", func_L00_0032A1A8);
 

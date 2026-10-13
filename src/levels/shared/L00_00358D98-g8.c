@@ -35,3 +35,14 @@ void func_L00_00374708(void)
     else if (v == 3)
         func_L00_00373D40(&D_001B2590, &D_001B2594);
 }
+
+extern int D_L00_001AD410 __attribute__((sda));
+extern void ref_L00_0036ADB0_00(void *, float);
+void func_L00_0036ADB0(void)
+{
+    int i = 0;
+    do {
+        ref_L00_0036ADB0_00((void *)(D_L00_001AD410 + i * 64), 1.0f);
+        i++;
+    } while (i < 64);
+}
