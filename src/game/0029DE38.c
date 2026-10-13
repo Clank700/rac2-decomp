@@ -163,7 +163,23 @@ float func_0029F530(char *s1)
 
 INCLUDE_ASM("asm/game", func_0029F628);
 
-INCLUDE_ASM("asm/game", func_0029F648);
+extern int func_00282A18(int);
+
+void func_0029F648(char *object, int *count, int *value)
+{
+    char *p = *(char **)(object + 0x24);
+    int index = *(unsigned char *)(p + 0x2C);
+    if (index != 0) {
+        int n;
+        index = (int)p + (index << 4);
+        n = *(short *)(index + 2);
+        *count = n;
+        *value = func_00282A18(n * 2);
+    } else {
+        *count = 0;
+        *value = 0;
+    }
+}
 
 void func_0029F6A0(
     unsigned char *obj, unsigned int index, unsigned char *dest)
@@ -364,11 +380,39 @@ out:
     }
 }
 
-INCLUDE_ASM("asm/game", func_0029FFB8);
+extern int D_0018C0B0;
+extern float D_001B1B90[];
+extern void func_002A04E8(int, float *);
+extern float func_00283248(float, float);
+extern float func_00283180(float);
+extern float func_00283198(float);
+
+void func_0029FFB8(void)
+{
+    float v[2];
+    float a;
+
+    func_002A04E8(D_0018C0B0, v);
+    a = func_00283248(v[0], v[1]);
+    D_001B1B90[0] = func_00283180(a) * 0.14f;
+    D_001B1B90[1] = func_00283198(a) * 0.14f;
+    D_001B1B90[2] = -0.99f;
+}
 
 INCLUDE_ASM("asm/game", func_002A0048);
 
-INCLUDE_ASM("asm/game", func_002A0180);
+extern void func_0011AEA0(int);
+extern char D_00238F00[];
+extern void *D_001B16B0 __attribute__((sda));
+extern int D_001B16B4 __attribute__((sda));
+extern void func_002A4D88(void *, int);
+
+void func_002A0180(void)
+{
+    func_0011AEA0(0);
+    func_00282B50((void *)0x70003800, D_00238F00, 0x800);
+    func_002A4D88(D_001B16B0, D_001B16B4);
+}
 
 void func_002A01C8(void)
 {
@@ -393,7 +437,21 @@ INCLUDE_ASM("asm/game", func_002A0250);
 
 INCLUDE_ASM("asm/game", func_002A0300);
 
-INCLUDE_ASM("asm/game", func_002A0380);
+extern void func_0029FDF0(void);
+extern void func_002A0180(void);
+extern int func_002A0048(void);
+extern int D_001B1B80;
+
+int func_002A0380(void)
+{
+    int result;
+    func_0029FDF0();
+    func_002A0180();
+    result = D_001B1B80;
+    if (result != 0)
+        result = func_002A0048();
+    return result;
+}
 
 
 INCLUDE_ASM("asm/game", func_002A03C0);

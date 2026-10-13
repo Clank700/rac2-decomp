@@ -61,7 +61,16 @@ INCLUDE_ASM("asm/game", func_002E7570);
 
 INCLUDE_ASM("asm/game", func_002E76C0);
 
-INCLUDE_ASM("asm/game", func_002E7B48);
+extern unsigned int D_001A7AF0 __attribute__((sda));
+extern void func_002E76C0(void *, int, int);
+
+void func_002E7B48(void *object)
+{
+    int count = ((D_001A7AF0 >> 4) & 1) ? 3 : 1;
+    int index;
+    for (index = 0; index < count; index++)
+        func_002E76C0(object, index, 0);
+}
 
 INCLUDE_ASM("asm/game", func_002E7BC0);
 

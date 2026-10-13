@@ -367,7 +367,15 @@ void func_002A8C00(char *a, int b, int c, float d, Quad16 *q) {
 
 INCLUDE_ASM("asm/game", func_002A8C28);
 
-INCLUDE_ASM("asm/game", func_002A8D70);
+extern void func_0029FCC0(void *, void *, float *);
+extern int func_002A8C28(void *, float, float *, int, float, float, int, int, int);
+
+int func_002A8D70(float x, float y, float z, void *object, void *source, int mode, int first, int second, int third)
+{
+    float vector[4];
+    func_0029FCC0(object, source, vector);
+    return func_002A8C28(object, x, vector, mode, y, z, first, second, third);
+}
 
 INCLUDE_ASM("asm/game", func_002A8E18);
 

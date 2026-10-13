@@ -20,7 +20,24 @@ INCLUDE_ASM("asm/game", func_002DE550);
 
 INCLUDE_ASM("asm/game", func_002DE618);
 
-INCLUDE_ASM("asm/game", func_002DE6F0);
+extern int D_001B1F50[] __attribute__((sda));
+extern int D_001B1F54[] __attribute__((sda));
+
+int func_002DE6F0(int key)
+{
+    int count = 0;
+    unsigned int large = 0x4F000;
+    int *flags = D_001B1F54;
+    int *keys = D_001B1F50;
+    do {
+        count++;
+        if (*keys == key)
+            return (*flags & 1) ? large : 0x11800;
+        flags += 2;
+        keys += 2;
+    } while (count < 5);
+    return -1;
+}
 
 /* authored C for independently verified level-native body */
 s32 func_002DE750(s32 key) {
@@ -35,7 +52,24 @@ s32 func_002DE750(s32 key) {
  return 1;
 }
 
-INCLUDE_ASM("asm/game", func_002DE7A0);
+int func_002DE7A0(int key)
+{
+    int count = 0;
+    int mask = -5;
+    int *flags = D_001B1F54;
+    int *keys = D_001B1F50;
+    do {
+        count++;
+        if (*keys != key) {
+            flags += 2;
+            keys += 2;
+            continue;
+        }
+        *flags &= mask;
+        return 0;
+    } while (count < 5);
+    return 1;
+}
 
 INCLUDE_ASM("asm/game", func_002DE7F0);
 
@@ -69,4 +103,4 @@ void func_002DF158(s32 object, s32 amount)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002DF190);
+/* func_002DF190 is matched in 002DDEC8-g8.c (-G8 small data). */
