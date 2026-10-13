@@ -39,11 +39,6 @@ extern void func_3FC1B0(int, int);
 
 typedef int TI128 __attribute__((mode(TI)));
 
-/* Quadword copy, as the game's own macro wrote it (lq/sq through a materialised address). */
-static __inline__ void qcopy(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
-}
-
 INCLUDE_ASM("asm/levels", func_L02_0040A4A8);
 
 INCLUDE_ASM("asm/levels", func_L02_0040B0F8);

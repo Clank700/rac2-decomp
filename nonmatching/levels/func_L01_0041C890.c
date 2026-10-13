@@ -1,6 +1,16 @@
 /* Near miss from src/levels/shared/L01_00397110-g8.c: the build refuses this body at its
    place — 196 bytes, expected 204. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L01_00397110-g8.c. */
+extern float func_002E4460(float, float);
+
+extern void func_002E3470(void *, void *, void *);
+
+extern float D_L01_001B1B24 __attribute__((sda));
+
+extern void func_00306250(char *);
+
 void func_L01_0041C890(char *a0)
 {
     char *s0 = *(char **)(a0 + 0x68);

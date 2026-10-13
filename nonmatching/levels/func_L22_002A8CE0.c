@@ -1,6 +1,16 @@
 /* Near miss from src/levels/shared/L22_002A8B98.c: the build refuses this body at its
    place — 168 bytes, expected 184. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L22_002A8B98.c. */
+extern char D_00189E20[];
+
+extern unsigned char D_00139568[];
+
+extern char D_L22_002645F0[];
+
+extern int func_L00_002ADEA0(int index);
+
 int func_L22_002A8CE0(int a0)
 {
     char *p = D_00189E20;

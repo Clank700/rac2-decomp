@@ -1,6 +1,16 @@
 /* Near miss from src/levels/07_siberius/L07_003F4578-g8.c: the build refuses this body at its
    place — instruction at +0x30 differs. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/07_siberius/L07_003F4578-g8.c. */
+typedef unsigned char      u8;
+
+typedef signed int         s32;
+
+extern u8 *D_L07_001B22DC __attribute__((sda));
+
+extern void func_317520(u8 *a, u8 *b, u8 *c, u8 *d, u8 *e, u8 *f);
+
 void func_L07_0040F6B8(u8 *a0)
 {
     u8 *p = *(u8 **)(a0 + 0x68);

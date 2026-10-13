@@ -1,9 +1,13 @@
 /* Near miss from src/levels/shared/L01_00397110-g8.c: the build refuses this body at its
    place — instruction at +0x18 differs. Kept as a starting point;
    not linked, not counted. */
-extern void func_L01_00397EB0(char *);
 
-INCLUDE_ASM("asm/levels", func_L01_00397870);
+/* Standalone declarations recovered from src/levels/shared/L01_00397110-g8.c. */
+extern int func_003104E8(int);
+
+extern void func_002E3470(void *, void *, void *);
+
+extern void func_L01_00397EB0(char *);
 
 extern float D_L01_001AF554 __attribute__((sda));
 

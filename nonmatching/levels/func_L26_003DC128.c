@@ -1,6 +1,16 @@
 /* Near miss from src/levels/26_jamming_array/L26_002EC840-g8.c: the build refuses this body at its
    place — instruction at +0x0 differs. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/26_jamming_array/L26_002EC840-g8.c. */
+typedef unsigned char u8;
+
+typedef unsigned short u16;
+
+extern u8 *D_L26_001B1C1C __attribute__((sda));
+
+extern unsigned char D_L26_001FA6E0[];
+
 void func_L26_003DC128(u8 *a0) {
     u8 st = *(u8 *)(a0 + 0x21);
 

@@ -1,6 +1,10 @@
 /* Near miss from src/levels/18_damosel/L18_00433460.c: the build refuses this body at its
    place — 280 bytes, expected 288. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/18_damosel/L18_00433460.c. */
+typedef int TI128 __attribute__((mode(TI)));
+
 void func_L18_0043F308(float *out, float *p0, float *p1, float *p2, float *p3, float t) {
     float t2, t3;
     float a, b, c, d, e1, e2, e3, e;

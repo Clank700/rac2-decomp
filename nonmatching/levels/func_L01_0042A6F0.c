@@ -1,5 +1,15 @@
 /* Near miss from src/levels/shared/L01_00397110.c: the build refuses this body at its place.
    Kept as a starting point; not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L01_00397110.c. */
+extern char D_001B9380[];
+
+extern char D_00189EA0[];
+
+extern void func_2CF938(char *, char *);
+
+typedef int TI128 __attribute__((mode(TI)));
+
 void func_L01_0042A6F0(int a0, int a1)
 {
     char *p = *(char **)(D_001B9380 + 0x190);

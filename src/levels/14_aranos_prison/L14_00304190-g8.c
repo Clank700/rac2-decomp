@@ -2,11 +2,6 @@
 
 /* This unit is built with -G8: these two bodies reach a global through $gp. */
 
-/* Quadword copy, as the game's own macro wrote it (lq/sq through a materialised address). */
-static __inline__ void qcopy(void *dst, void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)" : : "r"(dst), "r"(src) : "$2", "memory");
-}
-
 extern int D_001A79F0;
 extern int D_001A72E0;
 extern int D_L14_001B23D0 __attribute__((sda));

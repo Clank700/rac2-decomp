@@ -1,6 +1,22 @@
 /* Near miss from src/levels/01_oozla/L01_002BEB90.c: the build refuses this body at its
    place — 244 bytes, expected 276. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/01_oozla/L01_002BEB90.c. */
+typedef int TI128 __attribute__((mode(TI)));
+
+extern int D_L01_001A79F0;
+
+extern int D_L01_001BD1F4;
+
+extern char D_L01_001BD1C0[];
+
+extern void func_2E3738(void *, void *, float);
+
+extern void func_2E3470(void *, void *, void *);
+
+extern void func_2E2608(void *, int, int, unsigned int, int);
+
 void func_L01_002F21F0(char *arg0) {
     char buffer[0x50];
     char *end = buffer + 0x40;

@@ -7,6 +7,9 @@ Recorded candidate sizes, profiles and differences describe the retained experim
 verified behavior. Declaration repairs and symbol renaming are not new match measurements.
 Drafts marked G8 need a `-g8.c` source unit when checked again.
 
+Extracted drafts may still need the original source unit's types and declarations. Their
+recorded checks describe the original compilation unit, not standalone syntax or verified behavior.
+
 | Function | Size | Bytes that differ |
 | --- | ---: | ---: |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
@@ -35,6 +38,81 @@ Drafts marked G8 need a `-g8.c` source unit when checked again.
 | [func_00341E58](game/func_00341E58.c) | 52 | check.py 28/28, but level 00 cannot place it: needs .text.func_00341E90 at its place, which is not C |
 | [func_0034E478](game/func_0034E478.c) | 64 | check.py 28/28, but level 00 cannot place it: needs .text.func_0034E4B8 at its place, which is not C |
 | [func_00351A38](game/func_00351A38.c) | 72 | check.py 28/28, but level 00 cannot place it: needs .text.func_00351938 at its place, which is not C |
+
+| [`func_L01_002F21F0`](levels/func_L01_002F21F0.c) | 276 | Recorded candidate is 244 bytes; size does not match retail. |
+| [`func_L01_00378A80`](levels/func_L01_00378A80.c) | 156 | Recorded G8 candidate is 144 bytes; size does not match retail. |
+| [`func_L01_00397870`](levels/func_L01_00397870.c) | 224 | Recorded G8 instruction mismatch at +0x88. |
+| [`func_L01_00397EB0`](levels/func_L01_00397EB0.c) | 340 | Recorded G8 instruction mismatch at +0x18. |
+| [`func_L01_003993C8`](levels/func_L01_003993C8.c) | 324 | Recorded G8 instruction mismatch at +0x4. |
+| [`func_L01_003CDD00`](levels/func_L01_003CDD00.c) | 344 | Recorded candidate is 352 bytes; size does not match retail. |
+| [`func_L01_003DBB88`](levels/func_L01_003DBB88.c) | 304 | Recorded candidate is 312 bytes; size does not match retail. |
+| [`func_L01_003E9CF8`](levels/func_L01_003E9CF8.c) | 324 | Recorded G8 instruction mismatch at +0x0. |
+| [`func_L01_0041C890`](levels/func_L01_0041C890.c) | 204 | Recorded G8 candidate is 196 bytes; size does not match retail. |
+| [`func_L01_0042A568`](levels/func_L01_0042A568.c) | 380 | Recorded candidate is 372 bytes; size does not match retail. |
+| [`func_L01_0042A6F0`](levels/func_L01_0042A6F0.c) | 132 | Build refusal recorded; the exact remaining discrepancy was not recorded. |
+| [`func_L01_0042E0A8`](levels/func_L01_0042E0A8.c) | 248 | Recorded candidate is 244 bytes; size does not match retail. |
+| [`func_L02_003FCBF0`](levels/func_L02_003FCBF0.c) | 172 | Recorded G8 candidate is 180 bytes; size does not match retail. |
+| [`func_L02_004114A0`](levels/func_L02_004114A0.c) | 144 | Recorded link refusal: needs .rodata at its place, which is not C. |
+| [`func_L03_002AB5C8`](levels/func_L03_002AB5C8.c) | 148 | Recorded candidate is 144 bytes; size does not match retail. |
+| [`func_L03_0038B2E8`](levels/func_L03_0038B2E8.c) | 168 | Recorded instruction mismatch at +0x8. |
+| [`func_L03_0038B4E8`](levels/func_L03_0038B4E8.c) | 192 | Recorded candidate is 184 bytes; size does not match retail. |
+| [`func_L03_003CACA8`](levels/func_L03_003CACA8.c) | 204 | Recorded G8 candidate is 212 bytes; size does not match retail. |
+| [`func_L03_003D18F8`](levels/func_L03_003D18F8.c) | 208 | Recorded G8 candidate is 212 bytes; size does not match retail. |
+| [`func_L04_0046CD68`](levels/func_L04_0046CD68.c) | 192 | Recorded G8 instruction mismatch at +0x34. |
+| [`func_L05_00379ED0`](levels/func_L05_00379ED0.c) | 68 | Recorded G8 instruction mismatch at +0x4. |
+| [`func_L05_0037B440`](levels/func_L05_0037B440.c) | 248 | Recorded G8 candidate is 224 bytes; size does not match retail. |
+| [`func_L05_00416EC0`](levels/func_L05_00416EC0.c) | 192 | Recorded candidate is 188 bytes; size does not match retail. |
+| [`func_L05_0041D498`](levels/func_L05_0041D498.c) | 212 | Recorded G8 candidate is 196 bytes; size does not match retail. |
+| [`func_L05_00425FE0`](levels/func_L05_00425FE0.c) | 212 | Recorded G8 candidate is 196 bytes; size does not match retail. |
+| [`func_L05_00426B08`](levels/func_L05_00426B08.c) | 212 | Recorded G8 candidate is 196 bytes; size does not match retail. |
+| [`func_L05_0042BCE0`](levels/func_L05_0042BCE0.c) | 200 | Recorded candidate is 188 bytes; size does not match retail. |
+| [`func_L05_00432080`](levels/func_L05_00432080.c) | 208 | Recorded candidate is 200 bytes; size does not match retail. |
+| [`func_L05_004424B8`](levels/func_L05_004424B8.c) | 168 | Recorded candidate is 180 bytes; size does not match retail. |
+| [`func_L05_00443C18`](levels/func_L05_00443C18.c) | 240 | Recorded candidate is 232 bytes; size does not match retail. |
+| [`func_L05_00445F90`](levels/func_L05_00445F90.c) | 160 | Recorded candidate is 164 bytes; size does not match retail. |
+| [`func_L07_003EF1E0`](levels/func_L07_003EF1E0.c) | 112 | Recorded candidate is 104 bytes; size does not match retail. |
+| [`func_L07_003F68F0`](levels/func_L07_003F68F0.c) | 108 | Recorded G8 candidate is 128 bytes; size does not match retail. |
+| [`func_L07_003F6CF0`](levels/func_L07_003F6CF0.c) | 208 | Recorded G8 candidate is 220 bytes; size does not match retail. |
+| [`func_L07_003F8780`](levels/func_L07_003F8780.c) | 164 | Recorded G8 instruction mismatch at +0x70. |
+| [`func_L07_0040F6B8`](levels/func_L07_0040F6B8.c) | 164 | Recorded G8 instruction mismatch at +0x30. |
+| [`func_L11_00340500`](levels/func_L11_00340500.c) | 72 | Recorded instruction mismatch at +0x8. |
+| [`func_L11_003F2C28`](levels/func_L11_003F2C28.c) | 240 | Recorded G8 candidate is 252 bytes; size does not match retail. |
+| [`func_L11_004395C8`](levels/func_L11_004395C8.c) | 116 | Recorded G8 instruction mismatch at +0x4. |
+| [`func_L11_0044C180`](levels/func_L11_0044C180.c) | 160 | Recorded candidate is 156 bytes; size does not match retail. Volatile quadword-store semantics need review. |
+| [`func_L11_0044C268`](levels/func_L11_0044C268.c) | 192 | Recorded candidate is 164 bytes; size does not match retail. |
+| [`func_L12_00300138`](levels/func_L12_00300138.c) | 108 | Recorded candidate is 100 bytes; size does not match retail. |
+| [`func_L12_00388038`](levels/func_L12_00388038.c) | 84 | Recorded G8 instruction mismatch at +0x4. |
+| [`func_L13_00409840`](levels/func_L13_00409840.c) | 348 | Recorded candidate is 344 bytes; size does not match retail. |
+| [`func_L13_0040A3B0`](levels/func_L13_0040A3B0.c) | 208 | Recorded instruction mismatch at +0x0. |
+| [`func_L13_0040DE50`](levels/func_L13_0040DE50.c) | 228 | Recorded G8 instruction mismatch at +0xc. |
+| [`func_L13_0041BA60`](levels/func_L13_0041BA60.c) | 128 | Recorded candidate is 124 bytes; size does not match retail. |
+| [`func_L14_003DE908`](levels/func_L14_003DE908.c) | 136 | Recorded candidate is 132 bytes; size does not match retail. |
+| [`func_L14_00423B30`](levels/func_L14_00423B30.c) | 164 | Recorded candidate is 140 bytes; size does not match retail. |
+| [`func_L14_00426E60`](levels/func_L14_00426E60.c) | 196 | Recorded G8 instruction mismatch at +0x30. |
+| [`func_L15_0042FD40`](levels/func_L15_0042FD40.c) | 148 | Recorded G8 instruction mismatch at +0xc. |
+| [`func_L15_00432008`](levels/func_L15_00432008.c) | 164 | Recorded G8 candidate is 176 bytes; size does not match retail. |
+| [`func_L18_0042F688`](levels/func_L18_0042F688.c) | 220 | Recorded candidate is 196 bytes; size does not match retail. |
+| [`func_L18_0042FAA8`](levels/func_L18_0042FAA8.c) | 56 | Recorded G8 candidate is 60 bytes; size does not match retail. |
+| [`func_L18_00432630`](levels/func_L18_00432630.c) | 100 | Recorded candidate is 92 bytes; size does not match retail. |
+| [`func_L18_00433088`](levels/func_L18_00433088.c) | 220 | Recorded G8 candidate is 216 bytes; size does not match retail. |
+| [`func_L18_00434FC0`](levels/func_L18_00434FC0.c) | 288 | Recorded instruction mismatch at +0xa8. |
+| [`func_L18_00437AA0`](levels/func_L18_00437AA0.c) | 260 | Recorded G8 candidate is 248 bytes; size does not match retail. |
+| [`func_L18_00439FC8`](levels/func_L18_00439FC8.c) | 332 | Recorded instruction mismatch at +0xec. |
+| [`func_L18_0043F308`](levels/func_L18_0043F308.c) | 288 | Recorded candidate is 280 bytes; size does not match retail. |
+| [`func_L20_002B7A48`](levels/func_L20_002B7A48.c) | 192 | Recorded candidate is 180 bytes; size does not match retail. |
+| [`func_L20_0036E720`](levels/func_L20_0036E720.c) | 92 | Recorded candidate is 88 bytes; size does not match retail. |
+| [`func_L20_0039D7B0`](levels/func_L20_0039D7B0.c) | 204 | Recorded candidate is 192 bytes; size does not match retail. |
+| [`func_L20_003C0350`](levels/func_L20_003C0350.c) | 216 | Recorded instruction mismatch at +0x6c. |
+| [`func_L20_00449AE8`](levels/func_L20_00449AE8.c) | 200 | Recorded G8 instruction mismatch at +0x4. |
+| [`func_L20_00449FD0`](levels/func_L20_00449FD0.c) | 308 | Recorded G8 candidate is 300 bytes; size does not match retail. |
+| [`func_L20_0044A838`](levels/func_L20_0044A838.c) | 180 | Recorded G8 candidate is 184 bytes; size does not match retail. |
+| [`func_L20_0044AA88`](levels/func_L20_0044AA88.c) | 224 | Recorded G8 candidate is 236 bytes; size does not match retail. |
+| [`func_L22_002A8B98`](levels/func_L22_002A8B98.c) | 172 | Recorded instruction mismatch at +0x4. |
+| [`func_L22_002A8CE0`](levels/func_L22_002A8CE0.c) | 184 | Recorded candidate is 168 bytes; size does not match retail. |
+| [`func_L22_003D0840`](levels/func_L22_003D0840.c) | 60 | Recorded candidate is 64 bytes; size does not match retail. |
+| [`func_L22_0040DD20`](levels/func_L22_0040DD20.c) | 32 | Recorded instruction mismatch at +0x8. |
+| [`func_L23_003C19E0`](levels/func_L23_003C19E0.c) | 204 | Recorded G8 candidate is 200 bytes; size does not match retail. |
+| [`func_L26_003DC128`](levels/func_L26_003DC128.c) | 124 | Recorded G8 instruction mismatch at +0x0. |
 
 ## Level functions
 

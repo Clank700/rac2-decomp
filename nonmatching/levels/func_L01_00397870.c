@@ -1,6 +1,30 @@
 /* Near miss from src/levels/shared/L01_00397110-g8.c: the build refuses this body at its
    place — instruction at +0x88 differs. Kept as a starting point;
    not linked, not counted. */
+
+/* Declaration recovered from nonmatching/levels/func_L01_00397EB0.c. */
+extern void func_L01_00397EB0(char *a0);
+
+
+/* Standalone declarations recovered from src/levels/shared/L01_00397110-g8.c. */
+extern float D_L01_001AF50C __attribute__((sda));
+
+extern float D_L01_001AF510 __attribute__((sda));
+
+extern float D_L01_001AF514 __attribute__((sda));
+
+extern float D_L01_001AF528 __attribute__((sda));
+
+extern int D_L01_001AF54C __attribute__((sda));
+
+extern float func_002E3A60(float);
+
+extern float func_002E4460(float, float);
+
+extern int func_003104E8(int);
+
+extern void func_L01_00397A28(char *);
+
 void func_L01_00397870(char *a0)
 {
     char *s1 = *(char **)(a0 + 0x68);

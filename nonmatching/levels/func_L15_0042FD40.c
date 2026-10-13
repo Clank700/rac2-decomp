@@ -1,6 +1,26 @@
 /* Near miss from src/levels/15_gorn/L15_00315428-g8.c: the build refuses this body at its
    place — instruction at +0xc differs. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/15_gorn/L15_00315428-g8.c. */
+extern int D_L15_001B1530 __attribute__((sda));
+
+extern int D_L15_001B1534 __attribute__((sda));
+
+extern int D_L15_001B15C4 __attribute__((sda));
+
+extern unsigned char D_L15_00221E10[];
+
+extern unsigned char D_L15_0029FD80[];
+
+extern int func_80381310(int a0);
+
+extern void func_80380770(int a0, void *a1);
+
+extern void func_80383FB8(void);
+
+extern void func_803807B0(void);
+
 void func_L15_0042FD40(void)
 {
     char *stage = D_L15_00221E10;

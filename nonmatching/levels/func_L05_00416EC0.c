@@ -1,6 +1,18 @@
 /* Near miss from src/levels/05_feltzin_system/L05_00314E28.c: the build refuses this body at its
    place — 188 bytes, expected 192. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/05_feltzin_system/L05_00314E28.c. */
+extern void func_306630(char *dst, char *src, char *src2);
+
+extern void func_306660(char *dst, char *src, char *src2);
+
+extern void func_3066A0(char *dst, char *src, float value);
+
+extern void func_306AD8(char *dst, char *src, char *object);
+
+extern void func_32E728(char *object, int flag, int *mode, char *out);
+
 void func_L05_00416EC0(char *arg0, int arg1) {
     char *sub = *(char **)(arg0 + 0x68);
     int mode;

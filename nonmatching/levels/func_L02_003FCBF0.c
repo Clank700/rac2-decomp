@@ -1,6 +1,10 @@
 /* Near miss from src/levels/02_maktar_nebula/L02_003F5430-g8.c: the build refuses this body at its
    place — 180 bytes, expected 172. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/02_maktar_nebula/L02_003F5430-g8.c. */
+extern char *D_L02_001B1190[] __attribute__((sda));
+
 int func_L02_003FCBF0(char *a0) {
     char *obj = *(char **)(a0 + 0x68);
     char *sub = D_L02_001B1190[*(short *)(obj + 0x120)];

@@ -1,6 +1,32 @@
 /* Near miss from src/levels/01_oozla/L01_003CAFE0.c: the build refuses this body at its
    place — 352 bytes, expected 344. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/01_oozla/L01_003CAFE0.c. */
+typedef unsigned char  u8;
+
+typedef unsigned short u16;
+
+typedef unsigned int   u32;
+
+typedef signed int     s32;
+
+typedef float          f32;
+
+typedef int TI128 __attribute__((mode(TI)));
+
+extern s32 func_2E45B8(f32 a0);
+
+extern void func_3377C8(u32 a0);
+
+extern void func_310060(u8 *a0, s32 a1, s32 a2);
+
+extern void func_310418(u8 *a0, s32 a1, s32 a2);
+
+extern u8 *D_L01_001B255C;
+
+extern u32 D_L01_001FFE80[];
+
 void func_L01_003CDD00(u8 *a0)
 {
     u8 *s0 = *(u8 **)(a0 + 0x68);

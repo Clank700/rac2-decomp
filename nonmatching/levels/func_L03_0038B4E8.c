@@ -1,6 +1,12 @@
 /* Near miss from src/levels/shared/L03_002AB5C8.c: the build refuses this body at its
    place — 184 bytes, expected 192. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L03_002AB5C8.c. */
+typedef int TI128 __attribute__((mode(TI)));
+
+extern int D_001AEF60 __attribute__((sda));
+
 void func_L03_0038B4E8(unsigned char *a0) {
     unsigned char *q = a0;
     unsigned char *p = *(unsigned char **)(q + 0x68);

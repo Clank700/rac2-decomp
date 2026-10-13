@@ -1,6 +1,18 @@
 /* Near miss from src/levels/20_yeedil/L20_0039C448.c: the build refuses this body at its
    place — instruction at +0x6c differs. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/20_yeedil/L20_0039C448.c. */
+extern char *D_L20_001FBB20[];
+
+extern char *D_L20_001B2F9C;
+
+extern float D_L20_0023E670[];
+
+extern float func_00283CE0(int);
+
+extern float func_002A7AA8(float, float, float, float, float);
+
 void func_L20_003C0350(char *arg0) {
     char *state = *(char **)(arg0 + 0x68);
     short *p = (short *)D_L20_001FBB20[*(int *)state];

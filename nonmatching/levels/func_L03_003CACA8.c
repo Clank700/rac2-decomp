@@ -1,6 +1,22 @@
 /* Near miss from src/levels/03_endako/L03_00399230-g8.c: the build refuses this body at its
    place — 212 bytes, expected 204. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/03_endako/L03_00399230-g8.c. */
+typedef unsigned char      u8;
+
+typedef signed int         s32;
+
+typedef float              f32;
+
+extern void func_L03_003CAD78(char *a0);
+
+extern void func_31B920(char *a0, s32 a1, s32 a2);
+
+extern void func_2E77F0(void *a0);
+
+extern f32 D_L03_001B0350[] __attribute__((sda));
+
 void func_L03_003CACA8(char *a0)
 {
     char *s0 = *(char **)(a0 + 0x68);

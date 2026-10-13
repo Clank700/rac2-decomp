@@ -1,6 +1,24 @@
 /* Near miss from src/levels/shared/L04_00417308-g8.c: the build refuses this body at its
    place — instruction at +0x34 differs. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L04_00417308-g8.c. */
+typedef int s32;
+
+extern float D_L04_001B1C8C __attribute__((sda));
+
+extern float D_L04_001B1C90 __attribute__((sda));
+
+extern float D_L04_001B1C94 __attribute__((sda));
+
+extern float D_L04_001B1C98 __attribute__((sda));
+
+extern s32 D_L04_001B1CC4 __attribute__((sda));
+
+extern float func_30EEF8(char *);
+
+extern void func_L04_0046CE68(char *);
+
 void func_L04_0046CD68(char *a0, s32 a1)
 {
     char *v1 = *(char **)(a0 + 0x70);

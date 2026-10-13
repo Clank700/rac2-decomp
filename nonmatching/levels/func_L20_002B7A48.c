@@ -1,6 +1,22 @@
 /* Near miss from src/levels/20_yeedil/L20_002B7A48.c: the build refuses this body at its
    place — 180 bytes, expected 192. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/20_yeedil/L20_002B7A48.c. */
+typedef unsigned char      u8;
+
+typedef signed short       s16;
+
+typedef signed int         s32;
+
+extern char D_00189E20[];
+
+extern char D_L20_00139568[];
+
+extern char D_L20_0026D970[];
+
+extern s32 func_2C0C30(s32 a0);
+
 s32 func_L20_002B7A48(char *a0)
 {
     char *base = D_00189E20;

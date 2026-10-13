@@ -1,6 +1,22 @@
 /* Near miss from src/levels/shared/L05_003D33E8-g8.c: the build refuses this body at its
    place — 196 bytes, expected 212. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L05_003D33E8-g8.c. */
+typedef int TI128 __attribute__((mode(TI)));
+
+extern int func_328508(int);
+
+extern void func_3065F8(int);
+
+extern float func_332C18(void);
+
+extern int D_L05_001D1348 __attribute__((sda));
+
+extern int D_L05_001B2528 __attribute__((nosda));
+
+extern void func_41D728(int);
+
 int func_L05_0041D498(int a0)
 {
     int s1 = a0;

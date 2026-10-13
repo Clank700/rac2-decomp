@@ -1,6 +1,28 @@
 /* Near miss from src/levels/07_siberius/L07_003F4578-g8.c: the build refuses this body at its
    place — 220 bytes, expected 208. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/07_siberius/L07_003F4578-g8.c. */
+typedef unsigned char      u8;
+
+typedef unsigned short     u16;
+
+typedef unsigned int       u32;
+
+typedef signed int         s32;
+
+typedef float              f32;
+
+extern void func_3109C8(u8 *a, s32 b, s32 c);
+
+extern s32 func_312FA8(u8 *a, s32 b, s32 c);
+
+extern f32 func_313008(u8 *a, s32 b);
+
+extern void func_313DD8(void *a, f32 b, f32 c);
+
+extern f32 D_L07_001B0FD0 __attribute__((sda));
+
 void func_L07_003F6CF0(u8 *a0)
 {
     u8 *s1 = *(u8 **)(a0 + 0x68);

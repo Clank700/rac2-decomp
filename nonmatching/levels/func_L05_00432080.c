@@ -1,6 +1,14 @@
 /* Near miss from src/levels/shared/L05_00428350.c: the build refuses this body at its
    place — 200 bytes, expected 208. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L05_00428350.c. */
+extern char *func_328508(char *);
+
+extern void func_32AF08(char *);
+
+typedef int TI128 __attribute__((mode(TI)));
+
 char *func_L05_00432080(char *a0, float f12)
 {
     char *obj = func_328508((char *)0x10E3);

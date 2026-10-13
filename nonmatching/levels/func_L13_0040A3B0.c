@@ -1,6 +1,20 @@
 /* Near miss from src/levels/shared/L13_00406F18.c: the build refuses this body at its
    place — instruction at +0x0 differs. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L13_00406F18.c. */
+extern float func_0032E870(char *, void *, char *);
+
+extern float func_003281B8(void *, char *, int, float, float, float, float);
+
+extern void func_002F8FA0(void *, void *);
+
+extern void func_002F92E8(char *, char *, void *);
+
+extern float func_002F86B0(float);
+
+typedef int TI128 __attribute__((mode(TI)));
+
 float func_L13_0040A3B0(char *a0, char *a1, char *a2, char *a3)
 {
     float tmp[4];

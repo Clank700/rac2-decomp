@@ -1,6 +1,18 @@
 /* Near miss from src/levels/11_joba/L11_004465F8.c: the build refuses this body at its
    place — 164 bytes, expected 192. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/11_joba/L11_004465F8.c. */
+typedef unsigned char      u8;
+
+typedef signed short       s16;
+
+typedef signed int         s32;
+
+extern s32 func_441868(s32 a0, s32 a1);
+
+extern s32 func_33C800(char *a0, s32 a1, s32 a2, s32 a3, float f12, float f13);
+
 void func_L11_0044C268(char *a0)
 {
     char *s1 = a0;

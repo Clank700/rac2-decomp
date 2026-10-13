@@ -1,6 +1,18 @@
 /* Near miss from src/levels/shared/L13_00406F18.c: the build refuses this body at its
    place — 344 bytes, expected 348. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L13_00406F18.c. */
+extern int func_L13_004094C0(char *, char *);
+
+extern void func_003357C8(char *, char *, int, int);
+
+extern void func_L13_004095F8(char *, char *);
+
+extern float func_002F8938(char *, char *);
+
+extern int D_001A79F0;
+
 int func_L13_00409840(char *a0, char *a1)
 {
     char *s0 = func_L13_004094C0(a0, a1);

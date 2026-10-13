@@ -1,6 +1,30 @@
 /* Near miss from src/levels/18_damosel/L18_00433460.c: the build refuses this body at its
    place — instruction at +0xec differs. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/18_damosel/L18_00433460.c. */
+typedef int s32;
+
+typedef unsigned char u8;
+
+extern float func_00283B98(float, float);
+
+extern int D_L18_001C9D40;
+
+extern s32 func_002E59B0(void *, s32);
+
+extern s32 func_002E5CF8(s32, s32, void *);
+
+extern void *func_002A9640(void *, s32, s32);
+
+extern float func_002A96A0(void *, void *);
+
+extern void func_002AB800(void *, void *);
+
+extern void func_002AB8C0(void *, void *);
+
+extern int func_002A7750(void *, int, int);
+
 void func_L18_00439FC8(u8 *obj) {
     u8 *state;
     u8 *p;

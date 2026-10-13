@@ -1,6 +1,27 @@
 /* Near miss from src/levels/shared/L13_00406F18-g8.c: the build refuses this body at its
    place — instruction at +0xc differs. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/shared/L13_00406F18-g8.c. */
+extern float D_L13_001B1310 __attribute__((sda));
+
+extern int D_L13_001B1300 __attribute__((sda));
+
+extern int D_L13_001B1304 __attribute__((sda));
+
+extern int D_L13_001B1308 __attribute__((sda));
+
+extern int D_L13_001B130C __attribute__((sda));
+
+extern float D_L13_001B1314 __attribute__((sda));
+
+extern char *func_003249F0(int, int);
+
+extern float func_00324B10(void);
+
+extern void func_L13_0040DFC0(char *, char *, char *, char *, int, char *, float, float,
+                              float);
+
 void func_L13_0040DE50(char *a0)
 {
     char *g;

@@ -1,6 +1,20 @@
 /* Near miss from src/levels/23_damosel_orbit/L23_0035CE90-g8.c: the build refuses this body at its
    place — 200 bytes, expected 204. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/23_damosel_orbit/L23_0035CE90-g8.c. */
+extern int D_L23_001B36B0;
+
+extern float D_L23_001AFA34 __attribute__((sda));
+
+extern char D_00189EA0[];
+
+extern void func_2F8190(char *out, char *in, char *base);
+
+extern void func_2F8440(char *out, char *in, float scale);
+
+extern float func_2F8268(char *out, char *in);
+
 int func_L23_003C19E0(char *arg0, float *arg1) {
     char buf[16];
 

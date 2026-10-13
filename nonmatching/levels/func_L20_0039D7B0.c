@@ -1,6 +1,20 @@
 /* Near miss from src/levels/20_yeedil/L20_0039C448.c: the build refuses this body at its
    place — 192 bytes, expected 204. Kept as a starting point;
    not linked, not counted. */
+
+/* Standalone declarations recovered from src/levels/20_yeedil/L20_0039C448.c. */
+extern int D_L20_001B2AC8;
+
+extern void func_L20_0039DF18(char *, int);
+
+extern void func_L20_0039D880(char *);
+
+extern void func_L20_0039D680(char *);
+
+extern float func_00283BE0(float, float);
+
+extern void func_002AAA00(char *, char *, int, float, float, float, float);
+
 void func_L20_0039D7B0(char *arg0) {
     char *state;
     float r;
