@@ -59,7 +59,29 @@ INCLUDE_ASM("asm/levels", func_L20_0039DCF8);
 
 extern void func_0029F338(int);
 
-INCLUDE_ASM("asm/levels", func_L20_0039DE88);
+extern void func_002A7750(char *, int, int);
+
+void func_L20_0039DE88(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+    char **p;
+    int i;
+
+    func_002A7750(arg0, 6, 2);
+    *(unsigned short *)(arg0 + 0x34) = (*(unsigned short *)(arg0 + 0x34) | 0x41) & 0xEFFF;
+    *(int *)(arg0 + 0x98) = 0;
+    if (*(int *)(state + 0x254) != 0) {
+        func_0029F338(*(int *)(state + 0x254));
+        *(int *)(state + 0x254) = 0;
+    }
+    p = (char **)(state + 0x258);
+    for (i = 1; i >= 0; i--) {
+        if (*p != 0) {
+            func_0029F338(*p);
+            *p = 0;
+        }
+        p++;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L20_0039DF18);
 

@@ -71,21 +71,64 @@ INCLUDE_ASM("asm/levels", func_L11_00440360);
 
 INCLUDE_ASM("asm/levels", func_L11_00440790);
 
+/* Finds the class entry the identifier names and hands it to that class's handler. */
+extern u8 *D_L11_001FC420[];
+
+extern u8 *D_L11_001B359C;
+
+extern void func_L11_003F2F38(u8 *);
+
+extern void func_L11_00439950(u8 *);
+
 INCLUDE_ASM("asm/levels", func_L11_00440868);
 
 INCLUDE_ASM("asm/levels", func_L11_00440970);
 
 INCLUDE_ASM("asm/levels", func_L11_00440B28);
 
-INCLUDE_ASM("asm/levels", func_L11_00440C80);
+/* Returns the state's 0x200 halfword. */
+s16 func_L11_00440C80(u8 *obj) {
+    return *(s16 *)(*(u8 **)(obj + 0x68) + 0x200);
+}
 
 INCLUDE_ASM("asm/levels", func_L11_00440C90);
 
 INCLUDE_ASM("asm/levels", func_L11_00440E18);
 
+/* Walks the state's 0x120 slots in order and renews each live entry through the two shared helpers. */
+extern s32 func_417238(s32);
+
+extern void func_4172E8(s32);
+
 INCLUDE_ASM("asm/levels", func_L11_00441090);
 
+/* Clears the state's 0x120 slot table once every live entry has been accepted. */
+extern s32 func_417270(s32);
+
 INCLUDE_ASM("asm/levels", func_L11_00441108);
+
+/* hands every entry of the class list to its measured handler */
+extern u8 *D_L11_001FC420[];
+
+extern u8 *D_L11_001B359C;
+
+extern void func_L11_00449878(u8 *);
+
+extern void func_L11_0044C4F0(u8 *);
+
+extern void func_L11_00452DF8(u8 *);
+
+extern void func_L11_00454DD8(u8 *);
+
+extern void func_L11_00456540(u8 *);
+
+extern void func_L11_00436A78(u8 *);
+
+extern void func_L11_00439BF0(u8 *);
+
+extern void func_L11_0043AB28(u8 *);
+
+extern void func_L11_003F3098(u8 *);
 
 INCLUDE_ASM("asm/levels", func_L11_004411C8);
 
@@ -133,7 +176,10 @@ s32 func_L11_00441808(u8 *object, f32 *point) {
     return result;
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00441858);
+/* Returns the state's 0xC0 word. */
+s32 func_L11_00441858(u8 *obj) {
+    return *(s32 *)(*(u8 **)(obj + 0x68) + 0xC0);
+}
 
 /* consumes one positive signed state counter selected by a measured class identifier and reports success */
 s32 func_L11_00441868(u8 *object, s32 class_id) {
@@ -206,6 +252,8 @@ INCLUDE_ASM("asm/levels", func_L11_00443498);
 INCLUDE_ASM("asm/levels", func_L11_00443940);
 
 /* maps the class index to its measured identifier */
+extern u32 D_L11_002BB0E0[];
+
 INCLUDE_ASM("asm/levels", func_L11_00443CE0);
 
 INCLUDE_ASM("asm/levels", func_L11_00443D78);
@@ -217,6 +265,17 @@ INCLUDE_ASM("asm/levels", func_L11_004456A0);
 INCLUDE_ASM("asm/levels", func_L11_00445990);
 
 INCLUDE_ASM("asm/levels", func_L11_00445B30);
+
+/* Claims the shared call slot for the state entry the identifier names. */
+typedef struct {
+    u8 pad0[0x24];
+    s32 field24;
+    s32 field28;
+    u8 pad2[0x3C];
+    s32 field68;
+} JobaCallSlotView;
+
+extern u8 D_001A63A8[];
 
 INCLUDE_ASM("asm/levels", func_L11_00445D28);
 

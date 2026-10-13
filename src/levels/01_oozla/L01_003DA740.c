@@ -45,7 +45,35 @@ INCLUDE_ASM("asm/levels", func_L01_003DCF40);
 
 INCLUDE_ASM("asm/levels", func_L01_003DD3A0);
 
-INCLUDE_ASM("asm/levels", func_L01_003DD6A8);
+/* func_L01_003DD6A8 */
+extern void func_002AB8C0(void *, void *);
+
+extern void func_00282978(void *);
+
+extern s32 func_00282948(void *);
+
+extern void func_002B0990(void *, void *, s32, s32, f32);
+
+void func_L01_003DD6A8(u8 *a0)
+{
+    u32 v;
+    u8 *p = *(u8 **)(a0 + 0x68);
+
+    func_002AB8C0(a0, p + 0x100);
+    v = *(u16 *)(a0 + 0x96);
+    if (v <= 0xFFFE) {
+        *(u16 *)(a0 + 0x96) = v + 1;
+    }
+    func_00282978(p + 0x3D8);
+    func_00282948(p + 0x404);
+    func_00282978(p + 0x3D6);
+    v = *(s16 *)(p + 0x3DA);
+    if (v != 0) {
+        *(u16 *)(p + 0x3D6) = 0x168;
+        *(s16 *)(p + 0x3DA) = 0;
+    }
+    func_002B0990(a0, p + 0x300, 1, 1, 1.8f);
+}
 
 INCLUDE_ASM("asm/levels", func_L01_003E8ED8);
 
@@ -102,4 +130,44 @@ INCLUDE_ASM("asm/levels", func_L01_0042C540);
 
 INCLUDE_ASM("asm/levels", func_L01_0042C8D8);
 
-INCLUDE_ASM("asm/levels", func_L01_0042CE78);
+/* func_L01_0042CE78 */
+typedef struct L01_0042CE78_ENTRY {
+    char pad0[0x38];
+    u8 f38;
+    u8 f39;
+} L01_0042CE78_ENTRY;
+
+typedef struct L01_0042CE78_OBJ {
+    char pad0[0x84];
+    s16 f84;
+} L01_0042CE78_OBJ;
+
+extern u8 *D_L01_001B1F04 __attribute__((sda));
+
+extern s32 func_L00_004290C0(void *);
+
+s32 func_L01_0042CE78(L01_0042CE78_OBJ *a0, u8 *a1)
+{
+    L01_0042CE78_ENTRY *e = *(L01_0042CE78_ENTRY **)(D_L01_001B1F04 + a0->f84 * 0x20 + 0x1C);
+    s32 r;
+
+    if (e->f39 != 0) {
+        r = -1;
+    } else if (e->f38 != 0) {
+        r = 1;
+    } else if (a1 != 0 && *(s16 *)(a1 + 0x7E) == 0) {
+        r = 0;
+    } else {
+        if (func_L00_004290C0(a0) != 0) {
+            goto one;
+        }
+        goto zero;
+    one:
+        r = 1;
+        return r;
+    zero:
+        r = 0;
+        return r;
+    }
+    return r;
+}

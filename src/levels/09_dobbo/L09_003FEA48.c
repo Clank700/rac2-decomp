@@ -146,7 +146,29 @@ INCLUDE_ASM("asm/levels", func_L09_00402D50);
 
 INCLUDE_ASM("asm/levels", func_L09_00403100);
 
-INCLUDE_ASM("asm/levels", func_L09_004031D8);
+extern char D_L09_001B9C30[];
+extern f32 func_2EA578(char *a0, char *a1);
+extern f32 func_2EA3E0(f32 x);
+extern void func_2EACD0(char *a0, char *a1);
+
+void func_L09_0040B008(char *a0) {
+    char *s1 = a0;
+    char *s2 = s1 + 0xC0;
+    char *s3 = *(char **)(s1 + 0x68);
+    f32 a, b;
+    *(s32 *)(s3 + 0x8) = 0;
+    *(s32 *)(s3 + 0xC) = 0;
+    *(f32 *)(s3 + 0x0) = 0.2f;
+    *(f32 *)(s3 + 0x4) = 0.2f;
+    func_2EACD0(s2, s1 + 0xF0);
+    a = func_2EA3E0(func_2EA578(s2, D_L09_001B9C30));
+    b = func_2EA3E0(func_2EA578(s1 + 0xD0, D_L09_001B9C30));
+    if (b < a) {
+        *(s32 *)(s3 + 0x14) = 1;
+    } else {
+        *(s32 *)(s3 + 0x14) = 0;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L09_00403270);
 
@@ -204,8 +226,6 @@ INCLUDE_ASM("asm/levels", func_L09_00409308);
 INCLUDE_ASM("asm/levels", func_L09_0040A2E8);
 
 INCLUDE_ASM("asm/levels", func_L09_0040AC48);
-
-INCLUDE_ASM("asm/levels", func_L09_0040B008);
 
 INCLUDE_ASM("asm/levels", func_L09_0040B0C8);
 

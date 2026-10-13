@@ -74,8 +74,6 @@ void func_L01_00399098(char *a0)
 
 INCLUDE_ASM("asm/levels", func_L01_003990E8);
 
-INCLUDE_ASM("asm/levels", func_L01_00399170);
-
 INCLUDE_ASM("asm/levels", func_L01_003993C8);
 
 INCLUDE_ASM("asm/levels", func_L01_00399510);
@@ -106,7 +104,28 @@ INCLUDE_ASM("asm/levels", func_L01_003EE5F8);
 
 INCLUDE_ASM("asm/levels", func_L01_003EE6F0);
 
-INCLUDE_ASM("asm/levels", func_L01_003EE8E0);
+extern int func_002A9640(char *, int, int);
+
+extern void func_002A8598(int, int);
+
+/* revives the round a moby belongs to and drops what it was carrying */
+void func_L01_003EE8E0(char *a0)
+{
+    char *r = (char *)func_002A9640(a0, 0x10000, 0);
+
+    if (r != 0) {
+        char *q = *(char **)(r + 0x20);
+
+        if (q != 0) {
+            if (*(short *)(q + 0xAA) == 0x825) {
+                if (*(unsigned char *)(a0 + 0x21) != 0xFF)
+                    func_002A8598(*(unsigned char *)(a0 + 0x21), 2);
+            }
+        }
+    }
+
+    *(unsigned char *)(a0 + 0xA8) = 0xFF;
+}
 
 INCLUDE_ASM("asm/levels", func_L01_003FFFE8);
 

@@ -13,6 +13,15 @@ extern int func_002A7820(int, int);
 extern int func_002A77E0(int);
 extern float func_00283B98(float, float);
 
+/* Shared level-runtime bodies this file reaches: the eight-argument record
+   starter and the two-argument record stepper. */
+extern void func_L00_00323448();
+extern void func_L00_00323958(unsigned char *, unsigned char *);
+
+/* The record tables func_L09_003FB788 / 003FB860 / 003FB908 / 003FB9F8 walk.
+   None of those bodies is written yet, so nothing here defines them; the
+   declarations live in the drafts notes until one of them lands. */
+
 /* Level 09 table of track pointers, indexed by a record byte. */
 extern short *D_L09_001FB560[];
 
@@ -36,7 +45,36 @@ INCLUDE_ASM("asm/levels", func_L09_0039BA18);
 
 INCLUDE_ASM("asm/levels", func_L09_003C0DF8);
 
-INCLUDE_ASM("asm/levels", func_L09_003C8CD8);
+/* Two-state gate on the record's byte 0x20. In state 0, as long as the live
+   word the sub-object opens with is not -1, the record is stamped 0xFF, the
+   shared eight-argument starter is run on the sub-object's track block and the
+   record flips to state 1. In state 1 the sub-object's first float is scaled by
+   2*pi/21600 (a per-frame 1/100 s turn rate) and folded into the record's own
+   angle before its track block is stepped again. */
+void func_L09_003C8CD8(unsigned char *a0) {
+    unsigned char *s0 = a0;
+    unsigned char *s1 = *(unsigned char **)(s0 + 0x68);
+    switch (s0[0x20]) {
+    case 0:
+        if (*(long long *)s1 == -1) {
+            break;
+        }
+        {
+            unsigned char stamp = 0xFF;
+            *(unsigned char *)(s0 + 0x30) = stamp;
+        }
+        func_L00_00323448(s0, s1 + 0x30, 0x64, *(int *)(s1 + 4), *(int *)s1,
+                          -1, 7, 0);
+        s1[0xC5A] = 1;
+        s0[0x20] = 1;
+        break;
+    case 1:
+        *(float *)(s0 + 0xF0) = func_00283B98(
+            *(float *)(s0 + 0xF0), *(float *)(s1 + 8) * 0.000290888245f);
+        func_L00_00323958(s0, s1 + 0x30);
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L09_003CBB18);
 
@@ -119,7 +157,7 @@ INCLUDE_ASM("asm/levels", func_L09_003F6820);
 
 INCLUDE_ASM("asm/levels", func_L09_003F69A0);
 
-INCLUDE_ASM("asm/levels", func_L09_003F6AB8);
+/* func_L09_003F6AB8 lives in the -g8.c brother: it loads a global through $gp. */
 
 INCLUDE_ASM("asm/levels", func_L09_003F6B28);
 
