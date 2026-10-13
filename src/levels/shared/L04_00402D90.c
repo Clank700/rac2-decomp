@@ -38,7 +38,14 @@ BatchA_A04_u32 func_L04_0040A1D0(BatchA_A04_u8 *a0) {
     return r;
 }
 
-INCLUDE_ASM("asm/levels", func_L04_0040A220);
+/* A04-table-select family, incrementing form: bumps the state-selected byte */
+void func_L04_0040A220(BatchA_A04_u8 *a0)
+{
+    BatchA_A04_u32 v = D_001A79F0[0];
+
+    if (v == 4) D_001395B8[(BatchA_A04_u32)a0 + 0x4D]++;
+    else if (v == 0xB) D_001395B8[(BatchA_A04_u32)a0 + 0x57]++;
+}
 
 /* shared native body of family A04-table-select: reads the state-selected byte */
 unsigned int func_L04_0040A268(unsigned char *a0)
@@ -51,9 +58,32 @@ unsigned int func_L04_0040A268(unsigned char *a0)
     return r;
 }
 
-INCLUDE_ASM("asm/levels", func_L04_0040A2B8);
+/* A04-table-select family, incrementing form (second slot pair) */
+void func_L04_0040A2B8(BatchA_A04_u8 *a0)
+{
+    BatchA_A04_u32 v = D_001A79F0[0];
 
-INCLUDE_ASM("asm/levels", func_L04_0040A310);
+    if (v == 4) D_001395B8[(BatchA_A04_u32)a0 + 0x52]++;
+    else if (v == 0xB) D_001395B8[(BatchA_A04_u32)a0 + 0x5C]++;
+}
+
+extern BatchA_A04_u8 *D_001B26F0 __attribute__((sda));
+
+extern void func_002B9180(void *);
+
+/* Sweeps the 0x800 packed 64-byte records, redrawing the four live kinds */
+void func_L04_0040A310(void)
+{
+    int i;
+
+    for (i = 0; i < 0x800; i++) {
+        BatchA_A04_u8 b = *(BatchA_A04_u8 *)((i << 6) + (BatchA_A04_u32)D_001B26F0);
+
+        if (b == 0x4A || b == 8 || b == 0xB || b == 0xF) {
+            func_002B9180(D_001B26F0 + (i << 6));
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L04_0040A3B8);
 
@@ -65,7 +95,8 @@ INCLUDE_ASM("asm/levels", func_L04_0040A958);
 
 INCLUDE_ASM("asm/levels", func_L04_0040AC30);
 
-INCLUDE_ASM("asm/levels", func_L04_0040AC98);
+/* func_L04_0040AC98 reaches its global off $gp, so its body lives in
+   L04_00402D90-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L04_0040ACA8);
 

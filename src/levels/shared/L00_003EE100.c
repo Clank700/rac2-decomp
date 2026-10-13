@@ -182,7 +182,12 @@ INCLUDE_ASM("asm/levels", func_L00_003EEE90);
 
 INCLUDE_ASM("asm/levels", func_L00_003EF3E0);
 
-INCLUDE_ASM("asm/levels", func_L00_003EF548);
+extern int D_L00_001B0838 __attribute__((sda));
+
+void func_L00_003EF548(void)
+{
+    D_L00_001B0838 = 0;
+}
 
 extern int D_L00_001B0838 __attribute__((sda));
 
@@ -318,7 +323,12 @@ INCLUDE_ASM("asm/levels", func_L00_003F0CC8);
 
 INCLUDE_ASM("asm/levels", func_L00_003F1300);
 
-INCLUDE_ASM("asm/levels", func_L00_003F1448);
+extern int D_L00_001B08D0 __attribute__((sda));
+
+void func_L00_003F1448(void)
+{
+    D_L00_001B08D0 = 0;
+}
 
 /* resets a state record: zero words, plus/minus one float flags and two 64-bit fields in the retail store order */
 void func_L00_003F1DC8(char *p)

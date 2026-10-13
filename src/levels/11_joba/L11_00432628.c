@@ -10,7 +10,22 @@ INCLUDE_ASM("asm/levels", func_L11_00434580);
 
 INCLUDE_ASM("asm/levels", func_L11_004349F8);
 
-INCLUDE_ASM("asm/levels", func_L11_00434AA8);
+typedef int TI128 __attribute__((mode(TI)));
+
+extern void func_L11_00434AF8(char *p, void *q);
+
+extern void func_L11_00434D00(char *p, void *q);
+
+/* Hands two reads of the state's quadword to the two measured stage helpers. */
+void func_L11_00434AA8(char *p)
+{
+    char *state = *(char **)(p + 0x68);
+    TI128 v = *(TI128 *)state;
+
+    func_L11_00434AF8(p, &v);
+    v = *(TI128 *)state;
+    func_L11_00434D00(p, &v);
+}
 
 INCLUDE_ASM("asm/levels", func_L11_00434AF8);
 
@@ -31,7 +46,41 @@ INCLUDE_ASM("asm/levels", func_L11_00436850);
 
 INCLUDE_ASM("asm/levels", func_L11_00436910);
 
-INCLUDE_ASM("asm/levels", func_L11_00436A78);
+extern void func_L11_00441978(unsigned char *object, int class_id);
+
+extern void func_0032C700(char *, int, int, int, int, int, int, int, float, float, int, int, int, int);
+
+extern void func_002E5DA0(int, int, void *, int);
+
+extern void func_002A7470(void *, int, int, int);
+
+extern void func_002A05A8(char *);
+
+extern void func_002A7750(void *, int, int);
+
+/* Retires the measured stage-46 record: clears the guard, drops the effect and re-tags the object. */
+void func_L11_00436A78(char *obj)
+{
+    char *state = *(char **)(obj + 0x68);
+
+    if (*(short *)(state + 0x282) == 1) {
+        func_L11_00441978(*(unsigned char **)(obj + 0xB8), 0xD37);
+        *(int *)(state + 0x270) = 0;
+    } else {
+        *(int *)(state + 0x270) = 0;
+    }
+    *(short *)(state + 0x282) = 0;
+    if (*(unsigned char *)(obj + 0x31)) {
+        func_0032C700(obj + 0x10, 0, 0, 0x1E, 5, 0, 0x32, 1, 0.3f, 0.0f, 0, 0, 0, 0);
+        func_002E5DA0(0, 0, obj, 0xDF7);
+    }
+    func_002A7470(obj, 0, 0, 3);
+    func_002A05A8(obj);
+    func_002A7750(obj, 1, 0);
+    *(unsigned char *)(obj + 0x31) = 0;
+    *(int *)(obj + 0x98) = 0;
+    *(unsigned short *)(obj + 0x34) = (*(unsigned short *)(obj + 0x34) & 0xEFFF) | 0x47;
+}
 
 INCLUDE_ASM("asm/levels", func_L11_00436B78);
 
@@ -71,9 +120,43 @@ INCLUDE_ASM("asm/levels", func_L11_00437EA8);
 
 INCLUDE_ASM("asm/levels", func_L11_00437FD0);
 
+extern void func_002833F0(char *, char *);
+
+extern void func_00282D30(char *, char *, float);
+
+extern void func_00282F20(char *, char *, float);
+
+extern void func_00282CC0(char *, char *, char *);
+
 INCLUDE_ASM("asm/levels", func_L11_00438248);
 
-INCLUDE_ASM("asm/levels", func_L11_00438320);
+extern void func_00282F20_2(float *p, float x);
+
+extern void func_00282DD8(char *a, char *b, char *c);
+
+extern void func_002AB6D8(char *a, char *b);
+
+extern void func_002AAA00(char *a, char *b, int c, float d, float e, float f, float g);
+
+/* Builds the measured three-axis basis of the object and hands it to the three slots. */
+void func_L11_00438320(char *obj, float a, float b, float c)
+{
+    char *state = *(char **)(obj + 0x68);
+    float m[4][4];
+    float out[4];
+
+    func_00282F20_2(m[0], 1.0f);
+    func_00282C88((TI128 *)m[2]);
+    m[2][2] = 1.0f;
+    func_00282DD8((char *)m[1], (char *)m[0], (char *)m[2]);
+    func_00282F20((char *)m[1], (char *)m[1], 1.0f);
+    func_00282DD8((char *)m[2], (char *)m[1], (char *)m[0]);
+    func_00282F20((char *)m[2], (char *)m[2], 1.0f);
+    func_002AB6D8((char *)m[0], (char *)out);
+    func_002AAA00(obj + 0xF0, state + 0x2A0, 0, out[0], a, b, c);
+    func_002AAA00(obj + 0xF4, state + 0x2A4, 0, out[1], a, b, c);
+    func_002AAA00(obj + 0xF8, state + 0x2A8, 0, out[2], a, b, c);
+}
 
 INCLUDE_ASM("asm/levels", func_L11_00438460);
 
@@ -103,7 +186,44 @@ INCLUDE_ASM("asm/levels", func_L11_00439640);
 
 INCLUDE_ASM("asm/levels", func_L11_00439950);
 
-INCLUDE_ASM("asm/levels", func_L11_00439BF0);
+extern int func_373978(char *obj, int a);
+
+extern void func_3739C0(int a);
+
+extern char D_00188660[];
+
+#define REC_L11_359C(o, t) ((*(int *)(*(char **)((o) + 0x68) + 0x358) << 8) + (int)(t))
+
+/* Releases the object's measured slot and clears the six flags of its record. */
+void func_L11_00439BF0(char *obj)
+{
+    char *state;
+    char *records;
+
+    func_002A7750(obj, 1, 0);
+    state = *(char **)(obj + 0x68);
+    *(unsigned short *)(obj + 0x34) = (*(unsigned short *)(obj + 0x34) & 0xEFFF) | 0x47;
+    *(unsigned char *)(obj + 0x31) = 0;
+    *(int *)(obj + 0x98) = 0;
+    if (func_373978(obj, *(int *)(state + 0x38C)) != 0) {
+        if (*(int *)(state + 0x38C) != -1) {
+            char *entry = D_00188660 + *(int *)(state + 0x38C) * 0x70;
+
+            if (*(char **)(entry + 0x88) == obj && *(unsigned char *)(entry + 0x74) != 0)
+                func_3739C0(*(int *)(state + 0x38C));
+        }
+        *(int *)(state + 0x38C) = -1;
+    }
+    records = (char *)D_L11_001B359C;
+    *(unsigned short *)(REC_L11_359C(obj, records) + 0x34) |= 0x2;
+    *(unsigned short *)(REC_L11_359C(obj, records) + 0x34) |= 0x4;
+    *(unsigned short *)(REC_L11_359C(obj, records) + 0x34) |= 0x40;
+    *(unsigned short *)(REC_L11_359C(obj, records) + 0x34) &= 0xEFFF;
+    *(unsigned short *)(REC_L11_359C(obj, records) + 0x34) |= 0x1;
+    *(unsigned char *)(REC_L11_359C(obj, records) + 0x31) = 0;
+    *(int *)(REC_L11_359C(obj, (char *)D_L11_001B359C) + 0x98) = 0;
+}
+
 
 /* Picks the measured 3/4 code from the counter at 0x364 of the object at 0x68. */
 int func_L11_00439D60(char *p)

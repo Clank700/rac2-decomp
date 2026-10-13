@@ -173,7 +173,14 @@ INCLUDE_ASM("asm/levels", func_L11_0044C4F0);
 
 INCLUDE_ASM("asm/levels", func_L11_0044C688);
 
-INCLUDE_ASM("asm/levels", func_L11_0044C818);
+void func_L11_0044C818(char *a0)
+{
+    char *p = *(char **)(a0 + 0x68);
+
+    *(u16 *)(p + 0x4CC) = *(u8 *)(a0 + 0x20);
+    *(u16 *)(p + 0x4CE) = *(u8 *)(a0 + 0x95);
+    func_32C9E0(a0, 6, 4);
+}
 
 INCLUDE_ASM("asm/levels", func_L11_0044C850);
 

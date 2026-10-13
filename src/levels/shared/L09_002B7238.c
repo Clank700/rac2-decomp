@@ -3,7 +3,7 @@
 /* index -> entry of a per-level table; a live entry's first word is a one-based id. */
 extern unsigned int D_L09_001FE6C0[];
 extern unsigned int D_L09_001FB560[];
-extern char *D_L09_001B285C;
+extern char *D_L09_001B285C __attribute__((sda));
 
 INCLUDE_ASM("asm/levels", func_L09_002B7238);
 
@@ -157,7 +157,20 @@ INCLUDE_ASM("asm/levels", func_L09_003EA108);
 extern int func_L06_00382850_1(char *object, unsigned int entry, float value);
 extern int func_002B6228_1(char *object, unsigned int entry, int value, int flag);
 
-INCLUDE_ASM("asm/levels", func_L09_003EA2D0);
+int func_L09_003EA2D0(char *object, int index, int value)
+{
+    unsigned int entry = D_L09_001FE6C0[index];
+    char *p = *(char **)(object + 0x68);
+    int result;
+
+    if (entry != 0) {
+        result = func_L06_00382850_1(object + 0x10, entry, 0.0f);
+        result = func_002B6228_1(object, entry, value, result);
+        return *(short *)(p + 0x118);
+    }
+    *(short *)(p + 0x118) = 0;
+    return -1;
+}
 
 
 INCLUDE_ASM("asm/levels", func_L09_003EA360);
@@ -184,7 +197,20 @@ INCLUDE_ASM("asm/levels", func_L09_003EAA18);
 
 INCLUDE_ASM("asm/levels", func_L09_003EAB20);
 
-INCLUDE_ASM("asm/levels", func_L09_003EAF60);
+extern void func_002E5CF8(int a, int b, char *c);
+extern void func_002A6C58(char *a, int b, int c);
+extern void func_0029F338(void *entry);
+extern void func_0032C700(void *p, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
+                          float f1, float f2, int s1, int s2, int s3, int s4);
+
+void func_L09_003EAF60(char *object)
+{
+    func_002E5CF8(2, 0, object);
+    func_002A6C58(object, 0, 3);
+    func_0032C700(object + 0x10, 1, 0x19, 0x14, 0x14, 0x14, 0x2D, 1,
+                  1.0f, 20.0f, 1, 1, 0, 0);
+    func_0029F338(object);
+}
 
 INCLUDE_ASM("asm/levels", func_L09_003F65E0);
 
@@ -350,7 +376,24 @@ INCLUDE_ASM("asm/levels", func_L09_003F7CE0);
 INCLUDE_ASM("asm/levels", func_L09_003F8598);
 
 
-INCLUDE_ASM("asm/levels", func_L09_003F87D8);
+void func_L09_003F87D8(char *unused, int index)
+{
+    unsigned int entry;
+    unsigned short *q;
+
+    if (index == 0xFF)
+        return;
+    entry = D_L09_001FB560[index];
+    if (entry == 0)
+        return;
+    q = (unsigned short *)entry;
+    do {
+        char *r = D_L09_001B285C + ((q[0] & 0x7FFF) << 8);
+
+        if (*(signed char *)(r + 0x20) >= 0 && *(short *)(r + 0xAA) == 0xD0F)
+            *(unsigned char *)(*(int *)(r + 0x68) + 0x2EA) = 1;
+    } while ((short)*q++ >= 0);
+}
 
 
 

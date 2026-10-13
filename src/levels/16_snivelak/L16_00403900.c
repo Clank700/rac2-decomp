@@ -1,5 +1,7 @@
 #include "common.h"
 
+typedef int TI128 __attribute__((mode(TI)));
+
 extern void func_L16_00410CC0(u8 *, u8 *);
 
 extern void func_2E74B8(void *, void *, void *);
@@ -125,8 +127,6 @@ s32 func_L16_00413638(u8 *arg)
         return 1;
     return 0;
 }
-
-INCLUDE_ASM("asm/levels", func_L16_00413690);
 
 INCLUDE_ASM("asm/levels", func_L16_00413700);
 

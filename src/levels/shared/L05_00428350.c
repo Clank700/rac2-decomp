@@ -1,5 +1,13 @@
 #include "include_asm.h"
 
+extern int D_001A7350 __attribute__((sda));
+
+extern int D_001A7354 __attribute__((sda));
+
+extern void func_2FC560(char *out, char *src);
+
+extern int func_307778(float value);
+
 extern void func_00282CF0_9(char *local, char *first, char *second);
 
 extern void func_00282CC0_14(char *target, char *first, char *local);
@@ -124,7 +132,19 @@ INCLUDE_ASM("asm/levels", func_L05_00444840);
 
 INCLUDE_ASM("asm/levels", func_L05_00444B20);
 
-INCLUDE_ASM("asm/levels", func_L05_00444D60);
+/* Converts a two-float record to the coordinate pair the level's bias words expect. */
+void func_L05_00444D60(char *a0, int *a1, int *a2, int a3)
+{
+    float local[2];
+    float bias;
+
+    func_2FC560((char *)local, a0);
+    bias = (float)D_001A7350;
+    *a1 = func_307778((local[0] - bias) * 0.0625f);
+    bias = (float)D_001A7354;
+    *a2 = func_307778((local[1] - bias) * 0.0625f) + a3;
+}
+
 
 INCLUDE_ASM("asm/levels", func_L05_00444DF8);
 

@@ -69,11 +69,35 @@ INCLUDE_ASM("asm/levels", func_L08_003289D0);
 
 INCLUDE_ASM("asm/levels", func_L08_00328AE0);
 
-INCLUDE_ASM("asm/levels", func_L08_00328B80);
+extern u8 *D_L08_001B29DC __attribute__((sda));
+extern void func_L08_00328AE0(void *, s32, s32, s32);
+
+void func_L08_00328B80(s32 a0, s32 a1, s32 a2, s32 a3) {
+    if (a0 == -1)
+        return;
+    func_L08_00328AE0(D_L08_001B29DC + (a0 << 8), a1, a2, a3);
+}
 
 INCLUDE_ASM("asm/levels", func_L08_00328BB0);
 
-INCLUDE_ASM("asm/levels", func_L08_0032A4D0);
+extern f32 func_00283248(f32, f32);
+extern f32 func_00282E20(void *);
+
+/* Splits a four-float vector: two components give an angle, 0x45AFDF66 marks an
+   already-resolved vector. */
+void func_L08_0032A4D0(u8 *a0, f32 *a1, f32 *a2, f32 *a3) {
+    f32 v[4];
+
+    *(TI128 *)v = *(TI128 *)a0;
+    if (v[3] != 5627.9248046875f) {
+        *a1 = func_00283248(v[0], v[1]);
+        return;
+    }
+    *a1 = func_00283248(v[0], v[1]);
+    *a2 = *a2 * func_00282E20(v);
+    v[3] = 0;
+    *a3 = *a3 * v[2];
+}
 
 INCLUDE_ASM("asm/levels", func_L08_0032C0D8);
 
@@ -97,7 +121,14 @@ s32 func_L08_003391C0(u8 *p, s32 a1, s32 a2, u8 *out, f32 f1, f32 f2) {
 
 INCLUDE_ASM("asm/levels", func_L08_00339220);
 
-INCLUDE_ASM("asm/levels", func_L08_0033CD18);
+extern void func_L01_00324410(s32, s32, void *);
+
+/* The float varargs entry: 2.95.3 spills $a2-$a3, $t0-$t3 (eight bytes each)
+   and $f12-$f18; the work is done by the shared worker on that save area. */
+void func_L08_0033CD18(s32 a0, s32 a1, ...) {
+    func_L01_00324410(a0, a1, (char *)__builtin_next_arg(a1) - 0x30);
+}
+
 INCLUDE_ASM("asm/levels", func_L08_0034A078);
 
 INCLUDE_ASM("asm/levels", func_L08_00363320);
