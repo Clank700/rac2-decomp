@@ -64,7 +64,20 @@ INCLUDE_ASM("asm/levels", func_L23_00418FD0);
 /* Shifts a 64-bit value right by a variable count and keeps its lowest bit. */
 s32 func_L23_00419070(u64 arg0, s32 arg1) { return (s32)((arg0 >> arg1) & 1); }
 
-INCLUDE_ASM("asm/levels", func_L23_00419088);
+/* Advances the three-slot ring at +0x398, storing the previous value of +0x394. */
+void func_L23_00419088(char *arg0, s16 arg1) {
+    char *p = *(char **)(arg0 + 0x68);
+    s16 n = *(s16 *)(p + 0x39E);
+    u16 old = *(u16 *)(p + 0x394);
+    int off;
+    int r;
+
+    r = (n + 1) % 3;
+    off = r * 2;
+    *(s16 *)(p + 0x39E) = r;
+    *(s16 *)(p + off + 0x398) = old;
+    *(s16 *)(p + 0x394) = arg1;
+}
 
 INCLUDE_ASM("asm/levels", func_L23_004190C8);
 
@@ -100,7 +113,18 @@ s32 func_L23_0041B478(void) {
 
 INCLUDE_ASM("asm/levels", func_L23_0041B498);
 
-INCLUDE_ASM("asm/levels", func_L23_0041B540);
+extern float func_00282C48(float);
+
+/* Relatches the first measure when the incoming one has moved at least a tenth away. */
+void func_L23_0041B540(char *arg0, float *arg1) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    if (!(func_00282C48(*(float *)(state + 0x5D0) - *arg1) < 0.1f)) {
+        *(float *)(state + 0x5D0) = *arg1;
+        *(s32 *)(state + 0x5CC) = 0;
+        *(s32 *)(state + 0x5DC) = 0;
+    }
+}
 
 /* Clears three words of the state at +0x68. */
 void func_L23_0041B5B0(char *arg0) {
@@ -113,7 +137,16 @@ void func_L23_0041B5B0(char *arg0) {
 
 INCLUDE_ASM("asm/levels", func_L23_0041B5C8);
 
-INCLUDE_ASM("asm/levels", func_L23_0041B668);
+/* The same relatch as the first measure, for the second one and its own flags. */
+void func_L23_0041B668(char *arg0, float *arg1) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    if (!(func_00282C48(*(float *)(state + 0x5D4) - *arg1) < 0.1f)) {
+        *(float *)(state + 0x5D4) = *arg1;
+        *(s32 *)(state + 0x58C) = 0;
+        *(s32 *)(state + 0x5D8) = 0;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L23_0041B6D8);
 
@@ -126,8 +159,6 @@ INCLUDE_ASM("asm/levels", func_L23_0041B9F0);
 INCLUDE_ASM("asm/levels", func_L23_0041BE70);
 
 INCLUDE_ASM("asm/levels", func_L23_0041BF18);
-
-INCLUDE_ASM("asm/levels", func_L23_0041C0B0);
 
 INCLUDE_ASM("asm/levels", func_L23_0041C0E8);
 

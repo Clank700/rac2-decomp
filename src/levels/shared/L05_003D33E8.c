@@ -1,6 +1,8 @@
 #include "include_asm.h"
 #include "common.h"
 
+typedef int TI128 __attribute__((mode(TI)));
+
 INCLUDE_ASM("asm/levels", func_L05_003D33E8);
 
 INCLUDE_ASM("asm/levels", func_L05_003FE430);
@@ -108,11 +110,38 @@ INCLUDE_ASM("asm/levels", func_L05_0041C708);
 
 INCLUDE_ASM("asm/levels", func_L05_0041C7E8);
 
-INCLUDE_ASM("asm/levels", func_L05_0041D498);
+/* func_L05_0041D498 is defined in L05_003D33E8-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L05_0041D570);
 
-INCLUDE_ASM("asm/levels", func_L05_0041D728);
+void func_L05_0041D728(char *object)
+{
+    char *state = *(char **)(object + 0x68);
+    float *f = (float *)state;
+    int *w;
+    int i;
+    int j;
+    int v;
+
+    for (i = 3; i >= 0; i--)
+        *f++ = (float)func_332AB8(0xFF);
+    *(float *)(state + 0x10) = -1.0f;
+    *(float *)(state + 0x14) = -2.25f;
+    *(float *)(state + 0x18) = 1.25f;
+    *(float *)(state + 0x1C) = 2.5f;
+    j = 3;
+    w = (int *)(state + 0x2C);
+    v = 0xFF;
+    for (; j >= 0; j--) {
+        *w = v;
+        w = (int *)((char *)w - 4);
+        v -= 0x40;
+    }
+    *(float *)(state + 0x30) = 2.8f;
+    *(float *)(state + 0x34) = 3.5f;
+    *(float *)(state + 0x3C) = 2.8f;
+    *(float *)(state + 0x38) = 3.5f;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_0041D800);
 
@@ -177,7 +206,7 @@ INCLUDE_ASM("asm/levels", func_L05_00424CF0);
 
 INCLUDE_ASM("asm/levels", func_L05_00425058);
 
-INCLUDE_ASM("asm/levels", func_L05_00425FE0);
+/* func_L05_00425FE0 is defined in L05_003D33E8-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L05_004260B8);
 
@@ -216,15 +245,69 @@ INCLUDE_ASM("asm/levels", func_L05_00426568);
 
 INCLUDE_ASM("asm/levels", func_L05_00426658);
 
-INCLUDE_ASM("asm/levels", func_L05_00426810);
+void func_L05_00426810(char *object)
+{
+    char *state = *(char **)(object + 0x68);
+    float *f = (float *)state;
+    int *w;
+    int i;
+    int j;
+    int v;
+
+    for (i = 3; i >= 0; i--)
+        *f++ = (float)func_332AB8(0xFF);
+    *(float *)(state + 0x10) = -1.0f;
+    *(float *)(state + 0x14) = -2.25f;
+    *(float *)(state + 0x18) = 1.25f;
+    *(float *)(state + 0x1C) = 2.5f;
+    j = 3;
+    w = (int *)(state + 0x2C);
+    v = 0xFF;
+    for (; j >= 0; j--) {
+        *w = v;
+        w = (int *)((char *)w - 4);
+        v -= 0x40;
+    }
+    *(float *)(state + 0x30) = 2.0f;
+    *(float *)(state + 0x34) = 2.5f;
+    *(float *)(state + 0x3C) = 2.0f;
+    *(float *)(state + 0x38) = 2.5f;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_004268E8);
 
-INCLUDE_ASM("asm/levels", func_L05_00426B08);
+/* func_L05_00426B08 is defined in L05_003D33E8-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L05_00426BE0);
 
-INCLUDE_ASM("asm/levels", func_L05_00426D98);
+void func_L05_00426D98(char *object)
+{
+    char *state = *(char **)(object + 0x68);
+    float *f = (float *)state;
+    int *w;
+    int i;
+    int j;
+    int v;
+
+    for (i = 3; i >= 0; i--)
+        *f++ = (float)func_332AB8(0xFF);
+    *(float *)(state + 0x10) = -1.0f;
+    *(float *)(state + 0x14) = -2.25f;
+    *(float *)(state + 0x18) = 1.25f;
+    *(float *)(state + 0x1C) = 2.5f;
+    j = 3;
+    w = (int *)(state + 0x2C);
+    v = 0xFF;
+    for (; j >= 0; j--) {
+        *w = v;
+        w = (int *)((char *)w - 4);
+        v -= 0x40;
+    }
+    *(float *)(state + 0x30) = 2.5f;
+    *(float *)(state + 0x34) = 3.2f;
+    *(float *)(state + 0x3C) = 2.5f;
+    *(float *)(state + 0x38) = 3.2f;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_00426E70);
 

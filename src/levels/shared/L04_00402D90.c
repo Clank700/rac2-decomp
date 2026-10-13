@@ -93,12 +93,29 @@ INCLUDE_ASM("asm/levels", func_L04_0040A628);
 
 INCLUDE_ASM("asm/levels", func_L04_0040A958);
 
-INCLUDE_ASM("asm/levels", func_L04_0040AC30);
+extern signed char *D_L04_001B24DC __attribute__((sda));
+
+extern void func_40E248(char *a0, char *a1);
+
+/* Retail reaches its record base off $gp (a small-data symbol), and the three
+   state words at 0x48 of the record and of the indexed record. */
+void func_L04_0040AC30(char *a0, char *a1)
+{
+    char *s0 = a0;
+    char *s1 = a1;
+
+    func_40E248(s0, s1);
+    *(int *)(s0 + 0x48) = 0;
+    if (*(int *)(s1 + 0x1DC) != -1) {
+        *(int *)((*(int *)(s1 + 0x1DC) << 8) + (int)D_L04_001B24DC + 0x48) = 0;
+    }
+}
 
 /* func_L04_0040AC98 reaches its global off $gp, so its body lives in
    L04_00402D90-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L04_0040ACA8);
+/* func_L04_0040ACA8 reaches one of its globals absolutely and another off $gp,
+   so its body lives in L04_00402D90-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L04_0040ACC8);
 

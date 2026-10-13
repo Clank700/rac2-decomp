@@ -81,6 +81,15 @@ INCLUDE_ASM("asm/levels", func_L14_00423240);
 
 INCLUDE_ASM("asm/levels", func_L14_00423358);
 
+extern void func_002B5278(char *object, float factor);
+
+extern void func_002B5258(char *object);
+
+extern void func_002B50E0(char *object, char *bone, float factor);
+
+extern void func_002B4FF0(char *object, char *bone, float factor);
+
+/* Dispatches on the owner's animation step and plays the matching bone animation. */
 INCLUDE_ASM("asm/levels", func_L14_00423B30);
 
 extern char D_L14_001B9500[];
@@ -170,7 +179,7 @@ void func_L14_00426DE8(char *a0)
     func_2EF6D8(0, D_001A6480[0xA9], 0, D_001A6480[0xA8], s0);
 }
 
-INCLUDE_ASM("asm/levels", func_L14_00426E60);
+/* func_L14_00426E60 lives in the -g8 sibling file (it reads two floats through $gp). */
 
 INCLUDE_ASM("asm/levels", func_L14_00426F28);
 

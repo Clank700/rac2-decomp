@@ -14,6 +14,28 @@ extern void func_31B920(char *a0, s32 a1, s32 a2);
 extern f32  func_31BAE8(f32 a0, f32 a1);
 extern f32  func_2F0000(f32 a0, f32 a1);
 extern char D_L03_00188660[];
+extern s32  func_312898(s32 a0, s32 a1, void *a2);
+extern void func_2EEFE0(char *a0, char *a1, void *a2);
+extern u8  *D_L03_001B2A1C;
+extern f32  D_00189E20_19;
+extern u8   D_001395BF;
+extern void func_2BEE78(char *a0, char *a1, s32 a2, s32 a3);
+extern void func_2B8300(s32 a0, s32 a1, char *a2);
+extern void func_43B870(s32 a0);
+extern void func_32F140(s32 a0, s32 a1);
+extern char D_00189E20_11[];
+extern u8   D_001395C0;
+extern u8   D_001A7AFA;
+extern u8   D_001A7B32;
+extern u8   D_001A7AFB;
+extern u8   D_001A7B33;
+extern u8   D_001A7AFC;
+extern u8   D_001A7B34;
+extern void func_2B8510(s32 a0);
+extern void func_313378(s32 a0);
+extern void func_359FD0(char *a0, char *a1);
+extern void func_30D710(s32 a0, s32 a1);
+typedef int TI128 __attribute__((mode(TI)));
 
 INCLUDE_ASM("asm/levels", func_L03_00399230);
 
@@ -62,7 +84,7 @@ INCLUDE_ASM("asm/levels", func_L03_003C8698);
 
 /* func_L03_003CA938 lives in the -G8 sibling L03_00399230-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L03_003CACA8);
+/* func_L03_003CACA8 is defined in L03_00399230-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L03_003CAD78);
 
@@ -159,7 +181,7 @@ INCLUDE_ASM("asm/levels", func_L03_003D11E0);
 
 INCLUDE_ASM("asm/levels", func_L03_003D1548);
 
-INCLUDE_ASM("asm/levels", func_L03_003D18F8);
+/* func_L03_003D18F8 is defined in L03_00399230-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L03_003D19C8);
 

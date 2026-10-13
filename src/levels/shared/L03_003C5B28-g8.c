@@ -65,3 +65,19 @@ void func_L03_0043ACD8(void) {
     }
     state->field00 = 0;
 }
+
+/* The $gp float each of the two mutual twins reads (3.0f and 1.0f). */
+extern f32 D_L03_001B02F0 __attribute__((sda));
+
+extern f32 D_L03_001B1A90 __attribute__((sda));
+
+void func_L03_003CA230(u8 *a0, u8 *a1) {
+    func_00282D30(a1, a0 + 0xC0, D_L03_001B02F0);
+    func_00282CC0(a1, a1, a0 + 0x10);
+}
+
+/* The same body with func_00282F20 and 1.0f. */
+void func_L03_004197C8(u8 *a0, u8 *a1) {
+    func_00282F20(a1, a0 + 0xC0, D_L03_001B1A90);
+    func_00282CC0(a1, a1, a0 + 0x10);
+}

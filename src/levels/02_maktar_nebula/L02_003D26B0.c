@@ -133,7 +133,28 @@ INCLUDE_ASM("asm/levels", func_L02_003D4E00);
 
 INCLUDE_ASM("asm/levels", func_L02_003D4ED0);
 
-INCLUDE_ASM("asm/levels", func_L02_003D4FD0);
+typedef int TI128 __attribute__((mode(TI)));
+
+extern void func_321E78(char *, char *, float, float, float, float);
+
+extern void func_322330(char *, char *, float, float, float, float, int);
+
+extern void func_327620(char *, char *, char *, float, float, float);
+
+void func_L02_003D4FD0(char *arg0, TI128 *arg1, float arg2, float arg3) {
+    char *state = *(char **)(arg0 + 0x68);
+    TI128 vec = *arg1;
+    float *v = (float *)&vec;
+
+    func_321E78(arg0 + 0x10, state + 0x1B0, v[0], 0.025f, 0.025f, 1.5000001f);
+    func_321E78(arg0 + 0x14, state + 0x1B4, v[1], 0.025f, 0.025f, 1.5000001f);
+    func_321E78(arg0 + 0x18, state + 0x1B8, v[2], 0.025f, 0.025f, 1.5000001f);
+    func_322330(arg0 + 0xF8, state + 0x1C4, arg2, 0.003490659f, 0.003490659f,
+                0.22107507f, 0);
+    func_322330(arg0 + 0xF4, state + 0x2F0, arg3, *(float *)(state + 0x124),
+                *(float *)(state + 0x128), *(float *)(state + 0x12C), 0);
+    func_327620(arg0, state + 0x2F4, state + 0x304, 0.5f, 0.087266475f, -1.0f);
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003D5118);
 
@@ -211,7 +232,17 @@ INCLUDE_ASM("asm/levels", func_L02_003D5C20);
 
 INCLUDE_ASM("asm/levels", func_L02_003D5CF0);
 
-INCLUDE_ASM("asm/levels", func_L02_003D5DF8);
+extern void func_3366A8(char *);
+
+void func_L02_003D5DF8(char *arg0) {
+    char *cur;
+
+    while (arg0 != 0) {
+        cur = arg0;
+        arg0 = *(char **)(arg0 + 0x34);
+        func_3366A8(cur);
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003D5E40);
 

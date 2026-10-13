@@ -63,3 +63,29 @@ void func_L20_0043F510(char *arg0) {
     func_L00_002EC970(&tmp, state + 0x10, D_L20_001B1FD8, 3,
                       *(float *)(state + 0x74), 0.25f);
 }
+
+extern float D_L20_001B2024 __attribute__((sda));
+
+extern void func_002B0990(void *, void *, int, int, float);
+
+void func_L20_00440150(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+    unsigned short n = *(unsigned short *)(arg0 + 0x96);
+
+    if (n <= 0xFFFE) {
+        *(unsigned short *)(arg0 + 0x96) = n + 1;
+    }
+    func_002B0990(arg0, state + 0x2B0, 2, 1, D_L20_001B2024);
+}
+
+extern float D_L20_001B2090 __attribute__((sda));
+
+extern int D_L20_001B2094 __attribute__((sda));
+
+extern void func_00282F20(char *, char *, float);
+
+extern void func_L20_00443B60(char *, char *, char *, float *);
+
+extern void func_L20_0044B100(char *, char *, char *, char *, int, float, int);
+
+/* func_L20_00444088 is defined in L20_0043ECB0.c (this unit has no $gp access for it). */

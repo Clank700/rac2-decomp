@@ -90,7 +90,39 @@ INCLUDE_ASM("asm/levels", func_L11_00436F80);
 
 INCLUDE_ASM("asm/levels", func_L11_004375B8);
 
-INCLUDE_ASM("asm/levels", func_L11_00437CF0);
+extern unsigned char D_L11_00438880[];
+
+extern void func_802F8AD0(void *a0, void *a1);
+extern void func_80338398(void *a0, void *a1, int a2, int a3, float f12);
+extern void func_L11_004395C8(char *p);
+extern void func_L11_00437EA8(char *p);
+extern void func_L11_00437FD0(char *p);
+extern void func_L11_00438460(char *p);
+extern void func_L11_004386B8(char *p);
+
+/* Runs the ten rotors' update, one frame each, and restarts the entry timer. */
+void func_L11_00437CF0(char *p)
+{
+    char *q = *(char **)(p + 0x68);
+    int i;
+
+    func_802F8AD0((void *)D_L11_00438880, p);
+
+    for (i = 12; i >= 0; i--)
+        ;
+
+    if (*(unsigned char *)(p + 0x20) >= 2) {
+        func_L11_004395C8(p);
+        func_L11_00437EA8(p);
+        func_L11_00437FD0(p);
+        func_L11_00438460(p);
+        func_L11_004386B8(p);
+    }
+    if (*(unsigned short *)(p + 0x96) <= 0xFFFE) {
+        (*(unsigned short *)(p + 0x96))++;
+    }
+    func_80338398(p, q + 0x80, 1, 1, 2.5f);
+}
 
 /* Walks the ten measured indices, clearing each record selected through 0x330. */
 void func_L11_00437DC0(char *p, int a1, int a2, int a3)
@@ -160,6 +192,7 @@ void func_L11_00438320(char *obj, float a, float b, float c)
 
 INCLUDE_ASM("asm/levels", func_L11_00438460);
 
+/* func_L11_004386B8: attempt kept in drafts (532 bytes, expected 452). */
 INCLUDE_ASM("asm/levels", func_L11_004386B8);
 
 INCLUDE_ASM("asm/levels", func_L11_00438880);
@@ -180,7 +213,8 @@ INCLUDE_ASM("asm/levels", func_L11_004390D0);
 
 INCLUDE_ASM("asm/levels", func_L11_004393D8);
 
-INCLUDE_ASM("asm/levels", func_L11_004395C8);
+/* func_L11_004395C8: attempt kept in drafts (112 bytes, expected 116). */
+/* func_L11_004395C8 is defined in L11_00432628-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L11_00439640);
 

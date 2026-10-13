@@ -33,19 +33,47 @@ INCLUDE_ASM("asm/levels", func_L07_003F5B50);
 
 INCLUDE_ASM("asm/levels", func_L07_003F6328);
 
-INCLUDE_ASM("asm/levels", func_L07_003F6528);
+extern void func_3109C8(u8 *a, s32 b, s32 c);
+
+extern f32 func_2E49C8(f32 a, f32 b);
+
+extern f32 func_2E5360(f32 a, f32 b);
+
+extern f32 D_L07_00189E20[];
+
+extern void func_L07_003F68F0(u8 *a0, f32 x);
+
+void func_L07_003F6528(u8 *a0)
+{
+    u8 *s0;
+    f32 r;
+
+    func_3109C8(a0, 2, -1);
+    s0 = *(u8 **)(a0 + 0x68);
+    *(u8 *)(a0 + 0x7F) = 0;
+    *(f32 *)(s0 + 0x20) = (f32)*(s16 *)(s0 + 0x24);
+    r = func_2E5360(func_2E49C8(D_L07_00189E20[0x20] - *(f32 *)(a0 + 0x10),
+                                D_L07_00189E20[0x21] - *(f32 *)(a0 + 0x14)),
+                    *(f32 *)(s0 + 0x60));
+    if (r > 0.0f) {
+        *(f32 *)(s0 + 0x54) = -1.5707964f;
+    } else {
+        *(f32 *)(s0 + 0x54) = 1.5707964f;
+    }
+    func_L07_003F68F0(a0, 0.0f);
+}
 
 INCLUDE_ASM("asm/levels", func_L07_003F65E8);
 
 INCLUDE_ASM("asm/levels", func_L07_003F67B8);
 
-INCLUDE_ASM("asm/levels", func_L07_003F68F0);
+/* func_L07_003F68F0 is defined in L07_003F4578-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L07_003F6960);
 
 INCLUDE_ASM("asm/levels", func_L07_003F6C40);
 
-INCLUDE_ASM("asm/levels", func_L07_003F6CF0);
+/* func_L07_003F6CF0 is defined in L07_003F4578-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L07_003F6DC0);
 
@@ -103,7 +131,7 @@ INCLUDE_ASM("asm/levels", func_L07_003F80B8);
 
 INCLUDE_ASM("asm/levels", func_L07_003F8430);
 
-INCLUDE_ASM("asm/levels", func_L07_003F8780);
+/* func_L07_003F8780 is defined in L07_003F4578-g8.c (this unit has no $gp access for it). */
 
 extern void func_00282CF0(u8 *a, u8 *b, u8 *c);
 
@@ -205,7 +233,28 @@ INCLUDE_ASM("asm/levels", func_L07_0040EC08);
 
 INCLUDE_ASM("asm/levels", func_L07_0040EFC0);
 
-INCLUDE_ASM("asm/levels", func_L07_0040EFC8);
+extern void func_338D68(void *a, s32 b, void *c, void *d, s32 e, f32 f);
+
+extern f32 func_2E4508(void *a, void *b);
+
+void func_L07_0040EFC8(s32 *a0, f32 *a1, f32 a, f32 b)
+{
+    f32 p2[4];
+    f32 p1[4];
+    f32 tmp[4];
+    f32 d = a - b;
+    f32 s;
+
+    if (d < 0.0f)
+        d = d + (f32)a0[0];
+    s = a + b;
+    if ((f32)a0[0] < s)
+        s = s - (f32)a0[0];
+    func_338D68(a0, 1, p1, tmp, 0, d);
+    func_338D68(a0, 1, p2, tmp, 0, s);
+    a1[2] = func_2E49C8(p1[0] - p2[0], p1[1] - p2[1]);
+    a1[1] = -func_2E49C8(func_2E4508(p2, p1), p1[2] - p2[2]);
+}
 
 INCLUDE_ASM("asm/levels", func_L07_0040F0D0);
 
@@ -213,9 +262,10 @@ INCLUDE_ASM("asm/levels", func_L07_0040F468);
 
 INCLUDE_ASM("asm/levels", func_L07_0040F598);
 
-INCLUDE_ASM("asm/levels", func_L07_0040F6B8);
+/* func_L07_0040F6B8 is defined in L07_003F4578-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L07_0040F760);
+
 
 INCLUDE_ASM("asm/levels", func_L07_0040F8F8);
 

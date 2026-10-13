@@ -75,7 +75,22 @@ BatchA_A18_s32 func_L18_0032B768(BatchA_A18_u8 *s, BatchA_A18_s32 a1, BatchA_A18
     return 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L18_0033B628);
+extern BatchA_A18_s32 func_002A8AF0(BatchA_A18_s32 a0, BatchA_A18_s32 a1, BatchA_A18_s32 a2);
+extern BatchA_A18_s32 D_001FE480[];
+
+/* hands the slot's payload to its handler; the slot table entry holds count then payload */
+BatchA_A18_s32 func_L18_0033B628(BatchA_A18_s32 a0, BatchA_A18_s32 a1, BatchA_A18_s32 a2) {
+    BatchA_A18_u8 *p;
+    if (a1 != -1) {
+        p = (BatchA_A18_u8 *)D_001FE480[a1];
+        if (p != 0) {
+            if (*(BatchA_A18_s32 *)p != 0) {
+                return func_002A8AF0(a0, (BatchA_A18_s32)(p + 0x10), *(BatchA_A18_s32 *)p);
+            }
+        }
+    }
+    return a2;
+}
 
 INCLUDE_ASM("asm/levels", func_L18_0035D238);
 
@@ -195,7 +210,14 @@ void func_L18_003F8E30(BatchA_A18_u8 *s) {
     *(BatchA_A18_BatchAs16 *)((char *)p + 0x768) = 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L18_003F8E40);
+/* A18-cond-select twin of 003F8E80: two independent state gates */
+BatchA_A18_s32 func_L18_003F8E40(BatchA_A18_u8 *s) {
+    BatchA_A18_s32 r = 0;
+    if ((s[0x20] == 5 && s[0xBC] == 1) || (s[0x20] == 3 && s[0x94] == 5)) {
+        r = 1;
+    }
+    return r;
+}
 
 /* A09-cond-select-36 freshly exact-verified under family reservation */
 BatchA_A09_s32 func_L18_003F8E80(BatchA_A09_u8 *s) {
@@ -324,7 +346,23 @@ void func_L18_00426F28(BatchA_A18_u8 *a0, BatchA_A18_s32 a1, BatchA_A18_s32 a2, 
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L18_00426F78);
+extern void func_002B60B0(float a0, float a1, float a2, float a3);
+extern void func_00282948(void *a0);
+
+/* the object's scale angles are re-submitted in degrees, then the matrix is rebuilt */
+void func_L18_00426F78(BatchA_A18_u8 *a0) {
+    BatchA_A18_u8 *p = *(BatchA_A18_u8 **)(a0 + 0x68);
+    if (a0[0x21] != 0xFF) {
+        if (*(BatchA_A18_u8 *)(p + 0x39F) != 0) {
+            func_002B60B0(0.00027777778450399637f * *(float *)(p + 0x3C4),
+                          0.01666666753590107f * *(float *)(p + 0x3C0),
+                          4.848137450608192e-06f * *(float *)(p + 0x3D4),
+                          0.0002908882452175021f * *(float *)(p + 0x3D0));
+            func_00282948(*(void **)(p + 0x388));
+        }
+    }
+    *(BatchA_A18_u8 *)(p + 0x39F) = 0;
+}
 
 extern void func_00282948(void *a0);
 
@@ -350,7 +388,26 @@ void func_L18_00427058(BatchA_A18_u8 *a0) {
     *(BatchA_A18_u8 *)(p + 0x3B0) = 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L18_00427130);
+extern BatchA_A18_s32 func_L09_0033E690(BatchA_A18_u8 *a0, BatchA_A18_s32 a1, float f12);
+extern BatchA_A18_s32 func_L09_00329178(BatchA_A18_u8 *a0, BatchA_A18_s32 a1,
+                                        BatchA_A18_s32 a2, BatchA_A18_s32 a3);
+
+/* re-seats the object on a new animation; -1 means "leave it to the level" */
+BatchA_A18_s32 func_L18_00427130(BatchA_A18_u8 *a0, BatchA_A18_s32 a1, BatchA_A18_s32 a2) {
+    BatchA_A18_u8 *p = *(BatchA_A18_u8 **)(a0 + 0x68);
+    BatchA_A18_s32 r;
+    *(BatchA_A18_s32 *)(p + 0x38C) = a1;
+    if (a1 == -1) {
+        *(BatchA_A18_BatchAs16 *)(p + 0x1C8) = (BatchA_A18_BatchAs16)a1;
+        return -1;
+    }
+    r = func_L09_0033E690(a0 + 0x10, a1, 0.0f);
+    if (func_L09_00329178(a0, a1, a2, r) != 0) {
+        return *(short *)(p + 0x1C8);
+    }
+    *(unsigned short *)(p + 0x1C8) = 0;
+    return -1;
+}
 
 extern BatchA_A18_s32 func_L09_0033E658(void *a0);
 

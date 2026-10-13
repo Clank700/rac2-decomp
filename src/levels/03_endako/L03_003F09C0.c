@@ -161,7 +161,11 @@ void func_L03_003F68E8(u8 *entity, u32 value) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L03_003F6918);
+void func_L03_003F6918(u8 *entity, s32 index) {
+    LevelState *state = *(LevelState **)(entity + 0x68);
+
+    state->entries[index] = state->entries[--state->count];
+}
 
 INCLUDE_ASM("asm/levels", func_L03_003F6948);
 

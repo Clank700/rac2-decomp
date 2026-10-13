@@ -150,7 +150,7 @@ INCLUDE_ASM("asm/levels", func_L02_0032F008);
 INCLUDE_ASM("asm/levels", func_L02_00331440);
 
 extern void func_00282CF0(float *out, const float *a, const float *b);
-extern void func_L02_00332668(char *arg0, void *arg1);
+extern int func_L02_00332668(char *arg0, char *arg1);
 
 void func_L02_00332630(char *arg0, void *arg1) {
     int tmp[4];
@@ -159,11 +159,50 @@ void func_L02_00332630(char *arg0, void *arg1) {
     func_L02_00332668(arg0, tmp);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_00332668);
+extern int D_L02_001A8FF0 __attribute__((sda));
+extern float func_00283248(float a, float b);
+extern int func_L01_00322288(char *a0, float f12);
+extern void *func_L00_0032C638(char *a0);
+extern float func_L00_003BFF68(char *a0, void *a1, char *a2, int a3);
+
+/* Pick a target from the shape, or answer whether its height still fits. */
+int func_L02_00332668(char *arg0, char *arg1) {
+    void *rec;
+    float h;
+
+    if (D_L02_001A8FF0 == 0)
+        return func_L01_00322288(arg0, func_00283248(*(float *)(arg1), *(float *)(arg1 + 4)));
+
+    rec = func_L00_0032C638(arg0);
+    if (rec == 0)
+        return 0;
+    h = func_L00_003BFF68(arg0, rec, arg1, 0);
+    if (*(float *)((char *)rec + 0x30) < h)
+        return 0;
+    return 1;
+}
+
 
 INCLUDE_ASM("asm/levels", func_L02_00332900);
 
-INCLUDE_ASM("asm/levels", func_L02_003329C8);
+extern void func_00282F20(float *out, const float *in, float s);
+extern void *func_L00_0032C638(char *a0);
+extern float func_L00_0031CDD0(char *a0, char *a1, int a2, float f12, float f13);
+
+/* Aim the record at the shape the caller found. */
+int func_L02_003329C8(char *a0, char *a1, float f12, float f13) {
+    char *rec = func_L00_0032C638(a0);
+
+    if (rec == 0)
+        return 0;
+    *(float *)(rec + 0x2C) = f13;
+    func_00282CF0((float *)(rec + 0xA0), (const float *)a1, (const float *)(a0 + 0x10));
+    *(int *)(rec + 0xA8) = 0;
+    func_00282F20((float *)(rec + 0xA0), (const float *)(rec + 0xA0), f12);
+    *(float *)(rec + 0xA8) = func_L00_0031CDD0(a0 + 0x10, a1, 0, f12, -f13);
+    return 1;
+}
+
 
 INCLUDE_ASM("asm/levels", func_L02_00332A80);
 
@@ -186,6 +225,14 @@ void func_L02_00333438(char *arg0, char *arg1) {
 
 INCLUDE_ASM("asm/levels", func_L02_00333480);
 
+extern void *func_002B9030(int kind);
+extern int func_00283CF0(float f);
+extern float func_002A7878(float a, float b);
+extern float func_00283CE0(int n);
+extern int func_L00_0031C998(int a0, int a1, float f12);
+extern void func_00282D30(void *a0, void *a1, float f12);
+extern unsigned char *D_L02_002001D8;
+
 INCLUDE_ASM("asm/levels", func_L02_003449D8);
 
 INCLUDE_ASM("asm/levels", func_L02_00348420);
@@ -204,16 +251,32 @@ INCLUDE_ASM("asm/levels", func_L02_0038C998);
 
 INCLUDE_ASM("asm/levels", func_L02_0038CDE8);
 
-INCLUDE_ASM("asm/levels", func_L02_0038D978);
+extern int func_00282978(void *p);
+extern int func_00283D38(int a0, int a1, float f12);
+
+/* Toggle the lamp and hand the new state to the colour routine. */
+void func_L02_0038D978(char *arg0) {
+    char *s0 = *(char **)(arg0 + 0x68);
+
+    if (*(short *)(arg0 + 0xAA) != 0x9B0)
+        return;
+    if (func_00282978(s0 + 0x74) != 0) {
+        *(unsigned short *)(s0 + 0x74) = 0x32;
+        *(unsigned int *)(s0 + 0x8C) = (*(unsigned int *)(s0 + 0x8C) == 0);
+    }
+    *(int *)(arg0 + 0x78) = func_00283D38(*(int *)(arg0 + 0x78),
+        *(unsigned int *)(s0 + 0x8C) != 0 ? 0x50787878 : 0x50141414, 0.15f);
+}
+
 
 extern void func_L02_0038DA60(void *arg0);
-extern void func_L02_0038DC68(void *arg0);
-extern void func_L02_0038DE58(void *arg0);
+extern void func_L02_0038DC68(unsigned char *arg0);
+extern void func_L02_0038DE58(unsigned char *arg0);
 extern void func_L02_0038E048(void *arg0);
-extern void func_L02_0038E250(void *arg0);
-extern void func_L02_0038E430(void *arg0);
+extern void func_L02_0038E250(unsigned char *arg0);
+extern void func_L02_0038E430(unsigned char *arg0);
 extern void func_L02_0038E610(void *arg0);
-extern void func_L02_0038E838(void *arg0);
+extern void func_L02_0038E838(unsigned char *arg0);
 
 void func_L02_0038DA00(void *arg0) {
     func_L02_0038DA60(arg0);
@@ -227,6 +290,14 @@ void func_L02_0038DA00(void *arg0) {
 }
 
 INCLUDE_ASM("asm/levels", func_L02_0038DA60);
+
+extern void func_00282D60(void *buf, void *value, float scale);
+extern int func_00283DB8(void *buf, float value);
+extern void func_L00_002ECFE8(void *a0, void *a1, int a2, unsigned int a3,
+                              float f12, float f13, float f14, int t0, int t1);
+extern int D_L02_001B35B8 __attribute__((sda));
+extern char *D_L02_001FBFC0[];
+extern int func_L02_002F1658(void);
 
 INCLUDE_ASM("asm/levels", func_L02_0038DC68);
 
@@ -256,7 +327,7 @@ void func_L02_003948D0(unsigned char *a0) {
     }
 }
 
-extern void func_L02_003AA650(void *arg0);
+extern void func_L02_003AA650(char *arg0);
 
 void func_L02_003A6F78(char *arg0) {
     unsigned char *p;
@@ -283,7 +354,29 @@ INCLUDE_ASM("asm/levels", func_L02_003A6FE8);
 
 INCLUDE_ASM("asm/levels", func_L02_003A8770);
 
-INCLUDE_ASM("asm/levels", func_L02_003AA650);
+extern void func_002B9180(void *p);
+extern void func_0029F338(void *e);
+extern void *D_L02_001B31EC __attribute__((sda));
+
+/* Release the eight slots behind the entity, then retire it. */
+void func_L02_003AA650(char *arg0) {
+    void **p;
+    int i;
+
+    p = (void **)(*(char **)(arg0 + 0x68) + 0x30);
+    for (i = 7; i >= 0; i--) {
+        if (p[0] != 0) {
+            func_002B9180(p[0]);
+            p[0] = 0;
+        }
+        p++;
+    }
+    if (D_L02_001B31EC == arg0)
+        arg0[0x20] = 4;
+    else
+        func_0029F338(arg0);
+}
+
 
 INCLUDE_ASM("asm/levels", func_L02_003B6548);
 

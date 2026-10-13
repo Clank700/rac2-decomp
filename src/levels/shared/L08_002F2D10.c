@@ -65,9 +65,61 @@ f32 func_L08_003277C0(s32 n, f32 x) {
     return r;
 }
 
-INCLUDE_ASM("asm/levels", func_L08_003289D0);
+extern u8 *D_L08_001B29DC __attribute__((sda));
+extern u8 *D_L08_001B29E0 __attribute__((sda));
 
-INCLUDE_ASM("asm/levels", func_L08_00328AE0);
+/* Counts the 0x100-byte records between the two pointers whose halfword at +0xAA equals A0
+   and whose byte at +0x20 is neither 0xFE nor 0xFD. */
+s32 func_L08_003289D0(s32 a0) {
+    u8 *p = D_L08_001B29DC;
+    s32 n = 0;
+
+    for (; p < D_L08_001B29E0; p += 0x100) {
+        if (p != 0 && *(s16 *)(p + 0xAA) == a0) {
+            if (*(u8 *)(p + 0x20) != 0xFE) {
+                if (*(u8 *)(p + 0x20) != 0xFD)
+                    n++;
+            }
+        }
+    }
+    return n;
+}
+
+/* Switches three flags of one record; -1 leaves a group alone, 0 clears it and anything
+   else sets it. */
+void func_L08_00328AE0(void *a0v, s32 a1, s32 a2, s32 a3) {
+    u8 *a0 = a0v;
+    u8 kind;
+
+    if (a0 == 0)
+        return;
+    kind = *(u8 *)(a0 + 0x20);
+    if (kind == 0xFE)
+        return;
+    if (kind == 0xFD)
+        return;
+    if (a1 != -1) {
+        if (a1 != 0)
+            *(u16 *)(a0 + 0x34) &= 0xFFFD;
+        else
+            *(u16 *)(a0 + 0x34) |= 2;
+    }
+    if (a2 != -1) {
+        if (a2 != 0) {
+            *(u8 *)(a0 + 0x31) = 1;
+            *(u16 *)(a0 + 0x34) &= 0xFFFE;
+        } else {
+            *(u8 *)(a0 + 0x31) = 0;
+            *(u16 *)(a0 + 0x34) |= 1;
+        }
+    }
+    if (a3 != -1) {
+        if (a3 != 0)
+            *(s32 *)(a0 + 0x98) = *(s32 *)(*(s32 *)(a0 + 0x24) + 0x10);
+        else
+            *(s32 *)(a0 + 0x98) = 0;
+    }
+}
 
 extern u8 *D_L08_001B29DC __attribute__((sda));
 extern void func_L08_00328AE0(void *, s32, s32, s32);

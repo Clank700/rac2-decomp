@@ -38,6 +38,18 @@ INCLUDE_ASM("asm/levels", func_L20_0039D340);
 
 INCLUDE_ASM("asm/levels", func_L20_0039D680);
 
+extern int D_L20_001B2AC8;
+
+extern void func_L20_0039DF18(char *, int);
+
+extern void func_L20_0039D880(char *);
+
+extern void func_L20_0039D680(char *);
+
+extern float func_00283BE0(float, float);
+
+extern void func_002AAA00(char *, char *, int, float, float, float, float);
+
 INCLUDE_ASM("asm/levels", func_L20_0039D7B0);
 
 INCLUDE_ASM("asm/levels", func_L20_0039D880);
@@ -98,7 +110,6 @@ INCLUDE_ASM("asm/levels", func_L20_0039E1E8);
 INCLUDE_ASM("asm/levels", func_L20_0039E368);
 
 INCLUDE_ASM("asm/levels", func_L20_0039E5F0);
-
 INCLUDE_ASM("asm/levels", func_L20_0039E770);
 
 INCLUDE_ASM("asm/levels", func_L20_0039E890);
@@ -145,6 +156,16 @@ INCLUDE_ASM("asm/levels", func_L20_003C0048);
 
 INCLUDE_ASM("asm/levels", func_L20_003C02D0);
 
+extern char *D_L20_001FBB20[];
+
+extern char *D_L20_001B2F9C;
+
+extern float D_L20_0023E670[];
+
+extern float func_00283CE0(int);
+
+extern float func_002A7AA8(float, float, float, float, float);
+
 INCLUDE_ASM("asm/levels", func_L20_003C0350);
 
 INCLUDE_ASM("asm/levels", func_L20_003E6728);
@@ -155,14 +176,13 @@ INCLUDE_ASM("asm/levels", func_L20_00408D98);
 
 INCLUDE_ASM("asm/levels", func_L20_00409480);
 
-INCLUDE_ASM("asm/levels", func_L20_004095D0);
+/* func_L20_004095D0 is defined in L20_0039C448-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L20_00435178);
 
 INCLUDE_ASM("asm/levels", func_L20_00438F98);
 
 INCLUDE_ASM("asm/levels", func_L20_004395B0);
-
 INCLUDE_ASM("asm/levels", func_L20_0043D470);
 
 INCLUDE_ASM("asm/levels", func_L20_0043D4D8);

@@ -154,7 +154,7 @@ INCLUDE_ASM("asm/levels", func_L14_003DE9B0);
 
 INCLUDE_ASM("asm/levels", func_L14_003DECE0);
 
-INCLUDE_ASM("asm/levels", func_L14_003DF100);
+/* func_L14_003DF100 lives in the -g8 sibling file (its calls pass floats, so it needs real prototypes). */
 
 INCLUDE_ASM("asm/levels", func_L14_003DF200);
 
@@ -175,7 +175,7 @@ void func_L14_003DF690(char *arg0, int arg1) {
 
 INCLUDE_ASM("asm/levels", func_L14_003DF6A0);
 
-INCLUDE_ASM("asm/levels", func_L14_003DF7F8);
+/* func_L14_003DF7F8 is defined in L14_00304190-g8.c (this unit has no $gp access for it). */
 
 void func_L14_003DFA10(char *arg0, char *arg1) {
     char buf[16];
@@ -274,7 +274,23 @@ void func_L14_003E5190(char *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L14_003E51B0);
+void func_L14_003E51B0(char *arg0) {
+    char *v0 = *(char **)(arg0 + 0x68);
+    char *v1 = *(char **)(v0 + 0x30);
+
+    if (v1 != 0) {
+        char *v2 = *(char **)(v1 + 0x68);
+
+        *(int *)(v2 + 0x48) = ((unsigned int)*(s16 *)(v0 + 0x44) << 16)
+                              | ((unsigned int)*(s16 *)(v0 + 0x42) << 8)
+                              | (unsigned int)*(s16 *)(v0 + 0x40);
+        *(int *)(v2 + 0x4C) = ((unsigned int)*(s16 *)(v0 + 0x4A) << 16)
+                              | ((unsigned int)*(s16 *)(v0 + 0x48) << 8)
+                              | (unsigned int)*(s16 *)(v0 + 0x46);
+        *(int *)(v2 + 0x3C) = 1;
+        *(int *)(v2 + 0x34) = *(int *)(v0 + 0x18);
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L14_003E5218);
 

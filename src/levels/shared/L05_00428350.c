@@ -50,6 +50,47 @@ INCLUDE_ASM("asm/levels", func_L05_0042B2C0);
 
 INCLUDE_ASM("asm/levels", func_L05_0042BB10);
 
+extern char *func_328508(char *);
+
+extern void func_32AF08(char *);
+
+extern void func_3073E0(char *, char *);
+
+extern void func_3065F8(char *);
+
+extern void func_3066A0(char *, char *, float);
+
+extern void func_306630(char *, char *, char *);
+
+extern int func_2F9888(char *, int, char *, int, float);
+
+extern void func_2DCB60(int, int);
+
+extern void func_2EB6E8(void);
+
+extern int D_00221D94;
+
+extern int D_001A79F0;
+
+extern char *D_001B1EC4;
+
+extern char *D_001B251C;
+
+extern char D_00189E20[];
+
+extern char D_0019B2E8[];
+
+extern char D_001B3620[];
+
+extern char D_001BFB30[];
+
+#ifndef RAC2_T_TI128_15C4FA
+#define RAC2_T_TI128_15C4FA
+typedef int TI128 __attribute__((mode(TI)));
+#endif
+
+/* Creates the 0x1226 object, seeds its flags from the caller's two floats and copies the
+   caller's quadword into the object's transform slot. */
 INCLUDE_ASM("asm/levels", func_L05_0042BCE0);
 
 INCLUDE_ASM("asm/levels", func_L05_0042BDB0);
@@ -86,6 +127,7 @@ void func_L05_00430BF0(Vec16_Fc936841d *object, int index)
 
 INCLUDE_ASM("asm/levels", func_L05_00432078);
 
+/* Creates the 0x10E3 object and copies the caller's transforms into it. */
 INCLUDE_ASM("asm/levels", func_L05_00432080);
 
 INCLUDE_ASM("asm/levels", func_L05_00432158);
@@ -100,6 +142,7 @@ INCLUDE_ASM("asm/levels", func_L05_00441F30);
 
 INCLUDE_ASM("asm/levels", func_L05_00442398);
 
+/* Blends the negated angle into the object's transform through the level's matrix table. */
 INCLUDE_ASM("asm/levels", func_L05_004424B8);
 
 INCLUDE_ASM("asm/levels", func_L05_00442560);
@@ -122,6 +165,8 @@ INCLUDE_ASM("asm/levels", func_L05_004432E0);
 
 INCLUDE_ASM("asm/levels", func_L05_00443740);
 
+/* Folds the object's two turn rates out of its parent's rotation into the moby, then
+   rebuilds the three orientation blocks the driver reads. */
 INCLUDE_ASM("asm/levels", func_L05_00443C18);
 
 INCLUDE_ASM("asm/levels", func_L05_00443D08);
@@ -174,4 +219,5 @@ INCLUDE_ASM("asm/levels", func_L05_00445C38);
 
 INCLUDE_ASM("asm/levels", func_L05_00445D60);
 
+/* While the level is idle, checks the object's table bit before starting the encounter. */
 INCLUDE_ASM("asm/levels", func_L05_00445F90);

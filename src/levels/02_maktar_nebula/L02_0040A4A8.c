@@ -24,6 +24,18 @@ extern float func_002A7878(float, float);
 extern float func_00283248(float, float);
 extern float func_00283180(float);
 extern float func_00283198(float);
+extern void func_31E6A0(void *, int, int);
+extern char D_L02_00188660[];
+extern void func_41F230(void *, int, int, int, int, int, int, int, int, int,
+                        int, int, float, float);
+extern void func_366BD8(int, int, void *, int);
+extern void func_31EA58(void *, float, float);
+extern void func_2F1F70(void *, void *, void *);
+extern void func_32B068(void *, int, void *, int, float, float, float, float);
+extern void func_31E3C0(void *, int, int, int);
+extern void func_316220(void *);
+extern void func_366830(int);
+extern void func_3FC1B0(int, int);
 
 typedef int TI128 __attribute__((mode(TI)));
 
@@ -91,7 +103,14 @@ INCLUDE_ASM("asm/levels", func_L02_0040B980);
 /* sweeps the two effect tracks of the actor relative to a head position */
 INCLUDE_ASM("asm/levels", func_L02_0040BAB8);
 
-INCLUDE_ASM("asm/levels", func_L02_0040BBA0);
+/* records the actor's two shot counters, then arms it */
+void func_L02_0040BBA0(u8 *a0) {
+    u8 *t = *(u8 **)(a0 + 0x68);
+
+    *(u16 *)(t + 0x2E4) = *(u8 *)(a0 + 0x20);
+    *(u16 *)(t + 0x2E6) = *(u8 *)(a0 + 0x95);
+    func_31E6A0(a0, 6, 3);
+}
 
 INCLUDE_ASM("asm/levels", func_L02_0040BBD8);
 

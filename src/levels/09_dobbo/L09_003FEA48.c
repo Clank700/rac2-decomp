@@ -173,9 +173,7 @@ void func_L09_0040B008(char *a0) {
 INCLUDE_ASM("asm/levels", func_L09_00403270);
 
 INCLUDE_ASM("asm/levels", func_L09_00403398);
-
 INCLUDE_ASM("asm/levels", func_L09_00403700);
-
 
 INCLUDE_ASM("asm/levels", func_L09_00403798);
 
@@ -190,7 +188,6 @@ INCLUDE_ASM("asm/levels", func_L09_004052F8);
 INCLUDE_ASM("asm/levels", func_L09_00405490);
 
 INCLUDE_ASM("asm/levels", func_L09_00405610);
-
 INCLUDE_ASM("asm/levels", func_L09_00406BF8);
 
 void func_L09_00406C90(char *a0) {
@@ -203,16 +200,56 @@ void func_L09_00406C90(char *a0) {
     *(s32 *)(a1 + 0x5C) = -1;
 }
 
+
 INCLUDE_ASM("asm/levels", func_L09_00406CC0);
 
 INCLUDE_ASM("asm/levels", func_L09_00406E78);
 
 INCLUDE_ASM("asm/levels", func_L09_00406FC8);
-
 INCLUDE_ASM("asm/levels", func_L09_00408058);
 
-INCLUDE_ASM("asm/levels", func_L09_00408138);
+extern void func_L09_00408058(char *a0, s32 a1, s32 a2, s32 a3);
 
+/* Sets an entity's colour key, or hands an off-kind entity to the shared body. */
+void func_L09_00408138(char *a0, char *a1, s32 a2, s32 a3, s32 a4)
+{
+    u8 c;
+    s16 kind;
+    char *p;
+
+    if (a1 == 0) {
+        return;
+    }
+    c = *(u8 *)(a1 + 0x20);
+    if (c == 0xFE) {
+        return;
+    }
+    if (c == 0xFD) {
+        return;
+    }
+    kind = *(s16 *)(a1 + 0xAA);
+    if (kind == 0xD0F) {
+        p = *(char **)(a1 + 0x68);
+        *(u8 *)(p + 0x31C) = a2;
+        c = *(u8 *)(a1 + 0x30);
+        if (c != 0xFF) {
+            *(u8 *)(p + 0x31E) = c;
+        }
+        if (a2 != 0) {
+            *(u8 *)(a1 + 0x30) = 0xFF;
+        }
+        return;
+    }
+    if (kind == 0xD09 || kind == 0xCEA) {
+        func_L09_00408058(a1, 0, a3, a4);
+        return;
+    }
+    if (kind == 0xDE0) {
+        *(u8 *)(a1 + 0x95) = *(u8 *)(a0 + 0x95);
+        return;
+    }
+    func_L09_00408058(a1, a2, a3, a4);
+}
 INCLUDE_ASM("asm/levels", func_L09_004081F0);
 
 INCLUDE_ASM("asm/levels", func_L09_004082D0);

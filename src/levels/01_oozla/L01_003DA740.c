@@ -6,12 +6,27 @@ extern void func_L01_003DC9A8(void **, s32 *);
 extern s32 func_L01_00321178(void *, void *);
 extern void func_L01_00318638(void *, void *, void *);
 
+extern s32 func_310648();
+
+extern f32 func_310580(f32 x, f32 y);
+
+extern s32 func_310528(s32 a, s32 b);
+
+extern f32 func_2E3A48(f32 x);
+
+extern f32 func_2E3A60(f32 x);
+
+extern void func_2E3470(void *a, void *b, void *c);
+
+extern void func_32EF38(void *buf, s32 a1, s32 a2, s32 a3, f32 x, f32 y);
+
 INCLUDE_ASM("asm/levels", func_L01_003DA740);
 
 INCLUDE_ASM("asm/levels", func_L01_003DAB98);
 
 INCLUDE_ASM("asm/levels", func_L01_003DAE58);
 
+/* Scatters the measured primitive around the object, a1 times. */
 INCLUDE_ASM("asm/levels", func_L01_003DBB88);
 
 INCLUDE_ASM("asm/levels", func_L01_003DBCB8);
@@ -20,7 +35,7 @@ INCLUDE_ASM("asm/levels", func_L01_003DBF38);
 
 INCLUDE_ASM("asm/levels", func_L01_003DC078);
 
-INCLUDE_ASM("asm/levels", func_L01_003DC838);
+/* func_L01_003DC838 is defined in L01_003DA740-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L01_003DC8B8);
 
@@ -110,6 +125,7 @@ INCLUDE_ASM("asm/levels", func_L01_00416440);
 
 INCLUDE_ASM("asm/levels", func_L01_00416A50);
 
+/* Arms the measured primitive block of the given object. */
 INCLUDE_ASM("asm/levels", func_L01_00416B30);
 
 INCLUDE_ASM("asm/levels", func_L01_00416C08);
