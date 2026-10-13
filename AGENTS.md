@@ -77,6 +77,25 @@ Mark a function `ASM_FUNC` only on evidence, never because it resisted matching:
 
 Say which in the commit. A function that is merely hard is a near miss, not handwritten.
 
+## When to stop on a function
+
+Some functions cannot be matched from C, and some have cost enough. Know which before another
+attempt; OpenRAC's `docs/workflow/BACKFILL.md` has the measurements and the full procedure.
+
+- **Not a function.** It reads a register it never sets, branches outside its own bytes, or has
+  no `jr $ra`: a piece of its neighbour that the catalogue split off. Do not write C; report it,
+  it is a fix in `tools/levels.py`.
+- **Handwritten.** COP2/VU0 instructions, `$at` as a working register, a live instruction after
+  the return's delay slot, a trapping `addi`: see "Handwritten assembly" above.
+- **A tie.** Three different wordings that compile to the same bytes: a fourth will too. So will
+  another compiler or another flag: on rac1, three other compilers fixed none of 492 near misses.
+- **Out of budget.** About ten compiles without getting closer.
+
+Then stop: put the marker back, leave the attempt in `nonmatching/<area>/` with what differs and
+what would unblock it, and let it go up one model tier (docs/AGENT_WORKFLOW.md). Stopping is a
+normal result. C that behaves like the function without matching it is useful to the native port,
+never to `src/` or the progress report.
+
 ## Use the machine
 
 Builds and checks are the slow part of this work, and most of them are independent. Run them
