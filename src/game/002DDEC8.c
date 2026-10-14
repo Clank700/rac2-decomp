@@ -85,7 +85,36 @@ void func_002DE810(unsigned short *a0,u8 *a1) {
 
 INCLUDE_ASM("asm/game", func_002DE850);
 
-INCLUDE_ASM("asm/game", func_002DE858);
+typedef struct {
+    char b[8];
+} CdClock;
+
+extern int func_001256D8(CdClock *);
+extern void func_00131A98(unsigned char *);
+extern void func_002980D0(void);
+extern void func_00297670(void *);
+extern void func_0029ADA0(int);
+extern unsigned char D_001A7360[8] __attribute__((sda));
+extern unsigned char D_0018D278[];
+extern int D_001A79F0 __attribute__((sda));
+extern unsigned char D_001393E0[];
+
+void func_002DE858(int value, int mode)
+{
+    unsigned char *state = D_001393E0;
+    func_001256D8((CdClock *)D_001A7360);
+    func_00131A98(D_001A7360);
+    func_002980D0();
+    func_00297670(D_0018D278 + (D_001A79F0 << 11));
+    func_0029ADA0(value);
+    *(int *)(state + 0x174) = value;
+    *(short *)(state + 0x18) = mode;
+    *(int *)(state + 0x148) = 0;
+    if (*(int *)(state + 0x164) < 0) {
+        *(int *)(state + 0x168) = 0;
+        *(int *)(state + 0x164) = 19;
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002DE900);
 
