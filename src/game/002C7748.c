@@ -452,7 +452,43 @@ INCLUDE_ASM("asm/game", func_002CBAE0);
 
 INCLUDE_ASM("asm/game", func_002CBC58);
 
-INCLUDE_ASM("asm/game", func_002CC490);
+typedef struct {
+    char reserved00[0x14];
+    char *source;
+    int value;
+    char reserved1c[0x118];
+    int fallback;
+} CallbackState_2CC490;
+
+typedef struct {
+    char reserved00[0x1C4];
+    int flags;
+} GameState_2CC490;
+
+extern char D_00138180[];
+
+int func_002CC490(int a0)
+{
+    if (*(int *)(((CallbackState_2CC490 *)D_001F2840)->source + 0xE8) != a0)
+        return 0;
+    if ((((GameState_2CC490 *)D_00138180)->flags & 0x900) != 0 &&
+        ((CallbackState_2CC490 *)D_001F2840)->fallback == 0)
+        return 1;
+    if ((((GameState_2CC490 *)D_00138180)->flags & 0x10) != 0) {
+        int value = *(int *)(((CallbackState_2CC490 *)D_001F2840)->source + 0xE0);
+        int result;
+        if (value != 0)
+            ((CallbackState_2CC490 *)D_001F2840)->value = value;
+        else if (((CallbackState_2CC490 *)D_001F2840)->fallback == 0) {
+            result = -1;
+            goto done;
+        }
+        result = 0;
+done:
+        return result;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002CC528);
 
