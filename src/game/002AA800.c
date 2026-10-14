@@ -411,7 +411,27 @@ void func_002ACB48(float *vector, float scale)
     vector[2] = vector[2] + func_002A7878(negative, scale);
 }
 
-INCLUDE_ASM("asm/game", func_002ACBC8);
+extern char *D_001B1C4C __attribute__((sda));
+extern void func_00283098(char *, char *, char *);
+
+int func_002ACBC8(void *point, int index)
+{
+    float local[4];
+    float transformed[4];
+    char *record;
+
+    if (index != -1) {
+        record = D_001B1C4C + (index << 7);
+        func_00282CF0(local, point, record + 0x30);
+        local[3] = 0.0f;
+        func_00283098((char *)transformed, (char *)local, record + 0x40);
+        if (transformed[0] >= -1.0f && transformed[0] <= 1.0f &&
+            transformed[1] >= -1.0f && transformed[1] <= 1.0f &&
+            transformed[2] >= -1.0f && transformed[2] <= 1.0f)
+            return 1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002ACCA0);
 
