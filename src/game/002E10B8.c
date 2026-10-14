@@ -134,7 +134,22 @@ INCLUDE_ASM("asm/game", func_002E3468);
 
 INCLUDE_ASM("asm/game", func_002E3478);
 
-INCLUDE_ASM("asm/game", func_002E3548);
+extern char *ref_L00_002E3548_00 __attribute__((sda));
+extern float ref_L00_002E3548_01[16] __attribute__((sda));
+extern void func_00283388(float *);
+extern void func_002E3478(int);
+extern void func_002E3940(int);
+void func_002E3548(void)
+{
+    int i;
+    for (i = 0; i < *(short *)(ref_L00_002E3548_00 + 6); i++) {
+        if (i >= 10)
+            func_00283388(ref_L00_002E3548_01);
+        else
+            func_002E3478(i);
+        func_002E3940(i);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002E35D0);
 

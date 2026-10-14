@@ -173,7 +173,7 @@ void func_002B6770(int arg0, long arg1) {
 
 extern char D_00188660[];
 
-INCLUDE_ASM("asm/game", func_002B6788);
+/* func_002B6788 is matched in 002B6788.c. */
 
 extern void func_001325E8(int, void (*)(int, long), unsigned long);
 

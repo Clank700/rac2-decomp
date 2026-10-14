@@ -264,7 +264,14 @@ float func_002A7CA0(struct family_27f9_object *a0,
     return out;
 }
 
-INCLUDE_ASM("asm/game", func_002A7E08);
+extern float func_00283248(float, float);
+float func_002A7E08(struct family_27f9_object *object, float *target, float *value,
+                   float speed, float damping, float limit)
+{
+    float angle = func_00283248(target[4] - ((float *)object)[4],
+                               target[5] - ((float *)object)[5]);
+    return func_002A7CA0(object, value, angle, speed, damping, limit);
+}
 
 INCLUDE_ASM("asm/game", func_002A7E90);
 

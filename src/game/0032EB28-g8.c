@@ -34,3 +34,18 @@ void func_00336320(char *object)
     func_00300A00(*(int *)(object + 0x40), **(int **)(object + 0xC), first[0], first[1],
                  second[0], second[1] * D_L00_001B2708, **(float **)(object + 0x38));
 }
+
+extern void func_002FC808(void);
+extern void func_00330EC0(void *);
+extern void func_002FDBD8(void *, void *, int, float);
+extern float ref_L00_00330E48_00 __attribute__((sda));
+void func_00330E48(char *owner)
+{
+    char *data;
+    func_002FC808();
+    data = *(char **)(owner + 0x68);
+    if (*(float *)(data + 0x64) < ref_L00_00330E48_00)
+        func_00330EC0(owner);
+    if (*(int *)(data + 0x78))
+        func_002FDBD8(data + 0x30, data + 0x40, 0, 0.2f);
+}
