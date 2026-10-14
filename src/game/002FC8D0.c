@@ -241,7 +241,44 @@ void *func_002FEC50(int index) {
     return result;
 }
 
-INCLUDE_ASM("asm/game", func_002FEC78);
+extern void func_0029F978(unsigned char *, unsigned int, unsigned char *);
+
+int func_002FEC78(unsigned char *object, unsigned int flags)
+{
+    char *p = D_0021F9C0;
+    int i = 0;
+    do {
+        if (*(unsigned char **)(p + 0x40) != 0) {
+            i++;
+            p += 0x50;
+            continue;
+        } else {
+            *(int *)(p + 4) = -1;
+            *(unsigned char **)(p + 0x40) = object;
+            p[3] = 0;
+            p[0] = 0;
+            *(int *)(p + 0xC) = 0;
+            *(int *)(p + 8) = 0;
+            *(int *)(p + 0x10) = 0;
+            *(int *)(p + 0x14) = 0;
+            *(int *)(p + 0x18) = 0;
+            *(int *)(p + 0x1C) = 0;
+            *(int *)(p + 0x30) = 0;
+            *(int *)(p + 0x34) = 0;
+            *(int *)(p + 0x38) = 0;
+            *(int *)(p + 0x3C) = 0;
+            p[2] = 0;
+            *(int *)(p + 0x20) = 0;
+            *(int *)(p + 0x24) = 0;
+            *(int *)(p + 0x28) = 0;
+            *(int *)(p + 0x2C) = 0;
+            p[1] = 0;
+            func_0029F978(object, flags, (unsigned char *)p);
+            break;
+        }
+    } while (i < 64);
+    return i;
+}
 
 extern void func_0029F9F0(char *, char *);
 void func_002FED28(unsigned int index) { if (index < 64u) { char *p = D_0021F9C0 + index * 0x50; func_0029F9F0(*(char **)(p + 0x40), p); *(char **)(p + 0x40) = 0; } }
