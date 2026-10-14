@@ -380,7 +380,22 @@ INCLUDE_ASM("asm/game", func_002ACCA8);
 
 INCLUDE_ASM("asm/game", func_002ACD30);
 
-INCLUDE_ASM("asm/game", func_002ACD38);
+typedef struct { int selected, reserved04, reserved08, count; } MatchRange;
+extern MatchRange ref_L00_002ACD38_00;
+extern float ref_L00_002ACD38_01[][4];
+extern int func_00283D80(void *, void *, void *);
+int func_002ACD38(void *object)
+{
+    int found = 0;
+    int i;
+    for (i = ref_L00_002ACD38_00.count - 1; i >= 0; i--) {
+        if (func_00283D80(object, ref_L00_002ACD38_01[i], ref_L00_002ACD38_01[i + 2])) {
+            found = i + 1;
+            break;
+        }
+    }
+    return found == ref_L00_002ACD38_00.selected;
+}
 
 INCLUDE_ASM("asm/game", func_002ACDC8);
 
@@ -486,7 +501,17 @@ INCLUDE_ASM("asm/game", func_002AE8C0);
 
 INCLUDE_ASM("asm/game", func_002AEAE0);
 
-INCLUDE_ASM("asm/game", func_002AEB60);
+extern float func_0029F530(void *);
+extern float func_002AEAE0(int, float);
+int func_002AEB60(char *object, float threshold)
+{
+    float current = func_002AEAE0(4, func_0029F530(object));
+    float difference = current - threshold;
+    float step = func_002AEAE0(4, *(float *)(object + 0x48) * *(float *)(object + 0x4C));
+    if (threshold <= current)
+        return difference < step;
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002AEBF0);
 

@@ -239,7 +239,21 @@ void func_002FF288(void)
 {
 }
 
-INCLUDE_ASM("asm/game", func_002FF290);
+extern void func_0029F0C8(void *, int);
+extern void func_00282A60(unsigned int *, unsigned int, int);
+extern void func_002A0F48(void *);
+extern char *ref_L00_002FF290_00 __attribute__((sda));
+extern char *ref_L00_002FF290_01 __attribute__((sda));
+void func_002FF290(char *object, int kind)
+{
+    char *data;
+    func_0029F0C8(object, kind);
+    data = ref_L00_002FF290_01 + (((int)object - (int)ref_L00_002FF290_00) >> 8) * 128;
+    *(char **)(object + 0x68) = data;
+    func_00282A60((unsigned int *)data, 0, 128);
+    if ((*(unsigned short *)(object + 0x34) & 4) == 0)
+        func_002A0F48(object);
+}
 
 INCLUDE_ASM("asm/game", func_002FF300);
 

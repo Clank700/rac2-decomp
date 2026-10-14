@@ -146,7 +146,7 @@ extern void func_00282CF0(void *, void *, void *);
 extern unsigned int func_0031AB08(unsigned int);
 extern void func_0031AB18(void *, unsigned int, void *, int);
 
-INCLUDE_ASM("asm/game", func_0031AAB0);
+/* func_0031AAB0 is matched in 0031AAB0.c. */
 
 
 unsigned int func_0031AB08(unsigned int param_1)
@@ -211,7 +211,7 @@ INCLUDE_ASM("asm/game", func_0031D070);
 
 INCLUDE_ASM("asm/game", func_0031D268);
 
-INCLUDE_ASM("asm/game", func_0031D308);
+/* func_0031D308 is in the -G8 sibling. */
 
 INCLUDE_ASM("asm/game", func_0031D350);
 

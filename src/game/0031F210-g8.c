@@ -58,3 +58,17 @@ void func_00326BD8(void)
         *(float *)(data + 0x2C) = current;
     }
 }
+extern int ref_L00_00325B28_00 __attribute__((sda));
+extern char ref_L00_00325B28_01 __attribute__((sda));
+extern int ref_L00_00325B28_02;
+extern void func_00281A08(void *, int, void *, void *, int, int, int, int, float);
+
+void func_00325B28(char *object)
+{
+    int count = ref_L00_00325B28_00;
+    int state = ref_L00_00325B28_02;
+    char *data = *(char **)(object + 0x68);
+    func_00281A08(&ref_L00_00325B28_01, 4, data + 0x320, data + 0x420,
+        *(int *)(data + 0x2B4), *(int *)(data + 0x2B0),
+        count, state, *(float *)(data + 0x2B8));
+}

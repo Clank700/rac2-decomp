@@ -41,7 +41,7 @@ INCLUDE_ASM("asm/game", func_00351468);
 
 INCLUDE_ASM("asm/game", func_00351578);
 
-INCLUDE_ASM("asm/game", func_00351720);
+/* func_00351720 is matched in 00351720.c. */
 
 INCLUDE_ASM("asm/game", func_00351820);
 
