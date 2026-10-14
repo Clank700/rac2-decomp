@@ -276,7 +276,27 @@ void func_002B7AD0(void) {
     }
 }
 
-INCLUDE_ASM("asm/game", func_002B7B18);
+extern u8 D_001AA1F8[];
+extern void func_00282A28(void);
+
+int func_002B7B18(int a, int b, int count)
+{
+    u8 *state = D_001A63A8;
+    if (*(short *)(state + 4) == 0 && count != 0) {
+        *(int *)(state + 0x18) = 0;
+        *(int *)(state + 0x1c) = 0;
+        if (func_001334B8(b, count, a, (CdMode *)(state + 0x40))) {
+            *(int *)(state + 0x14) = a;
+            *(short *)(state + 4) = 1;
+            *(int *)(state + 8) = b;
+            *(int *)(state + 0x10) = count;
+            return count << 11;
+        }
+        func_0026FEB8(D_001AA1F8);
+        func_00282A28();
+    }
+    return 0;
+}
 
 extern int func_002B7B18(int, int, int);
 
