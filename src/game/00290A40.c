@@ -65,7 +65,7 @@ INCLUDE_ASM("asm/game", func_00291148);
 
 INCLUDE_ASM("asm/game", func_00291158);
 
-INCLUDE_ASM("asm/game", func_00291268);
+/* func_00291268 is in 00290A40-g8.c. */
 
 INCLUDE_ASM("asm/game", func_002912E8);
 

@@ -170,7 +170,40 @@ INCLUDE_ASM("asm/game", func_002F5D40);
 
 INCLUDE_ASM("asm/game", func_002F5E20);
 
-INCLUDE_ASM("asm/game", func_002F5EF8);
+extern int D_001A7478;
+extern int D_001B221C;
+extern unsigned char D_00188660[];
+extern int D_001BAD78[];
+extern int D_001A8BB8;
+extern void (*ref_L00_002F5EF8_00)(int);
+extern int ref_L00_002F5EF8_01;
+extern void func_002B6E78(int, int, int);
+extern void func_002B7320(void);
+extern void func_002FC1D8(void);
+
+void func_002F5EF8(void)
+{
+    if (D_001A7478 == 2)
+        *(volatile int *)&D_001A7478 = 0;
+    func_0027D330(4);
+    func_002B6E78(D_001B221C, 1, 0x400);
+    func_002B7320();
+    D_00188660[0x6B] |= 0x10;
+    func_002FC1D8();
+    if (ref_L00_002F5EF8_00 != 0 && D_001BAD78[0] == 0) {
+        if (D_001A8BB8 == 2)
+            goto done;
+        if (D_001A8BB8 == 1)
+            goto done;
+        {
+            ref_L00_002F5EF8_00(D_001A8C84);
+            *(void (*volatile *)(int))&ref_L00_002F5EF8_00 = 0;
+            *(volatile int *)&ref_L00_002F5EF8_01 = 0;
+        }
+    }
+done:
+    ;
+}
 
 INCLUDE_ASM("asm/game", func_002F5FB8);
 

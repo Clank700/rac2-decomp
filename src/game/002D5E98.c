@@ -83,7 +83,39 @@ INCLUDE_ASM("asm/game", func_002D6230);
 
 INCLUDE_ASM("asm/game", func_002D6970);
 
-INCLUDE_ASM("asm/game", func_002D6E78);
+typedef struct { char pad[4]; short mode; } Mode2D6E78;
+typedef struct { char pad[0x29C]; int flags[5]; int selected; } Map2D6E78;
+typedef struct { char pad[0xDB]; unsigned char active; } State2D6E78;
+extern Mode2D6E78 D_001A63A8;
+extern Map2D6E78 D_001C4FA0;
+extern State2D6E78 D_001F2840;
+extern unsigned char D_001F291B;
+extern void func_002B7AD0(void);
+
+int func_002D6E78(void)
+{
+    if (D_001A63A8.mode == 0) {
+        Map2D6E78 *map = &D_001C4FA0;
+        int index = map->selected;
+        if (index != -1) {
+            D_001F291B = 0;
+            map->flags[index] ^= 0x1000;
+            map->selected = -1;
+        }
+    }
+    if (D_001A63A8.mode != 0) {
+        State2D6E78 *state = &D_001F2840;
+        if (state->active != 0) {
+            Map2D6E78 *map;
+            func_002B7AD0();
+            state->active = 0;
+            map = &D_001C4FA0;
+            map->flags[map->selected] = -1;
+            map->selected = -1;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002D6F38);
 
@@ -283,7 +315,7 @@ INCLUDE_ASM("asm/game", func_002DA9A8);
 
 INCLUDE_ASM("asm/game", func_002DAD18);
 
-INCLUDE_ASM("asm/game", func_002DAE90);
+/* func_002DAE90 is in 002D5E98-g8.c. */
 
 INCLUDE_ASM("asm/game", func_002DAF68);
 

@@ -48,3 +48,32 @@ int func_002DCAB8(char *object)
         func_00339760(D_001A8CFC + 0x3CAA8);
     return 0;
 }
+
+extern void func_0027C540(int);
+extern void func_0027C660(void);
+extern unsigned long long func_00294C40(int);
+extern void func_0027E018(int, char *, int, int, int, int, int, int, unsigned long long, unsigned long long);
+extern int D_001ABB48 __attribute__((sda));
+extern char *D_001ABB4C;
+extern int D_001ABB50;
+extern int D_001ABB54;
+extern int D_001ABB58 __attribute__((sda));
+extern char *D_001ABB5C;
+extern int D_001ABB60;
+extern int D_001ABB64;
+
+int func_002DAE90(char *object)
+{
+    unsigned long long color;
+    unsigned long long packet;
+    if (*(int *)(object + 0x44) < 4)
+        return 0;
+    color = 0x60A09080ULL;
+    func_0027C540(0);
+    packet = func_00294C40(*(int *)(object + 0x48));
+    func_0027E018(D_001ABB48, D_001ABB4C, D_001ABB50, D_001ABB54, 0, 0, 0x100, 0x100, color, packet);
+    packet = func_00294C40(*(int *)(object + 0x4C));
+    func_0027E018(D_001ABB58, D_001ABB5C, D_001ABB60, D_001ABB64, 0, 0, 0x100, 0x100, color, packet);
+    func_0027C660();
+    return 8;
+}
