@@ -220,11 +220,25 @@ void func_0028B4D8(char *p)
     *(int *)(p + 104) = 0;
 }
 
-INCLUDE_ASM("asm/game", func_0028B540);
-
 typedef struct { unsigned char pad00[0x64]; int key; unsigned char pad68[0x28]; } SearchRow_28B5D0;
 extern SearchRow_28B5D0 D_00255330[];
 extern void func_0028B3D0(int, int, int, int, int, int, int);
+
+void func_0028B540(void)
+{
+    char *row = (char *)D_00255330;
+    int *field = (int *)(row + 0x6c);
+    int i = 0;
+    do {
+        func_0028B3D0(i, 0xffff, 0, 0, 0, 0, 1);
+        i++;
+        field[4] = 0;
+        field[0] = -6;
+        func_0028B4D8(row);
+        row += 0x90;
+        field = (int *)((char *)field + 0x90);
+    } while (i < 13);
+}
 
 int func_0028B5D0(int key)
 {
