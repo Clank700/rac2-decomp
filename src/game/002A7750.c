@@ -283,7 +283,35 @@ INCLUDE_ASM("asm/game", func_002A8240);
 
 INCLUDE_ASM("asm/game", func_002A84E0);
 
-INCLUDE_ASM("asm/game", func_002A8508);
+extern unsigned short *D_001EE5A0[];
+extern char *D_001B1B5C __attribute__((sda));
+
+/* Counts the entries of the 0x7FFF-masked id list at table[index] whose class
+   byte (0x20) is not value; an entry with the high bit of the id set ends the
+   list, and value -1 counts every entry with a class byte below 0x80. */
+int func_002A8508(int index, int value) {
+    unsigned short *list;
+    unsigned short *entry;
+    short key;
+    char *object;
+    int count;
+    if (index == -1)
+        return 0;
+    list = D_001EE5A0[index];
+    count = 0;
+    if (list == 0)
+        return 0;
+    entry = list;
+    do {
+        object = (char *)(((*entry & 0x7FFF) << 8) + (unsigned int)D_001B1B5C);
+        if (object[0x20] >= 0) {
+            if (value == -1 || (unsigned char)object[0x20] != value)
+                count++;
+        }
+        key = *entry++;
+    } while (key >= 0);
+    return count;
+}
 
 #define MACRO_ADDR __attribute__((section(".sdata")))
 
@@ -396,7 +424,19 @@ INCLUDE_ASM("asm/game", func_002A90F0);
 
 INCLUDE_ASM("asm/game", func_002A90F8);
 
-INCLUDE_ASM("asm/game", func_002A91F0);
+extern void func_002837D0(void *, void *, void *);
+extern void func_00283898(void *, int, float);
+
+void func_002A91F0(void *a0, float *a1) {
+    float v2[4];
+    float v1[4];
+    float v0[4];
+    func_00283898(v0, 0, a1[0]);
+    func_00283898(v1, 1, a1[1]);
+    func_00283898(v2, 2, a1[2]);
+    func_002837D0(a0, v0, v1);
+    func_002837D0(a0, a0, v2);
+}
 
 INCLUDE_ASM("asm/game", func_002A9288);
 

@@ -79,7 +79,7 @@ INCLUDE_ASM("asm/game", func_002D5EC0);
 
 INCLUDE_ASM("asm/game", func_002D6230);
 
-INCLUDE_ASM("asm/game", func_002D68D8);
+/* func_002D68D8 is in 002D5E98-g8.c. */
 
 INCLUDE_ASM("asm/game", func_002D6970);
 
@@ -327,7 +327,29 @@ undefined8 func_002DBB48(int param_1)
   return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002DBB78);
+extern int D_001A7420 __attribute__((sda));
+extern unsigned int D_00138344;
+typedef struct { char reserved00[0x14]; char *object; int value; char reserved1C[0xC8]; int clear; } SceneState;
+extern SceneState ref_L00_002DBB78_00;
+int func_002DBB78(void)
+{
+    if (D_001A7420 != 16 && D_001A7420 != 1) {
+        ref_L00_002DBB78_00.value = *(int *)(ref_L00_002DBB78_00.object + 0xE0);
+        return 0;
+    }
+    {
+        unsigned int flags = D_00138344;
+        if (flags & 0x20) {
+            ref_L00_002DBB78_00.clear = 0;
+            ref_L00_002DBB78_00.value = *(int *)(ref_L00_002DBB78_00.object + 0xE0);
+            *(int *)(ref_L00_002DBB78_00.object + 0x12C) = 1;
+        } else if (flags & 0x10) {
+            ref_L00_002DBB78_00.value = *(int *)(ref_L00_002DBB78_00.object + 0xE0);
+            *(int *)(ref_L00_002DBB78_00.object + 0x12C) = 0;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_002DBC10);
 
@@ -381,7 +403,7 @@ INCLUDE_ASM("asm/game", func_002DC720);
 
 INCLUDE_ASM("asm/game", func_002DC900);
 
-INCLUDE_ASM("asm/game", func_002DCAB8);
+/* func_002DCAB8 is built from 002D5E98-g8.c for small-data access. */
 
 int func_002DCB28(Handles_2DCB28 *object) {
     object->first = func_002DE618(object->first);

@@ -118,7 +118,37 @@ void func_002FC990(int a0, int a1, int a2)
 
 INCLUDE_ASM("asm/game", func_002FCB00);
 
-INCLUDE_ASM("asm/game", func_002FCD18);
+/* The guard reads the cell at 0x001B22C0/0x001B22C4: the read view is volatile (every use is a
+   fresh load), and the write of the initialiser's result is an ordinary store, which is what
+   leaves the first call's `lui` in the `bne` delay slot instead of duplicating it.  Both cells
+   are reached with retail's one-instruction macro form, so they carry the `sda` attribute. */
+extern int D_001B22C0 __attribute__((sda));
+
+extern int D_001B22C4 __attribute__((sda));
+
+extern void func_002FCE18(void);
+
+extern void func_002FCF18(void);
+
+extern int func_0011A930(int, void (*)(void), int);
+
+extern void func_0011B6C0(int);
+
+void func_002FCD18(void)
+{
+    if (D_001B22C0 != 0) {
+        return;
+    }
+    if (D_001B22C4 != 0) {
+        return;
+    }
+    if ((*(volatile unsigned int *)0x1000E010 & 0x20000) == 0) {
+        *(unsigned int *)0x1000E010 = 0x20000;
+    }
+    D_001B22C0 = func_0011A930(1, func_002FCE18, 0);
+    D_001B22C4 = func_0011A930(15, func_002FCF18, 0);
+    func_0011B6C0(1);
+}
 
 /* shared native body of family 349daa693c44d158 */
 void func_002FCDA8(void)

@@ -125,8 +125,33 @@ INCLUDE_ASM("asm/game", func_002742E8);
 
 INCLUDE_ASM("asm/game", func_00274500);
 
-INCLUDE_ASM("asm/game", func_002746C8);
+/* Collision-hit nudge subject: geometry plane at 0x20, scale 0x2C, data pointer 0x54. */
+typedef struct {
+    u8 pad000[0x20];
+    u8 at020[0xC];
+    f32 f02C;
+    u8 pad030[0x24];
+    char *p054;
+} HitNudge_002746C8;
 
+extern int func_00277258(float *out, int mode, float scale, char *data);
+
+extern float D_001BAFB0[];
+
+int func_002746C8(Obj_F4778f810 *obj)
+{
+    V4_F4778f810 tmp[2];
+    HitNudge_002746C8 *p = (HitNudge_002746C8 *)obj->p068;
+
+    func_00283098((char *)&tmp[0], (char *)p + 0x20, (char *)obj + 0xC0);
+    func_00282CC0((char *)&tmp[0], (char *)&tmp[0], (char *)obj + 0x10);
+    if (func_00277258((float *)&tmp[0], 2, p->f02C, p->p054) != 0) {
+        func_00282CF0((char *)&tmp[1], (char *)D_001BAFB0, (char *)&tmp[0]);
+        func_00282CC0((char *)obj + 0x10, (char *)obj + 0x10, (char *)&tmp[1]);
+        return 1;
+    }
+    return 0;
+}
 /* appendindexbyte59/count5C descriptor68, originalthreeGPR geometricupdate inclincomingdirectionA2, ifcount!=1 originalpointdifference24/transform40/bound80 andterminalcountbyte return */
 unsigned int func_00274768(OozlaAppendObject164 *object, unsigned int index, const float *direction)
 {

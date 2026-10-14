@@ -156,7 +156,31 @@ void func_002AAF40(int *a, int *b, int *c, int mask) {
     if (mask & 4) { x = *a; y = *c; *c = x; *a = y; }
 }
 
-INCLUDE_ASM("asm/game", func_002AAFA0);
+/* Scales four float arguments by 255, converts each through the same routine, masks each result to a byte and packs the four bytes into one word, low byte first. */
+
+
+int func_002AAFA0(unsigned int color, int mask)
+{
+    int tmp[3];
+    int mid;
+    unsigned int a;
+    int result;
+
+    if (mask == 0)
+        return color;
+
+    tmp[0] = color & 0xFF;
+    mid = color & 0xFF00;
+    tmp[1] = mid >> 8;
+    tmp[2] = (color >> 16) & 0xFF;
+    a = color >> 24;
+    func_002AAF40(tmp, tmp + 1, tmp + 2, mask);
+    result = a << 24;
+    result |= tmp[2] << 16;
+    result |= tmp[1] << 8;
+    result |= tmp[0];
+    return result;
+}
 
 void func_002AB028(float (*m)[4])
 {
@@ -317,7 +341,22 @@ INCLUDE_ASM("asm/game", func_002ABB18);
 
 INCLUDE_ASM("asm/game", func_002ABB70);
 
-INCLUDE_ASM("asm/game", func_002ABB78);
+extern char *g_mobyTableBase __attribute__((sda));
+extern char *g_mobyTableEnd __attribute__((sda));
+
+int func_002ABB78(char *object)
+{
+    if (object != 0)
+        goto check;
+fail:
+    return 0;
+check:
+    if ((unsigned int)object < (unsigned int)g_mobyTableBase)
+        goto fail;
+    if ((unsigned int)g_mobyTableEnd < (unsigned int)object)
+        goto fail;
+    return (unsigned int)(*(unsigned short *)(object + 0xAA) - 500) < 41;
+}
 
 INCLUDE_ASM("asm/game", func_002ABBB8);
 

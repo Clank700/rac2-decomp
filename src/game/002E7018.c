@@ -80,7 +80,26 @@ INCLUDE_ASM("asm/game", func_002E80B0);
 
 INCLUDE_ASM("asm/game", func_002E8190);
 
-INCLUDE_ASM("asm/game", func_002E82C8);
+extern void func_002FC560(unsigned int, unsigned long long);
+extern void func_0027E018(int, char *, int, int, int, int, int, int, unsigned long long, unsigned long long);
+extern char *D_001A7344 __attribute__((sda));
+extern unsigned long long D_001B2168 __attribute__((sda));
+
+void func_002E82C8(int alpha)
+{
+    unsigned long long color;
+    unsigned long long packet;
+    char *dst;
+
+    func_002FC560(0x47, 0x31801ULL);
+    func_002FC560(0x42, 0x8000000044ULL);
+    color = (alpha << 24) | 0x00808080;
+    packet = D_001B2168;
+    dst = D_001A7344;
+    func_0027E018(0x20, dst - 0x58, 0x100, 0x20, 0, 0, 0x100, 0x20, color, packet);
+    func_002FC560(0x47, 0x5360BULL);
+}
+
 
 INCLUDE_ASM("asm/game", func_002E8368);
 
