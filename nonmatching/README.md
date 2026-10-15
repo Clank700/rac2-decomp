@@ -58,6 +58,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L03_0038B4E8`](levels/func_L03_0038B4E8.c) | 192 | Recorded candidate is 184 bytes; size does not match retail. |
 | [`func_L03_003CACA8`](levels/func_L03_003CACA8.c) | 204 | Recorded G8 candidate is 212 bytes; size does not match retail. |
 | [`func_L03_003D18F8`](levels/func_L03_003D18F8.c) | 208 | Recorded G8 candidate is 212 bytes; size does not match retail. |
+| [`func_L03_003F71E0`](levels/func_L03_003F71E0.c) | 108 | Semantics and store order match; only register allocation differs ($t0/$t1/$a2/$a3 against $a0/$a2/$a3/$v0). |
 | [`func_L04_0046CD68`](levels/func_L04_0046CD68.c) | 192 | Recorded G8 instruction mismatch at +0x34. |
 | [`func_L05_00379ED0`](levels/func_L05_00379ED0.c) | 68 | Recorded G8 instruction mismatch at +0x4. |
 | [`func_L05_0037B440`](levels/func_L05_0037B440.c) | 248 | Recorded G8 candidate is 224 bytes; size does not match retail. |
@@ -86,6 +87,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L13_0040A3B0`](levels/func_L13_0040A3B0.c) | 208 | Recorded instruction mismatch at +0x0. |
 | [`func_L13_0040DE50`](levels/func_L13_0040DE50.c) | 228 | Recorded G8 instruction mismatch at +0xc. |
 | [`func_L13_0041BA60`](levels/func_L13_0041BA60.c) | 128 | Recorded candidate is 124 bytes; size does not match retail. |
+| [`func_L14_003DE310`](levels/func_L14_003DE310.c) | 80 | 8; right size, two words differ on branch sense: `bgez`/`bltz` direction and `c.ole.s $f0,$f1` against `c.olt.s $f1,$f0`. |
 | [`func_L14_003DE908`](levels/func_L14_003DE908.c) | 136 | Recorded candidate is 132 bytes; size does not match retail. |
 | [`func_L14_00423B30`](levels/func_L14_00423B30.c) | 164 | Recorded candidate is 140 bytes; size does not match retail. |
 | [`func_L14_00426E60`](levels/func_L14_00426E60.c) | 196 | Recorded G8 instruction mismatch at +0x30. |
@@ -109,7 +111,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L20_0044AA88`](levels/func_L20_0044AA88.c) | 224 | Recorded G8 candidate is 236 bytes; size does not match retail. |
 | [`func_L22_002A8B98`](levels/func_L22_002A8B98.c) | 172 | Recorded instruction mismatch at +0x4. |
 | [`func_L22_002A8CE0`](levels/func_L22_002A8CE0.c) | 184 | Recorded candidate is 168 bytes; size does not match retail. |
-| [`func_L22_003D0840`](levels/func_L22_003D0840.c) | 60 | Recorded candidate is 64 bytes; size does not match retail. |
+| [`func_L22_003D0840`](levels/func_L22_003D0840.c) | 60 | 4; matches size and every other word, but the parameter copy is `daddu $v1,$a0,$zero` against retail's `$a3`. |
 | [`func_L22_0040DD20`](levels/func_L22_0040DD20.c) | 32 | Recorded instruction mismatch at +0x8. |
 | [`func_L23_003C19E0`](levels/func_L23_003C19E0.c) | 204 | Recorded G8 candidate is 200 bytes; size does not match retail. |
 | [`func_L26_003DC128`](levels/func_L26_003DC128.c) | 124 | Recorded G8 instruction mismatch at +0x0. |
