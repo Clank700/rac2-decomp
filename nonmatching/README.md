@@ -58,6 +58,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L03_0038B4E8`](levels/func_L03_0038B4E8.c) | 192 | Recorded candidate is 184 bytes; size does not match retail. |
 | [`func_L03_003CACA8`](levels/func_L03_003CACA8.c) | 204 | Recorded G8 candidate is 212 bytes; size does not match retail. |
 | [`func_L03_003D18F8`](levels/func_L03_003D18F8.c) | 208 | Recorded G8 candidate is 212 bytes; size does not match retail. |
+| [`func_L03_003F71E0`](levels/func_L03_003F71E0.c) | 108 | Semantics and store order match; only register allocation differs ($t0/$t1/$a2/$a3 against $a0/$a2/$a3/$v0). |
 | [`func_L04_0046CD68`](levels/func_L04_0046CD68.c) | 192 | Recorded G8 instruction mismatch at +0x34. |
 | [`func_L05_00379ED0`](levels/func_L05_00379ED0.c) | 68 | Recorded G8 instruction mismatch at +0x4. |
 | [`func_L05_0037B440`](levels/func_L05_0037B440.c) | 248 | Recorded G8 candidate is 224 bytes; size does not match retail. |
