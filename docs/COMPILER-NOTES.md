@@ -1112,6 +1112,34 @@ the retail 28 bytes and `tools/check.py func_0012E8C8 --diff` reported 1 of 1
 places match. The full build then reported `OK` for all 28 programs, so the
 default-off patch did not change any earlier match in that corpus.
 
+## Opt-in quadword register saves (15 October 2026)
+
+The qualified profile saves a callee-saved register in an 8-byte slot (`sd`/`ld`). Two units of
+`src/core` are saved in 16-byte slots instead: `sq $ra,0($sp)` and `lq $ra,0($sp)`, and `sq $fp`
+beside it. They are `src/core/001163B0.c` and `src/core/00115200.c`, 30 functions and 18 800
+bytes between them, all of them markers until now.
+
+The gap is one instruction class, and it was measured, not inferred. `func_00119BC8` (48 bytes)
+compiles under the unmodified SDK profile (`sdk -O2 -G2 -ffunction-sections`) to the retail body
+instruction for instruction; the only difference is at `+0x8` and `+0x1C`, where that compiler
+emits `sd $ra`/`ld $ra` against retail's `sq`/`lq`. The same C under the game compiler's default
+profile produces the same sequence with the same single difference, so no source shape reaches
+it: the slot width is a compiler property.
+
+Patch `0058` re-establishes, only with `-mastra-quad-saves`, the widening that the released
+source applies to register 0 and that the ASTRA stack applies to every GPR. The default stays
+the qualified 8-byte path: with the option off the rebuilt `cc1` produces the same output as
+before, and `tools/build.py all` still reports 28 programs `OK`.
+
+The option is per file in `config/cflags.txt`, and each opted-in function is moved to a file of
+its own (`src/core/00119BC8.c`, `src/core/00115228.c`, `src/core/00115E68.c`) so the option
+cannot change another function of the unit it came from. The three were the measured witnesses:
+`tools/check.py <func> --diff` reports 1 of 1 places match for each.
+
+Do not reach for this option for a single stubborn body: it re-widens every GPR slot, so it fits
+a unit whose retail saves are quadword throughout, and it was not needed by any function outside
+these two units.
+
 ## Quadword copy source shapes
 
 For func_L08_003D3D80 and func_L08_003D82F0, the current game profile folds
