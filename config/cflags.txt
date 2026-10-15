@@ -17,6 +17,7 @@ src/core/0011B800.c	sdk -O2 -G2 -ffunction-sections
 src/core/0011BAC8.c	sdk -O2 -G2 -ffunction-sections
 src/core/0011BAF0.c	sdk -O2 -G2 -ffunction-sections
 src/core/0011BE20.c	sdk -O2 -G2 -ffunction-sections
+src/core/0011BEE0.c	sdk -O2 -G2 -ffunction-sections
 src/core/0011BF18.c	sdk -O2 -G2 -ffunction-sections
 src/core/0011C820.c	sdk -O2 -G2 -ffunction-sections
 src/core/0011C8B0.c	sdk -O2 -G2 -ffunction-sections
