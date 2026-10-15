@@ -18,6 +18,9 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_00118BC0`](core/func_00118BC0.c) | 264 | Candidate is 276 bytes; this cc1 materialises both global addresses and the buffer base into registers where retail keeps one base and offsets |
 | [`func_001330D0`](core/func_001330D0.c) | 56 | Candidate is 64 bytes; the retail table base is `$gp`-relative, this cc1 materialises it absolutely |
 | [`func_00133688`](core/func_00133688.c) | 52 | Candidate is 44 or 48 bytes; one unit needs both a `$gp` and a folded absolute access, which no single profile gives |
+| [`func_0012F948`](core/func_0012F948.c) | 80 | Candidate is 76 bytes; retail's shift sits before the prologue with a nop after it, and the store order differs |
+| [`func_001322B8`](core/func_001322B8.c) | 92 | Sequence and calls exact; this cc1 gives `$s0` to the shift and `$s1` to the object, retail the other way round |
+| [`func_00118460`](core/func_00118460.c) | 112 | Candidate is five instructions long; retail peels the loop and orders the tests differently |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
 | [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
 | [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |
