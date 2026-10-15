@@ -592,3 +592,8 @@ counts when it links at every place it has.
 | [`func_0012DF18`](core/func_0012DF18.c) | - | Contains a `sync` at +0xEC, same barrier problem as func_0011B0B0; the rest looks like ordinary C |
 | [`func_001208E8`](core/func_001208E8.c) | - | Not attempted in this run; ordinary-C shape, an entry walk with indirect calls |
 | [`func_0012DAC0`](core/func_0012DAC0.c) | - | Not attempted in this run; four early exits, three calls and a packed word from six shifted fields |
+| [`func_00124414`](core/func_00124414.c) | 164 | not a C target: hand-written COP2/VU0 code (`sync`, `cfc2`/`ctc2` $28/$29/$404, four `qmfc2`/`qmtc2` words); the first word also reads $t6, so the row starts mid-instruction |
+| [`func_001184D0`](core/func_001184D0.c) | 120 | 120 bytes, matching retail instruction for instruction including the `bnel` and its delay-slot increment; only the base pointer's register differs (retail copies the parameter to $t1, this cc1 to $t0, counters in $t0/$t1 respectively). Needs the game compiler, not the unit's `sdk` line |
+| [`func_00124780`](core/func_00124780.c) | 148 | 148 bytes; control flow, calls and relocations agree, the order of two adjacent store pairs does not (retail writes buf[1] then buf[2], and $s1 before $s0) |
+| [`func_0012EAA0`](core/func_0012EAA0.c) | 136 | Candidate is 96 (SDK) or 104 (game); retail selects the case with a value tree (`beq`/`sltu`+`bnel`/`beq`) where both cc1s emit two equality tests, and retail's unused 16-byte frame is not allocatable from this body |
+| [`func_00131620`](core/func_00131620.c) | 72 | The row starts 8 bytes early: retail 0x131620 is an unreachable `sdr`+`nop` and the body's 64 bytes are at 0x131628. The candidate matches that body except the byte global's address register ($v1 in retail) |
