@@ -1168,6 +1168,39 @@ matched varargs function in `src/core/0011E0D8.c` already does, with
 `func_00115DA8` are the measured witnesses. The offset is the register save area's size above
 the named arguments: 8 minus the named count, times 8 bytes.
 
+## Habits measured by the agent waves (15 October 2026)
+
+Six source profiles now appear in `config/cflags.txt`, not two. The prologue is the tell, and a
+wrong frame or a wrong save pair means the profile is wrong before the C is: `-O2 -G0` (default,
+`sd` in 8-byte slots), `sdk -O2 -G2` (SDK units: `sd` in 16-byte slots), `sdk -O2 -g2 -gstabs`
+(the MPEG decoder units, same signature), `-O2 -G2 … -mastra-quad-saves` (`sq` in 16-byte slots,
+the libc region 0x1163B0-0x1178xx and the other quadword units), and two `-O0`-class units.
+
+- **A dropped argument onto the frame and a `b` to the epilogue means `-O0`**, not a varargs
+  helper: `func_001175F0` is `atoi`'s shim and only `-O0 -G2 -ffunction-sections
+  -mastra-quad-saves` reproduces it. Do not reach for `__builtin_next_arg` there.
+- **`-mno-split-addresses` is the only lever found for retail's `lui $r,%hi ; ld $r,%lo($r)`**
+  (and the `$at` store form); `func_001339B0` only matches with it.
+- **`$gp` is a property of the unit, not of the compile**: a `-g8.c` sibling gets `-G8` from its
+  name (no `config/cflags.txt` line needed), the symbol carries `__attribute__((sda))`, and the
+  *game* compiler must be the one compiling it - the SDK compiler with `-G8` does not use `$gp` at
+  all. `gp = 0x001AEFF0`.
+- **A helper upstream declares `static __inline__` must stay `static __inline__`**; without the
+  keyword the callee is a real call and the body shrinks (`func_00123C28`: 252 bytes against 260).
+- **Unsigned spellings are load-bearing**: `-1u` gives the retail `lui`/`ori` pair where `-1` gives
+  a single `addiu`, and a failure value compared as `0xFFFFFFFFu` is what `func_00115C90` needs.
+- **`mult rd,rs,rt` on the R5900 hides from the reader**: it is opcode 0x00 funct 0x18 *and* opcode
+  0x1C funct 0x18 (MULT1), and rabbitizer prints `.word # INVALID` for both, dropping the
+  destination. Three waves mistook live products for dead instructions.
+- **Two walls the source cannot move**, both measured repeatedly: this cc1 **CSEs symbol addresses**
+  (`sym`, `sym+const`) into callee-saved registers and keeps them across calls where retail
+  re-materialises a fresh `lui`/`addiu` (`func_00119AC0`, `func_00132C48`, `func_00130428`), and
+  the order of the two save registers sometimes rotates (`func_0011DE08`, `func_001286C8`). Both
+  are compiler-side levers, not source shapes.
+- **A body can pass `tools/check.py` and still not land**: `func_00118CC8` (a 35-entry jump table)
+  fails with `needs .rodata at its place` and `func_00123C28` with `needs .sdata at its place`.
+  Both are in `nonmatching/` with their C. Only `tools/build.py` decides.
+
 ## Quadword copy source shapes
 
 For func_L08_003D3D80 and func_L08_003D82F0, the current game profile folds
