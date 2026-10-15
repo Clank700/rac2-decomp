@@ -66,5 +66,3 @@ void func_0012E890(void *arg0, int arg1, int arg2, int arg3) {
     *(int *)(p + 0xC) = arg1;
     r1_func_0012AAC8(arg0, 0);
 }
-
-INCLUDE_ASM("asm/core", func_0012E8C8);

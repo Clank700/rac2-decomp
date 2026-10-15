@@ -58,6 +58,7 @@ src/core/0012D100.c	sdk -O2 -G2 -ffunction-sections
 src/core/0012D808.c	sdk -O2 -g2 -gstabs
 src/core/0012E088.c	sdk -O2 -G2 -ffunction-sections
 src/core/0012E110.c	sdk -O2 -G2 -ffunction-sections
+src/core/0012E8C8.c	-O2 -G0 -ffunction-sections -mastra-split-trunc-slot
 src/core/0012E8E8.c	sdk -O2 -g2 -gstabs
 src/core/0012E980.c	sdk -O2 -G2 -ffunction-sections
 src/core/0012E9D0.c	sdk -O2 -G2 -ffunction-sections
