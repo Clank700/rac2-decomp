@@ -1136,6 +1136,18 @@ its own (`src/core/00119BC8.c`, `src/core/00115228.c`, `src/core/00115E68.c`) so
 cannot change another function of the unit it came from. The three were the measured witnesses:
 `tools/check.py <func> --diff` reports 1 of 1 places match for each.
 
+**Save order, gated on the same option.** The qualified profile emits the GPR save block in
+ascending register order (`s0, s1, ..., ra`), which is what the 8-byte-slot families show. These
+two units are the opposite: retail stores `ra` first and walks down
+(`sq $ra,0x20($sp); sq $fp,0x10($sp)`), which is the released loop's own direction.
+`ascending_save_order.py` therefore keeps the released descending walk for units compiled with
+`-mastra-quad-saves`, and `reorder_save_blocks.py` accepts either form; the default path stays
+byte-identical to the qualified one. Measured on `func_00115F28` (80 bytes) and
+`func_00115C90` (92 bytes): with the ascending order their prologue and epilogue were permuted
+(`sq $s0` before `sq $s1`, restores in the other order); with the gate both match at 1 of 1
+places, and `func_00115C90` additionally needs its failure value compared as the unsigned
+`0xFFFFFFFF` for the retail `lui`/`ori` pair.
+
 Do not reach for this option for a single stubborn body: it re-widens every GPR slot, so it fits
 a unit whose retail saves are quadword throughout, and it was not needed by any function outside
 these two units.
