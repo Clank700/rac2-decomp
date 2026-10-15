@@ -12,6 +12,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 
 | Function | Size | Bytes that differ |
 | --- | ---: | ---: |
+| [`func_00116300`](core/func_00116300.c) | 96 | Candidate is 88 bytes; retail gives the empty arm its own `b` over the block, this cc1 lays the block out as the fall-through |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
 | [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
 | [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |
