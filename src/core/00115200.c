@@ -16,8 +16,6 @@ void **func_00115210(void)
 
 INCLUDE_ASM("asm/core", func_00115220);
 
-INCLUDE_ASM("asm/core", func_00115228);
-
 INCLUDE_ASM("asm/core", func_00115250);
 
 INCLUDE_ASM("asm/core", func_00115340);
@@ -47,8 +45,6 @@ INCLUDE_ASM("asm/core", func_00115D48);
 INCLUDE_ASM("asm/core", func_00115DA8);
 
 INCLUDE_ASM("asm/core", func_00115E28);
-
-INCLUDE_ASM("asm/core", func_00115E68);
 
 INCLUDE_ASM("asm/core", func_00115E90);
 
