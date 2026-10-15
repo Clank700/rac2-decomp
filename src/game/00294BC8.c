@@ -371,8 +371,6 @@ void func_00298170(void)
 {
 }
 
-INCLUDE_ASM("asm/game", func_00298178);
-
 typedef struct {
     char reserved00[0x10];
     int field10;
@@ -384,6 +382,35 @@ typedef struct {
 } SharedState;
 extern SharedState D_001393E0;
 extern int D_001A7420[] __attribute__((sda));
+
+extern unsigned int D_001A7424[] __attribute__((sda));
+extern int D_001B1A3C __attribute__((sda));
+extern int D_001B1A38 __attribute__((sda));
+extern void (*D_002560D0[])(void);
+void func_00298178(void)
+{
+    int old;
+    int flags;
+    char *state = (char *)&D_001393E0;
+    if (*(int *)(state + 0x16c) != 0 ||
+        *(int *)(state + 0x10) != 0 || *(int *)(state + 0x24) > 0)
+        D_001B1A3C = 1;
+    flags = *(int *)D_001A7424;
+    old = D_001A7420[0];
+    if (flags & 0x80) {
+        D_001A7420[0] = 21;
+        *(int *)D_001A7424 = (flags & ~0x80) | 0x40;
+    }
+    flags = *(int *)D_001A7424;
+    if (flags & 0x100) {
+        D_001A7420[0] = 20;
+        *(int *)D_001A7424 = (flags & ~0x100) | 0x40;
+    }
+    D_002560D0[D_001A7420[0]]();
+    D_001B1A38++;
+    if (D_001A7420[0] != old)
+        D_001B1A38 = 0;
+}
 
 void func_00298278(void) {
     D_001A7420[0] = 3;
