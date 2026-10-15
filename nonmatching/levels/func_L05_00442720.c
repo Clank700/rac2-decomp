@@ -1,3 +1,6 @@
+/* Rechecked 2026-10-15 with the compiler rebuilt from master bb4c620.
+   -O2 -G0 -ffunction-sections: 128 bytes versus 136; 0 of 4 placements match. Address materialization and the return delay slot differ.
+   This is also the supplied wave8/w10 body; no duplicate is needed. */
 /* Abandoned attempt - func_L05_00442720, 136 bytes, 4 places.
    The mirror of func_L05_004427A8: the same eight fields, read from 0x1B2000 and
    written to 0x1B3630; the word is 0x1B2014 -> 0x1B3644 and its store is a bare
