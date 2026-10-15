@@ -65,8 +65,6 @@ int func_00120808(short *record) {
     return record[2];
 }
 
-INCLUDE_ASM("asm/core", func_00120810);
-
 INCLUDE_ASM("asm/core", func_001208E8);
 
 INCLUDE_ASM("asm/core", func_00120A30);

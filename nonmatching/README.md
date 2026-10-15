@@ -21,6 +21,15 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_0012F948`](core/func_0012F948.c) | 80 | Candidate is 76 bytes; retail's shift sits before the prologue with a nop after it, and the store order differs |
 | [`func_001322B8`](core/func_001322B8.c) | 92 | Sequence and calls exact; this cc1 gives `$s0` to the shift and `$s1` to the object, retail the other way round |
 | [`func_00118460`](core/func_00118460.c) | 112 | Candidate is five instructions long; retail peels the loop and orders the tests differently |
+| [`func_00122630`](core/func_00122630.c) | 300 | libgcc `__pack_d`; candidate is 304 bytes, instruction-identical but for the `dli` expansion of 0x800FFFFFFFFFFFFF (gas patch 0052's top-down rule, 7 instructions, against retail's 6 the unpatched generic path gives) |
+| [`func_00123B40`](core/func_00123B40.c) | 228 | libgcc `find_fde`; candidate is 216 bytes, the loop, `frame_init` call and binary search all match, but both profiles delete the redundant `if (ob == 0) return 0;` retail keeps |
+| [`func_00115340`](core/func_00115340.c) | 128 | SDK `memcmp` (symbol_addrs's own SDK-library match): 128-bit `lq` and MMI compare ops no C reaches; ASM_FUNC candidate |
+| [`func_0011B458`](core/func_0011B458.c) | 164 | SDK `_sceIDC` (symbol_addrs's own SDK-library match): `sync` / `cache` / `mfc0 TagLo` body; ASM_FUNC candidate |
+| [`func_001291A0`](core/func_001291A0.c) | 116 | VU0 macro mode: 19 of 29 instructions are COP2 macro ops reading a constant pool at 0x137EA0; called from the ASM_FUNC vector helpers next door |
+| [`func_00128F48`](core/func_00128F48.c) | 136 | Row is a stripped function's delay slot plus a 0xCDCDCDCD linker gap; the 128-byte body after them builds constant masks with no-op ANDs no compiler emits |
+| [`func_0012FBF0`](core/func_0012FBF0.c) | 368 | libmpeg decode-or-skip driver; 91 of 92 instructions identical, only `*(int *)inner = 1`'s constant lands in `$v0` here and `$v1` in retail |
+| [`func_0011FB8C`](core/func_0011FB8C.c) | 188 | Row starts with a `0xCDCDCDCD` linker gap and a dead-stripped function's delay slot; the real 176-byte body runs from 0x11FB98 |
+| [`func_00132498`](core/func_00132498.c) | 328 | SDK `snd_BankLoadAsync`; five `$gp` globals, so it needs the `-g8` sibling unit route before a body can be checked (symbol map recorded) |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
 | [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
 | [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |
