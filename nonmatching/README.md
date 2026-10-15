@@ -570,3 +570,15 @@ counts when it links at every place it has.
 | [`func_L11_0043E090`](levels/func_L11_0043E090.c) | 0 of 1 | needs .rodata at its place, which is not C |
 | [`func_L11_0043E108`](levels/func_L11_0043E108.c) | 0 of 1 | needs .rodata at its place, which is not C |
 | [`func_L11_004433D8`](levels/func_L11_004433D8.c) | 0 of 1 | needs .rodata at its place, which is not C |
+| [`func_00120A30`](core/func_00120A30.c) | 132 | Loop, table and byte-kind test exact; this cc1 leaves the index in `$a0` where retail copies it to `$a2` at entry. Three loop wordings give the same 132 bytes |
+| [`func_00122760`](core/func_00122760.c) | 152 | Every instruction matches; 4 short because retail has a standalone `nop` before the `bnel`, and the normal path's three stores take different slots |
+| [`func_0011B0B0`](core/func_0011B0B0.c) | 144 | C except the two `sync` barriers, which no construct in this toolchain emits (`__sync_synchronize()` becomes a call). May belong as ASM_FUNC |
+| [`func_0012CAB0`](core/func_0012CAB0.c) | 268 | Same size, `instruction at +0xc differs`: retail gives the constant 5 `$s6` and 0x1B3 `$s5`, this candidate the other way; the tail follows them |
+| [`func_001306D0`](core/func_001306D0.c) | 216 | Same frame and callee-saved set; 8 short because retail rematerialises the stride three times and reloads the masks from the stack |
+| [`func_001290BC`](core/func_001290BC.c) | - | VU0 macro code (`sqc2`/`lqc2` plus COP2 words) and the extent starts on the 0xCDCDCDCD linker fill |
+| [`func_00125D94`](core/func_00125D94.c) | - | Cannot match as it stands: the 192-byte extent begins on a 0xCDCDCDCD fill word; the function is the 188 bytes from +4 |
+| [`func_00128FD0`](core/func_00128FD0.c) | - | Reads `$s4` at +0x10 before anything writes it; the result keeps bits 32..63 of that register |
+| [`func_00115690`](core/func_00115690.c) | - | R5900 MMI instructions (opcode 0x1C) in a word-at-a-time memcpy; rabbitizer prints them as `.word # INVALID` |
+| [`func_0012DF18`](core/func_0012DF18.c) | - | Contains a `sync` at +0xEC, same barrier problem as func_0011B0B0; the rest looks like ordinary C |
+| [`func_001208E8`](core/func_001208E8.c) | - | Not attempted in this run; ordinary-C shape, an entry walk with indirect calls |
+| [`func_0012DAC0`](core/func_0012DAC0.c) | - | Not attempted in this run; four early exits, three calls and a packed word from six shifted fields |

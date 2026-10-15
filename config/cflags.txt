@@ -156,3 +156,4 @@ src/core/001235C8.c	sdk -O2 -G2 -ffunction-sections
 src/core/00123930.c	sdk -O2 -G2 -ffunction-sections
 src/core/001163E0.c	-O2 -G0 -ffunction-sections
 src/core/00120B38.c	sdk -O2 -G2 -ffunction-sections
+src/core/00133250-g8.c	-O2 -G8 -ffunction-sections

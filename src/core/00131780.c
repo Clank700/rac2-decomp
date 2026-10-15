@@ -294,8 +294,6 @@ void func_00133220(void) {
     *(int *)&r1_D_0015EDC4 = 1;
 }
 
-INCLUDE_ASM("asm/core", func_00133250);
-
 INCLUDE_ASM("asm/core", func_00133300);
 
 INCLUDE_ASM("asm/core", func_00133340);
