@@ -13,8 +13,6 @@ int func_001163B0(void) {
             *(unsigned int *)((char *)r1_D_0012F86C + 0x58) * 1103515245 + 12345) & 0x7FFFFFFF;
 }
 
-INCLUDE_ASM("asm/core", func_00116460);
-
 INCLUDE_ASM("asm/core", func_001166C8);
 
 INCLUDE_ASM("asm/core", func_00116E10);
@@ -39,12 +37,12 @@ INCLUDE_ASM("asm/core", func_001185E8);
 
 INCLUDE_ASM("asm/core", func_00118BC0);
 
-INCLUDE_ASM("asm/core", func_00118CC8);
-
 INCLUDE_ASM("asm/core", func_00118D98);
 
 INCLUDE_ASM("asm/core", func_00119AC0);
 
 INCLUDE_ASM("asm/core", func_00119BF8);
+
+INCLUDE_ASM("asm/core", func_00118CC8);
 
 INCLUDE_ASM("asm/core", func_0011A7F8);
