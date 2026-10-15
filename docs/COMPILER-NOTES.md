@@ -1090,6 +1090,28 @@ full `tools/build.py all`). These are source-shape habits of cc1 that decide the
   linker's padding between two functions (`addiu $sp,$sp,N; nop` chains with no `jr $ra`); ten
   were found in `0032EB28.c` alone. That is a `tools/levels.py` fix, not C.
 
+## Opt-in `truncdisi2` return-slot split (15 October 2026)
+
+`func_0012E8C8` is a 28-byte libmpeg helper. Its C computes a 64-bit right
+shift and returns the low signed word. The unmodified compiler emits the
+correct `dsll32` and `dsra32`, but treats them as one `truncdisi2` RTL
+instruction: it places both before `jr $ra` and emits a `nop` in the return
+slot (32 bytes). Retail has `dsll32; jr $ra; dsra32` (28 bytes).
+
+Patch `0057` makes the two shifts separate RTL instructions **after reload and
+before the second and delay-slot schedulers**, only with
+`-mastra-split-trunc-slot`. The option is per file in `config/cflags.txt` and
+currently belongs only to `src/core/0012E8C8.c`; other translation units keep
+the qualified compiler path. The source is split into its own file so the
+option cannot change another function from the surrounding SDK unit. The
+patch changes compiler source, never generated assembly.
+
+The unmodified compiler produced 32 bytes; the patched compiler still
+produced those 32 bytes with the option off. With the option on, it produced
+the retail 28 bytes and `tools/check.py func_0012E8C8 --diff` reported 1 of 1
+places match. The full build then reported `OK` for all 28 programs, so the
+default-off patch did not change any earlier match in that corpus.
+
 ## Quadword copy source shapes
 
 For func_L08_003D3D80 and func_L08_003D82F0, the current game profile folds

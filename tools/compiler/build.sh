@@ -6,7 +6,7 @@
 # Run it on 32-bit-capable x86-64 Linux (gcc -m32), e.g. in the rac2-linux container
 # (docs/BUILDING.md). It downloads the two inputs to build/downloads/ and checks them,
 # applies the patches in tools/compiler/patches/ (Lombyte's sce-991111b stack, MIT, with its
-# retired 0034 and its earlier 0020) and the transformers in tools/compiler/transformers/,
+# retired 0034 and its earlier 0020), the opt-in 0057 extension and the transformers in tools/compiler/transformers/,
 # refuses to build unless the five patched sources hash as listed below, and builds.
 #
 # The binaries' hashes depend on the build host; the sources' do not. A compiler from these
@@ -34,7 +34,7 @@ rm -rf "$W/src" && tar xzf "$DL/gnu-ee-binutils-gcc-1.1.tar.gz" -C "$W" && mv "$
 cd "$W/src"
 export GIT_CEILING_DIRECTORIES=$W
 for p in 0000 0001 0015 0016 0019 0020 0021 0022 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 \
-         0036 0037 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056; do
+         0036 0037 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057; do
   git apply --whitespace=nowarn "$HERE"/patches/$p-*.patch
 done
 patch -R -p1 -s < "$HERE"/patches/0001-r5900-quad-saves.patch   # the retail saves in 8-byte slots
@@ -54,9 +54,9 @@ python3 $T/pad_div_erratum_nops.py gas/config/tc-mips.c
 python3 $T/neutralise_div_dslot.py gcc
 python3 $T/pad_div_erratum_branch.py gas/config/tc-mips.c >/dev/null
 sha256sum --check --quiet <<'SUMS'
-4a6a1ae14448e504eef4f58450973ebcd6c3ba45fdf204961642f0b97138fb8a  gcc/config/mips/mips.c
-87d59c06d047cf7252349cb02aebc266f8b4dcecd537c827e6ec3966a10bbfc3  gcc/config/mips/mips.h
-9720897dc353fd246c6f94d5882c3beb16c81fa9e42438ee8d184c8a78a581ad  gcc/config/mips/mips.md
+444021bd850a3a8a232f44561a4fae12c40ce1c47e0a2dc0af461eb1e4d15884  gcc/config/mips/mips.c
+1b88cc165c235735dbdf0cac3d0392aefeb08fb4482a9b601709fddf38a1271f  gcc/config/mips/mips.h
+9f6894ef4dfaa19708b4fd68203a1424e36b680741969b8b3531c92c0a628e40  gcc/config/mips/mips.md
 38d52727addc0b0b299700835788808cf23fe59c863a961cdd6f28170faaf3cc  gcc/toplev.c
 b22dfff81e41d3d378b1f35a231d2c11b60700967d6faf70b820f6300caf81d6  gas/config/tc-mips.c
 SUMS
