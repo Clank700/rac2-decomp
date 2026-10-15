@@ -72,3 +72,18 @@ void func_00325B28(char *object)
         *(int *)(data + 0x2B4), *(int *)(data + 0x2B0),
         count, state, *(float *)(data + 0x2B8));
 }
+
+extern volatile int D_001AFFF0 __attribute__((sda));
+extern volatile int D_001AFFF4 __attribute__((sda));
+extern void func_00322138(char *);
+extern void func_00322340(char *, char *, float, int, int, int);
+void func_00321FE0(char *object)
+{
+    char *data = *(char **)(object + 0x68);
+    unsigned int state = *(unsigned char *)(object + 0x20);
+    if (state == 4 || state == 5 || *(unsigned char *)(object + 0x95) == 2 || state == 10)
+        func_00322138(object);
+    func_00322340(object, data + 0x3A0, 0.125f, D_001AFFF0, 0x20000000, 0x20000000);
+    func_00322340(object, data + 0x3B0, 0.15f, D_001AFFF4, 0x30000000, 0x20000000);
+    func_00322340(object, data + 0x3C0, 0.15f, D_001AFFF4, 0x10000000, 0x30000000);
+}
