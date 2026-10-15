@@ -14,6 +14,21 @@ extern int D_001B1608[] __attribute__((sda));
 extern char *D_001B1B5C;
 extern char *D_001B1B64;
 
+extern char *D_001B22A8;
+extern int D_001ABD88[2] __attribute__((sda));
+extern char D_00261D10[];
+extern void func_002E0C40(int, int);
+
+void func_002DF7A8(int a0, int a1, int a2)
+{
+    *(int *)(*(char *volatile *)&D_001B22A8 + 0x0) = 0x30000003;
+    *(int *)(*(char *volatile *)&D_001B22A8 + 0x4) = (int)(D_00261D10 + a2 * 0x30);
+    *(int *)(*(char *volatile *)&D_001B22A8 + 0x8) = 0x13000000;
+    *(int *)(*(char *volatile *)&D_001B22A8 + 0xC) = 0x50000003;
+    D_001B22A8 = *(char *volatile *)&D_001B22A8 + 0x10;
+    func_002E0C40(a0, D_001ABD88[a1]);
+}
+
 void func_002DF2E0(int a0, int a1)
 {
     char *start;
