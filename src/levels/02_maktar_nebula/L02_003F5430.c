@@ -270,7 +270,16 @@ INCLUDE_ASM("asm/levels", func_L02_00400948);
 
 INCLUDE_ASM("asm/levels", func_L02_00400B10);
 
-INCLUDE_ASM("asm/levels", func_L02_00400CC8);
+extern int D_0017A80;
+
+/* True when the field at +0xAA is 0xB59, the global at D_0017A80 is 1 and bit 3 of the
+   byte at +0x20 is clear. */
+s32 func_L02_00400CC8(char *a0) {
+    s32 r = 0;
+    if (*(s16 *)(a0 + 0xAA) == 0xB59 && D_0017A80 == 1)
+        r = (*(u8 *)(a0 + 0x20) ^ 8) ? 0 : D_0017A80;
+    return r;
+}
 
 INCLUDE_ASM("asm/levels", func_L02_00401298);
 
