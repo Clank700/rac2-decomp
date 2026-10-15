@@ -32,6 +32,17 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_00132498`](core/func_00132498.c) | 328 | SDK `snd_BankLoadAsync`; five `$gp` globals, so it needs the `-g8` sibling unit route before a body can be checked (symbol map recorded) |
 | [`func_00121AB8`](core/func_00121AB8.c) | 96 | 24 of 25 words differ; retail uses the two-operand signed `mult` and the three-operand `mult1` for the cross terms of a 64-bit product and reads only the `multu`, this cc1 reads the one it needs and drops the other |
 | [`func_00132220`](core/func_00132220.c) | 148 | 6 of 37 words differ, all in the first block: retail branches `beqz` to the shared epilogue with the return value in the delay slot and leaves the `jal` delay slot a `nop`, this cc1 branches the other way and fills both slots with the argument setup |
+| [`func_00127218`](core/func_00127218.c) | 112 | Candidate is 104 bytes; the row is eight bytes too long - the leading `sw $a0,0x0($v1); nop` is the linker remnant rac1-decomp calls func_001235C0, and the USA v2.00 symbols still give func_00127218 size 0x8. The C reproduces the 104 bytes at 0x00127220 exactly; a `tools/levels.py` split unblocks it |
+| [`func_001244B8`](core/func_001244B8.c) | 136 | WaitGsPathsIdle: reads VU0 control register 29 with `cfc2`, a COP2 instruction plain C cannot emit |
+| [`func_0011B140`](core/func_0011B140.c) | 164 | Two `sync` barriers around the 0x1000F000 handshake; this cc1 emits no `sync` from C |
+| [`func_00115250`](core/func_00115250.c) | 240 | SDK hand-written byte scan: 0x8080 mask build-up and multimedia ops the disassembler prints as `.word`; no C spelling |
+| [`func_001153D4`](core/func_001153D4.c) | 176 | memcpy, SDK hand-written r5900 assembly: 128-bit lq/sq plus an ldl/ldr/sdl/sdr alignment prologue; no C spelling |
+| [`func_001157AC`](core/func_001157AC.c) | 328 | strlen, SDK hand-written r5900 assembly (symbol_addrs), in one of the 16-byte-slot units |
+| [`func_001334B8`](core/func_001334B8.c) | 196 | Exact size, one instruction differs at +0x48: retail fills the `beq` delay slot with the return-zero constant and branches to +168, this cc1 hoists the first argument's `lui` into the slot instead |
+| [`func_0011C000`](core/func_0011C000.c) | 144 | Saturating double/fixed conversion; no C attempt - the entry copies `$a0` into `$a1` before any 64-bit use, which no plain-C body produces |
+| [`func_0012CC88`](core/func_0012CC88.c) | 296 | MPEG header dispatcher; no C attempt - an 11-word local pointer table is copied to the stack with ldl/ldr before the `jalr` |
+| [`func_0012DC50`](core/func_0012DC50.c) | 272 | 264-byte candidate; the `sdk -O2 -g2 -gstabs` profile (same as func_0012D808's) reproduces the 16-byte save slots and the whole body, but this cc1 will not make the last `return func_0012DA98(s0);` a sibling call where retail has `j func_12DA98` |
+| [`func_001307B0`](core/func_001307B0.c) | 224 | IPU setup; no C attempt - the mode stores are merged into call delay slots |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
 | [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
 | [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |
@@ -229,7 +240,6 @@ level address written as a number, which only fits one level.
 
 - [`func_0011EA38`](core/func_0011EA38.c)
 - [`func_00121B18`](core/func_00121B18.c)
-- [`func_00124C98`](core/func_00124C98.c)
 - [`func_0012C680`](core/func_0012C680.c)
 - [`func_0012C788`](core/func_0012C788.c)
 - [`func_0012C878`](core/func_0012C878.c)
