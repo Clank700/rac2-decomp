@@ -68,4 +68,4 @@ void func_003435B0(u8 *a0, u32 a1) {
 
 
 
-INCLUDE_ASM("asm/game", func_00343638);
+/* func_00343638 is matched in 00343200-g8.c (-G8 small data). */
