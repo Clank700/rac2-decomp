@@ -594,4 +594,22 @@ float func_002AA458(void *a0, void *a1, void *a2, float f1, float f2, float f3)
 
 INCLUDE_ASM("asm/game", func_002AA548);
 
-INCLUDE_ASM("asm/game", func_002AA738);
+extern float func_00283BE0(void);
+extern float func_00282C48(float);
+
+f32 func_002AA738(s32 a0)
+{
+    f32 base = func_00283BE0();
+
+    if (a0 == 0 || base * (f32)a0 > 0.0f)
+        return base;
+    {
+        f32 zero = 0.0f;
+
+        if (func_00282C48(base) <= 0.001745329471305012702941895f)
+            return zero;
+        if (base > zero)
+            return base - 6.2831859588623046875f;
+        return base + 6.2831859588623046875f;
+    }
+}
