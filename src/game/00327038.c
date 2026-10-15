@@ -83,7 +83,31 @@ INCLUDE_ASM("asm/game", func_003286D0);
 
 INCLUDE_ASM("asm/game", func_00328758);
 
-INCLUDE_ASM("asm/game", func_00328848);
+extern float func_002A7878(float, float);
+extern void func_00282F20(float *, float *, float);
+extern char D_0022B0A0[];
+
+void func_00328848(char *a0)
+{
+    char *rec = D_0022B0A0;
+    int *owner = *(int **)(a0 + 0x68);
+    int i;
+
+    for (i = 0; i < 100; i++) {
+        if (*(int *)(rec + 0x34) != 0) {
+            rec += 0x40;
+            continue;
+        }
+        *(int *)(rec + 0x34) = (int)a0;
+        *(int *)(rec + 0x30) = 0;
+        *(float *)(rec + 0x0) = func_002A7878(-1.0f, 1.0f);
+        *(float *)(rec + 0x4) = func_002A7878(-1.0f, 1.0f);
+        *(float *)(rec + 0x8) = func_002A7878(-1.0f, 1.0f);
+        func_00282F20((float *)rec, (float *)rec, 0.1275f);
+        owner[0x48 / 4]++;
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/game", func_00328918);
 

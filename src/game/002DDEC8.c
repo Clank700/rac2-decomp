@@ -98,6 +98,7 @@ extern unsigned char D_001A7360[8] __attribute__((sda));
 extern unsigned char D_0018D278[];
 extern int D_001A79F0 __attribute__((sda));
 extern unsigned char D_001393E0[];
+extern void func_00298E08(int, int);
 
 void func_002DE858(int value, int mode)
 {
@@ -116,7 +117,23 @@ void func_002DE858(int value, int mode)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002DE900);
+void func_002DE900(int value, int mode)
+{
+    unsigned char *state;
+    func_00298E08(value, mode);
+    func_001256D8((CdClock *)D_001A7360);
+    func_00131A98(D_001A7360);
+    func_0029ADA0(value);
+    state = D_001393E0;
+    *(int *)(state + 0x148) = 0;
+    *(short *)(state + 0x18) = mode;
+    *(int *)(state + mode * 0x1C + 0x30) = 0;
+    *(int *)(state + 0x174) = value;
+    if (*(int *)(state + 0x164) < 0) {
+        *(int *)(state + 0x168) = 0;
+        *(int *)(state + 0x164) = 0x13;
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002DE990);
 
