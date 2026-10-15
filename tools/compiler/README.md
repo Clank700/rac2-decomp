@@ -20,8 +20,10 @@ unchanged. Use the switch only on a dedicated C file in `config/cflags.txt`;
 
 Patch `0058` adds the opt-in `-mastra-quad-saves` switch. It widens every GPR save slot to
 TImode, so the prologue and the epilogue emit `sq`/`lq` as the two measured `src/core` units
-are saved; without the switch the output is unchanged. Use it only on a dedicated C file in
-`config/cflags.txt`; `src/core/00119BC8.c` is the measured witness.
+are saved, and it keeps the released descending save order for those units (the default profile
+keeps the ascending order measured for the 8-byte slots). Without the switch the output is
+unchanged. Use it only on a dedicated C file in `config/cflags.txt`; `src/core/00119BC8.c`,
+`src/core/00115F28.c` and `src/core/00115C90.c` are the measured witnesses.
 
 `build.sh` stops unless `mips.c`, `mips.h`, `mips.md`, `toplev.c` and `tc-mips.c` hash as it
 lists. The binaries' own hashes depend on the build host and path, so check a compiler by its

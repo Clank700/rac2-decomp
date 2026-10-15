@@ -34,8 +34,6 @@ INCLUDE_ASM("asm/core", func_001158F4);
 
 INCLUDE_ASM("asm/core", func_00115AC0);
 
-INCLUDE_ASM("asm/core", func_00115C90);
-
 INCLUDE_ASM("asm/core", func_00115CF0);
 
 INCLUDE_ASM("asm/core", func_00115D38);
@@ -48,15 +46,9 @@ INCLUDE_ASM("asm/core", func_00115E28);
 
 INCLUDE_ASM("asm/core", func_00115E90);
 
-INCLUDE_ASM("asm/core", func_00115F28);
-
-INCLUDE_ASM("asm/core", func_00115F78);
-
 INCLUDE_ASM("asm/core", func_00115FC0);
 
 INCLUDE_ASM("asm/core", func_00116300);
-
-INCLUDE_ASM("asm/core", func_00116360);
 
 void func_001163A0(unsigned int value)
 {
