@@ -21,6 +21,28 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_0012F948`](core/func_0012F948.c) | 80 | Candidate is 76 bytes; retail's shift sits before the prologue with a nop after it, and the store order differs |
 | [`func_001322B8`](core/func_001322B8.c) | 92 | Sequence and calls exact; this cc1 gives `$s0` to the shift and `$s1` to the object, retail the other way round |
 | [`func_00118460`](core/func_00118460.c) | 112 | Candidate is five instructions long; retail peels the loop and orders the tests differently |
+| [`func_00122630`](core/func_00122630.c) | 300 | libgcc `__pack_d`; candidate is 304 bytes, instruction-identical but for the `dli` expansion of 0x800FFFFFFFFFFFFF (gas patch 0052's top-down rule, 7 instructions, against retail's 6 the unpatched generic path gives) |
+| [`func_00123B40`](core/func_00123B40.c) | 228 | libgcc `find_fde`; candidate is 216 bytes, the loop, `frame_init` call and binary search all match, but both profiles delete the redundant `if (ob == 0) return 0;` retail keeps |
+| [`func_00115340`](core/func_00115340.c) | 128 | SDK `memcmp` (symbol_addrs's own SDK-library match): 128-bit `lq` and MMI compare ops no C reaches; ASM_FUNC candidate |
+| [`func_0011B458`](core/func_0011B458.c) | 164 | SDK `_sceIDC` (symbol_addrs's own SDK-library match): `sync` / `cache` / `mfc0 TagLo` body; ASM_FUNC candidate |
+| [`func_001291A0`](core/func_001291A0.c) | 116 | VU0 macro mode: 19 of 29 instructions are COP2 macro ops reading a constant pool at 0x137EA0; called from the ASM_FUNC vector helpers next door |
+| [`func_00128F48`](core/func_00128F48.c) | 136 | Row is a stripped function's delay slot plus a 0xCDCDCDCD linker gap; the 128-byte body after them builds constant masks with no-op ANDs no compiler emits |
+| [`func_0012FBF0`](core/func_0012FBF0.c) | 368 | libmpeg decode-or-skip driver; 91 of 92 instructions identical, only `*(int *)inner = 1`'s constant lands in `$v0` here and `$v1` in retail |
+| [`func_0011FB8C`](core/func_0011FB8C.c) | 188 | Row starts with a `0xCDCDCDCD` linker gap and a dead-stripped function's delay slot; the real 176-byte body runs from 0x11FB98 |
+| [`func_00132498`](core/func_00132498.c) | 328 | SDK `snd_BankLoadAsync`; five `$gp` globals, so it needs the `-g8` sibling unit route before a body can be checked (symbol map recorded) |
+| [`func_00121AB8`](core/func_00121AB8.c) | 96 | 24 of 25 words differ; retail uses the two-operand signed `mult` and the three-operand `mult1` for the cross terms of a 64-bit product and reads only the `multu`, this cc1 reads the one it needs and drops the other |
+| [`func_00132220`](core/func_00132220.c) | 148 | 6 of 37 words differ, all in the first block: retail branches `beqz` to the shared epilogue with the return value in the delay slot and leaves the `jal` delay slot a `nop`, this cc1 branches the other way and fills both slots with the argument setup |
+| [`func_00127218`](core/func_00127218.c) | 112 | Candidate is 104 bytes; the row is eight bytes too long - the leading `sw $a0,0x0($v1); nop` is the linker remnant rac1-decomp calls func_001235C0, and the USA v2.00 symbols still give func_00127218 size 0x8. The C reproduces the 104 bytes at 0x00127220 exactly; a `tools/levels.py` split unblocks it |
+| [`func_001244B8`](core/func_001244B8.c) | 136 | WaitGsPathsIdle: reads VU0 control register 29 with `cfc2`, a COP2 instruction plain C cannot emit |
+| [`func_0011B140`](core/func_0011B140.c) | 164 | Two `sync` barriers around the 0x1000F000 handshake; this cc1 emits no `sync` from C |
+| [`func_00115250`](core/func_00115250.c) | 240 | SDK hand-written byte scan: 0x8080 mask build-up and multimedia ops the disassembler prints as `.word`; no C spelling |
+| [`func_001153D4`](core/func_001153D4.c) | 176 | memcpy, SDK hand-written r5900 assembly: 128-bit lq/sq plus an ldl/ldr/sdl/sdr alignment prologue; no C spelling |
+| [`func_001157AC`](core/func_001157AC.c) | 328 | strlen, SDK hand-written r5900 assembly (symbol_addrs), in one of the 16-byte-slot units |
+| [`func_001334B8`](core/func_001334B8.c) | 196 | Exact size, one instruction differs at +0x48: retail fills the `beq` delay slot with the return-zero constant and branches to +168, this cc1 hoists the first argument's `lui` into the slot instead |
+| [`func_0011C000`](core/func_0011C000.c) | 144 | Saturating double/fixed conversion; no C attempt - the entry copies `$a0` into `$a1` before any 64-bit use, which no plain-C body produces |
+| [`func_0012CC88`](core/func_0012CC88.c) | 296 | MPEG header dispatcher; no C attempt - an 11-word local pointer table is copied to the stack with ldl/ldr before the `jalr` |
+| [`func_0012DC50`](core/func_0012DC50.c) | 272 | 264-byte candidate; the `sdk -O2 -g2 -gstabs` profile (same as func_0012D808's) reproduces the 16-byte save slots and the whole body, but this cc1 will not make the last `return func_0012DA98(s0);` a sibling call where retail has `j func_12DA98` |
+| [`func_001307B0`](core/func_001307B0.c) | 224 | IPU setup; no C attempt - the mode stores are merged into call delay slots |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
 | [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
 | [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |
@@ -218,7 +240,6 @@ level address written as a number, which only fits one level.
 
 - [`func_0011EA38`](core/func_0011EA38.c)
 - [`func_00121B18`](core/func_00121B18.c)
-- [`func_00124C98`](core/func_00124C98.c)
 - [`func_0012C680`](core/func_0012C680.c)
 - [`func_0012C788`](core/func_0012C788.c)
 - [`func_0012C878`](core/func_0012C878.c)
@@ -559,3 +580,20 @@ counts when it links at every place it has.
 | [`func_L11_0043E090`](levels/func_L11_0043E090.c) | 0 of 1 | needs .rodata at its place, which is not C |
 | [`func_L11_0043E108`](levels/func_L11_0043E108.c) | 0 of 1 | needs .rodata at its place, which is not C |
 | [`func_L11_004433D8`](levels/func_L11_004433D8.c) | 0 of 1 | needs .rodata at its place, which is not C |
+| [`func_00120A30`](core/func_00120A30.c) | 132 | Loop, table and byte-kind test exact; this cc1 leaves the index in `$a0` where retail copies it to `$a2` at entry. Three loop wordings give the same 132 bytes |
+| [`func_00122760`](core/func_00122760.c) | 152 | Every instruction matches; 4 short because retail has a standalone `nop` before the `bnel`, and the normal path's three stores take different slots |
+| [`func_0011B0B0`](core/func_0011B0B0.c) | 144 | C except the two `sync` barriers, which no construct in this toolchain emits (`__sync_synchronize()` becomes a call). May belong as ASM_FUNC |
+| [`func_0012CAB0`](core/func_0012CAB0.c) | 268 | Same size, `instruction at +0xc differs`: retail gives the constant 5 `$s6` and 0x1B3 `$s5`, this candidate the other way; the tail follows them |
+| [`func_001306D0`](core/func_001306D0.c) | 216 | Same frame and callee-saved set; 8 short because retail rematerialises the stride three times and reloads the masks from the stack |
+| [`func_001290BC`](core/func_001290BC.c) | - | VU0 macro code (`sqc2`/`lqc2` plus COP2 words) and the extent starts on the 0xCDCDCDCD linker fill |
+| [`func_00125D94`](core/func_00125D94.c) | - | Cannot match as it stands: the 192-byte extent begins on a 0xCDCDCDCD fill word; the function is the 188 bytes from +4 |
+| [`func_00128FD0`](core/func_00128FD0.c) | - | Reads `$s4` at +0x10 before anything writes it; the result keeps bits 32..63 of that register |
+| [`func_00115690`](core/func_00115690.c) | - | R5900 MMI instructions (opcode 0x1C) in a word-at-a-time memcpy; rabbitizer prints them as `.word # INVALID` |
+| [`func_0012DF18`](core/func_0012DF18.c) | - | Contains a `sync` at +0xEC, same barrier problem as func_0011B0B0; the rest looks like ordinary C |
+| [`func_001208E8`](core/func_001208E8.c) | - | Not attempted in this run; ordinary-C shape, an entry walk with indirect calls |
+| [`func_0012DAC0`](core/func_0012DAC0.c) | - | Not attempted in this run; four early exits, three calls and a packed word from six shifted fields |
+| [`func_00124414`](core/func_00124414.c) | 164 | not a C target: hand-written COP2/VU0 code (`sync`, `cfc2`/`ctc2` $28/$29/$404, four `qmfc2`/`qmtc2` words); the first word also reads $t6, so the row starts mid-instruction |
+| [`func_001184D0`](core/func_001184D0.c) | 120 | 120 bytes, matching retail instruction for instruction including the `bnel` and its delay-slot increment; only the base pointer's register differs (retail copies the parameter to $t1, this cc1 to $t0, counters in $t0/$t1 respectively). Needs the game compiler, not the unit's `sdk` line |
+| [`func_00124780`](core/func_00124780.c) | 148 | 148 bytes; control flow, calls and relocations agree, the order of two adjacent store pairs does not (retail writes buf[1] then buf[2], and $s1 before $s0) |
+| [`func_0012EAA0`](core/func_0012EAA0.c) | 136 | Candidate is 96 (SDK) or 104 (game); retail selects the case with a value tree (`beq`/`sltu`+`bnel`/`beq`) where both cc1s emit two equality tests, and retail's unused 16-byte frame is not allocatable from this body |
+| [`func_00131620`](core/func_00131620.c) | 72 | The row starts 8 bytes early: retail 0x131620 is an unreachable `sdr`+`nop` and the body's 64 bytes are at 0x131628. The candidate matches that body except the byte global's address register ($v1 in retail) |

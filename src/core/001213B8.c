@@ -88,8 +88,6 @@ static __inline__ int double_parts_isinf(DoubleParts *parts) {
     return parts->kind == 4;
 }
 
-INCLUDE_ASM("asm/core", func_00122F10);
-
 int func_00123028(double first, double second) {
     DoubleParts a, b;
     func_00122760(&first, &a);

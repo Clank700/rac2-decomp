@@ -65,8 +65,6 @@ int func_00120808(short *record) {
     return record[2];
 }
 
-INCLUDE_ASM("asm/core", func_00120810);
-
 INCLUDE_ASM("asm/core", func_001208E8);
 
 INCLUDE_ASM("asm/core", func_00120A30);
@@ -80,8 +78,6 @@ void *func_00120AB8(int index, void *source, void *destination) {
     unsigned int size = index < 31 ? 16 : index <= 63 ? 4 : 8;
     return func_001153D4(to, from, size);
 }
-
-INCLUDE_ASM("asm/core", func_00120B38);
 
 void func_00120BC8(void)
 {

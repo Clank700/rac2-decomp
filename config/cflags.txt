@@ -40,6 +40,7 @@ src/core/0011FA18.c	sdk -O2 -G2 -ffunction-sections
 src/core/0011FA20.c	sdk -O2 -G2 -ffunction-sections
 src/core/0011FA70.c	sdk -O2 -G2 -ffunction-sections
 src/core/001213B8.c	sdk -O2 -G2 -ffunction-sections
+src/core/00122F10.c	sdk -O2 -G2 -ffunction-sections
 src/core/00124568.c	sdk -O2 -G2 -ffunction-sections
 src/core/00124AF0.c	sdk -O2 -G2 -ffunction-sections
 src/core/00124C98.c	sdk -O2 -G2 -ffunction-sections
@@ -148,5 +149,11 @@ src/levels/shared/L05_00446E28.c	-O2 -G8 -ffunction-sections
 src/game/0027A0F8.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/game/002CCED0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/core/00120390.c	sdk -O2 -G2 -ffunction-sections
+src/core/00120810.c	sdk -O2 -G2 -ffunction-sections
 src/core/0012CFE8.c	sdk -O2 -G2 -ffunction-sections
 src/core/001232F0.c	sdk -O2 -G2 -ffunction-sections
+src/core/001235C8.c	sdk -O2 -G2 -ffunction-sections
+src/core/00123930.c	sdk -O2 -G2 -ffunction-sections
+src/core/001163E0.c	-O2 -G0 -ffunction-sections
+src/core/00120B38.c	sdk -O2 -G2 -ffunction-sections
+src/core/00133250-g8.c	-O2 -G8 -ffunction-sections
