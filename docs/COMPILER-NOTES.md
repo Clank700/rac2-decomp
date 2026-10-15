@@ -1152,6 +1152,22 @@ Do not reach for this option for a single stubborn body: it re-widens every GPR 
 a unit whose retail saves are quadword throughout, and it was not needed by any function outside
 these two units.
 
+## The game compiler's own headers, and where a varargs list really is (15 October 2026)
+
+`build.sh` now installs `gcc/ginclude/*.h` into the compiler's output directory, as the SDK
+recipe already did; before that, a unit compiled with the game compiler could not include
+`<stdarg.h>` (`stdarg.h: No such file or directory`), which is why the varargs units of the two
+quadword files were out of reach.
+
+The header alone does not reproduce retail's list, though: on this target `<stdarg.h>`'s
+`va_start` expands to `__builtin_next_arg(last)` — the **stack** arguments — while the retail
+varargs shims pass the compiler's **register save area**, `sp + 0x50` in a 0x80 frame with two
+named arguments and `sp + 0x58` in a 0x90 frame with one. The bodies reach it the way the
+matched varargs function in `src/core/0011E0D8.c` already does, with
+`(char *)__builtin_next_arg(last) - <0x30 or 0x38>`; `func_00115CF0`, `func_00115D48` and
+`func_00115DA8` are the measured witnesses. The offset is the register save area's size above
+the named arguments: 8 minus the named count, times 8 bytes.
+
 ## Quadword copy source shapes
 
 For func_L08_003D3D80 and func_L08_003D82F0, the current game profile folds

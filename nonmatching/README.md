@@ -15,6 +15,9 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_00116300`](core/func_00116300.c) | 96 | Candidate is 88 bytes; retail gives the empty arm its own `b` over the block, this cc1 lays the block out as the fall-through |
 | [`func_00118548`](core/func_00118548.c) | 156 | Candidate is 160 bytes; unsigned divide matches, but this cc1 copies the quotient into a third register and hoists the loop `divu` out of the delay slot |
 | [`func_00115E90`](core/func_00115E90.c) | 152 | Call shape, order and the noreturn tail are exact; this cc1 swaps the counter and the entry pointer between `$s0` and `$s1` |
+| [`func_00118BC0`](core/func_00118BC0.c) | 264 | Candidate is 276 bytes; this cc1 materialises both global addresses and the buffer base into registers where retail keeps one base and offsets |
+| [`func_001330D0`](core/func_001330D0.c) | 56 | Candidate is 64 bytes; the retail table base is `$gp`-relative, this cc1 materialises it absolutely |
+| [`func_00133688`](core/func_00133688.c) | 52 | Candidate is 44 or 48 bytes; one unit needs both a `$gp` and a folded absolute access, which no single profile gives |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
 | [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
 | [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |

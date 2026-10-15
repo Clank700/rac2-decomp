@@ -87,4 +87,8 @@ export CC="gcc -m32" CFLAGS="$F"
   make -j$J all-gas
 } > "$W/build.log" 2>&1 || { tail -30 "$W/build.log"; exit 1; }
 cp gcc/cc1 gcc/cpp "$OUT/" && cp gas/as-new "$OUT/as"
+# the compiler's own headers (stdarg.h and the va-*.h it includes), as the
+# SDK recipe installs them: an authored unit that includes <stdarg.h>
+# (a varargs body) needs them on the preprocessor's path.
+mkdir -p "$OUT/include" && cp "$W/src/gcc/ginclude/"*.h "$OUT/include/"
 echo "compiler in $OUT"
