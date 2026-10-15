@@ -51,6 +51,8 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_0012CC88`](core/func_0012CC88.c) | 296 | MPEG header dispatcher; no C attempt - an 11-word local pointer table is copied to the stack with ldl/ldr before the `jalr` |
 | [`func_0012DC50`](core/func_0012DC50.c) | 272 | 264-byte candidate; the `sdk -O2 -g2 -gstabs` profile (same as func_0012D808's) reproduces the 16-byte save slots and the whole body, but this cc1 will not make the last `return func_0012DA98(s0);` a sibling call where retail has `j func_12DA98` |
 | [`func_001307B0`](core/func_001307B0.c) | 224 | IPU setup; no C attempt - the mode stores are merged into call delay slots |
+| [`func_0011BEE0`](core/func_0011BEE0.c) | 56 | Byte-exact only with a register pin (`__asm__("" : "=r"(p) : "0"(0x1000F180))`), which AGENTS.md forbids |
+| [`func_00125F20`](core/func_00125F20.c) | 484 | Byte-exact only with `__asm__ __volatile__("sync")`; inline assembly is forbidden, so the barrier belongs to the ASM_FUNC route |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
 | [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
 | [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |
