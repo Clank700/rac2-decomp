@@ -132,7 +132,54 @@ void func_0026EB98(int *first, int *second, int *third) {
     }
 }
 
-INCLUDE_ASM("asm/game", func_0026EC58);
+typedef struct { char b[8]; } CdClock;
+extern int func_001256D8(CdClock *);
+extern void func_001163A0(unsigned int);
+void func_0026EC58(unsigned short *out)
+{
+    CdClock clock;
+    int first, second, third;
+    int low, high;
+    int seed;
+    func_001256D8(&clock);
+    seed = (unsigned char)clock.b[1] + 1;
+    seed *= (unsigned char)clock.b[3] + 1;
+    seed *= (unsigned char)clock.b[2] + 1;
+    seed *= (unsigned char)clock.b[5] + 1;
+    seed *= (unsigned char)clock.b[6] + 1;
+    func_001163A0(seed);
+    func_0026EB98(&first, &second, &third);
+    out[0x20/2] = out[0x08/2] = (unsigned short)first + 0xb9;
+    out[0x28/2] = out[0x10/2] = (unsigned short)second + 0xb9;
+    out[0x30/2] = out[0x18/2] = (unsigned short)third + 0xb9;
+    if (func_002A77E0(2)) {
+        low = 0xb3;
+        high = 0xb6;
+    } else {
+        low = 0xb6;
+        high = 0xb3;
+    }
+    func_0026EB98(&first, &second, &third);
+    out[0x02/2] = (unsigned short)first + low;
+    out[0x06/2] = (unsigned short)second + low;
+    out[0x0c/2] = (unsigned short)third + low;
+    out[0x12/2] = out[0x02/2];
+    out[0x16/2] = out[0x06/2];
+    out[0x1c/2] = out[0x0c/2];
+    out[0x22/2] = out[0x02/2];
+    out[0x26/2] = out[0x06/2];
+    out[0x2c/2] = out[0x0c/2];
+    func_0026EB98(&first, &second, &third);
+    out[0x04/2] = (unsigned short)first + high;
+    out[0x0a/2] = (unsigned short)second + high;
+    out[0x0e/2] = (unsigned short)third + high;
+    out[0x14/2] = out[0x04/2];
+    out[0x1a/2] = out[0x0a/2];
+    out[0x1e/2] = out[0x0e/2];
+    out[0x24/2] = out[0x04/2];
+    out[0x2a/2] = out[0x0a/2];
+    out[0x2e/2] = out[0x0e/2];
+}
 
 INCLUDE_ASM("asm/game", func_0026EDE8);
 

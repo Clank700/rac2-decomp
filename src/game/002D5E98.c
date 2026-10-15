@@ -182,7 +182,29 @@ INCLUDE_ASM("asm/game", func_002D84B0);
 
 INCLUDE_ASM("asm/game", func_002D89D8);
 
-INCLUDE_ASM("asm/game", func_002D8EC0);
+extern char *D_001A8CFC[] __attribute__((sda));
+extern unsigned char D_00139568[];
+extern int D_00139868[];
+extern unsigned char D_00239BA0[];
+typedef struct { unsigned char reserved[0x6C]; int handle; } WidgetClass2D8EC0;
+extern void *func_0034E5B8(void *);
+extern void func_00335E68(unsigned char *, int);
+extern void func_00336B98(char *, int);
+extern void func_00336B90(unsigned char *, int);
+extern void func_0034E220(char *, int, int, int, int);
+void func_002D8EC0(char *source, short *row, int first, int second, int x, int y)
+{
+    int index = second * *(int *)(source + 0x44) + first;
+    unsigned char *widget = (unsigned char *)func_0034E5B8(D_001A8CFC[0] + 0x36F28) + index * 0x48;
+    func_00335E68(widget, 0);
+    if (((WidgetClass2D8EC0 *)(D_00139568[row[3]] * 0xE0 + (unsigned int)D_00239BA0))->handle != 0) {
+        func_00335E68(widget, 1);
+        func_00336B98((char *)widget, D_00139868[row[3]] >> 5);
+        func_00336B90(widget, ((WidgetClass2D8EC0 *)(D_00139568[row[3]] * 0xE0 + (unsigned int)D_00239BA0))->handle);
+    }
+    func_0034E220(D_001A8CFC[0] + 0x36F28, index, x, y, 0x80);
+}
+
 
 INCLUDE_ASM("asm/game", func_002D9008);
 
