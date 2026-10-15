@@ -24,11 +24,11 @@ retail one ([`progress/report.json`](progress/report.json), `tools/progress.py`)
 <!-- progress -->
 | | Functions | Code |
 | --- | ---: | ---: |
-| Boot executable | 1,411 of 3,390 | 161,996 of 1,049,464 bytes |
-| Levels | 1,470 of 5,710 | 147,828 of 4,484,136 bytes |
-| **Total** | 2,881 of 9,100 | 309,824 of 5,533,600 bytes (5.60%) |
+| Boot executable | 1,470 of 3,390 | 170,200 of 1,049,464 bytes |
+| Levels | 1,471 of 5,710 | 147,888 of 4,484,136 bytes |
+| **Total** | 2,941 of 9,100 | 318,088 of 5,533,600 bytes (5.75%) |
 
-The 27 levels hold 106,337 function placements; C covers 36,986 of them.
+The 27 levels hold 106,337 function placements; C covers 38,445 of them.
 84 of the matched functions are the original's own assembly (`ASM_FUNC`), kept as assembly.
 <!-- /progress -->
 
