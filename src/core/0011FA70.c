@@ -35,7 +35,7 @@ int func_0011FA70(int *dst, int *src, unsigned int nbytes) {
     return 0;
 }
 
-INCLUDE_ASM("asm/core", func_0011FAA8);
+ASM_FUNC("asm/core", func_0011FAA8);
 
 /* rac1-decomp src/core/0011DDD0.c: func_0011DE38 */
 /*
