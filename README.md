@@ -21,6 +21,11 @@ the boot does not also have. A function many levels share is one function, howev
 places it has. A function is C when its C links into a program that comes out equal to the
 retail one ([`progress/report.json`](progress/report.json), `tools/progress.py`).
 
+The report also gives the boot executable's data (383,391 bytes of initialised data, for the
+Data bar on [ByteMatch](https://bytematch.dev)). None of it is matched yet: the build places C
+functions' code and discards their objects' data, so all of it still comes from retail's dumps.
+The levels' data is not measured.
+
 <!-- progress -->
 | | Functions | Code |
 | --- | ---: | ---: |
