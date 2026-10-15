@@ -79,8 +79,6 @@ void *func_00120AB8(int index, void *source, void *destination) {
     return func_001153D4(to, from, size);
 }
 
-INCLUDE_ASM("asm/core", func_00120B38);
-
 void func_00120BC8(void)
 {
 }

@@ -30,6 +30,8 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_0012FBF0`](core/func_0012FBF0.c) | 368 | libmpeg decode-or-skip driver; 91 of 92 instructions identical, only `*(int *)inner = 1`'s constant lands in `$v0` here and `$v1` in retail |
 | [`func_0011FB8C`](core/func_0011FB8C.c) | 188 | Row starts with a `0xCDCDCDCD` linker gap and a dead-stripped function's delay slot; the real 176-byte body runs from 0x11FB98 |
 | [`func_00132498`](core/func_00132498.c) | 328 | SDK `snd_BankLoadAsync`; five `$gp` globals, so it needs the `-g8` sibling unit route before a body can be checked (symbol map recorded) |
+| [`func_00121AB8`](core/func_00121AB8.c) | 96 | 24 of 25 words differ; retail uses the two-operand signed `mult` and the three-operand `mult1` for the cross terms of a 64-bit product and reads only the `multu`, this cc1 reads the one it needs and drops the other |
+| [`func_00132220`](core/func_00132220.c) | 148 | 6 of 37 words differ, all in the first block: retail branches `beqz` to the shared epilogue with the return value in the delay slot and leaves the `jal` delay slot a `nop`, this cc1 branches the other way and fills both slots with the argument setup |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
 | [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
 | [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |
