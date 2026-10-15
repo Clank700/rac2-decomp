@@ -4,6 +4,8 @@ src/core/00115228.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 src/core/00115E68.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 src/core/00115C90.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 src/core/00115F28.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
+src/core/00116360.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
+src/core/00115F78.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 src/core/001163B0.c	sdk -O2 -G2 -ffunction-sections
 src/core/00119BC8.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 src/core/0011B1E8.c	sdk -O2 -G2 -ffunction-sections
