@@ -198,7 +198,7 @@ char *func_0028B2B8(int size)
     return cursor;
 }
 
-INCLUDE_ASM("asm/game", func_0028B338);
+/* func_0028B338 is in 00288D88-g8.c. */
 
 INCLUDE_ASM("asm/game", func_0028B3D0);
 
