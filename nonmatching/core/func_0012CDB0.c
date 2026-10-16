@@ -25,6 +25,30 @@
  * and the `sdk -O2 -g2 -gstabs` profile (which fits the neighbouring unit
  * func_0012D808) all change nothing else. The game compiler 2.95.3 is the
  * wrong compiler here: its prologue differs at +0x0.
+ *
+ * WAVE 4: the store is not "sunk late" for a scheduling reason - it is an
+ * 8-byte insn. Compiling this body with `-da` through the game's cc1 (the same
+ * toolchain tools/build.py drives) writes the three store lines as
+ *
+ *     sw  $6,268443664          (268443664 = 0x10002010)
+ *
+ * i.e. ONE RTL insn with an absolute constant address, which the ASSEMBLER
+ * expands to `lui $at,0x1000 ; sw $a2,0x2010($at)` - two words where the delay
+ * slot has room for one, so reorg can never place it in the slot. The first
+ * read-modify-write (the one that already matches) reaches its array through
+ * $a3 instead: its address is CSEd into a register for the read and the write
+ * of the same statement, so its store is a 4-byte `sw $v1,0($a3)` and IS
+ * filled. The three failing stores use two different materialisations because
+ * the read and the store of a volatile pair are not CSEd into one register
+ * (the read keeps the address in $a2, the store reaches it through $at).
+ *
+ * Measured and rejected in wave 4: `-mno-split-addresses` on a dedicated file
+ * (`src/core/0012CDB0.c`, `config/cflags.txt`) - it does NOT change this store
+ * out of the macro form and it moves the frame to 0x10 against retail's 0x20
+ * (the six incoming-argument stores stop landing in the jal delay slots), so
+ * the whole prologue breaks while the three IPU stores stay put.
+ * What would close it: a source shape that makes this cc1 keep the address of
+ * the store in a general register (the $a3 form) without disturbing the frame.
  */
 
 /* rac1-decomp src/core/00125630.c: func_00128F90 (_pictureCodingExtension).

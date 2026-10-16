@@ -8,7 +8,26 @@
    stays between the two exits and an extra `b` appears at the end. Everything else -
    the two `lui $at` stores to 0x1A7100/0x1A7110, the two argument addresses as
    lui/addiu symbols, the payload stores and both calls - lines up. Unblocked by a
-   source shape that makes this cc1 fill that delay slot from the branch target. */
+   source shape that makes this cc1 fill that delay slot from the branch target.
+
+   WAVE 4 re-tries, all measured on this body (the file has to be its own *-g8.c:
+   00133490-g8.c holds the already-matching sibling func_00133640):
+     * the if/else shape with a shared exit - `if (func_00133580(1) == 1) ret = 0;
+       else { body } return ret;` - puts the ENTIRE body in retail's exact order
+       and position, but flips the test (bne to the body) and keeps the zero in an
+       in-line block with `b epilogue`, so the same +0x48 word is still the only
+       difference. Inverting that condition (`!= 1` with the body in the then-arm,
+       with and without the shared return) reproduces the original layout instead.
+       A plain `int ret; ret = 0;` before the test costs a callee-saved register
+       and grows the frame: 204 bytes against 196.
+     * `-fno-schedule-insns2` groups the prologue saves (sd $s0..$ra together) where
+       retail interleaves them with the daddu moves, so the scheduler is part of the
+       match - but the BODY ORDER is unchanged (lui $a0 first), so the hoist into the
+       slot is not sched2. `-fno-schedule-insns` changes nothing at all.
+     * passing the two addresses straight in the call (no p/q locals) changes nothing.
+   What remains: the beq's slot must take the return-0 constant and the branch must
+   be retargeted to +168 (the epilogue); this cc1 fills it from the fall-through
+   (`lui $a0,0x1A`) and leaves the return-0 block in line with an extra `b`. */
 #include "common.h"
 
 extern int D_001A748C __attribute__((sda));
