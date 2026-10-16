@@ -62,7 +62,29 @@ void func_L02_003DBE60(char *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003DBF40);
+extern unsigned char D_001A7AFA;
+extern char D_00189EA0[];
+extern unsigned short D_0018C31C[];
+extern int func_002ACBC8(void *, int);
+extern void func_L02_003DBFD8(void);
+
+void func_L02_003DBF40(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    switch (*(unsigned char *)(arg0 + 0x20)) {
+    case 0:
+        *(unsigned char *)(arg0 + 0x30) = 0xFF;
+        if (D_001A7AFA == 0)
+            D_0018C31C[0] = 1;
+        func_002A7750(arg0, 1, -1);
+        break;
+    case 1:
+        func_L02_003DBFD8();
+        if (func_002ACBC8(D_00189EA0, *(int *)state))
+            *(unsigned short *)(D_00189EA0 + 0x19A) = 5;
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003DBFD8);
 
