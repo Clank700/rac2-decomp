@@ -119,8 +119,7 @@ extern void func_0012B3E0(MpegDecoderC *d, int DMV[][2], int *dmvector, int mvx,
 
 /* _errMessage takes one argument, this call site hands it three; the alias is
    the only spelling that keeps the extra two live in $a1/$a2. */
-extern void func_00130250_msg(MpegDecoderC *d, char *fmt, int code)
-    __asm__("func_00130250");
+extern void func_00130250_msg(MpegDecoderC *d, char *fmt, int code) __asm__("func_00130250");
 
 extern char D_0013BA20[];
 
