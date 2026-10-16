@@ -81,7 +81,44 @@ INCLUDE_ASM("asm/game", func_003285C0);
 
 INCLUDE_ASM("asm/game", func_003286D0);
 
-INCLUDE_ASM("asm/game", func_00328758);
+extern unsigned char *D_001BAF98[];
+extern char D_001A63A8[];
+extern char D_001B01F0[];
+extern int func_002B6D28(void);
+extern void func_002A8598(int, int);
+extern void func_0026FEB8(const char *, ...);
+
+void func_00328758(char *self)
+{
+    unsigned char *object = D_001BAF98[0];
+    char *owner = *(char **)(self + 0x68);
+    unsigned char *state;
+    char *context;
+    if (object == 0)
+        return;
+    if (*(short *)(*(char **)(object + 0x24) + 0x46) != 18)
+        return;
+    state = *(unsigned char **)(object + 0x68);
+    if (state != 0) {
+        if (*(short *)(state + 0x16) == 0) {
+            if (state[0x14] != 0) {
+                object[0xBC] += 2;
+                if (object[0xBC] >= 25) {
+                    context = D_001A63A8;
+                    if (*(short *)(context + 0x72) == 3 && *(short *)(context + 0x6C) < 6000)
+                        func_002B6D28();
+                }
+                if (object[0x21] != 255)
+                    func_002A8598(object[0x21], object[0xBC]);
+            }
+            *(int *)(owner + 0x54) = 0;
+        } else {
+            *(int *)(owner + 0x54) = 1;
+        }
+    } else {
+        func_0026FEB8(D_001B01F0, *(short *)(object + 0xAA));
+    }
+}
 
 extern float func_002A7878(float, float);
 extern void func_00282F20(float *, float *, float);
