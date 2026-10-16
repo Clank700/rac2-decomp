@@ -1,7 +1,6 @@
 #include "include_asm.h"
 
 typedef unsigned char u8;
-typedef unsigned int u32;
 typedef int s32;
 typedef float f32;
 
@@ -24,27 +23,33 @@ typedef float f32;
  * float, call one of two handlers with (0x0018C0B0, a0, a1, f12, &copy), then
  * `if ((a1 & 4) || a5) *(s32 *)0x001B3718 = D_L23_001B13D4;`.
  *
- * measured: with a plain 16-byte struct the copy comes out as ldl/ldr/sdl/sdr, with
- * `__attribute__((aligned(16)))` as two ld/sd pairs - neither is retail's one lq/sq
- * pair.  The rest of the shape (argument registers, both calls, the $gp store and the
- * tail) is settled.  The lq/sq spelling is the open question.
+ * measured (wslcmp.py, unit's -g8 sibling, -O2 -G8 -ffunction-sections): `typedef int
+ * TI16 __attribute__((mode(TI)));` is the lq/sq spelling - the candidate is then exactly
+ * 168 bytes and 41 of 42 words match, the ONE left being the block order of the two
+ * handler arms:
+ *   +0x20  retail 1100000C beqz $t0,.+4+(0xC<<2)   mine 1500000C bnez $t0,.+4+(0xC<<2)
+ * Both source orders (a4 == 0 -> func_002A8F70, and the swapped form) compile to the
+ * SAME word, so the fall-through arm is this cc1's choice, not the source's.  Before
+ * that, a plain struct copied with ldl/ldr/sdl/sdr and an aligned(16) struct with two
+ * ld/sd pairs.  The unit must be the -g8 sibling: retail reads `$gp` at 0x001B13D4, and
+ * that file also carries `extern s32 D_0018C0B0 __attribute__((nosda));` which is the
+ * loaded 0x0018C0B0 value the two handlers need (not the address).
  */
 
-extern void func_002A8F70(void *, void *, void *, f32, void *);
-extern void func_002A90C8(void *, void *, void *, f32, void *);
+extern s32 D_0018C0B0 __attribute__((nosda));
 extern s32 D_L23_001B13D4 __attribute__((sda));
+extern void func_002A8F70(s32, void *, void *, f32, TI16 *);
+extern void func_002A90C8(s32, void *, void *, f32, TI16 *);
 
-typedef struct {
-    u32 w[4];
-} V4;
+typedef int TI16 __attribute__((mode(TI)));
 
-void func_L23_0041E5B0(void *a0, s32 a1, s32 a2, V4 *a3, s32 a4, s32 a5) {
-    V4 v = *a3;
+void func_L23_0041E5B0(void *a0, s32 a1, s32 a2, TI16 *a3, s32 a4, s32 a5) {
+    TI16 v = *a3;
 
     if (a4 == 0)
-        func_002A8F70((void *)0x0018C0B0, a0, (void *)a1, (f32)a2, &v);
+        func_002A90C8(D_0018C0B0, a0, (void *)a1, (f32)a2, &v);
     else
-        func_002A90C8((void *)0x0018C0B0, a0, (void *)a1, (f32)a2, &v);
+        func_002A8F70(D_0018C0B0, a0, (void *)a1, (f32)a2, &v);
     if ((a1 & 4) != 0 || a5 != 0)
         *(s32 *)0x001B3718 = D_L23_001B13D4;
 }
