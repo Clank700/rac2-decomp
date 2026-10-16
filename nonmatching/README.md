@@ -1104,10 +1104,8 @@ Matched this tour (7, all re-checked with the Docker-free ruler, `N of N places 
 | [`func_L14_003E50B8`](levels/func_L14_003E50B8.c) | 212 | Nearest: 208 bytes. The s16 ring walk (mod 8 over `*(s16 *)(a1+0x16)` until the limit at `a1+0x14` is met, then `func_321F58(a0, 2, -1)` on an odd index) is exact; only the temporaries differ (this cc1: `$a2`/`$a3`/`$a0` and `$t0` for the parameter; retail: `$a1`/`$a2`/`$a0` and `$a3`). Five spellings identical |
 | [`func_L22_003FD140`](levels/func_L22_003FD140.c) | 168 | Not a C row: catalogue defect. The first four words are `lwc1 $f0,0x44($v0)` (a `$v0` the body never sets) plus three `nop`s; the real prologue `addiu $sp,$sp,-0x70` opens at 0x003FD150 and the epilogue closes at 0x003FD1E7, so the entry should be 0x003FD150 with a size of 152. Decoded body noted for the maintainers |
 
-## Level functions, wave 7 agent lvl7-03 (2026-10-16)
 
 | [`func_L00_00300378`](levels/func_L00_00300378.c) | 192 | Size EXACT, 27 places, decoded in full (three header words select three pointer blocks; each non-zero block's base is published - 0x001BF200, 0x001B1AC0, 0x001B1AC4 - and added to its 16-byte-strided pointer fields at +0x1C, `count` re-read every iteration). Needs the -G8 sibling with a `config/cflags.txt` line `L00_002FC7A0-g8.c -O2 -G8 -ffunction-sections -mno-split-addresses`: that flag is what turns the two blanket zeros into retail's `lui $at; sw %lo($at)` (the two matched neighbours still measure 27/27 under it). One register left - retail computes the block base into `$v1` and copies `daddu $a1,$v1`, this cc1 goes straight into `$a1`, so the `$gp` store cannot land in the `blez` delay slot |
-| [`func_L05_004222D8`](levels/func_L05_004222D8.c) | 164 | Candidate is 172 bytes; the clamp-and-publish body is decoded in full and needs the `-G8` sibling (level 5's `$gp` base is 0x1AEFF0, so `lw $v0,0x2360($gp)` is `D_L05_001B1350` with the `sda` attribute while 0x1B1354/58/5C stay absolute). Retail materialises `lui $v0,0x14; addiu $v0,$v0,-0x6A48` last, this cc1 hoists the same pair into `$a2` at the top and then rematerialises a dead `lw $v0,0x0($gp)` into two clamp delay slots - the two extra words. Nine shapes give 172/176 |
 
 ## Additional source forms
 
@@ -1389,8 +1387,6 @@ read the primary entry for context and verify each form separately.
 
 ## Level functions, wave 7 agent lvl7-01 (2026-10-16)
 
-| Function | Size | Bytes that differ |
-| --- | ---: | ---: |
 | [`func_L00_003B3090`](levels/func_L00_003B3090.c) | 196 | Exact size, 12 words left. Record builder: the 16-byte `lq`/`sq` copy through `mode(TI)`, the pointer at +0x10, 0x10000 at +0x14, 1 at +0x20, the float of A1+0x2C at +0x1C, then `func_00282F70(&rec,&rec,1.0f)` and the tail (1.0f, 0x45AFDF66, 3, 2, the halfword of A0+0xAA) for `func_00277F48(A2,1,D_0018C0B0,&rec,float at A1+0x30)`. Retail keeps the stores ahead of the `lq`/`sq` and materialises both small constants in `$v0`/`$v1`; this cc1 sinks the stores past the call set-up, keeps them in `$v1`/`$a3` and hoists the `lq` into `$v1`. Six store permutations and four spellings of the float measured |
 | [`func_L02_003CD1E8`](levels/func_L02_003CD1E8.c) | 176 | Candidate 180 bytes, one word over and every other word retail's. This cc1 allocates the first parameter's pseudo to `$v0`, so the `lw $s1,0x68($a0)` retail keeps in the first call's delay slot becomes `daddu $v0,$a0,$zero` + `lw $s1,0x68($v0)`. Twelve source shapes (state pointer before/between/after the two calls, struct field, `unsigned`/`int`/`void *` loads, index expression, explicit copies of both parameters, `-O2` and `-O2 -G8`) all give the copy, so it is the allocator, not the shape |
 | [`func_L02_003CEBB8`](levels/func_L02_003CEBB8.c) | 184 | Not written: the 0x7FFF list walk of the matched L01/L04 siblings (`q = table[a0]`, `base = *(u8 **)D_L02_001B359C`, `e = base + ((*q & 0x7FFF) << 8)`, class 0xD returns `e`), plus a continuation chain this cc1 duplicates (the 0xFF test again, a `bnez` on a register the prologue just cleared, `q == 0`, then `(s16)*(q-1) >= 0` OR `q == table[index]`). Structure and gates in the file |
@@ -1402,3 +1398,54 @@ read the primary entry for context and verify each form separately.
 
 - [`func_L00_003B3090`](levels/func_L00_003B3090.c): [form 1](levels/alternatives/func_L00_003B3090-form-01.c).
 - [`func_L02_003CD1E8`](levels/func_L02_003CD1E8.c): [form 1](levels/alternatives/func_L02_003CD1E8-form-01.c).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
