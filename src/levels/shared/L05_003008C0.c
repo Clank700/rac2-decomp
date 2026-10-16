@@ -118,11 +118,44 @@ INCLUDE_ASM("asm/levels", func_L05_0037A218);
 
 INCLUDE_ASM("asm/levels", func_L05_0037A5F8);
 
+typedef struct L05Slot40 {
+    int state;      /* 0x00 */
+    int next;       /* 0x04, the index the chain moves to */
+    int pad08[2];
+    int limit;      /* 0x10 */
+    int value;      /* 0x14 */
+    int pad18[4];
+} L05Slot40;
+
+extern L05Slot40 D_002A1800[];
+
+extern int func_L05_0037AAC8(int index);
+
 INCLUDE_ASM("asm/levels", func_L05_0037AA88);
 
-INCLUDE_ASM("asm/levels", func_L05_0037AB18);
+/* Takes a step off the stored value, never below zero. */
+void func_L05_0037AB18(int index, int step)
+{
+    int slot = func_L05_0037AA88(index);
 
-INCLUDE_ASM("asm/levels", func_L05_0037AB88);
+    if (slot < 0)
+        slot = func_L05_0037AAC8(index);
+    D_002A1800[slot].value -= step;
+    if (D_002A1800[slot].value <= 0)
+        D_002A1800[slot].value = 0;
+}
+
+/* Adds a step to the stored value, never above the stored limit. */
+void func_L05_0037AB88(int index, int step)
+{
+    int slot = func_L05_0037AA88(index);
+
+    if (slot < 0)
+        slot = func_L05_0037AAC8(index);
+    D_002A1800[slot].value += step;
+    if (D_002A1800[slot].limit < D_002A1800[slot].value)
+        D_002A1800[slot].value = D_002A1800[slot].limit;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_0037AC00);
 
