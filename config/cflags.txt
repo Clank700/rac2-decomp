@@ -150,10 +150,17 @@ src/game/0027A0F8.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/game/002CCED0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/core/00120390.c	sdk -O2 -G2 -ffunction-sections
 src/core/00120810.c	sdk -O2 -G2 -ffunction-sections
+src/core/001212C8.c	sdk -O2 -G2 -ffunction-sections
+src/core/001242A0.c	sdk -O2 -G2 -ffunction-sections
 src/core/0012CFE8.c	sdk -O2 -G2 -ffunction-sections
 src/core/001232F0.c	sdk -O2 -G2 -ffunction-sections
 src/core/001235C8.c	sdk -O2 -G2 -ffunction-sections
 src/core/00123930.c	sdk -O2 -G2 -ffunction-sections
 src/core/001163E0.c	-O2 -G0 -ffunction-sections
+src/core/001175F0.c	-O0 -G2 -ffunction-sections -mastra-quad-saves
 src/core/00120B38.c	sdk -O2 -G2 -ffunction-sections
 src/core/00133250-g8.c	-O2 -G8 -ffunction-sections
+src/core/001339B0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/core/00117108.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
+src/core/0012DD60.c	sdk -O2 -g2 -gstabs
+src/core/00116460.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
