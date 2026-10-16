@@ -393,9 +393,10 @@ void func_L02_003D78A8(char *a0) {
    same register-permutation wall as func_L02_003DBEC8. 152 bytes against 148. */
 INCLUDE_ASM("asm/levels", func_L02_003D7B88);
 
-/* Near miss (see work/wave7-20261013/w04/drafts): the whole body compiles to the retail
-   instruction sequence; only the register permutation differs (the parameter copy and p land in
-   a2/a3 the other way round). 124 bytes against 120. */
+/* Near miss (see work/wave7-20261013/w04/drafts and nonmatching/levels/func_L02_003DBEC8.c):
+   the body compiles to the retail instruction sequence; only the register permutation differs
+   (the parameter copy and the context land in $t1/$t0 here, retail keeps $a2/$a3) and the
+   epilogue's `ld $ra` is sunk into the bnez delay slot, so 112 bytes against 120. */
 INCLUDE_ASM("asm/levels", func_L02_003DBEC8);
 
 void func_L02_003DED08(void) {
