@@ -2013,3 +2013,4 @@ read the primary entry for context and verify each form separately.
 
 | function | size | verdict |
 | --- | --- | --- |
+| [`func_L02_003FB4D8`](levels/func_L02_003FB4D8.c) | 196 | Size exact, 48 of 49 words byte-identical (id guard, symbol table lookup - a literal 0x1FC060 compiles to `lui; ori` and misses -, the u16 `(*q & 0x7FFF) * 256` walk with a `$gp` base, the four element tests, the +0xB8 store and a TWO-argument tail call). Only the loop-bottom branch differs: retail `bgez` (plain, 0x0441FFEE) against this cc1's annulling `bgezl` (0x0443FFEE). Seven spellings measured. |
