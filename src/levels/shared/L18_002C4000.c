@@ -150,7 +150,22 @@ BatchA_A18_s32 func_L18_003F7358(BatchA_A18_u8 *a0, BatchA_A18_u8 *a1) {
 INCLUDE_ASM("asm/levels", func_L18_003F73B8);
 
 
-INCLUDE_ASM("asm/levels", func_L18_003F7470);
+extern BatchA_A18_s32 func_002A77E0(BatchA_A18_s32 a0);
+
+extern BatchA_A18_s32 func_L18_003F75E8(BatchA_A18_s32 a0, BatchA_A18_u8 *a1);
+
+/* runs the 0x1E gate and, when it clears, the record query into a local buffer;
+   answers whether the query found anything */
+BatchA_A18_s32 func_L18_003F7470(BatchA_A18_u8 *a0) {
+    BatchA_A18_u8 buf[16];
+    BatchA_A18_s32 p;
+
+    if (func_002A77E0(0x1E) == 0) {
+        p = *(BatchA_A18_s32 *)(a0 + 0x68);
+        return func_L18_003F75E8(*(BatchA_A18_s32 *)((char *)p + 0x25C), buf) != 0;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L18_003F74B8);
 
@@ -428,4 +443,9 @@ INCLUDE_ASM("asm/levels", func_L18_004273F0);
 
 INCLUDE_ASM("asm/levels", func_L18_00427688);
 
+extern char *D_L18_001FB320[];
+extern char *D_L18_001B281C;
+
+/* func_L18_00427B48: 144 bytes against retail's 148; the chain pointer and the
+   stored 1 take each other's register. Deposited in nonmatching/levels/. */
 INCLUDE_ASM("asm/levels", func_L18_00427B48);
