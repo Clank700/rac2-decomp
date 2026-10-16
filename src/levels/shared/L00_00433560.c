@@ -112,7 +112,15 @@ void* func_L00_00433AA0(void* param_1)
 
 INCLUDE_ASM("asm/levels", func_L00_00433AD8);
 
-INCLUDE_ASM("asm/levels", func_L00_00433DB0);
+extern void func_430480(void *);
+extern void func_42C290(void *);
+
+/* Visits both sub-objects, then hands back the same pointer. */
+char *func_L00_00433DB0(char *a0) {
+    func_430480(a0 + 0x8);
+    func_42C290(a0 + 0x2B0);
+    return a0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00433DE8);
 
