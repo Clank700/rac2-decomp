@@ -9,7 +9,9 @@
    the call set-up, keeps the 0x10000 pair in $v1/$a3 and hoists the lq into $v1 (so the sq
    cannot share the loaded register). Six permutations of the four stores and of the block
    copy were measured in one run (best: f14, f20, f1C, p10, block), plus four spellings of
-   the 0x45AFDF66 constant.
+   the 0x45AFDF66 constant. Four further shapes that materialise the record pointer up
+   front (every field through `struct S *p`, mixed, and the tail stores first) come out
+   180-196 bytes with 13-45 words off, so the folding is not the lever here.
    NOTE for whoever retries: the rebuilt assembler does not read the exact decimal of a float
    to its bits - 5627.906982421875f comes out 0x45AFDF42, not 0x45AFDF66 (same effect hit on
    3.141571044921875f, read as 0x40490F80 instead of 0x40490FD0); the constant needs a
