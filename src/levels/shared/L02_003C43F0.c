@@ -49,6 +49,16 @@ extern void func_002833F0_2(void *, void *);
 
 extern void func_002E5DA0(int, int, void *, int);
 
+extern void func_0029FCC0(char *, int, void *);
+
+extern int func_801234F0(float);
+
+extern void func_0026FEB8(void *, int, int, int, int);
+
+extern void func_L00_002D40A0(void *, int, float);
+
+extern char D_L02_001AFE38[];
+
 extern void func_002A6C58(void *, int, int);
 
 extern void func_00288CB0(int, int);
@@ -154,9 +164,23 @@ INCLUDE_ASM("asm/levels", func_L02_003C49A0);
 
 INCLUDE_ASM("asm/levels", func_L02_003C4C80);
 
-/* Reads three angles through a helper, converts them, and hands them to the placement call
-   together with the object's own angle. */
-INCLUDE_ASM("asm/levels", func_L02_003C4E18);
+/* Reads three angles through a helper, bends the object's own angle at +0xF8 into the same
+   range, converts all four and hands them to the four-argument report, then applies the
+   same bend to the local angles. */
+void func_L02_003C4E18(char *a0)
+{
+    char *s0 = a0;
+    float v[4];
+    float f20;
+
+    func_0029FCC0(a0, 1, v);
+    /* retail holds 0x40490FD0 here; this spelling is what the rebuilt assembler reads to
+       those bits */
+    f20 = func_00283B98_12(*(float *)(s0 + 0xF8), 3.14159f);
+    func_0026FEB8(D_L02_001AFE38, func_801234F0(v[0]), func_801234F0(v[1]),
+                  func_801234F0(v[2]), func_801234F0(f20));
+    func_L00_002D40A0(v, 0, f20);
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003C4ED8);
 

@@ -1372,3 +1372,18 @@ read the primary entry for context and verify each form separately.
 
 
 
+## Level functions, wave 7 agent lvl7-01 (2026-10-16)
+
+| Function | Size | Bytes that differ |
+| --- | ---: | ---: |
+| [`func_L00_003B3090`](levels/func_L00_003B3090.c) | 196 | Exact size, 12 words left. Record builder: the 16-byte `lq`/`sq` copy through `mode(TI)`, the pointer at +0x10, 0x10000 at +0x14, 1 at +0x20, the float of A1+0x2C at +0x1C, then `func_00282F70(&rec,&rec,1.0f)` and the tail (1.0f, 0x45AFDF66, 3, 2, the halfword of A0+0xAA) for `func_00277F48(A2,1,D_0018C0B0,&rec,float at A1+0x30)`. Retail keeps the stores ahead of the `lq`/`sq` and materialises both small constants in `$v0`/`$v1`; this cc1 sinks the stores past the call set-up, keeps them in `$v1`/`$a3` and hoists the `lq` into `$v1`. Six store permutations and four spellings of the float measured |
+| [`func_L02_003CD1E8`](levels/func_L02_003CD1E8.c) | 176 | Candidate 180 bytes, one word over and every other word retail's. This cc1 allocates the first parameter's pseudo to `$v0`, so the `lw $s1,0x68($a0)` retail keeps in the first call's delay slot becomes `daddu $v0,$a0,$zero` + `lw $s1,0x68($v0)`. Twelve source shapes (state pointer before/between/after the two calls, struct field, `unsigned`/`int`/`void *` loads, index expression, explicit copies of both parameters, `-O2` and `-O2 -G8`) all give the copy, so it is the allocator, not the shape |
+| [`func_L02_003CEBB8`](levels/func_L02_003CEBB8.c) | 184 | Not written: the 0x7FFF list walk of the matched L01/L04 siblings (`q = table[a0]`, `base = *(u8 **)D_L02_001B359C`, `e = base + ((*q & 0x7FFF) << 8)`, class 0xD returns `e`), plus a continuation chain this cc1 duplicates (the 0xFF test again, a `bnez` on a register the prologue just cleared, `q == 0`, then `(s16)*(q-1) >= 0` OR `q == table[index]`). Structure and gates in the file |
+| [`func_L02_003CD8C0`](levels/func_L02_003CD8C0.c) | 176 | Not written: the void twin of the row above (class 0x41/0xFFFF flag pair on `*(u32 *)(e+0x68) + 0x386/0x382`, the index byte 0x21 re-read every iteration because the body stores alias it). The duplicated continuation chain is the wall; one dead `nop` at 0x003CD8EC |
+| [`func_L01_00398A90`](levels/func_L01_00398A90.c) | 192 | No C can place it: the case index at 0x001A79F0 feeds `sltiu` against 0x14 and then a 20-entry `jr` table at 0x002A4420, which the linker cannot place. The five arms and the converging `func_002B0C28(...,4,1)` are written out in the near-miss |
+| [`func_L02_00401480`](levels/func_L02_00401480.c) | 176 | No C can place it: the word after the prologue is `0x700014A9` (opcode 0x1C) with `sq $v0,0x0($sp)` next, i.e. the 16-byte copy's non-`lq` (`0x1E`) load half - the MMI/LQ/SQ class of the neighbouring rows. The rest of the row is ordinary and is written out in the near-miss |
+
+### Additional source forms
+
+- [`func_L00_003B3090`](levels/func_L00_003B3090.c): [form 1](levels/alternatives/func_L00_003B3090-form-01.c).
+- [`func_L02_003CD1E8`](levels/func_L02_003CD1E8.c): [form 1](levels/alternatives/func_L02_003CD1E8-form-01.c).
