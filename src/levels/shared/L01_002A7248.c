@@ -339,7 +339,7 @@ INCLUDE_ASM("asm/levels", func_L01_00324410);
 INCLUDE_ASM("asm/levels", func_L01_00324550);
 
 
-INCLUDE_ASM("asm/levels", func_L01_003245E0);
+/* func_L01_003245E0 is defined in L01_002A7248-g8.c (this unit has no $gp access for it). */
 
 
 extern char D_00139A28[];
