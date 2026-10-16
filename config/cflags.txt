@@ -167,3 +167,6 @@ src/core/00116460.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 src/core/001166C8.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 
 src/core/001310C0.c	sdk -O2 -G2 -ffunction-sections
+src/core/00116E10.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
+src/core/00130428.c	sdk -O2 -G2 -ffunction-sections
+src/core/00132220-g8.c	-O2 -G8 -ffunction-sections
