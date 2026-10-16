@@ -892,3 +892,9 @@ counts when it links at every place it has.
 | [`func_L16_0040C7E8`](levels/func_L16_0040C7E8.c) | 88 | Not C: `.word 0x78620000`/`0x7CA20000`, MMI (lq/sq family) |
 | [`func_L22_003A2988`](levels/func_L22_003A2988.c) | 124 | Not C: `.word 0x7BA20000`/`0x7E220000`, MMI |
 | [`func_L16_003960F8`](levels/func_L16_003960F8.c) | 152 | Not C: `.word 0x78620000`/`0x7FA20000`, MMI (plus `beql` loads) |
+
+## Level functions, wave 6 agent lvl-04 (2026-10-16)
+
+| [`func_L01_002ABF90`](levels/func_L01_002ABF90.c) | - | Not a C row: catalogue defect, linker fill. `addiu $sp,$sp,0x40; nop; addiu $sp,$sp,0x70` with no prologue and no `jr $ra`, wedged between func_L00_002AA200's epilogue and func_L00_002AA938 (at row+0x10 in both places). Needs a `tools/levels.py` split |
+| [`func_L01_002E1150`](levels/func_L01_002E1150.c) | - | Not a C row: same fill family. `addiu $sp,$sp,0xA00; nop; addiu $sp,$sp,0x100`, then func_L00_002EBE88 at row+0x10 in all 8 places. Not a duplicate name for it (no address is carried twice in the catalogue) |
+| [`func_L01_0042C450`](levels/func_L01_0042C450.c) | - | Not a C row: recycled `sb $zero,0x38($v0)` / `sltiu $v0,$v0,0x1` fragment, `$v0` live-in and never defined, no `jr $ra`; next real body func_L00_004290C0 at row+0x10 |
