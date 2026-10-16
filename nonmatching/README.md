@@ -1095,6 +1095,10 @@ Matched this tour (7, all re-checked with the Docker-free ruler, `N of N places 
 | [`func_L14_003E50B8`](levels/func_L14_003E50B8.c) | 212 | Nearest: 208 bytes. The s16 ring walk (mod 8 over `*(s16 *)(a1+0x16)` until the limit at `a1+0x14` is met, then `func_321F58(a0, 2, -1)` on an odd index) is exact; only the temporaries differ (this cc1: `$a2`/`$a3`/`$a0` and `$t0` for the parameter; retail: `$a1`/`$a2`/`$a0` and `$a3`). Five spellings identical |
 | [`func_L22_003FD140`](levels/func_L22_003FD140.c) | 168 | Not a C row: catalogue defect. The first four words are `lwc1 $f0,0x44($v0)` (a `$v0` the body never sets) plus three `nop`s; the real prologue `addiu $sp,$sp,-0x70` opens at 0x003FD150 and the epilogue closes at 0x003FD1E7, so the entry should be 0x003FD150 with a size of 152. Decoded body noted for the maintainers |
 
+## Level functions, wave 7 agent lvl7-03 (2026-10-16)
+
+| [`func_L05_004222D8`](levels/func_L05_004222D8.c) | 164 | Candidate is 172 bytes; the clamp-and-publish body is decoded in full and needs the `-G8` sibling (level 5's `$gp` base is 0x1AEFF0, so `lw $v0,0x2360($gp)` is `D_L05_001B1350` with the `sda` attribute while 0x1B1354/58/5C stay absolute). Retail materialises `lui $v0,0x14; addiu $v0,$v0,-0x6A48` last, this cc1 hoists the same pair into `$a2` at the top and then rematerialises a dead `lw $v0,0x0($gp)` into two clamp delay slots - the two extra words. Nine shapes give 172/176 |
+
 ## Additional source forms
 
 Keep a primary attempt at `levels/<catalogue-name>.c`. Distinct alternatives live
