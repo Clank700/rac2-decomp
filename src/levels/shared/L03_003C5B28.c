@@ -345,7 +345,7 @@ void func_L03_0042B908(u8 *a0, u32 a1) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L03_0042B930);
+/* func_L03_0042B930 lives in the -g8 sibling: its first read is a $gp float. */
 
 typedef struct {
     int a;
