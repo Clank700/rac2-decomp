@@ -86,7 +86,36 @@ int func_002B4038(int value, int index) {
 
 INCLUDE_ASM("asm/game", func_002B4068);
 
-INCLUDE_ASM("asm/game", func_002B4090);
+typedef int PoseVector128 __attribute__((mode(TI)));
+typedef struct {
+    PoseVector128 initial, previous, current, delta;
+    PoseVector128 matrix[4];
+    float angles[4];
+    PoseVector128 change[4];
+} PoseWorkspace;
+extern void func_00283410(void *, void *);
+extern void func_002830C0(void *, void *, void *);
+extern void func_00283788(void *, void *, void *);
+extern void func_00282CF0(void *, void *, void *);
+extern void func_00282CC0(void *, void *, void *);
+extern void func_002AB6D8(float *, float *);
+
+void func_002B4090(char *self, PoseVector128 *point, float x, float y, float z)
+{
+    PoseWorkspace work;
+    work.initial = *point;
+    func_00283410(work.matrix, self + 0xF0);
+    func_002830C0(&work.previous, &work.initial, work.matrix);
+    work.angles[0] = x;
+    work.angles[1] = y;
+    work.angles[2] = z;
+    func_00283410(work.change, work.angles);
+    func_00283788(work.matrix, work.matrix, work.change);
+    func_002830C0(&work.current, &work.initial, work.matrix);
+    func_00282CF0(&work.delta, &work.previous, &work.current);
+    func_00282CC0(self + 0x10, self + 0x10, &work.delta);
+    func_002AB6D8((float *)work.matrix, (float *)(self + 0xF0));
+}
 
 INCLUDE_ASM("asm/game", func_002B41A0);
 
