@@ -30,3 +30,36 @@ void func_0034E4F8(char *object)
     *(float *)(state + 0xB0) = saved;
     func_0027AB40();
 }
+
+extern char *D_001B23CC[] __attribute__((sda));
+extern int ref_L00_0034F690_00 __attribute__((sda));
+typedef int (*CleanupCallback)(void);
+extern int func_001339B0(void);
+extern void func_00124B88(int);
+extern void func_003505A8(void *);
+extern void func_00351E40(void *);
+extern void func_0011AA70(int);
+extern void func_0011AA30(int);
+extern void func_0011B658(int);
+extern void func_0011A950(int, int);
+extern CleanupCallback func_00126DC0(CleanupCallback);
+extern int func_00351890(void *);
+extern int func_0034F898(void *);
+extern int func_003506A8(void *);
+
+void func_0034F690(void)
+{
+    func_00124B88(0);
+    func_003505A8(D_001B23CC[0]);
+    func_00351E40(D_001B23CC[0] + 0xd9168);
+    func_0011AA70(ref_L00_0034F690_00);
+    func_0011AA30(ref_L00_0034F690_00);
+    func_0011B658(2);
+    func_0011A950(2, *(int *)(D_001B23CC[0] + 0xd8000 + 0x10f8));
+    func_00126DC0(func_001339B0);
+    func_00351890(D_001B23CC[0] + 0xd9048);
+    func_0034F898(D_001B23CC[0] + 0xd9100);
+    func_003506A8(D_001B23CC[0] + 0xd9040);
+    func_00124B88(0);
+    *(volatile unsigned int *)0x1000e000 &= ~2u;
+}
