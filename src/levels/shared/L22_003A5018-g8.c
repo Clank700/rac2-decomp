@@ -42,3 +42,59 @@ s32 func_L22_003A61A8(u8 *a0) {
     }
     return 0;
 }
+
+extern int D_L22_001AFA00 __attribute__((sda));
+
+extern int D_L22_001AFA04 __attribute__((sda));
+
+extern void func_002E59F8(int handle);
+
+extern void func_00291450(int index);
+
+extern void func_0029F338_22(char *object);
+
+/* Drops the resident slot the argument's record selects: the slot word is released and stamped
+ * -1, and the object the slot holds is torn down when its id is 0x5F3 and it has not started
+ * (the two resident words it owns are cleared first, and its stored index is released when it is
+ * not -1). An object with any other id only clears the slot. */
+void func_L22_003B9358(u32 a0)
+{
+    u32 g = D_0018C0B0[0];
+    int *slot;
+    char *object;
+
+    if (a0 == g) {
+        slot = &D_L22_001AFA08;
+        if (D_L22_001AFA00 != -1) {
+            func_002E59F8(D_L22_001AFA00);
+            D_L22_001AFA00 = -1;
+        }
+    } else {
+        slot = &D_L22_001AFA0C;
+        if (D_L22_001AFA04 != -1) {
+            func_002E59F8(D_L22_001AFA04);
+            D_L22_001AFA04 = -1;
+        }
+    }
+    object = (char *)*slot;
+    if (object == 0)
+        return;
+    if (*(short *)(object + 0xAA) != 0x5F3) {
+        *slot = 0;
+        return;
+    }
+    if (*(unsigned char *)(object + 0x20) != 0)
+        return;
+    {
+        char *inner = *(char **)(object + 0x68);
+        int index;
+
+        *(int *)0x001A8AB0 = 0;
+        *(int *)0x001A8AC0 = 0;
+        index = *(short *)(inner + 0x2C);
+        if (index != -1)
+            func_00291450(index);
+    }
+    func_0029F338_22((char *)*slot);
+    *slot = 0;
+}
