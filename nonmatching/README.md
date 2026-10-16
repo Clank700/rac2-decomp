@@ -841,3 +841,7 @@ counts when it links at every place it has.
 | [`func_L00_002FE268`](levels/func_L00_002FE268.c) | 108 | Complete (both 64-bit constants reach retail's exact dli sequences); 112 bytes against 108: this cc1 computes the block address into a spare register and copies it into $a3, where retail materialises it straight into $a3. Needs a -G8 unit |
 | [`func_L00_00303388`](levels/func_L00_00303388.c) | 144 | Complete (descending table walk, one-based return); 136 bytes against 144: the register assignment differs (retail shares $v1 between the data and the +0x20 base with the count in $v0), which folds the base into the load offset and drops the loop padding |
 | [`func_L02_003CE9A8`](levels/func_L02_003CE9A8.c) | 124 | Second attempt; same wall as the note kept in `src/levels/shared/L02_003C43F0.c` (wave7 draft, 116 bytes): the branch-likely pair and the duplicated `lh` delay-slot loads are retail's, the register copies differ. This candidate is 128 bytes with the kind byte in $v1 against $v0. Needs a -G8 unit |
+
+## Wave 5 (2026-10-16)
+
+| [`func_L00_002A4EF8`](levels/func_L00_002A4EF8.c) | 240 | Same 60 words at the right size and every retail instruction present; this cc1 schedules the two index-clamp ops (`movz`/`slt`) after the 20-byte literal copy where retail keeps them beside the `slti`, and the remaining 12 words follow from that placement |
