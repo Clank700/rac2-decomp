@@ -82,6 +82,6 @@ void func_L00_0037E5C0(void)
     func_L00_0037FE08();
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0037E5F0);
+/* func_L00_0037E5F0 is built with -G8: see L00_0037DD80-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_0037E640);
