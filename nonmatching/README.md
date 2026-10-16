@@ -845,3 +845,10 @@ counts when it links at every place it has.
 ## Wave 5 (2026-10-16)
 
 | [`func_L00_002A4EF8`](levels/func_L00_002A4EF8.c) | 240 | Same 60 words at the right size and every retail instruction present; this cc1 schedules the two index-clamp ops (`movz`/`slt`) after the 20-byte literal copy where retail keeps them beside the `slti`, and the remaining 12 words follow from that placement |
+| [`func_L00_0037E640`](levels/func_L00_0037E640.c) | 36 | One instruction short: this cc1 saves `$ra` before the argument `la` and puts the `la`'s second half in the call's delay slot; retail saves after the `la` and leaves a `nop`. Eleven call spellings and six flag sets all give the same 8 words |
+| [`func_L22_003A2DF8`](levels/func_L22_003A2DF8.c) | 20 | Bit extract from a float's raw pattern: `mfc1`, the `daddu` copy, `srlv` and `andi` are all exact, but this cc1 inserts the FPR hazard `nop` after `mfc1` where retail has none. Six shapes give the same extra word - probably what stops the other `F32Bits` readers in that unit too |
+| [`func_L22_003A1EC8`](levels/func_L22_003A1EC8.c) | 12 | Not a function: `addiu $sp,$sp,0x70; nop; addiu $sp,$sp,0x30`, no `jr $ra`; the twelve bytes before it are the previous function's epilogue. A split-off remnant - fix in `tools/levels.py` |
+| [`func_L05_0037BB78`](levels/func_L05_0037BB78.c) | 20 | Not a function: no `jr $ra` and `$v1` is read before anything sets it (`addiu $sp,$sp,0x30; nop; lw $v0,0x8($v1); nop; addiu $sp,$sp,0x20`), the neighbour's tail |
+| [`func_L00_0042BC30`](levels/func_L00_0042BC30.c) | 12 | Not a function: `addiu $sp,$sp,0x20; nop; addiu $sp,$sp,0x20`, no `jr $ra` and no register traffic |
+| [`func_L02_003F0788`](levels/func_L02_003F0788.c) | 16 | Not a function: `addiu $sp,$sp,0x50; nop; jr $ra; nop` - it deallocates a frame it never allocated, so the row is the tail of the function before it |
+| [`func_L00_0037DE30`](levels/func_L00_0037DE30.c) | 196 | One instruction short with the `for (; a2 > 0; a2--)`-plus-`continue`s form (48 of 49 words); what remains is the `blezl $s2` / `bnel`-delay-slot pair that only executes when the branch is taken |
