@@ -7,23 +7,25 @@
  * every load, every store and every struct offset lands at the same address.
  * What differs is register allocation and instruction scheduling:
  *
- *   retail   d -> $t9   dy -> $t5   fieldpred -> $t8   ref -> $s6
- *            sfield -> $s2   yofs -> $s1   dx -> $s0
- *   this cc1 d -> $t8   dy -> $s2   fieldpred -> $t5   ref -> $fp
- *            sfield -> $s1   yofs -> $s0   dx -> $s6
+ *   this cc1 d -> $t9   ref -> $s6   fieldpred -> $t8   dx -> $s0
+ *   retail   d -> $t8   ref -> $fp   fieldpred -> $t5   dx -> $s6
  *
- * Retail needs four callee-saved registers for the long-lived values, this
- * cc1 needs five (it keeps `dy` in $s2 where retail keeps it in the temp $t5),
- * so the first word already differs: `daddu $t9,$a0,$zero` against
- * `daddu $t8,$a0,$zero`. The local stack slots shift with it (work spills to
- * 0xC($sp) in retail, 0x8($sp) here) and the tail stores come out in a
- * different order (retail yref/yfunc/.../cref/cfunc/n, here cfunc/yref).
- * The function contains no call, so this is local-alloc's choice of temp
- * versus callee-saved for `dy`, not a source shape that can be spelled
- * differently. Tried: the declarations and the statement order follow the
- * upstream file exactly; no profile change applies (the prologue - 0xB0 frame,
- * the same ten saved words, the same 0x140/0x1C queue constants - already
- * matches).
+ * (In a check.py --diff dump the candidate is the LEFT column and retail the
+ * RIGHT one; the candidate's bytes are the ones carrying relocations, so they
+ * print as `lui $0` / `jal func_000000`.)
+ *
+ * The first word already differs: `daddu $t9,$a0,$zero` here against
+ * `daddu $t8,$a0,$zero` in retail. Retail keeps the long-lived `ref` in a
+ * callee-saved register ($fp) and `fieldpred` in the temp `$t5`; this cc1 does
+ * the opposite - `ref` in `$s6`, `fieldpred` in `$t8`. The local stack slots
+ * shift with it (work spills to 0x8($sp) here, 0xC($sp) in retail) and the
+ * four queue stores at the tail come out in another order.
+ * The function contains no call, so this is local-alloc's choice between a
+ * temporary and a callee-saved register, not a source shape that can be
+ * spelled differently. Tried: the declarations and the statement order follow
+ * the upstream file exactly; no profile change applies (the prologue - 0xB0
+ * frame, the same ten saved words, the same 0x140/0x1C queue constants -
+ * already matches).
  *
  * What would unblock it: a source form for this body whose RTL keeps `dy` in a
  * temporary, or any measured lever that makes local-alloc pick $t9 over $t8
