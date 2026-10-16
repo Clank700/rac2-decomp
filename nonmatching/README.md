@@ -637,6 +637,7 @@ what was tried. None of these links, and none is counted. Move a file into `src/
 | [`func_L02_00457068`](levels/func_L02_00457068.c) | 12 | Catalogue defect: `addiu $sp,$sp,0x20 ; nop ; addiu $sp,$sp,0x20`; no `jr $ra`. |
 | [`func_L22_0032F2C0`](levels/func_L22_0032F2C0.c) | 12 | Catalogue defect: `addiu $sp,$sp,0x50 ; nop ; addiu $sp,$sp,0x40`; no `jr $ra`. |
 | [`func_L22_002F3B38`](levels/func_L22_002F3B38.c) | 24 | COP2/VU0: `ldc2`/`sdc2` around a COP2 macro word; handwritten vector routine, ASM_FUNC territory, no C. |
+| [`func_L18_003F7320`](levels/func_L18_003F7320.c) | 52 | Wave 5 w12: accumulator wall. Retail keeps one `$a2` accumulator (`daddu $a2,$zero,$zero` before the test, one shared `addiu $a2,$zero,0x1`, `daddu $v0,$a2,$zero` at the return); six shapes tried - the plain if/else if-converts to 44 bytes with `xori`, and the branch-keeping ones return in `$v0` with the pointer in `$v1` instead of `$a1`. Its sibling func_L18_003F7470 matched with the inverted-early-return lesson: writing `if (gate == 0) { work; return work; } return 0;` is what makes cc1 emit the plain `bnez` where it otherwise forms `bnel`. |
 
 
 ## Matched, but not landable under the Plain C rule (2026-10-13)
