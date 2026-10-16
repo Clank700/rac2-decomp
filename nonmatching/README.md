@@ -1205,6 +1205,9 @@ Matched this tour (7, all re-checked with the Docker-free ruler, `N of N places 
 
 ## Level functions, wave 7 agent lvl7-06, tour 2 (2026-10-16)
 
+
+| function | size | verdict |
+| --- | --- | --- |
 | [`func_L00_004290C0`](levels/func_L00_004290C0.c) | 220 | The whole arm structure is exact - four `obj+0xC/0x10/8/0x14` fields in a nested `>= 0` test whose annulled `bltzl` slots carry the next field's load. Measured 208-212 bytes against 220 for four spellings: retail keeps the shared `r != 0` normalisation in its own block after the arms and every arm branches there with `b` + `nop`, while this cc1 sinks it into each arm's delay slot as `sltu` and branches straight to the epilogue. The two constants (0x00189EA0, the 0x001FDA80 table) must be SYMBOLS: as literals cc1 emits `lui 0x18`/`ori` because bit 15 of the low half is set |
 | [`func_L10_00424448`](levels/func_L10_00424448.c) | 224 | Decoded, not attempted: one-shot init behind the `$gp` word at 0x001B13A4 (`sw $zero,0x00221CFC`, then func_342218/func_37CFD8/func_37BD00/func_37BCA0/func_37BCB0), a countdown loop calling func_37D048 on `+0xAA == 0xF8E` entries, then func_425798, func_425410(0x32,0xC), func_37BCB8(0xF8E), func_37D168(v0) and, only when that answers zero, func_423DC8(a0,2) |
 | [`func_L02_003D25C8`](levels/func_L02_003D25C8.c) | 228 | Two INVALID words plus a max.s/min.s class word (`4600xxxx`, funct 0x28/0x29) - the word class the sixth wave measured as unemittable from C. ASM_FUNC candidate, same wall as func_L08_00422850 |
