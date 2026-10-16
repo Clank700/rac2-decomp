@@ -264,6 +264,11 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L00_0041A490`](levels/func_L00_0041A490.c) | 108 | 96-byte candidate; modulo-16 arithmetic, register allocation and return scheduling remain different. |
 | [`func_L00_0041A500`](levels/func_L00_0041A500.c) | 192 | G8 candidate has exact size; first recorded mismatch +0x4 is prologue/register allocation and placement of -1. |
 | [`func_L00_004263B8`](levels/func_L00_004263B8.c) | 188 | G8 candidate has exact size; 0/27 places. First recorded mismatch +0x20 is table-base register allocation (a2 versus retail a1). |
+| [`func_L16_00413700`](levels/func_L16_00413700.c) | 136 | Not attempted: opcode-0x1C word `0x700014A9` at +0x24 (the same word as func_L23_0042AD10). The surrounding lq/sq copies, the {x,y,1.0f,w} stack vector and all four calls are mapped in the near-miss. ASM_FUNC candidate. |
+| [`func_L19_002A88C8`](levels/func_L19_002A88C8.c) | 148 | Not attempted: `.word 0x00651818` at +0x68 is a SPECIAL-funct-0x18 multiply whose product the next delay slot overwrites (dead result, no C spelling); the rest is a table lookup, mapped word by word in the near-miss. ASM_FUNC candidate. |
+| [`func_L23_0041E538`](levels/func_L23_0041E538.c) | 12 | Catalogue defect: `sltiu $v0,$v0,1` / nop / `sltu $v0,$zero,$v0` at 0x41E538 reads `$v0` (never `$a0`) and has no `jr $ra`; it sits between func_L23_0041E418's epilogue and func_L23_0041E548. No C can be placed. |
+| [`func_L23_004277B0`](levels/func_L23_004277B0.c) | 52 | Catalogue defect: the entry is 8 bytes early - `addiu sp,sp,0x190` / nop at 0x4277B0 are the previous body's restore (its `jr $ra` is at 0x4277AC) and the 44-byte body starts at 0x4277B8. That body is the two-call wrapper in the near-miss, so a `LEVEL_ENTRY_OFFSETS{(23, 0x004277B0): 8}` entry unblocks it; no C can cover the leading two words. |
+| [`func_L23_0042AD10`](levels/func_L23_0042AD10.c) | 128 | Not attempted: opcode-0x1C word `0x700014A9` at +0x2C, plus a 16-byte stack copy emitted as sq/lq around three swc1 stores. The arm/store/call sequence is mapped in the near-miss. ASM_FUNC candidate. |
 
 ## USA v2.00 trials
 
