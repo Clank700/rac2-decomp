@@ -763,8 +763,14 @@ counts when it links at every place it has.
 
 ## Level functions, wave 5 agent lvl-03, tour 2 (2026-10-16)
 
-| Function | Size | Bytes that differ |
-| --- | ---: | ---: |
 | [`func_L04_003524D0`](levels/func_L04_003524D0.c) | 68 | Candidate 64 bytes; clamp, `div` guard and table walk exact, only the table/window register PAIR is swapped (`$a2`/`$a3`). Three declaration orders measured. Reads the boot's own table at 0x138180 |
 | [`func_L00_002B9BB0`](levels/func_L00_002B9BB0.c) | 168 | Candidate 160 bytes, structure exact; retail keeps the resident high half live in `$s3` and COMPLETES the base twice where this cc1 reuses the earlier register, plus an index/table register swap. Same wall as `func_L00_002A74A8` |
 | [`func_L00_002D20D0`](levels/func_L00_002D20D0.c) | 152 | Candidate 160 bytes; every offset and store identical, but the resident block/object pair lands in `$t1`/`$t0` against retail's `$a0`/`$a3`, and this cc1 reloads the owner once more across the object store |
+| [`func_L00_002CAF20`](levels/func_L00_002CAF20.c) | 276 | Candidate size exact and the sequence instruction-for-instruction; this cc1 gives the resident-state base `$s1` and the looked-up record `$s0`, retail the other way round. Eleven shapes (record read before/after the call, duplicated record expression, the `+0x28` load in the call's delay slot, a pointer variable per base) all give the same swap |
+| [`func_L00_002CB218`](levels/func_L00_002CB218.c) | 188 | Candidate size exact; the `+0x24F8` word is `lwu` in all 27 places, which this cc1 only emits for a 64-bit variable holding the unsigned 32-bit load (measured), and retail's single base with two plain offsets for 0x00138180 comes out as per-site `%hi`/`%lo` pairs (or as a base materialised above the first test) here |
+| [`func_L00_002CB2D8`](levels/func_L00_002CB2D8.c) | 204 | Candidate is 208 bytes; this cc1 loads every `movz`/`movn` operand absolutely, where retail reads 0x001A7398 `lw $v1,-0x7C58($gp)` into the merge. Six source shapes and a `-G8` unit all give `lui`+`lw`; outside a merge the same `sda` declaration does give `$gp` with a GPREL16 relocation |
+| [`func_L00_002CB038`](levels/func_L00_002CB038.c) | - | Not attempted: the front-end screen loader (symbol_addrs's `MenuScreenLoad`). Body read in full and recorded; needs the same `$gp` counter block as func_L00_002CB2D8 and two `func_2AE888` calls with four float arguments each |
+| [`func_L00_002CAD90`](levels/func_L00_002CAD90.c) | - | Not attempted: float work around two 16-byte `lq`/`sq` block copies. Body read in full and recorded; needs a 16-byte aggregate whose copy this cc1 lowers to `lq`/`sq` |
+| [`func_L00_002D1B70`](levels/func_L00_002D1B70.c) | - | Not attempted: `func_2ADEA0(3)` selects between three `$gp` tables at 0x001A7D60 / 0x001A7D48 / 0x001A7D78, then a 4-byte-stride scan for a byte id; the selector's `movn` is the same merge shape as func_L00_002CB2D8's blocker |
+| `func_L00_002D1DA0` | - | Not attempted: same three `$gp` tables as func_L00_002D1B70 plus a stack array of matching slots and a `func_31A768` call; the three tables are the shared blocker |
+| `func_L00_002D1C40` | - | Not attempted: not disassembled in this run (352 bytes, 27 places, same unit as func_L00_002D1B70) |
