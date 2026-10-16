@@ -331,6 +331,21 @@ extern void func_0033D638(int);
 extern void func_0033C028(int);
 extern void func_0033C378(int);
 
+/* The value-returning half of the same family: the handler is called with the object base,
+ * the fixed byte offset added and the caller's argument, and its result is returned. */
+extern int func_0033C590(int, int);
+extern int func_L00_00432448(int, int);
+extern int func_L00_00432ED0(int, int);
+extern int func_0033BE98(int, int);
+extern int func_0033C2D8(int, int);
+extern int func_0033E3A0(int, int);
+extern int func_0033D028(int, int);
+extern int func_L00_00433560(int, int);
+extern int func_003424C0(int, int);
+extern int func_00341EE8(int, int);
+extern int func_0033FB98(int, int);
+extern int func_003398A8(int, int);
+
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
 void func_L00_0030D210(void)
@@ -601,7 +616,17 @@ int func_L00_0030D788(int a0)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D7C8);
+/* Reads a bound global word; when it is non-zero it calls the object's handler with that value
+ * plus a fixed base offset as the first argument and the function's own argument as the second,
+ * returning the handler's result, otherwise returns 0. */
+int func_L00_0030D7C8(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_0033C590(value + 0x3D060, argument);
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -613,7 +638,15 @@ void func_L00_0030D808(void)
         func_0033C738(value + 0x3D060);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D838);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030D838(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_L00_00432448(value + 0x3D310, argument);
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -625,7 +658,15 @@ void func_L00_0030D878(void)
         func_0033CC20(value + 0x3D310);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D8A8);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030D8A8(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_L00_00432ED0(value + 0x3D900, argument);
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -637,7 +678,15 @@ void func_L00_0030D8E8(void)
         func_0033D638(value + 0x3D900);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D918);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030D918(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_0033BE98(value + 0x3DBB0, argument);
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -649,7 +698,15 @@ void func_L00_0030D958(void)
         func_0033C028(value + 0x3DBB0);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D988);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030D988(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_0033C2D8(value + 0x3DE60, argument);
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -661,7 +718,15 @@ void func_L00_0030D9C8(void)
         func_0033C378(value + 0x3DE60);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D9F8);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030D9F8(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_0033E3A0(value + 0x3EDB8, argument);
+    return 0;
+}
 
 void func_L00_0030DA38(void)
 {
@@ -671,7 +736,15 @@ void func_L00_0030DA38(void)
         func_0033E428(value + 0x3EDB8);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030DA68);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030DA68(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_0033D028(value + 0x3D5C0, argument);
+    return 0;
+}
 
 void func_L00_0030DAA8(void)
 {
@@ -681,7 +754,15 @@ void func_L00_0030DAA8(void)
         func_0033D2C0(value + 0x3D5C0);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030DAD8);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030DAD8(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_L00_00433560(value + 0x3E5A8, argument);
+    return 0;
+}
 
 void func_L00_0030DB18(void)
 {
@@ -691,7 +772,15 @@ void func_L00_0030DB18(void)
         func_0033DCC8(value + 0x3E5A8);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030DB48);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030DB48(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_003424C0(value + 0x3E1D8, argument);
+    return 0;
+}
 
 void func_L00_0030DB88(void)
 {
@@ -701,7 +790,15 @@ void func_L00_0030DB88(void)
         func_00342758(value + 0x3E1D8);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030DBB8);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030DBB8(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_00341EE8(value + 0x3E430, argument);
+    return 0;
+}
 
 void func_L00_0030DBF8(void)
 {
@@ -722,7 +819,15 @@ void func_L00_0030DC80(int argument)
         func_0034CE98(value + 0x376C8, argument);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030DCB8);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030DCB8(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_0033FB98(value + 0x3A388, argument);
+    return 0;
+}
 
 void func_L00_0030DCF8(void)
 {
@@ -773,7 +878,15 @@ void func_L00_0030DFE0(void)
         func_003399B0(value + 0x3CAA8);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030E010);
+/* Same bound-global dispatch as its neighbours, with its own base offset and handler. */
+int func_L00_0030E010(int argument)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        return func_003398A8(value + 0x3CAA8, argument);
+    return 0;
+}
 
 /* shared native body of family e7046bc951256c7e */
 void func_L00_00310048(void)
