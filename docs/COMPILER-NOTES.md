@@ -1214,3 +1214,67 @@ TI/float unions emitted ld/sd pairs; memcpy variants emitted unaligned word
 copies. Neither candidate matched. The retail shape resembles the qcopy
 helpers in include/common.h, but those helpers use inline assembly and cannot
 be used as a matching route under AGENTS.md.
+
+## Habits measured by the sixth wave (16 October 2026, levels)
+
+Twelve workers on `src/levels/`, two rounds each (26 matches, ~140 measured near misses).
+The boot-era habits above still hold; these are the ones the level units added.
+
+- **The `$gp` recipe, settled for level units**: `extern <type> D_LNN_XXXXXXXX __attribute__((sda));`
+  in the `<unit>-g8.c` sibling (the name gives `-G8`; the declaration needs a size at most the
+  threshold). `sda` alone reaches the bare GPREL16 form for loads *and* stores there. The asm-name
+  spelling `extern int X __asm__("X_alias") __attribute__((section(".sdata")));` — the asm name
+  **before** the attribute; the reverse order is a parse error — reproduces the bare reference in a
+  `-G0` probe, but three independent measurements on level units found it changes nothing for
+  loads: when a load comes out `lui $at` + absolute, the cause is the unit's `-G0` profile or the
+  assembler unfolding that use, not the declaration. An address that must stay absolute is
+  `__attribute__((nosda))`, and one absolute plus one `$gp` access to the *same* symbol can need
+  the double-name pattern already recorded above.
+- **Try the `-g8` sibling before abandoning**: the same body moved into `<unit>-g8.c` turned
+  `func_L00_003206B8` from 184 bytes with one wrong word (`-G0`) into 27 of 27 places match.
+  A `-g8.c` sibling usually holds only `INCLUDE_ASM` rows: put the typedefs (`u8`, `s16`, `f32`)
+  **before** the externs, or adding the body at the end of the file leaves the externs above the
+  typedefs and cc1 prints misleading `parse error before ')'` on the casts.
+- **Two names for the same pointer are the missing `daddu`**: when retail copies a just-loaded
+  value into a callee-saved register (the guard keeps the fresh load, the walk needs the value
+  across a call), write the guard and the walk with **two C variables** —
+  `u16 *q = table[a0]; if (q) { u16 *p = q; do { ... } while (*p++ >= 0); }` — which is what
+  turned `func_L08_00328BB0` from three words off into an exact match. One variable leaves the
+  copy out.
+- **`mode(TI)` reaches `lq`/`sq`**: `typedef int TI16 __attribute__((mode(TI)));` compiles a
+  16-byte copy as `lq`/`sq` where a plain struct assignment gives `ldl`/`ldr`/`sdl`/`sdr`. The
+  "MMI, not C" class is therefore narrower than it looks — re-test those rows with a TI typedef
+  before depositing them. The `0x7000_xxxx` family (the real MMI words) stays out of reach.
+  What still blocks the TI copies is that this cc1 folds a **constant destination offset** into
+  the `sq` where retail materialises the pointer first (five spellings measured on three bodies,
+  ~30 places).
+- **Emission-order habits** (each measured, each worth one try before giving up): the order of
+  assignments decides the registers (`==` operand order decides which side lands in `$v0`);
+  `+ -2.0f` is an ADD where `- 2.0f` compiles to `sub.s`; positive `&&` guards match where the
+  negated chain does not; two identical adjacent stores are written in the **reverse** of retail's
+  order; `&rec->champ` keeps the displacement in a register where `rec->champ` folds it.
+- **Float constants can be one ulp off the natural spelling**: `1.0471977f` (`0x3F860A93`, one
+  above π/3) and `0.78539824f` (`0x3F490FDC`, one above π/4) are what retail holds; take the bits
+  from the disassembly, not from the arithmetic.
+- **Address constants**: an absolute whose lower half has bit 15 set needs a SYMBOL spelling to
+  come out `lui hi+1 ; addiu -lo`, while one with bit 15 clear needs the plain **literal** (a
+  symbol adds a `lui`).
+- **`ref_LNN_XXXXXXXX_kk` is not only for data**: a shared function whose call target is, in some
+  programs only, a neighbouring local function needs the `ref_` name there (23 of 27 places
+  without it, 27 of 27 with).
+- **Walls confirmed once more, one spelling each**: the annulled branch slots (`beql`/`bnel` with
+  the load or the shifted value inside), the interleaving of prologue address pairs, and the block
+  order of two symmetrical handlers (both source orders compile to the same word — the choice is
+  the compiler's).
+- **`max.s` (COP1 funct 0x28) is not emittable from C**: `func_L08_00425328` and
+  `func_L08_00425398` are one instruction from retail with the op spelled in the disassembly;
+  ternary and conditional-assignment forms measured both emit `c.olt.s` + `bc1f`/`mov.s`
+  sequences instead. A compiler-side candidate like the quad-save patches.
+- **Method, before writing C**: grep the unit tree for an already-matched sibling carrying the
+  recipe in a comment (it has landed several matches at first compile), and read the first four
+  words of an uncertain row — a `.word 0x78/0x7A/0x7C/0x7E` opening is an `lq`/`sq` pair, and a
+  row opening on `addiu $sp,$sp,+N ; nop` is catalogue padding with the real body after the gap.
+- **A Docker-free ruler exists**: the game's 32-bit `cc1`/`cpp`/`as` run directly under WSL with
+  their work in `/tmp` (the 32-bit tools cannot stat drvfs files), and the verdict comes from
+  `tools/build.py`'s own `Placement.derive` — the exact code path of `tools/check.py`. Useful when
+  the container is unavailable; the container build stays the authority.
