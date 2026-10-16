@@ -33,7 +33,23 @@ void func_L00_0032B2A8(int value)
     ref_L01_00320B20_00 = value;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0032B500);
+extern int D_L00_001A8F00;
+extern int D_L00_001A8F04;
+extern int D_L00_001A8F08;
+extern int D_L00_001AA440 __attribute__((sda));
+extern int D_L00_001AA444 __attribute__((sda));
+
+/* records the raw input in the absolute state block, parks a -2 marker beside it
+   and clears the two small-data cells that follow.  The two identical stores are
+   written in the order this cc1 emits them (it swaps them otherwise). */
+void func_L00_0032B500(int value)
+{
+    D_L00_001A8F00 = value;
+    D_L00_001A8F08 = -2;
+    D_L00_001A8F04 = value;
+    D_L00_001AA440 = 0;
+    D_L00_001AA444 = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0032B9E8);
 
