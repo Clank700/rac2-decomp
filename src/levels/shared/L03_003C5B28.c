@@ -270,7 +270,23 @@ void func_L03_004199F0(u8 *a0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L03_00419A60);
+/* Hands one record of the pool the level index selects to the shared lookup and then sets or
+   clears the low bit of the record's tenth halfword flag. */
+void func_L03_00419A60(u32 a0, u8 *a1, s32 a2) {
+    u8 *rec = (u8 *)D_L03_001B2A1C + (a0 << 8);
+    u8 *q = *(u8 **)(rec + 0x68);
+    s32 index;
+
+    if (*(u8 *)(rec + 0x20) == 0)
+        func_L03_004199F0(rec);
+    index = -1;
+    if (func_L02_0032EDD8(a1, &q[0x80], ((s32 *)q)[0x120], &index) == 0)
+        return;
+    if (a2 != 0)
+        *(unsigned short *)(q + (index << 5) + 0x8C) &= 0xFFFE;
+    else
+        *(unsigned short *)(q + (index << 5) + 0x8C) |= 1;
+}
 
 extern void func_L02_0032E998(u8 *, u8 *, u8 *, u8 *, s32, u32, u32);
 
@@ -291,7 +307,7 @@ s32 func_L03_00419B58(u32 a0, s32 a1) {
     return -1;
 }
 
-extern void func_L02_0032EDD8(u8 *, u8 *, s32, s32 *);
+extern s32 func_L02_0032EDD8(u8 *, u8 *, s32, s32 *);
 
 void func_L03_00419B90(u32 a0, u8 *a1, u8 *a2) {
     u8 *q = *(u8 **)((u8 *)D_L03_001B2A1C + (a0 << 8) + 0x68);
