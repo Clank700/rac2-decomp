@@ -9,12 +9,12 @@
      0x1B26B0: the float runs through $gp, the absolute site clears it.
    A near miss of the body is in nonmatching/levels/func_L00_0037E5F0.c. */
 
-extern u32 D_L00_001B26B4 __attribute__((nosda));
+extern unsigned int D_L00_001B26B4 __attribute__((nosda));
 
-extern u32 D_L00_001B26B4_1;
+extern unsigned int D_L00_001B26B4_1;
 
-extern f32 D_L00_001B26B0_1;
+extern float D_L00_001B26B0_1;
 
-extern s32 D_L00_001B26B0 __attribute__((nosda));
+extern int D_L00_001B26B0 __attribute__((nosda));
 
 INCLUDE_ASM("asm/levels", func_L00_0037E5F0);
