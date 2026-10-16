@@ -1,0 +1,7 @@
+typedef long s64;
+extern int D_001BF21C;
+s64 func_L00_002E2048(void) {
+ s64 v=D_001BF21C;
+ if(v<0) return -1;
+ return (v&0x60)>>5;
+}
