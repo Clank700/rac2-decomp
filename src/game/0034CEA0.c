@@ -189,7 +189,6 @@ void func_0034EDB0(void *unused, char *object)
 
 INCLUDE_ASM("asm/game", func_0034EE78);
 
-INCLUDE_ASM("asm/game", func_0034EF58);
 
 INCLUDE_ASM("asm/game", func_0034F048);
 
