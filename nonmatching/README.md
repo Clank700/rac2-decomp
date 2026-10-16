@@ -1318,3 +1318,57 @@ read the primary entry for context and verify each form separately.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+| [`func_L00_004117B8`](levels/func_L00_004117B8.c) | 236 | 27 places. ABANDON, address-CSE wall (260 bytes): walks the 30 entries of the 0x00256620 block and folds each set record into a 16-byte buffer (`func_2AFFD8(rec+0x10,buf,1)`, `func_282D30(buf,buf,*(rec+0xC) * 0.0008300250046886504f = 0x3A599609)`, `buf[0] += *(rec+0) * 0.0009764999849721789f = 0x3A7FFBCE`), then the same scale from 0x00250004/0x00250008 and `func_L00_00411F48(a0)`. Retail reuses the CSE'd `lui $v0,0x25` for the two out-of-guard loads across the calls; here the addresses land in $s3/$s4 and the frame grows 0x40 -> 0x50. `nosda` on the three symbols and the field spelling both give 260 |
+| [`func_L04_00434AD0`](levels/func_L04_00434AD0.c) | 224 | 2 places. Not retried: byte-for-byte the twin of func_L04_00423178 (same block 0x001BD380, same D_001B1DE1 guard, same func_3325E0 call and 4.0f publishes), so it hits the same address-CSE wall (260 vs 224, frame 0x40 -> 0x60) |
+| [`func_L19_0042A8B8`](levels/func_L19_0042A8B8.c) | 228 | Not retried: the same family at level 19 (block 0x001BD740, +0xAA compared with the immediate 0xE3E, scale f20 = 0x3FF33333 = 1.9f), same address-CSE wall measured on func_L04_00423178 |
+
+
+
+
