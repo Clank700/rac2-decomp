@@ -12,14 +12,16 @@ typedef struct {
     f32 f278;
     f32 f27C;
     s32 i280;
-} T_001BFF99C0;
+} T_001B99C0;
 
-extern T_001BFF99C0 D_001BFF99C0;
+extern T_001B99C0 D_L16_001B99C0;
 
 extern void func_002A7470(void *, s32, s32, s32);
 
 INCLUDE_ASM("asm/levels", func_L16_002C6378);
 
+/* func_L16_002D2D10: six spellings give the same 72-byte object (retail is 88).
+   Deposited in nonmatching/levels/func_L16_002D2D10.c. */
 INCLUDE_ASM("asm/levels", func_L16_002D2D10);
 
 INCLUDE_ASM("asm/levels", func_L16_002F60B8);
