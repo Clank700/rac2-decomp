@@ -5,7 +5,7 @@
  * arguments in $s6/$s7/$fp, materialises the constants in temporaries and
  * needs 0x70. Five more instructions are missing elsewhere.
  *
- * snd_QueueCommandToRing (989snd, rac1-decomp src/core/989snd.c func_0012E828
+ * snd_QueueCommandToRing (989snd, rac1-decomp src/core/989snd.c func_0012E800
  * at delta +0x45F0; rac1 keeps it as INCLUDE_ASM too, so there is no upstream
  * C). Append one command to the double-buffered ring selected by
  * r1_D_001A74C0, pumping and re-testing while the slot is busy or the free
