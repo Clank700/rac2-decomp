@@ -798,3 +798,13 @@ counts when it links at every place it has.
 | [`func_L00_00428EE0`](levels/func_L00_00428EE0.c) | - | Not a C row: dead `sw` tail with unset base registers, a restore, and a complete `return 0` at 0x428EF8; re-cut to 0x428EF8 |
 | [`func_L02_002F1FB8`](levels/func_L02_002F1FB8.c) | 24 | VU0 macro mode: `ldc2`/`sdc2` plus a COP2 macro op (0x4BE2086C); no C spelling, ASM_FUNC candidate |
 | [`func_L02_002F21C0`](levels/func_L02_002F21C0.c) | 32 | VU0 macro mode: two `ldc2` and four COP2 macro ops; no C spelling, ASM_FUNC candidate |
+| [`func_L02_0031E918`](levels/func_L02_0031E918.c) | 88 | Candidate size exact, one instruction differs at +0x1c: a cyclic permutation of `$f0`/`$f1`/`$f2` (retail reads the value into `$f0`, 1/4096 into `$f1`, 1.0f into `$f2`). Tried the one-expression and three-local forms |
+| [`func_L02_00321C30`](levels/func_L02_00321C30.c) | 164 | Candidate is 152 bytes; retail keeps the travel in `$f22` across `func_2F2270` and saves three floats (frame 0x50), this cc1 uses `$f21` and saves two (frame 0x40); the branch layout is mirrored too |
+| [`func_L00_002ADFE8`](levels/func_L00_002ADFE8.c) | 136 | 76-entry tail-call dispatch table at 0x0029FF70: `lw $a0,...; jr $a0` at +0x24. A C switch emits its own `.rodata` table and `jalr`; ASM_FUNC candidate |
+| [`func_L00_00421A98`](levels/func_L00_00421A98.c) | 184 | Jump table: `lw $a0,...; jr $a0` at +0x4c. ASM_FUNC candidate |
+| [`func_L05_003CFCF0`](levels/func_L05_003CFCF0.c) | 668 | Jump table: `lw $a0,...; jr $a0` at +0x60. ASM_FUNC candidate |
+| [`func_L02_002EF968`](levels/func_L02_002EF968.c) | 148 | 128-bit block moves: raw `lq`/`sq` words at +0x54 (opcodes 0x1E/0x1F) inside a 4-iteration float and block copy; no C spelling, ASM_FUNC candidate |
+| [`func_L00_004284B0`](levels/func_L00_004284B0.c) | 176 | 128-bit block moves: five raw `lq`/`sq` words from +0x28 around float work and three calls; no C spelling, ASM_FUNC candidate |
+| [`func_L00_003A8E28`](levels/func_L00_003A8E28.c) | 468 | SPECIAL2/MMI word 0x700014A9 at +0x78 (opcode 0x1C, printed INVALID); one family with the next two rows; ASM_FUNC candidate |
+| [`func_L00_00428000`](levels/func_L00_00428000.c) | 752 | SPECIAL2/MMI word 0x700014A9 at +0x5c; ASM_FUNC candidate |
+| [`func_L05_003D0538`](levels/func_L05_003D0538.c) | 496 | SPECIAL2/MMI word 0x700014A9 at +0x44; ASM_FUNC candidate |
