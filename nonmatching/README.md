@@ -1639,3 +1639,55 @@ read the primary entry for context and verify each form separately.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+| [`func_L22_003FA1D0`](levels/func_L22_003FA1D0.c) | 212 | Exact size, ONE word at +0x34: retail materialises func_362DE0's constant fourth argument (`addiu $a3,$zero,0xE0B`) before the dependent first one (`addiu $a0,$v0,0xC`), this cc1 the other way round. Registers are retail's throughout; three spellings (inline, inner call in a named pointer, fourth argument named) give the same word |
+
+
+
+
