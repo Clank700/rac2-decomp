@@ -28,7 +28,9 @@
    instruction multiset otherwise aligns, including the `lh`/`nop` and both `beql`
    arms. Five runs (~30 forms: declaration orders, explicit base/limit copies - both
    fold away - `for`/do-while/guard variants, struct fields, ternary min) all land on
-   148 or 152. */
+   148 or 152. `-mno-split-addresses` (wave 7's lever for `lui %hi; sw %lo($r)`
+   global stores) leaves all five of those sizes unchanged - measured, so the
+   residue here is the two copies, not the address form. */
 
 typedef short s16;
 typedef int s32;
