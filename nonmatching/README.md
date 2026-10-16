@@ -57,6 +57,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_0011BEE0`](core/func_0011BEE0.c) | 56 | Byte-exact only with a register pin (`__asm__("" : "=r"(p) : "0"(0x1000F180))`), which AGENTS.md forbids |
 | [`func_00125F20`](core/func_00125F20.c) | 484 | Byte-exact only with `__asm__ __volatile__("sync")`; inline assembly is forbidden, so the barrier belongs to the ASM_FUNC route |
 | [`func_00129DA8`](core/func_00129DA8.c) | 1052 | libmpeg `_getRef0`: the body compiles to the exact retail size and aligns instruction for instruction, but this cc1 keeps `dy` in `$s2` where retail keeps it in the temp `$t5`, so it needs five callee-saved registers against retail's four and the first word already differs (`daddu $t8` against `daddu $t9`) |
+| [`func_00115FC0`](core/func_00115FC0.c) | 828 | newlib `_mbtowc_r` (SHIFT_JIS / EUC-JP / ISO-2022-JP paths): exact C, `tools/check.py` says `1 of 1 places match`, but `tools/build.py` refuses it with `needs .rodata at its place, which is not C` - the eight-case `switch (action)` becomes a jump table retail keeps at 0x13A3C0 |
 | [`func_0012FB48`](boot/func_0012FB48.c) | 20 | 3 |
 | [`func_00278E78`](game/func_00278E78.c) | 48 | C candidate emits 40 bytes; control flow and global address sequence differ |
 | [func_00282C50](game/func_00282C50.c) | 8 | 0 of 28 exact; jr ra matches, but retail delay slot is raw 0x460D6029 and C emits abs.s f0,f13 |
