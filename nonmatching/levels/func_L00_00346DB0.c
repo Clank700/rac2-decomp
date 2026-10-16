@@ -6,8 +6,9 @@
    The whole 204-byte body is instruction-exact except the three-way select that
    ends the 0x10 arm: retail branches (beqz + addiu $v1,zero,-1 in the delay slot
    + a shared daddu $v1,zero,zero) where this cc1 always emits movn.  Measured on
-   seven spellings (if/else-if/else, else with r = -1 then a conditional r = 0,
-   defaults on either side, early returns, a goto, a char* result): all 204 bytes,
+   nine spellings (if/else-if/else, else with r = -1 then a conditional r = 0,
+   defaults on either side, early returns, a goto, a char* result, and both a
+   64-bit result and a 64-bit select variable): all 204 bytes except the last,
    all differing at +0x18 only.  Same wall for its two twins, deposited beside it. */
 extern char D_L00_00138180[];
 extern char D_L00_001FEC40[];
