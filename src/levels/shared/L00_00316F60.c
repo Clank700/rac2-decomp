@@ -369,7 +369,12 @@ void func_L00_00323F70(void *input, int *out_x, int *out_y) {
     *out_y = func_00283CF0(((*(f32 *)(temporary + 4)) - (f32)D_001A7354) * 0.0625f);
 }
 
+extern u8 D_00189E20[];
+
+/* func_L00_00324120 (three-way state test) is a near miss:
+   nonmatching/levels/func_L00_00324120.c */
 INCLUDE_ASM("asm/levels", func_L00_00324120);
+
 
 INCLUDE_ASM("asm/levels", func_L00_00324D18);
 
@@ -389,20 +394,27 @@ void func_L00_00324F18(char *a0, char *a1, float f12, float f13, float f14) {
     func_00282CC0(a1, a1, a0 + 0x10);
 }
 
-extern void func_002AFFD8(u8 *);
+extern void func_002AFFD8_1(u8 *) __asm__("func_002AFFD8");
 
 void func_L00_003252A8(u8 *a0)
 {
-    func_002AFFD8(a0 + 0x10);
+    func_002AFFD8_1(a0 + 0x10);
 }
 
+extern int D_001A8FF0;
+
+extern void func_00282C98(void *);
+
+/* func_L00_003252C8 (flag-routed handler, reads the caller's a1) is a near miss:
+   nonmatching/levels/func_L00_003252C8.c */
 INCLUDE_ASM("asm/levels", func_L00_003252C8);
 
-extern void func_L00_003252C8(u8 *);
+
+extern void func_L00_003252C8_1(u8 *) __asm__("func_L00_003252C8");
 
 void func_L00_00325300(u8 *a0)
 {
-    func_L00_003252C8(a0 + 0x10);
+    func_L00_003252C8_1(a0 + 0x10);
 }
 
 extern void func_002B00D8(u8 *);

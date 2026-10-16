@@ -152,7 +152,10 @@ void func_L00_002DC4C0(Obj_F4778f810 *obj)
 
 INCLUDE_ASM("asm/levels", func_L00_002E0200);
 
+/* func_L00_002E2048 (packed status field) is a near miss:
+   nonmatching/levels/func_L00_002E2048.c */
 INCLUDE_ASM("asm/levels", func_L00_002E2048);
+
 
 INCLUDE_ASM("asm/levels", func_L00_002E2958);
 
