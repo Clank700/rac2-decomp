@@ -211,8 +211,8 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L00_002EDD00`](levels/func_L00_002EDD00.c) | 40 | G8 candidate is 44 bytes; 0/27 places. Separate multiply/add does not reproduce the retail COP1 accumulation sequence. |
 | [`func_L00_002FC7A8`](levels/func_L00_002FC7A8.c) | 468 | G8 candidate is 464 bytes; base lifetime, hoisted count and register allocation differ. |
 | [`func_L00_002FCBE8`](levels/func_L00_002FCBE8.c) | 492 | 452-byte candidate; base lifetime and repeated loop references differ. |
-| [`func_L00_0031B9F8`](levels/shared/func_L00_0031B9F8.c) | 164 | 172-byte float/index calculation candidate; 8 bytes larger; compile profile not recorded. |
-| [`func_L00_0031D670`](levels/shared/func_L00_0031D670.c) | 152 | 188-byte four-component interpolation attempt with local vector copies; 36 bytes larger. |
+| [`func_L00_0031B9F8`](levels/shared/func_L00_0031B9F8.c) | 164 | 160 bytes with 40 of 41 words byte-identical (wave 7, 2026-10-16), registers included; the one missing word is the load-delay `nop` of `lwc1 $f12,0x8($s0) ; div.s`, the wall recorded in docs/COMPILER-NOTES.md (cc1 emits the `#nop` marker, the object drops it). The body needs the second 0x00283CE0 call to take `(index*index + index) >> 1`, which the R5900 emits as the three-operand `mult $v0,$s2,$s2` (rd = low product). Six head spellings measured. |
+| [`func_L00_0031D670`](levels/shared/func_L00_0031D670.c) | 152 | Exact size and every instruction present (wave 7, 2026-10-16) once the two 16-byte copies use `__attribute__((mode(TI)))` - that is what emits retail's `lq`/`sq` (a plain 16-byte struct copy of the same body emits ldl/ldr + sdl/sdr and comes out 188; the f32-array spell comes out 140). Left: the callee-saved pair is swapped - retail copies the destination into `$s0` at +0x28 and materialises the right operand's address in the first call's delay slot (`addiu $s1,$sp,0x10`), here those two land in each other's registers and every store shifts one call later. ~15 spellings measured. |
 | [`func_L00_00338E90`](levels/func_L00_00338E90.c) | 292 | 296-byte candidate; quadword copies are present, but entry scheduling and saved-register allocation differ. |
 | [`func_L00_00354DF8`](levels/func_L00_00354DF8.c) | 272 | G8 candidate is 284 bytes; pointer/base allocation differs at the corrected entry. |
 | [`func_L00_0035F640`](levels/func_L00_0035F640.c) | 148 | Exact-size candidate; branch layout at +0x20 and store order differ. Overlay data names corrected; bindings still need rechecking. |
@@ -1691,3 +1691,10 @@ read the primary entry for context and verify each form separately.
 
 
 
+## Level functions, wave 7 agent lvl7-12 (2026-10-16)
+
+| function | size | verdict |
+| --- | --- | --- |
+| [`func_L13_004267B0`](levels/func_L13_004267B0.c) | 112 | Size exact and the whole first block byte-identical once the 0x0019B2E8 table is a 16-byte-entry array indexed by the 0x001A79F0 counter; the second block swaps the delay slot and two registers (retail: object pointer in the beqz slot, index next, 0x001B291C base into `$v0`; here the base `lui` takes the slot and the pointer/base land in `$v1`/`$a1`). Fifteen source spellings give the same block. The 0x001B291C base needs its absolute second name - under `sda` the delay-slot load comes out one gp word (108 bytes) |
+| [`func_L00_0031CDD0`](levels/shared/func_L00_0031CDD0.c) | 184 | 176 bytes, whole body and every register exact; the 8 missing bytes are the two `nop` retail carries between the second call's delay slot and its `div.s` (cc1's .s emits no marker there) - the division-padding hole of docs/COMPILER-NOTES.md item (4). Body: buf = a-b, t = |buf|/arg4, `out` = t, result = -((a[2]-b[2]) + arg5*(t*t)*0.5f)/t. Four spellings, all 176. |
+| [`func_L00_0031BDC0`](levels/shared/func_L00_0031BDC0.c) | 196 | Body and frame fully recovered (buf1 = a2-a1, buf2 = a3-a1, t = dot(buf1,buf2)/dot(buf1,buf1), scale, dst = a1+t*buf1, return t); the 32 extra bytes are the clamp, which retail does with the two COP1 words `max.s`/`min.s` (funct 0x28/0x29) that this cc1 never emits from C - same wall as func_L08_00425328. Five clamp spellings measured (228/236). |
