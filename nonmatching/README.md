@@ -675,3 +675,22 @@ counts when it links at every place it has.
 | [`func_L18_003FC9B8`](levels/func_L18_003FC9B8.c) | - | Not attempted: four 128-bit words copy two sixteen-byte blocks (0x78A20000 / 0x78820000 LQ into 0x7CE20000 / 0x7CA20000 SQ) after a flag and field update. The repository's own drafts (func_L00_00338E90, func_L00_003EE288) show quadword copies are C-reachable but stop on scheduling and quad-register allocation - this row needs a shared quad plan first |
 | [`func_L09_00325C58`](levels/func_L09_00325C58.c) | - | Not a C row: 20-byte extent of three orphaned epilogue restores (frames 0x190, 0x150, 0x40) with no `jr`, `jal` or branch - the same catalogue defect as func_L00_0035CC98, longer |
 | [`func_L17_0032B558`](levels/func_L17_0032B558.c) | - | Not a C row: same defect, 20 bytes of restores (frames 0x50, 0x10, 0xB0) with no return path |
+
+## Level functions, wave 5 agent lvl-03 (2026-10-16)
+
+| Function | Size | Bytes that differ |
+| --- | ---: | ---: |
+| [`func_L00_002A6708`](levels/func_L00_002A6708.c) | 240 | Closest candidate is 228 bytes; the loop, both record tests and the -1 store shape are exact, but this cc1 rotates the three increments to the top of the body where retail leaves them at the end, gives `$s1`/`$s2` to the -1 constant and the trip counter the other way round, and emits `addu $v0,$s7,$s3` where retail emits `addu $v0,$s3,$s7` |
+| [`func_L00_002A75D8`](levels/func_L00_002A75D8.c) | - | Compiler-profile wall, the same as `func_L00_003ACC88`: the retail 128-bit zero (`0x700014A9` = `pcpyld $v0,$zero,$zero`, then `sq $v0,0x0($sp)`) is folded to `sq $zero` by `rac2_fold_zero_ti_store`, because `$v0` is dead after the store. No C deposits |
+| [`func_L00_002A9E30`](levels/func_L00_002A9E30.c) | 252 | Candidate is 240 bytes; the arithmetic sequence, the 4-float argument convention and the object walk are instruction-exact, but retail keeps the resident base as a completed address in `$v1` (and its high half in `$a1`) where this cc1 keeps the high half with displacements, the two FP branches come out with the likely-ness inverted, and two `c.eq.s` nops are missing |
+| [`func_L00_002A74A8`](levels/func_L00_002A74A8.c) | 300 | Candidate is 272 bytes; both blocks' calls, the signed `% 4` (movn) sequence and the `(old & ~a3) \| a2` splice are exact, but retail keeps the resident high half in `$s1` across the whole body and completes the address twice, the `(A \|\| B) && C` gate gets `$a1` as its phi, and the `(0x90,0x90,0xF0)` stores are ordered differently |
+| [`func_L00_002D3248`](levels/func_L00_002D3248.c) | 68 | Same size and every instruction matches; only the store order differs. Retail leaves the `+0x1430` float store for the `jr` delay slot and this cc1 schedules it first. Two source orders measured, same result |
+| [`func_L00_00444D18`](levels/func_L00_00444D18.c) | 44 | Same size, three words; retail fuses the resident load into the high address register (`lui $v0,%hi` then `lw $v0,%lo($v0)` at +0x4) while this cc1 schedules the constant's `lui` between them and loads into `$v1`. Six spellings measured, all identical |
+| [`func_L00_004450E8`](levels/func_L00_004450E8.c) | 44 | Same three words as `func_L00_00444D18` (same thunk shape, other callee) |
+| [`func_L00_00447678`](levels/func_L00_00447678.c) | 48 | Same thunk shape as `func_L00_00444D18` with the constant 0xD9090, plus `return 1` |
+| [`func_L00_004476A8`](levels/func_L00_004476A8.c) | 48 | Same thunk shape as `func_L00_00447678` with the other callee |
+| [`func_L00_003CA650`](levels/func_L00_003CA650.c) | - | Catalogue defect: the extent opens on `addiu $sp,$sp,0x60; nop` (a stray epilogue). The C of the body from +8 (0x003CA658) is deposited; the boundary needs re-deriving |
+| [`func_L19_003DD6D0`](levels/func_L19_003DD6D0.c) | - | Catalogue defect, `addiu $sp,$sp,+N; nop` family: the extent opens on the previous function's epilogue tail (`jr $ra; addiu $sp,$sp,0xA0`) and the body from +8 is not a coherent prologue either. No C deposited |
+| [`func_L19_0043CFD8`](levels/func_L19_0043CFD8.c) | - | Same defect family as `func_L19_003DD6D0` (extent opens on `addiu $sp,$sp,0x20; nop`) |
+| [`func_L04_0033D158`](levels/func_L04_0033D158.c) | - | Same defect family (extent opens on `addiu $sp,$sp,0x40; nop`) |
+| [`func_L04_0034B9B0`](levels/func_L04_0034B9B0.c) | - | Same defect family (extent opens on `addiu $sp,$sp,0x10; nop`) |
