@@ -145,7 +145,16 @@ INCLUDE_ASM("asm/levels", func_L00_002B9598);
 
 INCLUDE_ASM("asm/levels", func_L00_002B9B38);
 
-INCLUDE_ASM("asm/levels", func_L00_002B9B88);
+/* The resident id this forwards, and the helper it calls. */
+extern int D_0018C0B0;
+
+extern void func_35F3A8(void *a0, void *a1, int a2);
+
+/* Forwards both of its arguments and the resident id to the helper. */
+void func_L00_002B9B88(void *a0, void *a1)
+{
+    func_35F3A8(a0, a1, D_0018C0B0);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002B9BB0);
 

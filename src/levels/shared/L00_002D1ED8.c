@@ -129,7 +129,16 @@ void func_L00_002D24B8(void) {
     *(int *)(b + 0xC48) = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002D24D0);
+/* The resident word published below. */
+extern int D_0018AA68;
+
+/* Publishes the argument into the resident word, with 0xFFFFFFFF becoming 5. */
+void func_L00_002D24D0(int value)
+{
+    if (value == -1)
+        value = 5;
+    D_0018AA68 = value;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002D24E8);
 
