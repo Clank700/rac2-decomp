@@ -166,7 +166,13 @@ INCLUDE_ASM("asm/levels", func_L00_002E3520);
 
 INCLUDE_ASM("asm/levels", func_L00_002E36F8);
 
-INCLUDE_ASM("asm/levels", func_L00_002E3898);
+extern void func_2EDD48(void *);
+extern char ref_L00_001BC228_00[];
+
+/* Thin forwarder: hands one global to the shared handler. */
+void func_L00_002E3898(void) {
+    func_2EDD48(ref_L00_001BC228_00);
+}
 
 /* evaluates (b-a)*(t*t)+a*t and converts the measured float result to a signed word */
 s32 func_L00_002E3A68(f32 a,f32 b,f32 t) {

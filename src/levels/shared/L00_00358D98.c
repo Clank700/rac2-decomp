@@ -264,7 +264,11 @@ void func_L00_00374B98(void)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00374B78);
+extern void func_3747B0(void);
+
+void func_L00_00374B78(void) {
+    func_3747B0();
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00374C18);
 
