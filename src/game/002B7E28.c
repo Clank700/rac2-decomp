@@ -323,7 +323,18 @@ INCLUDE_ASM("asm/game", func_002BA6A0);
 
 INCLUDE_ASM("asm/game", func_002BA8A0);
 
-INCLUDE_ASM("asm/game", func_002BA978);
+extern unsigned char *D_001F2544;
+
+void func_002BA978(char *self)
+{
+    int alpha = *(short *)(self + 0xA) * *(int *)(self + 0x20) / 27;
+    *(unsigned int *)(self + 4) = (*(unsigned int *)(self + 4) & 0xFFFFFFu) | (alpha << 24);
+    if (func_00282978_4(self + 0xA)) {
+        func_002B9180_8(self);
+    } else {
+        self[2] = D_001F2544[(27 - *(short *)(self + 0xA)) / 3];
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002BAA28);
 

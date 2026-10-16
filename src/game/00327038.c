@@ -81,7 +81,44 @@ INCLUDE_ASM("asm/game", func_003285C0);
 
 INCLUDE_ASM("asm/game", func_003286D0);
 
-INCLUDE_ASM("asm/game", func_00328758);
+extern unsigned char *D_001BAF98[];
+extern char D_001A63A8[];
+extern char D_001B01F0[];
+extern int func_002B6D28(void);
+extern void func_002A8598(int, int);
+extern void func_0026FEB8(const char *, ...);
+
+void func_00328758(char *self)
+{
+    unsigned char *object = D_001BAF98[0];
+    char *owner = *(char **)(self + 0x68);
+    unsigned char *state;
+    char *context;
+    if (object == 0)
+        return;
+    if (*(short *)(*(char **)(object + 0x24) + 0x46) != 18)
+        return;
+    state = *(unsigned char **)(object + 0x68);
+    if (state != 0) {
+        if (*(short *)(state + 0x16) == 0) {
+            if (state[0x14] != 0) {
+                object[0xBC] += 2;
+                if (object[0xBC] >= 25) {
+                    context = D_001A63A8;
+                    if (*(short *)(context + 0x72) == 3 && *(short *)(context + 0x6C) < 6000)
+                        func_002B6D28();
+                }
+                if (object[0x21] != 255)
+                    func_002A8598(object[0x21], object[0xBC]);
+            }
+            *(int *)(owner + 0x54) = 0;
+        } else {
+            *(int *)(owner + 0x54) = 1;
+        }
+    } else {
+        func_0026FEB8(D_001B01F0, *(short *)(object + 0xAA));
+    }
+}
 
 extern float func_002A7878(float, float);
 extern void func_00282F20(float *, float *, float);
@@ -109,7 +146,32 @@ void func_00328848(char *a0)
     }
 }
 
-INCLUDE_ASM("asm/game", func_00328918);
+extern void func_00283098(void *, void *, void *);
+
+void func_00328918(char *owner)
+{
+    int address = (int)D_0022B0A0;
+    char *position = (char *)(address + 0x10);
+    char *other = (char *)(address + 0x20);
+    int remaining = 99;
+    char *base = (char *)address;
+    char *data = *(char **)(owner + 0x68);
+    do {
+        if (*(char **)(position + 0x24) == owner) {
+            func_00283098(position, base, owner + 0xC0);
+            func_00282F20((float *)other, (float *)position, 1.0f);
+            func_00282CC0(position, position, owner + 0x10);
+            *(float *)(position + 0x20) += 0.6283186078071594f;
+            if (*(float *)(position + 0x20) >= 6.2831854820251465f) {
+                *(int *)(position + 0x24) = 0;
+                --*(int *)(data + 0x48);
+            }
+        }
+        base += 0x40;
+        other += 0x40;
+        position += 0x40;
+    } while (--remaining >= 0);
+}
 
 INCLUDE_ASM("asm/game", func_00328A20);
 

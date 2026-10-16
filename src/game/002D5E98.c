@@ -423,9 +423,104 @@ int func_002DBE80(char *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002DBEC0);
+extern int D_00138180[];
+extern int D_001F2974;
+extern void func_002DF190(int, int);
 
-INCLUDE_ASM("asm/game", func_002DBF98);
+int func_002DBEC0(char *object)
+{
+    int flags;
+    {
+        int *state = D_00138180;
+        if (!(state[0x1C4 / 4] & 0x900))
+            goto proceed;
+        if (D_001F2974 == 0)
+            return 1;
+    }
+proceed:
+    {
+        int *state = D_00138180;
+        flags = state[0x1C4 / 4];
+    }
+    if (flags & 0x10) {
+        char *root = (char *)&D_001F2840;
+        int value = *(int *)(*(char **)(root + 0x14) + 0xE0);
+        int status;
+        if (value != 0) {
+            *(int *)(root + 0x18) = value;
+        } else {
+            switch (*(int *)(root + 0x134)) {
+            case 0:
+                status = -1;
+                goto finish;
+            default:
+                break;
+            }
+        }
+        status = 0;
+finish:
+        return status;
+    }
+    {
+        int old = *(int *)(object + 0x40);
+        if (flags & 0x40)
+            *(int *)(object + 0x40) = (old + 1) % 30;
+        else if (flags & 0x20)
+            *(int *)(object + 0x40) = (old + 29) % 30;
+        if (*(int *)(object + 0x40) != old)
+            func_002DF190(1, 17);
+    }
+    return 0;
+}
+
+
+extern int D_00138180[];
+extern int D_001F2974;
+extern void func_002DF190(int, int);
+
+int func_002DBF98(char *object)
+{
+    int flags;
+    {
+        int *state = D_00138180;
+        if (!(state[0x1C4 / 4] & 0x900))
+            goto proceed;
+        if (D_001F2974 == 0)
+            return 1;
+    }
+proceed:
+    {
+        int *state = D_00138180;
+        flags = state[0x1C4 / 4];
+    }
+    if (flags & 0x10) {
+        char *root = (char *)&D_001F2840;
+        int value = *(int *)(*(char **)(root + 0x14) + 0xE0);
+        int status;
+        if (value != 0) {
+            *(int *)(root + 0x18) = value;
+        } else {
+            switch (*(int *)(root + 0x134)) {
+            case 0:
+                status = -1;
+                goto finish;
+            default:
+                break;
+            }
+        }
+        status = 0;
+finish:
+        return status;
+    }
+    if (flags & 0x2040) {
+        *(int *)(object + 0x54) = (*(int *)(object + 0x54) + 1) % 12;
+        func_002DF190(1, 17);
+    } else if (flags & 0x8020) {
+        *(int *)(object + 0x54) = (*(int *)(object + 0x54) + 11) % 12;
+        func_002DF190(1, 17);
+    }
+    return 0;
+}
 
 /* Two-branch draw set-up: copies a 2-byte record from one of two tables into a 16-byte local, then issues a draw call with five float arguments (scale, per-instance angle, two constants, colour value) plus a 64-bit attribute word, a geometry handle, a fifth integer argument -1 and a local buffer. */
 int func_002DC090(char *s0)

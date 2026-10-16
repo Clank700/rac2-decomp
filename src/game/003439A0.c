@@ -35,7 +35,37 @@ char *func_003439A0(char *p)
 
 INCLUDE_ASM("asm/game", func_00343A30);
 
-INCLUDE_ASM("asm/game", func_00343EE8);
+typedef struct { unsigned char pad[6]; short id; short tail; } SelectionRow;
+extern SelectionRow D_001AA810[];
+
+void func_00343EE8(DobboGridState312 *state, unsigned int buttons)
+{
+    if (buttons & 0x1000) {
+        func_002E5E58(3, 0, 0);
+        state->row = 1;
+        state->mode = 2;
+    } else if (buttons & 0x4000) {
+        func_002E5E58(3, 0, 0);
+        state->row = 0;
+        state->mode = 2;
+    } else if (buttons & 0x8000) {
+        --state->column;
+        func_002E5E58(3, 0, 0);
+        if (state->column < 0) {
+            state->column = 0;
+            state->mode = 1;
+        }
+    } else if (buttons & 0x2000) {
+        func_002E5E58(3, 0, 0);
+        ++state->column;
+        if (state->column >= 2) {
+            state->column = 0;
+            state->mode = 1;
+            state->row = 0;
+        }
+    }
+    state->index = D_001AA810[state->column].id;
+}
 
 INCLUDE_ASM("asm/game", func_00343FF8);
 

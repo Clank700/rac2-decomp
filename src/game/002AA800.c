@@ -238,7 +238,40 @@ s32 func_002AB220(u8 *a0) {
  return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002AB250);
+extern int func_002A99A0(void *, int, void *, void *, float);
+extern float func_002A7940(void);
+extern int func_002A7820(int, int);
+extern void func_002AF000(float *, float, float, float);
+extern void func_002BAE50(void *, void *, unsigned int, int, int, int, int, int);
+
+void func_002AB250(void *owner, char *offset, void *filter)
+{
+    char vectors[320];
+    float position[4];
+    char *cursor;
+    float *point;
+    int count;
+    int result;
+    int first;
+    float angle;
+    result = func_002A99A0(owner, 20, vectors, filter, 14.0f);
+    if (result == 0)
+        return;
+    if (result > 0) {
+        point = position;
+        cursor = vectors;
+        count = result;
+        do {
+            angle = func_002A7940();
+            func_002AF000(point, 0.030000001192092896f, angle, func_002A7940());
+            F904cc63b_FUN_00282CC0((V4_F904cc63b *)point, (V4_F904cc63b *)point, offset);
+            position[2] += 0.015000000596046448f;
+            first = func_002A7820(20, 35);
+            func_002BAE50(cursor, point, 0x7000A0FFu, 255, first, 30, func_002A7820(40, 60), 1);
+            cursor += 16;
+        } while (--count != 0);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002AB378);
 
