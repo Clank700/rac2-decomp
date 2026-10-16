@@ -164,3 +164,4 @@ src/core/001339B0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/core/00117108.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 src/core/0012DD60.c	sdk -O2 -g2 -gstabs
 src/core/00116460.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
+src/core/001166C8.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
