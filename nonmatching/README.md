@@ -2159,3 +2159,6 @@ read the primary entry for context and verify each form separately.
 
 
 
+
+| Function | Size | Bytes that differ |
+| --- | ---: | ---: |
