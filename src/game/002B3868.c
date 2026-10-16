@@ -86,7 +86,36 @@ int func_002B4038(int value, int index) {
 
 INCLUDE_ASM("asm/game", func_002B4068);
 
-INCLUDE_ASM("asm/game", func_002B4090);
+typedef int PoseVector128 __attribute__((mode(TI)));
+typedef struct {
+    PoseVector128 initial, previous, current, delta;
+    PoseVector128 matrix[4];
+    float angles[4];
+    PoseVector128 change[4];
+} PoseWorkspace;
+extern void func_00283410(void *, void *);
+extern void func_002830C0(void *, void *, void *);
+extern void func_00283788(void *, void *, void *);
+extern void func_00282CF0(void *, void *, void *);
+extern void func_00282CC0(void *, void *, void *);
+extern void func_002AB6D8(float *, float *);
+
+void func_002B4090(char *self, PoseVector128 *point, float x, float y, float z)
+{
+    PoseWorkspace work;
+    work.initial = *point;
+    func_00283410(work.matrix, self + 0xF0);
+    func_002830C0(&work.previous, &work.initial, work.matrix);
+    work.angles[0] = x;
+    work.angles[1] = y;
+    work.angles[2] = z;
+    func_00283410(work.change, work.angles);
+    func_00283788(work.matrix, work.matrix, work.change);
+    func_002830C0(&work.current, &work.initial, work.matrix);
+    func_00282CF0(&work.delta, &work.previous, &work.current);
+    func_00282CC0(self + 0x10, self + 0x10, &work.delta);
+    func_002AB6D8((float *)work.matrix, (float *)(self + 0xF0));
+}
 
 INCLUDE_ASM("asm/game", func_002B41A0);
 
@@ -122,13 +151,36 @@ INCLUDE_ASM("asm/game", func_002B4B70);
 
 INCLUDE_ASM("asm/game", func_002B4C18);
 
-INCLUDE_ASM("asm/game", func_002B4FF0);
+extern char *func_002B5D28(void *);
+extern float func_00283B98(float, float);
+extern int func_00282978(short *);
+extern int func_002A7820(int, int);
+extern int func_002B50E0(void *, void *, float);
+
+int func_002B4FF0(char *self, float *target, float amount)
+{
+    char *data = func_002B5D28(self);
+    float angle;
+    if (data == 0)
+        return 8;
+    angle = func_00283248(target[0] - *(float *)(self + 0x10),
+                         target[1] - *(float *)(self + 0x14));
+    angle = func_00283B98(angle, amount);
+    if (*(float *)(data + 0xDC) != 0.0f) {
+        angle = func_00283B98(angle, *(float *)(data + 0xDC));
+        if (func_00282978((short *)(data + 0xE0))) {
+            *(float *)(data + 0xDC) = -*(float *)(data + 0xDC);
+            *(short *)(data + 0xE0) = func_002A7820(*(short *)(data + 0xE2), *(short *)(data + 0xE4));
+        }
+    }
+    return func_002B50E0(self, target, angle);
+}
 
 INCLUDE_ASM("asm/game", func_002B50D8);
 
 INCLUDE_ASM("asm/game", func_002B50E0);
 
-extern void func_002B50E0(void *, void *, float);
+extern int func_002B50E0(void *, void *, float);
 
 void func_002B5258(char *m) {
     func_002B50E0(m, m + 0x10, *(float *)(m + 0xF8));
