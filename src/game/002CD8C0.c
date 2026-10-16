@@ -195,7 +195,61 @@ int func_002D2830(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002D2838);
+typedef struct {
+    char reserved00[0x14];
+    char *source;
+    int value;
+    char reserved1c[0x118];
+    int fallback;
+} CallbackState;
+extern CallbackState D_001F2840;
+extern int D_00138344;
+extern int D_001A7908 __attribute__((sda));
+typedef struct {
+    char reserved00[0x14F8];
+    int first;
+    int reserved14fc;
+    int second;
+} CallbackToggleState;
+extern CallbackToggleState D_00189E20;
+extern float D_0018B300[];
+extern int func_002E5E58(int, unsigned int, void *);
+extern void func_00282F20(void *, void *, float);
+
+int func_002D2838(void)
+{
+    int result = 0;
+    int flags = D_00138344;
+    if (flags & 0x10) {
+        int value = *(int *)(D_001F2840.source + 0xE0);
+        if (value != 0)
+            D_001F2840.value = value;
+        else if (D_001F2840.fallback == 0) {
+            value = -1;
+            goto return_value;
+        }
+        value = 0;
+return_value:
+        return value;
+    }
+    if (flags & 0x900)
+        result = 1;
+    else if (flags & 0x40) {
+        func_002E5E58(4, 0, 0);
+        switch (D_001A7908) {
+        default:
+            D_001A7908 = 0;
+            D_00189E20.second = 0;
+            D_00189E20.first = 0;
+            break;
+        case 0:
+            D_001A7908 = 1;
+            func_00282F20(D_0018B300, (char *)D_0018B300 - 0x14E0, 1.0f);
+            break;
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/game", func_002D2918);
 
@@ -216,15 +270,6 @@ int func_002D2C00(void) {
     return 0;
 }
 
-typedef struct {
-    char reserved00[0x14];
-    char *source;
-    int value;
-    char reserved1c[0x118];
-    int fallback;
-} CallbackState;
-extern CallbackState D_001F2840;
-extern int D_00138344;
 extern void func_0029C6B0(int);
 
 int func_002D2C30(void) {
