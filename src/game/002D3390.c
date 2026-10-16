@@ -155,7 +155,7 @@ int func_002D5290(char *object) {
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002D52D8);
+/* func_002D52D8 is in the -G8 sibling. */
 
 INCLUDE_ASM("asm/game", func_002D53F0);
 
