@@ -16,7 +16,16 @@
    as `memcpy(v, a0, 16)` with s32 or float buffers (212 bytes), and with the guard written
    as `!= -1`/`<= -1`/conditional - all four shapes land on the same diffs. Retail's lq/sq
    pair is a single 16-byte copy with the source address in a register, which none of these
-   spellings produced here. */
+   spellings produced here.
+
+   Second pass, same tour: holding both samples in one 32-byte buffer (`s32 buf[8]`, or
+   `TI128 buf[2]` with the two 128-bit words) reaches retail's 160 bytes exactly, but the
+   frame is still 0x40, because the flag block's base is kept live across the call in $s1
+   where retail materialises it only after the call (its frame is 0x30 and it saves just
+   $s0 and $ra). Naming the block inline in the two guards instead of through a local drops
+   that save and lands on 152 bytes with 34 diffs - the body is then eight bytes short of
+   retail's and the prologue/epilogue pair no longer matches. scratch/w19.c and w20.c hold
+   those shapes; the remaining work is the exact split of the two guards' base setup. */
 
 typedef unsigned char u8;
 typedef short s16;
