@@ -285,7 +285,39 @@ void func_L00_003C2DE8(char *a0, char *a1, float fa, float fb)
     } while (i >= 0);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003C2F10);
+/* Two-state gate on the record's byte 0x20 (the same body as func_L09_003C8CD8, which
+   the level 09 file already carries). In state 0, as long as the live word the sub-object
+   opens with is not -1, the record is stamped 0xFF, the shared eight-argument starter is
+   run on the sub-object's track block and the record flips to state 1. In state 1 the
+   sub-object's first float is scaled by 2*pi/21600 (a per-frame 1/100 s turn rate) and
+   folded into the record's own angle before its track block is stepped again. */
+extern void func_323448();
+extern void func_323958(unsigned char *, unsigned char *);
+extern float func_2EF0F8(float, float);
+
+void func_L00_003C2F10(unsigned char *a0) {
+    unsigned char *s0 = a0;
+    unsigned char *s1 = *(unsigned char **)(s0 + 0x68);
+    switch (s0[0x20]) {
+    case 0:
+        if (*(long long *)s1 == -1) {
+            break;
+        }
+        {
+            unsigned char stamp = 0xFF;
+            *(unsigned char *)(s0 + 0x30) = stamp;
+        }
+        func_323448(s0, s1 + 0x30, 0x64, *(int *)(s1 + 4), *(int *)s1, -1, 7, 0);
+        s1[0xC5A] = 1;
+        s0[0x20] = 1;
+        break;
+    case 1:
+        *(float *)(s0 + 0xF4) = func_2EF0F8(
+            *(float *)(s0 + 0xF4), *(float *)(s1 + 8) * 0.000290888245f);
+        func_323958(s0, s1 + 0x30);
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003C2FC8);
 
