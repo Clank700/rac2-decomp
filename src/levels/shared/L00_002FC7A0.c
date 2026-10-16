@@ -128,7 +128,32 @@ void func_L00_002FD308(unsigned long long argument)
     func_00291640(argument);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002FD400);
+extern void func_002F0D00(void *, void *, int);
+
+extern unsigned char D_L00_001C7040[] __attribute__((nosda));
+
+/* walks the eight thirty-two-byte entries: for the ones with both flags set it
+   hands the two halfword offsets of the entry to the shared routine and clears
+   them */
+void func_L00_002FD400(void)
+{
+    unsigned char *entry = D_L00_001C7040;
+    int i;
+    int base;
+    short first;
+
+    for (i = 0; i < 8; i++) {
+        if (*(int *)(entry + 0x10) != 0 && *(int *)(entry + 0xC) != 0) {
+            base = *(int *)(entry + 0xC);
+            first = *(short *)(entry + 0x8);
+            func_002F0D00((void *)(base + (first << 1)),
+                          (void *)(base + (first << 1) + (*(short *)(entry + 0xA) << 1)), i);
+            *(short *)(entry + 0x8) = 0;
+            *(short *)(entry + 0xA) = 0;
+        }
+        entry += 0x30;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002FD480);
 

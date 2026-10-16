@@ -229,6 +229,11 @@ void func_L02_003CE908(char *a0) {
 /* Near miss (see work/wave7-20261013/w04/drafts): the loop, both branch-likely tests and the
    duplicated `lh` delay-slot loads are retail's; two register copies are missing because this
    compiler gives the kind byte the other register. 116 bytes against 124. */
+/* Near miss (see work/wave7-20261013/w04/drafts): the loop, both branch-likely tests and the
+   duplicated `lh` delay-slot loads are retail's; two register copies are missing because this
+   compiler gives the kind byte the other register. 116 bytes against 124.
+   wave5-09: same wall from a -G8 unit (needs the .extern for the one-instruction $gp load);
+   candidate 128 bytes, the same two register copies plus a `nop` the retail loop does not have. */
 INCLUDE_ASM("asm/levels", func_L02_003CE9A8);
 
 INCLUDE_ASM("asm/levels", func_L02_003CEA28);
