@@ -49,7 +49,39 @@ INCLUDE_ASM("asm/levels", func_L16_003E7248);
 
 INCLUDE_ASM("asm/levels", func_L16_003F4FA8);
 
-INCLUDE_ASM("asm/levels", func_L16_003F54F8);
+extern void func_002A7750(char *, s32, s32);
+
+extern s32 func_002A9640(char *, s32, s32);
+
+extern void func_L16_003F55A0(char *);
+
+extern void func_L16_003F5708(char *);
+
+extern void func_002E5CF8(s32, s32, char *);
+
+extern void func_0029F338(char *);
+
+/* Tears the resident down (state 0) or starts it once the readiness test passes
+   (state 1), chosen by the record's own state byte. */
+void func_L16_003F54F8(char *a0) {
+    char *s0 = a0;
+
+    switch (*(u8 *)(s0 + 0x20)) {
+    case 0:
+        *(u16 *)(s0 + 0x32) = 0x200;
+        *(u16 *)(s0 + 0x34) |= 0x4000;
+        func_002A7750(s0, 1, -1);
+        break;
+    case 1:
+        if (func_002A9640(s0, 0x80000, 0) != 0) {
+            func_L16_003F55A0(s0);
+            func_L16_003F5708(s0);
+            func_002E5CF8(0, 0, s0);
+            func_0029F338(s0);
+        }
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L16_003F55A0);
 
