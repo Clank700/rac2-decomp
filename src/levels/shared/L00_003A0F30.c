@@ -262,7 +262,25 @@ void func_L00_003A8508(char *a0)
 
 INCLUDE_ASM("asm/levels", func_L00_003A85A0);
 
-INCLUDE_ASM("asm/levels", func_L00_003A8618);
+/* Dispatches on a table lookup: the object's +0x68 pointer names a short that is looked up
+   with key 0x5CB; on a miss the object takes the discard path, otherwise the two update
+   helpers run. */
+extern int func_32A060(int, int);
+extern void func_310440(char *);
+extern void func_3A8940(char *);
+extern void func_3A91A0(char *);
+
+void func_L00_003A8618(char *a0)
+{
+    char *s0 = a0;
+
+    if (func_32A060(0x5CB, *(short *)(*(char **)(s0 + 0x68) + 0x1A)) == 0)
+        func_310440(s0);
+    else {
+        func_3A8940(s0);
+        func_3A91A0(s0);
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003A8670);
 
