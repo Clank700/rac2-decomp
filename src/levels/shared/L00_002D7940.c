@@ -57,7 +57,18 @@ void func_L00_002D7940(s32 *object) {
     object[0]=0; object[1]=0; object[2]=0; object[3]=0; object[4]=0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002D7958);
+extern float func_00283B98(float, float);
+
+/* blends the first component of the source through the helper, then copies the four
+   remaining components straight across */
+void func_L00_002D7958(f32 *dst, f32 *src, f32 x) {
+ dst[0]=func_00283B98(src[0],x);
+ dst[1]=src[1];
+ dst[2]=src[2];
+ dst[3]=src[3];
+ dst[4]=src[4];
+}
+
 
 INCLUDE_ASM("asm/levels", func_L00_002D7D58);
 
