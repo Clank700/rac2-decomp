@@ -1,39 +1,82 @@
-/* func_L16_0040D188 (208 bytes, 1 place, level 16) -- structure transcribed, NOT
-   compiled: the unit needs a $gp access this file's profile cannot give (see below).
+/* func_L16_0040D188 (208 bytes, 1 place, level 16) -- measured 0 of 1: SIZE IS
+   RIGHT (208), the residue is one instruction order plus the allocation.
 
-   The inner walk is the "0x7FFF-masked id list" skeleton the lead circulated, and
-   its instruction shape matches the already-matched
-   src/levels/01_oozla/L01_003CAFE0-g8.c word for word: `do { e = base + ((*p &
-   0x7FFF) << 8); ... } while (*(s16 *)p++ >= 0);` produces retail's
-   `lh $v0,-0x2($a1)` + `bgezl $v0,body` + `lhu $v0,0x0($a1)` delay slot here too.
+   MEASURED WITH `-O2 -G8 -ffunction-sections`: the unit needs GPREL16 for the
+   `lw $v0,0x3B48($gp)` bound, so whoever promotes this must put the function in a
+   file named `...-g8.c` (or give it a cflags line); L16_00403900.c, which holds it
+   today, is the default -G0 unit. The bound is `extern s32 D_... __attribute__
+   ((sda))`; the two other globals stay absolute (`nosda`).
 
-   Retail, in order:
-     40D188  a2 = arg0
-     40D18C  if (a2[0x21] == 0xFF) return
-     40D19C  p = (u16 *)D_001FB660[a2[0x21]];        /* 0x1FB660, u32 table */
-     40D1AC  goto test
-     body 40D1B8
-             e = D_001B2B1C + ((*p & 0x7FFF) << 8);   /* base is a POINTER global,
-                                                        loaded from 0x1B2B1C */
-             if (e == 0) return
-             c = *(s16 *)(e + 0xAA);
-             if (c == 0xF35)  *(u32 *)(*(u8 **)(e + 0x68) + 0x244) = 1;
-             else if (c == 0xEA3) *(u32 *)(*(u8 **)(e + 0x68) + 0x24C) = 1;
-             p++;
-     test 40D208
-             if (a2[0x21] == 0xFF) return
-             if (D_<gp+0x3B48> < a2[0x21]) return
-             if (p == 0) return
-             if (*(s16 *)(p - 1) >= 0) goto body        /* the do/while condition */
-             if (p == (u16 *)D_001FB660[a2[0x21]]) goto body   /* head reloaded */
-             return
+   Structure: the id-list walk of src/levels/01_oozla/L01_003CAFE0-g8.c, with the
+   outer guards sharing one test block at the bottom:
+     init   if (arg0[0x21] == 0xFF) return; p = (u16 *)D_001FB660[arg0[0x21]];
+     body   e = D_001B2B1C + ((*p & 0x7FFF) << 8);
+            if (e == 0) return;
+            c = *(s16 *)(e + 0xAA);
+            if (c == 0xF35) *(u32 *)(*(u8 **)(e + 0x68) + 0x244) = 1;
+            else if (c == 0xEA3) *(u32 *)(*(u8 **)(e + 0x68) + 0x24C) = 1;
+            p++;
+     test   if (arg0[0x21] == 0xFF) return;
+            if (D_<gp> < arg0[0x21]) return;
+            if (p == 0) return;
+            if (*(s16 *)(p - 1) >= 0) goto body;                 /* list continues */
+            if (p == (u16 *)D_001FB660[arg0[0x21]]) goto body;   /* head reloaded */
+            return;
 
-   Two traps for whoever takes this:
-     - the index a2[0x21] is RE-READ at both tests because the body stores through
-       `*(u8 **)(e + 0x68)`, so this cc1 cannot prove they do not alias; that is
-       what puts the extra tests between the loop top and the do/while condition;
-     - the bound at 40D214 is a `lw $v0,0x3B48($gp)` access, so the unit needs
-       GPREL16: an `-G8` file with a sized, <= 8-byte `sda` symbol (wave 6's rule).
-       Level 16's L16_00403900.c holds many other functions of this lot, so this
-       one probably belongs in its own `L16_...-g8.c` unit rather than changing the
-       file's profile. */
+   THREE shapes reach exactly 208 bytes (out of 14 measured): a `for (;;)` with the
+   body first and those guards at the bottom, that same form with the class value
+   declared first or last, and a body-first form whose inner `do { } while (*p++ >=
+   0)` is separate. The first is kept below. Everything else costs 4-24 bytes more:
+   the single pre-tested `while` carrying the whole compound condition (232), the
+   same with `p == head` first (228), the do/while carrying every guard (180), the
+   old `p[j]`-style walk (224).
+
+   What still differs is not the shape. Retail opens with `daddu $a2,$a0,$zero`
+   (the parameter moved out of `$a0`, which the body then uses for the class value)
+   and materialises 0xF35 / 0xEA3 / 0xFF / 1 at their points of use in `$v0`; this
+   cc1 keeps the parameter in `$a0` and hoists all four constants into `$t0`-`$t3`
+   before the loop, so the first word differs and the schedule follows it.
+   Spelling the parameter copy (`u8 *st = arg0;`, used from the loop on), reading
+   it through a pointer local, and several declaration orders were measured: still
+   208 with the same first-word difference. */
+
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef unsigned int u32;
+typedef int s32;
+typedef short s16;
+
+extern u32 D_L16_001FB660[];
+extern u8 *D_L16_001B2B1C __attribute__((nosda));
+extern s32 D_L16_001B3B48 __attribute__((sda));
+
+void func_L16_0040D188(u8 *arg0) {
+    s32 c;
+    u16 *p;
+    u8 *base;
+    u8 *e;
+
+    if (arg0[0x21] == 0xFF)
+        return;
+    p = (u16 *)D_L16_001FB660[arg0[0x21]];
+    for (;;) {
+        base = D_L16_001B2B1C;
+        e = base + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            return;
+        c = *(s16 *)(e + 0xAA);
+        if (c == 0xF35)
+            *(u32 *)(*(u8 **)(e + 0x68) + 0x244) = 1;
+        else if (c == 0xEA3)
+            *(u32 *)(*(u8 **)(e + 0x68) + 0x24C) = 1;
+        p++;
+        if (arg0[0x21] == 0xFF)
+            return;
+        if (D_L16_001B3B48 < arg0[0x21])
+            return;
+        if (p == 0)
+            return;
+        if (*(s16 *)(p - 1) < 0 && p != (u16 *)D_L16_001FB660[arg0[0x21]])
+            return;
+    }
+}
