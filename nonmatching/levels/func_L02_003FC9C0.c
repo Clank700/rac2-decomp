@@ -31,13 +31,6 @@ typedef float f32;
  * (retail reloads it into v0 and v1), so the source must re-read it too.  Candidate
  * comes out 208 bytes against 188 with the arms laid out the other way (this cc1 emits
  * `bnel` where retail has a `beqz` to the else arm) - block layout, not the source.
- * -G8 sibling retry (lead lesson): the same body compiled as L02_003F5430-g8.c
- * reports `func_L02_003FC9C0: 0 of 1 places match [02_maktar_nebula: 180 bytes,
- * expected 188]` - the $gp loads come out in retail's form there, and the 208-byte
- * -G0 candidate's inverted arms collapse to 180 bytes, i.e. 2 instructions short of
- * 188 instead of 20 over.  The -g8 unit has no typedefs of its own: it needs
- * `typedef unsigned char u8; typedef short s16; typedef float f32;` added before the
- * externs, and the externs spelled `float`.)
  * $gp recipe (lead, 2026-10-16, re-measured here): both `extern f32 X __attribute__((sda));` and
  * `extern f32 X __asm__("X_asm") __attribute__((section(".sdata")));` leave the reference BARE in
  * the .s (`l.s $f0,D_L02_001B1234`), i.e. GPREL16, which is retail's form.  The `lui $at`+absolute
