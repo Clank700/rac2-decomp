@@ -1209,6 +1209,10 @@ Matched this tour (7, all re-checked with the Docker-free ruler, `N of N places 
 
 
 
+## Level functions, wave 7 agent lvl7-03 (2026-10-16)
+
+| [`func_L05_004222D8`](levels/func_L05_004222D8.c) | 164 | Candidate is 172 bytes; the clamp-and-publish body is decoded in full and needs the `-G8` sibling (level 5's `$gp` base is 0x1AEFF0, so `lw $v0,0x2360($gp)` is `D_L05_001B1350` with the `sda` attribute while 0x1B1354/58/5C stay absolute). Retail materialises `lui $v0,0x14; addiu $v0,$v0,-0x6A48` last, this cc1 hoists the same pair into `$a2` at the top and then rematerialises a dead `lw $v0,0x0($gp)` into two clamp delay slots - the two extra words. Nine shapes give 172/176 |
+
 ## Additional source forms
 
 Keep a primary attempt at `levels/<catalogue-name>.c`. Distinct alternatives live
