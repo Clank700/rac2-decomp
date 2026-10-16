@@ -1278,3 +1278,44 @@ The boot-era habits above still hold; these are the ones the level units added.
   their work in `/tmp` (the 32-bit tools cannot stat drvfs files), and the verdict comes from
   `tools/build.py`'s own `Placement.derive` — the exact code path of `tools/check.py`. Useful when
   the container is unavailable; the container build stays the authority.
+
+## Habits measured by the seventh wave (16 October 2026, levels)
+
+Another twelve-worker wave on `src/levels/` (22 matches). The habits above still hold; these are
+the additions, including two corrections.
+
+- **The reconstructed assembler under-rounds some decimal float spellings by one ulp**:
+  `3.141571044921875f` encodes `0x40490F80` where retail holds `0x40490FD0`, `5627.906982421875f`
+  encodes `0x45AFDF42` against `0x45AFDF66`, and `1.5707964f` gives `0x3FC90FDB` against retail's
+  `0x3FC90FDC`. The correct spelling exists but is not always the nearest decimal (`3.14159f` and
+  `1.5707965f` both encode retail's bits). Read the constant's `lui`/`ori` out of the object and
+  compare it with the disassembly before treating a float constant as a wall; two matches turned
+  on this alone.
+- **`-mno-split-addresses`, in a `-g8` sibling, is the way to retail's bare `lwc1 $f,off($gp)`**:
+  measured three times (`func_L00_003959C0` 216 -> 200 bytes, its exact size; `func_L05_00397F48`
+  252 -> 232; `func_L01_00416A50` 252 -> 232). It does **not** move integer `$gp` loads, and it can
+  permute the prologue's save order - check both.
+- **Store order is an arbitrary permutation of the source order**: brute-forcing the statement
+  order of identical stores (all variants in one ruler run) is the cheapest lever of the wave;
+  `func_L10_0042BE20` matched on the first try that way.
+- **The walk families**: `for (;;) { e = base + ((*q & 0x7FFF) << 8); ...; if ((s16)*q < 0)
+  break; q++; }` matches (`L01_003CAFE0-g8.c`, `L04_00422A00-g8.c`), but the counter's
+  initialisation belongs **after** the guards - `int n = 0;` at the top costs 8 bytes - and the
+  call target of a shared walk is a neighbouring local function in some programs, which takes a
+  `ref_LNN_XXXXXXXX_kk` name.
+- **Two bodies passed `tools/check.py` and the build refused to place them** - worth remembering
+  because `check.py` sees neither: a call to a *local* function compiled into the same object
+  requires that function's section to be placed at the expected address in every program
+  (`func_L00_0036FA68`: its callee is a neighbouring local in six of the programs), and a
+  `D_LNN_XXXXXXXX` name is checked against its implied value in every program
+  (`func_L22_003B9358`: "needs two values" where the four words sit at other addresses). Both
+  take `ref_` names and then resolve from the retail bytes per program.
+- **`check.py`'s failure line is an address oracle**: `D_L13_XXXXXXXX would be at 0xYYYYYYYY`
+  gives the real address of a `$gp` or absolute global outright.
+- **Five-second screening pays**: `showlvl.py <name> | grep -c '\.word'` classifies a row as the
+  MMI family (`0x7000_xxxx`, not C) in seconds; the `0x78/0x7A/0x7C/0x7E` pairs are `lq`/`sq`, and
+  `mode(TI)` reaches them. Six of ten rows screened this way were MMI.
+- **Walls confirmed, do not spend on them**: `max.s`/`min.s`, the two load-delay `nop`s before a
+  `div.s`, the division padding after a label, the `slti`/`bnez`/two-store clamp, and the prologue
+  interleaving (grouped saves against saves interleaved with the first load) - each measured
+  repeatedly, with no source shape moving them.
