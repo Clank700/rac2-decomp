@@ -2409,3 +2409,6 @@ read the primary entry for context and verify each form separately.
 
 
 
+
+| function | size | verdict |
+| --- | --- | --- |
