@@ -18,21 +18,21 @@ INCLUDE_ASM("asm/core", func_00115220);
 
 INCLUDE_ASM("asm/core", func_00115250);
 
-INCLUDE_ASM("asm/core", func_00115340);
+ASM_FUNC("asm/core", func_00115340);
 
-INCLUDE_ASM("asm/core", func_001153D4);
+ASM_FUNC("asm/core", func_001153D4);
 
-INCLUDE_ASM("asm/core", func_00115484);
+ASM_FUNC("asm/core", func_00115484);
 
-INCLUDE_ASM("asm/core", func_00115544);
+ASM_FUNC("asm/core", func_00115544);
 
-INCLUDE_ASM("asm/core", func_00115690);
+ASM_FUNC("asm/core", func_00115690);
 
-INCLUDE_ASM("asm/core", func_001157AC);
+ASM_FUNC("asm/core", func_001157AC);
 
 INCLUDE_ASM("asm/core", func_001158F4);
 
-INCLUDE_ASM("asm/core", func_00115AC0);
+ASM_FUNC("asm/core", func_00115AC0);
 
 INCLUDE_ASM("asm/core", func_00115D38);
 
