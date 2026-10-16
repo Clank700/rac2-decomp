@@ -694,3 +694,11 @@ counts when it links at every place it has.
 | [`func_L19_0043CFD8`](levels/func_L19_0043CFD8.c) | - | Same defect family as `func_L19_003DD6D0` (extent opens on `addiu $sp,$sp,0x20; nop`) |
 | [`func_L04_0033D158`](levels/func_L04_0033D158.c) | - | Same defect family (extent opens on `addiu $sp,$sp,0x40; nop`) |
 | [`func_L04_0034B9B0`](levels/func_L04_0034B9B0.c) | - | Same defect family (extent opens on `addiu $sp,$sp,0x10; nop`) |
+
+## Level functions, wave 5 agent lvl-03, tour 2 (2026-10-16)
+
+| Function | Size | Bytes that differ |
+| --- | ---: | ---: |
+| [`func_L04_003524D0`](levels/func_L04_003524D0.c) | 68 | Candidate 64 bytes; clamp, `div` guard and table walk exact, only the table/window register PAIR is swapped (`$a2`/`$a3`). Three declaration orders measured. Reads the boot's own table at 0x138180 |
+| [`func_L00_002B9BB0`](levels/func_L00_002B9BB0.c) | 168 | Candidate 160 bytes, structure exact; retail keeps the resident high half live in `$s3` and COMPLETES the base twice where this cc1 reuses the earlier register, plus an index/table register swap. Same wall as `func_L00_002A74A8` |
+| [`func_L00_002D20D0`](levels/func_L00_002D20D0.c) | 152 | Candidate 160 bytes; every offset and store identical, but the resident block/object pair lands in `$t1`/`$t0` against retail's `$a0`/`$a3`, and this cc1 reloads the owner once more across the object store |
