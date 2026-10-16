@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Compile one C file with the game's 32-bit Linux compiler, from inside WSL, without Docker.
 #
-#   bash /mnt/d/RAC2/worktrees/agent-lvl6-04/scratch/wslcc.sh <source.c> <out.o> [flags]
+#   bash /mnt/d/RAC2/worktrees/agent-lvl6-11/scratch/wslcc.sh <source.c> <out.o> [flags]
 #
 # Everything (source, headers, compiler, output) works in /tmp, a Linux-native tmpfs: the
 # 32-bit cc1/cpp cannot stat drvfs files ("Value too large for defined data type"), which is
@@ -12,14 +12,14 @@ SRC="$1"
 OUT="$2"
 FLAGS="${3:--O2 -G0 -ffunction-sections}"
 CCTOOLS=/mnt/d/RAC2/master/build/compiler/tools
-W=/tmp/rac2w
+W=/tmp/rac2w-11
 C=$W/cc
 mkdir -p "$C" "$W/inc"
 for t in cpp cc1 as; do
   [ -x "$C/$t" ] || cp -f "$CCTOOLS/$t" "$C/$t"
   chmod +x "$C/$t"
 done
-cp -rf /mnt/d/RAC2/worktrees/agent-lvl6-04/include/. "$W/inc/"
+cp -rf /mnt/d/RAC2/worktrees/agent-lvl6-11/include/. "$W/inc/"
 cp -f "$SRC" "$W/x.c"
 cd "$W"
 "$C/cpp" -I"$W/inc" -I"$W" "$W/x.c" > "$W/x.i"

@@ -31,6 +31,11 @@ typedef float f32;
  * (retail reloads it into v0 and v1), so the source must re-read it too.  Candidate
  * comes out 208 bytes against 188 with the arms laid out the other way (this cc1 emits
  * `bnel` where retail has a `beqz` to the else arm) - block layout, not the source.
+ * $gp recipe (lead, 2026-10-16, re-measured here): both `extern f32 X __attribute__((sda));` and
+ * `extern f32 X __asm__("X_asm") __attribute__((section(".sdata")));` leave the reference BARE in
+ * the .s (`l.s $f0,D_L02_001B1234`), i.e. GPREL16, which is retail's form.  The `lui $at`+absolute
+ * pair seen in this candidate is the ASSEMBLER expanding the reference at that use site, not the
+ * declaration spelling; the alias form is worth retrying here first for the next worker.
  */
 
 extern void *func_L00_002D70A0(s32);

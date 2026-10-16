@@ -26,6 +26,11 @@ typedef float f32;
  * `$t0`-against-`$a2` choice are the scheduler's and the allocator's, not the source's.
  * The `$gp` float is fixed by the `sda` declaration below; the rest of the body is
  * understood end to end.
+ * $gp recipe (lead, 2026-10-16, re-measured here): both `extern f32 X __attribute__((sda));` and
+ * `extern f32 X __asm__("X_asm") __attribute__((section(".sdata")));` leave the reference BARE in
+ * the .s (`l.s $f0,D_L02_001B1234`), i.e. GPREL16, which is retail's form.  The `lui $at`+absolute
+ * pair seen in this candidate is the ASSEMBLER expanding the reference at that use site, not the
+ * declaration spelling; the alias form is worth retrying here first for the next worker.
  */
 
 extern void func_002A7750(void *, s32, s32);
