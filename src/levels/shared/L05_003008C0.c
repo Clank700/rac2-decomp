@@ -20,7 +20,14 @@ void func_L05_00303000(int a0, int a1, int a2, int a3, int a4, int a5, int a6)
 
 INCLUDE_ASM("asm/levels", func_L05_00304B40);
 
-INCLUDE_ASM("asm/levels", func_L05_0030C930);
+extern int D_L05_00293D48[];
+
+/* Stores the pair and steps the second half of the counter. */
+void func_L05_0030C930(int a0, int a1) {
+    int *p = D_L05_00293D48;
+    p[0x11] = a1 + 1;
+    p[0x10] = a0;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_00324DB8);
 

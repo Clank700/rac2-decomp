@@ -20,7 +20,13 @@ void func_L00_002F51B0(void)
 {
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002F5890);
+extern void func_2F4490(int, int);
+
+/* Only the second mode triggers the spawn. */
+void func_L00_002F5890(int a0) {
+    if (a0 == 2)
+        func_2F4490(0xA01, 0x58);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002F59A8);
 
