@@ -1070,6 +1070,15 @@ Matched this tour (7, all re-checked with the Docker-free ruler, `N of N places 
 | [`func_L11_0030ED58`](levels/func_L11_0030ED58.c) | 156 | Guard and band structure recovered - state word 11 at 0x001A79F0, +0x30 == 2 in the block at 0x001BE5C0, then `id` classified into [0x1B9,0x26B]→0x46, [0x321,0x3B5]→0x47, `<= 0x44B`→0x48, else -1, then `func_2FF678($gp string, which, 2, 0x80808080, 0)` - but the C is a transcription of three literal bands with no derivation in the bytes |
 | [`func_L11_00397A30`](levels/func_L11_00397A30.c) | 184 | Not C: `.word 0x700014A9`, the MMI word the func_L00_003A8E28 near miss documents, and it is the first instruction after the prologue. ASM_FUNC candidate |
 
+## Level functions, wave 7 agent lvl7-02 (2026-10-16)
+
+| Function | Size | What the worker found |
+| --- | ---: | --- |
+| [`func_L20_004499E8`](levels/func_L20_004499E8.c) | 140 | 132 bytes: every instruction is present in retail's order and the eight missing bytes are exactly the two `addiu` retail pays for the TI128 destinations, which this cc1 folds into `sq $zero,0x50($t0)` and `sq $v0,0x10($a3)` (the func_L11_003973F8 wall - a named `TI128 *`, `volatile` destinations and `__builtin_memcpy(...,16)` all measured, the last 200 bytes). Allocation also differs (`arg0` copied into `$a3`, the state in `$t0`). Carries a new measured habit: an `s32` field stored from `(s32)(float)` keeps the value in the FP register and comes out `cvt.w.s` + `swc1`, where a `float` field with a `(float)(int)` cast round-trips through `mfc1`/`mtc1` (148 bytes) |
+| [`func_L20_00444088`](levels/func_L20_00444088.c) | 164 | Retail's exact size and every word, with one pair swapped at +0x2c: retail sets `$a3 = $sp+0x20` before `$a2 = $s0`, this cc1 the other way round - the same wall recorded on func_L20_00443D58 next door. A named `float *pf = &f` for the fourth argument costs a frame slot and an `$s3` (176 bytes) |
+| [`func_L20_0043F460`](levels/func_L20_0043F460.c) | 176 | 184 bytes; the shape is recovered (a 210000.0f-scaled two-float helper, a `== 0xB5A` arm choosing between the `$gp` word `D_L20_001B1FC0` and three words retail materialises with one `lui`+`lw` each, so `nosda`, then a six-argument call whose fifth argument rides in `$t0`). A `s32[3]` spelling reaches the absolutes through one shared base and costs two more words (204); the residue is the selector's delay slot (retail carries the `$gp` load there) and the `pair[2]` stores retail keeps on the stack |
+| [`func_L20_004424A0`](levels/func_L20_004424A0.c) | 176 | 168 bytes; calls and both constant blocks are in retail's order. Three residues: `$s0`/`$s1` hold the object and the state the other way round, the `*(f32*)(state+0x7C)` term is CSE'd with the store just made (retail reloads it for `add.s $f12,$f12,$f12`), and `*(TI128 *)(state + 0xF0) = 0` folds instead of materialising `addiu $v0,$s0,0xF0` (the func_L11_003973F8 wall again). Taking the 0.000277777785f product before the second call moves it into `$f20` and costs a frame slot |
+
 ## Additional source forms
 
 Keep a primary attempt at `levels/<catalogue-name>.c`. Distinct alternatives live
