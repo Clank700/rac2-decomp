@@ -1240,6 +1240,10 @@ Matched this tour (7, all re-checked with the Docker-free ruler, `N of N places 
 | [`func_L22_003FBF00`](levels/func_L22_003FBF00.c) | 204 | 208 bytes: one instruction over, at the join where retail reloads the fallback float with the bare `lwc1 $f12,0x1C60($gp)` and this cc1 rematerialises it as `lui $at` + `lwc1`. Everything else is in retail's order, including the v/w/x declaration order for the sp+0x00/0x10/0x20 scratch vectors and the two-step slot base (`q = handle + a2*4` then `*(int *)(q + 0x60)` - folded it grows to 216 and shifts the base). `volatile`, a named `f32` local and two names for the resident float all give the same 208 |
 | [`func_L22_0040DD40`](levels/func_L22_0040DD40.c) | 192 | Exactly 192 bytes and every instruction present; only the 16-byte copy's schedule differs - this cc1 folds the +0x10 into the `lq` (`lq $v0,0x10($s0)`) and sinks the `sq` into the `jal` delay slot where retail materialises `addiu $a0,$s0,0x10` first and keeps the pair adjacent. The TI128 destination wall the lead reconfirmed; seven spellings measured (named source pointer, `+ 0`, two names, TI-typed local, volatile source, volatile destination, copy as a comma expression inside the argument list) all land on it. The three-label switch is required - two cases make cc1 build a comparison chain instead of the tree |
 
+## Level functions, wave 7 agent lvl7-03 (2026-10-16)
+
+| [`func_L05_004222D8`](levels/func_L05_004222D8.c) | 164 | Candidate is 172 bytes; the clamp-and-publish body is decoded in full and needs the `-G8` sibling (level 5's `$gp` base is 0x1AEFF0, so `lw $v0,0x2360($gp)` is `D_L05_001B1350` with the `sda` attribute while 0x1B1354/58/5C stay absolute). Retail materialises `lui $v0,0x14; addiu $v0,$v0,-0x6A48` last, this cc1 hoists the same pair into `$a2` at the top and then rematerialises a dead `lw $v0,0x0($gp)` into two clamp delay slots - the two extra words. Nine shapes give 172/176 |
+
 ## Additional source forms
 
 Keep a primary attempt at `levels/<catalogue-name>.c`. Distinct alternatives live
