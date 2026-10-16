@@ -41,22 +41,29 @@ def main() -> None:
         address, size = placement.functions[name][0]
         index = sym["section"]
         have = obj["sections"][index]["size"]
-        if have != size:
-            print(f"{source.name}: {have} bytes, expected {size}")
-            continue
-        _, why = placement.derive(obj, index, address)
-        print(f"{source.name}: {'OK' if why is None else why}")
-        if why is not None:
+        data, ref = obj["sections"][index]["data"], placement.retail(address, size)
+
+        def show_diff():
             import rabbitizer
 
             def dis(word, at):
                 return rabbitizer.Instruction(int.from_bytes(word, "little"), vram=at).disassemble()
 
-            data, ref = obj["sections"][index]["data"], placement.retail(address, size)
-            for at in range(0, size, 4):
-                if data[at:at + 4] != ref[at:at + 4]:
-                    print(f"    +{at:#04x}  {address + at:08X}  {dis(data[at:at + 4], address + at):<34}"
-                          f"| {dis(ref[at:at + 4], address + at)}")
+            for at in range(0, max(len(data), len(ref)), 4):
+                mine, theirs = data[at:at + 4], ref[at:at + 4]
+                if mine != theirs:
+                    left = dis(mine, address + at) if len(mine) == 4 else ""
+                    right = dis(theirs, address + at) if len(theirs) == 4 else ""
+                    print(f"    +{at:#04x}  {address + at:08X}  {left:<34}| {right}")
+
+        if have != size:
+            print(f"{source.name}: {have} bytes, expected {size}")
+            show_diff()
+            continue
+        _, why = placement.derive(obj, index, address)
+        print(f"{source.name}: {'OK' if why is None else why}")
+        if why is not None:
+            show_diff()
 
 
 if __name__ == "__main__":
