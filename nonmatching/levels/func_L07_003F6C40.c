@@ -2,7 +2,7 @@
    Arms the level-7 object: stores the integer argument at a0 + 0xB8, copies the 16 bytes at
    a2 to a0 + 0x10, clears the 16 bytes at s1 + 0x50 (s1 = *(a0 + 0x68)), converts s1's +0x24
    short to a float at s1 + 0x20, publishes the float argument at s1 + 0x60, scales the
-   func_2A78D8(a0 + 0x10, D_001B0FD8, D_001B0FDC) result by 0.01745329424738884f (0x3C8EFA36) into
+   func_2A78D8(a0 + 0x10, D_001B0FD8, D_001B0FDC) result by 0.017453292f (0x3C8EFA36) into
    s1 + 0x64, sets the 0x1000 bit of a0 + 0x34 masking 0x0041 off, and copies the 0x10 field of
    the *(a0 + 0x24) object to a0 + 0x98 before func_3109C8(a0, 2, -1).
    The two TI128 stores both fold their constant offset into the sq here
@@ -34,7 +34,7 @@ void func_L07_003F6C40(char *a0, s32 a1, TI128 *a2, f32 f12)
     *(f32 *)(s1 + 0x20) = (f32)*(s16 *)(s1 + 0x24);
     *(f32 *)(s1 + 0x60) = f12;
     *(f32 *)(s1 + 0x64) =
-        func_002A78D8(a0 + 0x10, D_L07_001B0FD8, D_L07_001B0FDC) * 0.01745329424738884f;
+        func_002A78D8(a0 + 0x10, D_L07_001B0FD8, D_L07_001B0FDC) * 0.017453292f;
     *(u16 *)(a0 + 0x34) = (*(u16 *)(a0 + 0x34) & 0xFFBE) | 0x1000;
     *(s32 *)(a0 + 0x98) = *(s32 *)(*(char **)(a0 + 0x24) + 0x10);
     func_3109C8((u8 *)a0, 2, -1);
