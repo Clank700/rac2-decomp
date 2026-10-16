@@ -340,6 +340,28 @@ void func_L01_003246D0(void) {
 
 INCLUDE_ASM("asm/levels", func_L01_003246F8);
 
+extern int D_L01_001A79F0;
+
+extern int D_L01_0028EA50[];
+
+extern int D_L01_001C5D20[];
+
+/* scans the half-open span the counter global picks out of the pair table, looking for
+   the caller's key; the key rides in $a0 without a caller-side argument */
+int func_L01_003246F8(int key) {
+ unsigned n=(unsigned)D_L01_001A79F0;
+ int i;
+ int end;
+ if(n>=0x13) return 0;
+ i=D_L01_0028EA50[n];
+ end=D_L01_0028EA50[n+1];
+ while(i<end) {
+  if(D_L01_001C5D20[i]==key) return i;
+  i++;
+ }
+ return -1;
+}
+
 
 INCLUDE_ASM("asm/levels", func_L01_00326DD8);
 
