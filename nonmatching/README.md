@@ -1264,3 +1264,57 @@ read the primary entry for context and verify each form separately.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+| [`func_L00_003EC078`](levels/func_L00_003EC078.c) | 200 | 27 places. Screened out, MMI class: `pcpyld $v0,$zero,$zero` at +0x1C plus `sq $v0,0x20($sp)`, the `rac2_fold_zero_ti_store` wall of func_L00_0040B2C0 / func_L00_003ACC88; the body also moves quadwords with `lq $v0,0x20($sp)` (+0x5C) / `sq $v0,0x10($sp)` (+0x64) |
+| [`func_L07_003F8CD0`](levels/func_L07_003F8CD0.c) | 188 | Screened out, MMI class: `pcpyld $v0,$zero,$zero` at +0x30 plus `sq $v0,0x30($sp)`, same folded-zero wall; the rest is ordinary calls (func_0029FCC0, func_00282F20, func_L07_003F6528, func_L04_0030C4C0, func_L07_003F65E8) |
+| [`func_L00_0040AFB8`](levels/func_L00_0040AFB8.c) | 224 | 27 places. Screened out, TI128 class: `lq $v1,0x10($s0)` at +0x88 and `sq $v1,0x10($sp)` at +0xB8 with two live `mult` (0x00861818, 0x00461018 - opcode 0x00 funct 0x18, alive despite rabbitizer's INVALID); the constant destination offset folds into the sq where retail materialises the pointer, so it waits for a compiler-side lever |
+
+
+
+
