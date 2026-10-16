@@ -109,7 +109,32 @@ void func_00328848(char *a0)
     }
 }
 
-INCLUDE_ASM("asm/game", func_00328918);
+extern void func_00283098(void *, void *, void *);
+
+void func_00328918(char *owner)
+{
+    int address = (int)D_0022B0A0;
+    char *position = (char *)(address + 0x10);
+    char *other = (char *)(address + 0x20);
+    int remaining = 99;
+    char *base = (char *)address;
+    char *data = *(char **)(owner + 0x68);
+    do {
+        if (*(char **)(position + 0x24) == owner) {
+            func_00283098(position, base, owner + 0xC0);
+            func_00282F20((float *)other, (float *)position, 1.0f);
+            func_00282CC0(position, position, owner + 0x10);
+            *(float *)(position + 0x20) += 0.6283186078071594f;
+            if (*(float *)(position + 0x20) >= 6.2831854820251465f) {
+                *(int *)(position + 0x24) = 0;
+                --*(int *)(data + 0x48);
+            }
+        }
+        base += 0x40;
+        other += 0x40;
+        position += 0x40;
+    } while (--remaining >= 0);
+}
 
 INCLUDE_ASM("asm/game", func_00328A20);
 
