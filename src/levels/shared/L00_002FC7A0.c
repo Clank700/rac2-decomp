@@ -972,7 +972,40 @@ Slot0820eb11 *func_L00_00310BC8(Ctx *ctx, int index)
     return slot;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00310C88);
+typedef struct LvlSlotNode {
+    char                 pad00[0x1C];
+    struct LvlSlotNode  *next;   /* +0x1C */
+} LvlSlotNode;
+
+typedef struct LvlSlotCtx {
+    char          pad00[0x50];
+    LvlSlotNode  *head;          /* +0x50 */
+} LvlSlotCtx;
+
+extern void func_00282A60(char *, int, int);
+
+/* The free half of the allocator above: unlinks the slot the caller's handle points at from
+ * the context's slot list, wipes the sixty-four bytes and nulls the handle. The handle is
+ * re-read at every mention (no local copy) - that is what keeps the retail allocation. */
+void func_L00_00310C88(LvlSlotCtx *ctx, LvlSlotNode **handle)
+{
+    LvlSlotNode *cur;
+
+    if (*handle == 0)
+        return;
+
+    if (ctx->head == *handle) {
+        ctx->head = (*handle)->next;
+    } else {
+        cur = ctx->head;
+        while (cur->next != 0 && cur->next != *handle)
+            cur = cur->next;
+        if (cur->next == *handle)
+            cur->next = (*handle)->next;
+    }
+    func_00282A60((char *)*handle, 0, 0x40);
+    *handle = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_00310D30);
 

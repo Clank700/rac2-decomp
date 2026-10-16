@@ -174,7 +174,38 @@ void func_L03_003E5070(u8 *a0) {
 /* func_L03_003E50E0 lives in the -g8 sibling: its first call reads a float
    constant through $gp at 0x1CB0. */
 
-INCLUDE_ASM("asm/levels", func_L03_003E5170);
+extern void func_003355A8(int);
+
+extern void func_0026FF08(int, int, f32, f32, f32, f32);
+
+extern void func_0029F338(u8 *);
+
+extern s32 g_activeGadgetItem;
+
+extern f32 D_001B9C14;
+
+/* The retail materialises this one's address with `lui $at`, which is gas's expansion of the
+   bare-symbol macro cc1 only emits for an `sda` symbol. */
+extern f32 D_001B2464 __attribute__((sda));
+
+/* Hands the entity's gadget class id to the active-gadget global, clears the entity's
+ * gadget state and releases the resident class it was holding. */
+void func_L03_003E5170(u8 *a0) {
+    u8 *q = *(u8 **)(a0 + 0x68);
+    f32 zero = 0.0f;
+    f32 scale = 1.12434113f;    /* bits 0x3F8FEA69 (0x3F8FEA69 != 1.12434f) */
+
+    func_003355A8(3);
+    D_001B9C14 = scale;
+    func_0026FF08(1, 0, scale, 0.005f, 0.2f, zero);
+    *(f32 *)(q + 0x6C) = zero;
+    g_activeGadgetItem = *(s32 *)(q + 0x64);
+    D_001B2464 = zero;
+    if (*(u8 **)(q + 0x58) != 0) {
+        func_0029F338(*(u8 **)(q + 0x58));
+        *(u32 *)(q + 0x58) = 0;
+    }
+}
 
 void func_L03_003E5218(u8 *a0) {
     *(u32 *)(*(u8 **)(a0 + 0x68) + 0x60) = 1;
