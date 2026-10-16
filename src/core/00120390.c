@@ -117,8 +117,6 @@ typedef struct frame_state
   char saved[FIRST_PSEUDO_REGISTER+1];
 } frame_state;
 
-#define REG_SAVED_REG 2
-
 struct eh_context
 {
   void *handler_label;
@@ -133,6 +131,8 @@ typedef struct exception_descriptor
 } exception_descriptor;
 
 #define NEW_EH_RUNTIME ((void *) -2)
+
+#define REG_SAVED_REG 2
 
 extern void func_00120368(void);
 extern void func_00120BC8(void);
