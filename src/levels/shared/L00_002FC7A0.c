@@ -398,7 +398,18 @@ void func_L00_0030D3A8(void)
         func_00339590(value + 0x3B1F0);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D3D8);
+extern int func_00339F28(int, int);
+
+/* Reads a bound global word; when it is non-zero it calls a helper with that value plus a fixed base offset as the first argument and the function's own argument as the second, otherwise returns 0. */
+int func_L00_0030D3D8(int a0)
+{
+    int v = D_L00_001A904C_1;
+
+    if (v != 0) {
+        return func_00339F28(v + 0x3ADE8, a0);
+    }
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -420,7 +431,18 @@ void func_L00_0030D448(void)
         func_0033B910(value + 0x3B490);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D478);
+extern int func_0033B540(int, int);
+
+/* Reads a bound global word; when it is non-zero it calls a helper with that value plus a fixed base offset as the first argument and the function's own argument as the second, otherwise returns 0. */
+int func_L00_0030D478(int a0)
+{
+    int v = D_L00_001A904C_1;
+
+    if (v != 0) {
+        return func_0033B540(v + 0x3B490, a0);
+    }
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -432,7 +454,18 @@ void func_L00_0030D4B8(void)
         func_0033F030(value + 0x3B7C0);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D4E8);
+extern int func_0033EA60(int, int);
+
+/* Reads a bound global word; when it is non-zero it calls a helper with that value plus a fixed base offset as the first argument and the function's own argument as the second, otherwise returns 0. */
+int func_L00_0030D4E8(int a0)
+{
+    int v = D_L00_001A904C_1;
+
+    if (v != 0) {
+        return func_0033EA60(v + 0x3B7C0, a0);
+    }
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -444,7 +477,18 @@ void func_L00_0030D528(void)
         func_00345358(value + 0x39F38);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D558);
+extern int func_00344478(int, int);
+
+/* Reads a bound global word; when it is non-zero it calls a helper with that value plus a fixed base offset as the first argument and the function's own argument as the second, otherwise returns 0. */
+int func_L00_0030D558(int a0)
+{
+    int v = D_L00_001A904C_1;
+
+    if (v != 0) {
+        return func_00344478(v + 0x39F38, a0);
+    }
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -498,7 +542,18 @@ void func_L00_0030D678(void)
         func_003438E8(value + 0x3C108);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D6A8);
+extern int func_00343798(int, int);
+
+/* Reads a bound global word; when it is non-zero it calls a helper with that value plus a fixed base offset as the first argument and the function's own argument as the second, otherwise returns 0. */
+int func_L00_0030D6A8(int a0)
+{
+    int v = D_L00_001A904C_1;
+
+    if (v != 0) {
+        return func_00343798(v + 0x3C108, a0);
+    }
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -510,7 +565,18 @@ void func_L00_0030D6E8(void)
         func_L00_00433F50(value + 0x3C440);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D718);
+extern int func_0033E5C0(int, int);
+
+/* Reads a bound global word; when it is non-zero it calls a helper with that value plus a fixed base offset as the first argument and the function's own argument as the second, otherwise returns 0. */
+int func_L00_0030D718(int a0)
+{
+    int v = D_L00_001A904C_1;
+
+    if (v != 0) {
+        return func_0033E5C0(v + 0x3C440, a0);
+    }
+    return 0;
+}
 
 /* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
  * fixed byte offset in it. */
@@ -522,7 +588,18 @@ void func_L00_0030D758(void)
         func_0033D970(value + 0x3CDB0);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0030D788);
+extern int func_L00_00433198(int, int);
+
+/* Reads a bound global word; when it is non-zero it calls a helper with that value plus a fixed base offset as the first argument and the function's own argument as the second, otherwise returns 0. */
+int func_L00_0030D788(int a0)
+{
+    int v = D_L00_001A904C_1;
+
+    if (v != 0) {
+        return func_L00_00433198(v + 0x3CDB0, a0);
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0030D7C8);
 
