@@ -88,6 +88,16 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [func_0034E478](game/func_0034E478.c) | 64 | check.py 28/28, but level 00 cannot place it: needs .text.func_0034E4B8 at its place, which is not C |
 | [func_00351A38](game/func_00351A38.c) | 72 | check.py 28/28, but level 00 cannot place it: needs .text.func_00351938 at its place, which is not C |
 
+| [`func_L00_0037E670`](levels/func_L00_0037E670.c) | 40 | Candidate is 48 bytes; retail hoists the 40.0f constant above the branch and uses the conditional-execute shape `beql $a0,$zero,join` with the store in the annulled delay slot; this cc1 emits the plain `bnez Lelse; nop; <then>; b join; <else>` form for every source shape tried |
+| [`func_L01_002E1670`](levels/func_L01_002E1670.c) | 12 | Catalogue defect: `addiu sp,sp,0xC0` / nop / `addiu sp,sp,0xF0` at 0x2E1670, between the epilogue ending at 0x2E166C and the next prologue at 0x2E1680; no C can be placed |
+| [`func_L03_002B0958`](levels/func_L03_002B0958.c) | 20 | Catalogue defect: five `addiu sp,sp,imm` / nop words at 0x2B0958, the same shape as func_L00_00341798; no C can be placed |
+| [`func_L03_003245B0`](levels/func_L03_003245B0.c) | 12 | Catalogue defect: `addiu sp,sp,0x30` / nop / `addiu sp,sp,0x60` at 0x3245B0, between the epilogue ending at 0x3245AC and the next prologue at 0x3245C0; no C can be placed |
+| [`func_L06_003829D8`](levels/func_L06_003829D8.c) | 20 | Catalogue defect: five `addiu sp,sp,imm` / nop words at 0x3829D8, the same shape as func_L00_00341798; no C can be placed |
+| [`func_L06_0047C1D0`](levels/func_L06_0047C1D0.c) | 24 | Catalogue defect: three `jr $ra; nop` stubs in a row at 0x47C1D0 (one 24-byte C function cannot emit three returns); no C can be placed |
+| [`func_L07_00323350`](levels/func_L07_00323350.c) | 20 | Catalogue defect: five `addiu sp,sp,imm` / nop words at 0x323350, the same shape as func_L00_00341798; no C can be placed |
+| [`func_L01_002F1F70`](levels/func_L01_002F1F70.c) | 96 | Candidate is the right size and 21 of 24 words match; +0x2C/+0x34 (retail finishes $a1 then puts `addiu $a0,$zero,0x47` in the jal delay slot, this cc1 sinks the `ori` instead) and +0x50 (`or $a1,$v0,$a1` against `or $a1,$a1,$v0`). The load must be written as the literal `*(int *)0x001A72E0` |
+| [`func_L03_002EFB60`](levels/func_L03_002EFB60.c) | 64 | COP2: `ldc2`/`sdc2`/`qmfc2` transfers plus an `mfc1`, no C can be placed |
+| [`func_L03_0032AB20`](levels/func_L03_0032AB20.c) | 80 | Candidate is 72 bytes; the first ten instructions match (including the annulled `beql` + load pair) once the data base is the file's symbol `D_L03_00189E20`; the gap is block layout, retail sends all four failures to one return-0 block and keeps `beq` + `addiu $v0,$zero,1` where this cc1 branches forward and folds the last test into a boolean |
 | [`func_L01_002F21F0`](levels/func_L01_002F21F0.c) | 276 | Recorded candidate is 244 bytes; size does not match retail. |
 | [`func_L01_00378A80`](levels/func_L01_00378A80.c) | 156 | Recorded G8 candidate is 144 bytes; size does not match retail. |
 | [`func_L01_00397870`](levels/func_L01_00397870.c) | 224 | Recorded G8 instruction mismatch at +0x88. |
