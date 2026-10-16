@@ -532,6 +532,62 @@ what was tried. None of these links, and none is counted. Move a file into `src/
 | [`func_L00_002EE340`](levels/func_L00_002EE340.c) | 72 | Wave 5 w04: no C attempt; VU0 macro mode (ldc2 x2 + seven COP2 macro-mode words + qmfc2 family, returns 0/1 by `bgtz`). Plain C cannot emit COP2 ops: ASM_FUNC candidate, same class as the 002EE058/002EE078/002EE290 stubs next door. |
 | [`func_L00_002EE4D8`](levels/func_L00_002EE4D8.c) | 104 | Wave 5 w04: no C attempt; VU0 macro mode (ldc2, mfc1, twelve COP2 macro words, sdc2, two return paths 1/0). No C spelling of the COP2 stream: ASM_FUNC candidate. |
 | [`func_L00_002EE660`](levels/func_L00_002EE660.c) | 72 | Wave 5 w04: no C attempt; VU0 macro mode plus MMI (ldc2, ori 0x7FFF, mfc1, SPECIAL2 words 0x70421488/0x70631C88/0x702208E8/0x702308C8, COP2 0x48A11000/0x4BE20858/0x4BE1097C/0x48210800). ASM_FUNC candidate. |
+| [`func_L00_002EBE88`](levels/func_L00_002EBE88.c) | 776 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_002ECFE8`](levels/func_L00_002ECFE8.c) | 552 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1f). |
+| [`func_L00_002F74F0`](levels/func_L00_002F74F0.c) | 120 | Wave 5 w04 tour 2: no C attempt; starts with addiu $sp,$sp,+0x10 (catalogue entry early). |
+| [`func_L00_003A0DA0`](levels/func_L00_003A0DA0.c) | 396 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1c). |
+| [`func_L00_003EED10`](levels/func_L00_003EED10.c) | 268 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003EF3E0`](levels/func_L00_003EF3E0.c) | 356 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003EFF58`](levels/func_L00_003EFF58.c) | 328 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F26C8`](levels/func_L00_003F26C8.c) | 468 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F3518`](levels/func_L00_003F3518.c) | 644 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F37E8`](levels/func_L00_003F37E8.c) | 668 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F3AD0`](levels/func_L00_003F3AD0.c) | 668 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F4B68`](levels/func_L00_003F4B68.c) | 256 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F4C68`](levels/func_L00_003F4C68.c) | 608 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F4EC8`](levels/func_L00_003F4EC8.c) | 724 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F5238`](levels/func_L00_003F5238.c) | 340 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F5390`](levels/func_L00_003F5390.c) | 708 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F5750`](levels/func_L00_003F5750.c) | 288 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_003F5870`](levels/func_L00_003F5870.c) | 384 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1c). |
+| [`func_L00_003F5F90`](levels/func_L00_003F5F90.c) | 468 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1c). |
+| [`func_L00_003F6168`](levels/func_L00_003F6168.c) | 416 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L02_0032EF10`](levels/func_L02_0032EF10.c) | 248 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L02_0032F008`](levels/func_L02_0032F008.c) | 12 | Wave 5 w04 tour 2: no C attempt; starts with addiu $sp,$sp,+0xc0 (catalogue entry early). |
+| [`func_L02_00332A80`](levels/func_L02_00332A80.c) | 676 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1f). |
+| [`func_L02_00332D28`](levels/func_L02_00332D28.c) | 456 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L02_00332EF0`](levels/func_L02_00332EF0.c) | 608 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L02_00333218`](levels/func_L02_00333218.c) | 232 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1c). |
+| [`func_L02_00333480`](levels/func_L02_00333480.c) | 452 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L04_004323F8`](levels/func_L04_004323F8.c) | 312 | Wave 5 w04 tour 2: no C attempt; jr $t (jump table) @+184. |
+| [`func_L04_00432530`](levels/func_L04_00432530.c) | 224 | Wave 5 w04 tour 2: no C attempt; jr $t (jump table) @+128. |
+| [`func_L04_0043BC58`](levels/func_L04_0043BC58.c) | 488 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L04_00456860`](levels/func_L04_00456860.c) | 396 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1c). |
+| [`func_L04_0046CE68`](levels/func_L04_0046CE68.c) | 336 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L05_00427090`](levels/func_L05_00427090.c) | 420 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L05_004276E8`](levels/func_L05_004276E8.c) | 640 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L05_00427968`](levels/func_L05_00427968.c) | 28 | Wave 5 w04 tour 2: no C attempt; starts with addiu $sp,$sp,+0x40 (catalogue entry early). |
+| [`func_L05_00427988`](levels/func_L05_00427988.c) | 404 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L05_00427B20`](levels/func_L05_00427B20.c) | 752 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L05_00427E10`](levels/func_L05_00427E10.c) | 404 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L05_00427FA8`](levels/func_L05_00427FA8.c) | 28 | Wave 5 w04 tour 2: no C attempt; starts with addiu $sp,$sp,+0x40 (catalogue entry early). |
+| [`func_L05_00445B58`](levels/func_L05_00445B58.c) | 224 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L05_00445C38`](levels/func_L05_00445C38.c) | 292 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L05_00445D60`](levels/func_L05_00445D60.c) | 560 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L08_003B2DB0`](levels/func_L08_003B2DB0.c) | 444 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L08_003C66F0`](levels/func_L08_003C66F0.c) | 200 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L08_003C67B8`](levels/func_L08_003C67B8.c) | 756 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L08_003CD648`](levels/func_L08_003CD648.c) | 128 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L08_003CD6C8`](levels/func_L08_003CD6C8.c) | 60 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L11_002C5E80`](levels/func_L11_002C5E80.c) | 512 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L11_00397C08`](levels/func_L11_00397C08.c) | 472 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L11_003F4198`](levels/func_L11_003F4198.c) | 472 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L11_00414660`](levels/func_L11_00414660.c) | 288 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L11_0046B9F0`](levels/func_L11_0046B9F0.c) | 536 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L11_0046BC08`](levels/func_L11_0046BC08.c) | 268 | Wave 5 w04 tour 2: no C attempt; MMI/LQ/SQ (op 0x1e). |
+| [`func_L00_002F46C8`](levels/func_L00_002F46C8.c) | 88 | Wave 5 w04 tour 2: best of 4 compiles, 92 vs 88 bytes; retail's two guards are `bnel` with `ld s0,0(sp)` in the annulled slot, this cc1 emits a plain `bnez` and fills the slot from the fall-through. `-mbranch-likely` is not an option of the pinned cc1; the sdk profile gives 88 bytes but a 0x20 frame against retail's 0x10. |
+| [`func_L00_002F6B90`](levels/func_L00_002F6B90.c) | 80 | Wave 5 w04 tour 2: exact 80 bytes, 3 words off - `lw $a0,0x10($a0); beqz; jalr $a0` where retail loads into `$v0` (the pointer dies at the load; four source shapes all tie it to $a0). |
+| [`func_L11_0045FEF8`](levels/func_L11_0045FEF8.c) | 180 | Wave 5 w04 tour 2: exact 180 bytes, every instruction and delay slot matching; only the `$s0`/`$s1` pair is swapped (retail: pointer in `$s1`, int in `$s0`), which flips the two prologue `sd`. A local `char *p` is required (inline `a0+0x10` costs 184). |
 
 
 ## Matched, but not landable under the Plain C rule (2026-10-13)
