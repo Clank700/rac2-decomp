@@ -892,3 +892,33 @@ counts when it links at every place it has.
 | [`func_L16_0040C7E8`](levels/func_L16_0040C7E8.c) | 88 | Not C: `.word 0x78620000`/`0x7CA20000`, MMI (lq/sq family) |
 | [`func_L22_003A2988`](levels/func_L22_003A2988.c) | 124 | Not C: `.word 0x7BA20000`/`0x7E220000`, MMI |
 | [`func_L16_003960F8`](levels/func_L16_003960F8.c) | 152 | Not C: `.word 0x78620000`/`0x7FA20000`, MMI (plus `beql` loads) |
+
+## Additional source forms
+
+Keep a primary attempt at `levels/<catalogue-name>.c`. Distinct alternatives live
+at `levels/alternatives/<catalogue-name>-form-NN.c`, with the catalogue name kept
+on the function definition. Keep harnesses, generated lists and synthetic probes
+in ignored local work directories.
+
+These alternatives preserve distinct authored experiments alongside the primary
+near-miss entries. They are indexed by catalogue function, never linked or
+counted as matches. Their extraction is not a new compile or matching result;
+read the primary entry for context and verify each form separately.
+
+- [`func_L00_002A53B8`](levels/func_L00_002A53B8.c): [form 1](levels/alternatives/func_L00_002A53B8-form-01.c), [form 2](levels/alternatives/func_L00_002A53B8-form-02.c), [form 3](levels/alternatives/func_L00_002A53B8-form-03.c), [form 4](levels/alternatives/func_L00_002A53B8-form-04.c), [form 5](levels/alternatives/func_L00_002A53B8-form-05.c), [form 6](levels/alternatives/func_L00_002A53B8-form-06.c), [form 7](levels/alternatives/func_L00_002A53B8-form-07.c), [form 8](levels/alternatives/func_L00_002A53B8-form-08.c), [form 9](levels/alternatives/func_L00_002A53B8-form-09.c), [form 10](levels/alternatives/func_L00_002A53B8-form-10.c), [form 11](levels/alternatives/func_L00_002A53B8-form-11.c), [form 12](levels/alternatives/func_L00_002A53B8-form-12.c), [form 13](levels/alternatives/func_L00_002A53B8-form-13.c), [form 14](levels/alternatives/func_L00_002A53B8-form-14.c).
+- [`func_L00_002A5480`](levels/func_L00_002A5480.c): [form 1](levels/alternatives/func_L00_002A5480-form-01.c), [form 2](levels/alternatives/func_L00_002A5480-form-02.c), [form 3](levels/alternatives/func_L00_002A5480-form-03.c), [form 4](levels/alternatives/func_L00_002A5480-form-04.c), [form 5](levels/alternatives/func_L00_002A5480-form-05.c), [form 6](levels/alternatives/func_L00_002A5480-form-06.c), [form 7](levels/alternatives/func_L00_002A5480-form-07.c), [form 8](levels/alternatives/func_L00_002A5480-form-08.c), [form 9](levels/alternatives/func_L00_002A5480-form-09.c), [form 10](levels/alternatives/func_L00_002A5480-form-10.c).
+- [`func_L00_002D3EA8`](levels/func_L00_002D3EA8.c): [form 1](levels/alternatives/func_L00_002D3EA8-form-01.c), [form 2](levels/alternatives/func_L00_002D3EA8-form-02.c), [form 3](levels/alternatives/func_L00_002D3EA8-form-03.c), [form 4](levels/alternatives/func_L00_002D3EA8-form-04.c).
+- [`func_L00_002D3FB8`](levels/func_L00_002D3FB8.c): [form 1](levels/alternatives/func_L00_002D3FB8-form-01.c), [form 2](levels/alternatives/func_L00_002D3FB8-form-02.c), [form 3](levels/alternatives/func_L00_002D3FB8-form-03.c), [form 4](levels/alternatives/func_L00_002D3FB8-form-04.c), [form 5](levels/alternatives/func_L00_002D3FB8-form-05.c).
+- [`func_L00_002D75F0`](levels/func_L00_002D75F0.c): [form 1](levels/alternatives/func_L00_002D75F0-form-01.c), [form 2](levels/alternatives/func_L00_002D75F0-form-02.c), [form 3](levels/alternatives/func_L00_002D75F0-form-03.c).
+- [`func_L00_002D7D58`](levels/func_L00_002D7D58.c): [form 1](levels/alternatives/func_L00_002D7D58-form-01.c), [form 2](levels/alternatives/func_L00_002D7D58-form-02.c), [form 3](levels/alternatives/func_L00_002D7D58-form-03.c), [form 4](levels/alternatives/func_L00_002D7D58-form-04.c), [form 5](levels/alternatives/func_L00_002D7D58-form-05.c), [form 6](levels/alternatives/func_L00_002D7D58-form-06.c).
+- [`func_L00_002E2048`](levels/func_L00_002E2048.c): [form 1](levels/alternatives/func_L00_002E2048-form-01.c), [form 2](levels/alternatives/func_L00_002E2048-form-02.c), [form 3](levels/alternatives/func_L00_002E2048-form-03.c), [form 4](levels/alternatives/func_L00_002E2048-form-04.c), [form 5](levels/alternatives/func_L00_002E2048-form-05.c), [form 6](levels/alternatives/func_L00_002E2048-form-06.c).
+- [`func_L00_00322428`](levels/func_L00_00322428.c): [form 1](levels/alternatives/func_L00_00322428-form-01.c).
+- [`func_L00_003252C8`](levels/func_L00_003252C8.c): [form 1](levels/alternatives/func_L00_003252C8-form-01.c), [form 2](levels/alternatives/func_L00_003252C8-form-02.c), [form 3](levels/alternatives/func_L00_003252C8-form-03.c).
+- [`func_L00_003296C0`](levels/func_L00_003296C0.c): [form 1](levels/alternatives/func_L00_003296C0-form-01.c), [form 2](levels/alternatives/func_L00_003296C0-form-02.c).
+- [`func_L00_00329FF0`](levels/func_L00_00329FF0.c): [form 1](levels/alternatives/func_L00_00329FF0-form-01.c).
+- [`func_L00_0032A0B8`](levels/func_L00_0032A0B8.c): [form 1](levels/alternatives/func_L00_0032A0B8-form-01.c), [form 2](levels/alternatives/func_L00_0032A0B8-form-02.c), [form 3](levels/alternatives/func_L00_0032A0B8-form-03.c), [form 4](levels/alternatives/func_L00_0032A0B8-form-04.c), [form 5](levels/alternatives/func_L00_0032A0B8-form-05.c), [form 6](levels/alternatives/func_L00_0032A0B8-form-06.c), [form 7](levels/alternatives/func_L00_0032A0B8-form-07.c), [form 8](levels/alternatives/func_L00_0032A0B8-form-08.c), [form 9](levels/alternatives/func_L00_0032A0B8-form-09.c), [form 10](levels/alternatives/func_L00_0032A0B8-form-10.c), [form 11](levels/alternatives/func_L00_0032A0B8-form-11.c), [form 12](levels/alternatives/func_L00_0032A0B8-form-12.c), [form 13](levels/alternatives/func_L00_0032A0B8-form-13.c), [form 14](levels/alternatives/func_L00_0032A0B8-form-14.c), [form 15](levels/alternatives/func_L00_0032A0B8-form-15.c), [form 16](levels/alternatives/func_L00_0032A0B8-form-16.c).
+- [`func_L01_00323310`](levels/func_L01_00323310.c): [form 1](levels/alternatives/func_L01_00323310-form-01.c).
+- [`func_L12_004081F8`](levels/func_L12_004081F8.c): [form 1](levels/alternatives/func_L12_004081F8-form-01.c).
+- [`func_L12_0041A6D0`](levels/func_L12_0041A6D0.c): [form 1](levels/alternatives/func_L12_0041A6D0-form-01.c), [form 2](levels/alternatives/func_L12_0041A6D0-form-02.c), [form 3](levels/alternatives/func_L12_0041A6D0-form-03.c).
+- [`func_L18_002F1098`](levels/func_L18_002F1098.c): [form 1](levels/alternatives/func_L18_002F1098-form-01.c).
+- [`func_L22_003F85A0`](levels/func_L22_003F85A0.c): [form 1](levels/alternatives/func_L22_003F85A0-form-01.c), [form 2](levels/alternatives/func_L22_003F85A0-form-02.c), [form 3](levels/alternatives/func_L22_003F85A0-form-03.c), [form 4](levels/alternatives/func_L22_003F85A0-form-04.c).
