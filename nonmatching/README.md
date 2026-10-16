@@ -998,3 +998,4 @@ Matched this tour (7, all re-checked with the Docker-free ruler, `N of N places 
 | [`func_L03_003CC478`](levels/func_L03_003CC478.c) | 152 | Not C: `.word 0x7A620000`/`0x7C820000`, MMI (lq/sq family) |
 | [`func_L30_00413490`](levels/func_L30_00413490.c) | 152 | Not C: `.word 0x78620000`/`0x7C820000`, MMI (lq/sq family) |
 | [`func_L03_0042B868`](levels/func_L03_0042B868.c) | 156 | Not C: `.word 0x7A620000`/`0x7E020000`/`0x7A820000`/`0x7C620000`/`0x7A220000`, MMI (lq/sq family) |
+| [`func_L03_003E3750`](levels/func_L03_003E3750.c) | 172 | 164 bytes (flat-pointer spelling 156): the keyed 16-byte record lookup at 0x002D2AB0 with the kind dispatch (<=0 -> 0, 1-2 -> word at (0x64+1)*4, 3 -> words +4 and +8). Retail keeps the record byte offset in `$a0` and rematerialises `a3 + a0` twice at the end, which both spellings fold away |
