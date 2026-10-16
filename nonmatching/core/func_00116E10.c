@@ -1,31 +1,48 @@
-/* NEAR MISS - candidate 764 bytes, retail 756 (2 instructions too many).
+#include "common.h"
+
+/* NEAR MISS - candidate 756 bytes, retail's exact size (wave 4, 15 October 2026).
 
    newlib mallocr.c's `fREe` (DEFINE_FREE), transcribed from
    build/sdk-compiler-build/source/ee/newlib/libc/stdlib/mallocr.c and compiled
-   with -O2 -G2 -ffunction-sections -mastra-quad-saves (src/core/00116460.c's
-   and src/core/001166C8.c's profile: the prologue `addiu $sp,$sp,-0x30` with
+   with -O2 -G2 -ffunction-sections -mastra-quad-saves (src/core/00116460.c's and
+   src/core/001166C8.c's profile: the prologue `addiu $sp,$sp,-0x30` with
    `sq $ra,0x20; sq $s1,0x10; sq $s0,0x0` is exact). trim_threshold 0x1345F0
    and top_pad 0x1345F8 are unsigned long, the other statics are the 0x1341E8
    bin array; no mmap arm and no check_inuse_chunk (HAVE_MMAP 0, DEBUG off).
 
-   189 of the 191 emitted instructions sit at retail's offsets; two extra:
+   Wave 3 recorded 764 bytes against retail's 756 with two extra instructions:
+   the islr branch's delay slot held `sz += nextsz` while the unlink path
+   reloaded both `next->fd` and `next->bk`, and a load-to-branch `nop` sat in
+   front of the frontlink large-bin loop's rotated `beql`.
 
-   - at +0x120 (the `if (!islr && next->fd == last_remainder)` test) retail puts
-     the `lw $v1,0x8($a3)` (next->fd) in the *delay slot of the islr branch* and
-     jumps from there to its unlink path at +0x154, which then only loads
-     next->bk.  This cc1 leaves `addu $t1,$t1,$a0` (`sz += nextsz`) in that slot
-     and has its unlink path (+0x154) reload both next->fd and next->bk, which
-     costs the two extra words.  Same source, same values - a rematerialisation
-     choice.
-   - in frontlink's large-bin loop (`while (FD != BK && S < chunksize(FD))`)
-     this cc1 inserts a `nop` between `lw $a2,0x8($a2)` and the following
-     `beql $a2,$t0`; retail has none.
+   Wave 4 measured where the size comes from. The `unlink(next, bck, fwd)` macro
+   makes cc1 emit a SECOND load of `next->fd` in the unlink block: this cc1 does
+   not carry a load across the branch unless the value stays live past it (spelt
+   as an explicit `fwd = next->fd` in the else arm alone, the candidate goes back
+   to 764 bytes - measured). Naming the load before the test and using it as the
+   unlink's FD keeps it live, and then:
 
-   Both are scheduling, not source: every other instruction, including the
-   whole top-merge arm, the last_remainder linking and the tail frontlink
-   small-bin arm, is byte-identical.  A compiler build whose delay-slot filler
-   prefers the speculative load would match it. */
-#include "common.h"
+   - the size becomes 756, retail's exact figure, and the islr region takes
+     retail's layout: `sz += nextsz` inline, the `next->fd` load in the islr
+     branch's delay slot, and the unlink path reaching the join with only
+     `next->bk` left to load;
+   - two words still differ. This cc1 keeps the loaded FD in $a2 and uses it
+     directly, where retail loads into $v1 and copies at the join
+     (`daddu $a2,$v1,$zero`, which is the macro's own `FD = P->fd` assignment:
+     retail's cc1 had CSE'd the load, so the assignment became a copy. The
+     earlier `unlink(p, bck, fwd)` above is what puts `fwd` in $a2 at both
+     sites). Retail's copy is the one instruction this candidate lacks.
+   - the load-to-branch `nop` in front of the frontlink large-bin loop is
+     untouched by the arm above (`lw $a2,0x8($a2)` then `beql $a2,$t0` in
+     retail; this cc1 inserts a `nop` between them, and moving `sz += nextsz`
+     relative to the load does not change it).
+
+   So the residual stays in wave 3's class - this cc1's delay-slot and
+   cross-branch CSE choices, not a source shape - but the body is now
+   size-exact and the islr region is understood to one instruction. The
+   candidate below is the 756-byte one; its one deviation from the upstream
+   transcription is the consolidate-forward arm (the load hoisted into `fwd`,
+   the `unlink` macro written out for that arm). */
 
 /*
  * A version of malloc/free/realloc written by Doug Lea and released to the
@@ -241,15 +258,20 @@ void func_00116E10(struct _reent *reent_ptr, Void_t *mem) {
 
   if (!(inuse_bit_at_offset(next, nextsz)))   /* consolidate forward */
   {
+    fwd = next->fd;
     sz += nextsz;
 
-    if (!islr && next->fd == last_remainder)  /* re-insert last_remainder */
+    if (!islr && fwd == last_remainder)        /* re-insert last_remainder */
     {
       islr = 1;
       link_last_remainder(p);
     }
     else
-      unlink(next, bck, fwd);
+    {
+      bck = next->bk;
+      fwd->bk = bck;
+      bck->fd = fwd;
+    }
   }
 
 

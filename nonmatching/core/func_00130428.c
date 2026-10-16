@@ -1,39 +1,6 @@
-/* from src/core/00130288.c: C that is one instruction short (676 bytes where
- * retail has 680) and differs only around the frame-size check.
- *
- * The source is the SDK's libmpeg: Lombyte's reconstruction of the reference
- * decoder (MIT) carries this whole routine as func_0012C4C8 in
- * src/assembly/sdk/library/sequenceheader.c, and this file is that source
- * transcribed field for field - every offset (mp->sys at 0x40, unk848,
- * picture_structure 0x174, unk13C/unk140, progressive_frame 0x188,
- * frame_pred_frame_dct 0x17C, matrix_coefficients 0x144, horizontal_size
- * 0x124, vertical_size 0x128, mb_width 0x12C, mb_height 0x130, the ten
- * reference-image pointers 0x108..0x528, frame_buffers 0xFC/0x100/0x104),
- * every call (copy_object_field_backward, reserve_aligned_buffer_space x3,
- * _initRefImages' fourteen arguments, InitializeReferenceImage x9) and the
- * `goto block_6` shape of the mb_height if/else reproduce exactly. So does
- * the 0x180 * mb_width << 4 * mb_height << 4 >> 8 product, which is the
- * R5900's three-operand `mult rd,rs,rt` (0x02D08018: rd=$s0, rs=$s6, rt=$s0)
- * that rabbitizer prints with two operands.
- *
- * The residual is the frame-size test:
- *
- *   retail : bne $s7,$v1,skip ; addiu $v0,$fp,0x528 ; lw $v0,0x4($a1)
- *            beq $s6,$v0,end  ; addiu $v0,$fp,0x528 ; sw $s6,0x4($a1) ...
- *   here   : bne $s7,$v1,skip ; addiu $a0,$fp,0x528 ; lw $v0,0x4($a1)
- *            beq $s6,$v0,end  ; ld $ra,0xE0($sp)    ; sw $a0,0x44($sp) ...
- *
- * This cc1 keeps `mpeg + 0x528` in $a0 (registers the value rather than
- * re-materialising it in the second delay slot) and fills that delay slot
- * from the epilogue instead, which is also what costs the four bytes: the two
- * epilogues (the tail-call one and the shared one) come out one instruction
- * shorter. Writing the early return as one `&&` test instead of the nested
- * `if` gives the exact retail size (680) but moves the following store into
- * the branch delay slot and changes the branch to `bnel`, so the nested form
- * is the one recorded here.
- */
+/* NEAR MISS - candidate 680 bytes, retail's exact size (wave 4, 15 October 2026).
 
-/* func_0012C4C8 in the SDK's libmpeg (the reference-image resize half of
+   func_0012C4C8 in the SDK's libmpeg (the reference-image resize half of
    _sequenceHeader): called once the sequence header has set the decoder's
    sizes, it recomputes the macroblock counts and, when the frame size actually
    changed, reserves the three frame buffers and re-initialises the reference
@@ -42,7 +9,43 @@
    decoder state reached through mp->sys at +0x40 as that source does.
    The 0x180 * width * height >> 8 product is the R5900's three-operand
    `mult rd,rs,rt` (rabbitizer prints two operands), which is why the source's
-   left-to-right parenthesisation has to be kept. */
+   left-to-right parenthesisation has to be kept.
+   Profile: sdk -O2 -G2 -ffunction-sections (the frame is `addiu $sp,$sp,-0xF0`
+   with `sd` in 16-byte slots; `sdk -O2 -g2 -gstabs` gives the same bytes).
+
+   Wave 3 recorded 676 bytes, four short, with the residual in the frame-size
+   check. Wave 4 found the four bytes: the `var_2_53 = mpeg + 0x528;` inside the
+   inner `if` is dead (the `sp40 + 0x68` assignment below overwrites it before
+   any use), and this cc1 was still registering its value. Removing that dead
+   assignment gives retail's exact size and moves the first difference from
+   +0xb8 to +0xb4. What is left is one seven-instruction region, and everything
+   after it realigns byte for byte:
+
+     retail : bne $s7,$v1,skip ; addiu $v0,$fp,0x528 ; lw $v0,0x4($a1)
+              beq $s6,$v0,end  ; addiu $v0,$fp,0x528 ; sw $s6,0x4($a1) ...
+     here   : bnel $s7,$v1,skip ; sw $s6,0x4($a1)   ; lw $v0,0x4($a1)
+              beq $s6,$v0,end  ; ld $ra,0xE0($sp)    ; sw $s6,0x4($a1)
+              addiu $v0,$fp,0x528 ...
+
+   Two related choices, both compiler-side:
+
+   - Rematerialisation. Retail computes `mpeg + 0x528` in BOTH branch delay
+     slots, in $v0 - the register the height load then clobbers, which is why
+     the fall-through path needs its own copy. This cc1 computes it once, in
+     $a0 (a register nothing clobbers), leaves it live to the merge and stores
+     it there; that costs one instruction fewer, and it is the four bytes wave 3
+     was missing.
+   - The shared epilogue: with the address no longer occupying the second delay
+     slot, this cc1 sinks `ld $ra,0xE0($sp)` into it and the shared epilogue
+     comes out one instruction short, cancelling the gain.
+
+   Levers tried and measured in wave 4: the `__asm__` alias on one address (the
+   lever the brief proposed for this wall) cannot apply here - the body holds no
+   symbol address at all, every address is `$fp + const` with $fp holding the
+   `mp->sys` pointer loaded from arg0+0x40, so there is no second name to give
+   the same symbol; and no symbol means `mips_check_split`/`-mno-split-addresses`
+   has nothing to bite on either. The retained candidate is the wave-3
+   transcription with that one dead assignment dropped. */
 extern void func_0012FB70(void *arg0);
 
 extern int func_0012FB80(void *arg0, void *arg1, unsigned int arg2, unsigned int arg3);
@@ -103,7 +106,6 @@ void func_00130428(void *arg0) {
         if (temp_22_48 == *(int *)((unsigned char *)arg0 + 0x4)) {
             return;
         }
-        var_2_53 = mpeg + 0x528;
     }
     sp40 = mpeg + 0x4C0;
     var_2_53 = sp40 + 0x68;
