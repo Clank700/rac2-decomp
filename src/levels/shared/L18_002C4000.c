@@ -443,4 +443,9 @@ INCLUDE_ASM("asm/levels", func_L18_004273F0);
 
 INCLUDE_ASM("asm/levels", func_L18_00427688);
 
+extern char *D_L18_001FB320[];
+extern char *D_L18_001B281C;
+
+/* func_L18_00427B48: 144 bytes against retail's 148; the chain pointer and the
+   stored 1 take each other's register. Deposited in nonmatching/levels/. */
 INCLUDE_ASM("asm/levels", func_L18_00427B48);

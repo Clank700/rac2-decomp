@@ -55,4 +55,17 @@ INCLUDE_ASM("asm/levels", func_L00_0032B9E8);
 
 INCLUDE_ASM("asm/levels", func_L00_0032BBA8);
 
-INCLUDE_ASM("asm/levels", func_L00_0032C5E8);
+/* The record at 0x88 of the second argument decides: arm it with the four
+   sub-addresses and light bit 0x40 on the record's 0x94 word when it takes. */
+extern int ref_L00_00320DE0_00();
+
+void func_L00_0032C5E8(char *a0, char *a1)
+{
+    char *s0 = a1;
+
+    if (*(int *)(s0 + 0x88) != 0) {
+        if (ref_L00_00320DE0_00(a0, *(int *)(s0 + 0x88), a0 + 0x10, a0 + 0xF0,
+                                a0 + 0x10, a0 + 0xF0) != 0)
+            *(int *)(s0 + 0x94) = *(int *)(s0 + 0x94) | 0x40;
+    }
+}

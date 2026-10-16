@@ -56,6 +56,9 @@ INCLUDE_ASM("asm/levels", func_L00_0037DE30);
 
 INCLUDE_ASM("asm/levels", func_L00_0037DEF8);
 
+/* Near miss: nonmatching/levels/func_L00_0037E000.c - the condition chain is right but this
+   cc1 runs the loop downwards (i = 31, i--) where retail counts up, and the `e != 0` test
+   comes out as `beql` with the store in its annulled slot against retail's `beqz`. */
 INCLUDE_ASM("asm/levels", func_L00_0037E000);
 
 /* clears the second word of every sixteen-byte record whose second word equals a0 */

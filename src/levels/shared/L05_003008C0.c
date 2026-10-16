@@ -29,7 +29,7 @@ void func_L05_0030C930(int a0, int a1) {
     p[0x10] = a0;
 }
 
-INCLUDE_ASM("asm/levels", func_L05_00324DB8);
+/* func_L05_00324DB8 is defined in L05_003008C0-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L05_00334358);
 

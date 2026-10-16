@@ -260,8 +260,34 @@ void func_L00_003A8508(char *a0)
 	} while (s1 < end);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003A85A0);
+/* Runs the two setup helpers on the object. When either reports a failure the dispatch
+ * callback func_L00_003A8618 is registered against it instead; otherwise the object takes
+ * the discard path unless its tag byte is 2. */
+extern int func_L00_003A87D8(char *);
 
+extern int func_L00_003A9000(char *);
+
+extern void func_310440(char *);
+
+extern void func_L00_003A8618(char *);
+
+/* Registering the callback targets the level's own variant of the dispatcher: in four programs
+ * (08, 09, ...) the call goes to a level-local function beside the shared one. */
+extern void ref_L00_002E6EF8_00(void (*)(char *), char *);
+
+void func_L00_003A85A0(char *a0)
+{
+    char *s1 = a0;
+    int first = func_L00_003A87D8(a0);
+    int second = func_L00_003A9000(a0);
+
+    if (first == 0 && second == 0) {
+        if (*(unsigned char *)(s1 + 0x20) == 2)
+            func_310440(s1);
+    } else {
+        ref_L00_002E6EF8_00(func_L00_003A8618, s1);
+    }
+}
 /* Dispatches on a table lookup: the object's +0x68 pointer names a short that is looked up
    with key 0x5CB; on a miss the object takes the discard path, otherwise the two update
    helpers run. */

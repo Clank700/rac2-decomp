@@ -232,7 +232,8 @@ INCLUDE_ASM("asm/levels", func_L00_003200F8);
 
 INCLUDE_ASM("asm/levels", func_L00_00320460);
 
-INCLUDE_ASM("asm/levels", func_L00_003206B8);
+/* func_L00_003206B8 only matches when this unit is built -G8 (its object table load comes
+   out of $gp there), so its body lives in L00_00316F60-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_003207F8);
 
