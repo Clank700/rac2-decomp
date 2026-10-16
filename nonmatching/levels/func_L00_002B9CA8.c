@@ -19,7 +19,9 @@
    same address), nor by a struct field for it, nor by reordering the declarations;
    the return of func_00282978 must stay `int` (an `s16` local adds a
    `sll`/`sra` pair, 188 bytes) and the countdown loop must be do/while or for
-   (the index form is 168). */
+   (the index form is 168). Wave 7's nested-call lever was tried as well (both
+   halfword reads inlined into func_L00_002B9B88, and the read folded into the
+   comparison): still 180. */
 
 typedef unsigned char u8;
 typedef unsigned short u16;

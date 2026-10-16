@@ -17,7 +17,13 @@
        instruction more than `mtc1 $a1,...`. Spelling the copy (`s32 n = p1;`),
        saving the float in a local, or inlining the conversion all fold away.
 
-   The `mtc1`/`nop`/`cvt.s.w` hazard pair and both call sites are otherwise exact. */
+   The `mtc1`/`nop`/`cvt.s.w` hazard pair and both call sites are otherwise exact.
+
+   Wave 7's "nested calls in the arguments of one enclosing call" lever was tried
+   here (the whole body as one func_0027F640(...) with func_0027C878(1) and
+   func_L00_002E9210(p3, p4) inline): 200 bytes with the size call inlined, 188
+   with it kept in a local - worse than or equal to the four-statement form, and
+   it does not produce retail's `daddu $v0,$a1,$zero` or the `$f22`/`$f21` order. */
 
 typedef int s32;
 
