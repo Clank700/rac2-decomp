@@ -209,7 +209,28 @@ void func_L01_003128C0(char *p) {
 
 INCLUDE_ASM("asm/levels", func_L01_003161F0);
 
-INCLUDE_ASM("asm/levels", func_L01_003165E8);
+extern char *D_L01_001FE180[];
+extern int func_311B48(char *a0, void *a1, int a2);
+extern int func_3163C8(char *a0, void *a1);
+extern int func_316558(char *a0, void *a1);
+extern int func_3164A0(char *a0, void *a1);
+
+/* chain of four probes on the same object; the first that reports a hit picks the code */
+int func_L01_003165E8(char *a0, int a1, char *a2, char *a3, char *t0) {
+    if (a1 >= 0) {
+        char *p = D_L01_001FE180[a1];
+        if (func_311B48(a0, p + 0x10, *(int *)p))
+            return 1;
+    }
+    if (func_3163C8(a0, a2))
+        return 2;
+    if (func_316558(a0, a3))
+        return 3;
+    if (func_3164A0(a0, t0))
+        return 4;
+    return 0;
+}
+
 
 
 extern void func_002E3CD8(void *a0, void *a1);
