@@ -5,10 +5,11 @@
    value computed after the final `jal`: this cc1 loads and compares into $v0
    (`lbu $v0,0x20($s1); sltiu $v0,$v0,0x2`) where retail uses $v1.  Four spellings of
    that guard (>= 2, early return, a named local, an empty else) all give $v0.
-   Worth a second look at the container: the same shape - the value computed right after
-   the last call landing in $v0 here and $v1 in retail - is also the only difference in
-   func_L18_003F9E50, so if the October build allocates that register differently both
-   are matches.  The body: */
+   SETTLED AT THE CONTAINER (2026-10-16): `python3 tools/check.py func_L08_004237F0` gives
+   `08_tabora: instruction at +0x7c differs` - 0 of 1 - i.e. the same offset the Docker-free
+   ruler gives.  The October build does not allocate that register differently, so this is a
+   real allocator wall and the same one that keeps func_L18_003F9E50 out.  Do not re-open it
+   on a compiler-version hypothesis.  The body: */
 
 typedef unsigned char u8;
 typedef unsigned short u16;

@@ -5,6 +5,9 @@
    retail (`addiu $v0,$zero,0x1; sh $v0,0xAC($s0)` against `addiu $v1,$zero,0x1;
    sh $v1,0xAC($s0)`).  Four spellings of that store (literal, named local, u16 store,
    scoped local) give the same $v0, and the named local costs a word.
+   SETTLED AT THE CONTAINER (2026-10-16): `python3 tools/check.py func_L18_003F9E50` gives
+   `instruction at +0x88 differs` at all three places - 0 of 3 - the same offset as the
+   Docker-free ruler, so the $v0/$v1 split is the allocator and not a build difference.
    It needs a -G8 unit: the five table bases are `$gp + 0x1470/0x1490/0x14B0/0x14D0/0x14F0`,
    i.e. 0x001B0460 / 0x001B0480 / 0x001B04A0 / 0x001B04C0 / 0x001B04E0 with $gp pinned at
    0x001AEFF0 in every program (tools/build.py GP), declared `__attribute__((sda))` in a
