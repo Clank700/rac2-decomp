@@ -146,7 +146,6 @@ src/levels/shared/L00_0037E668.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_0042C818.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L05_00446E28.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L10_0037D200.c	-O2 -G8 -ffunction-sections
-src/levels/shared/L04_002CC748-g8.c	-O2 -G8 -ffunction-sections -mno-split-addresses
 
 src/game/0027A0F8.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/game/002CCED0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
