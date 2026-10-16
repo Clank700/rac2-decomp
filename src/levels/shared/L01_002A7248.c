@@ -338,8 +338,6 @@ void func_L01_003246D0(void) {
     func_L01_003246A0(func_003246F8());
 }
 
-INCLUDE_ASM("asm/levels", func_L01_003246F8);
-
 extern int D_L01_001A79F0;
 
 extern int D_L01_0028EA50[];
