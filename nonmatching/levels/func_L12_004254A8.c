@@ -16,6 +16,8 @@ typedef int s32;
  *   0x004254E4  lui v1,0x14 ; addiu v0,zero,1 ; sb v0,-0x6A25(v1)
  *   0x004254F4  jal func_002A7750 (a0 = s0, a1 = 1, a2 = -1)
  *
+ * verdict: wslcmp.py on src/levels/12_todano/L12_0041E3E8.c says
+ *   func_L12_004254A8: 0 of 1 places match   [12_todano: instruction at +0x20 differs]
  * measured: this cc1 emits `addiu $a0,$zero,-1` + `lw $v1,0x0($v0)` + `beq $v1,$a0`
  * where retail has the -1 in `$v1` and the field in `$a1`.  Twelve spellings of the
  * guard were measured and all give that same cluster - a plain comparison, a named
