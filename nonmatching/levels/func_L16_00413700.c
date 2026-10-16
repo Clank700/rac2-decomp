@@ -28,7 +28,7 @@ typedef float f32;
  * at +0x20 are handed to func_002ACE78 with 0.0581f before returning to state 2.
  * The same 0x700014A9 word as func_L23_0042AD10 sits at 0x00413724 and blocks
  * byte-exactness on its own: no C spelling is known for the 0x1C-group instruction
- * (README: func_L01_002F1FD0, func_L00_00387BB0, func_L01_002F1FD0's neighbours).
+ * (README: func_L01_002F1FD0, func_L00_00387BB0).
  * The lq/sq pairs themselves are not the wall - C struct copies reach them
  * (README: func_L00_0037FA90 is 83/84 with them). ASM_FUNC candidate.
  */
