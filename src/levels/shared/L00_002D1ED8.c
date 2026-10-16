@@ -100,7 +100,26 @@ notfound:
 
 INCLUDE_ASM("asm/levels", func_L00_002D1FD8);
 
-INCLUDE_ASM("asm/levels", func_L00_002D2070);
+/* The resident block this reads its state from. */
+extern char D_00189E20_2[];
+
+/* Publishes the resident clock into the object the state word names, once the state word and
+   the second gate are both set and the helper accepts the object's key. */
+void func_L00_002D2070(void)
+{
+    char *base = D_00189E20_2;
+    int out;
+    int object;
+
+    if (*(int *)(base + 0x2494) == 0)
+        return;
+    if (*(int *)(base + 0x2498) == 0)
+        return;
+    if (func_L00_002D1F78(*(unsigned char *)(*(char **)(base + 0x2290) + 0x43), &out) == 0)
+        return;
+    object = *(int *)(base + 0x2494);
+    *(float *)(object + 0x48) = *(float *)(base + 0xC20);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_002D20D0);
 
