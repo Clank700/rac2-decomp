@@ -1080,6 +1080,12 @@ Matched this tour (7, all re-checked with the Docker-free ruler, `N of N places 
 | [`func_L20_004424A0`](levels/func_L20_004424A0.c) | 176 | 168 bytes; calls and both constant blocks are in retail's order. Three residues: `$s0`/`$s1` hold the object and the state the other way round, the `*(f32*)(state+0x7C)` term is CSE'd with the store just made (retail reloads it for `add.s $f12,$f12,$f12`), and `*(TI128 *)(state + 0xF0) = 0` folds instead of materialising `addiu $v0,$s0,0xF0` (the func_L11_003973F8 wall again). Taking the 0.000277777785f product before the second call moves it into `$f20` and costs a frame slot |
 | [`func_L20_00444B48`](levels/func_L20_00444B48.c) | 208 | 204 bytes, every instruction retail's: the guards convert the two integer parameters inline (`D_L20_001B20A0 <= (f32)a0` -> f12, `(f32)a1 <= D_L20_001B20A0` -> f13) while the blend calls the int-to-float helper `func_00283CE0` three times (twice on a0, once on a1, in the order the inline denominator evaluates). Two residues: retail's `nop` between the third `sub.s` and the `div.s`, and one set-up swapped at +0x8C (`$s1 = $a1` in the bc1f delay slot against `mov.s $f23,$f13` four words earlier). Locals for the quotient's operands give 200 bytes; `(f32)` casts instead of the three calls let this cc1 fold them (104 bytes) |
 
+## Level functions, wave 7 agent lvl7-02, tour 2 (2026-10-16)
+
+| Function | Size | What the worker found |
+| --- | ---: | --- |
+| [`func_L20_00444138`](levels/func_L20_00444138.c) | 156 | 152 bytes; the 0x100-stride object walk is recovered from the matched `L01_003CAFE0-g8.c` / `L04_00422A00-g8.c` recipe and body and tail match word for word (the `bnel` carries the 0xAA halfword in its delay slot, the id arm is the `(u16)(id - 0x1233) < 2 \|\| id == 0x1231 \|\| id == 0x1232` chain). The missing word is retail's fresh `lui $v0,0x1B; lw $v0,0x2FA0($v0)` re-materialisation of the re-read bound on the storing path, where this cc1 keeps the %hi in a caller-saved register; retail also keeps a `nop` after the loop head's `lhu`, and its two bound reloads carry two addressing forms (`$gp` in the bne delay slot, absolute on the storing path) - a second `sda` name reproduces the `$gp` form but turns the `bne` into a `bnel`, and declaring the bound `sda` outright gives 144 bytes with the arm inlined before the tail |
+
 ## Additional source forms
 
 Keep a primary attempt at `levels/<catalogue-name>.c`. Distinct alternatives live
