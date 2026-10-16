@@ -134,7 +134,7 @@ void func_L09_00404F90(char *a0, s32 a1, s32 a2) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L09_003FEA48);
+/* func_L09_003FEA48 is defined in L09_003FEA48-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L09_003FEAE8);
 
