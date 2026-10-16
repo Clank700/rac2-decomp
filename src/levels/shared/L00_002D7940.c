@@ -164,7 +164,38 @@ INCLUDE_ASM("asm/levels", func_L00_002E3340);
 
 INCLUDE_ASM("asm/levels", func_L00_002E3520);
 
-INCLUDE_ASM("asm/levels", func_L00_002E36F8);
+#ifndef RAC2_T_REC_2E36F8
+#define RAC2_T_REC_2E36F8
+typedef struct {
+    s32 value;         /* +0x00 */
+    s32 key;           /* +0x04 */
+    char pad08[8];
+} Rec_2e36f8;
+#endif
+
+extern s32 ref_L00_001BC200_00[];
+
+/* Linear search of the level's record list (sixteen-byte stride): the block's fourth word
+ * holds the list pointer and its fifth the count; the record's second word is the key, and a
+ * match returns its first word. Zero when the count is not positive or nothing matches. */
+s32 func_L00_002E36F8(s32 key)
+{
+    Rec_2e36f8 *entry;
+    s32 count = ref_L00_001BC200_00[4];
+    s32 i;
+
+    if (count > 0) {
+        i = 0;
+        entry = (Rec_2e36f8 *)ref_L00_001BC200_00[3];
+        do {
+            if (entry->key == key)
+                return entry->value;
+            entry++;
+            i++;
+        } while (i < count);
+    }
+    return 0;
+}
 
 extern void func_2EDD48(void *);
 extern char ref_L00_001BC228_00[];
