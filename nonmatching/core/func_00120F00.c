@@ -28,6 +28,37 @@
  * rest of the object uses (sdk -O2 -G2 -ffunction-sections, 16-byte save
  * slots).
  *
+ * Wave 4 measured the placement against 13 bodies of the same function, all
+ * under that profile, and the stub's place never moved:
+ *  - the return primitive is inert. `__builtin_eh_return (eh, cfa - cfa,
+ *    handler)` written with a named `void *ofs` temp, with `(void)`/`(long)`
+ *    casts, as `return __builtin_eh_return (...);`, with an explicit `return;`
+ *    after it, or parenthesised - all of them give byte-identical objects, 480
+ *    bytes, the stub still between the block move's loop and its tail. The
+ *    2-argument spelling (the form libgcc2.c uses when the target has no
+ *    EH_RETURN_STACKADJ_RTX) makes cc1 die on SIGSEGV, so the 3-argument ABI is
+ *    the one this compiler wants;
+ *  - the block move is inert too: `memcpy` with `sizeof (*udata)`, with
+ *    `sizeof (frame_state)`, with a literal 0x2F0, with `(char *)` casts,
+ *    `__builtin_memcpy` with either size, or plain `*my_udata = *udata;` all
+ *    give the same object. Only moving the memcpy *before* the cfa store
+ *    changes anything, and for the worse (484 bytes; the label-address store
+ *    is re-allocated, a0 instead of a1);
+ *  - the deciding pass is not switchable inside a matching profile:
+ *    `-fno-schedule-insns2` rewrites the prologue (484 bytes - the `nop` after
+ *    the `lui` and the whole `sd` order change), so retail's build has both
+ *    schedulers on, as ours does.
+ *
+ * The compiler's own expand_eh_return (except.c in the qualified tree) says the
+ * same from the other side: it emits the block in one piece - the three
+ * `emit_move_insn`, the return-address store, `emit_jump (after_stub)`, the
+ * stub, `emit_label (after_stub)` - and it runs from expand_function_end. Our
+ * object has the jump and the stub 90 bytes early and the three moves still at
+ * the end, which is what an open block-move sequence at that point would
+ * produce; no source spelling reaches that. What would settle it: the retail
+ * _eh.o itself (not in this tree), or the tree's compiler rebuilt with its
+ * end-of-function sequence order instrumented.
+ *
  * Verified: tools/check.py func_00120F00 --diff: boot: 480 bytes, expected
  * 476; the only differences are the relocations, the stub block's position
  * and its unfilled delay slot.

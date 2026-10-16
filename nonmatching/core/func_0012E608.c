@@ -15,7 +15,21 @@
    through a local `volatile u32 *`, swapping `enable_dmac(4)` and the store,
    unprototyped callee declarations, and the `sdk -O2 -G2` vs
    `sdk -O2 -g2 -gstabs` profiles (both 656). Unblocked by a cc1 that puts a
-   volatile store in a call's delay slot while keeping the split address. */
+   volatile store in a call's delay slot while keeping the split address.
+
+   WAVE 4: it is TWO delay slots, not one. Compiled as it stands (656 against
+   retail's 648) the extra words are
+     retail : jal enable_dmac(4) ; sw $v1,0($v0)          (the 0x1000E010 = 0x10 store)
+     here   : sw $v1,0($v0) ; jal ; nop
+     retail : beqz $v0,L ; jal func_0011F628              (the DIntr test)
+     here   : beqz $v0,L ; nop ; jal func_0011F628 ; nop
+   - one store before the call that retail has IN the call's slot (the backward
+   direction, the same wall func_001307B0 hits), and one call that retail puts in
+   the branch's slot. Measured and rejected in wave 4: SDK-plausible prototypes
+   (AddDmacHandler/DIntr returning int, enable_dmac/EnableInterrupts/disable_dmac/
+   RemoveDmacHandler/sendIpuCommand/_doCSC2 returning void, with their argument
+   types) - they change the top of the function (the IPU_CTRL read moves from $v1
+   to $v0) and leave both slots at 656/648. */
 #include "common.h"
 
 /* _csc_storeRefImage: adapted from Lombyte (MIT)
