@@ -37,7 +37,39 @@ void func_003512B8(u8 *a0) {
 
 INCLUDE_ASM("asm/game", func_00351310);
 
-INCLUDE_ASM("asm/game", func_00351468);
+typedef struct { unsigned long long first, second; int offset, count; } Transfer_3518F0;
+extern void func_00351310(void *, Transfer_3518F0 *);
+
+int func_00351468(void *owner, Transfer_3518F0 *message, int unused)
+{
+    char *self = owner;
+    int result = 0;
+    func_0011AC60(*(int *)(self + 0x40));
+    if (*(int *)(self + 0x58) < *(int *)(self + 0x54)) {
+        func_00351310(self, message);
+        if ((long long)message->first >= 0 || (long long)message->second >= 0) {
+            (*(Transfer_3518F0 **)(self + 0x50))[*(int *)(self + 0x5C)].first = message->first;
+            (*(Transfer_3518F0 **)(self + 0x50))[*(int *)(self + 0x5C)].second = message->second;
+            {
+                int offset = message->offset;
+                (*(Transfer_3518F0 **)(self + 0x50))[*(int *)(self + 0x5C)].offset = offset;
+            }
+            {
+                int count = message->count;
+                (*(Transfer_3518F0 **)(self + 0x50))[*(int *)(self + 0x5C)].count = count;
+            }
+            {
+                int next = *(int *)(self + 0x5C) + 1;
+                int capacity = *(int *)(self + 0x54);
+                *(int *)(self + 0x58) += 1;
+                *(int *)(self + 0x5C) = next % capacity;
+            }
+        }
+        result = 1;
+    }
+    func_0011AC40(*(int *)(self + 0x40));
+    return result;
+}
 
 INCLUDE_ASM("asm/game", func_00351578);
 
@@ -82,7 +114,6 @@ s32 func_003518D8(u8 *a0) { return *(s32 *)(a0 + 0xa8); }
 
 s32 func_003518E0(u8 *a0, s32 a1) { s32 vieux = *(s32 *)(a0 + 0xa8); *(s32 *)(a0 + 0xa8) = a1; return vieux; }
 
-typedef struct { unsigned long long first, second; int offset, count; } Transfer_3518F0;
 extern char *D_001B23CC[] __attribute__((sda));
 extern int func_00351468(void *, Transfer_3518F0 *, int);
 
