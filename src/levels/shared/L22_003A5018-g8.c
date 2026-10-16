@@ -43,9 +43,15 @@ s32 func_L22_003A61A8(u8 *a0) {
     return 0;
 }
 
-extern int D_L22_001AFA00 __attribute__((sda));
+/* The four resident words sit at the level-22 addresses; in the other program that carries
+ * func_L22_003B9358 they are elsewhere, so they take per-program names. */
+extern int ref_L22_003B9358_00 __attribute__((sda));   /* the level-22 word D_L22_001AFA08 */
 
-extern int D_L22_001AFA04 __attribute__((sda));
+extern int ref_L22_003B9358_01 __attribute__((sda));   /* the level-22 word D_L22_001AFA00 */
+
+extern int ref_L22_003B9358_02 __attribute__((sda));   /* the level-22 word D_L22_001AFA0C */
+
+extern int ref_L22_003B9358_03 __attribute__((sda));   /* the level-22 word D_L22_001AFA04 */
 
 extern void func_002E59F8(int handle);
 
@@ -64,16 +70,16 @@ void func_L22_003B9358(u32 a0)
     char *object;
 
     if (a0 == g) {
-        slot = &D_L22_001AFA08;
-        if (D_L22_001AFA00 != -1) {
-            func_002E59F8(D_L22_001AFA00);
-            D_L22_001AFA00 = -1;
+        slot = &ref_L22_003B9358_00;
+        if (ref_L22_003B9358_01 != -1) {
+            func_002E59F8(ref_L22_003B9358_01);
+            ref_L22_003B9358_01 = -1;
         }
     } else {
-        slot = &D_L22_001AFA0C;
-        if (D_L22_001AFA04 != -1) {
-            func_002E59F8(D_L22_001AFA04);
-            D_L22_001AFA04 = -1;
+        slot = &ref_L22_003B9358_02;
+        if (ref_L22_003B9358_03 != -1) {
+            func_002E59F8(ref_L22_003B9358_03);
+            ref_L22_003B9358_03 = -1;
         }
     }
     object = (char *)*slot;

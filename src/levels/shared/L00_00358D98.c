@@ -254,6 +254,9 @@ extern void func_002B9390(void);
 
 extern void func_L00_00310048(void);
 
+/* The tick gate's callee is a neighbouring local function in six of the programs. */
+extern unsigned int ref_L00_0036FA68_00(void);
+
 extern void func_002F52B8(void);
 
 extern void func_00289178(void);
@@ -269,7 +272,7 @@ void func_L00_0036FA68(void)
         if (func_002B49E0(4, 1, 1, 0, 0) == 0)
             return;
     }
-    if (func_L00_0036F480() != 0)
+    if (ref_L00_0036FA68_00() != 0)
         return;
     func_002F5220();
     func_002E4AC8();
