@@ -644,6 +644,9 @@ what was tried. None of these links, and none is counted. Move a file into `src/
 | [`func_L22_0032F228`](levels/func_L22_0032F228.c) | 52 | Catalogue defect: six `addiu $sp,$sp,N ; nop` pairs (0x30, 0x50, 0x70, 0x10, 0x40, 0x70, 0x40), no `jr $ra`. An extent fix in tools/levels.py. |
 | [`func_L09_003F7370`](levels/func_L09_003F7370.c) | 120 | MMI (LQ/SQ macro words 0x78620000/0x7C820000) between the stack setup and an eight-argument call to func_3F4120; ASM_FUNC territory. |
 | [`func_L05_003CEFA0`](levels/func_L05_003CEFA0.c) | 160 | MMI: three LQ/SQ words (a 128-bit copy of the s2+0x38 doubleword into s1+0x38) plus a `$gp+0xB78` float table indexed by the 0xAA halfword; the rest of the body is ordinary. ASM_FUNC or a later pass with the TI128 levers. |
+| [`func_L05_003CFB90`](levels/func_L05_003CFB90.c) | 148 | Wave 5 w12, tour 2: everything matches except a rotation of three constant stores in the block setup. Retail emits `sb $a1,0x19` (a1 = 2), `sw $v0,0x14` (v0 = 0x10000), `sw $v1,0x20` (v1 = 1); ours emits the same three stores rotated (`sw $a1,0x20` with a1 = 1, `sb $v0,0x19`, `sw $v1,0x14`). Two source orders give the identical rotation. The 0x45AFDF66 literal round-trips as 5627.9248046875f. |
+| [`func_L18_003F7988`](levels/func_L18_003F7988.c) | 124 | MMI: four LQ/SQ words (the s0+0x10 block into the record's +0x210, the record's +0x220 into s0+0xF0) around a halfword-to-float store (`lh 0x24` / `cvt.s.w` / `swc1 $f0,0x20`), then two calls. ASM_FUNC or the TI128 levers. |
+| [`func_L22_003300E8`](levels/func_L22_003300E8.c) | 124 | MMI: four LQ/SQ words (the caller's doubleword into the sub object at s0+0xA0, s1+0x10 onto the stack), then `jal func_32F7A8(s1, s0, sp, sp+0x10, 0)` and the `lw 0x94($s0)` / constant-8 answer. ASM_FUNC or the TI128 levers. |
 
 
 ## Matched, but not landable under the Plain C rule (2026-10-13)
