@@ -1057,6 +1057,7 @@ Matched this tour (7, all re-checked with the Docker-free ruler, `N of N places 
 | [`func_L11_003973F8`](levels/func_L11_003973F8.c) | 176 | 160 of 176, short by exactly four `addiu`: `mode(TI)` does reach `lq`/`sq` here, but this cc1 folds the +0x10/+0xF0 into the `lq`/`sq` offsets where retail materialises `$a0=s0+0x10`, `$v1=s1+0x10`, `$a1=s0+0xF0`, `$v1=s1+0xF0` and uses offset 0. The float registers also come out swapped (`$f21`=f13 against retail's `$f21`=f12) |
 | [`func_L11_0030ED58`](levels/func_L11_0030ED58.c) | 156 | Guard and band structure recovered - state word 11 at 0x001A79F0, +0x30 == 2 in the block at 0x001BE5C0, then `id` classified into [0x1B9,0x26B]→0x46, [0x321,0x3B5]→0x47, `<= 0x44B`→0x48, else -1, then `func_2FF678($gp string, which, 2, 0x80808080, 0)` - but the C is a transcription of three literal bands with no derivation in the bytes |
 | [`func_L11_00397A30`](levels/func_L11_00397A30.c) | 184 | Not C: `.word 0x700014A9`, the MMI word the func_L00_003A8E28 near miss documents, and it is the first instruction after the prologue. ASM_FUNC candidate |
+| [`func_L00_002FC058`](levels/func_L00_002FC058.c) | 184 | 27 shared places, decoded in full. Exact retail size and retail's instruction sequence, blocked on the dispatch's block layout: retail branches forward to the case-1 block at +0x34 and falls through the tree, this cc1 keeps case 1 as the fall-through with `bne` inverted (+0xc is the only difference reported, all 27 places). Three reusable measurements: the three `$gp` globals need SIZED `sda` declarations (a plain `extern int` gives `lui`/%lo per site), both conditions branch on `!= 0` (`func_L00_002FC018() != 0` selects the two-call arm, `ref_.._02 != 0` the early-clear arm), and `-O2 -G8 -ffunction-sections` is what yields `sw $v0,-0x5C80($gp)`. |
 
 ## Level functions, wave 7 agent lvl7-02 (2026-10-16)
 
@@ -1191,3 +1192,4 @@ read the primary entry for context and verify each form separately.
 
 
 - [`func_L10_00425888`](levels/func_L10_00425888.c): [form 1](levels/alternatives/func_L10_00425888-form-01.c).
+- [`func_L00_002FC058`](levels/func_L00_002FC058.c): [form 1](levels/alternatives/func_L00_002FC058-form-01.c), [form 2](levels/alternatives/func_L00_002FC058-form-02.c).
