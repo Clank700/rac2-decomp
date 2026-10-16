@@ -17,7 +17,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_00115E90`](core/func_00115E90.c) | 152 | Call shape, order and the noreturn tail are exact; this cc1 swaps the counter and the entry pointer between `$s0` and `$s1` |
 | [`func_001185E8`](core/func_001185E8.c) | 1496 | Candidate is 1508 bytes; the SDK vfprintf.obj float-to-string cvt, reconstructed from the assembly - its six-way Inf/-Inf/NaN/Ind dispatch matches instruction for instruction, and the twelve bytes left are register allocation (masked value in `$v1` against retail's `$s2`) plus the exponent tail |
 | [`func_00118BC0`](core/func_00118BC0.c) | 264 | Candidate is 276 bytes; this cc1 materialises both global addresses and the buffer base into registers where retail keeps one base and offsets |
-| [`func_001330D0`](core/func_001330D0.c) | 56 | Candidate is 64 bytes; the retail table base is `$gp`-relative, this cc1 materialises it absolutely |
+| [`func_001330D0`](core/func_001330D0.c) | 56 | Candidate is 60 bytes; the `$gp` base needs a SIZED `sda` declaration (an incomplete `int *tbl[]` never takes the gp form - with `int *tbl[2]` it does). The residue is allocation: `$v0`/`$v1` swapped and one extra `daddu` for the call argument |
 | [`func_00133688`](core/func_00133688.c) | 52 | Candidate is 44 or 48 bytes; one unit needs both a `$gp` and a folded absolute access, which no single profile gives |
 | [`func_0012F948`](core/func_0012F948.c) | 80 | Candidate is 76 bytes; retail's shift sits before the prologue with a nop after it, and the store order differs |
 | [`func_001322B8`](core/func_001322B8.c) | 92 | Sequence and calls exact; this cc1 gives `$s0` to the shift and `$s1` to the object, retail the other way round |
