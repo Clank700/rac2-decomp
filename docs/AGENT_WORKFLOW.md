@@ -40,10 +40,16 @@ function already matched here; those are carried over, not rewritten.
 
 ### Where the body may already exist
 
-Before writing C, look for the body in these four places. Each was measured by a worker wave, and
+Before writing C, look for the body in these places. Each was measured by a worker wave, and
 between them they account for most of what those waves matched: the work is transcription, not
 reconstruction.
 
+- **`symbol_addrs/usa-v2/symbol_addrs.txt`, by address, before anything else**:
+  `grep -in "= 0x0011d620;" symbol_addrs/usa-v2/symbol_addrs.txt`. The file names the function
+  (`sqrt`, `memcpy`, `__sjthrow`, `VfprintfInteger`) and usually carries its provenance - the
+  verbatim source when there is one (`libc.a w_sqrt.o's sqrt`, `newlib's hand-written
+  libc/machine/r5900/memset.S`) - plus the split defects around it. In the 15 October waves every
+  named function was a transcription; the unnamed ones cost an order of magnitude more.
 - **The SDK's own newlib is in this repository's build tree**:
   `build/sdk-compiler-build/source/ee/newlib/` - `libc/stdlib/mallocr.c`, `libc/stdio/` for the
   printf family, and `libc/machine/r5900/*.S` for the string routines (which is also why those

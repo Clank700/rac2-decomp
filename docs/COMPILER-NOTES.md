@@ -1184,7 +1184,11 @@ the libc region 0x1163B0-0x1178xx and the other quadword units), and two `-O0`-c
 - **`$gp` is a property of the unit, not of the compile**: a `-g8.c` sibling gets `-G8` from its
   name (no `config/cflags.txt` line needed), the symbol carries `__attribute__((sda))`, and the
   *game* compiler must be the one compiling it - the SDK compiler with `-G8` does not use `$gp` at
-  all. `gp = 0x001AEFF0`.
+  all. `gp = 0x001AEFF0`. The declaration also needs a **size** at most the `-G8` threshold: an
+  incomplete type (`extern int *tbl[];`) never takes the gp-relative form and comes out absolute -
+  measured on `func_00132DF0` (2026-10-15); with `extern int *tbl[2] __attribute__((sda));` the
+  same access is `addiu $x,$gp,-0x7B50`. The earlier "the attribute alone does not suffice" note
+  on `func_001330D0` is this effect.
 - **A helper upstream declares `static __inline__` must stay `static __inline__`**; without the
   keyword the callee is a real call and the body shrinks (`func_00123C28`: 252 bytes against 260).
 - **Unsigned spellings are load-bearing**: `-1u` gives the retail `lui`/`ori` pair where `-1` gives
