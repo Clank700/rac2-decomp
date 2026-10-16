@@ -37,10 +37,9 @@ void func_00121B18(void) {
     r1_func_0011D4A0_00121B18();
 }
 
-
-INCLUDE_ASM("asm/core", func_00121B20);
-
-INCLUDE_ASM("asm/core", func_001220F0);
+/* func_00121B20 and func_001220F0 (libgcc2.c's L_udivdi3 and L_umoddi3,
+   `__udivdi3`/`__umoddi3`) are compiled C now: src/core/00121B20.c and
+   src/core/001220F0.c. */
 
 INCLUDE_ASM("asm/core", func_00122630);
 
