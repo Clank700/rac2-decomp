@@ -389,15 +389,17 @@ void func_L02_003D78A8(char *a0) {
     func_002A7750(a0, 3, -1);
 }
 
-/* Near miss (see work/wave7-20261013/w04/drafts): retail sequence and store order reproduced,
-   same register-permutation wall as func_L02_003DBEC8. 152 bytes against 148. */
-INCLUDE_ASM("asm/levels", func_L02_003D7B88);
-
 /* Near miss (see work/wave7-20261013/w04/drafts and nonmatching/levels/func_L02_003DBEC8.c):
-   the body compiles to the retail instruction sequence; only the register permutation differs
-   (the parameter copy and the context land in $t1/$t0 here, retail keeps $a2/$a3) and the
-   epilogue's `ld $ra` is sunk into the bnez delay slot, so 112 bytes against 120. */
+   body, store order, table lookup and the lq/sq copy all in the retail sequence; the parameter
+   copy and the context land in $t0/$t1 here against retail's $a2/$a3 (a dead second parameter
+   does not move them), and with the context load written first this cc1 fills the bnez delay
+   slot with it and sinks the epilogue's `ld $ra` instead, so 108 bytes against 120. */
 INCLUDE_ASM("asm/levels", func_L02_003DBEC8);
+
+/* Near miss: nonmatching/levels/func_L02_003D7B88.c - body, store order and both lookups
+   reproduced; the parameter copy lands in $t2 and this cc1 sinks the epilogue's `ld $ra`
+   into the bnez delay slot where retail loads the context (140 bytes against 148). */
+INCLUDE_ASM("asm/levels", func_L02_003D7B88);
 
 void func_L02_003DED08(void) {
     func_L00_0037E5F0(10000.0f);
