@@ -1,48 +1,34 @@
-/* func_L02_003DAF90, 156 bytes, 1 placement (level 2).  Closest candidate 152 bytes - ONE
-   instruction short: the 16-byte lq/sq copy's destination stays folded on the frame pointer
-   here (`lq $v1,0x0($sp); sq $v1,0x10($sp)`) where retail materialises it first
-   (`addiu $v1,$sp,0x10; lq $v0,0x0($sp); sq $v0,0x0($v1)`).
-   FIVE spellings of that copy were measured and all fold: a TImode cast, a named
-   destination pointer, a union carrying a TImode member (that one also costs 8 bytes), an
-   explicit +0 through a char base, and a pointer-to-source.  Everything else - the 0x90
-   frame, the four scratch blocks at sp+0x00/0x10/0x20/0x60 with the 0x40-byte one in the
-   middle, all five calls and their delay slots - is exact.  Same wall as
-   func_L02_003DB158 and as the level-0 resident func_L00_00427BE8 (27 placements):
-   this cc1 folds a constant destination into the `sq` displacement, retail holds a pointer.
-   It needs the -G8 unit of src/levels/02_maktar_nebula/L02_003D26B0.c: the resident block
-   base and the two floats are `$gp + 0x1450/0x1448/0x1444`, i.e. 0x001B0440 / 0x001B0438 /
-   0x001B0434 with $gp pinned at 0x001AEFF0 (tools/build.py GP; confirmed against the matched
-   func_L02_003D69F0, whose `$gp + 0x1354/0x1360/0x1370` are exactly the addresses its C
-   names 0x001B0344/0x001B0350/0x001B0360).  Another near-miss of this family,
-   func_L18_003F9E50, carries the same recipe.  Body measured in that unit: */
+/* func_L02_003DAF90, 156 bytes, 1 placement (level 2, 02_maktar_nebula).
+   ABANDONED, not compiled: three of the arguments come straight out of the small-data area as
+   `addiu $a1,$gp,0x1450`, `lwc1 $f12,0x1448($gp)` and `lwc1 $f13,0x1444($gp)`, so the body
+   needs the -G8 sibling unit of src/levels/02_maktar_nebula/L02_003D26B0.c and that unit's
+   whole small-data block reproduced (the three offsets are ~5 kB in, so they depend on every
+   preceding `sda` object in the unit).  That is its own piece of work, not a spelling of this
+   function.
+   Everything else is decoded and measured:
 
-typedef int s32;
-typedef float f32;
-typedef int TQ __attribute__((mode(TI)));
+     frame 0x90; s0 -> 0x70, s1 -> 0x78, s2 -> 0x80, ra -> 0x88
+     v0 = *(u32 *)(a0 + 0xB8);
+     func_315618(a0, 4, sp);                    // fills 16 bytes at sp+0x00
+     *(TI128 *)(sp + 0x10) = *(TI128 *)sp;      // lq $v0,0x0($sp); sq $v0,0x0($v1), v1 = sp+0x10
+     s2 = *(u8 **)(v0 + 0x68);                  // loaded in the first jal's delay slot
+     func_315578(a0, 4, sp + 0x20);
+     func_2F2478(sp + 0x60, <$gp 0x1450>, sp + 0x20);
+     func_2F1F70(sp, sp, sp + 0x60);
+     func_32A8E8(sp, *(u32 *)(s2 + 0x250), <$gp 0x1448>, <$gp 0x1444>);
 
-extern f32 D_L02_001B0434 __attribute__((sda));
-extern f32 D_L02_001B0438 __attribute__((sda));
-extern s32 D_L02_001B0440 __attribute__((sda));
+   The two float arguments are loaded in the last call's two delay slots, and the 16-byte copy
+   reaches lq/sq through `typedef int TI128 __attribute__((mode(TI)));` (recipe measured in
+   src/levels/shared/L08_003D3928.c).
+   To get those three `$gp` references the symbol must be declared with the assembler name
+   FIRST and the section attribute after it, e.g.
+     extern int D_L02_001B0248 __asm__("D_L02_001B0248_alias") __attribute__((section(".sdata")));
+   which leaves the reference naked in the .s (`lw $2,D_L02_001B0248_alias`) and so emits
+   GPREL16 - verified with the lead's probe (gpprobe2.c).  The remaining unknown is the
+   level's $gp base: the offsets 0x1444/0x1448/0x1450 fix each symbol's distance from it,
+   so the three addresses have to be chosen against the base the build already uses for
+   level 2 (readable from the -G8 unit src/levels/02_maktar_nebula/L02_003D26B0-g8.c,
+   whose `sda` symbols already produce matching offsets).
+   No C is deposited: without the $gp block a body only reproduces the shape, not the words. */
 
-extern void *func_0029FCC0(char *, int, void *);
-extern void func_0029FC20(char *, int, void *);
-extern void func_002830C0(void *, void *, void *);
-extern void func_00282CC0(void *, void *, void *);
-extern void func_L00_00325AE8(void *, int, float, float);
-
-typedef struct { f32 x, y, z, w; } V4;
-typedef struct { f32 v[16]; } M4;
-
-void func_L02_003DAF90(char *a0) {
-    char *s2 = *(char **)(*(char **)(a0 + 0xB8) + 0x68);
-    V4 src, copy;
-    M4 block;
-    V4 out;
-
-    func_0029FCC0(a0, 4, &src);
-    *(TQ *)&copy = *(TQ *)&src;
-    func_0029FC20(a0, 4, &block);
-    func_002830C0(&out, &D_L02_001B0440, &block);
-    func_00282CC0(&src, &src, &out);
-    func_L00_00325AE8(&src, *(s32 *)(s2 + 0x250), D_L02_001B0438, D_L02_001B0434);
-}
+#include "include_asm.h"
