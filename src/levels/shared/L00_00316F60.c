@@ -167,7 +167,12 @@ INCLUDE_ASM("asm/levels", func_L00_0031BC48);
 
 INCLUDE_ASM("asm/levels", func_L00_0031BDC0);
 
-INCLUDE_ASM("asm/levels", func_L00_0031BE88);
+/* True only when the pending object exists and its inner flag is set. */
+s32 func_L00_0031BE88(char *a0) {
+    if (*(s32 **)(a0 + 0x98) != 0 && *(s32 *)(*(char **)(a0 + 0x98) + 8) != 0)
+        return 1;
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0031C0F8);
 
