@@ -226,7 +226,7 @@ void func_002C1840(char *self)
 
 INCLUDE_ASM("asm/game", func_002C19D8);
 
-INCLUDE_ASM("asm/game", func_002C1B38);
+/* func_002C1B38 is in the -G8 sibling. */
 
 extern float func_00282C48(float);
 
