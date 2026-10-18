@@ -424,7 +424,7 @@ tail:
 
 INCLUDE_ASM("asm/game", func_002C38A0);
 
-INCLUDE_ASM("asm/game", func_002C38E0);
+/* func_002C38E0 is in the -G8 sibling. */
 
 INCLUDE_ASM("asm/game", func_002C3B08);
 

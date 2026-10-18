@@ -40,3 +40,43 @@ void func_002C1B38(char *self)
     if ((*(unsigned int *)(self + 4) & 0xFF000000) == 0)
         func_002B9180(self);
 }
+
+extern int D_001AA39C __attribute__((sda));
+extern int func_002A77E0(int);
+extern int func_002A7820(int, int);
+extern float func_002A7878(float, float);
+extern void func_002BCB00(char *, char *, int, int, int, int, int, int, int, float);
+
+void func_002C38E0(char *self)
+{
+    char *motion = self + 0x20;
+    char *position;
+    int ttl;
+    if (func_00282978((short *)(self + 0xA)))
+        *(float *)(motion + 8) -= *(float *)(motion + 0x14);
+    position = self + 0x10;
+    func_00282CC0_17(position, position, motion);
+    *(unsigned char *)(self + 8) += 2;
+    if (*(float *)(self + 0x18) < *(float *)(motion + 0x10)) {
+        if (func_002A77E0(D_001AA39C - 1) == 0) {
+            *(float *)(self + 0x18) = *(float *)(motion + 0x10);
+            *(float *)(self + 0x20) *= func_002A7878(1.0f, 3.5f);
+            *(float *)(motion + 4) *= func_002A7878(1.0f, 3.5f);
+            *(float *)(motion + 8) *= func_002A7878(-1.0f, -1.5f);
+            ttl = func_002A7820(60, 120);
+            func_002BCB00(position, motion, *(int *)(self + 4), *(int *)(motion + 0x18),
+                ttl, 0, *(unsigned char *)(self + 2), *(unsigned char *)(self + 3), 0,
+                *(float *)(self + 0xC) * 0.5f);
+        } else {
+            *(float *)(self + 0x18) = *(float *)(motion + 0x10);
+            *(float *)(self + 0x20) += func_002A7878(-5.0f, 5.0f) * 0.016666668f;
+            *(float *)(motion + 4) += func_002A7878(-5.0f, 5.0f) * 0.016666668f;
+            *(float *)(motion + 8) *= func_002A7878(-0.5f, -1.0f);
+            ttl = func_002A7820(30, 60);
+            func_002BCB00(position, motion, *(int *)(self + 4), *(int *)(motion + 0x18),
+                ttl, 0, *(unsigned char *)(self + 2), *(unsigned char *)(self + 3), 0,
+                *(float *)(self + 0xC) * 0.25f);
+        }
+        func_002B9180(self);
+    }
+}
