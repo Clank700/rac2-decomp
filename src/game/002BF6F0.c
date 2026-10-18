@@ -228,7 +228,27 @@ INCLUDE_ASM("asm/game", func_002C19D8);
 
 INCLUDE_ASM("asm/game", func_002C1B38);
 
-INCLUDE_ASM("asm/game", func_002C1C88);
+extern float func_00282C48(float);
+
+void func_002C1C88(char *self)
+{
+    char *motion = self + 0x20;
+    func_00282CC0_17(self + 0x10, self + 0x10, motion);
+    *(float *)(self + 0x0C) += 5880.0f;
+    *(float *)(motion + 0x14) *= 0.98f;
+    *(float *)(motion + 0x10) += *(float *)(motion + 0x14);
+    *(unsigned char *)(self + 8) = func_00283CF0_6(*(float *)(motion + 0x10));
+    if (*(float **)(motion + 0x18)) {
+        if (func_00282C48(*(float *)(self + 0x18) - **(float **)(motion + 0x18)) < 0.2f)
+            *(float *)(self + 0x18) = **(float **)(motion + 0x18) + 0.02f;
+    }
+    if (--*(short *)(self + 0xA) == 0) {
+        *(int *)(self + 4) -= 0x01000000;
+        *(short *)(self + 0xA) = 1;
+    }
+    if ((*(unsigned int *)(self + 4) & 0xFF000000) == 0)
+        func_002B9180(self);
+}
 
 INCLUDE_ASM("asm/game", func_002C1DB0);
 
