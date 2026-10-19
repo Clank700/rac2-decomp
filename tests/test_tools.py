@@ -284,7 +284,7 @@ class MobyDispatchMetadata(unittest.TestCase):
             reader = csv.DictReader(stream, delimiter="\t")
             self.assertEqual(reader.fieldnames, [
                 "table", "level", "id", "role", "address", "aux", "proposed_name", "source",
-                "class_label", "class_label_source",
+                "class_label", "class_label_source", "class_label_basis",
             ])
             labels = {}
             for row in reader:
@@ -293,6 +293,8 @@ class MobyDispatchMetadata(unittest.TestCase):
                     self.assertNotIn(None, row.values(), "missing columns")
                     label, source = row["class_label"], row["class_label_source"]
                     self.assertEqual(bool(label), bool(source))
+                    basis = row["class_label_basis"]
+                    self.assertEqual(bool(label), bool(basis))
                     if label:
                         self.assertEqual(row["table"], "moby")
                         urls = source.split("; ")
@@ -316,10 +318,14 @@ class MobyDispatchMetadata(unittest.TestCase):
                             self.assertIn(path, paths.get(repository, set()))
                             self.assertGreaterEqual(int(end or start), int(start))
                             repositories.add(repository)
-                        if "RatchetModding/Replanetizer" in repositories:
-                            self.assertIn("evilwb/APRac2", repositories, "PS3 label lacks PS2 corroboration")
-                        previous = labels.setdefault(row["id"], (label, source))
-                        self.assertEqual(previous, (label, source), "conflicting class label")
+                        self.assertIn(basis, {"ps2-source", "ps3-source-only"})
+                        if basis == "ps3-source-only":
+                            self.assertEqual(repositories, {"RatchetModding/Replanetizer"})
+                        else:
+                            self.assertTrue(repositories & {"chaoticgd/wrench", "evilwb/APRac2"},
+                                            "label marked PS2 without a PS2 source")
+                        previous = labels.setdefault(row["id"], (label, source, basis))
+                        self.assertEqual(previous, (label, source, basis), "conflicting class label")
 
 
 if __name__ == "__main__":
