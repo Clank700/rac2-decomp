@@ -273,5 +273,35 @@ class Todo(unittest.TestCase):
             self.assertEqual(lo, hi + 1)
 
 
+class MobyDispatchMetadata(unittest.TestCase):
+    """Keep attributed class labels separate from the legacy dispatch-name fields."""
+
+    def test_schema_and_sourced_moby_labels(self):
+        import csv
+        import re
+
+        with (ROOT / "docs/moby-dispatch.tsv").open(encoding="utf-8", newline="") as stream:
+            reader = csv.DictReader(stream, delimiter="\t")
+            self.assertEqual(reader.fieldnames, [
+                "table", "level", "id", "role", "address", "aux", "proposed_name", "source",
+                "class_label", "class_label_source",
+            ])
+            labels = {}
+            for row in reader:
+                with self.subTest(table=row["table"], level=row["level"], id=row["id"]):
+                    self.assertNotIn(None, row, "unexpected extra columns")
+                    self.assertNotIn(None, row.values(), "missing columns")
+                    label, source = row["class_label"], row["class_label_source"]
+                    self.assertEqual(bool(label), bool(source))
+                    if label:
+                        self.assertEqual(row["table"], "moby")
+                        self.assertRegex(source, re.compile(
+                            r"^https://github\.com/chaoticgd/wrench/blob/[0-9a-f]{40}/"
+                            r"data/underlay/(?:gc_moby_classes|level_design)\.asset#L[1-9][0-9]*$"
+                        ))
+                        previous = labels.setdefault(row["id"], (label, source))
+                        self.assertEqual(previous, (label, source), "conflicting class label")
+
+
 if __name__ == "__main__":
     unittest.main()

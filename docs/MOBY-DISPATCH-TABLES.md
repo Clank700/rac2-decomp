@@ -71,27 +71,59 @@ the table:
 | … that Wrench also enumerates | **1 119** (96.6 %) |
 | The 328 unnamed records' identifiers, found in Wrench's list | **129 / 129** |
 
-Twenty-one of those class folders carry a name — `0_ratchet`, `10_clank`, `2425_fan`,
+Twenty-one of those class folders carried a name in that survey — `0_ratchet`, `10_clank`, `2425_fan`,
 `2716_slot_machine`, `4056_elevator_dam`, `4057_secret_door`, `2452_ant_ring`,
-`3138_clanks_apt_glass`, and thirteen more. **Where those names come from was not
-established here** — they are not in the boot ELF nor in a level overlay, as a raw string
-search shows — so they are recorded as observed, not explained.
+`3138_clanks_apt_glass`, and thirteen more. The source of the labels is now identified:
+Wrench's public underlay metadata (see below), rather than strings in the boot or overlays.
 
 The retail camera identifier set (`0,3,4,5,6,7,17,19,20,23,24,25,26,27`)
 contains the prototype's set exactly, plus `20`; camera transfer rests on that set equality
 and on the record layout, not on the pair control above, which is moby-specific.
 
 The data is in **`docs/moby-dispatch.tsv`** —
-`table · level · id · role · address · aux · proposed_name · source` — with virtual addresses
+`table · level · id · role · address · aux · proposed_name · source · class_label · class_label_source` — with virtual addresses
 as they appear in the overlay ELF. A tool that loads an overlay at file offset rather than at
 its virtual address must translate first.
+
+### Community object labels
+
+`class_label` records Wrench's human-readable Moby class label where a named class has an
+existing retail dispatch row. `class_label_source` is a permalink to the exact public
+metadata declaration. Both fields are empty when no sourced label is available; camera
+and sound identifiers are separate namespaces and receive no Moby labels.
+
+The source is Wrench commit `1b48f4d1ed02de9e05b57802ab518f9ec39c23df`:
+
+- [`data/underlay/gc_moby_classes.asset`](https://github.com/chaoticgd/wrench/blob/1b48f4d1ed02de9e05b57802ab518f9ec39c23df/data/underlay/gc_moby_classes.asset)
+  supplies **Slot Machine**.
+- [`data/underlay/level_design.asset`](https://github.com/chaoticgd/wrench/blob/1b48f4d1ed02de9e05b57802ab518f9ec39c23df/data/underlay/level_design.asset)
+  supplies **Fan**, the Endako elevators, doors and tube/ant objects, and the Todano
+  **Elevator Dam** and **Secret Door**.
+
+This adds labels to **12 existing Moby rows**. Each class/handler pair was checked directly
+in `lvl.vtbl` from the contributor's matching USA v1.01 ISO. For example, class **2425**
+is labelled **Fan** and points at `0x003ca938` in Endako. The existing function catalogue
+maps that exact entry to `func_L03_003CA938` in `src/levels/03_endako/L03_00399230-g8.c`.
+To find it, search the TSV for `Fan`, then look up the row's level/address in
+`config/levels/functions.tsv`; shared code can have a canonical name from another level.
+
+These are attributed community labels, not recovered designer symbols or texture filenames.
+Preserve their source spelling. A handler shared by several classes does not acquire a
+single object's identity: the 12 rows have **9 distinct handler entries**. `proposed_name`
+and `source` still describe the existing dispatch-name transfer and are unchanged. The
+new columns are appended, so positional readers of the original eight fields retain their
+meaning. No C function, catalogue entry or Ghidra naming rule is changed.
+
+The TSV remains the one published mapping; no second class-name table or generated
+resource dump is needed. Textures, meshes, material graphs and instance lists remain local.
 
 ## What this is not
 
 - **Not designer names.** `UpdateMoby_3032` states a moby class, not a creature. Two routes
   to real names exist so far, and both are thin: the assert-message pass on the prototype,
   which named one hundred and six boot functions in this project, and the twenty-one class
-  names Wrench carries.
+  labels Wrench carries. The sourced labels above describe classes, not the full behaviour
+  of their handlers.
 - **Not boot code.** Crossing all 5,788 handlers with the boot bodies this project has
   mapped into the levels (82 per level in `config/level-catalog.json`, 288 in the wider
   prefix survey) gives **zero overlap**. The dispatch tables point at level-local code —
@@ -101,7 +133,7 @@ its virtual address must translate first.
 
 ## Applying the names
 
-`scripts/ghidra/ApplyMobyNames.java` is a Ghidra script: it reads `docs/moby-dispatch.tsv`
+`tools/ghidra/ApplyMobyNames.java` is a Ghidra script: it reads `docs/moby-dispatch.tsv`
 and names the functions of the overlay currently open, taking the level name as its first
 argument. It builds both address candidates from the ELF section table on disk (virtual
 address and file offset, because an overlay may have been imported either way), leaves an
