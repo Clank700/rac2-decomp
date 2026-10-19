@@ -295,10 +295,29 @@ class MobyDispatchMetadata(unittest.TestCase):
                     self.assertEqual(bool(label), bool(source))
                     if label:
                         self.assertEqual(row["table"], "moby")
-                        self.assertRegex(source, re.compile(
-                            r"^https://github\.com/chaoticgd/wrench/blob/[0-9a-f]{40}/"
-                            r"data/underlay/(?:gc_moby_classes|level_design)\.asset#L[1-9][0-9]*$"
-                        ))
+                        urls = source.split("; ")
+                        self.assertEqual(len(urls), len(set(urls)), "duplicate provenance")
+                        paths = {
+                            "chaoticgd/wrench": {
+                                "data/underlay/gc_moby_classes.asset", "data/underlay/level_design.asset",
+                                "data/overlay/src/game_gc/update/moby4018_therm_water.h",
+                            },
+                            "RatchetModding/Replanetizer": {"LibReplanetizer/ModelLists/MobyModelsRC2.txt"},
+                            "evilwb/APRac2": {"data/Items.py"},
+                        }
+                        repositories = set()
+                        for url in urls:
+                            match = re.fullmatch(
+                                r"https://github\.com/([^/]+/[^/]+)/blob/[0-9a-f]{40}/"
+                                r"([^#]+)#L([1-9][0-9]*)(?:-L([1-9][0-9]*))?", url,
+                            )
+                            self.assertIsNotNone(match, url)
+                            repository, path, start, end = match.groups()
+                            self.assertIn(path, paths.get(repository, set()))
+                            self.assertGreaterEqual(int(end or start), int(start))
+                            repositories.add(repository)
+                        if "RatchetModding/Replanetizer" in repositories:
+                            self.assertIn("evilwb/APRac2", repositories, "PS3 label lacks PS2 corroboration")
                         previous = labels.setdefault(row["id"], (label, source))
                         self.assertEqual(previous, (label, source), "conflicting class label")
 

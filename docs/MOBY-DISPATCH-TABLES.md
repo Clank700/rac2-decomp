@@ -87,12 +87,12 @@ its virtual address must translate first.
 
 ### Community object labels
 
-`class_label` records Wrench's human-readable Moby class label where a named class has an
-existing retail dispatch row. `class_label_source` is a permalink to the exact public
-metadata declaration. Both fields are empty when no sourced label is available; camera
+`class_label` records an attributed human-readable Moby class label where a named class has an
+existing retail dispatch row. `class_label_source` contains immutable links to the public
+declarations supporting it. Both fields are empty when no sourced label is available; camera
 and sound identifiers are separate namespaces and receive no Moby labels.
 
-The source is Wrench commit `1b48f4d1ed02de9e05b57802ab518f9ec39c23df`:
+The original labels come from Wrench commit `1b48f4d1ed02de9e05b57802ab518f9ec39c23df`:
 
 - [`data/underlay/gc_moby_classes.asset`](https://github.com/chaoticgd/wrench/blob/1b48f4d1ed02de9e05b57802ab518f9ec39c23df/data/underlay/gc_moby_classes.asset)
   supplies **Slot Machine**.
@@ -100,7 +100,7 @@ The source is Wrench commit `1b48f4d1ed02de9e05b57802ab518f9ec39c23df`:
   supplies **Fan**, the Endako elevators, doors and tube/ant objects, and the Todano
   **Elevator Dam** and **Secret Door**.
 
-This adds labels to **12 existing Moby rows**. Each class/handler pair was checked directly
+Those labels annotate **12 existing Moby rows**. Each class/handler pair was checked directly
 in `lvl.vtbl` from the contributor's matching USA v1.01 ISO. For example, class **2425**
 is labelled **Fan** and points at `0x003ca938` in Endako. The existing function catalogue
 maps that exact entry to `func_L03_003CA938` in `src/levels/03_endako/L03_00399230-g8.c`.
@@ -109,7 +109,7 @@ To find it, search the TSV for `Fan`, then look up the row's level/address in
 
 These are attributed community labels, not recovered designer symbols or texture filenames.
 Preserve their source spelling. A handler shared by several classes does not acquire a
-single object's identity: the 12 rows have **9 distinct handler entries**. `proposed_name`
+single object's identity: those 12 Wrench rows have **9 distinct handler entries**. `proposed_name`
 and `source` still describe the existing dispatch-name transfer and are unchanged. The
 new columns are appended, so positional readers of the original eight fields retain their
 meaning. No C function, catalogue entry or Ghidra naming rule is changed.
@@ -117,13 +117,115 @@ meaning. No C function, catalogue entry or Ghidra naming rule is changed.
 The TSV remains the one published mapping; no second class-name table or generated
 resource dump is needed. Textures, meshes, material graphs and instance lists remain local.
 
+The full [Wrench underlay at that revision](https://github.com/chaoticgd/wrench/tree/1b48f4d1ed02de9e05b57802ab518f9ec39c23df/data/underlay)
+was also checked across its 18 `.asset` files, restricting declarations to the `gc` game
+namespace. It supplies **25 named Moby classes, 101 named Tie classes, 17 named Shrub
+classes and 27 level names**. These are source declarations, not counts of models observed
+in a particular extraction. Only 12 of the named Moby IDs occur in this dispatch TSV, and
+all 12 are labelled. The other 13 do not gain an invented handler entry.
+
+Tie and Shrub IDs occupy different namespaces and cannot label Moby handlers. For example,
+`gc.shrub_classes.4018` is **Blue Fern**, while `gc.moby_classes.4018` is the separate
+**Therm Water** class described below. Preserve the full `(game, class type, ID)` key when
+using Wrench metadata for asset identification; a number alone is not an object identity.
+
+### Equipment labels corroborated across sources
+
+An additional **30 classes / 810 existing rows** have matching model attributions in:
+
+- [Replanetizer's RAC2 model list](https://github.com/RatchetModding/Replanetizer/blob/2136bd9fbe4815b0119921e794a87d847da9816e/LibReplanetizer/ModelLists/MobyModelsRC2.txt),
+  which uses **hexadecimal** class IDs and targets the PS3 collection.
+- [APRac2's explicit equipment model IDs](https://github.com/evilwb/APRac2/blob/12148dcedcbcb19bf6fc47f0a5b45281d06740bc/data/Items.py),
+  whose [supported target](https://github.com/evilwb/APRac2/blob/12148dcedcbcb19bf6fc47f0a5b45281d06740bc/README.md#what-versions-of-the-ratchet--clank-2-are-supported)
+  is PS2 USA v1.01, `SCUS-97268`.
+
+Their `class_label_source` cells contain both immutable declaration links, separated by
+`; `. Class IDs were converted to decimal for the TSV; names agree after ignoring case,
+spacing and punctuation (for example, **Helipack** / **Heli-Pack**). The displayed label
+keeps Replanetizer's spelling. All 810 class/handler pairs were also checked in the original
+PS2 ISO's `lvl.vtbl`; no PS3 address was transferred. This establishes source agreement and
+retail dispatch identity, not an independent live observation of each object's appearance.
+
+Only an **explicit** APRac2 `oclass_id` counts. An omitted field inherits a fallback Wrench
+model, so it cannot identify the item; upgraded weapons can reuse a base model, so their
+display names cannot overwrite its class label. These are equipment **model** names, not
+proof that every instance is an equipped weapon, a pickup or a projectile.
+
+Wrench also has a class-specific description outside its name tables:
+[`moby4018_therm_water.h`](https://github.com/chaoticgd/wrench/blob/46e80430158a4a11e9cbd51424c84a015bbab058/data/overlay/src/game_gc/update/moby4018_therm_water.h#L3-L22).
+The label **Therm Water** preserves its filename wording; it is not a recovered symbol.
+Its `update4018` layout is compatible with all five original class-4018 instances in Notak:
+each has 64 PVar bytes, the low-height field agrees with the instance's Z position, and the
+frozen flag is Boolean. The class's dispatch pointer is `0x00456bb0`. This checks the class
+association and the stated layout controls, not every field or live water behaviour.
+
+The TSV now labels **43 classes / 823 rows**. Other Replanetizer names remain unconfirmed
+here. APRac2-only **Clank Zapper** (`0x0ed8`) and **Shield Charger** (`0x0a5c`) are also left
+unlabelled pending another check. A missing exact entry in the function catalogue is not
+replaced with the nearest function: use the measured dispatch address as written.
+
+### Identifying an object with MobyViewer
+
+[CreepNT's MobyViewer](https://github.com/CreepNT/MobyViewer/tree/78ed6b0057f74367c851a40dd2b7f9832338dafe)
+reads live Moby instances from PCSX2. The procedure below was checked against that revision's
+README and source; this revision has **not been run or qualified with the current PCSX2
+build** for this research. Record both tool versions when qualifying a session.
+
+1. Use your own unmodified matching USA v1.01 ISO in PCSX2 and enter the level being
+   investigated. Verify the disc version separately: MobyViewer detects the game family,
+   not the repository's target hash. Keep saves and observation output private.
+2. Obtain MobyViewer from its [upstream releases](https://github.com/CreepNT/MobyViewer/releases/tag/0.13)
+   (the 0.13 release provides `MobyViewer-win64.exe` for 64-bit Windows). With PCSX2 running, choose the PS2 target
+   and press **Attach**. Confirm **Current game: Ratchet & Clank 2** and sensible instance
+   positions. On Windows its direct-process backend is available; **Use IPC** selects an
+   alternative backend which upstream marks experimental. An attachment failure is a tool
+   compatibility problem, not evidence that a class is absent.
+3. Start without a name lookup file. In **Options and filters**, enable the **oClass**
+   filter using the **decimal** ID from this TSV; `0x0979` in a lookup list means decimal
+   `2425`, not `979`. Inspect **oClass**, **Moby UID**, position and **Update function address**.
+   Do not confuse the separate 8-bit **mClass** field with the 16-bit **oClass**.
+4. Correlate a numeric instance with the visible object by position and repeatable movement,
+   appearance or disappearance. Orange title bars indicate currently visible instances;
+   they do not identify the object by themselves. Record the level, class, UID, update
+   pointer and the observation that supports the proposed name. Distinguish held models,
+   pickups, projectiles and effects. Observe a second instance or scene when possible.
+5. Match `(level, oClass, update pointer)` against this TSV and the original `lvl.vtbl`.
+   A class can share a handler with other classes. Resolve a canonical C name only at an
+   exact catalogue entry. Use **Full refresh** after changing level or loading a state,
+   since the instance stack and overlay addresses can change. Repeat the control after it.
+6. Once confirmed, add the label and an attributable source to this TSV. Summarize any new
+   observation and its limits in the PR; private screenshots and dumps stay local. A lookup
+   label displayed by the viewer is not independent confirmation of the label itself.
+
+For convenient later browsing, MobyViewer accepts a local `rc2.txt` with one
+**four-digit hexadecimal** `ID=Label` per line, such as `0979=Fan`; `FFFF` is invalid.
+Generate it from the labelled Moby rows into ignored `build/`, deduplicating by class ID,
+then place it where that MobyViewer build reads its lookup files. Release builds look for
+`rc2.txt` in their working directory; debug builds use `../data/` (see
+[`widgets.cpp`](https://github.com/CreepNT/MobyViewer/blob/78ed6b0057f74367c851a40dd2b7f9832338dafe/src/widgets.cpp#L26-L30)).
+The upstream README suggests placing it beside the executable; launch from that directory.
+Never import the lookup back as new evidence or commit a second name list.
+
+For example, run this Python code from the repository root to generate the lookup:
+
+```python
+import csv
+from pathlib import Path
+
+with Path("docs/moby-dispatch.tsv").open(encoding="utf-8", newline="") as stream:
+    labels = {int(r["id"]): r["class_label"] for r in csv.DictReader(stream, delimiter="\t")
+              if r["table"] == "moby" and r["class_label"]}
+Path("build").mkdir(exist_ok=True)
+Path("build/rc2.txt").write_text(
+    "".join(f"{key:04X}={value}\n" for key, value in sorted(labels.items())), encoding="utf-8")
+```
+
 ## What this is not
 
-- **Not designer names.** `UpdateMoby_3032` states a moby class, not a creature. Two routes
-  to real names exist so far, and both are thin: the assert-message pass on the prototype,
-  which named one hundred and six boot functions in this project, and the twenty-one class
-  labels Wrench carries. The sourced labels above describe classes, not the full behaviour
-  of their handlers.
+- **Not designer names.** `UpdateMoby_3032` states a moby class, not a creature. The sourced
+  community labels above describe classes or equipment models, not the full behaviour of
+  their handlers. Assert-message evidence is a separate source of semantic information
+  (see [`ASSERT-MESSAGE-NAMES.md`](ASSERT-MESSAGE-NAMES.md)).
 - **Not boot code.** Crossing all 5,788 handlers with the boot bodies this project has
   mapped into the levels (82 per level in `config/level-catalog.json`, 288 in the wider
   prefix survey) gives **zero overlap**. The dispatch tables point at level-local code —
