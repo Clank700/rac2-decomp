@@ -137,7 +137,6 @@ void func_0027C520(void)
 INCLUDE_ASM("asm/game", func_0027C540);
 
 
-INCLUDE_ASM("asm/game", func_0027C768);
 
 INCLUDE_ASM("asm/game", func_0027C878);
 
