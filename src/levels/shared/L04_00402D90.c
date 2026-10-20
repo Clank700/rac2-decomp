@@ -156,7 +156,85 @@ INCLUDE_ASM("asm/levels", func_L04_0040DCA8);
 
 INCLUDE_ASM("asm/levels", func_L04_0040DF90);
 
-INCLUDE_ASM("asm/levels", func_L04_0040E248);
+extern BatchA_A04_u8 D_00188660[];
+
+extern void func_002E59F8(int handle);
+
+/* Releases the callback records this moby still holds: every handle slot that is set
+   names a record of the callback table, and the one that belongs to this moby is
+   handed to the release helper. Each slot is cleared afterwards. */
+void func_L04_0040E248(int a0, BatchA_A04_u8 *a1)
+{
+    int id = a0;
+    BatchA_A04_u8 *p = a1;
+    int v;
+    BatchA_A04_u8 *rec;
+
+    v = *(int *)(p + 0x748);
+    if (v != -1) {
+        rec = D_00188660 + v * 0x70;
+        if (*(int *)(rec + 0x88) == id && rec[0x74] != 0) {
+            func_002E59F8(v);
+        }
+    }
+    *(int *)(p + 0x748) = -1;
+
+    v = *(int *)(p + 0x74C);
+    if (v != -1) {
+        rec = D_00188660 + v * 0x70;
+        if (*(int *)(rec + 0x88) == id && rec[0x74] != 0) {
+            func_002E59F8(v);
+        }
+    }
+    *(int *)(p + 0x74C) = -1;
+
+    v = *(int *)(p + 0x714);
+    if (v != -1) {
+        rec = D_00188660 + v * 0x70;
+        if (*(int *)(rec + 0x88) == id && rec[0x74] != 0) {
+            func_002E59F8(v);
+        }
+    }
+    *(int *)(p + 0x714) = -1;
+
+    v = *(int *)(p + 0x3BC);
+    if (v != -1) {
+        rec = D_00188660 + v * 0x70;
+        if (*(int *)(rec + 0x88) == id && rec[0x74] != 0) {
+            func_002E59F8(v);
+        }
+    }
+    *(int *)(p + 0x3BC) = -1;
+
+    v = *(int *)(p + 0x328);
+    if (v != -1) {
+        rec = D_00188660 + v * 0x70;
+        if (*(int *)(rec + 0x88) == id && rec[0x74] != 0) {
+            func_002E59F8(v);
+        }
+    }
+    *(int *)(p + 0x328) = -1;
+
+    v = *(int *)(p + 0x330);
+    if (v != -1) {
+        rec = D_00188660 + v * 0x70;
+        if (*(int *)(rec + 0x88) == id && rec[0x74] != 0) {
+            func_002E59F8(v);
+        }
+    }
+    *(int *)(p + 0x330) = -1;
+
+    v = *(int *)(p + 0x334);
+    if (v != -1) {
+        rec = D_00188660 + v * 0x70;
+        if (*(int *)(rec + 0x88) == id && rec[0x74] != 0) {
+            func_002E59F8(v);
+        }
+    }
+    *(int *)(p + 0x32C) = 0;
+    *(int *)(p + 0x334) = -1;
+    *(int *)(p + 0x324) = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L04_0040E460);
 

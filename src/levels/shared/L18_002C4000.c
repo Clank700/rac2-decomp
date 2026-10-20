@@ -20,7 +20,7 @@ extern BatchA_A18_u8 D_0018C0D4;
 
 INCLUDE_ASM("asm/levels", func_L18_002C4000);
 
-INCLUDE_ASM("asm/levels", func_L18_002C41F0);
+/* func_L18_002C41F0 is defined in L18_002C4000-g8.c (this unit has $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L18_002CFD68);
 

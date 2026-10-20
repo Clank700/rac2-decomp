@@ -5,6 +5,7 @@ typedef unsigned char u8;
 typedef int s32;
 typedef unsigned int u32;
 typedef unsigned short u16;
+typedef short s16;
 
 extern f32 func_2F9748(f32, f32);
 extern s32 func_32A4D0(u8 *, s32);
@@ -93,7 +94,74 @@ INCLUDE_ASM("asm/levels", func_L13_003EFD58);
 
 INCLUDE_ASM("asm/levels", func_L13_003FE420);
 
-INCLUDE_ASM("asm/levels", func_L13_003FE708);
+/* The level's lift platform: it picks its next state from the neighbour it hangs on,
+   then drives the platform through it. func_002AAA00 takes two pointers, four floats
+   (radians) and an integer, in that order. */
+extern f32 func_00282E80(void *, void *);
+extern f32 func_00282E48(void *, void *);
+extern void func_002AAA00(void *, void *, f32, f32, f32, f32, s32);
+extern void func_00282F20(void *, void *, f32);
+extern void func_00282CC0(void *, void *, void *);
+extern u8 D_0012EA0[];
+
+void func_L13_003FE708(u8 *a0) {
+    u8 *ptr = *(u8 **)(a0 + 0x68);
+    f32 vec[4];
+
+    if (*(s32 *)ptr != 0) {
+        if (func_00282E80(a0 + 0x10, D_0012EA0) < 8.0f) {
+            if (a0[0x20] == 0) {
+                a0[0x20] = 1;
+            }
+        }
+    } else if (*(s32 *)(ptr + 8) != 0) {
+        if (func_00282E48(a0 + 0x10, D_0012EA0) < 8.0f) {
+            if (a0[0x20] == 0) {
+                if (*(s16 *)(D_0012EA0 + 0x2C8) == 1) {
+                    a0[0x20] = 2;
+                }
+            }
+        }
+    } else {
+        if (a0[0x20] == 0) {
+            *(u32 *)(a0 + 0x98) = 0;
+            a0[0x20] = 3;
+        }
+    }
+
+    if (a0[0x20] == 1) {
+        func_002AAA00(a0 + 0xF8, ptr + 4, -0.78539824f, 0.0017453295f, 0.0017453295f, 0.0349065922f, 0);
+    }
+    if (a0[0x20] == 2) {
+        func_002AAA00(a0 + 0xF8, ptr + 4, -1.5707965f, 0.0017453295f, 0.0017453295f, 0.0349065922f, 0);
+    }
+    if (a0[0x20] == 4) {
+        *(u16 *)(a0 + 0x96) = *(u16 *)(a0 + 0x96) + 1;
+        func_00282F20(vec, a0 + 0xD0, -0.16666667f);
+        func_00282CC0(a0 + 0x10, a0 + 0x10, vec);
+        if (*(u16 *)(a0 + 0x96) >= 11) {
+            *(u16 *)(a0 + 0x96) = 0;
+            a0[0x20] = 5;
+        }
+    }
+    if (a0[0x20] == 5) {
+        u32 c = *(u16 *)(a0 + 0x96) + 1;
+
+        *(u16 *)(a0 + 0x96) = c;
+        if ((u16)c >= 31) {
+            *(u16 *)(a0 + 0x96) = 0;
+            a0[0x20] = 6;
+        }
+    }
+    if (a0[0x20] == 6) {
+        *(u16 *)(a0 + 0x96) = *(u16 *)(a0 + 0x96) + 1;
+        func_00282F20(vec, a0 + 0xD0, 0.16666667f);
+        func_00282CC0(a0 + 0x10, a0 + 0x10, vec);
+        if (*(u16 *)(a0 + 0x96) >= 11) {
+            a0[0x20] = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L13_003FE970);
 
