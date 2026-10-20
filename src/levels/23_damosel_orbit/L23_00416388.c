@@ -59,7 +59,27 @@ s32 func_L23_00418F30(char *arg0, u64 arg1, s32 *arg2, s32 arg3) {
     return count;
 }
 
-INCLUDE_ASM("asm/levels", func_L23_00418FD0);
+extern s32 func_L23_00419070(u64, s32);
+
+extern int *D_L23_001FF300[];
+
+extern char D_L23_002595C8[];
+
+/* Returns 0 when bit arg of the slot's first mask is set; otherwise tests the second mask and
+   returns the slot's count minus one. */
+s32 func_L23_00418FD0(char *arg0, s32 index, s32 arg) {
+    s32 *slots = (s32 *)(*(char **)(arg0 + 0x68) + 0x230);
+    s32 *slot = &slots[index];
+    s32 v;
+    s32 n;
+
+    if (func_L23_00419070(*(u64 *)(D_L23_002595C8 + (*slot << 4)), arg) != 0)
+        return 0;
+    v = *slot;
+    n = *D_L23_001FF300[v] - 1;
+    func_L23_00419070(*(u64 *)(D_L23_002595C8 + (v << 4) + 8), arg);
+    return n;
+}
 
 /* Shifts a 64-bit value right by a variable count and keeps its lowest bit. */
 s32 func_L23_00419070(u64 arg0, s32 arg1) { return (s32)((arg0 >> arg1) & 1); }

@@ -97,7 +97,7 @@ INCLUDE_ASM("asm/levels", func_L23_004265D0);
 
 INCLUDE_ASM("asm/levels", func_L23_004277B0);
 
-INCLUDE_ASM("asm/levels", func_L23_004277E8);
+/* func_L23_004277E8 is matched in L23_0041E418-g8.c */
 
 
 /* increments the 16-bit counter at object + 0x96 while it stays below 0xFFFF */

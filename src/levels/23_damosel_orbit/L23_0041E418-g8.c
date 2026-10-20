@@ -362,3 +362,37 @@ void func_L23_004234C0(u8 *arg0, TI16 *arg1, s32 arg2) {
     payload = *(u8 **)(obj + 0x68);
     *(s16 *)(payload + 0x2E) = 1;
 }
+
+extern void func_002A7750(void *, s32, s32);
+
+extern void func_L23_004278D8(u8 *);
+
+/* the timer the second state copies into the sub-object */
+extern float D_L23_001B36FC __attribute__((sda));
+
+/* state 0 arms the draw distances and a 2000-tick timer and moves to state 1; state 1 copies the
+   shared timer when it is set and moves to state 2; both then run the per-frame handler */
+void func_L23_004277E8(u8 *moby) {
+    u8 *vars = *(u8 **)(moby + 0x68);
+    u8 state = moby[0x20];
+
+    if (state == 0) {
+        *(u16 *)(moby + 0x32) = 0xFF;
+        moby[0x30] = 0xFF;
+        *(u16 *)(moby + 0x34) = *(u16 *)(moby + 0x34) | 0x100;
+        *(float *)(vars + 0x20) = 2000.0f;
+        *(s16 *)(vars + 0x24) = 2000;
+        *(u16 *)(moby + 0x7C) = 0x3FF;
+        func_002A7750(moby, 1, 0);
+        *(u16 *)(moby + 0x34) = *(u16 *)(moby + 0x34) | 0x4000;
+    } else if (state == 1) {
+        float t = D_L23_001B36FC;
+
+        if (t != 0.0f) {
+            *(float *)(vars + 0x20) = t;
+            *(s16 *)(vars + 0x24) = (s16)t;
+        }
+        func_002A7750(moby, 2, 0);
+    }
+    func_L23_004278D8(moby);
+}
