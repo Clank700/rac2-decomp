@@ -37,6 +37,8 @@ typedef struct {
 typedef unsigned long long u64;
 
 
+extern unsigned int D_L09_001FE6C0[];
+
 extern unsigned int D_L09_001FB560[];
 
 extern char *D_L09_001B285C __attribute__((sda));
