@@ -104,7 +104,7 @@ src/game/00287E98.c	-O2 -G8 -ffunction-sections
 src/game/00288D30.c	-O2 -G8 -ffunction-sections
 src/game/00288D70.c	sdk -O2 -G8 -ffunction-sections
 src/game/0028E440.c	-O2 -G8 -ffunction-sections
-src/game/00290670.c	sdk -O2 -G8 -ffunction-sections
+src/game/00290670.c	-O2 -G8 -ffunction-sections
 src/game/00290730.c	-O2 -G8 -ffunction-sections
 src/game/002983D0.c	-O2 -G8 -ffunction-sections
 src/game/00298630.c	-O2 -G8 -ffunction-sections
