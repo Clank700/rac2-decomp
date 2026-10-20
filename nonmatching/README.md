@@ -81,7 +81,6 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_002C38A0`](game/func_002C38A0.c) | 64 | Candidate is 56 bytes; retail begins with stack adjustment and nop |
 | [`func_002C5020`](game/func_002C5020.c) | 68 | Candidate is 72 bytes; retail GP-relative load needs file-level -G8 |
 | [`func_002C9A60`](boot/func_002C9A60.c) | 20 | 9 |
-| [`func_002C9C60`](game/func_002C9C60.c) | 44 | 8 |
 | [`func_002CC528`](game/func_002CC528.c) | 40 | 4 |
 | [`func_002D33C0`](game/func_002D33C0.c) | 60 | 2 instructions differ; global-address lui and stack adjustment order differs |
 | [`func_002E5F40`](game/func_002E5F40.c) | 32 | 1 |
@@ -179,9 +178,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L05_0042BCE0`](levels/func_L05_0042BCE0.c) | 200 | Recorded candidate is 188 bytes. [Alternative field order](levels/alternatives/func_L05_0042BCE0.c) rechecked on 2026-10-15: 188 bytes, 0/4 placements; saved-register set and frame differ. |
 | [`func_L05_00432080`](levels/func_L05_00432080.c) | 208 | Recorded candidate is 200 bytes. [Indexed-loop alternative](levels/alternatives/func_L05_00432080.c) rechecked on 2026-10-15: 200 bytes, 0/4 placements; store scheduling and loop control differ. |
 | [`func_L05_004424B8`](levels/func_L05_004424B8.c) | 168 | Recorded candidate is 180 bytes. [Four-argument call alternative](levels/alternatives/func_L05_004424B8.c) rechecked on 2026-10-15: 168 bytes, 0/4 placements; first instruction difference at +0x14. |
-| [`func_L05_00443C18`](levels/func_L05_00443C18.c) | 240 | Recorded candidate is 232 bytes; size does not match retail. |
 | [`func_L05_00445F90`](levels/func_L05_00445F90.c) | 160 | Recorded candidate is 164 bytes; size does not match retail. |
-| [`func_L07_003EF1E0`](levels/func_L07_003EF1E0.c) | 112 | Recorded candidate is 104 bytes; size does not match retail. |
 | [`func_L07_003F68F0`](levels/func_L07_003F68F0.c) | 108 | Recorded G8 candidate is 128 bytes; size does not match retail. |
 | [`func_L07_003F6CF0`](levels/func_L07_003F6CF0.c) | 208 | Recorded G8 candidate is 220 bytes; size does not match retail. |
 | [`func_L07_003F8780`](levels/func_L07_003F8780.c) | 164 | Recorded G8 instruction mismatch at +0x70. |
@@ -240,9 +237,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L00_002EDD00`](levels/func_L00_002EDD00.c) | 40 | G8 candidate is 44 bytes; 0/27 places. Separate multiply/add does not reproduce the retail COP1 accumulation sequence. |
 | [`func_L00_002FC7A8`](levels/func_L00_002FC7A8.c) | 468 | G8 candidate is 464 bytes; base lifetime, hoisted count and register allocation differ. |
 | [`func_L00_002FCBE8`](levels/func_L00_002FCBE8.c) | 492 | 452-byte candidate; base lifetime and repeated loop references differ. |
-| [`func_L00_0031B9F8`](levels/shared/func_L00_0031B9F8.c) | 164 | 160 bytes with 40 of 41 words byte-identical (wave 7, 2026-10-16), registers included; the one missing word is the load-delay `nop` of `lwc1 $f12,0x8($s0) ; div.s`, the wall recorded in docs/COMPILER-NOTES.md (cc1 emits the `#nop` marker, the object drops it). The body needs the second 0x00283CE0 call to take `(index*index + index) >> 1`, which the R5900 emits as the three-operand `mult $v0,$s2,$s2` (rd = low product). Six head spellings measured. |
 | [`func_L00_0031D670`](levels/shared/func_L00_0031D670.c) | 152 | Exact size and every instruction present (wave 7, 2026-10-16) once the two 16-byte copies use `__attribute__((mode(TI)))` - that is what emits retail's `lq`/`sq` (a plain 16-byte struct copy of the same body emits ldl/ldr + sdl/sdr and comes out 188; the f32-array spell comes out 140). Left: the callee-saved pair is swapped - retail copies the destination into `$s0` at +0x28 and materialises the right operand's address in the first call's delay slot (`addiu $s1,$sp,0x10`), here those two land in each other's registers and every store shifts one call later. ~15 spellings measured. |
-| [`func_L00_0031B9F8`](levels/shared/func_L00_0031B9F8.c) | 164 | 172-byte float/index calculation candidate; 8 bytes larger; compile profile not recorded. |
 | [`func_L00_0031D670`](levels/shared/func_L00_0031D670.c) | 152 | 188-byte four-component interpolation attempt with local vector copies; 36 bytes larger. |
 | [`func_L00_00338E90`](levels/func_L00_00338E90.c) | 292 | 296-byte candidate; quadword copies are present, but entry scheduling and saved-register allocation differ. |
 | [`func_L00_00354DF8`](levels/func_L00_00354DF8.c) | 272 | G8 candidate is 284 bytes; pointer/base allocation differs at the corrected entry. |
@@ -944,9 +939,7 @@ counts when it links at every place it has.
 | [`func_L02_003F0788`](levels/func_L02_003F0788.c) | 16 | Not a function: `addiu $sp,$sp,0x50; nop; jr $ra; nop` - it deallocates a frame it never allocated, so the row is the tail of the function before it |
 | [`func_L00_0037DE30`](levels/func_L00_0037DE30.c) | 196 | One instruction short with the `for (; a2 > 0; a2--)`-plus-`continue's form (48 of 49 words); what remains is the `blezl $s2` / `bnel`-delay-slot pair that only executes when the branch is taken |
 | [`func_L00_0037E5F0`](levels/func_L00_0037E5F0.c) | 76 | Right size and every retail instruction present; three words stay permuted - the gate load's destination register, the `mtc1 $zero,$f1` position and the `neg.s` against the absolute store's `lui`. Four spellings give the same three. Its -G8 home with the `nosda`/`_1` double names is src/levels/shared/L00_0037DD80-g8.c |
-| [`func_L04_0039FEA8`](levels/func_L04_0039FEA8.c) | 68 | Body exact, 60 of retail's 68 bytes: this cc1 drops the two `nop's retail keeps between the divisor `lwc1` and the `div.s`. Three spellings give the same 60 |
 | [`func_L00_0037DE30`](levels/func_L00_0037DE30.c) | 196 | One instruction short with the `for (; a2 > 0; a2--)`-plus-`continue`s form (48 of 49 words); what remains is the `blezl $s2` / `bnel`-delay-slot pair that only executes when the branch is taken |
-| [`func_L04_0039FEA8`](levels/func_L04_0039FEA8.c) | 68 | Body exact, 60 of retail's 68 bytes: this cc1 drops the two `nop`s retail keeps between the divisor `lwc1` and the `div.s`. Three spellings give the same 60 |
 | [`func_L12_00427C58`](levels/func_L12_00427C58.c) | 84 | Wall, one compile: this cc1 turns the `if (a2 != 0)` guard into `beql` with the load in the annulled slot, retail keeps `bnez` and a separate load |
 | [`func_L16_0040C7E8`](levels/func_L16_0040C7E8.c) | 88 | Not C: `.word 0x78620000`/`0x7CA20000`, MMI (lq/sq family) |
 | [`func_L22_003A2988`](levels/func_L22_003A2988.c) | 124 | Not C: `.word 0x7BA20000`/`0x7E220000`, MMI |

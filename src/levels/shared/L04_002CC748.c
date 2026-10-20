@@ -219,7 +219,7 @@ INCLUDE_ASM("asm/levels", func_L04_0039FA08);
 
 INCLUDE_ASM("asm/levels", func_L04_0039FC28);
 
-INCLUDE_ASM("asm/levels", func_L04_0039FEA8);
+/* func_L04_0039FEA8 is matched in L04_0039FEA8.c (built with -g). */
 
 INCLUDE_ASM("asm/levels", func_L04_0039FEF0);
 

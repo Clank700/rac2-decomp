@@ -113,6 +113,7 @@ src/game/0029BCC8.c	-O2 -G8 -ffunction-sections
 src/game/002A0430.c	-O2 -G8 -ffunction-sections
 src/game/002B1C20.c	-O2 -G8 -ffunction-sections
 src/game/002B5EF8.c	-O2 -G0 -ffunction-sections -g
+src/game/002C9C60.c	-O2 -G0 -ffunction-sections -g
 src/game/002DF1B8.c	sdk -O2 -G2 -ffunction-sections
 src/game/002ED260.c	-O2 -G8 -ffunction-sections
 src/game/002F5220.c	-O2 -G8 -ffunction-sections
@@ -133,6 +134,7 @@ src/game/00343068.c	-O2 -G8 -ffunction-sections
 src/game/00343798.c	-O2 -G8 -ffunction-sections
 src/game/00344848.c	-O2 -G8 -ffunction-sections
 src/game/003506A8.c	sdk -O2 -G2 -ffunction-sections
+src/levels/07_siberius/L07_003EF1E0.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L00_002A3B80.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002D64B8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002D6FD8.c	-O2 -G8 -ffunction-sections
@@ -142,10 +144,13 @@ src/levels/shared/L00_002F08D0.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002F3488.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002F43E0.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002FBF60.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L00_0031B9F8.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L00_0032B270.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_0037B6F0.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_0037E668.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_0042C818.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L04_0039FEA8.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L05_00443C18.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L05_00446E28.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L10_0037D200.c	-O2 -G8 -ffunction-sections
 

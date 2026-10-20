@@ -1,8 +1,5 @@
-/* Near miss from src/levels/shared/L05_00428350.c: the build refuses this body at its
-   place — 232 bytes, expected 240. Kept as a starting point;
-   not linked, not counted. */
+#include "include_asm.h"
 
-/* Standalone declarations recovered from src/levels/shared/L05_00428350.c. */
 extern void func_3066A0(char *, char *, float);
 
 extern void func_306630(char *, char *, char *);
