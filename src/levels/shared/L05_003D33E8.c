@@ -80,7 +80,7 @@ INCLUDE_ASM("asm/levels", func_L05_00417D48);
 
 INCLUDE_ASM("asm/levels", func_L05_00418288);
 
-INCLUDE_ASM("asm/levels", func_L05_00418440);
+/* func_L05_00418440 is matched in L05_00418440.c (built with -mno-split-addresses). */
 
 INCLUDE_ASM("asm/levels", func_L05_00418508);
 

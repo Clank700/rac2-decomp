@@ -87,4 +87,4 @@ void func_L00_0037E5C0(void)
 
 /* func_L00_0037E5F0 is built with -G8: see L00_0037DD80-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L00_0037E640);
+/* func_L00_0037E640 is matched in L00_0037E640.c (built with -mno-split-addresses). */

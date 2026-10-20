@@ -193,7 +193,7 @@ INCLUDE_ASM("asm/levels", func_L00_0031B398);
 
 INCLUDE_ASM("asm/levels", func_L00_0031B750);
 
-INCLUDE_ASM("asm/levels", func_L00_0031B9F8);
+/* func_L00_0031B9F8 is matched in L00_0031B9F8.c (built with -g). */
 
 INCLUDE_ASM("asm/levels", func_L00_0031BC48);
 
@@ -466,7 +466,7 @@ extern void func_00282C98(void *);
 
 /* func_L00_003252C8 (flag-routed handler, reads the caller's a1) is a near miss:
    nonmatching/levels/func_L00_003252C8.c */
-INCLUDE_ASM("asm/levels", func_L00_003252C8);
+/* func_L00_003252C8 is matched in L00_003252C8.c (built with -mno-split-addresses). */
 
 
 extern void func_L00_003252C8_1(u8 *) __asm__("func_L00_003252C8");
