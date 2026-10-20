@@ -441,7 +441,6 @@ int func_002E5E58(int index, int value, void *object)
 
 INCLUDE_ASM("asm/game", func_002E5F00);
 
-INCLUDE_ASM("asm/game", func_002E5F38);
 
 s32 func_002E5F40(s32 index, s32 callback) {
     u8 *p = D_00188660 + index * 0x70;

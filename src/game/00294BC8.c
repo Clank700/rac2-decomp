@@ -358,7 +358,6 @@ void func_002979D8(char *dst, unsigned char *src)
     }
 }
 
-INCLUDE_ASM("asm/game", func_00297BA8);
 
 
 /* localized row40 textID10 firstpercent selector b formats signedmappedword80 with original decimalformatter; other selector formats original error string, preserve prefix/tail */
@@ -392,7 +391,6 @@ void func_00297E00(int index, unsigned char *output)
 }
 
 
-INCLUDE_ASM("asm/game", func_002980C8);
 
 INCLUDE_ASM("asm/game", func_002980D0);
 

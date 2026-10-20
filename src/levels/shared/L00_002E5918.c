@@ -151,7 +151,6 @@ void func_L00_002E6F48(void) {
         D_L00_001BE2C0[i](D_L00_001BE3C0[i]);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002E7F98);
 
 
 
@@ -204,11 +203,9 @@ void func_L00_002EA600(void) {
  func_0027AB40();
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002EA660);
 
 INCLUDE_ASM("asm/levels", func_L00_002EA668);
 
-INCLUDE_ASM("asm/levels", func_L00_002EA708);
 
 INCLUDE_ASM("asm/levels", func_L00_002EBE88);
 

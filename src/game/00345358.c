@@ -432,7 +432,6 @@ void func_003494D0(char *o)
 /* Measured target: byte-identical across all 27 levels. */
 void func_00349590(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x2c) = a1; }
 
-INCLUDE_ASM("asm/game", func_00349598);
 
 typedef struct {
     char reserved[0x18];
@@ -630,7 +629,6 @@ void func_0034B000(char *p, int a1)
     func_00349630_2(p + 876, 1);
 }
 
-INCLUDE_ASM("asm/game", func_0034B068);
 
 
 INCLUDE_ASM("asm/game", func_0034B2C8);

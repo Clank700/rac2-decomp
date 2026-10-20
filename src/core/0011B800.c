@@ -170,4 +170,3 @@ void func_0011BAA0(int arg0) {
     r1_func_00118E90(0x10, &local);
 }
 
-INCLUDE_ASM("asm/core", func_0011BAC4);
