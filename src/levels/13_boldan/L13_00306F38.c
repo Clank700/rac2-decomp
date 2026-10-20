@@ -122,7 +122,37 @@ INCLUDE_ASM("asm/levels", func_L13_00422CB8);
 
 INCLUDE_ASM("asm/levels", func_L13_004230B0);
 
-INCLUDE_ASM("asm/levels", func_L13_00424728);
+extern s32 func_002ACBC8(u8 *, s32);
+extern u8 D_001395B8[];
+
+void func_L13_00424728(u8 *a0) {
+    s32 *ptr = *(s32 **)(a0 + 0x68);
+    if (func_002ACBC8((u8 *)D_00189EA0, ptr[2]) != 0) {
+        if (D_001395B8[0x25] == 0) {
+            D_001395B8[0x25] = 1;
+        }
+    }
+    if (func_002ACBC8((u8 *)D_00189EA0, ptr[3]) != 0) {
+        if (D_001395B8[0x24] == 0) {
+            D_001395B8[0x24] = 1;
+        }
+    }
+    if (func_002ACBC8((u8 *)D_00189EA0, ptr[0]) != 0) {
+        if (D_001395B8[0x27] == 0) {
+            D_001395B8[0x27] = 1;
+        }
+    }
+    if (func_002ACBC8((u8 *)D_00189EA0, ptr[1]) != 0) {
+        if (D_001395B8[0x28] == 0) {
+            D_001395B8[0x28] = 1;
+        }
+    }
+    if (*((u8 *)D_L13_001B291C[0] + (ptr[4] << 8) + 0x20) == 2) {
+        if (D_001395B8[0x26] == 0) {
+            D_001395B8[0x26] = 1;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L13_004267B0);
 
@@ -131,7 +161,29 @@ INCLUDE_ASM("asm/levels", func_L13_004267B0);
 
 INCLUDE_ASM("asm/levels", func_L13_0042BE60);
 
-INCLUDE_ASM("asm/levels", func_L13_0042BEE0);
+extern void func_002E5CF8(s32, s32, u8 *);
+extern void func_002AA548(f32 *, f32 *, f32, f32, f32, f32);
+
+void func_L13_0042BEE0(u8 *a0) {
+    u8 *ptr = *(u8 **)(a0 + 0x68);
+    if (a0[0x20] == 0) {
+        *(u16 *)(a0 + 0x34) |= 0x800;
+        *(f32 *)(ptr + 0x8) = *(f32 *)(a0 + 0x18);
+        *(f32 *)(ptr + 0x4) = *(f32 *)(a0 + 0x18) - 6.0f;
+        a0[0x20] = 1;
+    }
+    if (a0[0x20] == 1) {
+        u8 v = *((u8 *)D_L13_001B291C[0] + (*(u32 *)ptr << 8) + 0x20);
+        if (v == 2) {
+            func_002E5CF8(0, 0, a0);
+            a0[0x20] = v;
+        }
+    }
+    if (a0[0x20] == 2) {
+        func_002AA548((f32 *)(a0 + 0x18), (f32 *)(ptr + 0xC), *(f32 *)(ptr + 0x4),
+                      0.0016666667f, 0.0016666667f, 0.200000018f);
+    }
+}
 
 extern s32 func_2AF870(u8 *);
 extern void func_327D00(f32 *, f32 *, f32, f32, f32, f32);
