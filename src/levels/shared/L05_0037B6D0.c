@@ -81,7 +81,30 @@ void func_L05_0037B6D0(char *obj)
 
 INCLUDE_ASM("asm/levels", func_L05_0037B948);
 
-INCLUDE_ASM("asm/levels", func_L05_0037BB28);
+extern void func_3065F8(int);
+
+struct S_L05_0037BB28 {
+    char pad0[0x10];
+    int f10;
+    int f14;
+    int f18;
+    int f1C;
+    int f20;
+};
+
+void func_L05_0037BB28(char *object)
+{
+    struct S_L05_0037BB28 *p = (struct S_L05_0037BB28 *)func_379CA0(object);
+
+    if (p == 0)
+        return;
+    func_3065F8((int)p);
+    p->f20 = -1;
+    p->f1C = -1;
+    p->f14 = 0;
+    p->f18 = -1;
+    p->f10 = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_0037BB78);
 
