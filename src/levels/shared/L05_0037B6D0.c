@@ -164,7 +164,6 @@ void func_L05_0037CDD8(char *obj, int value)
         *(int *)((char *)p + 0x114) = value;
 }
 
-INCLUDE_ASM("asm/levels", func_L05_0037CE08);
 
 int func_L05_0037CEB8(char *obj)
 {

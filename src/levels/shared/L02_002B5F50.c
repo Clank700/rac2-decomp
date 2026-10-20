@@ -49,7 +49,6 @@ void func_L02_0031F858(int arg0, int arg1) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L02_00321C30);
 
 extern void func_002A04B8(char *object, int *out0, int *out4, int *out8);
 

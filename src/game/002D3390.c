@@ -170,9 +170,8 @@ int func_002D4E10(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002D4E48);
+/* func_002D4E48 is in the -G8 sibling. */
 
-INCLUDE_ASM("asm/game", func_002D4FF0);
 
 extern int D_0025BA80;
 
@@ -183,7 +182,6 @@ int func_002D5038(void) {
 
 INCLUDE_ASM("asm/game", func_002D5048);
 
-INCLUDE_ASM("asm/game", func_002D50F0);
 
 extern char *D_001A8CFC[] __attribute__((sda));
 extern void *func_00341558(void *);
