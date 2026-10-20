@@ -204,7 +204,7 @@ INCLUDE_ASM("asm/game", func_0033A520);
 
 /* func_0033A688 is matched in 003399B0-g8.c (-G8 small data). */
 
-INCLUDE_ASM("asm/game", func_0033A6D8);
+/* func_0033A6D8 is matched in 003399B0-g8.c (-G8 small data). */
 
 /* Measured target: byte-identical across all 27 levels. */
 void func_0033A9C8(u8 *a0, f32 a1) { *(f32 *)(a0 + 0x204) = a1; }
@@ -237,7 +237,7 @@ int func_0033AB50(int a0)
 
 INCLUDE_ASM("asm/game", func_0033ABD0);
 
-INCLUDE_ASM("asm/game", func_0033ABD8);
+/* func_0033ABD8 is matched in 003399B0-g8.c (-G8 small data). */
 
 /* Measured target: byte-identical across all 27 levels. */
 void func_0033AE18(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x290) = a1; }
