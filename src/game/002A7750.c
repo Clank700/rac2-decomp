@@ -481,7 +481,6 @@ int func_002A9568(int first, int second, float amount) {
 
 
 
-INCLUDE_ASM("asm/game", func_002A9640);
 
 INCLUDE_ASM("asm/game", func_002A9698);
 
