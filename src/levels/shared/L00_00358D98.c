@@ -126,7 +126,22 @@ int func_L00_0035F6D8(int a0, int a1, int a2, int a3, int a4, int a5)
     return r;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0035F7E8);
+extern Entry32fd6f60 D_L00_002A3B00[];
+
+/* Table search: walks the 8-byte records of D_L00_002A3B00 until the key is
+ * found or the -1 terminator is met, and stores the record's index and value. */
+void func_L00_0035F7E8(Query *q)
+{
+    int i = 0;
+
+    if (D_L00_002A3B00[0].key != -1 && D_L00_002A3B00[0].key != q->key) {
+        do {
+            i++;
+        } while (D_L00_002A3B00[i].key != -1 && D_L00_002A3B00[i].key != q->key);
+    }
+    q->index = i;
+    q->value = D_L00_002A3B00[i].value;
+}
 
 void func_L00_0035F8D0(int value60, int selector68, int value64, int axis69, int mode6A)
 {
