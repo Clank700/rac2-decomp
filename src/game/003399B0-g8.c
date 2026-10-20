@@ -108,8 +108,6 @@ extern char D_001ADC88[];
 extern int D_001ADD30 __attribute__((sda));
 extern void func_00335E68(char *, int);
 
-#define FIELD(off) (*(int *)(obj + (off)))
-
 void func_0033AA00(char *obj, int *arr, char *third)
 {
     char *p = obj + 4;
@@ -121,7 +119,7 @@ void func_0033AA00(char *obj, int *arr, char *third)
 
     for (i = 3; i >= 0; i--) {
         if (*arr != 0) {
-            func_003361E0(p, D_001ADC88, FIELD(0x200));
+            func_003361E0(p, D_001ADC88, *(int *)(obj + 0x200));
             *(int *)func_00335E20(p) = *q;
             func_00336390(p, D_001A8CFC[0] + 0x8710, *arr);
         } else {
@@ -132,7 +130,7 @@ void func_0033AA00(char *obj, int *arr, char *third)
         q += 1;
         arr += 1;
     }
-    FIELD(0x1F8) = 0;
+    *(int *)(obj + 0x1F8) = 0;
     *(int *)obj = (int)third;
     n = 0;
     if (*(int *)(third + 4) != -1) {
@@ -144,7 +142,7 @@ void func_0033AA00(char *obj, int *arr, char *third)
         do {
             *out++ = 0;
             off += 0x18;
-            FIELD(0x1F8) = FIELD(0x1F8) + 1;
+            *(int *)(obj + 0x1F8) = *(int *)(obj + 0x1F8) + 1;
             n++;
             if (*(int *)(off + (int)*(int *)obj + 4) == minus)
                 break;
