@@ -551,9 +551,9 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L18_00437AA0`](levels/func_L18_00437AA0.c) | 260 | Recorded G8 candidate is 248 bytes; size does not match retail. |
 | [`func_L18_00439FC8`](levels/func_L18_00439FC8.c) | 332 | Recorded instruction mismatch at +0xec. |
 | [`func_L18_0043F308`](levels/func_L18_0043F308.c) | 288 | Recorded candidate is 280 bytes; size does not match retail. |
-| [`func_L20_002B7A48`](levels/func_L20_002B7A48.c) | 192 | Recorded candidate is 180 bytes; size does not match retail. The whole tail, from the `lw $v0,0x24CC($a0)` on, matches instruction for instruction; only the first 14 differ: the retail keeps the address of `D_00189E20` in the `lui` register and re-materialises the 64-bit form per use, this build copies it into `$a1` once; the retail compares the state byte with 1 first (`beq`) and keeps the "return 0" as a separate two-instruction block, this build inverts the first test (`bne`); the retail's prologue starts with the `lui`. Reading the state byte into a local and dispatching it with a `switch` does not restore the forward `beq` and brings the branch-likely form back. 26 compiles. |
-| [`func_L20_00449FD0`](levels/func_L20_00449FD0.c) | 308 | 296 bytes; the frame, the FPR saves, the `func_0029EFD0(0x12EE)` call, the two `func_002A7940` calls, `func_002833F0`, the 0x100 flag, the `D_L20_001B23F8` multiply, the state stores and `func_002A7878(10.0f,20.0f)` all match. Two residues: the materialised 128-bit copy (the retail `addiu` + `lq/sq 0(reg)`, this cc1 folds the offset in) and the two float arguments landing in `$f20`/`$f21` the other way round (the retail has `$f21` = first float, `$f20` = second). |
-| [`func_L20_0044A838`](levels/func_L20_0044A838.c) | 180 | 172 bytes; everything is the retail instruction - the prologue, the three `$gp` floats, the two calls, the flag test, the branch offsets and the epilogue - except the 128-bit copy, where the retail materialises both addresses (`addiu` + `lq $v0,0($r)` + `sq $v0,0($r)`) and this cc1 folds the offsets into the `lq`/`sq`. The fold is in the CSE pass (`find_best_addr` in gcc/cse.c) with `mips_address_cost` giving a register-plus-small-constant the same cost as a plain register, so the tie goes to the plus. |
+| [`func_L20_002B7A48`](levels/func_L20_002B7A48.c) | 192 | Recorded candidate is 180 bytes; size does not match retail. The whole tail, from the `lw $v0,0x24CC($a0)` on, matches instruction for instruction; only the first 14 differ: the retail keeps the address of `D_00189E20` in the `lui` register and re-materialises the 64-bit form per use, this build copies it into `$a1` once; the retail compares the state byte with 1 first (`beq`) and keeps the "return 0" as a separate two-instruction block, this build inverts the first test (`bne`); the retail's prologue starts with the `lui`. A `switch` on the state byte does not restore the forward `beq` and brings the branch-likely form back. The retail answers 0xD for state 4, and 0x51/0x67 come from the "field 0x24CC == 1" case - the source sets the argument register to `D_00189E20` on all paths into the common block, so it is an unconditional assignment. 26 compiles. |
+| [`func_L20_00449FD0`](levels/func_L20_00449FD0.c) | 308 | 300 bytes; the frame, the FPR saves, the `func_0029EFD0(0x12EE)` call, the two `func_002A7940` calls, `func_002833F0`, the 0x100 flag, the `D_L20_001B23F8` multiply, the state stores and `func_002A7878(10.0f,20.0f)` all match. Left: the materialised 128-bit copy, the two float arguments landing in `$f21`/`$f20` the other way round (the retail has `$f21` = first float), the 1/60 constant hoisted early instead of materialised late, and the retail's `daddu $v0,$s1,$zero` at the end - the function RETURNS the object pointer, so the prototype is not void. |
+| [`func_L20_0044A838`](levels/func_L20_0044A838.c) | 180 | 172 bytes; everything else is the retail instruction - the prologue, the three `$gp` floats, the two calls, the flag test, the branch offsets and the epilogue - except the 128-bit copy, where the retail materialises both addresses (`addiu` + `lq $v0,0($r)` + `sq $v0,0($r)`) and this cc1 folds the offsets into the `lq`/`sq`. |
 | [`func_L22_002A8B98`](levels/func_L22_002A8B98.c) | 172 | Recorded instruction mismatch at +0x4. |
 | [`func_L22_002A8CE0`](levels/func_L22_002A8CE0.c) | 184 | Recorded candidate is 168 bytes; size does not match retail. |
 | [`func_L22_003D0840`](levels/func_L22_003D0840.c) | 60 | 4; matches size and every other word, but the parameter copy is `daddu $v1,$a0,$zero` against retail's `$a3`. |
@@ -983,11 +983,20 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L14_00328E70`](levels/func_L14_00328E70.c) | 32 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
 | [`func_L14_00390DF8`](levels/func_L14_00390DF8.c) | 196 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
 | [`func_L18_003FB5E8`](levels/func_L18_003FB5E8.c) | 40 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
-| [`func_L20_0039C448`](levels/func_L20_0039C448.c) | 248 | Everything matches except two instructions: the 128-bit load (the retail `addiu $s0,$s2,0x10 ; lq $v0,0($s0)`, this compiler `lq $v0,0x10($s2)`) and the save order (the retail `sd $s0; sd $s2; sd $s1`, this compiler `sd $s0; sd $s1; sd $s2`). The frame (0x60), the call sequence, the branch, the local buffer and the register allocation all match. |
-| [`func_L20_0039C540`](levels/func_L20_0039C540.c) | 140 | Two 128-bit pairs differ and nothing else. This cc1 always folds a constant offset into the `lq`/`sq`; the retail materialises the pointer first. The fold is in the CSE pass (`find_best_addr` in gcc/cse.c) with `mips_address_cost` giving a register-plus-small-constant the same cost as a plain register, so the tie goes to the plus. Every source spelling measured folds. |
-| [`func_L20_0039E158`](levels/func_L20_0039E158.c) | 140 | One 128-bit pair differs and nothing else: this cc1 folds the constant offset into the `lq`/`sq`, the retail materialises the pointer first. The fold is in the CSE pass (`find_best_addr` in gcc/cse.c) with `mips_address_cost` giving a register-plus-small-constant the same cost as a plain register, so the tie goes to the plus. Every source spelling measured folds. |
-| [`func_L20_0039F210`](levels/func_L20_0039F210.c) | 32 | 28 bytes; the body is the 128-bit copy and the state stores. The retail materialises the destination pointer (`addiu $v1,$a0,0x10 ; lq $v0,0($a1) ; sq $v0,0($v1)`), this compiler folds the offset into the `sq` (`sq $v0,0x10($a0)`). About 25 spellings measured - TI pointer variable, array index, struct member, union, volatile, aligned(1)/(4)/(16), integer cast, a pointer loaded from memory, a pointer used twice, two names for one pointer, a pointer kept across a call, a 64-bit address, a short truncation - all fold. Only a plain register address keeps the retail's shape. |
-| [`func_L20_0043D470`](levels/func_L20_0043D470.c) | 100 | The 128-bit pair at the end differs and nothing else: this cc1 folds the constant offset into the `lq`/`sq`, the retail materialises the pointer first. The fold is in the CSE pass (`find_best_addr` in gcc/cse.c) with `mips_address_cost` giving a register-plus-small-constant the same cost as a plain register, so the tie goes to the plus. Every source spelling measured folds. |
+| [`func_L20_0039C448`](levels/func_L20_0039C448.c) | 248 | Everything matches except two instructions: the 128-bit load (the retail `addiu $s0,$s2,0x10 ; lq $v0,0($s0)`, this compiler `lq $v0,0x10($s2)`) and the save order (the retail `sd $s0; sd $s2; sd $s1`, this compiler `sd $s0; sd $s1; sd $s2`). The frame (0x60), the call sequence, the branch, the local buffer and the register allocation all match. The retail's save order is neither ascending nor descending - it is the scheduler's reordering. |
+| [`func_L20_0039C540`](levels/func_L20_0039C540.c) | 140 | Two 128-bit pairs differ and nothing else. This cc1 always folds a constant offset into the `lq`/`sq`; the retail materialises the pointer first. The fold is in the CSE pass (`find_best_addr` in gcc/cse.c) with `mips_address_cost` giving register+small-constant the same cost as a plain register, so the tie goes to the plus. |
+| [`func_L20_0039E158`](levels/func_L20_0039E158.c) | 140 | Plain-C near miss now (the earlier record used the forbidden inline-assembly `qcopy`): 132 bytes; everything but the one 128-bit pair is the retail's, and that pair is the offset fold (`addiu $a1,$s0,0x1F0; addiu $a0,$v1,0x10` against the folded `lq`/`sq`). |
+| [`func_L20_0039F210`](levels/func_L20_0039F210.c) | 32 | 28 bytes; only the materialised destination pointer (`addiu $v1,$a0,0x10`) is missing. The retail's shape is systematic, not an accident: it materialises a 128-bit address in a register when the address is used more than once and folds it into the instruction when it is used once. |
+| [`func_L20_0043D470`](levels/func_L20_0043D470.c) | 100 | 88 bytes: the 128-bit pair at the end differs (this cc1 folds the constant offset into the `lq`/`sq`, the retail materialises the pointer) AND the float registers: the retail puts 8.0f in `$f1` and 2.5f in `$f0`, this cc1 always allocates the other way round. A second use of the address does not break the fold. |
+
+## Linked at some of their places only (2026-10-12)
+
+C that was in `src/` and links in some programs but not in all: a level address written into
+it, a jump table it needs, or two different functions the catalogue holds as one. A function
+counts when it links at every place it has.
+
+| Function | Places it links at | What the build says elsewhere |
+| --- | --- | --- |
 | [`func_002DCAB8`](game/func_002DCAB8.c) | 26 of 28 | instruction at +0x38 differs |
 | [`func_L00_002B1308`](levels/func_L00_002B1308.c) | 0 of 27 | needs .rodata at its place, which is not C |
 | [`func_L00_002D4A38`](levels/func_L00_002D4A38.c) | recovered: 27 of 27 | Current C in `src/levels/shared/L00_002D3798.c` uses an opaque `sda` reference under G0; the old partial draft is retained here for reference. |
@@ -1225,9 +1234,9 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L02_003DBEC8`](levels/func_L02_003DBEC8.c) | 120 | Register wall, second wave to hit it: every load, store, the table lookup, the `lq`/`sq` copy and the trailing call are in the retail sequence; the parameter copy and the context land in `$t1`/`$t0` where retail keeps `$a2`/`$a3`, and this cc1 sinks the epilogue's `ld $ra` into the `bnez` slot (112 bytes against 120) |
 | [`func_L12_0041A578`](levels/func_L12_0041A578.c) | 108 | 112 bytes against 108: the index lands in `$a2` where retail increments the parameter in place (`addiu $a1,$a1,0x1`), and this cc1 folds the loop-back into the float test (`bc1fl`) where retail keeps `bc1t` + a separate `b` |
 | [`func_L00_0037E000`](levels/func_L00_0037E000.c) | 192 | 176 bytes against 192: this cc1 turns `for (i = 0; i < 32; i++)` into a descending `i--` countdown where retail counts up, plus the record pointer stays in `$s0` where retail copies it to `$a0` for the store |
-| [`func_L20_00443CF0`](levels/func_L20_00443CF0.c) | 100 | 0x24: retail emits `daddu $a1,$sp,$zero` before the prologue's `sd $s0,0x30($sp)`, this cc1 the other way round; every other word matches |
+| [`func_L20_00443CF0`](levels/func_L20_00443CF0.c) | 100 | One word pair: the retail sets the first call's second argument up BEFORE the prologue's `sd $s0,0x30($sp)`, this cc1 after it. Ten local spellings tried (TI128/char[16]/one struct/the declaration order/the state as char* or void*/the argument as void*/the index in a variable) and the per-file flags `-g`, `-mno-split-addresses`, `-fno-schedule-insns`, `-fno-schedule-insns2` (the last two reorder the whole body). This is the prologue-interleaving wall. |
 | [`func_L20_00444018`](levels/func_L20_00444018.c) | 108 | Retail hoists the 0.78539824f materialisation above `addiu $sp,$sp,-0x50` and gives `$s1` to the state pointer, `$s2` to `&v1`; this cc1 sinks the constant below the frame adjust and swaps the two callee-saved registers |
-| [`func_L20_00443D58`](levels/func_L20_00443D58.c) | 152 | Reaches retail's exact 0x60 frame and its `swc1 $f20,0x50($sp)` once the helper output is re-read into a second float local after the 0x443B60 call. 0x2c: retail sets `$a3 = $sp+0x20` before `$a2 = $s2`, this cc1 the other way round; every other word matches |
+| [`func_L20_00443D58`](levels/func_L20_00443D58.c) | 152 | One word pair at +0x2c: the retail sets `$a3 = $sp+0x20` before the store of f and `$a2 = $s2` after it; this cc1 always emits the call's argument set-ups in operand order. The `g = f` spelling reaches the retail's exact 0x60 frame and its `swc1 $f20,0x50($sp)`. |
 | [`func_L13_0043E8C0`](levels/func_L13_0043E8C0.c) | 24 | Catalogue defect: `jr $ra` / nop three times over at 0x43E8C0, three merged empty bodies; a tools/levels.py split unblocks it |
 | [`func_L03_00329ED0`](levels/func_L03_00329ED0.c) | 28 | Catalogue defect: starts `addiu sp,sp,+0x10` / nop, real body at 0x329EE8, row carries no `jr $ra`; a tools/levels.py split unblocks it |
 | [`func_L13_0042BE60`](levels/func_L13_0042BE60.c) | 44 | Catalogue defect: starts `addiu sp,sp,+0x10` / nop, a clean 32-byte body at 0x42BE68; a tools/levels.py split unblocks it |
@@ -1297,13 +1306,19 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L08_00429350`](levels/func_L08_00429350.c) | 184 | Exact retail size; the three-slot walk, the `bnel` delay-slot counter, the four pointer bumps at the loop bottom and the found-slot release arm all match. Blocked on the prologue: retail materialises 0x1B39A0/0x1B39E0/0x1B39F0/0x1B3A30 in that order into `$a2`/`$s1`/`$s2`/`$v1`, each `lui`/`addiu` interleaved with one `sd`, and keeps the walk base in `$v1`; this cc1 groups them differently. Three spellings measured, same interleave - the wall the sibling func_L08_00429408 near miss records for the same data family. |
 | [`func_L08_004294A0`](levels/func_L08_004294A0.c) | 192 | 188 bytes; the first 8 words and the whole body are retail's - three-slot walk, `bnel` delay-slot counter, 1/4 -> 2/3 state rewrite, `jal` with 0x40, and a 16-byte `lq`/`sq` copy at offset 0 on both sides (`mode(TI)` reaches it). Allocation cascades: retail puts the slot counter in `$a3` and the 0x1B3A30 base in `$a2`, this cc1 the other way (`i` in `$a2`, walk base in `$a1`), which shifts the four state constants down one register each and re-interleaves the base materialisations. Six spellings measured; `-mno-split-addresses` moves it further away (+0x4). A bare 0x002603E0 pointer cast emits `lui`/`ori` - the symbol spelling is what gives `addiu`. |
 | [`func_L12_0041A460`](levels/func_L12_0041A460.c) | 204 | 168 bytes; the 0x110 table index, the 0x224 offset scaled by 16, the two position differences, both calls and the `& 0x8F` / 0x224-vs-0x220 tail are all decoded and reproduced. Blocked on the 16-byte copy the frame carries: retail reserves 0x30 (0x20 here) and runs `addiu $v1,$v1,0x10 ; lq $at,0x0($v1) ; sq $v0,0x0($sp)` with nothing reading `$sp+0` afterwards; an unused `TI128` local is dropped by this cc1. 0x001FEB40 must be spelled as a SYMBOL - a literal emits `ori` where retail has `lui 0x20 ; addiu -0x1540`. |
-| [`func_L20_0044AB68`](levels/func_L20_0044AB68.c) | 204 | 200 bytes; the frame (0x50), the two saved registers, the 0.3f materialisation, the two float calls, the 14-argument `func_0032C700` call with its four stack words, the branch-likely test and the epilogue are all the retail's. The only difference is the 128-bit zero store: the retail writes `por $v0,$zero,$zero ; sq $v0,0x20($sp)` and the chain's fold pass gives `sq $zero` whenever the zero register is dead after the store. The `por` survives only when the zero feeds two or more stores; the retail body has one. The float constant of `func_0032C700` is 0.666f (0x3F2A7EFA), not 0.6666667f (0x3F2AAAAB). |
+| [`func_L20_0044AB68`](levels/func_L20_0044AB68.c) | 204 | 200 bytes; the frame (0x50), the two saved registers, the 0.3f materialisation, the two float calls, the 14-argument `func_0032C700` call with its four stack words, the branch-likely test and the epilogue are all the retail's. The only difference is the 128-bit ZERO store: the retail writes `por $v0,$zero,$zero ; sq $v0,0x20($sp)` and the chain's fold pass gives `sq $zero` whenever the zero register is dead after the store. The `por` survives only when the zero feeds TWO OR MORE stores; the retail body has one. The float constant of `func_0032C700` is 0.666f (0x3F2A7EFA), not 0.6666667f (0x3F2AAAAB). |
 | [`func_L05_00397F48`](levels/func_L05_00397F48.c) | 208 | Exact retail size and retail's words through +0x40, including the three expected blockers now SOLVED: the four `$gp` floats come out bare (`lwc1 $f0,0x0($gp)` + GPREL16) under `-O2 -G8 -ffunction-sections -mno-split-addresses` (needs its own file - the unit is the -G0 default), the 16-byte copy IS `lq $v0,0x0($s0)`+`sq $v0,0x0($sp)` via `mode(TI)` at offset 0 both sides, and 0x45AFDF66 encodes correctly from the decimal 5627.9248046875f. Left: this cc1 hoists the `lq` above the f1C/0x20 stores where retail keeps that order with `sq` in the `jal` slot. Three placements measured, all +0x40. The constant is 0x810000, not 0x81. |
-| [`func_L20_004499E8`](levels/func_L20_004499E8.c) | 140 | 132 bytes: every instruction is present in retail's order and the eight missing bytes are exactly the two `addiu` retail pays for the TI128 destinations, which this cc1 folds into `sq $zero,0x50($t0)` and `sq $v0,0x10($a3)` (the func_L11_003973F8 wall - a named `TI128 *`, `volatile` destinations and `__builtin_memcpy(...,16)` all measured, the last 200 bytes). Allocation also differs (`arg0` copied into `$a3`, the state in `$t0`). Carries a new measured habit: an `s32` field stored from `(s32)(float)` keeps the value in the FP register and comes out `cvt.w.s` + `swc1`, where a `float` field with a `(float)(int)` cast round-trips through `mfc1`/`mtc1` (148 bytes) |
+
+## Level functions, wave 7 agent lvl7-02 (2026-10-16)
+
+| [`func_L20_004499E8`](levels/func_L20_004499E8.c) | 140 | 132 bytes: the 128-bit copy wall. The retail materialises `addiu $t0,$a0,0x10` and `addiu $a3,$a3,0x50`; cc1 folds both offsets into the `sq`. NEW: a volatile pointer object reaches a plain-register address (`sw ; lq ; lw ; sq $v0,0($reg)`, the retail's zero-displacement `sq`) at the price of a stack store and a reload - eight bytes over the retail's single `addiu`. |
+| [`func_L20_004424A0`](levels/func_L20_004424A0.c) | 176 | The residue is a compiler-model difference, not a source shape: the retail keeps `D_L20_001B2138 * 0.000277777785f` in the CALLER-SAVED `$f0` across `jal f_00330C60` and stores it to state[0xE0] after that call, while this cc1 puts any value live across a call in the callee-saved `$f20` (frame 0x30 against the retail's 0x20). |
+| [`func_L20_00444B48`](levels/func_L20_00444B48.c) | 208 | 204 bytes, every instruction retail's: two residues - the `nop` before the `div.s` (the division floor; the assembler only pads a division when a code label is within two slots, and no source shape puts one there - `do { ... } while (0)` is optimised away and leaves no label) and the swap of `$s1 = $a1` (the retail's `bc1f` delay slot) against `mov.s $f23,$f13` (the retail: four words earlier). The two `nop`s after the `mtc1` and after the `c.le.s` ARE emitted - they are the assembler's mtc1 hazard rule. |
+
+## Level functions, wave 7 agent lvl7-02, tour 2 (2026-10-16)
+
 | [`func_L20_00444088`](levels/func_L20_00444088.c) | 164 | Retail's exact size and every word, with one pair swapped at +0x2c: retail sets `$a3 = $sp+0x20` before `$a2 = $s0`, this cc1 the other way round - the same wall recorded on func_L20_00443D58 next door. A named `float *pf = &f` for the fourth argument costs a frame slot and an `$s3` (176 bytes) |
 | [`func_L20_0043F460`](levels/func_L20_0043F460.c) | 176 | 184 bytes; the shape is recovered (a 210000.0f-scaled two-float helper, a `== 0xB5A` arm choosing between the `$gp` word `D_L20_001B1FC0` and three words retail materialises with one `lui`+`lw` each, so `nosda`, then a six-argument call whose fifth argument rides in `$t0`). A `s32[3]` spelling reaches the absolutes through one shared base and costs two more words (204); the residue is the selector's delay slot (retail carries the `$gp` load there) and the `pair[2]` stores retail keeps on the stack |
-| [`func_L20_004424A0`](levels/func_L20_004424A0.c) | 176 | 168 bytes; calls and both constant blocks are in retail's order. Three residues: `$s0`/`$s1` hold the object and the state the other way round, the `*(f32*)(state+0x7C)` term is CSE'd with the store just made (retail reloads it for `add.s $f12,$f12,$f12`), and `*(TI128 *)(state + 0xF0) = 0` folds instead of materialising `addiu $v0,$s0,0xF0` (the func_L11_003973F8 wall again). Taking the 0.000277777785f product before the second call moves it into `$f20` and costs a frame slot |
-| [`func_L20_00444B48`](levels/func_L20_00444B48.c) | 208 | 204 bytes, every instruction retail's: the guards convert the two integer parameters inline (`D_L20_001B20A0 <= (f32)a0` -> f12, `(f32)a1 <= D_L20_001B20A0` -> f13) while the blend calls the int-to-float helper `func_00283CE0` three times (twice on a0, once on a1, in the order the inline denominator evaluates). Two residues: retail's `nop` between the third `sub.s` and the `div.s`, and one set-up swapped at +0x8C (`$s1 = $a1` in the bc1f delay slot against `mov.s $f23,$f13` four words earlier). Locals for the quotient's operands give 200 bytes; `(f32)` casts instead of the three calls let this cc1 fold them (104 bytes) |
 | [`func_L20_00444138`](levels/func_L20_00444138.c) | 156 | 152 bytes; the 0x100-stride object walk is recovered from the matched `L01_003CAFE0-g8.c` / `L04_00422A00-g8.c` recipe and body and tail match word for word (the `bnel` carries the 0xAA halfword in its delay slot, the id arm is the `(u16)(id - 0x1233) < 2 \|\| id == 0x1231 \|\| id == 0x1232` chain). The missing word is retail's fresh `lui $v0,0x1B; lw $v0,0x2FA0($v0)` re-materialisation of the re-read bound on the storing path, where this cc1 keeps the %hi in a caller-saved register; retail also keeps a `nop` after the loop head's `lhu`, and its two bound reloads carry two addressing forms (`$gp` in the bne delay slot, absolute on the storing path) - a second `sda` name reproduces the `$gp` form but turns the `bne` into a `bnel`, and declaring the bound `sda` outright gives 144 bytes with the arm inlined before the tail |
 | [`func_L18_00432D60`](levels/func_L18_00432D60.c) | 196 | 244 bytes; same walk family as func_L20_00444138 (pre-loop `a0[0x21] == 0xFF` guard, `p = table[a0[0x21]]`, a test that re-reads the key each pass with the nested `p == table[a0[0x21]]` continue, body `base + ((*p & 0x7FFF) << 8)` then `func_L18_00432AD0`). Wall is allocation, not shape: retail keeps only the table's %hi in `$s2` and re-materialises `addiu $v1,$s2,-0x4CE0` per site in a 0x20 frame, this cc1 keeps the whole base live in `$s4` (plus `$s3`) and lands on 0x30, shifting every word. The `break`-in-body spelling and a `$gp` bound are identical (244) |
 | [`func_L05_004222D8`](levels/func_L05_004222D8.c) | 164 | Candidate is 172 bytes; the clamp-and-publish body is decoded in full and needs the `-G8` sibling (level 5's `$gp` base is 0x1AEFF0, so `lw $v0,0x2360($gp)` is `D_L05_001B1350` with the `sda` attribute while 0x1B1354/58/5C stay absolute). Retail materialises `lui $v0,0x14; addiu $v0,$v0,-0x6A48` last, this cc1 hoists the same pair into `$a2` at the top and then rematerialises a dead `lw $v0,0x0($gp)` into two clamp delay slots - the two extra words. Nine shapes give 172/176 |
@@ -1330,7 +1345,12 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L00_00419A80`](levels/func_L00_00419A80.c) | - | Not a C row: the 16-byte opener is two stack restores (`addiu $sp,$sp,0x50; nop; addiu $sp,$sp,0x30; nop`), the same in both places (00, 14), and the real 196-byte body starts at 0x00419A90. Recovered body in the file, including the per-place `$gp` float (0x2454 / 0x2B1C) |
 | [`func_L01_00416B30`](levels/func_L01_00416B30.c) | 212 | Exactly 212 bytes, every constant right (`-2.25f` is 0xC0100000, not -2.5f), but the prologue's saved pair is swapped: retail keeps the loop counter in `$s2` and the handle in `$s1`, this cc1 the other way, so `sd $s1/$s2` and the whole body shift from +0x8. Counter-first, handle-first and both for-header spellings do not move the pair, and all 24 permutations of the four tail stores (lead lever 1, one ruler call) still fail first at +0x8 - the pair masks the stores |
 | [`func_L01_00416A50`](levels/func_L01_00416A50.c) | 224 | **The `$gp` float wall is broken: 232 bytes with the -g8 sibling plus `-mno-split-addresses`** (lead lever 2), 8 bytes from retail. 248 at -G0, 252 at -G8 alone; the extra flag gives all four `$gp` floats the bare one-instruction `lwc1 $f1,0x2A70($gp)` form, i.e. a `config/cflags.txt` line `-O2 -G8 -ffunction-sections -mno-split-addresses`. This contradicts the earlier "the sda spelling changes nothing for loads" measurement for this unit. The 8 bytes left: a 1-ULP decimal for 0x3998825C, and a `mov.s $f1,$f0` plus one redundant `swc1 $f0,0xF8` where retail stores `$f0` twice |
-| [`func_L20_0039E0A0`](levels/func_L20_0039E0A0.c) | 184 | Candidate is 156 bytes; the list-walk family body is decoded in full (0x001FBB20 slot table, bound 0x001B2FB8, base 0x001B2F9C, counts the entries whose class byte `e[0x20]` is not 6, wrap-around tail `while (!((s16)p[-1] < 0 && p != list))`). All 7 missing words are THREE guards retail keeps and this cc1 proves dead away: `beq $a2,$t2` on the `(arg & 0xFF) == 0xFF` slot, `bnez $t0` on a register retail materialises as 0 and never writes, and `beqz $a1` on a pointer retail proved non-null. `e` must be `unsigned char *` for retail's `lbu`. A second attempt with the three guards written as separate `if (...) break;` statements inside the loop body folds them away just the same. |
+
+
+
+## Level functions, wave 7 agent lvl7-03, tour 2 (2026-10-16)
+
+| [`func_L20_0039E0A0`](levels/func_L20_0039E0A0.c) | 184 | 168 bytes (42 instructions against the retail's 46). A third spelling fixes the exit shape (`goto ret` with one shared label), the 32-bit parameter, the `u16 **tbl` table element and TWO of the three guards (the inner `(arg & 0xFF) == 0xFF` test on a 64-bit copy of the 32-bit slot, and `rec == 0` after the increment). Still missing: the always-zero flag retail materialises and tests, the branch-likely back edges with the record word reloaded in both delay slots, the 32-bit count increment and the allocation. |
 | [`func_L30_003848B8`](levels/func_L30_003848B8.c) | 196 | **Size EXACT (196)**, level 30, decoded in full (0x001A63A8 display state, 0x00295C60 class table, `$gp` bitmask 0x001AEC90 = 0x1AEFF0-0x360, needs the -G8 sibling). The size only lands with the negation spelled `(((D >> cls) & 1) ^ 1) != 0`: that `^ 1` is what makes cc1 emit retail's `srav; xori; andi; beqz` - `!(D & (1 << cls))` drops the `xori` and gives 192. Left: layout - retail sends all three guards to ONE return-0 block placed AFTER the body (`+0x24` branches) while this cc1 puts it right after the guard chain (`+0x7`), shifting everything from +0x10, and retail keeps only the HIGH half of 0x001A63A8 in `$t1`, rebuilding it at the tail. Nested-guard and early-return spellings give the same 196 |
 | [`func_L00_004290C0`](levels/func_L00_004290C0.c) | 220 | The whole arm structure is exact - four `obj+0xC/0x10/8/0x14` fields in a nested `>= 0` test whose annulled `bltzl` slots carry the next field's load. Measured 208-212 bytes against 220 for four spellings: retail keeps the shared `r != 0` normalisation in its own block after the arms and every arm branches there with `b` + `nop`, while this cc1 sinks it into each arm's delay slot as `sltu` and branches straight to the epilogue. The two constants (0x00189EA0, the 0x001FDA80 table) must be SYMBOLS: as literals cc1 emits `lui 0x18`/`ori` because bit 15 of the low half is set |
 | [`func_L10_00424448`](levels/func_L10_00424448.c) | 224 | Decoded, not attempted: one-shot init behind the `$gp` word at 0x001B13A4 (`sw $zero,0x00221CFC`, then func_342218/func_37CFD8/func_37BD00/func_37BCA0/func_37BCB0), a countdown loop calling func_37D048 on `+0xAA == 0xF8E` entries, then func_425798, func_425410(0x32,0xC), func_37BCB8(0xF8E), func_37D168(v0) and, only when that answers zero, func_423DC8(a0,2) |
@@ -1370,15 +1390,408 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L00_00326110`](levels/shared/func_L00_00326110.c) | 188 | 180 bytes, whole body recovered (call to 0x00282E48 against 7.0f picking 3 or 1, the D_001A79F0 clamp via sltiu/movz against 25, the D_002A0D50 table load and the R5900 three-operand `mult $a1,$a1,$s2`, then the six-integer-argument tail call with -1/0). The 8 bytes are one saved pair: retail keeps the mode in $s1 and the argument in $s2, this cc1 uses $t0/$s1. Three spellings, all 180. |
 | [`func_L01_003A64F0`](levels/func_L01_003A64F0.c) | 188 | 176 bytes: the whole call chain is recovered and the lq/sq pairs need `mode(TI)` locals (v = *(a0+0x10), the 0x00282F20/0x00282CC0/0x00282CF0 trio on v, w = *(a0+0xF0), the `*(s16*)(p+0x86) == 5` split with the 0x00335370/0x003353C8 pair against 0x00335438 with four zeros). The 12 missing bytes are the materialised local addresses (`addiu $v1,$s0,0x10`, `addiu $s1,$sp,0x20`, `addiu $s1,$sp,0x10`) that this cc1 folds into the lq/sq offsets. Needs the -g8 sibling (a `$gp` float) plus `nosda` for the absolute D_001B9500. |
 | [`func_L00_003266D8`](levels/shared/func_L00_003266D8.c) | 212 | 208 bytes, whole three-stage countdown/reset state machine and the seven-argument 0x0028B3D0 call byte-identical (four `$gp` globals via the -g8 sibling, three absolute 0x001A8Fxx via `nosda`). The 4 bytes are the clamp only: retail has `slti / bnez / sw(delay) / addiu / b / sw` (two stores), the ternary gives `slti / movn` (208) and the if/else an extra `beql`+`b` (216). Four spellings. |
-| [`func_L20_002CD928`](levels/func_L20_002CD928.c) | 34964 | A 149-way dispatch through the level's own jump table `D_L20_002B27E0` over 62 bodies. The structure is mapped in the entry - prologue with a 0x1A0 frame, 746 calls to 136 distinct callees, 873 float constants, 6 `$gp` accesses, the epilogue's two stores - but the bodies are not transcribed. A C switch cannot carry it: GCC puts the jump table in the object's `.rdata`, `tools/build.py` discards the object's data, and a computed goto deletes every case body as unreachable. The table's own address would have to come from the level. |
-| [`func_L20_0039BDF0`](levels/func_L20_0039BDF0.c) | 212 | 208 bytes; the shape, the frame, the calls, the reload of `arg0` out of `p+0xB8` and the two argument stores all match. The two 16-byte copies differ: the retail materialises the pointer (`addiu $a0,$s0,0x10 ; sq $v0,0x0($a0)`), this compiler folds the constant offset into the `sq` (`sq $v0,0x10($s0)`). The fold is in the CSE pass (`find_best_addr` in gcc/cse.c) with `mips_address_cost` giving a register-plus-small-constant the same cost as a plain register, so the tie goes to the plus. The float constants are hoisted in front of the copy, and the second call's delay slot holds the store to `arg0+0x98` where the retail has `addiu $a1,$s0,0xF0`. |
-| [`func_L20_0039D680`](levels/func_L20_0039D680.c) | 300 | 300 bytes and the loop matches the retail instruction for instruction; only the 12-instruction prologue differs. The retail holds `%hi(D_00189EA0)` in `$s0` and reuses `$s0` for `%hi(D_1FBB20)`; this build keeps `%hi(D_00189EA0)` in `$a1` and copies it to `$s5`. Reading the `%hi`/`%lo` split the other way round - the retail's `addiu $v1,$s0,-0x44E0` is just `%lo(D_1FBB20)` on the saved `%hi`, so it is the same table - makes the body byte-exact. |
-| [`func_L20_0039ED78`](levels/func_L20_0039ED78.c) | 332 | 332 bytes and the block order, the branches, the calls and the arithmetic match; four registers differ: the 0.5f is in `$f1` instead of `$f12`, the high half of the level words is computed in `$v0`/`$v1` instead of `$a1`/`$a0`, and the two masks sit in the other registers. The branch polarity and the block order follow the source's if/else order: `if (c != 0) { small } else { big }` gives the branch-likely to the big block with the small block falling through, which is what the retail has. |
-| [`func_L20_0039E5F0`](levels/func_L20_0039E5F0.c) | 380 | 380 bytes and everything matches except three scheduled instructions: the `f_0032F5B0` arguments are set up before the float multiply, the delay slot of the `f_0033ECF8` call holds `daddu a3,zero,zero` instead of `mov.s f13,f21`, and the word read from `0x60(s1)` is in `$v0` instead of `$v1`. |
-| [`func_L20_00409480`](levels/func_L20_00409480.c) | 336 | 328 bytes; the retail keeps `index & 0xFF` in a temp for the first test and copies it to `$s4` later, this compiler copies it to `$s4` at once. The retail's loop back-edges are branch-likely with the reload of the record word in the delay slot (`bgezl $v0,LOOP` / `lhu $v0,0($s1)`), this compiler keeps the word in `$v1` and uses a plain `bgez`/`beq`. The table element's address has to be kept in a variable (`u16 **tbl = &D_L20_001FBB20[index]`) to land in a callee-saved register as the retail has it. |
-| [`func_L20_00449850`](levels/func_L20_00449850.c) | 404 | 396 bytes; this cc1 CSEs the constant 1 of the two stores into one value live across the call (it needs `$s2`) and keeps an FPR in `$f20`, so the frame is 0x30 against the retail's 0x20. The retail's mode dispatch reuses a comparison result - it tests "mode == 1", then "mode >= 2", then "mode == 0", and reuses the *mode < 2* value (`$v0` = 0) for a later "mode == 2" test that can never be true on that path - which a plain if-chain does not produce. |
-| [`func_L20_00449BB0`](levels/func_L20_00449BB0.c) | 304 | 312 bytes; the mode test, the pointer-hash comparison (`((int)arg0 >> 8) & 7` against `D_L20_001B2AC8 & 7`, with the `state+0xA4` load in the branch delay slot), the `func_00277F48` call, the counted loop over `D_L20_001C4480`, the `func_L20_00449AE8` call, the four tail calls and the float compare against `D_L20_001B23F0` all match. Two residues: the materialised 128-bit copy and one callee-saved register too many - the retail reuses `$s0` for the buffer address once `arg0` dies - which also shifts the loop head and adds one alignment `nop`. |
-| [`func_L20_0044B100`](levels/func_L20_0044B100.c) | 392 | 396 bytes; the frame (0x70), the eight saved GPRs, the FPR save, every call and store match. Two residues: the materialised 128-bit copy, and the two `nop`s the retail's division padding needs before the `div.s`. The body reaches `D_L20_001B2470` and `D_L20_001B246C` through `$gp`, so it belongs in a `-G8` unit. |
+| [`func_L20_002CD928`](levels/func_L20_002CD928.c) | 34964 | NEAR MISS: the dispatch and the epilogue are the right shape, and the level's own jump table `D_L20_002B27E0` IS reachable from C - a computed `goto *D_L20_002B27E0[sel]` gives the retail's ten dispatch instructions exactly and `tools/build.py` resolves the name - but the 62 bodies (34 KB of C) are not written, and the frame (0x1A0, ten GPRs, five FPRs, ~40 float spills) follows from the bodies, so the prologue cannot match before they are. The complete body map (address, size, case values, callees, float constants) and the source-level structure are in the file: a `switch (sel)` with 149 values and 62 bodies whose layout order IS the source order of the case labels, no `default:` label (the 36 unlabelled values land on the tail), 45 branches reaching the epilogue at 0x002D6158, and two shared hubs at 0x002D60C0 (14 branches) and 0x002D5FE4 (7). |
+| [`func_L20_0036AE68`](levels/func_L20_0036AE68.c) | 288 | Catalogue defect: the row's first two words (0x0036AE68 `sw $t3,0x40($v1)` / `nop`) sit after the previous function's `jr $ra` (0x0036AE5C) and are unreachable; the real body starts at 0x0036AE70 (`addiu $sp,$sp,-0x20`) and ends at 0x0036AF84 = 280 bytes, and the next function starts at 0x0036AF88. It reaches `lw $a0,-0x4800($gp)` twice -> 0x001AA7F0, so it belongs in the -G8 unit once the row is split. |
+| [`func_L20_00444130`](levels/func_L20_00444130.c) | 4 | Catalogue defect: the row is one `addiu $sp,$sp,0x530` between two functions, no `jr $ra` - linker padding, as the ten found in `0032EB28.c`. No C can match it. |
+| [`func_L20_0039BDF0`](levels/func_L20_0039BDF0.c) | 212 | 208 bytes; the shape, the frame, the calls, the reload of `arg0` out of `p+0xB8` and the two argument stores all match. The two 16-byte copies differ: the retail materialises the pointer (`addiu $a0,$s0,0x10` / `sq $v0,0x0($a0)`), this compiler folds the constant offset into the `sq`. The fold happens in the CSE pass (`find_best_addr` in gcc/cse.c): the address is `(mem:TI (plus:SI (reg) (const_int off)) 0)` and `mips_address_cost` gives register+small-constant the cost 1, the same as a plain register, so the tie goes to the plus. The TImode displacement range is [-32768, 32752]; an offset outside it makes the reload materialise the address - the retail's shape with the wrong immediate. The float constants are hoisted in front of the copy, and the second call's delay slot holds the store to `arg0+0x98` where the retail has `addiu $a1,$s0,0xF0`. |
+| [`func_L20_0039D680`](levels/func_L20_0039D680.c) | 300 | 300 bytes and the loop matches the retail instruction for instruction; only the 12-instruction prologue differs. The retail holds `%hi(D_00189EA0)` in `$s0` and reuses `$s0` for `%hi(D_1FBB20)`; this build keeps `%hi(D_00189EA0)` in `$a1` and copies it to `$s5`. Reading the `%hi`/`%lo` split the other way round - the retail's `addiu $v1,$s0,-0x44E0` is just `%lo(D_1FBB20)` applied to the saved `%hi`, so it is the same table - makes the body byte-exact. THE BRANCH-LIKELY RECIPE: the retail's loop ends in TWO SEPARATE tests that jump back into the body (`bgezl`/`beql`); spelling them as two `if (...) goto body;` instead of one `&&` chain is what makes this cc1 emit the branch-LIKELY form. `-fno-schedule-insns` moves the `lui` back between the saves but needs a unit of its own. |
+| [`func_L20_0039ED78`](levels/func_L20_0039ED78.c) | 332 | 14 instructions differ, all register choices: the 0.5f in `$f1` instead of `$f12`, the `nosda` loads with the address's high part in a scratch register instead of in the destination register, and the word read from `0x10(state)` in `$v1` instead of `$v0`. The second call written as ONE expression is what makes the retail's mask block come out exactly; the two masks must be computed 0xFFFFFF first. |
+| [`func_L20_0039E5F0`](levels/func_L20_0039E5F0.c) | 380 | 380 bytes and everything matches except three places (seven instructions): the `f_0032F5B0` arguments are set up before the float multiply, the delay slot of the `f_0033ECF8` call holds `daddu a3,zero,zero` instead of `mov.s f13,f21` (passing the two floats before the last int argument fixes this one), and the word read from `0x60(s1)` is in `$v0` instead of `$v1`. |
+| [`func_L20_00409480`](levels/func_L20_00409480.c) | 336 | 332 bytes; the `index & 0xFF` split and the branch-likely back-edges are now the retail's (write the expression twice; the loop is a `do { ... } while (1)` whose two continue cases are joined with `||` and the reload sits inside the `if`; the retail's constants 0xD0F/0xFE/0xFD must be VARIABLES, not literals). Left: this cc1 rotates the loop to [preheader][latch][body] where the retail has [preheader][body][latch], the save order, and the order of the three constants' registers. |
+| [`func_L20_00449850`](levels/func_L20_00449850.c) | 404 | Right size, 14 instructions differ: the register choice for the `D_0018A3E0` / `D_L20_001B2AC8` reads, the `andi` order (the retail masks the pointer first), and the mode 0 block's float load/store order - NO permutation of the five statements reproduces the retail's store order. NEW: an external global in a `-G8` file wants NO attribute (with `nosda` cc1 emits `lui $v0,%hi(S); lw $a0,%lo($v0)($v0)` and leaves the load after the prologue; with no attribute it emits the retail's `lui $v1; lw $v1,%lo($v1)`); a `volatile` store stops cc1 from sharing a constant between two stores; the mode dispatch wants gotos to labels; `mode` must be a SIGNED int. |
+| [`func_L20_00449BB0`](levels/func_L20_00449BB0.c) | 304 | 312 bytes; the mode test, the pointer-hash comparison (`((int)arg0 >> 8) & 7` against `D_L20_001B2AC8 & 7`, with the `state+0xA4` load in the branch delay slot), the `func_00277F48` call, the counted loop over `D_L20_001C4480`, the `func_L20_00449AE8` call, the four tail calls and the float compare against `D_L20_001B23F0` all match. Two residues: the materialised 128-bit copy and one callee-saved register too many - the retail reuses `$s0` for the buffer address once arg0 dies - which also shifts the loop head and adds one alignment `nop`. The retail's second tail call is `f_003023C0(sp+0x10, arg0+0x10, sp+0)`, the same three registers as the first. |
+| [`func_L20_0044B100`](levels/func_L20_0044B100.c) | 392 | 380 bytes; the frame (0x70), the eight saved GPRs, the FPR save, every call and store match. Left: the materialised 128-bit copy and the two `nop`s the retail's division padding needs before the `div.s`. A delay slot runs BEFORE its call, so the retail's two `swc1` in delay slots mean `state+0x24 = func_002A7940()` and `state+0x28 = func_002A7878(pi/60,pi/30)`, and `func_L11_00460258` takes NO float argument. |
+| [`func_L20_002B93E0`](levels/func_L20_002B93E0.c) | 556 | The retail's exact size with eight words differing. A global's address has two forms and the retail uses both: it materialises `D_00189E20` twice out of one `lui` - `daddu $a2,$v0,$zero` + `addiu $x,$a2,%lo` for a VALUE use and `addiu $reg,$reg,%lo` for an ADDRESS use - and cc1 folds the two occurrences into one unless they sit in different basic blocks. A direct expression (`*(u8 *)(s0 + 0x22B4) == 1`) puts the compared byte in the retail's register; through a variable it does not. Early returns give the retail's `beql`. `nosda` matters even outside the `$gp` window. |
+| [`func_L20_002D6488`](levels/func_L20_002D6488.c) | 2044 | 2024 bytes; only 9 of the 511 instructions match, and the first difference is the second instruction of the body. The retail keeps two forms of the address of `D_00189E20`: `$s0` = the 32-bit address and `$s5` = the 64-bit `%hi` (`daddu $s5,$v1,$zero`), and every field access costs two instructions (`addiu $v1,$s5,%lo(D_189E20)` ; `lh $v0,0x1454($v1)`); this compiler materialises the address once and accesses it with a 16-bit displacement, or - with direct symbol references - anchors the symbol in `$fp`, which the retail never does (it has no `$fp`). The source spelling that asks for the retail's split 64-bit `la` is still unknown (a pointer cast to `unsigned long long`, a 64-bit pointer, an `unsigned long long` local, a pointer kept across a call, a volatile pointer, `-mno-split-addresses`, `-mabi=64`, `-mips3`, `-mcpu=r5900` were all measured and none gives `daddu`+`addiu`). The body reaches `D_001A8F00`, `D_001B29E4` and `D_001B2AC8` through `$gp`, so it needs -G8. The structural map is in the file. |
+| [`func_L20_002DEBE0`](levels/func_L20_002DEBE0.c) | 28208 | Mapping only: the level's main update (0x110 frame, 440 calls to 83 callees in one sequence, six exits, 369 float constants, seven `$gp` accesses). It is NOT the 149-way dispatch of `D_L20_002B27E0` - that is `func_L20_002CD928`. |
+| [`func_L20_00310E38`](levels/func_L20_00310E38.c) | 1212 | Mapping only: the level's per-object update, one loop over the objects, 20 calls to 17 callees, seven `$gp` accesses, the type constants 0xE29/0xD54/0xFA0, and the 128-bit zero local at sp+0x70 (the same `por` wall). |
+| [`func_L20_0039BB18`](levels/func_L20_0039BB18.c) | 724 | Near miss, 176 of the retail's 181 opcodes equal; the frame, the branch structure, the FPR allocation and the tail are the retail's. Blocked by the 128-bit zero store (the retail's `por $v0,$zero,$zero ; sq $v0,0x10($sp)` folds to `sq $zero`; the `por` survives only when the zero feeds two stores, and a following `lq` that rewrites the register does not keep it alive), plus the `$s1`/`$s2` register tie, the load of the field at +0xB8 (the retail loads it twice, the dom pass hoists and cse merges the two uses), the counter's 64-bit copy and the clamp's result register. |
+| [`func_L20_0039BEC8`](levels/func_L20_0039BEC8.c) | 1252 | Mapping only: the trail builder, two four-iteration loops over the history arrays, 26 calls to 13 callees, twelve `$gp` accesses (six of them floats), three `lq`/`sq` 128-bit copies. |
+| [`func_L20_0039DBC8`](levels/func_L20_0039DBC8.c) | 300 | 268 bytes; the wall is the 128-bit copy (this cc1 folds the constant offset into the `sq`, the retail materialises the pointer) and the always-zero guard the retail keeps and tests (`daddu $t0,$zero,$zero` ... `bnez $t0`) that this cc1 folds away. |
+| [`func_L20_0039E890`](levels/func_L20_0039E890.c) | 360 | 340 bytes; the constants 1 and 0xFF want callee-saved registers (the retail compares them inside the loop, across a call) and the frame grows to 0x60, because the retail's dead state load shares a register with the constant 0xFF. The retail's three separate exit labels with branch-likely restores are the second wall. |
+| [`func_L20_0039E9F8`](levels/func_L20_0039E9F8.c) | 444 | 440 bytes; the calls, the constants and the comparisons are the retail's, but the base pointer `D_L20_001B308C` is kept in `$s3` across the calls where the retail reads the global again at the end, and the frame is 0x50 against the retail's 0x40. |
+| [`func_L20_0039E368`](levels/func_L20_0039E368.c) | 648 | Jump table `jtbl_002B4CA0` cannot be placed: a C `switch` puts its table in the unit's own `.rodata`, which the build discards - the wall that keeps `func_00118CC8` and `func_00123C28` in `nonmatching/`. |
+| [`func_L20_003A0320`](levels/func_L20_003A0320.c) | 680 | Structure mapped only (a `switch` on the byte at +0x20, a five-word block passed on the stack to `f_00334408`, float literals 0x3F666666/0x3FA66666/...); no C yet. |
+| [`func_L20_003BFEB8`](levels/func_L20_003BFEB8.c) | 396 | 384 bytes; the branch-likely loop form and one register too many for the list pointer (the retail keeps it in one register for the whole loop). |
+| [`func_L20_003C0048`](levels/func_L20_003C0048.c) | 648 | A first attempt: 616 against 648 bytes; the retail's dispatch is measured (signed comparison, both big cases out of line behind a branch-likely, the constant 2 in the delay slot) but the block order is not the retail's yet. |
+| [`func_L20_00408D98`](levels/func_L20_00408D98.c) | 1760 | Jump table `jtbl_002B5340` cannot be placed (the same `.rodata` wall); the body would have to be worked arm by arm. |
+| [`func_L20_00440398`](levels/func_L20_00440398.c) | 196 | 180 bytes against the retail's 196: the walk matches, but the retail tests a second, always-zero flag inside the loop (`daddu $t0,$zero,$zero` / `bnez $t0`) that NO spelling of a zero-valued local survives in this cc1 (int/u32/u16/u8/long long/u64/pointer/static, `!= 0`, `index - index`, `m - m`, `rec - rec`, `count - count`, `index & 0`, `index ^ index`, `(u32)index*0`, volatile), and with it the copy of the masked index out of `$t0` and the absolute form of the base load. That pattern occurs nowhere else in the game. |
+| [`func_L20_00442890`](levels/func_L20_00442890.c) | 352 | 340 bytes with the default flags, 344 with `-mno-split-addresses`, against the retail's 352; the whole body is recovered (every call, every constant, the three shared-unit calls with the `$gp` floats, the `func_002AAA00` call and the two final stores). The residues: the base address (the retail's high part in a scratch, the low part in `$s1`), the state pointer taking `$s1` in the retail and `$s0` here, the second float pair (`addiu $v0,$s0,0x160` + `0x4($v0)` against `0x164($s0)`), and the order of the three constant materialisations. |
+| [`func_L20_00443A10`](levels/func_L20_00443A10.c) | 332 | Exact size, 28 of 83 words differ: the boot table's address comes out as the single `la` pseudo where the retail separates the `lui` and the `addiu` around a save, the table index lands in `$v1` against the retail's `$v0`, the blend result in `$f20` against the retail's `$f21`, and the tail's five instructions are in another order. `-mno-split-addresses` is needed for the retail's base == dest absolute load and it is what costs the separated address pseudo - a body that needs both cannot be matched with one flag set. |
+| [`func_L20_004431E0`](levels/func_L20_004431E0.c) | 324 | The retail's exact size, the instructions differ from +0xc: the register allocation of the first block (the table base in `$v0` and the index in `$v1`, against `$v1` and `$v0`). |
+| [`func_L20_00442E68`](levels/func_L20_00442E68.c) | 200 | The 0x7FFF id-list walk: body and loop condition are the retail's byte for byte; only the entry block differs. The retail materialises the table's address into a register that is NOT the `%hi` register, so the `%hi` survives into the branch's delay slot where it is copied into the callee-saved register; this cc1 reuses the `%hi` register for the address, so the copy is scheduled early, the save order flips and the index lands in `$a0` instead of `$v1`. The walk needs a `goto`-loop with the condition block AFTER the body; a `for(;;)` rotates the loop and duplicates the checks. |
+| [`func_L20_00447640`](levels/func_L20_00447640.c) | 264 | The same id-list walk wall as `func_L20_00442E68`: the body and the loop condition are the retail's byte for byte, only the entry block differs (the retail's `%hi` survives into the branch's delay slot). |
+| [`func_L20_00448A18`](levels/func_L20_00448A18.c) | 284 | Not attempted: two of the three 128-bit copies have a constant destination offset that this cc1 folds. |
+| [`func_L20_00447748`](levels/func_L20_00447748.c) | 444 | Not attempted: the body is recovered (three early exits, the `$gp` table at gp+0x3340, the fourteen-word stack-argument struct and its four callees, the switch on arg0[0x20]); the wall is the scattered order of the fourteen stack stores. |
+| [`func_L20_00445890`](levels/func_L20_00445890.c) | 568 | Not attempted: the body is recovered (the `movz` clamp to 0x1F/0x20, the three exits on arg0[0x20], the table walk, the `or`/`sll` return value); the walls are the `movz` clamp and the branch-likely loop. |
+| [`func_L20_00448858`](levels/func_L20_00448858.c) | 444 | The closest of the lot: the retail's frame, its first float block and the rematerialised second 0.0f compare are reached, and 15 of 111 words match. Left: the callee-saved GPR roles are rotated (the retail `$s0`=state, `$s1`=arg0, `$s2`=pointer; here `$s0`=pointer, `$s1`=state, `$s2`=arg0), two float registers, and three block layouts - the load of state[0x20] must sit in the branch's delay slot and its then-block must use that value, and the retail moves a load out of a block into the delay slot of a predecessor branch, which this cc1 does not do. |
+| [`func_L20_00449178`](levels/func_L20_00449178.c) | 444 | 464 bytes; the 128-bit zero store folds to `sd`, `bnez` instead of the retail's `beql`, `$s0`/`$s1` swapped for the object and the state. Retail: the dispatch `mode == 1` / `mode >= 2` (`slti` + a branch-likely `beql`) / `mode == 0`; the mode 0 block builds a 128-bit vector on the stack (`por $v0,$zero,$zero` + `sq $v0,0x20($sp)`, the por in the branch's delay slot, then `swc1 $f0,0x28($sp)` for 2.0f) and calls `func_L00_0033E220`; the mode 2 block calls `func_L00_0032A258` with the addresses of the three level globals `D_L20_001B23A0/A8/B0`, which must be declared with a type bigger than the -G8 threshold or cc1 loads them out of `.sdata` instead of computing `$gp+offset`. |
+| [`func_L20_00449CE0`](levels/func_L20_00449CE0.c) | 752 | Not attempted: the 128-bit zero store at 0x00449EEC is the `func_L20_0044AB68` wall. |
+| [`func_L20_0044A658`](levels/func_L20_0044A658.c) | 480 | 452 bytes; everything but the two 16-byte copies matches, including the `beql`/`bc1fl` and the 0x12F2/0x12EF test. The retail spends `$a0`/`$a1` on the copy's addresses, so it keeps the flags in `$v1` and the -1 in `$v0`; with the copy folded this cc1 uses `$v0`/`$a0` instead. |
+| [`func_L20_0044A8F0`](levels/func_L20_0044A8F0.c) | 408 | 388 bytes; the two clamps (pi/4 = 0x3F490FDC, its negation 0xBF490FDC), the `swc1` in the branch delay slots, the `bc1f / b / bc1tl / bc1tl / bc1fl` sequence, the two `mov.s $f0,$f20` (the function returns a float) and the calls all match. But this cc1 emits the ORDERED `c.olt.s` where the retail has the SIGNALLING `c.lt.s`, for the same C. The frame is 0x60 against the retail's 0x70 because the folded copies free one callee-saved register. |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+| function | size | verdict |
+| --- | --- | --- |
 | [`func_L11_00335B88`](levels/func_L11_00335B88.c) | 4 | Catalogue defect: one word at 0x00335B88, `addiu $sp,$sp,0xB00`; a stack adjustment with no return, the linker fill between two bodies; no C can be placed |
 | [`func_L11_003F9F60`](levels/func_L11_003F9F60.c) | 4 | Catalogue defect: one word at 0x003F9F60, `sw $v0,-0x4000($gp)`; a store with no return, a piece of the neighbour the catalogue split off; no C can be placed |
 | [`func_L11_004417A0`](levels/func_L11_004417A0.c) | 4 | Catalogue defect: one word at 0x004417A0, `sw $a1,0x180($a2)`; a store with no return, a piece of the neighbour the catalogue split off; no C can be placed |
