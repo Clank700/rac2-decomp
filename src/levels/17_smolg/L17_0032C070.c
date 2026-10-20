@@ -200,7 +200,7 @@ INCLUDE_ASM("asm/levels", func_L17_003C6CE8);
 
 /* func_L17_003C7018 is defined in L17_0032C070-g8.c (this unit has no $gp access for it). */
 
-INCLUDE_ASM("asm/levels", func_L17_003C71B0);
+/* func_L17_003C71B0 is matched in L17_003C71B0.c (built with -mno-split-addresses). */
 
 /* Stores the second argument in the object's sub-record at 0xA4. */
 void func_L17_003C7250(char *a0, int a1)

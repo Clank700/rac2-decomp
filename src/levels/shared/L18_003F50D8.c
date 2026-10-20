@@ -1,13 +1,5 @@
-/* func_L18_003F50D8 (188 bytes, 3 places) -- NEAR MISS, not integrated.
-   Two resident-state edits (0x001A79F0 == 0x13 and 0x001A8F00 == 2) then a
-   three-way dispatch on the byte at +0x20: 0 calls func_L18_003F5198, 1 and 0x13
-   do nothing, anything else runs the four-function update chain.
-   The candidate is 192 bytes: every instruction of both blocks and the epilogue
-   is the source's, but where retail branches (beq/beql to the epilogue) this cc1
-   speculates the +0x20 load into the delay slot of a `bnel` and reloads it at the
-   join - the annulled-slot wall of COMPILER-NOTES, here on the branch that leaves
-   the first block.  Four spellings measured (local byte, three inline re-reads,
-   nested else-if, flipped constant order): all 192. */
+#include "include_asm.h"
+
 extern int D_L18_001A79F0;
 extern int D_L18_001A8F00;
 extern void func_L18_003F5198(void *);
