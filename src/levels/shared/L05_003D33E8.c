@@ -32,6 +32,10 @@ void func_L05_00416630(char *p)
 
 INCLUDE_ASM("asm/levels", func_L05_004170C8);
 
+/* Raises the object's flag word, hands it to the spawner and publishes the
+   level's record for the frame it points at.  The attempt is in
+   nonmatching/levels/func_L05_00417448.c: the size is exact and the tail
+   matches, the middle block's register allocation does not. */
 INCLUDE_ASM("asm/levels", func_L05_00417448);
 
 INCLUDE_ASM("asm/levels", func_L05_00417550);
