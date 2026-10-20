@@ -118,8 +118,6 @@ int func_L14_003DE2D8(char *arg0) {
     return count;
 }
 
-INCLUDE_ASM("asm/levels", func_L14_003DE310);
-
 INCLUDE_ASM("asm/levels", func_L14_003DE360);
 
 void func_L14_003DE488(char *arg0) {
@@ -205,6 +203,8 @@ void func_L14_003E1DD0(char *arg0) {
         break;
     }
 }
+
+INCLUDE_ASM("asm/levels", func_L14_003DE310);
 
 INCLUDE_ASM("asm/levels", func_L14_003E1E78);
 

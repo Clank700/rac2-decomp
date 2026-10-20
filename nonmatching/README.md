@@ -163,7 +163,7 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L13_0040A3B0`](levels/func_L13_0040A3B0.c) | 208 | Recorded instruction mismatch at +0x0. |
 | [`func_L13_0040DE50`](levels/func_L13_0040DE50.c) | 228 | Recorded G8 instruction mismatch at +0xc. |
 | [`func_L13_0041BA60`](levels/func_L13_0041BA60.c) | 128 | Recorded candidate is 124 bytes; size does not match retail. |
-| [`func_L14_003DE310`](levels/func_L14_003DE310.c) | 80 | 8; right size, two words differ on branch sense: `bgez`/`bltz` direction and `c.ole.s $f0,$f1` against `c.olt.s $f1,$f0`. |
+| [`func_L14_003DE310`](levels/func_L14_003DE310.c) | 80 | 8; right size, two words differ on branch sense: `bgez`/`bltz` direction and `c.ole.s $f0,$f1` against `c.olt.s $f1,$f0`. Wave 9: the retail's two inner tests are the plain forms (`bltz`, `bc1f`) where this cc1 emits the likely forms and so copies the clear store into each annulled delay slot; the record pointer must be a `char *` or the flag load is at 0x80 instead of 0x20 |
 | [`func_L14_003DE908`](levels/func_L14_003DE908.c) | 136 | Recorded candidate is 132 bytes; size does not match retail. |
 | [`func_L14_00423B30`](levels/func_L14_00423B30.c) | 164 | Recorded candidate is 140 bytes; size does not match retail. |
 | [`func_L14_00426E60`](levels/func_L14_00426E60.c) | 196 | Recorded G8 instruction mismatch at +0x30. |
