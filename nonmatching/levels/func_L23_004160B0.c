@@ -1,4 +1,14 @@
-/* func_L23_004160B0 (724 bytes, level 23 only, uses $gp: belongs in L23_0035CE90-g8.c) -- NEAR MISS, not integrated.
+/* func_L23_004160B0 (724 bytes, level 23 only, uses $gp) -- NEAR MISS, not integrated.
+   Best state (2026-10-20): EXACT SIZE, 724 bytes, in a -g8 unit of its own built with -g
+   (`-O2 -G8 -ffunction-sections -g`, as func_L23_003BF9B0 and func_L23_004402D8) and with the division
+   in a statement of its own (`f = ... / D_L23_001B13C8;` then `n = 10 - (int)(f * 10.0f);`): the -g line
+   label then gives retail's two nops before the div.s. What is left is the order of the loop preheader:
+   this cc1 materialises the invariant 0.017453294f first, retail after the 90.0f/120.0f constants
+   (loop.c's second pass; see the earlier notes below). Placing `k = 0.017453294f;` before the loop,
+   after the n = 10 clamp or at the end of the body was measured: none gives retail's order.
+
+   Earlier notes (716 bytes without -g):
+   func_L23_004160B0 (724 bytes, level 23 only, uses $gp: belongs in L23_0035CE90-g8.c) -- NEAR MISS, not integrated.
    state: 716 bytes against retail's 724 (tools/check.py, -O2 -G8). Everything is in retail's order and registers
    (conditions, the tail call, the $s0 particle counter, $s4..$s6 and $f20..$f24, the frame, every call and delay slot)
    except two things, 8 words in all:
@@ -16,6 +26,7 @@
    last (floats before it) puts `addiu $t3,$zero,0xFF` in the jal slot; D_L23_001B13CC is read as a variable (0.0f constant
    pool entry), not written as 0.0f.
    Needs for L23_0035CE90-g8.c: the sda externs below (D_L23_001B13CC and D_L23_001B1484 are new; D_L23_001B13C8 exists). */
+
 extern float D_L23_001B13C8 __attribute__((sda));
 
 extern float D_L23_001B13CC __attribute__((sda));
@@ -87,7 +98,10 @@ void func_L23_004160B0(char *arg0) {
         if (*(short *)(*(char **)(hit + 0x20) + 0xAA) != 0x118F)
             *(short *)(state + 0x26) = 0x14;
         if (*(unsigned short *)(arg0 + 0x7C) != 0) {
-            n = 10 - (int)(*(float *)(state + 0x20) / D_L23_001B13C8 * 10.0f);
+            float f;
+
+            f = *(float *)(state + 0x20) / D_L23_001B13C8;
+            n = 10 - (int)(f * 10.0f);
             if (*(float *)(state + 0x20) <= D_L23_001B13CC)
                 n = 10;
             for (i = 0; i < n; i++) {

@@ -1,16 +1,8 @@
-/* func_L23_003C00D0 (292 bytes, level 23 only) -- NEAR MISS, not integrated.
-   Belongs in src/levels/23_damosel_orbit/L23_0035CE90.c (no $gp access).
-   state: 276 bytes against retail's 292. Aligned word by word, the body is the same
-   sequence up to the first division, and after it, except for four nops: retail has two
-   nops between each load and the following div.s (`lhu $v0,0x36F0($v0)`, two nops,
-   `div.s $f1,$f1,$f0`; `lw $a0,0x3B4($s0)`, two nops, `div.s $f2,$f2,$f0`). This toolchain
-   emits the divisions straight after the loads. The division padding
-   (tools/compiler/transformers/pad_div_erratum_nops.py) is keyed to a code label within two
-   slots before the division, and no branch target that would make such a label is visible
-   in the retail bytes around these divisions. No source shape measured here moves it.
-*/
+#include "include_asm.h"
 
 extern int D_L23_001B36F0 __attribute__((sda));
+extern void func_L23_003BFFC0(char *arg0, int arg1, int arg2, int arg3, int arg4, float arg5);
+extern void func_367150(int);
 
 void func_L23_003C00D0(char *arg0) {
     char *state = *(char **)(arg0 + 0x68);

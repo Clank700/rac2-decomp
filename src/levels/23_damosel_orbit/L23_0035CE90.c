@@ -69,7 +69,7 @@ void func_L23_003C0028(char *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L23_003C00D0);
+/* func_L23_003C00D0 is matched in L23_003C00D0.c (built with -g). */
 
 INCLUDE_ASM("asm/levels", func_L23_003C01F8);
 
