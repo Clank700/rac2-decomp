@@ -189,7 +189,8 @@ INCLUDE_ASM("asm/game", func_003462A8);
 
 INCLUDE_ASM("asm/game", func_003463C8);
 
-INCLUDE_ASM("asm/game", func_003464D0);
+/* func_003464D0 is built from 00345358-g8.c for small-data access. */
+
 
 void func_003465D0(char *a0)
 {
