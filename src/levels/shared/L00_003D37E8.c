@@ -474,7 +474,7 @@ void func_L00_003E0F58(char *pos, int a1, int a2, char *a3, int t0,
     float off[4];
     long long r;
 
-    func_L00_003E0CE8_1(pkt);
+    func_L00_003E0CE8(pkt);
     r = func_002E67A0_1(a3);
 
     *(long long *)(pkt + 136) = ((long long)t0 << 2) | 0x8000000040LL;

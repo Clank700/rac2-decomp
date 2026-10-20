@@ -319,6 +319,8 @@ void func_L00_003F0AA8(char *p, float scale)
 
 extern void ref_L00_003F0B10_00(char *pkt);
 
+extern void ref_L00_003F0B10_01(char *, float);
+
 extern long long func_0027C878(char *p);
 
 extern float func_00283248(float x, float y);
@@ -384,7 +386,7 @@ void func_L00_003F0B10(char *pos, int a1, int a2, char *a3, int t0,
     m[14] = *(float *)(pos + 8) + off[2];
     m[15] = 1.0f;
 
-    func_L00_003F0AA8(pkt, fA);
+    ref_L00_003F0B10_01(pkt, fA);
     func_00280B90(pkt, m, 0);
 }
 
@@ -443,6 +445,8 @@ extern Aimvec_F0b10 D_L00_001B8C80;
 
 extern void ref_L00_003F1EB8_00(char *pkt);
 
+extern void ref_L00_003F1EB8_01(char *, float);
+
 /* Builds a 144-byte packet, aims a quaternion at the shared 0x001B8C80 vector from pos through three float helpers, derives an offset basis by a fourth, writes the last matrix row from pos plus that offset, then dispatches the packet. */
 void func_L00_003F1EB8(char *pos, int a1, int a2, char *a3, int t0,
                        float fA, float fB, float fC)
@@ -481,7 +485,7 @@ void func_L00_003F1EB8(char *pos, int a1, int a2, char *a3, int t0,
     m[14] = *(float *)(pos + 8) + off[2];
     m[15] = 1.0f;
 
-    func_L00_003F1E50(pkt, fA);
+    ref_L00_003F1EB8_01(pkt, fA);
     func_00280B90(pkt, m, 0);
 }
 
