@@ -20,7 +20,7 @@ INCLUDE_ASM("asm/levels", func_L23_003BDA20);
 
 INCLUDE_ASM("asm/levels", func_L23_003BEA00);
 
-INCLUDE_ASM("asm/levels", func_L23_003BF9B0);
+/* func_L23_003BF9B0 is defined in L23_003BF9B0-g8.c ($gp, and -g for its division padding). */
 
 extern void func_2F7DD0(char *);
 
