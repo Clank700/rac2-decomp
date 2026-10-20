@@ -70,6 +70,7 @@ src/levels/11_joba/L11_003F2C28-rc2.c	-O2 -G8 -mastra-r5900-extern-buffer -ffunc
 src/levels/shared/L12_0041A6D0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/levels/12_todano/L12_0041BDF8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/levels/shared/L12_00427C58-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/levels/22_dobbo_orbit/L22_0040DD20-rc2.c	-O2 -G0 -fno-schedule-insns2 -ffunction-sections -fno-builtin
 # path (a glob)<TAB>flags; "sdk" first: the SDK compiler (tools/compiler/sdk/) instead of the game's
 # The default is "-O2 -G0 -ffunction-sections" (-G8 for a file named *-g8.c).
 src/core/00115228.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
