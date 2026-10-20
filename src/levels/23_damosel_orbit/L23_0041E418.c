@@ -167,4 +167,4 @@ void func_L23_0043F930(s32 arg0) {
     func_L00_00428CE0(arg0);
 }
 
-INCLUDE_ASM("asm/levels", func_L23_004402D8);
+/* func_L23_004402D8 is matched in L23_004402D8-g8.c (built with -g). */
