@@ -2414,3 +2414,12 @@ read the primary entry for context and verify each form separately.
 
 | function | size | verdict |
 | --- | --- | --- |
+
+## Level functions, wave 9 agent s2 (2026-10-20)
+
+The shared level family (every body linked into the 27 level programs).
+
+| Function | Size | Bytes that differ |
+| --- | ---: | ---: |
+| [`func_L00_003AB8B8`](levels/func_L00_003AB8B8.c) | 264 | Size exact and the whole body recovered: the angle table, the three arms of the 0x11D/1 test and the two tail calls all match instruction for instruction. Left is the compiler's register choice: retail keeps the global base 0x189E20 in a temp for the early reads and in a callee-saved register for the late ones, retail copies the first parameter into $s1 and the second into $s2 where this cc1 swaps them (its allocation follows the first textual use, and the second parameter is used earlier here), and retail materialises the 1/60 constant after the multiply where this cc1 does it before. Retail keeps the global's high half in a scratch register and adds the low half where the base is used (the split-addresses form), so this body wants a -mno-split-addresses unit of its own; with that flag the candidate is 260 bytes and the two parameters land in the right registers |
+| [`func_L01_002E1510`](levels/func_L01_002E1510.c) | 348 | Candidate is 340 bytes: the first loop and the call sequence are exact, but retail copies the first parameter into $s4 and the second into $s6 where this cc1 gives $s5/$s6, retail computes the second record pointer as base + offset + 16 and this cc1 as (base + offset) + 16, and retail's outer loop head holds two instructions this cc1 folds into the loop body |
