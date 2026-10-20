@@ -43,11 +43,4 @@ INCLUDE_ASM("asm/core", func_00119BF8);
 
 INCLUDE_ASM("asm/core", func_00118CC8);
 
-/* The first stub of libkernl.a's klib.o (the kernel call table, 0x11A800 is
-   the object's start in config/datamine/ntsc-u-sdk-objects.tsv): the eight
-   bytes in front of the stub are retail's 0xCDCDCDCD linker fill between
-   objects, and the stub itself is `addiu $v1,$zero,0; syscall 0; jr $ra` -
-   a kernel trap no compiler emits. rac1-decomp's func_00118A40 is the same
-   24 bytes (the fill and the first stub of the same table) and is written
-   as handwritten assembly there. */
-ASM_FUNC("asm/core", func_0011A7F8);
+INCLUDE_ASM("asm/core", func_0011A7F8);
