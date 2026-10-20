@@ -130,13 +130,11 @@ gated:
     }
 }
 
-INCLUDE_ASM("asm/game", func_002F53C0);
 
 INCLUDE_ASM("asm/game", func_002F53C8);
 
 INCLUDE_ASM("asm/game", func_002F57A8);
 
-INCLUDE_ASM("asm/game", func_002F5AE8);
 
 INCLUDE_ASM("asm/game", func_002F5AF8);
 
@@ -239,7 +237,6 @@ INCLUDE_ASM("asm/game", func_002F8918);
 
 INCLUDE_ASM("asm/game", func_002F9198);
 
-INCLUDE_ASM("asm/game", func_002F93A8);
 
 INCLUDE_ASM("asm/game", func_002F93B0);
 
@@ -250,6 +247,5 @@ void func_002F9778(void)
     func_002F93B0();
 }
 
-INCLUDE_ASM("asm/game", func_002F9798);
 
 INCLUDE_ASM("asm/game", func_002F97A0);

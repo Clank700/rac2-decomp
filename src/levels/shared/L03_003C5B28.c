@@ -498,7 +498,6 @@ int func_L03_0043AF30(void *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L03_00454888);
 
 void func_L03_00456E58(void)
 {

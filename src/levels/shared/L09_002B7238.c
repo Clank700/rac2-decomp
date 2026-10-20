@@ -174,7 +174,6 @@ extern void ref_L09_003F8858_00(char *object, int value);
 
 INCLUDE_ASM("asm/levels", func_L09_002B7238);
 
-INCLUDE_ASM("asm/levels", func_L09_00325C58);
 
 INCLUDE_ASM("asm/levels", func_L09_00326E90);
 

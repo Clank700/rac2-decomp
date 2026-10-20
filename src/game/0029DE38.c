@@ -171,7 +171,6 @@ void func_0029F450(void *object)
     }
 }
 
-INCLUDE_ASM("asm/game", func_0029F528);
 
 /* Picks one of two pointers held at +88 and +92 of the receiver, choosing +92 when the byte at +66 equals 255, then returns a value derived from the scale word at +68: either a halved table lookup, or a weighted blend of two table lookups plus the scale, or an interpolation between a lookup at +92 and a lookup at +88 weighted by one minus the scale. */
 float func_0029F530(char *s1)
@@ -198,7 +197,6 @@ float func_0029F530(char *s1)
     return t * 0.0625f;
 }
 
-INCLUDE_ASM("asm/game", func_0029F628);
 
 extern int func_00282A18(int);
 
@@ -258,7 +256,6 @@ void func_0029F6A0(
 
 INCLUDE_ASM("asm/game", func_0029F840);
 
-INCLUDE_ASM("asm/game", func_0029F960);
 
 void func_0029F978(u8 *a0,u32 a1,u8 *a2) {
  u8 *p;
@@ -370,7 +367,6 @@ void func_0029FD48(char *p1, int n, char *p3, char *p4)
     }
 }
 
-INCLUDE_ASM("asm/game", func_0029FDE8);
 
 INCLUDE_ASM("asm/game", func_0029FDF0);
 

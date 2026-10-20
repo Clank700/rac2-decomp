@@ -64,9 +64,7 @@ void func_L00_00358E50(void)
     func_L00_00358D98(D_L00_0021DE10);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0035CC98);
 
-INCLUDE_ASM("asm/levels", func_L00_0035D168);
 
 extern int D_001B19E8 __attribute__((sda));
 
@@ -153,11 +151,9 @@ void func_L00_0035F9F0(int value, long address) {
         *target = value;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0035FA80);
 
 INCLUDE_ASM("asm/levels", func_L00_003603C0);
 
-INCLUDE_ASM("asm/levels", func_L00_00364EE0);
 
 extern void func_002B7B18(int value, char *target);
 
@@ -365,7 +361,6 @@ void func_L00_0037AF58(void)
 {
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0037AFB0);
 
 INCLUDE_ASM("asm/levels", func_L00_0037B408);
 
@@ -373,4 +368,3 @@ INCLUDE_ASM("asm/levels", func_L00_0037B4B8);
 
 INCLUDE_ASM("asm/levels", func_L00_0037B5C0);
 
-INCLUDE_ASM("asm/levels", func_L00_0037B6E8);

@@ -55,6 +55,41 @@ class LevelExtents(unittest.TestCase):
             levels.level_extent(0, 0x354DE8, 16)
 
 
+class Filler(unittest.TestCase):
+    """The linker's filler between the bodies: stack adjustments and nops only."""
+
+    def test_stack_adjustments_and_nops_are_filler(self):
+        self.assertTrue(levels.is_padding(code(0x27BD0030, 0, 0x27BD0010)))
+        self.assertTrue(levels.is_padding(code()))
+        self.assertTrue(levels.is_padding(code(0x00000000)))
+
+    def test_a_body_with_a_call_is_not_filler(self):
+        self.assertFalse(levels.is_padding(code(0x27BD0030, 0x0C000000)))
+
+    def test_a_body_without_a_return_can_still_be_code(self):
+        # func_00115E90 is matched C and has no jr $ra: it ends in a trap.
+        self.assertFalse(levels.is_padding(code(0x27BD0030, 0x00000000, 0x0C0A0A5E)))
+
+
+class BodyStart(unittest.TestCase):
+    """An extent that starts on a stack restore begins in the preceding body's
+    epilogue: the real body starts at the next prologue."""
+
+    def test_a_restore_leads_to_the_next_prologue(self):
+        # addiu $sp,$sp,0x30 ; nop ; addiu $sp,$sp,-0x50 ; ...
+        body = code(0x27BD0030, 0, 0x27BDFFB0)
+        self.assertEqual(levels.body_start(body), 8)
+
+    def test_a_prologue_is_already_at_the_body(self):
+        self.assertEqual(levels.body_start(code(0x27BDFFB0)), 0)
+
+    def test_another_first_instruction_is_already_at_the_body(self):
+        self.assertEqual(levels.body_start(code(0x0080802D)), 0)
+
+    def test_a_restore_without_a_prologue_stays(self):
+        self.assertEqual(levels.body_start(code(0x27BD0030, 0)), 0)
+
+
 class Identity(unittest.TestCase):
     def test_words_and_trim(self):
         self.assertEqual(levels.words(code(1, 2, 3)), (1, 2, 3))

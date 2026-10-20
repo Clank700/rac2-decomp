@@ -130,7 +130,6 @@ INCLUDE_ASM("asm/game", func_002E31E8);
 
 INCLUDE_ASM("asm/game", func_002E3360);
 
-INCLUDE_ASM("asm/game", func_002E3468);
 
 INCLUDE_ASM("asm/game", func_002E3478);
 
@@ -151,7 +150,6 @@ void func_002E3548(void)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002E35D0);
 
 INCLUDE_ASM("asm/game", func_002E35E0);
 
@@ -171,7 +169,6 @@ void func_002E37B0(void)
 }
 
 
-INCLUDE_ASM("asm/game", func_002E3938);
 
 typedef struct {
     int field0;
@@ -441,7 +438,6 @@ int func_002E5E58(int index, int value, void *object)
     return result;
 }
 
-INCLUDE_ASM("asm/game", func_002E5EF0);
 
 INCLUDE_ASM("asm/game", func_002E5F00);
 
@@ -516,7 +512,6 @@ void func_002E60E8(int arg0, long arg1) {
     }
 }
 
-INCLUDE_ASM("asm/game", func_002E6118);
 
 extern void *D_00214920[];
 extern void func_0029F338(void *);
@@ -537,7 +532,6 @@ INCLUDE_ASM("asm/game", func_002E6178);
 
 INCLUDE_ASM("asm/game", func_002E64A0);
 
-INCLUDE_ASM("asm/game", func_002E6A58);
 
 INCLUDE_ASM("asm/game", func_002E6A60);
 

@@ -167,7 +167,6 @@ INCLUDE_ASM("asm/game", func_0032EB28);
 
 INCLUDE_ASM("asm/game", func_0032F3D0);
 
-INCLUDE_ASM("asm/game", func_0032F590);
 
 INCLUDE_ASM("asm/game", func_0032F598);
 
@@ -202,7 +201,6 @@ INCLUDE_ASM("asm/game", func_00331718);
 
 INCLUDE_ASM("asm/game", func_00331800);
 
-INCLUDE_ASM("asm/game", func_003320E8);
 
 
 void func_003323F0(int a0) {
@@ -219,7 +217,6 @@ void func_003323F0(int a0) {
 
 INCLUDE_ASM("asm/game", func_00332440);
 
-INCLUDE_ASM("asm/game", func_00332588);
 
 INCLUDE_ASM("asm/game", func_00332590);
 
@@ -253,7 +250,6 @@ void func_003340A8(char *object)
         func_002FDBD8(data + 0x10, data + 0x20, 0, 1.0f);
 }
 
-INCLUDE_ASM("asm/game", func_003340F0);
 
 INCLUDE_ASM("asm/game", func_00334100);
 
@@ -264,11 +260,9 @@ INCLUDE_ASM("asm/game", func_00334550);
 /* func_00334710 is matched in 00334710-rc2.c. */
 
 
-INCLUDE_ASM("asm/game", func_00334728);
 
 INCLUDE_ASM("asm/game", func_00334730);
 
-INCLUDE_ASM("asm/game", func_00334898);
 
 INCLUDE_ASM("asm/game", func_003348A8);
 
@@ -296,7 +290,6 @@ INCLUDE_ASM("asm/game", func_00335370);
 
 INCLUDE_ASM("asm/game", func_003353C8);
 
-INCLUDE_ASM("asm/game", func_00335420);
 
 INCLUDE_ASM("asm/game", func_00335438);
 
@@ -338,7 +331,6 @@ void func_00335840(void) {
     func_002704D0();
 }
 
-INCLUDE_ASM("asm/game", func_00335860);
 
 void func_00335870(void *object, int flags) {
     *(void **)((char *)object + 4) = D_001AD9C8;
@@ -457,7 +449,6 @@ void func_00335EB0(char *a0, int a1)
     }
 }
 
-INCLUDE_ASM("asm/game", func_00335F18);
 
 void func_00335F20(char *object, int value) {
     if (value != *(int *)(object + 0x10)) {
@@ -534,7 +525,6 @@ void func_00335FC8(Obj_F7b2f1854 *o, int a1, int count)
     F7b2f1854_FUN_00335E68(o, 1);
 }
 
-INCLUDE_ASM("asm/game", func_003360F0);
 
 void func_003360F8(char *object, int flags)
 {
@@ -588,7 +578,6 @@ void func_003361E0(char *obj)
 
 INCLUDE_ASM("asm/game", func_00336288);
 
-INCLUDE_ASM("asm/game", func_00336308);
 
 /* Measured target: byte-identical across all 27 levels. */
 s32 func_00336318(u8 *a0) { return *(s32 *)(a0 + 0x38); }
@@ -646,7 +635,6 @@ Constructor_3361A8 *func_003366D0(Constructor_3361A8 *object) {
     return object;
 }
 
-INCLUDE_ASM("asm/game", func_00336708);
 
 void func_00336710(char *s1, int a1, char *a2)
 {
