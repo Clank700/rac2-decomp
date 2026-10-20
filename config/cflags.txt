@@ -44,6 +44,7 @@ src/game/003225C0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/game/00322A30-rc2.c	-O2 -G8 -fno-sched-interblock -ffunction-sections -fno-builtin
 src/game/0032ACF0-rc2.c	-O2 -fno-sched-interblock -G0 -ffunction-sections -fno-builtin
 src/game/0032AF50-rc2.c	-O2 -G0 -fno-strength-reduce -ffunction-sections -fno-builtin
+src/game/0032B0A8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 # path (a glob)<TAB>flags; "sdk" first: the SDK compiler (tools/compiler/sdk/) instead of the game's
 # The default is "-O2 -G0 -ffunction-sections" (-G8 for a file named *-g8.c).
 src/core/00115228.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
