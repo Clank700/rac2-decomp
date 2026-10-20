@@ -527,7 +527,6 @@ void func_00123978(int *record, RecordOutput *output, unsigned int *minimum, uns
     *maximum = high;
 }
 
-INCLUDE_ASM("asm/core", func_00123A00);
 
 INCLUDE_ASM("asm/core", func_00123B40);
 
@@ -576,7 +575,6 @@ static __inline__ struct dwarf_cie *get_cie(fde *f) {
 extern int func_00115544(const char *, const char *);
 extern unsigned int func_001157AC(const char *);
 
-INCLUDE_ASM("asm/core", func_00123C28);
 
 INCLUDE_ASM("asm/core", func_00123D30);
 

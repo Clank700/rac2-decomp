@@ -1,3 +1,76 @@
+src/core/00123A00-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
+src/core/00123C28-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
+src/core/001286C8-rc2.c	sdk -O2 -G0 -ffunction-sections -fno-builtin
+src/core/0012CAB0-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
+src/core/001322B8-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/core/001330D0-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/core/00133688-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/game/002729A0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/0027C660-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/0027C768-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/game/00288188-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/00288FB8-rc2.c	-O2 -G8 -mastra-r5900-extern-buffer -ffunction-sections -fno-builtin
+src/game/0028B650-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/0028BD68-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/0028F410-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/002908D0-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/00290978-rc2.c	-fno-builtin -O2 -G8 -mno-split-addresses -ffunction-sections
+src/game/00297BB0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/00297FE8-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/0029B628-rc2.c	-O2 -fno-schedule-insns -G8 -mastra-r5900-extern-buffer -ffunction-sections -fno-builtin
+src/game/0029B658-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/0029DC58-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/002A7398-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/002A90C8-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/002A9640-rc2.c	-O2 -fno-gcse -G0 -ffunction-sections -fno-builtin
+src/game/002B3670-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/game/002B7CE0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/002C1EF0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/002D2538-rc2.c	-O2 -G8 -fno-expensive-optimizations -ffunction-sections -fno-builtin
+src/game/002D4FF0-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/game/002D50F0-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/game/002DC228-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/002E3820-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/002E4528-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/002E45C8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/002E80B0-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/002ED8A0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/002FAD68-rc2.c	sdk -O1 -ffunction-sections -fno-builtin
+src/game/002FCF18-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/00300190-rc2.c	-O2 -G4 -mastra-r5900-extern-buffer -ffunction-sections -fno-builtin
+src/game/00310960-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/003169D0-rc2.c	-O2 -G0 -fno-strength-reduce -ffunction-sections -fno-builtin
+src/game/003225C0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/00322A30-rc2.c	-O2 -G8 -fno-sched-interblock -ffunction-sections -fno-builtin
+src/game/0032ACF0-rc2.c	-O2 -fno-sched-interblock -G0 -ffunction-sections -fno-builtin
+src/game/0032AF50-rc2.c	-O2 -G0 -fno-strength-reduce -ffunction-sections -fno-builtin
+src/game/0032B0A8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/0032FDD0-rc2.c	-O2 -G4 -ffunction-sections -fno-builtin
+src/game/003320F0-rc2.c	-O2 -G8 -fno-gcse -ffunction-sections -fno-builtin
+src/game/00334710-rc2.c	-O2 -G0 -fno-delayed-branch -ffunction-sections -fno-builtin
+src/game/003409C8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/00341220-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/game/00341558-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/003415B8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/00346710-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/game/0034B070-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/game/0034F7D8-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/levels/shared/L00_003ACCF8-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/levels/shared/L00_003D5320-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/levels/shared/L00_0040B330-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/levels/shared/L02_00321C30-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/shared/L04_003A19E8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/04_barlow/L04_00441100-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/shared/L05_0037CE08-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/levels/05_feltzin_system/L05_00416EC0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/07_siberius/L07_003F68F0-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/levels/07_siberius/L07_003F8BB0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/shared/L09_0033E658-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/11_joba/L11_003F2C28-rc2.c	-O2 -G8 -mastra-r5900-extern-buffer -ffunction-sections -fno-builtin
+src/levels/shared/L12_0041A6D0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/12_todano/L12_0041BDF8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/shared/L12_00427C58-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/levels/22_dobbo_orbit/L22_0040DD20-rc2.c	-O2 -G0 -fno-schedule-insns2 -ffunction-sections -fno-builtin
 # path (a glob)<TAB>flags; "sdk" first: the SDK compiler (tools/compiler/sdk/) instead of the game's
 # The default is "-O2 -G0 -ffunction-sections" (-G8 for a file named *-g8.c).
 src/core/00115228.c	-O2 -G2 -ffunction-sections -mastra-quad-saves

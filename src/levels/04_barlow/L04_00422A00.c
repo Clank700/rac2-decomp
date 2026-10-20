@@ -126,7 +126,6 @@ void func_L04_0043ABE0(void) {
 
 
 INCLUDE_ASM("asm/levels", func_L04_0043AD48);
-INCLUDE_ASM("asm/levels", func_L04_00441100);
 
 void func_L04_00441178(u8 *a0) {
     if (a0[0x20] != 0)
