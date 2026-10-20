@@ -109,6 +109,7 @@ src/game/00290730.c	-O2 -G8 -ffunction-sections
 src/game/002983D0.c	-O2 -G8 -ffunction-sections
 src/game/00298630.c	-O2 -G8 -ffunction-sections
 src/game/00298838.c	-O2 -G8 -ffunction-sections
+src/game/0029B658.c	-O2 -G0 -ffunction-sections -fno-schedule-insns
 src/game/0029BCC8.c	-O2 -G8 -ffunction-sections
 src/game/002A0430.c	-O2 -G8 -ffunction-sections
 src/game/002B1C20.c	-O2 -G8 -ffunction-sections
@@ -139,6 +140,7 @@ src/levels/06_notak/L06_003660F0.c	-O2 -G0 -ffunction-sections -mno-split-addres
 src/levels/07_siberius/L07_003EF1E0.c	-O2 -G0 -ffunction-sections -g
 src/levels/17_smolg/L17_003C71B0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/shared/L00_002A3B80.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L00_002A53B8.c	-O2 -G0 -ffunction-sections -fno-schedule-insns
 src/levels/shared/L00_002D64B8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002D6FD8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002D7938.c	-O2 -G8 -ffunction-sections
