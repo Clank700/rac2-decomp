@@ -57,6 +57,5 @@ void func_00290758(void)
     D_001A9A50 = 0;
 }
 
-INCLUDE_ASM("asm/game", func_002908D0);
 
 INCLUDE_ASM("asm/game", func_00290978);
