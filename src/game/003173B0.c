@@ -169,7 +169,28 @@ INCLUDE_ASM("asm/game", func_0031C498);
 
 INCLUDE_ASM("asm/game", func_0031C720);
 
-INCLUDE_ASM("asm/game", func_0031C7A0);
+extern void func_0031C970(char *);
+extern void func_0031CB78(char *, char *, int, int, int, float);
+extern void func_0031CDF8(char *, char *, float, int, int);
+
+/* Refresh the auxiliary state for modes 4, 5, 10 or flag 2, then issue
+   three calls with the embedded vectors and three with the referenced vectors. */
+void func_0031C7A0(char *self)
+{
+    char *data = *(char **)(self + 0x68);
+    unsigned char mode = self[0x20];
+
+    if (mode == 4 || mode == 5 || (unsigned char)self[0x95] == 2 || mode == 10)
+        func_0031C970(self);
+
+    func_0031CB78(self, data + 0x370, 0x41DE, 0x10000000, 0x20000000, 0.125f);
+    func_0031CB78(self, data + 0x380, 0x00800000, 0x10000000, 0x30000000, 0.125f);
+    func_0031CB78(self, data + 0x390, 0x00800000, 0x10000000, 0x30000000, 0.125f);
+
+    func_0031CDF8(self, *(char **)(data + 0x270) + 0x10, 0.075f, 0x204080, 0x204080);
+    func_0031CDF8(self, *(char **)(data + 0x274) + 0x10, 0.075f, 0x204080, 0x204080);
+    func_0031CDF8(self, *(char **)(data + 0x278) + 0x10, 0.075f, 0x204080, 0x204080);
+}
 
 void func_0031C8E0(char *p)
 {
