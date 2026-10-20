@@ -626,7 +626,6 @@ int func_002DC090(char *s0)
     return 2;
 }
 
-INCLUDE_ASM("asm/game", func_002DC228);
 
 INCLUDE_ASM("asm/game", func_002DC3C8);
 

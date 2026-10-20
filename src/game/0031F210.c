@@ -88,13 +88,11 @@ INCLUDE_ASM("asm/game", func_00322138);
 
 INCLUDE_ASM("asm/game", func_00322340);
 
-INCLUDE_ASM("asm/game", func_003225C0);
 
 INCLUDE_ASM("asm/game", func_00322680);
 
 INCLUDE_ASM("asm/game", func_00322690);
 
-INCLUDE_ASM("asm/game", func_00322A30);
 
 extern int func_00273B70(char *);
 extern void func_002A7750(unsigned char *, unsigned char, int);

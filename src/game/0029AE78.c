@@ -104,9 +104,8 @@ INCLUDE_ASM("asm/game", func_0029B168);
 
 INCLUDE_ASM("asm/game", func_0029B3E0);
 
-INCLUDE_ASM("asm/game", func_0029B628);
 
-/* func_0029B658 is matched in 0029B658.c (built with -fno-schedule-insns). */
+/* The existing implementation is in 0029B658-rc2.c. */
 
 extern char *D_001A8CFC[] __attribute__((sda));
 extern void func_0034CE28(void *, int);

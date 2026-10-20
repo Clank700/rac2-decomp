@@ -97,7 +97,6 @@ INCLUDE_ASM("asm/game", func_00340638);
 
 INCLUDE_ASM("asm/game", func_003407F8);
 
-INCLUDE_ASM("asm/game", func_003409C8);
 
 /* a menu's table entry: ten bytes, the value a signed short at offset six */
 typedef struct {
@@ -194,7 +193,6 @@ u8 *func_003411C0(u8 *a0) {
     return a0;
 }
 
-INCLUDE_ASM("asm/game", func_00341220);
 
 /* stores three consecutive words; byte-identical across all 27 levels. */
 void func_00341540(u8 *a0, s32 a1, s32 a2, s32 a3) { *(s32 *)(a0 + 0x2F0) = a1; *(s32 *)(a0 + 0x2F4) = a2; *(s32 *)(a0 + 0x2F8) = a3; }
@@ -202,9 +200,7 @@ void func_00341540(u8 *a0, s32 a1, s32 a2, s32 a3) { *(s32 *)(a0 + 0x2F0) = a1; 
 /* Measured target: byte-identical across all 27 levels. */
 void func_00341550(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x220) = a1; }
 
-INCLUDE_ASM("asm/game", func_00341558);
 
-INCLUDE_ASM("asm/game", func_003415B8);
 
 INCLUDE_ASM("asm/game", func_00341610);
 

@@ -86,7 +86,6 @@ INCLUDE_ASM("asm/game", func_0032F598);
 
 INCLUDE_ASM("asm/game", func_0032FDC0);
 
-INCLUDE_ASM("asm/game", func_0032FDD0);
 
 /* func_0032FEA8 uses small data in 0032EB28-g8.c. */
 
@@ -120,7 +119,6 @@ INCLUDE_ASM("asm/game", func_00331800);
 
 INCLUDE_ASM("asm/game", func_003320E8);
 
-INCLUDE_ASM("asm/game", func_003320F0);
 
 extern int D_001B2860[] __attribute__((sda));
 extern char D_001B0A88[];
@@ -187,7 +185,6 @@ INCLUDE_ASM("asm/game", func_00334160);
 
 INCLUDE_ASM("asm/game", func_00334550);
 
-INCLUDE_ASM("asm/game", func_00334710);
 
 INCLUDE_ASM("asm/game", func_00334728);
 
