@@ -194,7 +194,6 @@ INCLUDE_ASM("asm/levels", func_L12_00426C08);
 
 INCLUDE_ASM("asm/levels", func_L12_004277F0);
 
-INCLUDE_ASM("asm/levels", func_L12_00427C58);
 
 void func_L12_00427CB0(s32 a0) {
     s32 s1 = a0;
