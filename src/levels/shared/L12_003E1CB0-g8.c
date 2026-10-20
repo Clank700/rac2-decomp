@@ -3,6 +3,7 @@
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
+typedef signed short s16;
 
 extern u16 D_L12_001B0B0C __attribute__((sda));
 
@@ -102,5 +103,57 @@ void func_L12_00428040(struct L12Kind348Object *a0) {
             }
         }
         func_L00_002E6CF0((void *)func_L12_004281D8, a0);
+    }
+}
+
+extern void func_00282D30(void *dst, void *src, float value);
+
+extern void func_002830C0(void *, void *, void *);
+
+extern void func_L00_00325AE8(void *, int, float, float);
+
+/* Here the group count is read bare, so it takes a second name sized over 8 bytes (its .extern
+   re-sizes the symbol after func_L12_00428040's $gp reads). The vector's address is $gp-relative.
+   The colour pair is one plain 8-byte object, read as two members: cc1 counts `lw $4,D` (a small
+   symbol) as one instruction, but `lw $5,D+4` as two (mips.c's simple_memory_operand has no case
+   for a symbol plus an offset), so the delay-slot filler passes over the second argument's load
+   and takes the first's. In the slot the assembler gives that load the $gp form; outside it,
+   with a plain declaration's .extern only at the end of the file, `lw $5,D+4` becomes retail's
+   `lui $a1` / `lw $a1`. With `sda` both words come through $gp (380 bytes); as two separate
+   words each load is one instruction and the second argument's takes the slot. */
+extern int D_L12_001B2EB8_a[3] __asm__("D_L12_001B2EB8") __attribute__((sda));
+extern char D_L12_001B21E0[8] __attribute__((sda));
+extern struct L12PairWord D_L12_001B21F0;
+
+/* Turns the entities of the object's group that are kind 0x11EB and in use (flag byte at +0x31
+   set, state byte at +0x20 not 0xFE or 0xFD): the vector at D_L12_001B21E0 is turned by the
+   angle at +0x344 of the entity's private block and then by its matrix at +0x240, the colour
+   pair at D_L12_001B21F0 is mixed by the fraction at +0x34C, and both go to func_L00_00325AE8. */
+void func_L12_004281D8(u8 *a0) {
+    u16 *q;
+    u16 *p;
+    u8 *e;
+    u8 *s0;
+    float buf[4];
+    int r;
+
+    if (a0[0x21] == 0xFF)
+        return;
+    q = D_L12_001FB960[a0[0x21]];
+    if (q == 0)
+        return;
+    for (p = q; a0[0x21] != 0xFF && a0[0x21] <= D_L12_001B2EB8_a[0] && p != 0 &&
+           ((p != 0 && (s16)p[-1] >= 0) || p == D_L12_001FB960[a0[0x21]]);
+         p++) {
+        e = D_L12_001B2E9C[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        if (e[0x31] != 0 && *(s16 *)(e + 0xAA) == 0x11EB && e[0x20] != 0xFE && e[0x20] != 0xFD) {
+            s0 = *(u8 **)(e + 0x68);
+            func_00282D30(buf, D_L12_001B21E0, *(float *)(s0 + 0x344));
+            func_002830C0(buf, buf, s0 + 0x240);
+            r = func_00283D38(D_L12_001B21F0.a, D_L12_001B21F0.b, *(float *)(s0 + 0x34C));
+            func_L00_00325AE8(buf, r, *(float *)(s0 + 0x344) * 0.2f, 0.08f);
+        }
     }
 }
