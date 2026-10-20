@@ -514,8 +514,6 @@ INCLUDE_ASM("asm/levels", func_L00_003F5750);
 
 INCLUDE_ASM("asm/levels", func_L00_003F5870);
 
-INCLUDE_ASM("asm/levels", func_L00_003F59F0);
-
 INCLUDE_ASM("asm/levels", func_L00_003F5B10);
 
 INCLUDE_ASM("asm/levels", func_L00_003F5F90);

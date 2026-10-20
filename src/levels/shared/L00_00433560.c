@@ -53,8 +53,6 @@ char *func_L00_004336B0(char *object)
 
 INCLUDE_ASM("asm/levels", func_L00_004336E0);
 
-INCLUDE_ASM("asm/levels", func_L00_004336E8);
-
 /* Calls two helpers on object-plus-8 using the pointer at plus-684; when flag bit 6 is set and the plus-680 word is zero, calls a third helper and normalizes the measured byte cell to 0 or 1; returns flag bit 6. */
 int func_L00_00433810(char *object, int flags)
 {
