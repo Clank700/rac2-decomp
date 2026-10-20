@@ -38,7 +38,7 @@ extern void func_003D78A8(char *);
 
 extern s32 func_L02_003D7830(char *);
 
-extern char *D_L02_001B359C __attribute__((section(".sdata")));
+extern char *D_L02_001B359C __attribute__((sda));
 
 extern u32 D_L02_001FC060[];
 
@@ -133,7 +133,46 @@ INCLUDE_ASM("asm/levels", func_L02_003FB120);
 
 INCLUDE_ASM("asm/levels", func_L02_003FB4D8);
 
-INCLUDE_ASM("asm/levels", func_L02_003FB5A0);
+extern char *D_L02_001B359C __attribute__((sda));
+extern u32 D_L02_001FC060[];
+extern void func_L02_003D47B0(char *, s32);
+extern void func_L02_003DB310(char *, s32);
+
+/* Looks through the entity list the object's state names for one of kind A1 whose byte at +0x20
+   is 1; for the kinds 0x9F8 and 0xA44 it records A0 as that entity's owner, runs the kind's start
+   function, counts it in the state and returns it. */
+char *func_L02_003FB5A0(char *a0, s32 a1, s32 a2) {
+    char *state = *(char **)(a0 + 0x68);
+    u32 index = *(u32 *)(state + 0x40);
+    u32 entry;
+    u16 *p;
+    char *rec;
+
+    if (index == 0xFF)
+        return 0;
+    entry = D_L02_001FC060[index];
+    if (entry == 0)
+        return 0;
+    p = (u16 *)entry;
+    do {
+        rec = D_L02_001B359C + ((*p & 0x7FFF) << 8);
+        if (rec != 0 && *(u8 *)(rec + 0x20) != 0xFE && *(u8 *)(rec + 0x20) != 0xFD
+            && *(s16 *)(rec + 0xAA) == a1 && *(u8 *)(rec + 0x20) == 1) {
+            *(char **)(rec + 0xB8) = a0;
+            switch (a1) {
+            case 0x9F8:
+                func_L02_003D47B0(rec, *(s16 *)(state + 0x120) == 0xC);
+                *(s32 *)(state + 0xA0) += 1;
+                return rec;
+            case 0xA44:
+                func_L02_003DB310(rec, a2);
+                *(s32 *)(state + 0xA4) += 1;
+                return rec;
+            }
+        }
+    } while ((s16)*p++ >= 0);
+    return 0;
+}
 
 /* Counts the kind of A1 in the state and sets its scale to one. */
 s32 func_L02_003FB6C0(char *a0, char *a1) {
@@ -211,6 +250,15 @@ void func_L02_003FBAD0(char *a0) {
         *(s32 *)(s1 + 0xD8) = 0;
     }
 }
+
+extern char *D_L02_001B359C __attribute__((sda));
+extern u32 D_L02_001FC060[];
+extern void func_L02_003D2390(char *);
+extern void func_L02_003D4900(char *);
+extern void func_L02_003DB6D8(char *);
+extern void func_L02_003F18E8(char *);
+extern void func_L02_0040B980(char *);
+extern void func_L02_0040D180(char *);
 
 /* Walks the 16-bit stream the object's table entry points at and calls the handler of the
    entity type each word names; a negative word ends the stream. */
@@ -353,7 +401,7 @@ INCLUDE_ASM("asm/levels", func_L02_003FD070);
 
 INCLUDE_ASM("asm/levels", func_L02_003FD228);
 
-INCLUDE_ASM("asm/levels", func_L02_003FD7C8);
+/* func_L02_003FD7C8 is defined in L02_003F5430-g8.c ($gp accesses). */
 
 INCLUDE_ASM("asm/levels", func_L02_003FD8B8);
 
