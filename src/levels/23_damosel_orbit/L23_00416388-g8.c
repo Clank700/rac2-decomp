@@ -406,3 +406,42 @@ void func_L23_0041A648(char *arg0) {
         *(int *)(state + 0x5B0) = 0;
     }
 }
+
+/* boot data: a pointer whose byte at +0x43 selects the draw range; nosda keeps its lui/lw pair */
+extern unsigned char *D_0018C0B0 __attribute__((nosda));
+
+extern int D_L23_00259050[3][60];
+
+extern int func_002A77E0(int);
+
+extern int func_L23_0041C8C0(char *, void *, int, int);
+
+/* Draws a row (0, 1 or 2, the last one only when the byte at +0x43 is not 6) and hands the
+ * position to func_L23_0041C8C0 with that row. The search for a free slot is retail's: its
+ * result is never used. The three cases make cc1 build the decision tree rooted on 1 (with two,
+ * it emits a comparison chain from 0). */
+void func_L23_0041C7D8(void *pos, int arg1) {
+    int type = 0;
+    int i;
+
+    switch (func_002A77E0(D_0018C0B0[0x43] == 6 ? 2 : 3)) {
+    case 0:
+        type = 1;
+        break;
+    case 1:
+        type = 2;
+        break;
+    case 2:
+        type = 0;
+        break;
+    }
+    for (i = 0; i < 50; i++) {
+        if (D_L23_00259050[type][i] == 0)
+            break;
+        if (i == 49) {
+            i = -1;
+            break;
+        }
+    }
+    func_L23_0041C8C0(D_L23_001B1484, pos, type, arg1);
+}
