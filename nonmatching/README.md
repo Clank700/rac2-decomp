@@ -924,7 +924,6 @@ counts when it links at every place it has.
 | [`func_L00_0037DE30`](levels/func_L00_0037DE30.c) | 196 | One instruction short with the `for (; a2 > 0; a2--)`-plus-`continue`s form (48 of 49 words); what remains is the `blezl $s2` / `bnel`-delay-slot pair that only executes when the branch is taken |
 | [`func_L04_0039FEA8`](levels/func_L04_0039FEA8.c) | 68 | Body exact, 60 of retail's 68 bytes: this cc1 drops the two `nop`s retail keeps between the divisor `lwc1` and the `div.s`. Three spellings give the same 60 |
 | [`func_L12_00427C58`](levels/func_L12_00427C58.c) | 84 | Wall, one compile: this cc1 turns the `if (a2 != 0)` guard into `beql` with the load in the annulled slot, retail keeps `bnez` and a separate load |
-| [`func_L05_0037BB28`](levels/func_L05_0037BB28.c) | 80 | Wall, one compile: same annulled-slot idiom, and here the slot holds the frame restore `ld $s0,0x0($sp)` |
 | [`func_L16_0040C7E8`](levels/func_L16_0040C7E8.c) | 88 | Not C: `.word 0x78620000`/`0x7CA20000`, MMI (lq/sq family) |
 | [`func_L22_003A2988`](levels/func_L22_003A2988.c) | 124 | Not C: `.word 0x7BA20000`/`0x7E220000`, MMI |
 | [`func_L16_003960F8`](levels/func_L16_003960F8.c) | 152 | Not C: `.word 0x78620000`/`0x7FA20000`, MMI (plus `beql` loads) |
