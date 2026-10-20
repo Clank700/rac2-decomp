@@ -97,7 +97,6 @@ INCLUDE_ASM("asm/game", func_00340638);
 
 INCLUDE_ASM("asm/game", func_003407F8);
 
-INCLUDE_ASM("asm/game", func_003409C8);
 
 /* a menu's table entry: ten bytes, the value a signed short at offset six */
 typedef struct {
