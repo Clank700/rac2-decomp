@@ -150,6 +150,7 @@ src/levels/shared/L00_002F08D0.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002F3488.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002F43E0.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_002FBF60.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L00_003032F0.c	-O2 -G0 -ffunction-sections -fno-gcse
 src/levels/shared/L00_0031B9F8.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L00_003252C8.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/shared/L00_0032B270.c	-O2 -G8 -ffunction-sections
