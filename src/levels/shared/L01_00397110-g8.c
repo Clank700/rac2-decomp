@@ -90,8 +90,20 @@ extern float D_L01_001B1B24 __attribute__((sda));
 
 extern void func_00306250(char *);
 
+extern void func_00282D30(void *, void *, float);
+
+extern void func_0029FCC0(void *, int, void *);
+
+extern void func_002A7A00(void *, float, float);
+
+extern int func_002A77E0(int);
+
+extern void func_002C3150(void *, void *, int, unsigned char, unsigned char, int, float);
+
+extern void func_00282CC0(void *, void *, void *);
+
 /* builds the tilt of a hanging chain over three steps and draws it */
-INCLUDE_ASM("asm/levels", func_L01_00417090);
+
 
 extern float D_L01_001AF638 __attribute__((sda));
 
