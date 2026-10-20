@@ -238,6 +238,61 @@ def level_extent(number: int, address: int, size: int) -> tuple[int, int]:
     return address + skip, size - skip
 
 
+# A function's extent can start inside the preceding function's epilogue, and the
+# level's linker leaves padding between the bodies.  Both are measured from the
+# retail bytes, not from a list of addresses: an extent whose words are only stack
+# adjustments and nops is padding, and an extent that starts on a stack restore
+# begins in the epilogue of the body before it, so the real body starts at the
+# first prologue.  The end of the extent never moves.
+
+STACK_ADJUST = 0x09          # addiu
+MOVE = 0x21                  # addu $rd,$zero,$zero
+
+
+def _is_padding(word: int) -> bool:
+    """A stack adjustment or a nop: the words the linker leaves between bodies."""
+    if word == 0:
+        return True
+    op, rs, rt = word >> 26, (word >> 21) & 31, (word >> 16) & 31
+    if op == STACK_ADJUST and rt == 29:
+        return True
+    if op == 0 and word & 0x3F == MOVE:
+        return True
+    return False
+
+
+def is_padding(body: bytes) -> bool:
+    """True when the words are only stack adjustments and nops: filler, not code.
+
+    A body that ends in a trap or a tail call has no `jr $ra` and is still code, so
+    the absence of a return does not decide this: only the words do."""
+    return all(_is_padding(w) for w in words(body))
+
+
+def body_start(body: bytes) -> int:
+    """The bytes to skip to reach the real body, when the extent starts in the
+    preceding function's epilogue.
+
+    A prologue is a stack adjustment with a negative immediate (the raw 16-bit
+    value has its top bit set); a restore has a positive one.  An extent that starts
+    on a restore begins in the epilogue of the body before it, and its real body
+    starts at the next prologue.  An extent that starts on anything else is already
+    at its body."""
+    w = words(body)
+    if not w:
+        return 0
+    first = w[0]
+    if first >> 26 != STACK_ADJUST or (first >> 16) & 31 != 29:
+        return 0
+    if (first & 0xFFFF) >= 0x8000:       # a negative immediate is a prologue
+        return 0
+    for i, word in enumerate(w):
+        if word >> 26 == STACK_ADJUST and (word >> 16) & 31 == 29:
+            if (word & 0xFFFF) >= 0x8000:   # a negative immediate is a prologue
+                return i * 4
+    return 0
+
+
 def boot_image() -> tuple[bytes, list[tuple[int, int, int]]]:
     """The boot executable and its loadable segments (vaddr, file offset, file size)."""
     elf = BOOT.read_bytes()
@@ -307,8 +362,13 @@ def catalogue() -> None:
     else:
         boot = read_boot_functions()
     boot_by_fp = {}
+    corrected_boot = []
     for name, a, n in sorted(boot, key=lambda r: r[1]):
-        boot_by_fp.setdefault((fingerprint(boot_bytes(a, n), a), n), []).append(name)
+        body = boot_bytes(a, n)
+        if is_padding(body):
+            continue                    # the linker's filler, not a function
+        corrected_boot.append((name, a, n))
+        boot_by_fp.setdefault((fingerprint(body, a), n), []).append(name)
     extents = {}
     if from_old:
         for number in NAMES:
@@ -316,7 +376,7 @@ def catalogue() -> None:
             extents[number] = [(a, n) for a, n in old_extents(f"{number}_{NAMES[number]}")
                                if base <= a < base + len(data)]
     else:
-        for _, _, size, _, places in read_catalogue():
+        for name, kind, size, fp, places in read_catalogue():
             for number, a in places:
                 extents.setdefault(number, []).append((a, size))
     found = {}
@@ -325,11 +385,49 @@ def catalogue() -> None:
         for a, n in sorted(extents[number]):
             a, n = level_extent(number, a, n)
             body = data[a - base:a - base + n]
-            if not trim(body):
+            if not trim(body) or is_padding(body):
                 continue
             # the size too: the same instructions with different padding are two functions
             entry = found.setdefault((fingerprint(body, a), n), {"size": n, "places": []})
             entry["places"].append((number, a))
+    # A boot function and its copies in the levels are one body at different addresses.
+    # When the extent starts inside the preceding function's epilogue, the boot's copy
+    # and the levels' copies start the same way and move by the same amount: move them
+    # together, or the function splits in two.
+    for key, e in list(found.items()):
+        names = boot_by_fp.get(key, ())
+        if not names:
+            continue
+        name = names[0]
+        entry = next(((a, n) for n, a, n in corrected_boot if n == name), None)
+        if entry is None:
+            continue
+        ba, bn = entry
+        skip = body_start(levels.boot_bytes(ba, bn))
+        if not skip:
+            continue
+        moved = []
+        for number, a in e["places"]:
+            base, data = level_text(DUMP / level_dir(number))
+            body = data[a - base:a - base + e["size"]]
+            if body_start(body) != skip:
+                continue                # already at its body, or a different shape
+            moved.append((number, a))
+        if not moved:
+            continue
+        for number, a in moved:
+            base, data = level_text(DUMP / level_dir(number))
+            nb = data[a + skip - base:a + skip - base + e["size"] - skip]
+            if not trim(nb) or is_padding(nb):
+                continue
+            k = (fingerprint(nb, a + skip), e["size"] - skip)
+            entry = found.setdefault(k, {"size": e["size"] - skip, "places": []})
+            entry["places"].append((number, a + skip))
+        for number, a in moved:
+            e["places"] = [p for p in e["places"] if p != (number, a)]
+        # the boot's own extent moves too, and the boot's name stays with the body
+        corrected_boot = [(n, a + skip if n == name else a, s - skip if n == name else s)
+                          for n, a, s in corrected_boot]
     # Boot functions paired by hand with level places the code alone cannot tell apart.
     pairs = {}
     if BOOT_PAIRS.is_file():
@@ -368,7 +466,7 @@ def catalogue() -> None:
     rows.sort(key=lambda r: r[4][0])
     BOOT_FUNCTIONS.parent.mkdir(parents=True, exist_ok=True)
     BOOT_FUNCTIONS.write_text("# name\taddress\tsize\n" +
-                              "".join(f"{n}\t{a:08X}\t{s}\n" for n, a, s in sorted(boot, key=lambda r: r[1])))
+                              "".join(f"{n}\t{a:08X}\t{s}\n" for n, a, s in sorted(corrected_boot, key=lambda r: r[1])))
     LEVELS.mkdir(parents=True, exist_ok=True)
     lines = ["# name\tkind\tsize\tfingerprint\tlevels\tplaces (level:address)"]
     for name, kind, size, fp, places in rows:
@@ -378,7 +476,7 @@ def catalogue() -> None:
     placed = sum(r[2] * len(r[4]) for r in rows)
     count = {k: sum(1 for r in rows if r[1] == k) for k in ("boot", "shared", "level")}
     size = {k: sum(r[2] for r in rows if r[1] == k) for k in ("boot", "shared", "level")}
-    print(f"boot: {len(boot)} functions, {sum(r[2] for r in boot)} bytes")
+    print(f"boot: {len(corrected_boot)} functions, {sum(r[2] for r in corrected_boot)} bytes")
     print(f"levels: {sum(len(r[4]) for r in rows)} placements, {placed} bytes; {len(rows)} distinct: " +
           ", ".join(f"{count[k]} {k} ({size[k]} bytes)" for k in count))
 

@@ -277,7 +277,6 @@ void func_00347EC8(char *object, void *data)
 
 INCLUDE_ASM("asm/game", func_00347F80);
 
-INCLUDE_ASM("asm/game", func_00348060);
 
 void func_00348068(u8 *a0,f32 *a1) {
  f32 *end;
@@ -342,7 +341,6 @@ char *func_003484C8(char *a0)
     return a0;
 }
 
-INCLUDE_ASM("asm/game", func_00348568);
 
 /* Measured target: byte-identical across all 27 levels. */
 void func_00348570(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x448) = a1; }
@@ -374,7 +372,6 @@ void func_00348640(char *a0, int a1, int *a2)
 
 INCLUDE_ASM("asm/game", func_003486A8);
 
-INCLUDE_ASM("asm/game", func_003489E0);
 
 INCLUDE_ASM("asm/game", func_003489E8);
 
@@ -432,7 +429,6 @@ void func_003494D0(char *o)
     *(int *)(o + 28) = 1;
 }
 
-INCLUDE_ASM("asm/game", func_00349588);
 
 /* Measured target: byte-identical across all 27 levels. */
 void func_00349590(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x2c) = a1; }
@@ -510,7 +506,6 @@ u8 *func_00349918(u8 *a0) {
  return a0;
 }
 
-INCLUDE_ASM("asm/game", func_00349968);
 
 /* Initialises a record of four 1.0 floats, one zero, one small constant and four zero words, then runs the same four-argument setup four times with two selector flags swept over 0 and 1. */
 void func_00349970(S_F49afcbfe *x)
@@ -534,7 +529,6 @@ void func_00349970(S_F49afcbfe *x)
     func_00349A70_1(x, 1, 1, z, z, z, z);
 }
 
-INCLUDE_ASM("asm/game", func_00349A58);
 
 void func_00349A60(u8 *a0, s32 a1, s32 a2) { a0 += a1 * 4; *(s32 *)(a0 + 0x20) = a2; }
 
@@ -589,11 +583,9 @@ char *func_00349CB8(char *object)
     return object;
 }
 
-INCLUDE_ASM("asm/game", func_00349D50);
 
 INCLUDE_ASM("asm/game", func_00349D58);
 
-INCLUDE_ASM("asm/game", func_0034A4A0);
 
 /* Measured target: byte-identical across all 27 levels. */
 void func_0034A4A8(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x0) = a1; }

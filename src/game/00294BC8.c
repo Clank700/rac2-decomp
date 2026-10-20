@@ -207,7 +207,6 @@ int func_00295A10(int param_1)
 
 INCLUDE_ASM("asm/game", func_00295A80);
 
-INCLUDE_ASM("asm/game", func_00295BE0);
 
 void func_00295BE8(u8 *a0,u8 *a1,u8 *a2,u8 *a3) {
  s32 i=0;
@@ -316,7 +315,6 @@ void func_00297550(u8 *out,s32 index,u8 *base,short *offsets) {
     }
 }
 
-INCLUDE_ASM("asm/game", func_00297668);
 
 INCLUDE_ASM("asm/game", func_00297670);
 

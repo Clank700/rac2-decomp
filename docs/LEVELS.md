@@ -58,6 +58,16 @@ Correcting the second entry also groups it with Siberius's `003EBC90`, so the tw
 places share one definition. These corrections apply to level 00 only; regenerate
 the catalogue with `tools/levels.py catalogue`, rather than editing its rows.
 
+Two more kinds of row are measured from the retail bytes, not from a list of
+addresses. An extent whose words are only stack adjustments and nops is the linker's
+filler between two bodies, not a function, and leaves the catalogue: 258 level rows
+and 226 boot rows are such filler, 4,932 placements of it. The absence of a `jr $ra`
+does not decide this on its own - a body that ends in a trap or a tail call has no
+`jr $ra` and is still code (`func_00115E90` is matched C). And an extent that starts
+on a stack restore begins in the preceding function's epilogue, so its real body
+starts at the next prologue; the boot's own extent and the levels' copies of one
+function move by the same amount, or the function would split in two.
+
 ## The C
 
 The layout is rac1-decomp's: every function of both catalogues appears once in `src/`, in

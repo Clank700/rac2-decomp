@@ -473,7 +473,6 @@ s32 func_L02_00400CC8(char *a0) {
     return r;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_00401298);
 
 INCLUDE_ASM("asm/levels", func_L02_00401638);
 
