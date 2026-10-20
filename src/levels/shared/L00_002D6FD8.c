@@ -112,4 +112,3 @@ PoolRecord64 *func_L00_002D70A0(int a)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002D7138);

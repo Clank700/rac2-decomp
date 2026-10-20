@@ -161,7 +161,6 @@ void func_0034EC70(void)
     F0a76d85b_FUN_00279D18();
 }
 
-INCLUDE_ASM("asm/game", func_0034ECA8);
 
 INCLUDE_ASM("asm/game", func_0034ECB0);
 

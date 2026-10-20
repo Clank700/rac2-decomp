@@ -63,31 +63,31 @@ class Filler(unittest.TestCase):
         self.assertTrue(levels.is_padding(code()))
         self.assertTrue(levels.is_padding(code(0x00000000)))
 
-    def test_a_body_with_a_call_is_not_filler(self):
-        self.assertFalse(levels.is_padding(code(0x27BD0030, 0x0C000000)))
+    def test_arithmetic_is_not_filler(self):
+        # addu $t0,$t1,$t2
+        self.assertFalse(levels.is_padding(code(0x012A4021)))
+        # addiu $sp,$a0,16: a write through a register, not a stack adjustment
+        self.assertFalse(levels.is_padding(code(0x249D0010)))
 
     def test_a_body_without_a_return_can_still_be_code(self):
         # func_00115E90 is matched C and has no jr $ra: it ends in a trap.
         self.assertFalse(levels.is_padding(code(0x27BD0030, 0x00000000, 0x0C0A0A5E)))
 
 
-class BodyStart(unittest.TestCase):
-    """An extent that starts on a stack restore begins in the preceding body's
-    epilogue: the real body starts at the next prologue."""
+class EpilogueResidue(unittest.TestCase):
+    """The word a body leaves behind after its `jr $ra` and its delay slot."""
 
-    def test_a_restore_leads_to_the_next_prologue(self):
-        # addiu $sp,$sp,0x30 ; nop ; addiu $sp,$sp,-0x50 ; ...
-        body = code(0x27BD0030, 0, 0x27BDFFB0)
-        self.assertEqual(levels.body_start(body), 8)
+    def test_the_word_after_a_jr_is_the_residue(self):
+        previous = code(0x03E00008, 0x27BD0010)          # jr $ra ; addiu $sp,$sp,0x10
+        self.assertTrue(levels.is_epilogue_residue(code(0x00621021), previous))
 
-    def test_a_prologue_is_already_at_the_body(self):
-        self.assertEqual(levels.body_start(code(0x27BDFFB0)), 0)
+    def test_a_body_that_does_not_follow_a_jr_is_not_the_residue(self):
+        previous = code(0x0080802D, 0x27BD0010)
+        self.assertFalse(levels.is_epilogue_residue(code(0x00621021), previous))
 
-    def test_another_first_instruction_is_already_at_the_body(self):
-        self.assertEqual(levels.body_start(code(0x0080802D)), 0)
-
-    def test_a_restore_without_a_prologue_stays(self):
-        self.assertEqual(levels.body_start(code(0x27BD0030, 0)), 0)
+    def test_more_than_one_word_is_not_the_residue(self):
+        previous = code(0x03E00008, 0x27BD0010)
+        self.assertFalse(levels.is_epilogue_residue(code(0x00621021, 0), previous))
 
 
 class Identity(unittest.TestCase):

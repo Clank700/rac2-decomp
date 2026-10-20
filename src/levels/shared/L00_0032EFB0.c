@@ -38,7 +38,6 @@ int func_L00_0032EFB0(int a0, int a1, int a2, int a3)
 	return r;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0032F030);
 
 INCLUDE_ASM("asm/levels", func_L00_0032F038);
 

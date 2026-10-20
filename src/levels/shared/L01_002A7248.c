@@ -335,7 +335,6 @@ void func_L01_0031BC68(int a0, int a1) {
 }
 
 
-INCLUDE_ASM("asm/levels", func_L01_0031F080);
 
 
 void func_L01_003208D0(void *a0, float *a1, int a2) {
