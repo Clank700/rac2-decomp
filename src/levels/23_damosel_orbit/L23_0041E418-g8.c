@@ -209,3 +209,156 @@ void func_L23_0041E570(void) {
     }
     D_L23_001B3714 = D_L23_001B13E8;
 }
+
+/* the three words at 0x1B17B0 are copied to the stack; the entries picked by the timing tests are chosen by a helper */
+typedef struct {
+    s32 v[3];
+} L23Table3;
+
+extern L23Table3 D_L23_001B17B0;
+
+typedef struct {
+    u8 pad[0x18];
+    s32 f18;
+    s32 f1C;
+} L23Block1F90;
+
+extern L23Block1F90 D_L23_001B1F90;
+
+typedef struct {
+    u8 pad[0x1874];
+    s32 f1874;
+} D00189E20_View;
+
+extern D00189E20_View D_00189E20;
+
+extern s32 func_002A77E0(s32);
+
+/* collects the timing entries that apply and returns one of them at random (-1 when none does) */
+s32 func_L23_0041E418(void) {
+    u8 *obj = *(u8 **)(D_L23_001B1484 + 0x68);
+    L23Table3 table = D_L23_001B17B0;
+    s32 count = 0;
+
+    if (D_00189E20.f1874 < *(s16 *)(obj + 0x2F4) - 5) {
+        table.v[0] = 0;
+        count = 1;
+    }
+    if (count == 0 || !(D_00189E20.f1874 < *(s16 *)(obj + 0x2F4) / 2)) {
+        if (D_L23_001B1F90.f18 < *(s16 *)(obj + 0x2FA)) {
+            table.v[count++] = 1;
+        }
+        if (D_L23_001B1F90.f1C < *(s16 *)(obj + 0x2FE)) {
+            table.v[count++] = 2;
+        }
+    }
+    if (count == 0) {
+        return -1;
+    }
+    switch (func_002A77E0(count)) {
+    case 0:
+        return table.v[0];
+    case 1:
+        return table.v[1];
+    case 2:
+    default:
+        return table.v[2];
+    }
+}
+
+typedef int TI16 __attribute__((mode(TI)));
+
+/* level words written as bare symbols through $at: each sized past the $gp limit */
+extern s32 D_L23_001A8AB4[3] __attribute__((sda));
+
+extern s32 D_L23_001A8AC4[3] __attribute__((sda));
+
+extern long long D_L23_001A8AC8[2] __attribute__((sda));
+
+extern long long D_L23_001A8AB8[2] __attribute__((sda));
+
+/* a plain small extern: $gp in the delay slot reorg copies it into, absolute where it stays */
+extern s32 D_L23_001A8FF0;
+
+extern s16 func_00291308(TI16 *, s32, float, float);
+
+extern u8 *func_0029EFD0(s32);
+
+/* allocates the object, records it in the word chosen by the key and fills its fields and the level block */
+u8 *func_L23_00423380(u8 *arg0, TI16 *arg1) {
+    u8 *obj;
+    u8 *payload;
+    s32 *word;
+
+    obj = func_0029EFD0(0x1190);
+    word = &D_L23_001B1958;
+    if (arg0 == (u8 *)D_0018C0B0) {
+        word = &D_L23_001B1954;
+    }
+    if (obj != 0 && *word == 0) {
+        *(u8 *)(obj + 0x30) = 0xFF;
+        *(s16 *)(obj + 0x32) = 0xFF;
+        *(u8 *)(obj + 0x31) = 1;
+        *(u8 **)(obj + 0xB8) = arg0;
+        *(u8 *)(obj + 0x20) = 0;
+        payload = *(u8 **)(obj + 0x68);
+        *(TI16 *)(obj + 0x10) = *arg1;
+        *word = (s32)obj;
+        D_L23_001A8AB4[0] = 0xFF;
+        D_L23_001A8AC4[0] = 0x00FFFFFF;
+        D_L23_001A8AC8[0] = 0x1F00000042LL;
+        D_L23_001A8AB8[0] = 0;
+        D_L23_001A8AB0[0] = 0;
+        D_L23_001A8AC0[0] = 0;
+        *(s32 *)(payload + 0x10) = 0;
+        *(s16 *)(payload + 0x2C) = func_00291308(arg1, 0, 0.0f, 0.0f);
+    }
+    if (D_L23_001A8FF0 != 0) {
+        *(u16 *)(obj + 0x34) = *(u16 *)(obj + 0x34) | 0x100;
+        *(TI16 *)(obj + 0xC0) = *(TI16 *)(arg0 + 0xC0);
+        *(TI16 *)(obj + 0xD0) = *(TI16 *)(arg0 + 0xD0);
+        *(TI16 *)(obj + 0xE0) = *(TI16 *)(arg0 + 0xE0);
+    }
+    return obj;
+}
+
+extern s32 func_L00_0035F5A0(s32, s32, s32);
+
+/* makes sure the word chosen by the flag holds an object, then moves it to the given position */
+void func_L23_004234C0(u8 *arg0, TI16 *arg1, s32 arg2) {
+    s32 *word = &D_L23_001B1958;
+    TI16 local;
+    TI16 *pos = &local;
+    u8 *obj;
+    u8 *payload;
+    u8 *found;
+
+    if (arg2 != 0) {
+        word = &D_L23_001B1954;
+    }
+    local = *arg1;
+    if (*word == 0) {
+        func_L23_00423380(arg0, &local);
+        if (arg2 != 0) {
+            D_L23_001B194C = func_L00_0035F5A0(0x14, 0, 0);
+        } else {
+            D_L23_001B1950 = func_L00_0035F5A0(0x14, 0, 0);
+        }
+        found = (u8 *)*word;
+        if (found == 0) {
+            return;
+        }
+        obj = found;
+        payload = *(u8 **)(obj + 0x68);
+        if (*(s16 *)(obj + 0xAA) != 0x1190) {
+            return;
+        }
+        *(s16 *)(payload + 0x40) = arg2;
+        *(s32 *)(payload + 0x48) = 0;
+        *(s32 *)(payload + 0x44) = 0;
+    }
+    obj = (u8 *)*word;
+    *(TI16 *)(obj + 0x10) = *pos;
+    payload = *(u8 **)(obj + 0x68);
+    *(s16 *)(payload + 0x2E) = 1;
+}

@@ -6,7 +6,7 @@ typedef unsigned short u16;
 
 typedef int s32;
 
-INCLUDE_ASM("asm/levels", func_L23_0041E418);
+/* func_L23_0041E418 is defined in L23_0041E418-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L23_0041E538);
 
@@ -24,9 +24,9 @@ INCLUDE_ASM("asm/levels", func_L23_00422E08);
 
 INCLUDE_ASM("asm/levels", func_L23_00423378);
 
-INCLUDE_ASM("asm/levels", func_L23_00423380);
+/* func_L23_00423380 is defined in L23_0041E418-g8.c (this unit has no $gp access for it). */
 
-INCLUDE_ASM("asm/levels", func_L23_004234C0);
+/* func_L23_004234C0 is defined in L23_0041E418-g8.c (this unit has no $gp access for it). */
 
 INCLUDE_ASM("asm/levels", func_L23_004236B8);
 
