@@ -304,7 +304,6 @@ INCLUDE_ASM("asm/levels", func_L04_003A15C0);
 
 INCLUDE_ASM("asm/levels", func_L04_003A1868);
 
-INCLUDE_ASM("asm/levels", func_L04_003A19E8);
 
 void func_L04_003A1A48(u8 *dst, u16 *src, s32 count) {
     if (count <= 0)

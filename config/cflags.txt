@@ -59,6 +59,7 @@ src/levels/shared/L00_003ACCF8-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
 src/levels/shared/L00_003D5320-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
 src/levels/shared/L00_0040B330-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
 src/levels/shared/L02_00321C30-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/shared/L04_003A19E8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 # path (a glob)<TAB>flags; "sdk" first: the SDK compiler (tools/compiler/sdk/) instead of the game's
 # The default is "-O2 -G0 -ffunction-sections" (-G8 for a file named *-g8.c).
 src/core/00115228.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
