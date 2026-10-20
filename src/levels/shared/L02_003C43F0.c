@@ -233,9 +233,117 @@ INCLUDE_ASM("asm/levels", func_L02_003CCFE8);
 
 INCLUDE_ASM("asm/levels", func_L02_003CD1E8);
 
-INCLUDE_ASM("asm/levels", func_L02_003CD298);
+extern int D_L02_001B35B8 __attribute__((sda));
+extern char D_00189EA0[];
+extern float func_00282E48(void *, void *);
 
-INCLUDE_ASM("asm/levels", func_L02_003CD4A8);
+struct L02NearObject {
+    char pad[0x21];
+    unsigned char group;
+};
+
+struct L02NearBlock {
+    char pad[0x378];
+    unsigned short f378;
+};
+
+/* Finds the entity of the object's group nearest to the player (within 1000.0), then adds
+   0x19 to the +0x378 timer of every other entity of the group. */
+void func_L02_003CD298(struct L02NearObject *a0)
+{
+    unsigned short *q;
+    unsigned short *p;
+    unsigned short *r;
+    char *e;
+    char *best;
+    struct L02NearBlock *o;
+    float min;
+    float d;
+
+    if (a0->group == 0xFF)
+        return;
+    q = (unsigned short *)D_L02_001FC060[a0->group];
+    if (q == 0)
+        return;
+    best = 0;
+    min = 1000.0f;
+    p = q;
+    while (a0->group != 0xFF && a0->group <= D_L02_001B35B8 && p != 0 &&
+           ((p != 0 && (short)p[-1] >= 0) || p == (unsigned short *)D_L02_001FC060[a0->group])) {
+        e = D_L02_001B359C + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        d = func_00282E48(e + 0x10, D_00189EA0);
+        if (d < min) {
+            min = d;
+            best = e;
+        }
+        p++;
+    }
+    if (best != 0) {
+        for (r = (unsigned short *)D_L02_001FC060[a0->group];
+             a0->group != 0xFF && a0->group <= D_L02_001B35B8 && r != 0 &&
+             ((r != 0 && (short)r[-1] >= 0) ||
+              r == (unsigned short *)D_L02_001FC060[a0->group]);
+             r++) {
+            e = D_L02_001B359C + ((*r & 0x7FFF) << 8);
+            if (e == 0)
+                break;
+            if (e != best) {
+                o = *(struct L02NearBlock **)(e + 0x68);
+                o->f378 += 0x19;
+            }
+        }
+    }
+}
+
+typedef int L02Word;
+
+extern L02Word D_L02_001B35B8 __attribute__((sda));
+extern int func_002A7820(int, int);
+
+struct L02GroupObject {
+    char pad[0x21];
+    unsigned char group;
+};
+
+struct L02GroupEntityObj {
+    char pad[0x378];
+    short f378;
+};
+
+struct L02GroupEntity {
+    char pad[0x68];
+    struct L02GroupEntityObj *obj;
+};
+
+/* Gives every entity of the object's group a random timer between 0x1E and 0x5A at +0x378
+   of its private block. */
+void func_L02_003CD4A8(struct L02GroupObject *arg0)
+{
+    unsigned short *q;
+    unsigned short *p;
+    struct L02GroupEntity *e;
+
+    if (arg0->group == 0xFF)
+        return;
+    q = (unsigned short *)D_L02_001FC060[arg0->group];
+    if (q != 0) {
+        p = q;
+        while (arg0->group != 0xFF && arg0->group <= D_L02_001B35B8 && p != 0 &&
+               ((p != 0 && (short)p[-1] >= 0) ||
+                p == (unsigned short *)D_L02_001FC060[arg0->group])) {
+            struct L02GroupEntityObj *o;
+
+            e = (struct L02GroupEntity *)(D_L02_001B359C + ((*p & 0x7FFF) << 8));
+            if (e == 0)
+                break;
+            o = e->obj;
+            p++;
+            o->f378 = func_002A7820(0x1E, 0x5A);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003CD758);
 
