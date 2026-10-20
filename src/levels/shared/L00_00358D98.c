@@ -99,7 +99,28 @@ int func_L00_0035F5A0(int index, int a1, int a2)
     return r;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0035F640);
+/* Same slot table as func_L00_0035F5A0, but with the caller's own record: the helper gets the
+ * slot's record, the value goes in at 0x40 and the helper's second value becomes the fifth
+ * argument; the record's index word is written at 126 and the value word at 140. */
+int func_L00_0035F640(int index, int a1, int a2, int a3)
+{
+    int r;
+    char *p;
+
+    if (index >= D_001B19E8)
+        return -1;
+    if (index == 0xFFFFFFFFU) {
+        return -1;
+    } else {
+        r = func_002E5AD0((char *)(D_001B19EC + index * 32), a1, 0, a2 + 0x40, a3);
+        if (r >= 0) {
+            p = D_00188660_3 + r * 112;
+            *(int *)(p + 140) = a2;
+            *(short *)(p + 126) = index;
+        }
+        return r;
+    }
+}
 
 /* Builds a slot index out of three weight/kind arguments and fills the same 112-byte record as
  * above; the record's value word comes from the fifth argument, the helper's from the sixth. */
