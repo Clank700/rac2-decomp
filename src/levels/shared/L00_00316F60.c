@@ -139,6 +139,8 @@ f32 func_L00_0031A6C8(f32 value, s32 count) {
 
 INCLUDE_ASM("asm/levels", func_L00_0031A710);
 
+/* func_L00_0031AA28 (cubic curve through four control vectors) is a near miss:
+   nonmatching/levels/func_L00_0031AA28.c */
 INCLUDE_ASM("asm/levels", func_L00_0031AA28);
 
 /* Blends a value toward a target: helper(second,first) halved, scaled by (1 - helper(third*pi)); the first argument and that product go to a two-float helper whose float result is returned. */
