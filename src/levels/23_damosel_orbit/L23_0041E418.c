@@ -28,8 +28,6 @@ INCLUDE_ASM("asm/levels", func_L23_00423380);
 
 INCLUDE_ASM("asm/levels", func_L23_004234C0);
 
-INCLUDE_ASM("asm/levels", func_L23_00423588);
-
 INCLUDE_ASM("asm/levels", func_L23_004236B8);
 
 INCLUDE_ASM("asm/levels", func_L23_00425568);
@@ -42,7 +40,56 @@ INCLUDE_ASM("asm/levels", func_L23_004259E0);
 
 INCLUDE_ASM("asm/levels", func_L23_00425AF8);
 
-INCLUDE_ASM("asm/levels", func_L23_004260F0);
+typedef int TI16 __attribute__((mode(TI)));
+
+typedef short s16;
+
+extern void func_00282CF0(float *, float *, float *);
+
+extern void func_00282DD8(float *, float *, float *);
+
+extern void func_00282F20(float *, float *, float);
+
+extern int func_002A7820(int, int);
+
+extern float func_00283C28(float);
+
+extern float func_00283198(float);
+
+extern void func_00282D30(float *, float *, float);
+
+extern void func_00282CC0(float *, float *, float *);
+
+extern float D_L23_001BA640[];
+
+/* builds two vectors from the sources, rotates one by the measured angle and writes the result */
+void func_L23_004260F0(u8 *obj, float *dst, TI16 *src1, TI16 *src2, float scale) {
+    TI16 loc[6];
+    TI16 va;
+    TI16 vb;
+    u8 *o68;
+    s16 x;
+    s32 t;
+    float f;
+    float h;
+
+    va = *src2;
+    vb = *src1;
+    loc[1] = va;
+    loc[0] = vb;
+    o68 = *(u8 **)(obj + 0x68);
+    func_00282CF0((float *)&loc[2], (float *)&loc[0], (float *)&loc[1]);
+    func_00282CF0((float *)&loc[3], (float *)&loc[0], D_L23_001BA640);
+    func_00282DD8((float *)&loc[4], (float *)&loc[3], (float *)&loc[2]);
+    func_00282F20((float *)&loc[4], (float *)&loc[4], 1.0f);
+    x = *(s16 *)(o68 + 0xC);
+    t = func_002A7820(-x, x);
+    t = (((s32)*(u16 *)(obj + 0x96) << *(s16 *)(o68 + 0xE)) + t) % 360 - 180;
+    f = func_00283C28((float)t * 0.017453294f);
+    h = func_00283198(f) * scale;
+    func_00282D30((float *)&loc[5], (float *)&loc[4], h);
+    func_00282CC0(dst, (float *)&loc[0], (float *)&loc[5]);
+}
 
 INCLUDE_ASM("asm/levels", func_L23_00426248);
 

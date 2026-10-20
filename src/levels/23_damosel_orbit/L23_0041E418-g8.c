@@ -64,6 +64,61 @@ s32 func_L23_0041E548(void) {
     return state[0x20] == 4;
 }
 
+extern s32 D_L23_001B194C __attribute__((sda));
+
+extern s32 D_L23_001B1950 __attribute__((sda));
+
+/* two absolute level words: sized past the $gp limit so each store is a bare symbol through $at */
+extern s32 D_L23_001A8AB0[4] __attribute__((sda));
+
+extern s32 D_L23_001A8AC0[4] __attribute__((sda));
+
+extern void func_002E59F8(s32 handle);
+
+extern void func_0029F338(u8 *object);
+
+/* releases the handle of the slot chosen by the key, then the object the slot holds */
+void func_L23_00423588(s32 key, s32 flag) {
+    s32 *slot;
+    s32 handle;
+    u8 *obj;
+    u8 *v;
+
+    if (key == D_0018C0B0) {
+        handle = D_L23_001B194C;
+        slot = &D_L23_001B1954;
+        if (handle != -1) {
+            func_002E59F8(handle);
+            D_L23_001B194C = -1;
+        }
+    } else {
+        handle = D_L23_001B1950;
+        slot = &D_L23_001B1958;
+        if (handle != -1) {
+            func_002E59F8(handle);
+            D_L23_001B1950 = -1;
+        }
+    }
+    obj = (u8 *)*slot;
+    if (obj != 0) {
+        if (*(s16 *)(obj + 0xAA) != 0x1190) {
+            *slot = 0;
+        } else {
+            if (flag == 0 && obj[0x20] != 0) {
+                return;
+            }
+            v = *(u8 **)(obj + 0x68);
+            D_L23_001A8AB0[0] = 0;
+            D_L23_001A8AC0[0] = 0;
+            if (*(s16 *)(v + 0x2C) != -1) {
+                func_00291450(*(s16 *)(v + 0x2C));
+            }
+            func_0029F338((u8 *)*slot);
+            *slot = 0;
+        }
+    }
+}
+
 /* returns one of the two pinned words, chosen by the measured key */
 s32 func_L23_00423698(s32 arg0) {
     s32 *word = &D_L23_001B1958;
