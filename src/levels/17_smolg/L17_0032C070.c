@@ -155,7 +155,24 @@ int func_L17_003C5DF0(int a0)
     return *(unsigned char *)(a0 + 0x20) - 2U < 5;
 }
 
-INCLUDE_ASM("asm/levels", func_L17_003C5E20);
+/* true when the level's shared record names the given sub-state; the shared word at
+   0x34E closes the answer when the record is not the level's own */
+int func_L17_003C5E20(int a0)
+{
+    char *base = D_00189E20;
+
+    if (*(int *)(base + 0x229C) == 3 || *(int *)(base + 0x2294) == 0x1B) {
+        if (*(int *)(base + 0x588) != a0)
+            goto zero;
+        return 1;
+    }
+    if (*(short *)(base + 0x34E) != 0)
+        goto zero;
+    if (*(int *)(base + 0x33C) == a0)
+        return 1;
+zero:
+    return 0;
+}
 
 /* twin of func_L17_003C3250 on the 0x128 sub-object id and its own table */
 void func_L17_003C5E78(char *a2)
