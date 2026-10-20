@@ -461,7 +461,61 @@ void func_L02_003FF698(void *a0) {
         func_002A7750(a0, 2, -1);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003FFC48);
+extern long long func_0027C878(int);
+
+extern float func_00282E80(char *, float *);
+
+extern void func_00283410(void *, void *);
+
+extern void func_00280B90(void *, void *, int);
+
+extern void ref_L02_003FFC48_00(char *);
+
+extern void ref_L02_003FFC48_01(char *, float);
+
+extern float D_L02_001BA3C0[];
+
+void func_L02_003FFC48(char *position, int color, float scale, char *resource, float alpha, int mode, int flag)
+{
+    unsigned char work[0xE0];
+    unsigned int rgba;
+    unsigned long long mode_bits;
+    float first_angle;
+    float second_angle;
+    float distance;
+
+    ref_L02_003FFC48_00((char *)work);
+    *(long long *)(work + 0x78) = func_0027C878(mode);
+
+    mode_bits = ((unsigned long long)flag << 2) | 0x0000008000000040ULL;
+    *(long long *)(work + 0x88) = mode_bits;
+    *(long long *)(work + 0x80) = 0x0000FF9000000260ULL;
+
+    rgba = (unsigned int)color + ((unsigned int)resource << 24);
+    *(int *)(work + 0x4C) = rgba;
+    *(int *)(work + 0x48) = rgba;
+    *(int *)(work + 0x44) = rgba;
+    *(int *)(work + 0x40) = rgba;
+    *(long long *)(work + 0x70) = 0;
+
+    *(int *)(work + 0xDC) = 0;
+    first_angle = func_00283248(D_L02_001BA3C0[0x140 / 4] - *(float *)(position + 0),
+                                D_L02_001BA3C0[0x144 / 4] - *(float *)(position + 4));
+    *(float *)(work + 0xD8) = first_angle;
+
+    distance = func_00282E80(position, &D_L02_001BA3C0[0x140 / 4]);
+    second_angle = func_00283248(distance, D_L02_001BA3C0[0x148 / 4] - *(float *)(position + 8));
+    *(float *)(work + 0xD0) = alpha;
+    *(float *)(work + 0xD4) = -second_angle;
+
+    func_00283410(work + 0x90, work + 0xD0);
+    *(float *)(work + 0xC0) = *(float *)(position + 0);
+    *(float *)(work + 0xC4) = *(float *)(position + 4);
+    *(float *)(work + 0xC8) = *(float *)(position + 8);
+    *(float *)(work + 0xCC) = 1.0f;
+    ref_L02_003FFC48_01((char *)work, scale);
+    func_00280B90(work, work + 0x90, 0);
+}
 
 /* Below 6000 in the low half-word, while the high one reads three. */
 void func_L02_004006D8(void) {
