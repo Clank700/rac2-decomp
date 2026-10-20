@@ -33,7 +33,7 @@ extern u8 *D_L03_001B2A1C __attribute__((sda));
 
 INCLUDE_ASM("asm/levels", func_L03_003C5B28);
 
-INCLUDE_ASM("asm/levels", func_L03_003C5CE8);
+/* func_L03_003C5CE8 is defined in L03_003C5B28-g8.c (it reads the group count through $gp). */
 
 INCLUDE_ASM("asm/levels", func_L03_003C5DC8);
 
