@@ -46,3 +46,40 @@ void func_002DF2E0(int a0, int a1)
         *(unsigned short *)(p + 0x34) |= 0x80;
     }
 }
+
+extern char *D_001B20B4;
+extern int D_001B20BC __attribute__((section(".sdata")));
+extern void *D_001A72D0 __attribute__((sda));
+extern char D_001ABD90[];
+extern int func_002E2988(void *);
+extern void func_002FC748(void);
+extern void func_0026FEB8(const char *, ...);
+
+void func_002E0F98(void)
+{
+    char *other = *(char *volatile *)&D_001B20B4;
+    char *saved = *(char *volatile *)&D_001B22A8;
+    char *next;
+    int size;
+    D_001B22A8 = saved + 16;
+    *(unsigned int *)other = 0x20000000;
+    *(int *)(*(char *volatile *)&D_001B20B4 + 4) = (int)*(char *volatile *)&D_001B22A8;
+    *(int *)(*(char *volatile *)&D_001B20B4 + 8) = 0;
+    *(int *)(*(char *volatile *)&D_001B20B4 + 12) = 0;
+    size = func_002E2988(D_001A72D0);
+    func_002FC748();
+    if (size > 0x400000)
+        func_0026FEB8(D_001ABD90);
+    if (*(volatile int *)&D_001B20BC < size)
+        D_001B20BC = size;
+    *(unsigned int *)(*(char *volatile *)&D_001B22A8) = 0x20000000;
+    next = *(char *volatile *)&D_001B20B4 + 16;
+    *(int *)(*(char *volatile *)&D_001B22A8 + 4) = (int)next;
+    *(int *)(*(char *volatile *)&D_001B22A8 + 8) = 0;
+    *(int *)(*(char *volatile *)&D_001B22A8 + 12) = 0;
+    *(char *volatile *)&D_001B22A8 = *(char *volatile *)&D_001B22A8 + 16;
+    *(unsigned int *)saved = 0x20000000;
+    *(int *)(saved + 4) = (int)*(char *volatile *)&D_001B22A8;
+    *(int *)(saved + 8) = 0;
+    *(int *)(saved + 12) = 0;
+}
