@@ -218,7 +218,66 @@ INCLUDE_ASM("asm/levels", func_L23_0041C6B0);
 
 /* func_L23_0041C7D8 is matched in L23_00416388-g8.c */
 
-INCLUDE_ASM("asm/levels", func_L23_0041C8C0);
+/* The same table and counters func_L23_0041CCC0 clears below, declared the same way. */
+extern s32 D_L23_001B3744 __attribute__((sda));
+
+extern s32 D_L23_001B3738[3] __attribute__((sda));
+
+extern s32 D_L23_00259050[3][60];
+
+typedef int TI128 __attribute__((mode(TI)));
+
+extern char *func_L22_003FB1F8(char *, TI128 *, s32, float);
+
+extern char *func_L22_003FC780(char *, TI128 *, s32, float);
+
+extern char *func_L22_003FD1E8(char *, TI128 *, s32, float);
+
+/* Spawns an object of kind TYPE at POS in the first free slot of its row, counts it, and gives
+ * it the position as it was on entry. Returns the slot index, or -1 when the row is full.
+ * The do-while (0) around the first copy leaves loop notes after it, which the schedulers treat
+ * as a barrier (the lever of func_00124818): the argument copies and the 16-byte copy stay
+ * ahead of the search, so $a0 is free for the 0xF0 factor and the object goes to $t0. Wrapping
+ * the search instead doubles its reference weights, and local-alloc then gives the first word
+ * $v0 ahead of the table address. The vector is kept in memory (a TI128 local is kept in a
+ * register pair across the calls), and the table pointer is read back by D[type][i]. */
+s32 func_L23_0041C8C0(char *obj, TI128 *pos, s32 type, s32 arg3) {
+    float saved[4] __attribute__((aligned(16)));
+    char *slot;
+    s32 i;
+
+    do {
+        *(TI128 *)saved = *pos;
+    } while (0);
+    for (i = 0; i < 50; i++) {
+        if (D_L23_00259050[type][i] == 0)
+            break;
+        if (i == 49) {
+            i = -1;
+            break;
+        }
+    }
+    if (i != -1) {
+        switch (type) {
+        case 0:
+            D_L23_00259050[type][i] = (s32)func_L22_003FB1F8(obj, pos, arg3, 4.0f);
+            break;
+        case 1:
+            D_L23_00259050[type][i] = (s32)func_L22_003FC780(obj, pos, arg3, 3.65f);
+            break;
+        case 2:
+            D_L23_00259050[type][i] = (s32)func_L22_003FD1E8(obj, pos, arg3, 3.65f);
+            break;
+        }
+        slot = (char *)D_L23_00259050[type][i];
+        if (slot != 0) {
+            D_L23_001B3744++;
+            D_L23_001B3738[type]++;
+            *(TI128 *)(slot + 0x10) = *(TI128 *)saved;
+        }
+    }
+    return i;
+}
 
 INCLUDE_ASM("asm/levels", func_L23_0041CA58);
 
