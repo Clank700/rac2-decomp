@@ -42,6 +42,30 @@ int func_L23_0041B948(void) {
     return *(int *)(*(char **)(D_L23_001B1484 + 0x68) + 0x604) != 0;
 }
 
+extern void func_0029F978(char *, int, char *);
+
+extern void func_00283898(void *, int, float);
+
+extern float func_00283BE0(float, float);
+
+extern float D_L23_001B1570 __attribute__((sda));
+
+extern float D_L23_001B1574 __attribute__((sda));
+
+/* Relatches the two measured pairs at +0x580 and +0x584 from the two float arguments. */
+void func_L23_0041BF18(char *arg0, float arg1, float arg2) {
+    char *state = *(char **)(D_L23_001B1484 + 0x68);
+
+    if (*(unsigned char *)(state + 0x4F1) == 0)
+        func_0029F978(arg0, 0x28, state + 0x4F0);
+    func_00283898(state + 0x500, 0, *(float *)(state + 0x580));
+    *(float *)(state + 0x580) = func_00283BE0(*(float *)(state + 0x580), arg1 * D_L23_001B1570 * 0.00029088825f);
+    if (*(unsigned char *)(state + 0x531) == 0)
+        func_0029F978(arg0, 0x29, state + 0x530);
+    func_00283898(state + 0x540, 0, *(float *)(state + 0x584));
+    *(float *)(state + 0x584) = func_00283BE0(*(float *)(state + 0x584), arg2 * D_L23_001B1574 * 0.00029088825f);
+}
+
 /* Zero unless the counter is positive and below the limit. */
 int func_L23_0041C0C0(void) {
     if (D_L23_001B1694 > 0 && D_L23_001B1694 < D_L23_001B1698)
@@ -88,6 +112,61 @@ void func_L23_0041BFF0(char *arg0) {
         slot++;
     }
     *(int *)(arg0 + 0x98) = 0;
+}
+
+extern int D_L23_001B150C __attribute__((sda));
+
+extern float D_L23_001B17A0 __attribute__((sda));
+
+extern float D_L23_001B17A4 __attribute__((sda));
+
+extern float D_L23_001B17A8 __attribute__((sda));
+
+extern float D_L23_001B179C __attribute__((sda));
+
+extern void func_00291450(int);
+
+extern char D_00189EA0[];
+
+extern void func_00282CC0(char *, char *, char *);
+
+extern void func_00282D30(char *, char *, float);
+
+extern float func_002A7878(float, float);
+
+extern int func_L00_002FCF18(char *, float, float, float, float, float);
+
+extern void func_L23_00418650(char *, float);
+
+extern void func_L23_0041E3C8(void);
+
+extern void func_0027D098(void (*)(void), int);
+
+/* Releases the held handle, makes a new one from jittered values when the difference has low bits set, then registers the callback. */
+void func_L23_0041E290(char *arg0) {
+    char tmp[16];
+    int n;
+    float r;
+    float f21;
+    float f20;
+    float f16;
+
+    n = D_L23_001B15A4 - D_L23_001B3788;
+    if (D_L23_001B150C != -1)
+        func_00291450(D_L23_001B150C);
+    if ((n & 3) != 0) {
+        func_00282CC0(tmp, arg0 + 0x10, D_00189EA0);
+        func_00282D30(tmp, tmp, 0.5f);
+        func_L23_00418650(tmp, 5.0f);
+        r = func_002A7878(0.0f, D_L23_001B17A0 * 0.33333334f);
+        f21 = D_L23_001B17A0 + r;
+        r = func_002A7878(0.0f, D_L23_001B17A4 * 0.33333334f);
+        f20 = D_L23_001B17A4 + r;
+        r = func_002A7878(0.0f, D_L23_001B17A8 * 0.33333334f);
+        f16 = D_L23_001B17A8 + r;
+        D_L23_001B150C = func_L00_002FCF18(tmp, 35.0f, D_L23_001B179C, f21, f20, f16);
+    }
+    func_0027D098(func_L23_0041E3C8, (int)arg0);
 }
 
 /* Calls the measured shared helper with the measured ratio expression. */
