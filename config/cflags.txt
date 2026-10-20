@@ -173,4 +173,3 @@ src/core/00130428.c	sdk -O2 -G2 -ffunction-sections
 src/core/00132220-g8.c	-O2 -G8 -ffunction-sections
 src/core/00121B20.c	sdk -O2 -G2 -ffunction-sections
 src/core/001220F0.c	sdk -O2 -G2 -ffunction-sections
-src/levels/shared/L00_00433560.c	-O2 -G0 -ffunction-sections -mno-split-addresses
