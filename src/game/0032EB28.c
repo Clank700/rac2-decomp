@@ -173,9 +173,8 @@ INCLUDE_ASM("asm/game", func_0032F598);
 
 INCLUDE_ASM("asm/game", func_0032FDC0);
 
-INCLUDE_ASM("asm/game", func_0032FDD0);
 
-INCLUDE_ASM("asm/game", func_0032FEA8);
+/* func_0032FEA8 uses small data in 0032EB28-g8.c. */
 
 INCLUDE_ASM("asm/game", func_0032FFD8);
 
@@ -205,7 +204,6 @@ INCLUDE_ASM("asm/game", func_00331800);
 
 INCLUDE_ASM("asm/game", func_003320E8);
 
-INCLUDE_ASM("asm/game", func_003320F0);
 
 void func_003323F0(int a0) {
     int i;
@@ -263,12 +261,8 @@ INCLUDE_ASM("asm/game", func_00334160);
 
 INCLUDE_ASM("asm/game", func_00334550);
 
-TI128 func_00334710(int value, char *buffer)
-{
-    TI128 v = *(TI128 *)D_00189EA0;
-    *(volatile TI128 *)buffer = v;
-    return v;
-}
+/* func_00334710 is matched in 00334710-rc2.c. */
+
 
 INCLUDE_ASM("asm/game", func_00334728);
 

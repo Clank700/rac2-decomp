@@ -63,6 +63,7 @@ extern void func_002A0F48(void *);
 
 extern void func_00282F20(f32 *, void *, f32);
 
+
 extern void func_L12_0041BED8(u8 *);
 
 extern void func_326F10(void *, void *, s32, s32);
@@ -71,30 +72,8 @@ extern void func_L09_003F7788(void *, void *);
 
 /* A pointer table of level-12 data, reached absolutely (out of the $gp window). */
 
-void func_L12_0041BDF8(u8 *a0)
-{
-    u8 *a1 = a0;
-    u8 *s0;
-    u8 **p;
-    u8 *e;
-    s32 i;
+/* func_L12_0041BDF8 is matched in L12_0041BDF8-rc2.c. */
 
-    if (a1 == 0)
-        return;
-    if (*(s16 *)(a1 + 0xAA) != 0xFAE)
-        return;
-    s0 = *(u8 **)(a1 + 0x68);
-    func_L12_0041BED8(a0);
-    p = (u8 **)(s0 + 8);
-    i = 1;
-    do {
-        e = *p;
-        i--;
-        if (e != 0)
-            *(u32 *)(e + 0x98) = *(u32 *)(*(u8 **)(e + 0x24) + 0x10);
-        p++;
-    } while (i >= 0);
-}
 
 /* Returns 1 as soon as one of the two bound sub-objects carries a live state word. */
 s32 func_L12_0041BE60(u8 *a0)

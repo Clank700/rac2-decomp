@@ -35,7 +35,6 @@ typedef struct {
 
 INCLUDE_ASM("asm/game", func_0030F7B0);
 
-INCLUDE_ASM("asm/game", func_00310960);
 
 INCLUDE_ASM("asm/game", func_00310A40);
 
@@ -183,7 +182,6 @@ INCLUDE_ASM("asm/game", func_00316400);
 
 INCLUDE_ASM("asm/game", func_003166C8);
 
-INCLUDE_ASM("asm/game", func_003169D0);
 
 void func_00316B40(char *p)
 {

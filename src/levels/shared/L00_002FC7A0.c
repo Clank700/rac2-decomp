@@ -273,7 +273,7 @@ void func_L00_00300610(void)
 
 INCLUDE_ASM("asm/levels", func_L00_00300618);
 
-INCLUDE_ASM("asm/levels", func_L00_003032F0);
+/* func_L00_003032F0 is matched in L00_003032F0.c (built with -fno-gcse). */
 
 INCLUDE_ASM("asm/levels", func_L00_00303388);
 

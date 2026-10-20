@@ -219,7 +219,7 @@ INCLUDE_ASM("asm/levels", func_L04_0039FA08);
 
 INCLUDE_ASM("asm/levels", func_L04_0039FC28);
 
-INCLUDE_ASM("asm/levels", func_L04_0039FEA8);
+/* func_L04_0039FEA8 is matched in L04_0039FEA8.c (built with -g). */
 
 INCLUDE_ASM("asm/levels", func_L04_0039FEF0);
 
@@ -304,7 +304,6 @@ INCLUDE_ASM("asm/levels", func_L04_003A15C0);
 
 INCLUDE_ASM("asm/levels", func_L04_003A1868);
 
-INCLUDE_ASM("asm/levels", func_L04_003A19E8);
 
 void func_L04_003A1A48(u8 *dst, u16 *src, s32 count) {
     if (count <= 0)

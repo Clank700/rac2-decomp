@@ -36,7 +36,6 @@ typedef struct {
 
 typedef unsigned long long u64;
 
-extern unsigned int D_L09_001FE6C0[];
 
 extern unsigned int D_L09_001FB560[];
 
@@ -203,19 +202,8 @@ int func_L09_00329178(char *object, int index)
 
 INCLUDE_ASM("asm/levels", func_L09_003364E0);
 
-int func_L09_0033E658(int index)
-{
-    unsigned int entry;
+/* func_L09_0033E658 is matched in L09_0033E658-rc2.c. */
 
-    if (index == -1)
-        goto none;
-    entry = D_L09_001FE6C0[index];
-    if (entry == 0)
-        goto none;
-    return *(int *)entry - 1;
-none:
-    return -1;
-}
 
 int func_L09_0033E690(char *object, int index)
 {
