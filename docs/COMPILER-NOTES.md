@@ -1319,3 +1319,35 @@ the additions, including two corrections.
   `div.s`, the division padding after a label, the `slti`/`bnez`/two-store clamp, and the prologue
   interleaving (grouped saves against saves interleaved with the first load) - each measured
   repeatedly, with no source shape moving them.
+
+## Habits measured on the game units (20 October 2026)
+
+Fifteen workers on 66 `src/game/` functions, most of them placed in all 28 programs. The habits
+above still hold; these are the additions.
+
+- **`mfc1` is interlocked in retail, not here.** In the boot's `.text`, 88 `mfc1` are directly
+  followed by an instruction that reads their target register, in 47 functions (`func_0028D1E8`
+  has 13), and only one has a `nop` in between. This assembler inserts that `nop` (gas's
+  `cop_interlocks` names the 4300 and the 5400, not the R5900), so none of those 47 functions can
+  match from C. The lever would be the assembler; it changes the instrument for every unit, so it
+  is a maintainer's decision, not a source shape.
+- **The temporary in the destination register**: retail's `lui $r,%hi(X)` / `lw $r,%lo(X)($r)`
+  is a bare-symbol load the assembler expanded. In a `-G0` unit, `extern T X
+  __attribute__((sda));` gives it (and stores through `$at`): `func_00343260`. In a `-G8` unit the
+  same declaration is a `$gp` access, so a function that needs both forms of one symbol takes two
+  names: `func_0027B858`, `func_002987C0`.
+- **`-mno-split-addresses` when a store and a load of one byte each have their own `lui`**:
+  `func_0033C2D8` is 156 bytes in its `-G0` unit, where both share one `lui`, and exact with the
+  option, alone in `src/game/0033C2D8.c`; its neighbour `func_0033C378` does not match with it.
+- **A unit marked `sdk` can be game code**: `src/game/00287E98.c` was `sdk`; its two new functions
+  match only under the game compiler (the SDK one gives 144 and 168 bytes), and the two setters
+  already in it match under both.
+- **Return types decide registers**: declaring callees that return a value as returning it
+  (`memset` `func_00115484`, `strncpy` `func_00115AC0`, `sprintf` `func_00115DA8`,
+  `func_002DF1F8`) fixed several register choices and argument orders at once (`func_00339F28`,
+  `func_00343A30`): a call that sets `$v0` pushes the next value into `$v1`. A 64-bit colour
+  argument needs `unsigned long` in the callee's prototype, or the argument order changes
+  (`func_0033ED88`, `func_00344938`).
+- **Seeing the passes**: this cc1 takes `-fsched-verbose-N` (a dash; `=N` is refused), which with
+  `-dS`/`-dR` prints both schedulers' priorities and cycles; `-dL` shows the loop optimizer's
+  decisions, which is how the loop-invariant threshold behind `func_0033B910` was measured.
