@@ -5,8 +5,11 @@
    is not above that value and the difference is stored back otherwise.
 
    Measured with tools/check.py in src/game/0027F128.c (the -O2 -G0 profile):
-   the body cannot be placed, because the constant it loads is not defined
-   anywhere in the repository (see below).
+   "func_002829D8: 0 of 28 places match", 52 bytes against retail's 64.  The
+   candidate loads the constant absolutely (`lui $at,0x0` ; `lwc1 $f1,0($at)`)
+   because the symbol is undefined, so the assembler cannot put it in the
+   small-data section; with the symbol defined the unit would still have to
+   be built with -G8.
 
    What the retail bytes are:
 
