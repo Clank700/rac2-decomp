@@ -9,7 +9,16 @@
    instruction right at 160 bytes except one - this cc1 materialises the eighth
    argument's `lui/addiu` pair FIRST, retail keeps it last (after the 4 and 6
    constants). Two more spellings (eighth argument typed s32, or in a local) give
-   156 and 164. Blocker: the argument-setup order of the last argument. */
+   156 and 164. Blocker: the argument-setup order of the last argument.
+   Wave 9 (p1) re-measured it: the nested-if spelling of the two flag tests (the
+   shape of the matched func_L12_00412DE0) with the `if (A && B) { ... }` guard
+   reaches the retail's exact size, 160 bytes, and 158 of the 160 words are
+   identical; the two words left are the eighth argument's `lui/addiu` pair, which
+   this cc1 materialises first (retail keeps it last, after the 4 and 6 constants)
+   and the 0x34 half-word, which lands in $v0 where retail has $v1.  The `&&`
+   spelling of the two flag tests is not usable: this cc1 rewrites the pair of
+   comparisons as a range check (addiu/andi/sltiu), four bytes too many.  The
+   eighth argument's address is 0x001A8F20 (lui 0x1B + addiu -0x70E0). */
 typedef char *ptr;
 typedef unsigned char u8;
 typedef unsigned short u16;

@@ -86,9 +86,11 @@ extern float func_00282DF0(void *);
 extern int func_002E5CF8(int, int, char *);
 
 /* Stores the quadword the caller passes into the record at +0xF0. */
+/* func_L02_003CADA8 is a near miss: nonmatching/levels/func_L02_003CADA8.c */
 INCLUDE_ASM("asm/levels", func_L02_003CADA8);
 
 /* Stores the quadword the caller passes into the record at +0xB0. */
+/* func_L02_003D01F0 is a near miss: nonmatching/levels/func_L02_003D01F0.c */
 INCLUDE_ASM("asm/levels", func_L02_003D01F0);
 
 int func_L02_003D1880(char *arg0) {

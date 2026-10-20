@@ -34,6 +34,11 @@ typedef struct {
 
 extern void func_00283410_3(M4_F36d8a248 *, V4_F36d8a248 *);
 
+#ifndef RAC2_T_V4TI_F36D8A248
+#define RAC2_T_V4TI_F36D8A248
+typedef int V4TI_F36d8a248 __attribute__((mode(TI)));
+#endif
+
 extern void func_00283788_2(M4_F36d8a248 *, M4_F36d8a248 *, V4_F36d8a248 *);
 
 extern void func_002AB6D8_2(M4_F36d8a248 *, V4_F36d8a248 *);
@@ -115,6 +120,14 @@ extern f32 func_00283B98_4(f32, f32);
 
 extern void func_00283D38_2(s32, s32, f32);
 
+extern void func_00282CF0(void *, void *, void *);
+
+extern void func_00282CC0(void *, void *, void *);
+
+extern void func_00282D30(void *, void *, float);
+
+extern float func_00282C48(float);
+
 INCLUDE_ASM("asm/levels", func_L00_00316F60);
 
 /* computes a scalar complement-power curve by repeated multiplication */
@@ -128,6 +141,8 @@ f32 func_L00_0031A6C8(f32 value, s32 count) {
 
 INCLUDE_ASM("asm/levels", func_L00_0031A710);
 
+/* func_L00_0031AA28 (cubic curve through four control vectors) is a near miss:
+   nonmatching/levels/func_L00_0031AA28.c */
 INCLUDE_ASM("asm/levels", func_L00_0031AA28);
 
 /* Blends a value toward a target: helper(second,first) halved, scaled by (1 - helper(third*pi)); the first argument and that product go to a two-float helper whose float result is returned. */
@@ -142,7 +157,24 @@ float func_L00_0031ABE0(float a, float b, float c)
     return func_00283B98_7(a, t * (1.0f - u));
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0031AC60);
+/* Blends between two vectors: at a phase of zero the first vector is copied, at one the
+   second, and in between a sine-shaped weight scales the difference between them. */
+void func_L00_0031AC60(V4TI_F36d8a248 *a0, V4TI_F36d8a248 *a1, V4TI_F36d8a248 *a2, float t)
+{
+    char local[16];
+    float k;
+
+    if (t == 0.0f) {
+        *(volatile V4TI_F36d8a248 *)a0 = *(V4TI_F36d8a248 *)a1;
+    } else if (t == 1.0f) {
+        *(volatile V4TI_F36d8a248 *)a0 = *(V4TI_F36d8a248 *)a2;
+    } else {
+        k = (1.0f - func_00283180_5(t * 3.1415927f)) * 0.5f;
+        func_00282CF0(local, a2, a1);
+        func_00282D30(local, local, k);
+        func_00282CC0(a0, a1, local);
+    }
+}
 
 /* converts a normalised phase to radians, derives a blend factor of half the complement of a phase helper's result, and applies it to a two-argument helper over three consecutive float components written back over the first vector. */
 void func_L00_0031AD40(float *a0, float *a1, float *a2, float t)
@@ -208,7 +240,33 @@ INCLUDE_ASM("asm/levels", func_L00_0031D670);
 
 INCLUDE_ASM("asm/levels", func_L00_0031D958);
 
-INCLUDE_ASM("asm/levels", func_L00_0031EC88);
+/* Blends three components of a vector into a second one: for every component that is
+   negative the two vectors are mixed through a helper, scaled by the angle between them
+   and added back into the second vector. */
+void func_L00_0031EC88(V4TI_F36d8a248 *a0, V4TI_F36d8a248 *a1)
+{
+    V4_F36d8a248 localA;
+    V4_F36d8a248 localB;
+    V4_F36d8a248 *va = a1;
+    V4_F36d8a248 *fa = &localA;
+    V4_F36d8a248 *fb = &localB;
+    float *q = (float *)&localA;
+    float *p = (float *)a1;
+    float *r = (float *)&localB;
+    int i;
+
+    *(V4TI_F36d8a248 *)&localA = *(V4TI_F36d8a248 *)a0;
+    for (i = 0; i < 3; i++) {
+        if (*p < 0.0f) {
+            func_00282CF0(fb, va, fa);
+            func_00282D30(fb, fb, func_00282C48((*q - 0.1f) / *r));
+            func_00282CC0(va, fa, fb);
+        }
+        p++;
+        r++;
+        q++;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0031F1C0);
 
