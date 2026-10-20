@@ -134,5 +134,3 @@ void func_00344298(char *object, unsigned int buttons)
 }
 
 INCLUDE_ASM("asm/game", func_00344378);
-
-INCLUDE_ASM("asm/game", func_00344478);
