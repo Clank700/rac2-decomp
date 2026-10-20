@@ -158,7 +158,94 @@ INCLUDE_ASM("asm/levels", func_L04_0040DCA8);
 
 INCLUDE_ASM("asm/levels", func_L04_0040DF90);
 
-INCLUDE_ASM("asm/levels", func_L04_0040E248);
+extern char D_00188660[];
+
+extern void func_002E59F8(int value);
+
+/* Clears the seven pending ids of the record and reports the ones that still
+   point at another owner.  The record base is a boot table of 0x70-byte
+   entries; the live entry's owner word sits at +0x88 and its flag byte at
+   +0x74. */
+void func_L04_0040E248(int a0, char *a1)
+{
+    char *s0 = a1;
+    int s1 = a0;
+    char *p;
+    int v;
+
+    v = *(int *)(s0 + 0x748);
+    if (v != -1) {
+        p = D_00188660 + v * 0x70;
+        if (*(int *)(p + 0x88) == s1) {
+            if (*(unsigned char *)(p + 0x74) != 0)
+                func_002E59F8(v);
+        }
+    }
+    *(int *)(s0 + 0x748) = -1;
+
+    v = *(int *)(s0 + 0x74C);
+    if (v != -1) {
+        p = D_00188660 + v * 0x70;
+        if (*(int *)(p + 0x88) == s1) {
+            if (*(unsigned char *)(p + 0x74) != 0)
+                func_002E59F8(v);
+        }
+    }
+    *(int *)(s0 + 0x74C) = -1;
+
+    v = *(int *)(s0 + 0x714);
+    if (v != -1) {
+        p = D_00188660 + v * 0x70;
+        if (*(int *)(p + 0x88) == s1) {
+            if (*(unsigned char *)(p + 0x74) != 0)
+                func_002E59F8(v);
+        }
+    }
+    *(int *)(s0 + 0x714) = -1;
+
+    v = *(int *)(s0 + 0x3BC);
+    if (v != -1) {
+        p = D_00188660 + v * 0x70;
+        if (*(int *)(p + 0x88) == s1) {
+            if (*(unsigned char *)(p + 0x74) != 0)
+                func_002E59F8(v);
+        }
+    }
+    *(int *)(s0 + 0x3BC) = -1;
+
+    v = *(int *)(s0 + 0x328);
+    if (v != -1) {
+        p = D_00188660 + v * 0x70;
+        if (*(int *)(p + 0x88) == s1) {
+            if (*(unsigned char *)(p + 0x74) != 0)
+                func_002E59F8(v);
+        }
+    }
+    *(int *)(s0 + 0x328) = -1;
+
+    v = *(int *)(s0 + 0x330);
+    if (v != -1) {
+        p = D_00188660 + v * 0x70;
+        if (*(int *)(p + 0x88) == s1) {
+            if (*(unsigned char *)(p + 0x74) != 0)
+                func_002E59F8(v);
+        }
+    }
+    *(int *)(s0 + 0x330) = -1;
+
+    v = *(int *)(s0 + 0x334);
+    if (v != -1) {
+        p = D_00188660 + v * 0x70;
+        if (*(int *)(p + 0x88) == s1) {
+            if (*(unsigned char *)(p + 0x74) != 0)
+                func_002E59F8(v);
+        }
+    }
+
+    *(int *)(s0 + 0x32C) = 0;
+    *(int *)(s0 + 0x334) = -1;
+    *(int *)(s0 + 0x324) = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L04_0040E460);
 
