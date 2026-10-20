@@ -329,7 +329,39 @@ INCLUDE_ASM("asm/levels", func_L03_0041B848);
 
 INCLUDE_ASM("asm/levels", func_L03_00424C40);
 
-INCLUDE_ASM("asm/levels", func_L03_00425030);
+extern s32 func_002A77E0(s32);
+
+/* Fills the moby's four-entry table with the helper's picks, then the two
+   colour ramps and the two pairs of angles. */
+void func_L03_00425030(u8 *a0) {
+    u8 *s0 = *(u8 **)(a0 + 0x68) + 0x10;
+    u8 *s1 = *(u8 **)(a0 + 0x68);
+    u32 *v0;
+    u32 v1;
+    s32 i;
+    s32 j;
+
+    for (i = 3; i >= 0; i--) {
+        *(f32 *)s0 = (f32)func_002A77E0(0xFF);
+        s0 += 4;
+    }
+    *(f32 *)(s1 + 0x20) = -1.0f;
+    *(f32 *)(s1 + 0x24) = -2.25f;
+    *(f32 *)(s1 + 0x28) = 1.25f;
+    *(f32 *)(s1 + 0x2C) = 2.5f;
+    j = 3;
+    v0 = (u32 *)(s1 + 0x3C);
+    v1 = 0xFF;
+    for (; j >= 0; j--) {
+        *v0 = v1;
+        v0--;
+        v1 -= 0x40;
+    }
+    *(f32 *)(s1 + 0x40) = 2.0f;
+    *(f32 *)(s1 + 0x44) = 2.46f;
+    *(f32 *)(s1 + 0x4C) = 2.0f;
+    *(f32 *)(s1 + 0x48) = 2.46f;
+}
 
 INCLUDE_ASM("asm/levels", func_L03_00425108);
 
