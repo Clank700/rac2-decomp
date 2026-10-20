@@ -255,7 +255,30 @@ void func_003340A8(char *object)
 
 INCLUDE_ASM("asm/game", func_003340F0);
 
-INCLUDE_ASM("asm/game", func_00334100);
+/* The table func_00334100 walks: 0x30-byte entries with the searched id at +0x18.
+   Its address differs from level to level, so the symbol carries no address. */
+typedef struct {
+    unsigned char pad_34100[0x18];
+    int id_34100;
+    unsigned char pad2_34100[0x14];
+} Entry_34100;
+
+extern Entry_34100 ref_L00_00334100_00[30];
+
+s32 func_00334100(s32 a0)
+{
+    s32 i;
+    s32 r;
+
+    r = -1;
+    for (i = 0; i < 30; i++) {
+        if (ref_L00_00334100_00[i].id_34100 == a0) {
+            r = i;
+            break;
+        }
+    }
+    return r;
+}
 
 INCLUDE_ASM("asm/game", func_00334160);
 
@@ -412,7 +435,7 @@ void func_00335D60(void *object, int flags) {
     func_00335870(object, flags);
 }
 
-INCLUDE_ASM("asm/game", func_00335DC0);
+/* func_00335DC0 uses small data in 0032EB28-g8.c. */
 
 int func_00335E08(void) {
     return D_001B23A0;
