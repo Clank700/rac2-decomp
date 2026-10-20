@@ -15,8 +15,6 @@ void func_00287EA8(void) {
     D_001A8A64 = 0;
 }
 
-INCLUDE_ASM("asm/game", func_00287EB0);
-
 /* 0xE0-byte slots of the table at D_00239BA0; f4A and f4C link the slots. */
 typedef struct {
     int f00;
@@ -31,6 +29,27 @@ typedef struct {
 } Slot287E98;
 extern Slot287E98 D_00239BA0[];
 extern unsigned char D_00139568[];
+extern int D_00139868[];
+extern int D_00139688[];
+
+/* The second lookup re-reads D_00139568[index], which cc1 forwards from the stored value. With
+   a cast on v instead, index and the link swap $a2/$a3 and the second mult moves ahead of the
+   store. */
+void func_00287EB0(int index)
+{
+    Slot287E98 *s = &D_00239BA0[D_00139568[index]];
+    short v = s->f4A;
+    if (v == 0) return;
+    {
+        int x = s->f6C;
+        if (x >= 0) {
+            x <<= 5;
+            if (D_00139868[index] < x) D_00139868[index] = x;
+        }
+    }
+    D_00139568[index] = v;
+    if (D_00239BA0[D_00139568[index]].f00 != 0) D_00139688[index] = D_00239BA0[D_00139568[index]].f8E;
+}
 
 int func_00287F60(int index)
 {
