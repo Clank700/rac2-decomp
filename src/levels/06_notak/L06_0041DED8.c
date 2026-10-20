@@ -249,8 +249,6 @@ void func_L06_0044B250(char *arg0)
     func_35A550(arg0, 1, -1);
 }
 
-INCLUDE_ASM("asm/levels", func_L06_0044B2D8);
-
 /* Re-arms the object when the shared probe accepts its live handle. */
 void func_L06_0044B2D8(char *arg0)
 {
