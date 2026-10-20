@@ -155,7 +155,29 @@ int func_L05_0037CEB8(char *obj)
 INCLUDE_ASM("asm/levels", func_L05_0037CEE0);
 
 
-INCLUDE_ASM("asm/levels", func_L05_0037D6E8);
+struct S_L05_002A1800 {
+    char pad0[0xC];
+    int f0C;
+    int f10;
+    int f14;
+    char pad1[0x10];
+};
+
+extern struct S_L05_002A1800 D_L05_002A1800[];
+
+extern int func_002ED8A0(int);
+
+void func_L05_0037D6E8(void)
+{
+    int i;
+
+    for (i = 0; i < 15; i++)
+        D_L05_002A1800[i].f14 = D_L05_002A1800[i].f0C;
+    D_L05_002A1800[7].f14 = D_L05_002A1800[7].f0C;
+    D_L05_002A1800[13].f14 = D_L05_002A1800[13].f0C;
+    i = func_002ED8A0(6);
+    D_L05_002A1800[i].f14 = D_L05_002A1800[i].f10;
+}
 
 INCLUDE_ASM("asm/levels", func_L05_0037D768);
 
