@@ -239,3 +239,170 @@ int func_L23_00419CA0(int arg0) {
     }
     return 1;
 }
+
+extern int D_L23_001B1424 __attribute__((sda));
+
+extern unsigned char D_001395B8[];
+
+
+extern void func_0029B758(int, int);
+
+extern void func_0029CE80(void);
+
+/* Releases the five slot objects and the level object, then raises three flags. The flags are
+ * written through a pointer set after the calls, as retail's `lui`/`addiu` base with the 0x88 and
+ * 0xA1 displacements; written as D_001395B8[0xA1] and [0x88], the high half is hoisted into a
+ * saved register (160 bytes). */
+void func_L23_0041D9B0(void) {
+    char **p = (char **)(*(char **)(D_L23_001B1484 + 0x68) + 0x358);
+    unsigned char *flags;
+    int i;
+
+    for (i = 4; i >= 0; i--) {
+        if (*p != 0) {
+            func_0029F338(*p);
+            *p = 0;
+        }
+        p++;
+    }
+    if (D_L23_001B1484 != 0) {
+        func_0029B758(0, 0);
+        func_0029CE80();
+        func_0029F338(D_L23_001B1484);
+        D_L23_001B1484 = 0;
+    }
+    flags = D_001395B8;
+    D_L23_001B1424 = 1;
+    flags[0xA1] = 1;
+    flags[0x88] = 1;
+}
+
+/* The state at +0x68 as func_L23_0041BE70 reads it. Indexing the slot array through the
+ * struct keeps the base first in the address sum (`addu $v0,$a0,$v0`); pointer arithmetic
+ * puts the scaled index first. */
+typedef struct Vars_0041BE70 {
+    char pad0[0x358];
+    char *slot[5];            /* 0x358 */
+    char pad1[0x60C - 0x36C];
+    int index;                /* 0x60C */
+    char *held;               /* 0x610 */
+} Vars_0041BE70;
+
+/* A scalar: declared as an array, its address is scheduled differently in the two calls. */
+extern int D_L23_001B36E0;
+
+extern void func_002A90C8(void *, int, int, void *, float);
+
+/* Attaches the level object, the indexed slot or the held object, with the argument's two
+ * words. The two early returns give retail's arm layout: [no held object][slot][held]. */
+void func_L23_0041BE70(char *arg0) {
+    char *state = D_L23_001B1484;
+    Vars_0041BE70 *vars = *(Vars_0041BE70 **)(state + 0x68);
+    int index = vars->index;
+    char *p;
+
+    if (index == -1) {
+        p = vars->held;
+        if (p == 0) {
+            func_002A90C8(state, *(int *)(arg0 + 0x20), 0x10000, state + 0x10,
+                          *(float *)(arg0 + 0x2C));
+            return;
+        }
+    } else {
+        func_002A90C8(vars->slot[index], *(int *)(arg0 + 0x20), 0x10000, &D_L23_001B36E0,
+                      *(float *)(arg0 + 0x2C));
+        return;
+    }
+    if ((*(unsigned short *)(p + 0x34) | 0x4000) != 0)
+        func_002A90C8(p, *(int *)(arg0 + 0x20), 0x10000, &D_L23_001B36E0,
+                      *(float *)(arg0 + 0x2C));
+}
+
+extern float D_L23_001B1400 __attribute__((sda));
+
+extern float D_L23_001B1404 __attribute__((sda));
+
+extern float D_L23_001B1408 __attribute__((sda));
+
+/* Returns the new value in $f0. Declared void, the call leaves $f0 free and the measure
+ * reloaded right after it takes $f0 where retail has $f1. */
+extern float func_002AA548(float *, float *, float, float, float, float);
+
+extern float func_00282C48(float);
+
+/* Springs the first measure toward its target at the three scaled global rates, and latches
+ * it once it is within a tenth of the target. */
+void func_L23_0041B498(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    if (*(int *)(state + 0x5DC) != 0)
+        return;
+    func_002AA548((float *)(state + 0x5C8), (float *)(state + 0x5CC), *(float *)(state + 0x5D0),
+                  D_L23_001B1400 * 0.00027777778f, D_L23_001B1404 * 0.00027777778f,
+                  D_L23_001B1408 * 0.016666668f);
+    if (func_00282C48(*(float *)(state + 0x5C8) - *(float *)(state + 0x5D0)) < 0.1f) {
+        *(int *)(state + 0x5DC) = 1;
+        *(int *)(state + 0x5CC) = 0;
+    }
+}
+
+extern void func_0029F338(void *);
+
+extern void func_002E59F8(int);
+
+extern void func_00291450(int);
+
+extern int D_L23_001B1418 __attribute__((sda));
+
+extern short D_L23_001B146C __attribute__((sda));
+
+/* the two 8 x 3 handle tables */
+extern void *D_L23_00259320[8][3];
+
+extern void *D_L23_00259380[8][3];
+
+/* four handles; declared at 8 bytes so this -G8 unit loads its address as the bare
+   lui/addiu pair into one register, as retail does (an incomplete or 16-byte array splits it) */
+extern void *D_L23_001B3790[2];
+
+/* Releases the measured handles, then every object handle of the three tables, and clears them. */
+void func_L23_0041A648(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+    int i;
+    int j;
+
+    if (D_L23_001B1418 != -1) {
+        func_002E59F8(D_L23_001B1418);
+        D_L23_001B1418 = -1;
+    }
+    if (D_L23_001B146C != -1) {
+        func_00291450(D_L23_001B146C);
+        D_L23_001B146C = -1;
+    }
+    if (*(int *)(state + 0x5B0) != 0) {
+        *(int *)(state + 0x5C4) = 0;
+        for (i = 0; i < 8; i++) {
+            for (j = 0; j < 3; j++) {
+                if (D_L23_00259320[i][j] != 0) {
+                    func_0029F338(D_L23_00259320[i][j]);
+                    D_L23_00259320[i][j] = 0;
+                }
+            }
+        }
+        for (i = 0; i < 4; i++) {
+            if (D_L23_001B3790[i] != 0) {
+                func_0029F338(D_L23_001B3790[i]);
+                D_L23_001B3790[i] = 0;
+            }
+        }
+        for (i = 0; i < 8; i++) {
+            for (j = 0; j < 3; j++) {
+                if (D_L23_00259380[i][j] != 0) {
+                    func_0029F338(D_L23_00259380[i][j]);
+                    D_L23_00259380[i][j] = 0;
+                }
+            }
+        }
+        *(int *)(state + 0x5B0) = 0;
+    }
+}

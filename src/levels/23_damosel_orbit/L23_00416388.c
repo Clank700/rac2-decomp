@@ -137,8 +137,6 @@ INCLUDE_ASM("asm/levels", func_L23_0041A038);
 
 INCLUDE_ASM("asm/levels", func_L23_0041A3B8);
 
-INCLUDE_ASM("asm/levels", func_L23_0041A648);
-
 INCLUDE_ASM("asm/levels", func_L23_0041A7A0);
 
 INCLUDE_ASM("asm/levels", func_L23_0041AFE8);
@@ -152,8 +150,6 @@ s32 func_L23_0041B478(void) {
     func_L00_0030C930();
     return 1;
 }
-
-INCLUDE_ASM("asm/levels", func_L23_0041B498);
 
 extern float func_00282C48(float);
 
@@ -177,7 +173,25 @@ void func_L23_0041B5B0(char *arg0) {
     *(s32 *)(state + 0x5DC) = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L23_0041B5C8);
+/* Returns the new value in $f0. Declared void, the call leaves $f0 free and the measure
+ * reloaded right after it takes $f0 where retail has $f1. */
+extern float func_002AA548(float *, float *, float, float, float, float);
+
+/* Springs the second measure toward its target, doubles the word at +0x74, and latches the
+ * measure once it is within a tenth of the target. */
+void func_L23_0041B5C8(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    if (*(s32 *)(state + 0x5D8) != 0)
+        return;
+    func_002AA548((float *)(state + 0x588), (float *)(state + 0x58C), *(float *)(state + 0x5D4),
+                  0.016666668f, 0.016666668f, 0.40833336f);
+    *(float *)(state + 0x74) *= 2.0f;
+    if (func_00282C48(*(float *)(state + 0x588) - *(float *)(state + 0x5D4)) < 0.1f) {
+        *(s32 *)(state + 0x5D8) = 1;
+        *(s32 *)(state + 0x58C) = 0;
+    }
+}
 
 /* The same relatch as the first measure, for the second one and its own flags. */
 void func_L23_0041B668(char *arg0, float *arg1) {
@@ -195,8 +209,6 @@ INCLUDE_ASM("asm/levels", func_L23_0041B6D8);
 INCLUDE_ASM("asm/levels", func_L23_0041B940);
 
 INCLUDE_ASM("asm/levels", func_L23_0041B9F0);
-
-INCLUDE_ASM("asm/levels", func_L23_0041BE70);
 
 INCLUDE_ASM("asm/levels", func_L23_0041C0E8);
 
@@ -250,8 +262,6 @@ INCLUDE_ASM("asm/levels", func_L23_0041D0A0);
 INCLUDE_ASM("asm/levels", func_L23_0041D1F0);
 
 INCLUDE_ASM("asm/levels", func_L23_0041D398);
-
-INCLUDE_ASM("asm/levels", func_L23_0041D9B0);
 
 INCLUDE_ASM("asm/levels", func_L23_0041DA48);
 
