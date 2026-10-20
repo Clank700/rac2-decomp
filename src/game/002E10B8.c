@@ -170,7 +170,6 @@ void func_002E37B0(void)
         *(long long *)((char *)resident->table + index * 16) = 0;
 }
 
-INCLUDE_ASM("asm/game", func_002E3820);
 
 INCLUDE_ASM("asm/game", func_002E3938);
 
