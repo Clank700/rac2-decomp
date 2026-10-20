@@ -126,6 +126,8 @@ extern void func_00282CC0(void *, void *, void *);
 
 extern void func_00282D30(void *, void *, float);
 
+extern float func_00282C48(float);
+
 INCLUDE_ASM("asm/levels", func_L00_00316F60);
 
 /* computes a scalar complement-power curve by repeated multiplication */
@@ -237,6 +239,34 @@ int func_L00_0031D620(int a0, int a1, float x) {
 INCLUDE_ASM("asm/levels", func_L00_0031D670);
 
 INCLUDE_ASM("asm/levels", func_L00_0031D958);
+
+/* Blends three components of a vector into a second one: for every component that is
+   negative the two vectors are mixed through a helper, scaled by the angle between them
+   and added back into the second vector. */
+void func_L00_0031EC88(V4TI_F36d8a248 *a0, V4TI_F36d8a248 *a1)
+{
+    V4_F36d8a248 localA;
+    V4_F36d8a248 localB;
+    V4_F36d8a248 *va = a1;
+    V4_F36d8a248 *fa = &localA;
+    V4_F36d8a248 *fb = &localB;
+    float *q = (float *)&localA;
+    float *p = (float *)a1;
+    float *r = (float *)&localB;
+    int i;
+
+    *(V4TI_F36d8a248 *)&localA = *(V4TI_F36d8a248 *)a0;
+    for (i = 0; i < 3; i++) {
+        if (*p < 0.0f) {
+            func_00282CF0(fb, va, fa);
+            func_00282D30(fb, fb, func_00282C48((*q - 0.1f) / *r));
+            func_00282CC0(va, fa, fb);
+        }
+        p++;
+        r++;
+        q++;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_0031EC88);
 
