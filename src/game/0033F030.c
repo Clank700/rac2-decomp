@@ -200,7 +200,6 @@ void func_00341540(u8 *a0, s32 a1, s32 a2, s32 a3) { *(s32 *)(a0 + 0x2F0) = a1; 
 /* Measured target: byte-identical across all 27 levels. */
 void func_00341550(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x220) = a1; }
 
-INCLUDE_ASM("asm/game", func_00341558);
 
 INCLUDE_ASM("asm/game", func_003415B8);
 
