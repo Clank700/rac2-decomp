@@ -66,6 +66,7 @@ src/levels/05_feltzin_system/L05_00416EC0-rc2.c	-O2 -G0 -ffunction-sections -fno
 src/levels/07_siberius/L07_003F68F0-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
 src/levels/07_siberius/L07_003F8BB0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/levels/shared/L09_0033E658-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/levels/11_joba/L11_003F2C28-rc2.c	-O2 -G8 -mastra-r5900-extern-buffer -ffunction-sections -fno-builtin
 # path (a glob)<TAB>flags; "sdk" first: the SDK compiler (tools/compiler/sdk/) instead of the game's
 # The default is "-O2 -G0 -ffunction-sections" (-G8 for a file named *-g8.c).
 src/core/00115228.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
