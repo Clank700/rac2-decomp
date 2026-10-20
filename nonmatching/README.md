@@ -564,7 +564,7 @@ what was tried. None of these links, and none is counted. Move a file into `src/
 | [`func_L06_00458E10`](levels/func_L06_00458E10.c) | 288 | kept as the worker's whole-file draft; no note was left |
 | [`func_L06_00458F30`](levels/func_L06_00458F30.c) | 236 | kept as the worker's whole-file draft; no note was left |
 | [`func_L06_00459B18`](levels/func_L06_00459B18.c) | 144 | kept as the worker's whole-file draft; no note was left |
-| [`func_L06_0045A490`](levels/func_L06_0045A490.c) | 112 | kept as the worker's whole-file draft; no note was left |
+| [`func_L06_0045A490`](levels/func_L06_0045A490.c) | 112 | The block order is right and only the branch sense of the second test differs: retail `beq $v1,$s1,zero` (answer 0 when the level's word and the argument are equal), this cc1 always inverts it so that the "return 1" block is the branch target. Tried the `&&` and `||` spellings, two separate ifs (if-converted to xor/sltiu, 116 bytes) and a goto to a shared zero block |
 | [`func_L06_00464900`](levels/func_L06_00464900.c) | 236 | kept as the worker's whole-file draft; no note was left |
 | [`func_L00_0039F300`](levels/func_L00_0039F300.c) | 116 | kept as the worker's whole-file draft; no note was left |
 | [`func_L00_00390E10`](levels/func_L00_00390E10.c) | 276 | Restores the third-level object's transform and flags from the level's own globals, marks the level as initialised, publishes the default geometry constants and calls the boot helper with the three default words. |
