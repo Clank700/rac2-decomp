@@ -711,7 +711,7 @@ The first sweep used a pattern that missed definitions whose opening brace sits 
 the signature, and these bodies call the helpers through a local `__asm__` copy. Same rule, same
 treatment.
 
-| [`func_L01_003DCD40`](levels/func_L01_003DCD40.c) | 148 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
+| [`func_L01_003DCD40`](levels/func_L01_003DCD40.c) | 148 | The 128-bit copy does come out of plain C: a `mode(TI)` local gives retail's `lq`/`sq` pair, so the old "not landable without inline assembly" note is wrong. What is left is the register rotation - retail copies a0 into `$s1`, the state into `$s2`, a1 into `$s3` and keeps &vec in `$s0`, this cc1 rotates all four (a0 `$s0`, state `$s1`, a1 `$s2`, &vec `$s3`) and the prologue saves them in that order too. Candidate is 144 bytes against retail's 148; the stack layout, the frame, the three calls and the two 0x3E4 guards are exact. Twelve source shapes measured (declaration order, pointer variables for the copy, the copy inline) |
 | [`func_L01_003DCDD8`](levels/func_L01_003DCDD8.c) | 152 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
 | [`func_L02_003CADA8`](levels/func_L02_003CADA8.c) | 72 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
 | [`func_L02_003D01F0`](levels/func_L02_003D01F0.c) | 72 | matched byte for byte, but the body needs `qcopy`/`qzero` or a local `__asm__` helper: not a route under the Plain C rule |
