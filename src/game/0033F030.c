@@ -193,7 +193,6 @@ u8 *func_003411C0(u8 *a0) {
     return a0;
 }
 
-INCLUDE_ASM("asm/game", func_00341220);
 
 /* stores three consecutive words; byte-identical across all 27 levels. */
 void func_00341540(u8 *a0, s32 a1, s32 a2, s32 a3) { *(s32 *)(a0 + 0x2F0) = a1; *(s32 *)(a0 + 0x2F4) = a2; *(s32 *)(a0 + 0x2F8) = a3; }
