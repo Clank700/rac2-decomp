@@ -79,6 +79,11 @@ INCLUDE_ASM("asm/levels", func_L04_0030EDE0);
 
 INCLUDE_ASM("asm/levels", func_L04_0030FA30);
 
+/* Walks the level's list of live objects: the ones of kind 0xE29 get their
+   flag word raised, the ones of kind 0xD54 are reported, and the ones of
+   kind 0xFA0 hand their owner to the spawner.  The attempt is in
+   nonmatching/levels/func_L04_0031D630.c: two words off (the base address
+   stays in a temp in retail and is copied into $s3). */
 INCLUDE_ASM("asm/levels", func_L04_0031D630);
 
 INCLUDE_ASM("asm/levels", func_L04_0032F1D8);
