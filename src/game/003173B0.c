@@ -177,7 +177,7 @@ INCLUDE_ASM("asm/game", func_0031A098);
 INCLUDE_ASM("asm/game", func_0031A158);
 
 extern void func_0031A098(void *record);
-extern long long func_0027C878(int id);
+extern long long func_0027C878_1(int id);
 extern float func_00283248(float x, float y);
 extern float func_00282E80(void *a, void *b);
 extern float func_002A7940(void);
@@ -196,7 +196,7 @@ void func_0031A340(char *unused, char *p1, float scale, int col0, int col1, int 
     float x;
 
     func_0031A098(&local);
-    local.v120 = func_0027C878(11);
+    local.v120 = func_0027C878_1(11);
     local.k3 = col0 + col1;
     local.k2 = col0 + col1;
     local.k1 = col0 + col1;
@@ -286,22 +286,25 @@ INCLUDE_ASM("asm/game", func_0031C498);
 
 extern void func_0031C970(char *);
 extern void func_0031CB78(char *, char *, int, int, int, float);
-extern void func_0031CDF8(char *, char *, int, int, float);
+extern void func_0031CDF8(char *, char *, float, int, int);
 
+/* Refresh the auxiliary state for modes 4, 5, 10 or flag 2, then issue
+   three calls with the embedded vectors and three with the referenced vectors. */
 void func_0031C7A0(char *self)
 {
-    unsigned int mode = *(unsigned char *)(self + 0x20);
     char *data = *(char **)(self + 0x68);
+    unsigned char mode = self[0x20];
 
-    if (mode - 4 < 2 || *(unsigned char *)(self + 0x95) == 2 || mode == 10)
+    if (mode == 4 || mode == 5 || (unsigned char)self[0x95] == 2 || mode == 10)
         func_0031C970(self);
 
     func_0031CB78(self, data + 0x370, 0x41DE, 0x10000000, 0x20000000, 0.125f);
-    func_0031CB78(self, data + 0x380, 0x800000, 0x10000000, 0x30000000, 0.125f);
-    func_0031CB78(self, data + 0x390, 0x800000, 0x10000000, 0x30000000, 0.125f);
-    func_0031CDF8(self, *(char **)(data + 0x270) + 0x10, 0x204080, 0x204080, 0.075f);
-    func_0031CDF8(self, *(char **)(data + 0x274) + 0x10, 0x204080, 0x204080, 0.075f);
-    func_0031CDF8(self, *(char **)(data + 0x278) + 0x10, 0x204080, 0x204080, 0.075f);
+    func_0031CB78(self, data + 0x380, 0x00800000, 0x10000000, 0x30000000, 0.125f);
+    func_0031CB78(self, data + 0x390, 0x00800000, 0x10000000, 0x30000000, 0.125f);
+
+    func_0031CDF8(self, *(char **)(data + 0x270) + 0x10, 0.075f, 0x204080, 0x204080);
+    func_0031CDF8(self, *(char **)(data + 0x274) + 0x10, 0.075f, 0x204080, 0x204080);
+    func_0031CDF8(self, *(char **)(data + 0x278) + 0x10, 0.075f, 0x204080, 0x204080);
 }
 
 void func_0031C8E0(char *p)
@@ -449,7 +452,54 @@ void func_0031E960(char *p)
     F5a19df7a_FUN_002FC560(0x47, 0x5360bUL);
 }
 
-INCLUDE_ASM("asm/game", func_0031EB00);
+extern float D_FLT_001B5200[];
+extern int func_0027C878(int);
+extern float func_00283248(float, float);
+extern float func_00282E80(void *, void *);
+extern void func_00283410(void *, void *);
+extern void func_00280B90(void *, void *, int);
+
+void func_0031EB00(char *position, int color, float scale, char *resource, float alpha, int mode, int flag)
+{
+    unsigned char work[0xE0];
+    unsigned int rgba;
+    unsigned long long mode_bits;
+    float first_angle;
+    float second_angle;
+    float distance;
+
+    func_0031E750((char *)work);
+    *(long long *)(work + 0x78) = func_0027C878(mode);
+
+    mode_bits = ((unsigned long long)flag << 2) | 0x0000008000000040ULL;
+    *(long long *)(work + 0x88) = mode_bits;
+    *(long long *)(work + 0x80) = 0x0000FF9000000260ULL;
+
+    rgba = (unsigned int)color + ((unsigned int)resource << 24);
+    *(int *)(work + 0x4C) = rgba;
+    *(int *)(work + 0x48) = rgba;
+    *(int *)(work + 0x44) = rgba;
+    *(int *)(work + 0x40) = rgba;
+    *(long long *)(work + 0x70) = 0;
+
+    *(int *)(work + 0xDC) = 0;
+    first_angle = func_00283248(D_FLT_001B5200[0x140 / 4] - *(float *)(position + 0),
+                                D_FLT_001B5200[0x144 / 4] - *(float *)(position + 4));
+    *(float *)(work + 0xD8) = first_angle;
+
+    distance = func_00282E80(position, &D_FLT_001B5200[0x140 / 4]);
+    second_angle = func_00283248(distance, D_FLT_001B5200[0x148 / 4] - *(float *)(position + 8));
+    *(float *)(work + 0xD0) = alpha;
+    *(float *)(work + 0xD4) = -second_angle;
+
+    func_00283410(work + 0x90, work + 0xD0);
+    *(float *)(work + 0xC0) = *(float *)(position + 0);
+    *(float *)(work + 0xC4) = *(float *)(position + 4);
+    *(float *)(work + 0xC8) = *(float *)(position + 8);
+    *(float *)(work + 0xCC) = 1.0f;
+    func_0031E8F8((char *)work, scale);
+    func_00280B90(work, work + 0x90, 0);
+}
 
 INCLUDE_ASM("asm/game", func_0031EC68);
 
