@@ -12,6 +12,11 @@ recorded checks describe the original compilation unit, not standalone syntax or
 
 | Function | Size | Bytes that differ |
 | --- | ---: | ---: |
+| [`func_L04_00422A00`](levels/func_L04_00422A00.c) | 252 | Plain screen-height global changes scheduling; the worker's artificial volatile qualifier was rejected. Independently checked in the original G8 unit, 0 of 1 places. |
+| [`func_L11_003F4F30`](levels/func_L11_003F4F30.c) | 204 | Candidate is 212 bytes with the tables' real four-entry extents; the eight-byte addressing difference remains. Original G8 unit independently checked, 0 of 1 places. |
+| [`func_L06_004576C8`](levels/func_L06_004576C8.c) | 228 | Candidate is 236 bytes with all sixteen table elements declared; the eight-byte addressing difference remains. Original G8 unit independently checked, 0 of 1 places. |
+| [`func_00279B70`](game/func_00279B70.c) | 92 | Same-size named-global candidate; first mismatch at +0x04, with entry scheduling and register allocation differing. Independently checked in the original unit, 0 of 28 places. |
+| [`func_L11_0042A4C8`](levels/func_L11_0042A4C8.c) | 228 | Same-size candidate; first mismatch at +0x0c, with entry scheduling and register allocation differing. The loop after +0x34 matches; original `-G0` unit independently checked, 0 of 1 places. |
 | [`func_00116300`](core/func_00116300.c) | 96 | Candidate is 88 bytes; retail gives the empty arm its own `b` over the block, this cc1 lays the block out as the fall-through |
 | [`func_00116E10`](core/func_00116E10.c) | 756 | newlib `fREe`; candidate now reaches retail's exact size once the `next->fd` load is kept live across the islr branch (spelt as a separate load in the else arm only it falls back to 764, measured), the whole islr region then matching. Two words left, both compiler-side: this cc1 keeps the loaded FD in `$a2` and uses it at the join where retail loads into `$v1` and copies (`daddu $a2,$v1,$zero`), and it inserts a load-to-branch `nop` before the frontlink large-bin loop's rotated `beql` where retail has none |
 | [`func_00118548`](core/func_00118548.c) | 156 | Candidate is 160 bytes; unsigned divide matches, but this cc1 copies the quotient into a third register and hoists the loop `divu` out of the delay slot |
