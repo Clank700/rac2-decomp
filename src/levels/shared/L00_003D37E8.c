@@ -18,6 +18,8 @@ extern void func_L00_003DC8A8_1(char *pkt, float angle);
 
 extern void func_00280B90_1(char *pkt, float *matrix, int mode);
 
+extern void ref_L00_003E0F58_00(char *);
+
 extern void func_L00_003E0CE8_1(char *pkt);
 
 extern void func_L00_003E0D70_1(char *pkt, float angle);
@@ -472,7 +474,7 @@ void func_L00_003E0F58(char *pos, int a1, int a2, char *a3, int t0,
     float off[4];
     long long r;
 
-    func_L00_003E0CE8(pkt);
+    ref_L00_003E0F58_00(pkt);
     r = func_002E67A0_1(a3);
 
     *(long long *)(pkt + 136) = ((long long)t0 << 2) | 0x8000000040LL;
