@@ -36,8 +36,6 @@ INCLUDE_ASM("asm/levels", func_L23_004256F0);
 
 INCLUDE_ASM("asm/levels", func_L23_00425848);
 
-INCLUDE_ASM("asm/levels", func_L23_004259E0);
-
 INCLUDE_ASM("asm/levels", func_L23_00425AF8);
 
 typedef int TI16 __attribute__((mode(TI)));

@@ -396,3 +396,43 @@ void func_L23_004277E8(u8 *moby) {
     }
     func_L23_004278D8(moby);
 }
+
+extern s32 D_L23_001B19C4 __attribute__((sda));
+
+extern s32 D_L23_001B19C8 __attribute__((sda));
+
+extern float D_L23_001B19CC __attribute__((sda));
+
+extern float D_L23_001B19D0 __attribute__((sda));
+
+extern float D_L23_001B19D4 __attribute__((sda));
+
+extern s32 D_L23_001B19D8 __attribute__((sda));
+
+/* the three floats come before the two trailing words: that argument order is what keeps the
+   two arms of the second call from sharing more than the jal */
+extern void func_L23_00425AF8(void *obj, s32 a, s32 b, s32 c, float x, float y, float z, s32 d, s32 e);
+
+/* draws the record twice: once plain (or with the override word when byte 0x2B is set), once scaled */
+void func_L23_004259E0(u8 *a0) {
+    u8 *obj = *(u8 **)(a0 + 0x68);
+
+    if (obj[0x2A] == 0) {
+        func_L23_00425AF8(obj + 0x30, obj[0x28], obj[0x29], 5,
+                          *(float *)(obj + 0x10), *(float *)(obj + 0x14), *(float *)(obj + 0x18),
+                          *(s32 *)obj, *(s32 *)(obj + 4));
+        return;
+    }
+    if (obj[0x2B] != 0) {
+        func_L23_00425AF8(obj + 0x30, obj[0x28], obj[0x29], 5,
+                          *(float *)(obj + 0x10), *(float *)(obj + 0x14), *(float *)(obj + 0x18),
+                          D_L23_001B19D8, D_L23_001B19D8);
+    } else {
+        func_L23_00425AF8(obj + 0x30, obj[0x28], obj[0x29], 5,
+                          *(float *)(obj + 0x10), *(float *)(obj + 0x14), *(float *)(obj + 0x18),
+                          *(s32 *)obj, *(s32 *)(obj + 4));
+    }
+    func_L23_00425AF8(obj + 0x30, obj[0x28] * D_L23_001B19C4, obj[0x29] * D_L23_001B19C8, 5,
+                      *(float *)(obj + 0x10) * D_L23_001B19CC, *(float *)(obj + 0x14) * D_L23_001B19D0,
+                      *(float *)(obj + 0x18) * D_L23_001B19D4, *(s32 *)obj, *(s32 *)(obj + 4));
+}
