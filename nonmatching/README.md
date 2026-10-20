@@ -213,7 +213,6 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L22_002A8B98`](levels/func_L22_002A8B98.c) | 172 | Recorded instruction mismatch at +0x4. |
 | [`func_L22_002A8CE0`](levels/func_L22_002A8CE0.c) | 184 | Recorded candidate is 168 bytes; size does not match retail. |
 | [`func_L22_003D0840`](levels/func_L22_003D0840.c) | 60 | 4; matches size and every other word, but the parameter copy is `daddu $v1,$a0,$zero` against retail's `$a3`. |
-| [`func_L22_0040DD20`](levels/func_L22_0040DD20.c) | 32 | Recorded instruction mismatch at +0x8. |
 | [`func_L23_003C19E0`](levels/func_L23_003C19E0.c) | 204 | Recorded G8 candidate is 200 bytes; size does not match retail. |
 | [`func_L26_003DC128`](levels/func_L26_003DC128.c) | 124 | Recorded G8 instruction mismatch at +0x0. |
 
