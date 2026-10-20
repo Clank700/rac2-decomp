@@ -1351,3 +1351,27 @@ above still hold; these are the additions.
 - **Seeing the passes**: this cc1 takes `-fsched-verbose-N` (a dash; `=N` is refused), which with
   `-dS`/`-dR` prints both schedulers' priorities and cycles; `-dL` shows the loop optimizer's
   decisions, which is how the loop-invariant threshold behind `func_0033B910` was measured.
+- **Debug line labels pad divisions**: `-g` (or `-gstabs`) puts a line label before each source
+  line, and the assembler pads a `div.s` within two slots of a label with `nop`s.
+  `func_002B5EF8` matches only with `-g`, in a unit of its own (`src/game/002B5EF8.c`), and only
+  with the division on a line of its own. With `-g` the 1,197 functions of the non-SDK `src/game`
+  and `src/core` units still match at the boot place.
+- **One extra flag per file**: every `nonmatching/` file that compiles alone (1,087) was compiled
+  again with one extra flag. These then matched at every place (`tools/check.py` level, not
+  built); each would need a unit of its own with that flag:
+  - `-g`: `func_002C9C60`, `func_L04_0039FEA8`, `func_L05_00443C18`, `func_L07_003EF1E0`,
+    `func_L00_0031B9F8`.
+  - `-mno-split-addresses`: `func_002A0380`, `func_L00_003252C8`, `func_L00_0037E640`,
+    `func_L00_00380058`, `func_L00_00403C30`, `func_L00_00424978`, `func_L00_0042A500`,
+    `func_L00_00444D18`, `func_L00_004450E8`, `func_L02_003CB090`, `func_L05_00418440`,
+    `func_L05_00442720`, `func_L06_003660F0`, `func_L17_003C71B0`, `func_L18_003F50D8`.
+  - `-fno-schedule-insns`: `func_0012FB48`, `func_0029B658`, `func_L00_002A53B8`,
+    `func_L05_0030C930`.
+  - `-fno-schedule-insns2`: `func_002A0380`, `func_L22_0040DD20`.
+  - `-fno-gcse`: `func_L00_003032F0`.
+  - `-fno-strength-reduce`: `func_L00_00384C20`.
+- **The constant-offset wall is a cost tie in cse**: `find_best_addr` gives a register and a
+  register plus a small constant the same cost, and the tie goes to the sum. That is why
+  `obj + 16` folds into an `lq` where retail keeps the pointer, and it does the same to a plain
+  `lw` (`func_002B5E48`). Quadword copies through a held pointer reproduce retail exactly when
+  written as inline asm, which `src/` does not allow; they read like the original's copy macros.
