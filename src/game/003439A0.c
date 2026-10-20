@@ -67,7 +67,57 @@ void func_00343EE8(DobboGridState312 *state, unsigned int buttons)
     state->index = D_001AA810[state->column].id;
 }
 
-INCLUDE_ASM("asm/game", func_00343FF8);
+/* The cursor's cell table: the same ten-byte record shape as the selection rows above, but the
+   table's address is the level's own, so it is a ref_ name. */
+extern SelectionRow ref_L00_00286D68_00[];
+
+/* The cursor's up/down/left/right move: the button mask picks the direction, the state keeps
+   the column (0x43C), the row (0x440), the chosen index (0x444) and the mode (0x448). */
+void func_00343FF8(DobboGridState312 *state, unsigned int buttons)
+{
+    if (buttons & 0x1000) {
+        func_002E5E58(3, 0, 0);
+        if (--state->row < 0) {
+            if (state->column < 2) {
+                state->row = 0;
+                state->mode = 0;
+            } else if (state->column == 2) {
+                state->row = 1;
+            } else {
+                state->row = 0;
+                state->mode = 1;
+                state->column = 0;
+            }
+        }
+    } else if (buttons & 0x4000) {
+        func_002E5E58(3, 0, 0);
+        if (++state->row >= 2) {
+            if (state->column < 2) {
+                state->row = 0;
+                state->mode = 0;
+            } else if (state->column == 2) {
+                state->row = 0;
+            } else {
+                state->row = 0;
+                state->mode = 3;
+                state->column = 0;
+            }
+        }
+    } else if (buttons & 0x8000) {
+        func_002E5E58(3, 0, 0);
+        if (--state->column < 0) {
+            state->column = 3;
+        }
+    } else if (buttons & 0x2000) {
+        func_002E5E58(3, 0, 0);
+        if (++state->column >= 4) {
+            state->column = 0;
+            state->mode = 3;
+            state->row = 0;
+        }
+    }
+    state->index = ref_L00_00286D68_00[state->column + state->row * 4].id;
+}
 
 /* prioritized masks1000/4000/8000/2000 update signedcolumns43C/rows440 and mode448 with originalevent3 flags0/entitynull; index444=column+2row */
 void func_00344160(DobboGridState312 *state, unsigned int buttons)

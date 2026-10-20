@@ -142,8 +142,6 @@ void func_0033A9E0(u8 *a0, s32 a1) { if (a1 < *(s32 *)(a0 + 0x1F8)) *(s32 *)(a0 
 /* Measured target: byte-identical across all 27 levels. */
 void func_0033A9F8(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x20c) = a1; }
 
-INCLUDE_ASM("asm/game", func_0033AA00);
-
 int func_0033AB50(int a0)
 {
 	char *p = (char *)a0 + 12;

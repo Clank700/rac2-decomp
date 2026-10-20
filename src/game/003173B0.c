@@ -66,8 +66,6 @@ void func_00318200(char *object)
         (*(unsigned short *)(object + 0x96))++;
 }
 
-INCLUDE_ASM("asm/game", func_003182C0);
-
 INCLUDE_ASM("asm/game", func_00318340);
 
 INCLUDE_ASM("asm/game", func_00319780);
@@ -89,8 +87,6 @@ void func_00319EC0(char *object)
     func_002B0990(object, data + 0x380, 5, 1, 2.0f);
 }
 
-INCLUDE_ASM("asm/game", func_00319F38);
-
 extern void func_0031A158(char *);
 extern void func_0031A340(char *, char *, float, int, int, int);
 
@@ -110,10 +106,6 @@ INCLUDE_ASM("asm/game", func_0031A098);
 INCLUDE_ASM("asm/game", func_0031A158);
 
 INCLUDE_ASM("asm/game", func_0031A340);
-
-INCLUDE_ASM("asm/game", func_0031A580);
-
-INCLUDE_ASM("asm/game", func_0031A628);
 
 int func_0031A708(unsigned char *object) {
     return object[0x21] != 255;
@@ -167,9 +159,25 @@ INCLUDE_ASM("asm/game", func_0031BCC8);
 
 INCLUDE_ASM("asm/game", func_0031C498);
 
-INCLUDE_ASM("asm/game", func_0031C720);
+extern void func_0031C970(char *);
+extern void func_0031CB78(char *, char *, int, int, int, float);
+extern void func_0031CDF8(char *, char *, int, int, float);
 
-INCLUDE_ASM("asm/game", func_0031C7A0);
+void func_0031C7A0(char *self)
+{
+    unsigned int mode = *(unsigned char *)(self + 0x20);
+    char *data = *(char **)(self + 0x68);
+
+    if (mode - 4 < 2 || *(unsigned char *)(self + 0x95) == 2 || mode == 10)
+        func_0031C970(self);
+
+    func_0031CB78(self, data + 0x370, 0x41DE, 0x10000000, 0x20000000, 0.125f);
+    func_0031CB78(self, data + 0x380, 0x800000, 0x10000000, 0x30000000, 0.125f);
+    func_0031CB78(self, data + 0x390, 0x800000, 0x10000000, 0x30000000, 0.125f);
+    func_0031CDF8(self, *(char **)(data + 0x270) + 0x10, 0x204080, 0x204080, 0.075f);
+    func_0031CDF8(self, *(char **)(data + 0x274) + 0x10, 0x204080, 0x204080, 0.075f);
+    func_0031CDF8(self, *(char **)(data + 0x278) + 0x10, 0x204080, 0x204080, 0.075f);
+}
 
 void func_0031C8E0(char *p)
 {
@@ -224,8 +232,6 @@ INCLUDE_ASM("asm/game", func_0031DC10);
 INCLUDE_ASM("asm/game", func_0031DC18);
 
 INCLUDE_ASM("asm/game", func_0031DEE8);
-
-INCLUDE_ASM("asm/game", func_0031E2A0);
 
 INCLUDE_ASM("asm/game", func_0031E3A8);
 
