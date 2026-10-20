@@ -274,8 +274,6 @@ small:
     *(float *)(b + 0x2A8) = 0.018f;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00427290);
-
 INCLUDE_ASM("asm/levels", func_L00_00427620);
 
 INCLUDE_ASM("asm/levels", func_L00_004276E8);
