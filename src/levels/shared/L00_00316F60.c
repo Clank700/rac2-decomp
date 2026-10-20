@@ -268,8 +268,6 @@ void func_L00_0031EC88(V4TI_F36d8a248 *a0, V4TI_F36d8a248 *a1)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0031EC88);
-
 INCLUDE_ASM("asm/levels", func_L00_0031F1C0);
 
 extern int func_002ABB78(char *);
