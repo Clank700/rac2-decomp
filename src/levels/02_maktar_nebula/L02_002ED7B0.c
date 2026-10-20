@@ -158,7 +158,58 @@ void func_L02_003D1E40(char *self) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L02_002ED7B0);
+typedef struct {
+    float x, y, z, w;
+    float pad[4];
+} L02_Record20;
+
+typedef struct {
+    float x, y, z, w;
+    float pad[12];
+} L02_Record40;
+
+/* sda in this -G0 unit gives retail's macro load (`lui $r,%hi ; lw $r,%lo($r)`, one register); a plain
+   declaration splits it into two registers and interleaves the loads. */
+extern L02_Record20 *D_L02_001B3C14 __attribute__((sda));
+
+extern L02_Record20 *D_L02_001B3C18 __attribute__((sda));
+
+extern L02_Record40 *D_L02_001B3BD0 __attribute__((sda));
+
+extern int D_L02_001B3BD4 __attribute__((sda));
+
+/* Walks the two record tables and shifts each record's x by one period (2000, and 2048000 for the
+   second table, whose limit is scaled by 1024): down while x > 0 for the records on the flagged side
+   of the limit (z below it when flag is set), up while x < 0 for the others. */
+void func_L02_002ED7B0(int flag, float limit) {
+    L02_Record20 *p;
+    int i;
+
+    for (p = D_L02_001B3C14; p != D_L02_001B3C18; p++) {
+        int sel = p->z < limit ? flag : !flag;
+
+        if (sel) {
+            if (p->x > 0.0f)
+                p->x -= 2000.0f;
+        } else {
+            if (p->x < 0.0f)
+                p->x += 2000.0f;
+        }
+    }
+    limit *= 1024.0f;
+    for (i = 0; i < D_L02_001B3BD4; i++) {
+        L02_Record40 *q = &D_L02_001B3BD0[i];
+        int sel = q->z < limit ? flag : !flag;
+
+        if (sel) {
+            if (q->x > 0.0f)
+                q->x -= 2048000.0f;
+        } else {
+            if (q->x < 0.0f)
+                q->x += 2048000.0f;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L02_002F2B88);
 
