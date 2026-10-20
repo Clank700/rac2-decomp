@@ -1330,7 +1330,11 @@ above still hold; these are the additions.
   has 13), and only one has a `nop` in between. This assembler inserts that `nop` (gas's
   `cop_interlocks` names the 4300 and the 5400, not the R5900), so none of those 47 functions can
   match from C. The lever would be the assembler; it changes the instrument for every unit, so it
-  is a maintainer's decision, not a source shape.
+  is a maintainer's decision, not a source shape. Measured in a scratch build of that assembler:
+  adding `&& mips_cpu != 5900` to the `INSN_LOAD_COPROC_DELAY && ! cop_interlocks` test in
+  `append_insn` (`gas/config/tc-mips.c`) removes the `nop` after `mfc1`, keeps the one after
+  `mtc1`, leaves the object of every one of the 636 files in `src/` unchanged, and makes
+  `func_002ED4B8` and `func_00290680` exact.
 - **The temporary in the destination register**: retail's `lui $r,%hi(X)` / `lw $r,%lo(X)($r)`
   is a bare-symbol load the assembler expanded. In a `-G0` unit, `extern T X
   __attribute__((sda));` gives it (and stores through `$at`): `func_00343260`. In a `-G8` unit the
@@ -1375,3 +1379,8 @@ above still hold; these are the additions.
   `obj + 16` folds into an `lq` where retail keeps the pointer, and it does the same to a plain
   `lw` (`func_002B5E48`). Quadword copies through a held pointer reproduce retail exactly when
   written as inline asm, which `src/` does not allow; they read like the original's copy macros.
+- **Loop layouts**: a search loop whose found-block ends in `break` rather than `return` gets
+  retail's `b test; increment; test; body` layout (`func_002EE6E0`), and indexing a table as
+  `D_00214F90[39 + i]` keeps retail's address arithmetic where a walking pointer does not. A
+  counter set after the guard, in `while (1) { ...; i++; offset += 80; if (i >= 512) break; }`,
+  counts up as retail does where a `for` counts down (`func_002ED368`).

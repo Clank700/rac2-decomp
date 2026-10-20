@@ -272,4 +272,46 @@ void func_00344298(char *object, unsigned int buttons)
     *(int *)(object + 0x444) = D_L00_001AAB76;
 }
 
-INCLUDE_ASM("asm/game", func_00344378);
+/* Per-mode lookup of the selected entry's id (the short at +0x42 of a 0xE0-byte record).
+   Retail reads the mode 1 flag byte through a bare small-data symbol, so it is declared sda
+   under its own name (D_001A7AFE, the byte at +6 of the D_001A7AF8 flags) in this -G0 file. */
+extern unsigned char D_00139568[];
+extern unsigned char D_001A7AF8[];
+extern unsigned char D_001A7AFE __attribute__((sda));
+extern unsigned char D_00239BA0[];
+typedef struct { unsigned char pad[0x42]; short field42; unsigned char rest[0xE0 - 0x44]; } Entry224;
+/* The four text ids, copied from their retail data: the build keeps no compiler .rodata. */
+typedef struct { int v[4]; } Ids_00344378;
+extern Ids_00344378 D_001AE260;
+
+int func_00344378(DobboGridState312 *state)
+{
+    Ids_00344378 table = D_001AE260;
+    int value;
+
+    switch (state->mode) {
+    case 0:
+    case 2: {
+        int index = state->index;
+        if (D_001A7AF8[index] != 0) {
+            value = ((Entry224 *)D_00239BA0)[D_00139568[index]].field42;
+            break;
+        }
+        return 0;
+    }
+    case 1:
+        if (D_001A7AFE != 0) {
+            value = ((Entry224 *)D_00239BA0)[D_00139568[6]].field42;
+            break;
+        }
+        return 0;
+    case 3:
+        value = table.v[state->index];
+        break;
+    default:
+        value = 0;
+        break;
+    }
+    return value;
+}
+
