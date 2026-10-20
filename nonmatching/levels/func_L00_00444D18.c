@@ -1,22 +1,23 @@
-/* func_L00_00444D18, 44 bytes, 27 placements.  ABANDON - instruction-scheduling wall.
+/* func_L00_00444D18, 44 bytes, 27 placements.  ABANDON - needs its own compile unit.
    A one-line thunk: it loads the resident pointer word at 0x1B272C, adds 0xD9100, and calls
-   func_445428 with it.
-   Candidate is the same size (44 bytes) and three words differ: the four instructions of
-   arithmetic are exact, including the `lui 0xD; ori 0x9100` form of the constant, but retail
-   fuses the load into the high address register at +0x4 (`lui $v0,%hi` then `lw $v0,%lo($v0)`)
-   while this cc1 schedules the `lui` of the constant between them and loads into $v1
-   (`lw $v1,%lo($v0)`), so +0x4 and +0x8 are swapped and the `addu` differs at +0x1c. Six
-   spellings were measured on the func_L00_004450E8 shape and all six give the same three words:
-   the scalar symbol with a signed constant, the same with `u`, the dereferenced `*(int *)&sym`,
-   a local pointer, the constant first, and a named local for the load.
-   Unblocking: a spelling that makes cc1 fuse the load into the address register. */
+   the update helper with it.
+   The body is exact: with `-mno-split-addresses` on the unit, tools/check.py reports
+   `func_L00_00444D18: 27 of 27 places match` (measured 2026-10-20, wave 8). Without it this
+   cc1 schedules the `lui` of the constant between retail's `lui $v0,%hi` / `lw $v0,%lo($v0)`
+   pair and loads into $v1, so +0x4 and +0x8 are swapped and the `addu` differs at +0x1C
+   (three words). Six spellings were measured by wave 5 with the same result; `sda`, `nosda`,
+   an array of pointers and a `volatile` load were measured here with the same result too.
+   The split is the lever, and it cannot be a file-wide flag: `func_L00_004450C0` in the same
+   source file matches only with the default profile (`0 of 27` under this flag). The four
+   thunks therefore need a sibling unit of their own carrying
+   `-O2 -G0 -ffunction-sections -mno-split-addresses`. */
 
 #include "include_asm.h"
 
-extern int D_L00_001B272C;
-extern void func_445428(int a0);
+extern char *D_L00_001B272C[];
+extern int func_0034FAE8(char *);
 
-void func_L00_00444D18(void)
+int func_L00_00444D18(void)
 {
-    func_445428(D_L00_001B272C + 0xD9100);
+    return func_0034FAE8(D_L00_001B272C[0] + 0xD9100);
 }
