@@ -160,7 +160,34 @@ INCLUDE_ASM("asm/levels", func_L02_003D5118);
 
 INCLUDE_ASM("asm/levels", func_L02_003D52A8);
 
-INCLUDE_ASM("asm/levels", func_L02_003D5570);
+/* Clears the two sub-records, then spawns five children seeded from the actor. */
+void func_L02_003D5570(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+    char *first = state + 0x260;
+    char **slot = (char **)(state + 0x2A0);
+    char *second = state + 0x220;
+    char *child;
+    int i;
+
+    func_00282A60(first, 0, 0x40);
+    func_0029F978(arg0, 1, first);
+    func_00282A60(second, 0, 0x40);
+    func_0029F978(arg0, 0, second);
+    i = 0;
+    do {
+        child = func_0029EFD0(i + 0xA19);
+        i++;
+        *slot = child;
+        if (child != 0) {
+            *(unsigned char *)(child + 0x30) = 0;
+            *(unsigned short *)(*slot + 0x32) = *(unsigned short *)(arg0 + 0x32);
+            *(unsigned long long *)(*slot + 0x38) = *(unsigned long long *)(arg0 + 0x38);
+            *(unsigned short *)(*slot + 0x34) |= 1;
+            *(unsigned char *)(*slot + 0x31) = 0;
+        }
+        slot++;
+    } while (i < 5);
+}
 
 void func_L02_003D5660(char *arg0, int arg1) {
     char *state = *(char **)(arg0 + 0x68);
