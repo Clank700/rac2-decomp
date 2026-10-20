@@ -333,7 +333,53 @@ INCLUDE_ASM("asm/levels", func_L03_00425030);
 
 INCLUDE_ASM("asm/levels", func_L03_00425108);
 
-INCLUDE_ASM("asm/levels", func_L03_0042B6F8);
+extern void func_L03_0042B868(u8 *, u8 *, u32);
+
+extern void func_L03_0042B908(u8 *, u32);
+
+/* The level's game mode word, in the resident image (0x001A79F0).  The retail
+   reads it with a per-site `lui`+`lw` pair and, in the branch delay slot, with
+   the `$gp` form of the same symbol. */
+extern u32 D_001A79F0 __attribute__((sda));
+
+u8 *func_L03_0042B6F8(u8 *a0, u8 *a1, u32 a2, u8 *a3, u32 a4, u32 a5) {
+    u8 *p = func_0029EFD0(0x13BA);
+    u8 *q;
+    u32 v;
+
+    if (p == 0)
+        goto end;
+    v = *(unsigned short *)(p + 0x34);
+    q = *(u8 **)(p + 0x68);
+    *(unsigned short *)(p + 0x34) = v | 0x100;
+    if (a3 != 0)
+        *(u8 *)(p + 0x30) = *(u8 *)(a3 + 0x30);
+    else
+        *(u8 *)(p + 0x30) = 0x96;
+    if (a3 != 0)
+        *(unsigned short *)(p + 0x32) = *(unsigned short *)(a3 + 0x32);
+    else
+        *(unsigned short *)(p + 0x32) = 0x96;
+    *(u8 *)(p + 0x20) = 0;
+    *(u32 *)(q + 0x20) = a4;
+    *(u32 *)(q + 0x44) = (u32)a3;
+    func_L03_0042B868(p, a0, a1);
+    func_L03_0042B908(p, a2);
+    if (a5 == 0)
+        *(u32 *)(q + 0x3C) = 0;
+    if (D_001A79F0 == 0)
+        *(u32 *)(q + 0x48) = 0x48;
+    if (D_001A79F0 == 3)
+        *(u32 *)(q + 0x48) = 0x3F;
+    if (D_001A79F0 == 6)
+        *(u32 *)(q + 0x48) = 0x44;
+    if (D_001A79F0 == 9)
+        *(u32 *)(q + 0x48) = 0x48;
+    if (D_001A79F0 == 0x12)
+        *(u32 *)(q + 0x48) = 0x43;
+end:
+    return p;
+}
 
 INCLUDE_ASM("asm/levels", func_L03_0042B868);
 
