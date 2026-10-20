@@ -359,8 +359,6 @@ void func_00297E00(int index, unsigned char *output)
     *output = 0;
 }
 
-INCLUDE_ASM("asm/game", func_00297F98);
-
 INCLUDE_ASM("asm/game", func_00297FE8);
 
 INCLUDE_ASM("asm/game", func_002980C8);

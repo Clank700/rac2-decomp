@@ -19,6 +19,33 @@ extern int D_001ABD88[2] __attribute__((sda));
 extern char D_00261D10[];
 extern void func_002E0C40(int, int);
 
+/* func_002DF380 is here for the compiler, not for $gp: the SDK compiler of
+   src/game/002DF1B8.c does not rotate the loop the way retail does. The first
+   call returns a word the original keeps in $v0, which is what puts the base
+   pointer in $v1. */
+extern int func_002B4B70(int, int);
+
+/* The globals this function reads are above the resident data: their addresses
+   differ from program to program, so they have no address in their names. */
+extern int ref_L00_002DF380_00[];
+extern char *ref_L00_002DF380_01;
+extern char *ref_L00_002DF380_02;
+
+void func_002DF380(void)
+{
+    char *start;
+    char *end;
+    char *p;
+
+    func_002B4B70(0, 0);
+    func_00284E18(ref_L00_002DF380_00[0x8F], ref_L00_002DF380_00[0x90], ref_L00_002DF380_00[0x91]);
+    start = ref_L00_002DF380_02;
+    end = ref_L00_002DF380_01;
+    for (p = start; p < end; p += 0x100) {
+        *(unsigned short *)(p + 0x34) &= 0xFF7F;
+    }
+}
+
 void func_002DF7A8(int a0, int a1, int a2)
 {
     *(int *)(*(char *volatile *)&D_001B22A8 + 0x0) = 0x30000003;

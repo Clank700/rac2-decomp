@@ -201,8 +201,6 @@ int func_00293CA8(int index)
     return 1;
 }
 
-INCLUDE_ASM("asm/game", func_00293D30);
-
 INCLUDE_ASM("asm/game", func_00293F98);
 
 INCLUDE_ASM("asm/game", func_00294070);
