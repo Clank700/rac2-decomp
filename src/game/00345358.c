@@ -233,7 +233,6 @@ void *func_00346670(char *p)
     return p;
 }
 
-INCLUDE_ASM("asm/game", func_00346710);
 
 INCLUDE_ASM("asm/game", func_00346C60);
 
