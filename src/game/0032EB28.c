@@ -636,7 +636,7 @@ void func_00336408(char *object, int a1, int a2, int a3, int a4) {
     *(int *)(object + 0x44) = 0x80000000;
 }
 
-void func_00336468(void) { }
+INCLUDE_ASM("asm/game", func_00336468);
 
 /* lot12 -- measured bodies with sizes recorded in the catalogue. */
 void func_00336498(u8 *a0, s32 a1, s32 a2) {
