@@ -310,15 +310,11 @@ extern char D_L00_001AEB60[];
 
 extern void func_2A48F0(void *a0, void *a1);
 
-INCLUDE_ASM("asm/levels", func_L00_00444D18);
-
 /* Passes a fixed resident address, and the argument, on to the callee. */
 void func_L00_004450C0(void *arg)
 {
     func_2A48F0(D_L00_001AEB60, arg);
 }
-
-INCLUDE_ASM("asm/levels", func_L00_004450E8);
 
 INCLUDE_ASM("asm/levels", func_L00_004451F8);
 
@@ -356,10 +352,6 @@ int func_L00_00447278(char *p)
 }
 
 INCLUDE_ASM("asm/levels", func_L00_00447298);
-
-INCLUDE_ASM("asm/levels", func_L00_00447678);
-
-INCLUDE_ASM("asm/levels", func_L00_004476A8);
 
 void func_L00_00447780(void)
 {
