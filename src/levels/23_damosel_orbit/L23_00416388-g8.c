@@ -227,3 +227,15 @@ int func_L23_0041C0B0(void) {
         return 1;
     return 0;
 }
+
+/* Zero when the value is among the first D_L23_001B38C0 words of the table, else one. */
+int func_L23_00419CA0(int arg0) {
+    int *tab = &D_L23_001B1658;
+    int i;
+
+    for (i = 0; i < D_L23_001B38C0; i++) {
+        if (tab[i] == arg0)
+            return 0;
+    }
+    return 1;
+}
