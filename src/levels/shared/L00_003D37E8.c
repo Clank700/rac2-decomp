@@ -500,7 +500,7 @@ void func_L00_003E0F58(char *pos, int a1, int a2, char *a3, int t0,
     m[14] = *(float *)(pos + 8) + off[2];
     m[15] = 1.0f;
 
-    func_L00_003E0D70_1(pkt, fA);
+    func_L00_003E0D70(pkt, fA);
     func_802EAC30_1(pkt, m, 0);
 }
 
