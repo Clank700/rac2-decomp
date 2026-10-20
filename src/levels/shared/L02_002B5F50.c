@@ -212,7 +212,43 @@ INCLUDE_ASM("asm/levels", func_L02_00332EF0);
 
 INCLUDE_ASM("asm/levels", func_L02_00333218);
 
-INCLUDE_ASM("asm/levels", func_L02_00333300);
+extern void func_002AFFD8(char *, char *, int);
+extern void func_00282CC0(char *, char *, char *);
+extern int func_002761F8(float *, float *, int, char *, int);
+extern float func_002B0360(char *);
+extern char D_L13_001BFD00[];
+
+/* Copied from its matched twin func_L13_00409B08: project the record onto the shape's axes,
+   then on a hit take the target, colour and offset from the table entry. */
+void func_L02_00333300(char *a0, char *a1)
+{
+    float tmp[4];
+    float va[4];
+    float vb[4];
+    float f;
+    char *base;
+    char *q;
+
+    func_002AFFD8(a0 + 0x10, (char *)tmp, 1);
+    func_00282F20((char *)va, (char *)tmp, *(float *)(a1 + 8) + 0.1f);
+    func_00282F20((char *)vb, (char *)tmp, -*(float *)(a1 + 0xC) - 0.1f);
+    func_00282CC0((char *)va, (char *)va, a0 + 0x10);
+    func_00282CC0((char *)vb, (char *)vb, a0 + 0x10);
+    if (func_002761F8(va, vb, 0, a0, 0) != 0) {
+        base = D_L13_001BFD00 + 0x20;
+        f = func_002B0360(base);
+        q = base - 0x20;
+        *(float *)(a1 + 0x90) = f;
+        *(int *)(a1 + 0x88) = *(int *)(q + 0x18);
+        *(int *)(a1 + 0x8C) = *(int *)(q + 0x1C);
+        func_00282F20(a1 + 0x50, base + 0x20, 1.0f);
+    } else {
+        *(float *)(a1 + 0x90) = 0.0f;
+        *(int *)(a1 + 0x88) = 0;
+        *(int *)(a1 + 0x8C) = 0;
+        func_00282C88(a1 + 0x50);
+    }
+}
 
 extern void func_L02_00333480(char *arg0, char *arg1, void *arg2);
 
