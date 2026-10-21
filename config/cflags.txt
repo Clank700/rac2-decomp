@@ -345,3 +345,4 @@ src/pal/game/00342D98-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
 src/pal/levels/shared/L00_003BF2F8-flags.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-barrier
 src/pal/levels/shared/L00_003C6C58-flags.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-barrier
 src/pal/levels/02_maktar_nebula/L02_004013F8-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges -frac2-keep-block-order
+src/pal/levels/shared/L12_0042C130-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
