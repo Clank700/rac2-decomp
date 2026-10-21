@@ -2,7 +2,15 @@
 
 INCLUDE_ASM("asm/pal/game", func_PAL_002D5FF0);
 
-INCLUDE_ASM("asm/pal/game", func_PAL_002D60F0);
+extern int D_00138344;
+extern void func_0029CF08(int);
+extern int D_00138344;
+extern void func_0029CF08(int);
+
+int func_PAL_002D60F0(void) {
+    func_0029CF08(D_00138344);
+    return 0;
+}
 
 INCLUDE_ASM("asm/pal/game", func_PAL_002D6118);
 
@@ -22,7 +30,10 @@ INCLUDE_ASM("asm/pal/game", func_PAL_002D6448);
 
 INCLUDE_ASM("asm/pal/game", func_PAL_002D6478);
 
-INCLUDE_ASM("asm/pal/game", func_PAL_002D64D0);
+int func_PAL_002D64D0(void) {
+    func_0029CF08(D_00138344);
+    return 0;
+}
 
 INCLUDE_ASM("asm/pal/game", func_PAL_002D64F8);
 
