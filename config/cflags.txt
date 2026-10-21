@@ -37,7 +37,7 @@ src/core/001286C8-rc2.c	sdk -O2 -G0 -ffunction-sections -fno-builtin
 src/core/0012CAB0-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
 src/core/001322B8-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
 src/core/001330D0-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
-src/core/00133688-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/core/00133688-rc2.c	-O2 -G8 -mno-split-addresses -ffunction-sections -fno-builtin
 src/game/002729A0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/game/0027C660-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
 src/game/0027C768-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
