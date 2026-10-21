@@ -333,3 +333,4 @@ src/levels/shared/L08_003DB4A0.c	-O2 -G0 -ffunction-sections -mno-split-addresse
 src/levels/12_todano/L12_00425448.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/02_maktar_nebula/L02_003FD7C8-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges -frac2-keep-block-order
 src/pal/game/0029BFF0-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/pal/game/002B8838-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
