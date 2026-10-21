@@ -149,7 +149,11 @@ INCLUDE_ASM("asm/us2/game", func_US2_0033E070);
 
 INCLUDE_ASM("asm/us2/game", func_US2_0033E308);
 
-INCLUDE_ASM("asm/us2/game", func_US2_0033E488);
+char *func_US2_0033E488(char *object)
+{
+    Ffb202470_FUN_0033AB50(object + 8);
+    return object;
+}
 
 INCLUDE_ASM("asm/us2/game", func_US2_0033E4C0);
 
@@ -157,7 +161,11 @@ INCLUDE_ASM("asm/us2/game", func_US2_0033E5E8);
 
 INCLUDE_ASM("asm/us2/game", func_US2_0033E680);
 
-INCLUDE_ASM("asm/us2/game", func_US2_0033E750);
+char *func_US2_0033E750(char *object)
+{
+    Ffb202470_FUN_0033AB50(object + 8);
+    return object;
+}
 
 INCLUDE_ASM("asm/us2/game", func_US2_0033E788);
 
@@ -205,9 +213,34 @@ INCLUDE_ASM("asm/us2/game", func_US2_0033F510);
 
 INCLUDE_ASM("asm/us2/game", func_US2_0033F610);
 
-INCLUDE_ASM("asm/us2/game", func_US2_0033F670);
+void func_0033AF48(int);
 
-INCLUDE_ASM("asm/us2/game", func_US2_0033F690);
+void func_US2_0033F670(int param_1) {
+  func_0033AF48(param_1 + 8);
+}
+
+extern void func_0033AB50_1(void *);
+extern void func_L00_0042BFF8(void *);
+extern void func_L00_0042C290(void *);
+extern void func_L00_0042BAD0(void *);
+
+/* Calls twelve sub-object handlers in sequence, each with the object base plus a fixed byte offset (8, 684, 744, 816, 888, 960, 1040, 1112, 1184, 1256, 1328, 1400), then returns the object pointer. */
+char *func_US2_0033F690(char *object)
+{
+    func_0033AB50_1(object + 8);
+    func_L00_0042BFF8(object + 732);
+    func_L00_0042C290(object + 792);
+    func_L00_0042C290(object + 880);
+    func_L00_0042C290(object + 968);
+    func_L00_0042BAD0(object + 1056);
+    func_L00_0042C290(object + 1136);
+    func_L00_0042C290(object + 1224);
+    func_L00_0042C290(object + 1312);
+    func_L00_0042C290(object + 1400);
+    func_L00_0042C290(object + 1488);
+    func_L00_0042C290(object + 1576);
+    return object;
+}
 
 INCLUDE_ASM("asm/us2/game", func_US2_0033F720);
 

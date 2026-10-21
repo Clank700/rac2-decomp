@@ -355,3 +355,5 @@ src/us2/game/002CE6D8-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-ed
 src/us2/game/002D5F10-b.c	-O2 -G8 -ffunction-sections
 src/us2/game/002DCF58-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/us2/game/0033C958-flags.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/us2/game/003424C8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/us2/game/00341C28-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
