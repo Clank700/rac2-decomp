@@ -1,20 +1,8 @@
-/* func_L23_0041B6D8 (540 bytes, 1 place: 23:0041B6D8) -- NEAR MISS, not integrated.
-   This C compiles to 536 bytes (retail 540) and needs the -g8 sibling (the float D_L23_001B1564 is a
-   $gp access); check.py reports 0 of 1 places ("536 bytes, expected 540").
-   Everything else matches: the control flow, the four vector helpers, the 0.95f / 0.0f tests, the
-   neg.s tail and the shared func_00283BE0 call. What differs:
-   - the one 128-bit copy `C = M2[4..7]` (the second vector of the matrix filled by func_0029FC20):
-     retail materialises both addresses, then copies through $v0 -- `addiu $s0,$sp,0x60 ;
-     addiu $v1,$sp,0x80 ; lq $v0,0($v1) ; sq $v0,0($s0)` -- and keeps $s0 for the two calls that
-     follow; this cc1 folds the offsets into the quad instructions (`lq $v0,0x80($sp)`,
-     `sq $v0,0x60($sp)`), which is the four missing bytes. Retail's pair is also adjacent and
-     right behind the call; here the scheduler splits it.
-   - the call func_00282F20(A, A, 1.0f): retail sets `daddu $a1,$s3,$zero ; daddu $a0,$s3,$zero ;
-     jal ; mov.s $f12,$f20` (the float in the slot), this cc1 `mov.s $f12,$f20 ; daddu $a1 ; jal ;
-     daddu $a0` (five spellings of the call, a float-first alias prototype and a `float one` local
-     measured: same bytes, or worse).
-   A compiler that kept TImode memory addresses in plain registers for this unit would give the
-   retail size (measured on a private cc1: 540 bytes, only the func_00282F20 argument order left). */
+#include "include_asm.h"
+
+/* func_L23_0041B6D8 is a unit of its own: it needs the opt-in quadword-copy profile and its
+   scheduling barrier (-frac2-qcopy -frac2-qcopy-barrier, config/cflags.txt), which give retail's grouped `lq`/`sq`
+   with register addresses and keep the instructions around the copy on their own side of it. */
 
 typedef int TI128 __attribute__((mode(TI)));
 

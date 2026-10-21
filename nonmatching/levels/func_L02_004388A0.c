@@ -1,13 +1,34 @@
-/* Near miss: 644 bytes, retail's size (check.py first differs at +0x74).  The walk over the id list
- * (the rotated `for` with the `bgezl` and the `bc1fl` slot), the draw loop and both frames are
- * retail's word for word; what differs is 26 words: the two vector blocks and the sentinel
- * constant -1.
+/* NEAR MISS (measured 22 October 2026): 644 bytes, retail's 644, in a unit of its own,
+ * src/levels/02_maktar_nebula/L02_004388A0.c, built with
+ *     -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+ * 0 of 1 places match, first difference at +0xB4.  With the barrier both vector blocks are
+ * retail's word for word (the constant loads, the stores, the `lq $v0,0($fp) ; sq $v0,0($sp)`
+ * copy and the `addiu $s5` index after it).  5 words differ, all the sentinel -1 of the
+ * `idx != -1` test: retail has it in $v0, this cc1 in $v1 (+0xB4 the bne slot, +0xC8/+0xCC
+ * `bnel $v0,... ; addiu $v1,-1` where retail has `bnez $v0,... ; addiu $v0,-1`, +0x114/+0x118 the
+ * load and the `beq $s5`).  The bestid test's -1 is $v0 in both.
  *
- * It needs a unit of its own, `src/levels/02_maktar_nebula/L02_004388A0.c`, with one line in
- * config/cflags.txt:
- *     -O2 -G0 -ffunction-sections -frac2-qcopy
- * (the `lq $v0,0($fp) ; sq $v0,0($sp)` copy of the 16-byte point, `$fp` holding &tmp for the whole
- * loop).  Spellings that matter, each measured:
+ * Cause, measured with -dL and -dg (a compiler property, not a source shape):
+ *   - loop.c moves the -1 of the idx test out of the outer loop (its movable is matched with the
+ *     bestid test's -1: savings 2, life 3); global-alloc leaves it unallocated with a REG_EQUIV
+ *     of -1, so reload rematerialises it in front of each test;
+ *   - reload hands out reload registers round-robin over the function's spill registers
+ *     (allocate_reload_reg, last_spill_reg).  Here they are {$v0, $v1} only because the
+ *     TImode zero `*(TI128 *)tmp = 0` is reloaded as a GROUP of two registers ("Spilling reg 2.
+ *     Spilling reg 3." for both clears in the .greg dump): CLASS_MAX_NREGS (GR_REGS, TImode) is 2
+ *     while HARD_REGNO_NREGS (GPR, TImode) is 1 on the R5900.  The idx test's -1 is the next
+ *     reload after the second clear's group (which always starts at $v0), so it gets $v1;
+ *   - measured: with the clear replaced by `tmp[3] = 0.0f` (diagnostic only) the spill set is
+ *     {$v0} and every -1, both tests included, is retail's $v0.
+ *   What would unblock it: CLASS_MAX_NREGS consistent with HARD_REGNO_NREGS for TImode in the
+ *   GPRs (an opt-in compiler switch; the matched bodies with a reloaded TImode zero would need a
+ *   re-screen).  Tried on the source side: `long long bestid` (the two -1 movables no longer
+ *   match and the first loop pass declines the move, but the rerun of loop moves it; 652 bytes),
+ *   the outer loop as a `goto` loop (no loop motion at all: the -1 is $v0, but &tmp is no longer
+ *   hoisted into $fp: 624 bytes).  Earlier: a `continue` for the `if`, a do-while, an unsigned
+ *   index, moving `bestid = -1`.
+ *
+ * Spellings that matter, each measured earlier:
  *   - the level block is a struct: `D_L02_001BE200.timer` gives `lui ; addiu ; lw 0x34($v0)`, a
  *     char array gives `lui ; lw %lo(D+0x34)`;
  *   - the two range tests of each block are nested `if`s (`&&` is folded into one `sltiu` range
@@ -15,25 +36,7 @@
  *   - the table symbols are `sda`, which keeps the address of the corner table one `la` macro
  *     (`lui $s3 ; addiu $s3,$s3,0x2640` into the same register);
  *   - the draw loop counts up (`k < 4`), which loop.c turns into retail's `bgez $s2` count-down
- *     with both pointers walking up.
- *
- * What differs:
- *   - In each block retail loads the three constants $f0,$f1,$f2 in the order x,y,z, stores them
- *     x,y,z, copies, and only then sets the index (`addiu $s5,$zero,0x3F/0x40`).  This cc1 gives
- *     the first constant the highest register and moves `addiu $s5` up between the loads.
- *   - The constant -1 for the `idx == -1` test is `$v1` in three places (the two delay slots and
- *     the fall-through) and in the `beq` that reads it, where retail has `$v0`; $v1 holds the
- *     counter at the second test, so this cc1 needs a `bnel` there.
- *
- * Cause, measured, as for func_L02_004216F0: retail's 16-byte copy is a scheduling barrier.  With
- *     __asm__ __volatile__("lq $2,0(%1)\n\tsq $2,0(%0)" : : "r"(pt), "r"(tmp) : "$2", "memory");
- * in place of `*(TI128 *)pt = *(TI128 *)tmp;` (forward order of the three stores, same flags) the
- * two vector blocks are word for word retail's and only the sentinel remains (5 words: the three
- * `addiu` and the two branches, $v1 for $v0).  A `continue` in place of the `if`, a do-while for
- * the outer loop, an unsigned index and moving `bestid = -1` did not change it.  The compiler-side
- * candidate is the same as for func_L02_004216F0: an opt-in barrier variant of the `rac2_qcopy`
- * pattern.  `-frac2-zero-ti-barrier` on the clears makes this body worse (35 differing words
- * against 27 here, before the sentinel count). */
+ *     with both pointers walking up. */
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;

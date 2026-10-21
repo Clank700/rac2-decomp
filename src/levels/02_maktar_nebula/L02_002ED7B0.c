@@ -87,11 +87,11 @@ extern int func_002E5CF8(int, int, char *);
 
 /* Stores the quadword the caller passes into the record at +0xF0. */
 /* func_L02_003CADA8 is a near miss: nonmatching/levels/func_L02_003CADA8.c */
-INCLUDE_ASM("asm/levels", func_L02_003CADA8);
+/* func_L02_003CADA8 is matched in L02_003CADA8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 /* Stores the quadword the caller passes into the record at +0xB0. */
 /* func_L02_003D01F0 is a near miss: nonmatching/levels/func_L02_003D01F0.c */
-INCLUDE_ASM("asm/levels", func_L02_003D01F0);
+/* func_L02_003D01F0 is matched in L02_003D01F0.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 /* Callers also supply a candidate pointer; this predicate only inspects arg0. */
 int func_L02_003D1880(char *arg0, void *candidate) {
@@ -274,7 +274,7 @@ void func_L02_00300CE8(void) {
         func_L00_002E6CF0(func_L02_003007D8, 0);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_0033C760);
+/* func_L02_0033C760 is matched in L02_0033C760.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L02_0033C8B8);
 

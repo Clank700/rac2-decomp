@@ -17,7 +17,7 @@ INCLUDE_ASM("asm/game", func_002B52A0);
 
 INCLUDE_ASM("asm/game", func_002B5678);
 
-INCLUDE_ASM("asm/game", func_002B5828);
+/* func_002B5828 is matched in 002B5828.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/game", func_002B5BC0);
 

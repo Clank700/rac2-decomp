@@ -1,26 +1,8 @@
-/* func_L23_004183F0 (608 bytes, 1 place: 23:004183F0) -- NEAR MISS, not integrated.
-   This C compiles to 608 bytes, the retail size, and needs the -g8 sibling ($gp float
-   D_L23_001B15B4; D_L23_001B3800/3810 are 16 bytes and stay absolute); check.py reports
-   "instruction at +0x48 differs", 0 of 1 places.
-   Only the 128-bit copy `D_L23_001B3800 = v1` differs. Retail:
-     lui $v1,0x1B ; addiu $v1,$v1,0x3800 ; lq $v0,0($s0) ; sq $v0,0($v1) ; lwc1 $f12,... 
-   (the pair is adjacent, right behind the func_0029FCC0 call, and its source is $s0, the pointer
-   kept for the calls below). This cc1 emits `lq $v0,0x10($sp)` first (offset folded into the quad
-   load), then the address pair and the argument setup, and the `sq` last: six words.
-   Everything else is exact, and these spellings are what gets it there (each measured against the
-   alternative):
-   - the four absolute globals are volatile only so the loop optimiser does not hoist the load of
-     D_L23_001B36B0 above the counting loop (retail loads it after the loop; non-volatile: 26 words
-     differ);
-   - the counting loop is `p = table; i = 24; do { i--; ...; p++; } while (i >= 0)`; a for loop is
-     8 bytes over;
-   - `ok = !(flags & 1); if (ok && call(...))` gives retail's `xori ; andi ; beqz`; the inline
-     `!(flags & 1) &&` is worse;
-   - `if (best == 0) {...} else if (dist < bestDist) {...}`; one `best == 0 || dist < bestDist`
-     is 12 bytes short;
-   - func_00282948 is declared int (void: two more words differ).
-   A compiler that keeps TImode quad addresses in registers (and treats the pair as one unit) would
-   close the residue. */
+#include "include_asm.h"
+
+/* func_L23_004183F0 is a unit of its own: it needs the opt-in quadword-copy profile and its
+   scheduling barrier (-frac2-qcopy -frac2-qcopy-barrier, config/cflags.txt), which give retail's grouped `lq`/`sq`
+   with register addresses and keep the instructions around the copy on their own side of it. */
 
 typedef int TI128 __attribute__((mode(TI)));
 

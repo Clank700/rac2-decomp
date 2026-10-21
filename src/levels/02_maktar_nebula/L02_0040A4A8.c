@@ -53,7 +53,101 @@ typedef int TI128 __attribute__((mode(TI)));
 
 INCLUDE_ASM("asm/levels", func_L02_0040A4A8);
 
-INCLUDE_ASM("asm/levels", func_L02_0040B0F8);
+extern int func_00283CF0(float);
+extern int func_002A77E0(int);
+extern float func_00282E48(void *, void *);
+extern void func_002A93B0(void *);
+extern void func_0029FCC0(void *, int, void *);
+extern void func_0029FC20(void *, int, void *);
+extern void func_00282C88(void *);
+extern void func_002830C0(void *, void *, void *);
+extern void *func_002A9640(void *, int, int);
+extern int func_002B0ED8(void *, void *, int);
+extern char D_L02_001BA500[];
+extern void func_L02_0040B980(u8 *);
+extern void func_002B60B0_1(void *, float, float, float, float);
+
+/* Sets up the actor and refreshes its three effect tracks. In state 0 it points the sub-object's
+   record at +0x100, draws two byte values and a turn rate (15 to 40 degrees, negated half of the
+   time) for +0x2D8, may set bit 0x8000 of the halfword at +0x34, fills the sub-object's tuning
+   floats and arms it (func_L02_0040B980). In every state it then, when the actor is shown (+0x31)
+   and within 24.0 of D_L02_001BA500, starts func_002A93B0, rebuilds the tracks at +0x290, +0x2A0
+   and +0x2B0 from the matrix func_0029FC20 returns, and, from state 3 on, clears the carried
+   record's word at +0x2C filtering by class, tests func_002B0ED8 against 5 and refreshes the
+   +0x2E0 handle. Retail passes the actor to func_002B60B0 (a0 is reloaded before the call), which
+   the four-float declaration at the top of the file leaves out: the second name carries the
+   five-argument prototype. */
+void func_L02_0040B0F8(u8 *a0) {
+    u8 *s1 = *(u8 **)(a0 + 0x68);
+    float m[16];
+    float f;
+    u8 *p;
+    u8 *rec;
+    u8 *other;
+    short cls;
+
+    if (a0[0x20] == 0) {
+        *(u8 **)(s1 + 0x18) = s1 + 0x100;
+        s1[0x48] = func_00283CF0(15.0f);
+        s1[0x4A] = func_00283CF0(12.0f);
+        f = func_002A7878(15.0f, 40.0f) * 0.01745329424738884f;
+        if (func_002A77E0(2) != 0)
+            f = -f;
+        *(float *)(s1 + 0x2D8) = f;
+        if (func_002A77E0(2) == 1)
+            *(u16 *)(a0 + 0x34) = *(u16 *)(a0 + 0x34) | 0x8000;
+        s1[0x60] = 8;
+        *(float *)(s1 + 0x80) = 0.5f;
+        *(float *)(s1 + 0x84) = 0.5f;
+        *(float *)(s1 + 0x8C) = 0.4f;
+        *(int *)(s1 + 0x98) = 4;
+        *(float *)(s1 + 0x100) = 0.8f;
+        *(float *)(s1 + 0x104) = 0.5f;
+        *(float *)(s1 + 0x108) = 0.4f;
+        *(float *)(s1 + 0x10C) = 0.4f;
+        *(float *)(s1 + 0x110) = 1.5707965f;
+        *(float *)(s1 + 0x130) = 0.52359885f;
+        *(float *)(s1 + 0x12C) = 0.0055555557f;
+        func_002B60B0_1(a0, 0.004444444552063942f, 0.13333334028720856f,
+                        0.0011635529808700085f, 0.10471977293491364f);
+        s1[0x28] = 3;
+        func_L02_0040B980(a0);
+    }
+    if (a0[0x31] != 0) {
+        if (func_00282E48(a0 + 0x10, D_L02_001BA500) < 24.0f) {
+            func_002A93B0(a0);
+            a0[0x6F] = 0x16;
+        }
+    }
+    func_0029FCC0(a0, 1, s1 + 0x290);
+    p = s1 + 0x2B0;
+    func_0029FCC0(a0, 2, s1 + 0x2A0);
+    func_0029FC20(a0, 3, m);
+    func_00282C88(p);
+    *(float *)(s1 + 0x2B0) = 0.25f;
+    *(int *)(s1 + 0x2B8) = 0;
+    func_002830C0(p, p, m);
+    func_00282CC0(p, p, m + 12);
+    if (a0[0x31] != 0 && a0[0x20] >= 3) {
+        rec = func_002A9640(a0, 0x10000, 1);
+        if (rec != 0) {
+            other = *(u8 **)(rec + 0x20);
+            if (other != 0 && a0[0x31] == 0) {
+                cls = *(short *)(other + 0xAA);
+                if (cls == 0xA03 || cls == 0xB89)
+                    *(int *)(rec + 0x2C) = 0;
+            }
+        }
+        if (func_002B0ED8(a0, s1 + 0x50, 0) == 5) {
+            *(int *)(s1 + 0xE0) = 0;
+            *(float *)(s1 + 0xE4) = 0.8377582f;
+        }
+        if (a0[0x20] >= 2 && s1[0x2E] == 2)
+            func_L02_0040B980(a0);
+        *(s16 *)(s1 + 0x2E0) = func_002B3BA8(a0, *(u32 *)(s1 + 0x2DC), 100.0f, 100.0f, 0, 0);
+        *(int *)(s1 + 0x2D4) = *(int *)(s1 + 0x200);
+    }
+}
 
 /* arms one actor: raises its counter, then two setup calls */
 void func_L02_0040B420(u8 *a0) {
@@ -309,7 +403,106 @@ INCLUDE_ASM("asm/levels", func_L02_00411750);
 
 INCLUDE_ASM("asm/levels", func_L02_00411D18);
 
-INCLUDE_ASM("asm/levels", func_L02_004124A0);
+extern s32 D_001A79F0 __attribute__((sda));
+extern u8 D_0019B2E8[];
+extern u16 D_0018CFDC;
+extern int func_002A77E0(int);
+extern float func_002A7940(void);
+extern float func_002AA2E8(float *, float, float);
+extern float func_00282E80(void *, void *);
+extern float func_00282E48(void *, void *);
+extern float func_00283B98(float, float);
+extern void *func_002A9640(void *, int, int);
+extern int func_002E5CF8(int, int, void *);
+extern void func_L00_002E6CF0(void *, void *);
+extern void func_L02_00412808(u8 *);
+extern void func_L02_004129D0(u8 *);
+
+/* Steps the actor by its kind byte (+0x20). Kind 0 releases it (func_0029F338) when the table byte
+   of its owner (D_0019B2E8, indexed by the byte at +0xB0 and D_001A79F0) has bit 7 set; otherwise
+   it takes twice the size at +0x24 of its type record, sets or clears bit 15 of its flags at +0x34
+   by func_002A77E0(2), starts state 1 and draws the block's two phases (+4 and +0x14) with
+   func_002A7940. Kind 1 keeps its slot record (the index at +0x18 of the block) alive, eases the
+   block's float at +0xC to 0 or 1 by whether func_00282E80 puts the actor farther than 64.0 from
+   D_L02_001BA500, registers func_L02_004129D0 while it is nonzero, and when the entity found by
+   func_002A9640 (a record whose halfword at +0xAA is 0x9C8) is within 5.0 starts state 2 and gives
+   the slot up. Kind 2 only runs the common tail, which steps the two phases (func_00283B98), puts
+   0.5 * sin(phase) + the base at +8 into the actor's float at +0x18 and runs the counter at +0x10
+   down by 1/15, wrapping it into [-1, 1]. The first slot lookup is a separate block-local pointer
+   from the one in the state-2 arm (retail keeps them in different registers). */
+void func_L02_004124A0(u8 *a0) {
+    u8 *s1 = *(u8 **)(a0 + 0x68);
+    u8 *p;
+    u8 *q;
+    s32 slot;
+    float f;
+
+    switch (a0[0x20]) {
+    case 0:
+        if (D_0019B2E8[a0[0xB0] + D_001A79F0 * 16] & 0x80) {
+            func_0029F338(a0);
+            return;
+        }
+        *(float *)(a0 + 0x2C) = *(float *)(*(u8 **)(a0 + 0x24) + 0x24) * 2.0f;
+        if (func_002A77E0(2))
+            *(u16 *)(a0 + 0x34) |= 0x8000;
+        else
+            *(u16 *)(a0 + 0x34) &= 0x7FFF;
+        func_002A7750(a0, 1, -1);
+        *(float *)(s1 + 8) = *(float *)(a0 + 0x18);
+        *(float *)(s1 + 4) = func_002A7940();
+        *(float *)(s1 + 0x14) = func_002A7940();
+        break;
+    case 1:
+        if (a0[0x31] != 0)
+            func_L02_00412808(a0);
+        {
+            u8 *r = (u8 *)D_L02_00188660 + *(s32 *)(s1 + 0x18) * 0x70;
+
+            if (*(u8 **)(r + 0x88) != a0 || r[0x74] == 0)
+                *(s32 *)(s1 + 0x18) = func_002E5CF8(0, 4, a0);
+        }
+        f = func_00282E80(a0 + 0x10, D_L02_001BA500);
+        if (f > 64.0f)
+            func_002AA2E8((float *)(s1 + 0xC), 0.0f, 0.016666668f);
+        else
+            func_002AA2E8((float *)(s1 + 0xC), 1.0f, 0.016666668f);
+        if (*(float *)(s1 + 0xC) != 0.0f)
+            func_L00_002E6CF0((void *)func_L02_004129D0, a0);
+        p = func_002A9640(a0, 0x10000, 0);
+        if (p != 0) {
+            q = *(u8 **)(p + 0x20);
+            if (q != 0 && *(s16 *)(q + 0xAA) == 0x9C8 &&
+                func_00282E48(a0 + 0x10, q + 0x10) < 5.0f) {
+                D_0018CFDC = 0xFFFF;
+                func_002A7750(a0, 2, -1);
+                *(u16 *)(a0 + 0x34) = (*(u16 *)(a0 + 0x34) | 0x41) & 0xEFFF;
+                *(u32 *)(a0 + 0x98) = 0;
+                slot = *(s32 *)(s1 + 0x18);
+                if (slot != -1) {
+                    u8 *rec = (u8 *)D_L02_00188660 + slot * 0x70;
+
+                    if (*(u8 **)(rec + 0x88) == a0 && rec[0x74] != 0)
+                        func_002E59F8(slot);
+                }
+                *(s32 *)(s1 + 0x18) = -1;
+            }
+        }
+        a0[0xA8] = 0xFF;
+        break;
+    case 2:
+        break;
+    }
+    *(float *)(s1 + 4) = func_00283B98(*(float *)(s1 + 4), 0.05817765f);
+    *(float *)(s1 + 0x14) = func_00283B98(*(float *)(s1 + 0x14), -0.10471977f);
+    *(float *)(a0 + 0x18) = func_00283198(*(float *)(s1 + 4)) * 0.5f + *(float *)(s1 + 8);
+    f = *(float *)(s1 + 0x10) + -0.06666667f;
+    *(float *)(s1 + 0x10) = f;
+    if (f > 1.0f)
+        *(float *)(s1 + 0x10) = f - 1.0f;
+    else if (f < -1.0f)
+        *(float *)(s1 + 0x10) = f + 1.0f;
+}
 
 /* The effect's tuning, four resident tables copied onto the stack: the spread and fall speed of
    the sparks, the two sizes, the two colours and the two byte ranges of the kind. */
@@ -361,15 +554,64 @@ INCLUDE_ASM("asm/levels", func_L02_00412D50);
 
 INCLUDE_ASM("asm/levels", func_L02_00413730);
 
-INCLUDE_ASM("asm/levels", func_L02_004216F0);
+/* func_L02_004216F0 is matched in L02_004216F0-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier -g). */
 
 /* func_L02_00423520 is matched in L02_00423520-g8.c (built with -frac2-zero-ti-por). */
 
-INCLUDE_ASM("asm/levels", func_L02_00423838);
+extern void func_00282D30(void *, void *, float);
+extern void func_00282F20(void *, void *, float);
+extern int func_00283D38(int, int, float);
+extern void *func_002BAA28(void *, void *, void *, int, int, int, int, int, int);
+extern int D_L02_001B2050[2] __attribute__((sda));
+extern int D_L02_001B2058[2] __attribute__((sda));
+
+/* Throws twenty sparks from a point built from the actor's transform (+0x10) and its vectors at
+   +0xC0 and +0xE0. Each one flies along a random mix of the vectors at +0xC0, +0xD0 and +0xE0 at
+   a speed drawn between lo and hi, with a random size, two colours blended from the level's two
+   colour pairs and a small downward pull. Retail negates its constant at run time (neg.s), so k
+   stays a variable. */
+void func_L02_00423838(u8 *a0, float lo, float hi) {
+    float v10[4];
+    float v20[4];
+    float v30[4];
+    float v40[4];
+    float v50[4];
+    float v60[4];
+    int i;
+    float r;
+    int a, b, c;
+    int c0, c1;
+    float k = 0.0013888889f;
+
+    func_00282D30(v10, a0 + 0xE0, 1.75f);
+    func_00282CC0(v20, v10, a0 + 0x10);
+    func_00282D30(v10, a0 + 0xC0, -0.5f);
+    func_00282CC0(v20, v10, v20);
+    i = 19;
+    do {
+        func_00282F20(v40, a0 + 0xD0, func_002A7878(-1.0f, 1.0f));
+        func_00282F20(v30, a0 + 0xE0, func_002A7878(-0.15f, 1.0f));
+        func_00282CC0(v50, a0 + 0xC0, v40);
+        func_00282CC0(v50, v50, v30);
+        func_00282F20(v50, v50, func_002A7878(lo, hi));
+        r = func_002A7878(0.5f, 1.5f);
+        a = func_00283CF0(r * 10.0f);
+        b = func_00283CF0(r * 30.0f);
+        c = func_00283CF0(r * 7.0f);
+        v50[3] = func_002A7878(0.2f, 0.6f);
+        func_00282C88(v60);
+        v60[2] = -k * (float)(a + b + c);
+        func_00282CC0(v60, v60, v50);
+        v60[3] = 0.01f;
+        c0 = func_00283D38(D_L02_001B2050[0], D_L02_001B2050[1], func_002A7878(0.0f, 1.0f));
+        c1 = func_00283D38(D_L02_001B2058[0], D_L02_001B2058[1], func_002A7878(0.0f, 1.0f));
+        func_002BAA28(v20, v50, v60, c0, c1, a, b, c, 0x1003C);
+    } while (--i >= 0);
+}
 
 INCLUDE_ASM("asm/levels", func_L02_0042E2F8);
 
-INCLUDE_ASM("asm/levels", func_L02_0042E680);
+/* func_L02_0042E680 is matched in L02_0042E680.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L02_0042E988);
 
@@ -500,7 +742,6 @@ extern int D_001A79F0 __attribute__((sda));
 /* sda in this -G0 unit keeps the address of the ring table one `la`, retail's adjacent `lui`/`addiu`
    in the last call's setup (a plain declaration splits it and the scheduler lifts the `lui`). */
 extern char D_L02_001A8F20[] __attribute__((sda));
-extern u8 *func_002A9640(u8 *, int, int);
 extern void *func_0029EFD0(int);
 extern void func_002B37E8(void *, u8 *);
 extern int func_002E5CF8(int, int, void *);
