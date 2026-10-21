@@ -352,3 +352,5 @@ src/us2/game/0029C448-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ff
 src/us2/game/002CE618-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
 src/us2/game/002CE6A8-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
 src/us2/game/002CE6D8-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/us2/game/002D5F10-b.c	-O2 -G8 -ffunction-sections
+src/us2/game/002DCF58-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
