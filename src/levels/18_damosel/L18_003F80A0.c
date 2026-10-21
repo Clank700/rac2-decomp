@@ -111,7 +111,7 @@ void func_L18_00430248(u8 *a0) {
 
 INCLUDE_ASM("asm/levels", func_L18_004302B0);
 
-INCLUDE_ASM("asm/levels", func_L18_004308F0);
+/* func_L18_004308F0 is matched in L18_004308F0.c (built with -frac2-hazard-labels). */
 
 INCLUDE_ASM("asm/levels", func_L18_00430E58);
 

@@ -1,6 +1,8 @@
 src/levels/shared/L00_003B9CB8.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-barrier
 src/levels/20_yeedil/L20_0039E158.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/20_yeedil/L20_0039F210.c	-O2 -G0 -ffunction-sections -frac2-qcopy -fno-schedule-insns
+src/levels/18_damosel/L18_004308F0.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
+src/levels/shared/L02_00411530.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/core/00117278.c	-O0 -G2 -ffunction-sections -mastra-quad-saves
 src/core/00122630.c	-O2 -G0 -ffunction-sections
 src/core/00123A00-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
