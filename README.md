@@ -16,8 +16,8 @@ your own copy of the game.
 
 ## Progress
 
-Every distinct function counts once: the boot executable's 3,390 and the levels' 5,711 that
-the boot does not also have. A function many levels share is one function, however many
+Every distinct function counts once: the boot executable's functions and the level functions
+that the boot does not also have. A function many levels share is one function, however many
 places it has. A function is C when its C links into a program that comes out equal to the
 retail one ([`progress/report.json`](progress/report.json), `tools/progress.py`).
 
@@ -29,11 +29,11 @@ The levels' data is not measured.
 <!-- progress -->
 | | Functions | Code |
 | --- | ---: | ---: |
-| Boot executable | 1,905 of 3,164 | 256,084 of 1,047,280 bytes |
-| Levels | 1,881 of 5,481 | 248,820 of 4,482,260 bytes |
-| **Total** | 3,786 of 8,645 | 504,904 of 5,529,540 bytes (9.13%) |
+| Boot executable | 1,907 of 3,139 | 256,304 of 1,047,180 bytes |
+| Levels | 1,883 of 5,467 | 249,388 of 4,482,204 bytes |
+| **Total** | 3,790 of 8,606 | 505,692 of 5,529,384 bytes (9.15%) |
 
-The 27 levels hold 101,732 function placements; C covers 47,111 of them.
+The 27 levels hold 101,314 function placements; C covers 47,177 of them.
 251 of the matched functions are the original's own assembly (`ASM_FUNC`), kept as assembly.
 <!-- /progress -->
 

@@ -445,7 +445,29 @@ INCLUDE_ASM("asm/levels", func_L02_003CE9A8);
 
 INCLUDE_ASM("asm/levels", func_L02_003CEA28);
 
-INCLUDE_ASM("asm/levels", func_L02_003CEBB8);
+/* The entity pool base and the highest group id once more, as the `sda` arrays the twin walk
+   func_L02_003CD5B0 reads (02_maktar_nebula/L02_002ED7B0.c): read as X[0] they give retail's
+   rotated loop; func_L02_003CD8C0 above reads the same two words as scalars. */
+extern u8 *D_L02_001B359C_tbl[] __asm__("D_L02_001B359C") __attribute__((sda));
+extern int D_L02_001B35B8_tbl[] __asm__("D_L02_001B35B8") __attribute__((sda));
+
+/* Returns the first entity of the group whose state byte is 0xD, or 0. */
+u8 *func_L02_003CEBB8(int group) {
+    u16 *p;
+    u8 *e;
+
+    for (p = (u16 *)D_L02_001FC060[group];
+         (u8)group != 0xFF && group <= D_L02_001B35B8_tbl[0] && p != 0 &&
+         ((s16)p[-1] >= 0 || p == (u16 *)D_L02_001FC060[group]);
+         p++) {
+        e = D_L02_001B359C_tbl[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        if (e[0x20] == 0xD)
+            return e;
+    }
+    return 0;
+}
 
 /* Reads the object's basis, clamps its pitch and yaw, and stores them back. */
 void func_L02_003CEC70(char *a0) {
