@@ -31,6 +31,70 @@ void func_L02_003F56C0(void) {
         p[0] = f - 1.0f;
 }
 
+extern int D_001A8FF0;
+
+/* Four bytes: cc1 then emits the address as a single `la`, which gas expands to an adjacent
+   lui/addiu pair (an array of unknown size is split by cc1 itself). */
+extern char D_L02_001B3210[4];
+
+extern void func_L02_002ED7B0(int, float);
+
+extern float func_00282E48(void *, void *);
+
+extern void func_L01_00323310(int, int);
+
+typedef struct {
+    char pad0[0x80];
+    char pos[8];
+    float f88;
+    char pad1[0x2236];
+    unsigned char b22C2;
+    char pad2[0x22D];
+    unsigned char b24F0;
+} L02_003F5710_Hero;
+
+extern L02_003F5710_Hero D_00189E20;
+
+/* Watches the hero block's height (+0x88) against 420.0 and the copy of it the actor kept at
+   +0x98. Crossing it downwards clears the byte at +0x24F0 and the global flag; crossing it upwards
+   sets both when the flag is clear and the hero is within 150.0 of D_L02_001B3210, and clears
+   both when the flag is set and the hero is farther away. While the flag is set the hero's byte
+   at +0x22C2 is raised, and the first time the actor's word at +0xDC is set and handed its two
+   words at +0x1C and +0x20. The height is then kept at +0x98.
+
+   The flag is a plain extern int: the assembler decides each access at its use, a gp-relative one
+   inside a delay slot and the absolute lui/lw pair elsewhere, as retail has them. */
+void func_L02_003F5710(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+    float d;
+
+    if (D_00189E20.f88 < 420.0f && *(float *)(state + 0x98) >= 420.0f) {
+        func_L02_002ED7B0(0, 420.0f);
+        D_00189E20.b24F0 = 0;
+        D_001A8FF0 = 0;
+    } else if (D_00189E20.f88 > 420.0f && *(float *)(state + 0x98) <= 420.0f) {
+        func_L02_002ED7B0(1, 420.0f);
+        d = func_00282E48(D_00189E20.pos, D_L02_001B3210);
+        if (D_001A8FF0 == 0 && d < 150.0f) {
+            int on = 1;
+
+            D_00189E20.b24F0 = on;
+            D_001A8FF0 = on;
+        } else if (D_001A8FF0 != 0 && d > 150.0f) {
+            D_00189E20.b24F0 = 0;
+            D_001A8FF0 = 0;
+        }
+    }
+    if (D_001A8FF0 != 0) {
+        D_00189E20.b22C2 = 1;
+        if (*(int *)(state + 0xDC) == 0) {
+            *(int *)(state + 0xDC) = 1;
+            func_L01_00323310(*(int *)(state + 0x1C), *(int *)(state + 0x20));
+        }
+    }
+    *(float *)(state + 0x98) = D_00189E20.f88;
+}
+
 void func_L02_003FD770(char *a0) {
     char buf[16];
     func_00282C88(buf);
@@ -42,7 +106,6 @@ void func_L02_003FD770(char *a0) {
 
 extern char D_L02_001BA500[];
 extern int D_L02_001B32E8;
-extern float func_00282E48(void *, void *);
 extern void func_002A7750(char *, int, int);
 
 /* Raises the flag at 0x1B32E8. When the point at D_L02_001BA500 is within 0.0001 of the one at

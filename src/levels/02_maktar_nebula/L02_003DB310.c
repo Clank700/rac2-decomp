@@ -131,7 +131,7 @@ INCLUDE_ASM("asm/levels", func_L02_003EB648);
 
 INCLUDE_ASM("asm/levels", func_L02_003EE938);
 
-INCLUDE_ASM("asm/levels", func_L02_003EEAD8);
+/* func_L02_003EEAD8 is matched in L02_003EEAD8.c (built with -g). */
 
 INCLUDE_ASM("asm/levels", func_L02_003EEC58);
 
