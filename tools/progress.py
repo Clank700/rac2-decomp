@@ -235,9 +235,6 @@ def release_check(version: str, report_path: Path) -> None:
           + (f"; {len(ahead)} more are C in src/ and may match {version} once rebuilt" if ahead else ", current"))
 
 
-TABLE = "<!-- progress:{version} -->"
-
-
 def release_table(version: str, report: dict) -> None:
     """The release's line in docs/VERSIONS.md's table of totals."""
     doc = ROOT / "docs/VERSIONS.md"
@@ -251,8 +248,8 @@ def release_table(version: str, report: dict) -> None:
             f"{int(cats['level_code']['matched_code']):,} of {int(cats['level_code']['total_code']):,} | "
             f"{int(m['matched_code']):,} of {int(m['total_code']):,} ({m['matched_code_percent']:.2f}%) |")
     text = doc.read_text()
-    marker = TABLE.format(version=version)
-    lines = [(marker + " " + line) if l.startswith(marker) else l for l in text.splitlines()]
+    marker = f"| `{v['id']}` |"
+    lines = [line if l.startswith(marker) else l for l in text.splitlines()]
     doc.write_text("\n".join(lines) + "\n")
 
 
