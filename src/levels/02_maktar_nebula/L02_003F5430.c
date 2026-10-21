@@ -883,7 +883,7 @@ fail:
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_00400720);
+/* func_L02_00400720 is defined in L02_003F5430-g8.c ($gp accesses). */
 
 /* func_L02_00400948 is defined in L02_003F5430-g8.c ($gp accesses). */
 
