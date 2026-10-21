@@ -3,6 +3,7 @@ import struct
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -164,6 +165,37 @@ class Identity(unittest.TestCase):
 
 
 class Catalogue(unittest.TestCase):
+    def test_measured_residue_removed_in_boot_and_level_and_replay_is_stable(self):
+        # Synthetic residue: a store without a complete function around it.
+        # A different store and a tail jump of the same size must remain.
+        body = code(0xAC400020, NOP)
+        other = code(0xAC400024, NOP)
+        tail = code(j(0x3000), NOP)
+        data = body + other + tail
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            boot, catalogue, dump = root / "boot.tsv", root / "levels.tsv", root / "dump"
+            boot.write_text("# name\taddress\tsize\nfunc_00001000\t00001000\t8\n"
+                            "func_00001008\t00001008\t8\nfunc_00001010\t00001010\t8\n")
+            catalogue.write_text("# name\tkind\tsize\tfingerprint\tlevels\tplaces\n" + "".join(
+                f"func_L00_{a:08X}\tlevel\t8\tunused\t1\t00:{a:08X}\n" for a in (0x2000,0x2008,0x2010)))
+            level = dump / "00_test"
+            level.mkdir(parents=True)
+            (level / "manifest.json").write_text('{"sections":[{"name":"text","address":8192}]}')
+            (level / "text.bin").write_bytes(data)
+            with patch.multiple(levels, BOOT_FUNCTIONS=boot, CATALOGUE=catalogue, LEVELS=root,
+                                BOOT_PAIRS=root / "absent.tsv", DUMP=dump, NAMES={0:"test"},
+                                BOOT_RESIDUES={0x1000:8}), \
+                 patch.object(levels, "boot_image", return_value=(data, [(0x1000,0,len(data))])), \
+                 patch.object(sys, "argv", ["levels.py", "catalogue"]):
+                levels.catalogue()
+                self.assertEqual([a for _,a,_ in levels.read_boot_functions()], [0x1008,0x1010])
+                places = [a for row in levels.read_catalogue() for _,a in row[4]]
+                self.assertEqual(places, [0x2008,0x2010])
+                first = boot.read_bytes(), catalogue.read_bytes()
+                levels.catalogue()
+                self.assertEqual((boot.read_bytes(), catalogue.read_bytes()), first)
+
     def test_read_catalogue_and_boot(self):
         with tempfile.TemporaryDirectory() as d:
             cat = Path(d) / "functions.tsv"
