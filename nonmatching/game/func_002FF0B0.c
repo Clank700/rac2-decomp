@@ -15,6 +15,8 @@
    The previous function ends at 0x002FF0AC (`jr $ra` at 0x002FF0A4, the
    `addiu $sp,$sp,0xB0` in its delay slot) and func_002FF0D8 starts at 0x002FF0D8.
 
-   There is no `jr $ra` inside the row and the frame adjustments have no matching
-   prologue: the row is the middle of a function the catalogue cut in the wrong place.
-   No C can be placed here. */
+   A boot-wide scan found no direct control-flow target or aligned literal pointer
+   into this extent. Its preceding completed return and unmatched frame restores
+   support a residual catalogue extent. The scan does not rule out computed
+   indirect targets. Retain this for a separately validated generator correction;
+   no C or ASM_FUNC credit is claimed. */

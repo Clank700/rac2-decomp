@@ -1193,9 +1193,13 @@ the libc region 0x1163B0-0x1178xx and the other quadword units), and two `-O0`-c
   keyword the callee is a real call and the body shrinks (`func_00123C28`: 252 bytes against 260).
 - **Unsigned spellings are load-bearing**: `-1u` gives the retail `lui`/`ori` pair where `-1` gives
   a single `addiu`, and a failure value compared as `0xFFFFFFFFu` is what `func_00115C90` needs.
-- **`mult rd,rs,rt` on the R5900 hides from the reader**: it is opcode 0x00 funct 0x18 *and* opcode
-  0x1C funct 0x18 (MULT1), and rabbitizer prints `.word # INVALID` for both, dropping the
-  destination. Three waves mistook live products for dead instructions.
+- **Decode the R5900 multiplication destination**: opcode 0x00 funct 0x18 is `mult`, and
+  opcode 0x1C funct 0x18 is `mult1`. Generic MIPS decoding can omit the GPR destination
+  or report an invalid instruction. Inspect `rd` (bits 15-11) and its uses before calling
+  the result dead; absence of `mflo` alone is insufficient. The current compiler emits
+  a three-operand `mult` for ordinary `return index * stride;`, without `mflo`.
+  [Six audited examples](https://github.com/OpenRAC/rac2-gc-decomp/issues/157#issuecomment-6305695078)
+  consume their GPR results in address calculations and provide no handwritten-assembly evidence.
 - **Two walls the source cannot move**, both measured repeatedly: this cc1 **CSEs symbol addresses**
   (`sym`, `sym+const`) into callee-saved registers and keeps them across calls where retail
   re-materialises a fresh `lui`/`addiu` (`func_00119AC0`, `func_00132C48`, `func_00130428`), and

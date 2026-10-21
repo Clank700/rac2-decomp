@@ -7,9 +7,11 @@
      002FED80  addiu $sp, $sp, 0x40
 
    and they are followed by the padding up to 0x002FED90, where func_002FED90 starts.
-   The previous function ends at 0x002FED70 with its `jr $ra` and the `addiu $sp,$sp,0x10`
-   in its delay slot.
+   The previous function returns at 0x002FED68, with `addiu $sp,$sp,0x10`
+   in the delay slot at 0x002FED6C; two nops follow.
 
-   There is no `jr $ra` inside the row, so the code cannot return, and the
-   `addiu $sp,$sp,0x40` has no matching prologue: the row is the tail of a function the
-   catalogue cut in the wrong place. No C can be placed here. */
+   A boot-wide scan found no direct control-flow target or aligned literal pointer
+   into this extent. Together with the preceding completed return and unmatched
+   frame restore, this supports a residual catalogue extent. Absence of jr $ra
+   alone is insufficient, and computed indirect targets are not ruled out. Retain
+   this for a separately validated generator correction; no C or ASM_FUNC credit. */

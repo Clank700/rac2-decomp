@@ -9,4 +9,8 @@
    a register the row never sets. The neighbouring functions end with their own
    `jr $ra`, so the row is a piece of a function the catalogue cut in the wrong place.
 
-   No C can be placed here. */
+   A follow-up audit covered all 23 placements (boot and 22 levels). Each has a
+   preceding return, with no direct control-flow target or aligned literal pointer
+   into the extent in that program. This supports a residual catalogue extent;
+   computed indirect targets are not ruled out. Retain it for a separately
+   validated generator correction, without C or ASM_FUNC credit. */
