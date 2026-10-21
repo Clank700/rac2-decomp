@@ -30,14 +30,42 @@ void func_PAL_0034A2E0(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x60) = a1; }
 /* Measured target: byte-identical across all 27 levels. */
 void func_PAL_0034A2E8(u8 *a0, s32 a1) { *(s32 *)(a0 + 0xCC) = a1; }
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0034A2F0);
+extern int func_00348128(unsigned char *);
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0034A2F8);
+/* Measured target: byte-identical across all 27 levels. */
+s32 func_PAL_0034A2F0(u8 *a0) { return *(s32 *)(a0 + 0x60); }
+
+/* Measured target: byte-identical across all 27 levels. */
+s32 func_PAL_0034A2F8(u8 *a0) { return *(s32 *)(a0 + 0xC0); }
 
 INCLUDE_ASM("asm/pal/game", func_PAL_0034A300);
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0034A690);
+extern void Faac80289_FUN_003361A8(char *p);
+extern void Faac80289_FUN_00336968(char *p);
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0034A738);
+char *func_PAL_0034A690(char *a0)
+{
+    char *p = a0 + 536;
+    int i;
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0034A740);
+    Faac80289_FUN_003361A8(a0);
+    Faac80289_FUN_003361A8(a0 + 76);
+    Faac80289_FUN_003361A8(a0 + 152);
+    Faac80289_FUN_003361A8(a0 + 228);
+    Faac80289_FUN_003361A8(a0 + 304);
+    Faac80289_FUN_003361A8(a0 + 380);
+    Faac80289_FUN_003361A8(a0 + 456);
+
+    for (i = 6; i != -1; i--) {
+        Faac80289_FUN_00336968(p);
+        p += 88;
+    }
+    return a0;
+}
+
+/* Measured target: byte-identical across all 27 levels. */
+void func_PAL_0034A738(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x4B8) = a1; }
+
+/* Measured target: byte-identical across all 27 levels. */
+void func_PAL_0034A740(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x4BC) = a1; }
+
