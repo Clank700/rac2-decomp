@@ -1,3 +1,4 @@
+src/levels/shared/L00_003B9CB8.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-barrier
 src/core/00123A00-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
 src/core/00123C28-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
 src/core/001286C8-rc2.c	sdk -O2 -G0 -ffunction-sections -fno-builtin

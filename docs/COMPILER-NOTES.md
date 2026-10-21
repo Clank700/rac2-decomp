@@ -1193,9 +1193,13 @@ the libc region 0x1163B0-0x1178xx and the other quadword units), and two `-O0`-c
   keyword the callee is a real call and the body shrinks (`func_00123C28`: 252 bytes against 260).
 - **Unsigned spellings are load-bearing**: `-1u` gives the retail `lui`/`ori` pair where `-1` gives
   a single `addiu`, and a failure value compared as `0xFFFFFFFFu` is what `func_00115C90` needs.
-- **`mult rd,rs,rt` on the R5900 hides from the reader**: it is opcode 0x00 funct 0x18 *and* opcode
-  0x1C funct 0x18 (MULT1), and rabbitizer prints `.word # INVALID` for both, dropping the
-  destination. Three waves mistook live products for dead instructions.
+- **Decode the R5900 multiplication destination**: opcode 0x00 funct 0x18 is `mult`, and
+  opcode 0x1C funct 0x18 is `mult1`. Generic MIPS decoding can omit the GPR destination
+  or report an invalid instruction. Inspect `rd` (bits 15-11) and its uses before calling
+  the result dead; absence of `mflo` alone is insufficient. The current compiler emits
+  a three-operand `mult` for ordinary `return index * stride;`, without `mflo`.
+  [Six audited examples](https://github.com/OpenRAC/rac2-gc-decomp/issues/157#issuecomment-6305695078)
+  consume their GPR results in address calculations and provide no handwritten-assembly evidence.
 - **Two walls the source cannot move**, both measured repeatedly: this cc1 **CSEs symbol addresses**
   (`sym`, `sym+const`) into callee-saved registers and keeps them across calls where retail
   re-materialises a fresh `lui`/`addiu` (`func_00119AC0`, `func_00132C48`, `func_00130428`), and
@@ -1539,3 +1543,50 @@ only describe, and found the source spellings for two game-wide idioms.
   saves of a body into the retail's order.
 - **gas turns the compiler's `addu rd,rs,imm` into the retail's `addiu`**, and `move rd,rs`
   into `daddu rd,rs,$zero` - a candidate differing only in those is not a difference.
+
+## Optional scheduling model for 128-bit clears (21 October 2026)
+
+- **What retail does.** Retail clears a quadword with `sq $zero,0(reg)`. Every one of the 360
+  such stores in its compiled code (outside the hand-written COP2/MMI routines) has
+  displacement 0. In 71 of 95 inspected cases a load that may alias the cleared quadword comes before an
+  independent instruction that was ready before the store. For a plain store this scheduler
+  does that rarely (43 of 1,499 stores in the functions it already matches), and sp-based
+  clears (14 of 14) behave like pointer-based ones. That is the shape of an inline-asm clear,
+  `asm volatile ("sq $0,0x0(%0)" ...)`, which both schedulers treat as a barrier. Such a helper
+  gives retail's bytes with this cc1, but `src/` does not allow inline assembly.
+- **What this cc1 did.** The C writes the clear as a TImode store of zero (`*(TI128 *)p = 0`),
+  and `rac2_fold_zero_ti_store` turns it into `sq $0` after reload. sched2 then sees an
+  ordinary store. The R5900 issues two instructions a cycle, and the scheduler never issues an
+  instruction in the cycle that made it ready, so an independent ready instruction always took
+  the store's second slot and a dependent load came later. Lowering the store's ready cost to 1
+  does not change that.
+- **The opt-in change.** `transformers/zero_ti_store_barrier.py` gives those stores, in
+  `gcc/haifa-sched.c`'s `sched_analyze_insn`, the dependences, cost and unit of a volatile asm
+  (as `sched_analyze_2` builds them). After reload that is a TImode store from `$0`. Before
+  reload it is a TImode store of const 0 that is the only one between two calls, labels or
+  jumps: a zero that several stores share stays `por` + `sq`, the C form, and the fold leaves
+  it alone. This is enabled only by `-frac2-zero-ti-barrier`, per compilation unit
+  in `config/cflags.txt`; the default remains unchanged. The test controls show
+  that the heuristic also changes a single nonzero-displacement clear. It is not
+  a general detector of original inline assembly, so enabling it elsewhere needs
+  evidence and checks for every function in that file.
+- **Measured on 21 October.** An independent comparison of the same 767 source
+  units found 756 whole objects identical, ten with only `.mdebug` differences,
+  and one changed code section: the witness. The SDK compiler is unchanged.
+  `func_L00_003BFF68` (12 places) matches with the option, and with it disabled the same C
+  is 0 of 12: its prologue saves come out grouped, its clear two instructions late, and two
+  delay slots differ. Of the 1,779 drafts in `nonmatching/`, 28 change. `func_L02_003EAE10`'s
+  record and a new draft of `func_L13_0040A3B0` (3 places) are exact with it. Of the drafts
+  that change size, `func_L23_003BFE90` reaches retail's 300 bytes, and `func_L00_003CD160`
+  comes 8 bytes closer to retail's 1,268. Those draft-screen results were reported
+  for the initial always-enabled proposal; enabling the final option for each
+  additional unit still requires its own validation.
+
+`tests/test_zero_ti_store.py` executes the injected selector against synthetic RTL
+cases: zero/nonzero registers, scalar/quadword memory, neighboring clears and
+call/jump/label/barrier boundaries in both directions. Authored C controls then
+compile and assemble with the real EE tools in default, enabled and explicitly
+disabled modes, covering isolated/shared clears, nonzero displacement, calls and
+branches. `tools/compiler/build.sh` runs these tests after installation and pins
+the scheduler, option declarations and option table alongside the existing source
+hashes. Game-byte equality remains a separate full-build gate.

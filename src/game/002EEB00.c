@@ -179,7 +179,7 @@ INCLUDE_ASM("asm/game", func_002EF010);
 
 INCLUDE_ASM("asm/game", func_002EF080);
 
-INCLUDE_ASM("asm/game", func_002EF1E8);
+/* func_002EF1E8 is in 002EEB00-g8.c. */
 
 /* shared native body of family 9328256ba62fe2c4 */
 void func_002EF310(void)
