@@ -304,3 +304,6 @@ src/levels/shared/L00_003EA7D0.c	-O2 -G0 -ffunction-sections -mno-split-addresse
 src/levels/20_yeedil/L20_00444088-g8.c	-O2 -G8 -ffunction-sections -fno-schedule-insns
 src/levels/20_yeedil/L20_0043ECB0-g8.c	-O2 -G8 -ffunction-sections -mno-split-addresses
 src/levels/20_yeedil/L20_00444138-g8.c	-O2 -G8 -ffunction-sections -mno-split-addresses
+src/levels/shared/L04_00363CA0.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/09_dobbo/L09_002F8BA0-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/shared/L22_003A5018-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy
