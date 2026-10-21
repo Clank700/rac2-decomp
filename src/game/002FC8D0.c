@@ -199,7 +199,7 @@ void func_002FCF90(int arg0) {
     p->w[3] = 0;
 }
 
-INCLUDE_ASM("asm/game", func_002FCFC8);
+/* func_002FCFC8 is in 002FC8D0-g8.c. */
 
 
 INCLUDE_ASM("asm/game", func_002FD1B8);
