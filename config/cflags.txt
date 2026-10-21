@@ -57,6 +57,7 @@ src/levels/18_damosel/L18_004308F0.c	-O2 -G0 -ffunction-sections -frac2-hazard-l
 src/levels/shared/L02_00411530.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/levels/23_damosel_orbit/L23_00422668.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-no-annulled-wide-stores
 src/levels/shared/L02_0042EDD0-g8.c	-O2 -G8 -ffunction-sections -frac2-no-annulled-wide-stores -frac2-zero-ti-barrier
+src/levels/23_damosel_orbit/L23_00427CE8-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/core/00117278.c	-O0 -G2 -ffunction-sections -mastra-quad-saves
 src/core/00122630.c	-O2 -G0 -ffunction-sections
 src/core/00122800.c	sdk -O2 -G2 -ffunction-sections

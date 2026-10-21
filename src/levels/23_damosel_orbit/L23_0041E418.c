@@ -110,7 +110,7 @@ void func_L23_004278B0(u8 *arg0) {
 
 /* func_L23_004278D8 is matched in L23_004278D8-g8.c (built with -g). */
 
-INCLUDE_ASM("asm/levels", func_L23_00427CE8);
+/* func_L23_00427CE8 is matched in L23_00427CE8-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L23_004280D8);
 
