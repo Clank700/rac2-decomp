@@ -62,7 +62,7 @@ void func_L02_003DBE60(char *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003DBF40);
+/* func_L02_003DBF40 is defined in L02_003DB310-g8.c (with -G8, its flag load is one assembler macro, which builds the address in $v1 as retail does). */
 
 INCLUDE_ASM("asm/levels", func_L02_003DBFD8);
 
