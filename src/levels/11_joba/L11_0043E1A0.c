@@ -65,10 +65,10 @@ void func_L11_004401C0(u8 *obj) {
     *(s32 *)(state + 0x170) = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00440238);
+/* func_L11_00440238 lives in L11_00440238-g8.c (its source unit has the retail small-data view). */
 INCLUDE_ASM("asm/levels", func_L11_00440360);
 
-INCLUDE_ASM("asm/levels", func_L11_00440790);
+/* func_L11_00440790 lives in L11_00440238-g8.c (its source unit has the retail small-data view). */
 
 /* Finds the class entry the identifier names and hands it to that class's handler. */
 extern u8 *D_L11_001FC420[];
