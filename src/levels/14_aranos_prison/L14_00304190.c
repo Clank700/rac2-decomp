@@ -259,7 +259,7 @@ INCLUDE_ASM("asm/levels", func_L14_003E4A40);
 
 INCLUDE_ASM("asm/levels", func_L14_003E4BA0);
 
-INCLUDE_ASM("asm/levels", func_L14_003E4EA0);
+/* func_L14_003E4EA0 is matched in L14_003E4EA0-g8.c (built with -g). */
 
 /* func_L14_003E5030 lives in the -g8 sibling file (it reaches a global through $gp). */
 
