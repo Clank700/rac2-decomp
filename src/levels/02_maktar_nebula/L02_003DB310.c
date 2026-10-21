@@ -3,7 +3,70 @@
 
 INCLUDE_ASM("asm/levels", func_L02_003DB310);
 
-INCLUDE_ASM("asm/levels", func_L02_003DB6D8);
+extern void func_002A7750(char *, int, int);
+
+extern void func_002E59F8(int);
+
+extern void func_002A7470(char *, int, int, int);
+
+extern void func_002A05A8(char *);
+
+extern void func_0029F338(char *);
+
+extern void func_0029F9F0(char *, char *);
+
+extern char D_00188660[];
+
+extern char *D_L02_001B359C __attribute__((sda));
+
+/* An entity record (0x100 bytes, in the table at D_L02_001B359C). Both flag updates below go
+   through this struct: a struct member store neither orders the next load of the table's base
+   after it nor makes the compiler reload that base, which is how retail's loads are placed. */
+typedef struct {
+    char pad0[0x34];
+    unsigned short flags;
+} Entity003DB6D8;
+
+/* The record of the table that the actor's state names at +0x244. */
+#define CHILD003DB6D8 (D_L02_001B359C + *(int *)(*(char **)(arg0 + 0x68) + 0x244) * 0x100)
+
+/* Switches the actor off: stops the effect that the state's slot at +0x26C indexes in the table at
+   D_00188660 (0x70-byte records) when that record's owner (+0x88) is this actor and its live byte
+   (+0x74) is set, clears the actor's own flags, and clears its child entity's state (the child
+   is the table record that the state names at +0x244); the child is then handed to func_0029F9F0
+   with each of the three sub-objects of the state whose byte at +0x171, +0x1B1, +0x1F1 is set. */
+void func_L02_003DB6D8(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+    int slot;
+    char *rec;
+
+    func_002A7750(arg0, 1, 0);
+    slot = *(int *)(state + 0x26C);
+    if (slot != -1) {
+        rec = D_00188660 + slot * 0x70;
+        if (*(char **)(rec + 0x88) == arg0 && *(unsigned char *)(rec + 0x74) != 0)
+            func_002E59F8(slot);
+    }
+    *(int *)(state + 0x26C) = -1;
+    func_002A7470(arg0, 0, 0, 3);
+    func_002A05A8(arg0);
+    *(unsigned char *)(arg0 + 0x31) = 0;
+    *(int *)(arg0 + 0x98) = 0;
+    ((Entity003DB6D8 *)arg0)->flags = (((Entity003DB6D8 *)arg0)->flags & 0xEFFF) | 3;
+    ((Entity003DB6D8 *)CHILD003DB6D8)->flags |= 1;
+    *(unsigned char *)(CHILD003DB6D8 + 0x31) = 0;
+    *(int *)(CHILD003DB6D8 + 0x98) = 0;
+    if (*(char **)(*(char **)(arg0 + 0x68) + 0x260) != 0)
+        func_0029F338(*(char **)(*(char **)(arg0 + 0x68) + 0x260));
+    if (*(unsigned char *)(state + 0x171) != 0)
+        func_0029F9F0(CHILD003DB6D8, state + 0x170);
+    if (*(unsigned char *)(state + 0x1B1) != 0)
+        func_0029F9F0(CHILD003DB6D8, state + 0x1B0);
+    if (*(unsigned char *)(state + 0x1F1) != 0)
+        func_0029F9F0(CHILD003DB6D8, state + 0x1F0);
+}
+
+#undef CHILD003DB6D8
 
 void func_L02_003DB870(char *arg0, int arg1) {
     *(int *)(*(char **)(arg0 + 0x68) + 0x264) = arg1;
@@ -62,7 +125,7 @@ void func_L02_003DBE60(char *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003DBF40);
+/* func_L02_003DBF40 is defined in L02_003DB310-g8.c (with -G8, its flag load is one assembler macro, which builds the address in $v1 as retail does). */
 
 INCLUDE_ASM("asm/levels", func_L02_003DBFD8);
 
