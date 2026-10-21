@@ -266,7 +266,6 @@ INCLUDE_ASM("asm/game", func_002FD1B8);
 
 INCLUDE_ASM("asm/game", func_002FD828);
 
-INCLUDE_ASM("asm/game", func_002FDB40);
 
 INCLUDE_ASM("asm/game", func_002FDBD8);
 
@@ -341,7 +340,6 @@ int func_002FEC78(unsigned char *object, unsigned int flags)
 extern void func_0029F9F0(char *, char *);
 void func_002FED28(unsigned int index) { if (index < 64u) { char *p = D_0021F9C0 + index * 0x50; func_0029F9F0(*(char **)(p + 0x40), p); *(char **)(p + 0x40) = 0; } }
 
-INCLUDE_ASM("asm/game", func_002FED78);
 
 INCLUDE_ASM("asm/game", func_002FED90);
 
@@ -356,7 +354,6 @@ void func_002FEE50(int index) {
 
 INCLUDE_ASM("asm/game", func_002FEE70);
 
-INCLUDE_ASM("asm/game", func_002FF0B0);
 
 INCLUDE_ASM("asm/game", func_002FF0D8);
 
