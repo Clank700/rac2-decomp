@@ -123,6 +123,40 @@ int func_PAL_L00_0034EB98(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L00_0034EBC8);
+extern void func_L00_0030DA68(int);
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L00_0034EC50);
+/* Guarded callback update: with the pending-input bit set, refreshes the value from its source and reports it (or the fallback's -1), otherwise reports a configured input or runs the setup call. */
+int func_PAL_L00_0034EBC8(void)
+{
+    int result = 0;
+    int flags = D_00138344;
+    if (flags & 0x10) {
+        int value = *(int *)(D_L00_001FEC40.source + 0xE0);
+        if (value != 0)
+            D_L00_001FEC40.value = value;
+        else if (D_L00_001FEC40.fallback == 0) {
+            value = -1;
+            goto return_value;
+        }
+        value = 0;
+return_value:
+        return value;
+    }
+    if (flags & 0x900)
+        result = 1;
+    else
+        func_L00_0030DA68(flags);
+    return result;
+}
+
+extern void func_L00_0030DAA8(void);
+
+/* Run the three measured setup calls with an explicit long zero, then return the defined integer zero. */
+int func_PAL_L00_0034EC50(void)
+{
+    func_0027C540(0);
+    func_L00_0030DAA8();
+    func_0027C660();
+    return 0;
+}
+
