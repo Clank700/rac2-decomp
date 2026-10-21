@@ -15,6 +15,7 @@ src/levels/23_damosel_orbit/L23_00425568.c	-O2 -G0 -ffunction-sections -frac2-qc
 src/game/002EE920.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/game/002ED2B8-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy
 src/levels/02_maktar_nebula/L02_003CAE68.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/02_maktar_nebula/L02_003E8E90-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy
 src/game/002B5E48.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/002EE988.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/23_damosel_orbit/L23_00418650.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
