@@ -585,7 +585,7 @@ s32 func_002AD0B0(u8 *a0) {
 
 INCLUDE_ASM("asm/game", func_002AD0E0);
 
-INCLUDE_ASM("asm/game", func_002AD250);
+/* func_002AD250 is in 002AD250-rc2.c (it needs the grouped 128-bit copy). */
 
 int func_002AD330(char *a0, char *a1, char *a2, char *a3)
 {
