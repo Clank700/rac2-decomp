@@ -41,6 +41,8 @@ extern int *D_L01_001AA7F0 __attribute__((sda));
 
 extern int D_001A79F0_3 __attribute__((sda));
 
+extern int D_001C4FA0[];
+
 extern void F6df9730c_FUN_00282B50(char *dst, int *src, int count);
 
 /* Find a mapped record by its unsigned halfword class and return its opaque word. */
@@ -229,14 +231,34 @@ void func_00295BE8(u8 *a0,u8 *a1,u8 *a2,u8 *a3) {
 }
 
 extern int D_001C51D0;
-extern void func_00295C70(void);
+extern int func_00295C70(void);
 
 void func_00295C50(int value) {
     D_001C51D0 = value;
     func_00295C70();
 }
 
-INCLUDE_ASM("asm/game", func_00295C70);
+extern int func_00295870(int);
+
+/* Picks the next free slot of the resident table and reports whether that
+   slot is in use.  The resident flag at D_001A79F0_3 vetoes the slot while
+   the table's counter is still empty.  The counter sits at the table's +0x230
+   and the slot's own flag at its +0x24, so both are reached through the one
+   base the retail uses (the array's indices 0x8C and 0x9). */
+int func_00295C70(void)
+{
+    if (D_001C4FA0[0x8C] >= 0x1C)
+        D_001C4FA0[0x8C] = 0x1B;
+    if (func_00295870(D_001C4FA0[0x8C]))
+        D_001C4FA0[0x9] = 1;
+    else
+        D_001C4FA0[0x9] = 0;
+    if (D_001C4FA0[0x8C] == 0) {
+        if (D_001A79F0_3 != 0)
+            D_001C4FA0[0x9] = 0;
+    }
+    return D_001C4FA0[0x9] != 0;
+}
 
 INCLUDE_ASM("asm/game", func_00295D00);
 
