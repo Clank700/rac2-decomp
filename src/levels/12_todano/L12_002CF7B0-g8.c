@@ -20,7 +20,7 @@ extern void func_00282D30(void *, void *, float);
 
 extern void func_00282CC0(void *, void *, void *);
 
-extern char D_L12_00277F710[];
+extern char D_L12_0027F710[];
 
 extern int D_L12_001A9410 __attribute__((sda));
 
@@ -59,7 +59,7 @@ void func_L12_002FFF88(void)
         if (D_L12_001BDB00.entries[index] != 0) {
             char *d = obj + 0x10;
             char *c = obj + 0xC0;
-            D_L12_001BDB00.mesh = (int)D_L12_00277F710;
+            D_L12_001BDB00.mesh = (int)D_L12_0027F710;
             q = (char *)&D_L12_001A9410;
             off = 0x20;
             i = 3;

@@ -84,7 +84,7 @@ extern s32  func_002E5CF8(s32 a0, s32 a1, char *a2);
 extern void func_002E59F8(s32 a0);
 extern void func_L01_003115E8(int a0, int a1);
 extern u8  *D_L03_001B2A1C;
-extern u8   D_018F8660[];
+extern u8   D_00188660[];
 extern s32  D_L03_001B0438 __attribute__((sda));
 extern f32  D_L03_001B043C __attribute__((sda));
 
@@ -118,7 +118,7 @@ void func_L03_003CBE58(char *a0)
         if (func_002B38B8(D_L03_001B2A1C + *(s32 *)(s1 + 0x70) * 0x100) == 0) {
             break;
         }
-        p = D_018F8660 + *(s32 *)(s1 + 0x7C) * 0x70;
+        p = D_00188660 + *(s32 *)(s1 + 0x7C) * 0x70;
         if (*(char **)(p + 0x88) != s2 || *(u8 *)(p + 0x74) == 0) {
             *(s32 *)(s1 + 0x7C) = func_002E5CF8(0, 4, s2);
         }
@@ -139,7 +139,7 @@ void func_L03_003CBE58(char *a0)
         if (1.69646013f < t) {
             if (*(s32 *)(s1 + 0x78) < 5) {
                 if (*(s32 *)(s1 + 0x7C) != -1) {
-                    p = D_018F8660 + *(s32 *)(s1 + 0x7C) * 0x70;
+                    p = D_00188660 + *(s32 *)(s1 + 0x7C) * 0x70;
                     if (*(char **)(p + 0x88) == s2 && *(u8 *)(p + 0x74) != 0) {
                         func_002E59F8(*(s32 *)(s1 + 0x7C));
                     }

@@ -71,7 +71,7 @@ extern void func_L11_00456438(u8 *a0, s32 a1);
 
 extern u32 D_L11_001B0D9C __attribute__((sda));
 
-extern u8 D_189FE20[];
+extern u8 D_00189E20[];
 
 /* Places the measured point on the state's three vertices, then walks them: each one gets
    its angle to the shared origin and the class call its identifier names. */
@@ -110,7 +110,7 @@ void func_L11_00417340(u8 *arg0) {
         *(f32 *)(*(u8 **)(s1 + 0x18) + 0x1C) = loc[3];
     }
 
-    base = D_189FE20;
+    base = D_00189E20;
     p = *(u8 **)(s1 + 0x10);
     total = 0;
     for (i = 0; i < 3; i++) {

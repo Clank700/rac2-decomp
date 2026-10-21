@@ -48,7 +48,7 @@ typedef struct {
     s32 f68;
 } L07Mat;
 
-extern L07Mat D_L07_00268C0;
+extern L07Mat D_L07_0027E8C0;
 
 /* The four records the engine reads through $gp. */
 extern int D_L07_001A93E0 __attribute__((sda));
@@ -106,7 +106,7 @@ void func_L07_002F2C70(void) {
     if (D_L07_001BCF00.slot[idx] == 0)
         goto end;
 
-    g = &D_L07_00268C0;
+    g = &D_L07_0027E8C0;
     D_L07_001BCF00.f50 = g;
     p = &g->m[0];
     q = (Vec2 *)&D_L07_001A93E0;
