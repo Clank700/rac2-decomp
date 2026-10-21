@@ -113,6 +113,68 @@ void func_L14_003DF100(char *arg0, int arg1) {
     func_420B10(*(int *)(v + 0x64), b, p, 0);
 }
 
+/* The id-list walks of func_L14_003DF440 and func_L14_003DF540 read D_L14_001B259C as a bare
+   symbol (the second name: `sda` on an array over 8 bytes), while D_L14_001B25B8 is a plain int:
+   its `.extern` comes last in the file, so the load in a branch delay slot is a $gp access and
+   no other load is. */
+extern unsigned short *D_L14_001FB060[];
+extern int D_L14_001B25B8;
+extern unsigned char *D_L14_001B259C_base[3] __asm__("D_L14_001B259C") __attribute__((sda));
+extern void *func_L00_0032C638(char *a0);
+
+/* 0 when an entity of the owner's group (state word 0x68), other than the two states 0xFE and
+   0xFD, has a linked object whose word at +0x88 is not the owner; else 1. */
+int func_L14_003DF440(char *self) {
+    char *state = *(char **)(self + 0x68);
+    unsigned short *p;
+    unsigned char *e;
+    char *t;
+
+    for (p = D_L14_001FB060[*(int *)(state + 0x68)];
+         (*(int *)(state + 0x68) & 0xFF) != 0xFF && *(int *)(state + 0x68) <= D_L14_001B25B8 &&
+         p != 0 && ((p != 0 && (short)p[-1] >= 0) || p == D_L14_001FB060[*(int *)(state + 0x68)]);
+         p++) {
+        e = D_L14_001B259C_base[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        /* two tests, as retail has them: `!= 0xFE && != 0xFD` is folded into one range test */
+        if (e[0x20] != 0xFE) {
+            if (e[0x20] != 0xFD) {
+                t = func_L00_0032C638(e);
+                if (t != 0 && *(char **)(t + 0x88) != self)
+                    return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+extern float func_00282C48(float x);
+
+/* 1 when an entity of the owner's group (state word 0x68), other than the two states 0xFE and
+   0xFD, is more than 1.5 away from it along the float at +0x18; else 0. */
+int func_L14_003DF540(char *self) {
+    char *state = *(char **)(self + 0x68);
+    unsigned short *p;
+    unsigned char *e;
+
+    for (p = D_L14_001FB060[*(int *)(state + 0x68)];
+         (*(int *)(state + 0x68) & 0xFF) != 0xFF && *(int *)(state + 0x68) <= D_L14_001B25B8 &&
+         p != 0 && ((p != 0 && (short)p[-1] >= 0) || p == D_L14_001FB060[*(int *)(state + 0x68)]);
+         p++) {
+        e = D_L14_001B259C_base[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        if (e[0x20] != 0xFE) {
+            if (e[0x20] != 0xFD) {
+                if (func_00282C48(*(float *)(e + 0x18) - *(float *)(self + 0x18)) > 1.5f)
+                    return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 void func_L14_003DF7F8(char *arg0) {
     char *v = *(char **)(arg0 + 0x68);
 
