@@ -1,35 +1,34 @@
-/* 0 of 1 places match - candidate is 228 bytes = retail (57 instructions); 15 words differ, all
-   of them ORDER (the frame, the registers, every operand and every call match):
-     +0x14..+0x20  prologue saves: retail stores f21, f20, then $ra last; this cc1 stores $ra
-                   right after the first move and f21, f20 after it;
-     +0x60..+0x6C  the two constants of the second func_002A7878 call: retail loads -2.0 into
-                   $f12 first and 2.0 into $f13 second, this cc1 the reverse;
-     +0x7C..+0x88  after the second call retail runs lw $s0, the 8.0, addiu $v1, add.s $f20 and
-                   then lq/sq; this cc1 starts with `mov.s $f12,$f21`;
-     +0x98         the delay slot of the sin call: retail `mov.s $f12,$f21`, this cc1
-                   `add.s $f20,$f0,$f1`;
-     +0x9C..+0xA4  after the sin call: retail mul.s, lwc1, mov.s; this cc1 lwc1, mov.s, mul.s.
-   File: src/levels/02_maktar_nebula/L02_003DB310.c (would be a unit of its own with
-   `-O2 -G0 -ffunction-sections -frac2-qcopy`). Checked with the master cc1 of 21 October.
+/* NEAR MISS (measured 22 October 2026): 228 bytes, retail's 228, in a unit of its own built with
+   `-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier`; 0 of 1 places match, first
+   difference at +0x78. Everything else is retail's (frame, saves, registers, calls, the grouped
+   copy through `addiu $v1,$s0,0x4A0`); 5 words differ, the order of the block before the copy:
+       retail:  lw $s0,0x68($s1) ; lui $at,0x4100 ; mtc1 $at,$f1 ;
+                addiu $v1,$s0,0x4A0 ; add.s $f20,$f0,$f1
+       here:    lui $at,0x4100 ; mtc1 $at,$f1 ; lw $s0,0x68($s1) ;
+                add.s $f20,$f0,$f1 ; addiu $v1,$s0,0x4A0
+   (the 8.0 of the radius, the state load and the copy's destination address).
 
-   Cause, measured: retail's 16-byte copy is a SCHEDULING BARRIER, as the maintainers' inline-asm
-   copy macro would be. Diagnostic only, never to be committed: with the copy written as
-       __asm__ volatile ("lq $2,0(%1)\n\tsq $2,0(%0)" : : "r"(state + 0x4A0), "r"(arg1)
-                         : "$2", "memory");
-   instead of the TI assignment (and no profile flag), this exact function reports
-   "func_L02_003F1A88: 1 of 1 places match". Everything before the copy then stays before it
-   (the add.s of the radius, the address, the loads) and everything after stays after, which is
-   all four differences above; -frac2-qcopy groups lq/sq with a $v0 clobber but gives the pair no
-   barrier ("No memory barrier is added"), so sched1/sched2 are free to move the neighbours.
-   A barrier variant of -frac2-qcopy (the copy given the dependences, cost and unit of a
-   volatile asm, as -frac2-zero-ti-barrier does for the clears) is the lever; the same asm
-   diagnostic makes func_L02_003EE938 and func_L02_003E8CE8 match, and func_L02_003DBA70 match
-   except for its unfolded zero (see their files).
+   Cause, measured with -fsched-verbose-5: the barrier gives the copy a volatile asm's
+   dependences, but the links INTO it keep their producers' latencies. The two chains that feed
+   the copy are `li.s 8.0 -> add.s -> copy` and `lw state -> addiu -> copy`; with the add.s link
+   costing 3, sched1 ranks the li.s at priority 24 and the lw at 22 (sched2: 28 and 26), so the
+   constant goes first. With the copy written as the volatile asm (scratch only, never for src/:
+   `__asm__ volatile ("lq $2,0(%1)\n\tsq $2,0(%0)" : : "r"(state + 0x4A0), "r"(arg1) : "$2",
+   "memory")`, default profile) the copy is an unrecognised insn, insn_cost() marks every link
+   into it LINK_COST_FREE (cost 1): add.s 20, li.s 22, lw 22, the tie goes to the lw by
+   INSN_REG_WEIGHT (arg0's pseudo dies there) and the function is exact at its place.
+   No source shape changes that dependence graph (the two chains are the computation itself;
+   the statement order does not move priorities). The lever is compiler-side: under
+   -frac2-qcopy-barrier, make the links into the copy cost 1 as they do for an asm (treat it as
+   an unrecognised consumer in insn_cost, haifa-sched.c); the twelve barrier witnesses would
+   need re-checking with it.
 
-   Tried, none changes the 15 words: loads as struct members (`arg0->x`, `arg1[0]`), const-
-   qualified loads, `-fno-schedule-insns`, `-fno-schedule-insns2` (220 bytes),
-   `-fno-sched-interblock`; without the profile the TI copy folds its offset into the sq
-   (`sq $v0,0x4A0($s0)`, a different word count). */
+   Tried before (no change to these words): loads as struct members, const-qualified loads,
+   -fno-schedule-insns, -fno-schedule-insns2 (220 bytes), -fno-sched-interblock; without
+   -frac2-qcopy the copy folds its offset into the sq (`sq $v0,0x4A0($s0)`).
+
+   File: src/levels/02_maktar_nebula/L02_003DB310.c (marker); would be a unit of its own,
+   L02_003F1A88.c, with the profile above. */
 
 #include "include_asm.h"
 

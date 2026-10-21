@@ -1,55 +1,61 @@
-/* 0 of 1 places match.  Needs a unit built with `-O2 -G8 -ffunction-sections` (a `-g8` file: the
-   $gp reads of D_L02_001B143C..1460 and 1470 are outside delay slots).  This body compiles to
-   688 bytes against retail's 696 and a 0xE0 frame against retail's 0xF0: retail saves FIVE
-   callee-saved GPRs (s0..s3 and ra) and this saves four, see below.  Beyond that the diff is
-   scheduling and register roles from the very first instructions (the prologue, the order of the
-   func_0027F640 arguments, the func_002802E0 argument set-up), so this is a structural near miss
-   and about 140 of the 174 words differ by tools/check.py's alignment.  Tried: about 45 compiles
-   over the spellings listed below.
+/* NEAR MISS (measured 22 October 2026).  Needs a `-G8` unit (built here with
+   `-O2 -G8 -ffunction-sections`; the $gp reads of D_L02_001B143C..1460 and 1470 are outside delay
+   slots).  This body is 700 bytes against retail's 696, with retail's 0xF0 frame and retail's
+   five GPR saves; 0 of 1 places match.
 
-   What is established (each measured, each moved the diff):
+   The extra callee-saved register.  Retail saves s0..s3 and $ra but never touches $s2 in the
+   body; `state` is in $s3.  This C (`char *ctx = buf1;` set before the first call and passed to
+   the five draw calls) gives retail's register assignment exactly: ctx in $s2, state in $s3,
+   the texts in $s1, buf2 and the colours in $s0 (the else block's colour in $s1), and the
+   then/else blocks are retail's word for word except for ctx.  But this cc1 keeps ctx in $s2
+   (`addiu $s2,$sp,0x10` in the first call's slot, `daddu $a0,$s2,$zero` at the five calls)
+   where retail rematerialises the address at each call (`addiu $a0,$sp,0x10`) and has no set
+   of $s2 at all, while still saving it.  112 of retail's 174 words are in a longest common
+   subsequence with this body (103 for the earlier C that passes buf1 directly).  Without
+   ctx (passing buf1 directly) state lands in $s2 and the frame is 0xE0 (688 bytes, about 140
+   words off); every other shape tried also gives 0xE0 or keeps the extra register in use
+   (second names for a0 or state, a second load of state, per-part text / float / int variables,
+   a struct for the state, `len` variables).
+   Why, read in the sources of this cc1: a pseudo with a frame-address REG_EQUIV is
+   rematerialised by reload only when it has NO hard register (every reg_equiv_constant path in
+   reload1.c tests reg_renumber < 0), and reload takes a callee-saved register away from its
+   pseudo only when it needs it as a spill register at an insn where $v0..$t7 are all
+   unavailable (order_regs_for_reload works per insn), which never happens here.  Retail's
+   output is what a pseudo allocated to $s2 by global-alloc and then spilled by reload looks like
+   (home marked live, so saved; every use replaced by its equivalence).  It is not alone: 21
+   retail game functions save a GPR they never use, none of them in C, e.g. func_00326A10 and
+   its copies func_0032F3D0 / func_L00_003DDEC8 / func_L00_004003F0 ($s0, a stack buffer passed to
+   two calls and rematerialised at each), func_002D2188, func_0034A4E0, func_L02_003C43F0,
+   func_L02_003FE8B8, func_L04_00416E38, func_L05_00421B98 / func_L10_00424CD0 /
+   func_L15_00431590 / func_L25_0040DE40.  Hypothesis, not measured: the retail compiler chose
+   spill registers for the whole function, as gcc 2.8's reload did (new_spill_reg marked the reg
+   live and spill_hard_reg evicted every pseudo in it), so a cheap callee-saved register could
+   become a spill register that no reload ended up using.  A compiler-side question, not a
+   source shape.
+
+   Also still different (scheduling):
+   - the first block: retail issues `addiu $a0,$zero,0x2F45` before the lookup call and the state
+     load in its slot (here the other way round), and the prologue's $s2 save comes late (no
+     dependents in retail, since $s2 is never set);
+   - the last block: retail keeps every global read of the func_002802E0 call after the three
+     scaled-coordinate chains (the chains in $f0, scale $f1, 0.5 $f2, conversion scratch $f3);
+     here sched1 issues those loads and the stack store into the chains' latency gaps, and the
+     chain registers come out scale $f0, 0.5 $f1, t $f2.  Separate float/int variables for the
+     last part do not change it.
+
+   What is established (each measured earlier, each moved the diff):
    - the draws: func_0027F640(colour, text, x, y, scale, len, font, style), func_002802E0(ctx, ...
      nine arguments, the ninth on the stack), func_00280270 / func_00280190(ctx, colour, text,
-     strlen(text)), func_00115DA8 (the sprintf) and func_00288FB8 (the text lookup); ctx is the
-     0x20-byte block at sp+0x10 (declared FIRST: declared after buf2 it sits at sp+0x80), buf2 the
-     0x70-byte string buffer at sp+0x30.
-   - the text lookups are statements of their own (`text = func_00288FB8(...)` before the call
-     that uses them, `msg` too): inside the argument list the address arguments (the format string,
-     buf2) are evaluated first and live across the lookup in callee-saved registers.
-   - the colour arguments are `long long` in the prototypes (func_0027F640's first, the second of
-     func_00280270 / func_00280190): a plain load argument is only loaded at the call, a 64-bit
-     one is a pseudo made before the next call, which is retail's `lw $s0,0x244C($gp)` in front
-     of func_0027C878 and `lw $s0,0x2458($gp)` in front of the strlen.
-   - the order of func_0027F640's int and float parameters sets the order the arguments are
-     evaluated in (text call, then the float chains, then the font call): the floats sit between
-     the text and the font.
-   - FP callee-saved registers f20/f21/f22 come out as retail's (0.5 in f22) with the default
-     scheduler; -fno-schedule-insns permutes them.
-   - the three `(int)(x * scale + 0.5f)` arguments are written as steps on ONE float variable
-     (`t = (float)D; t = t * scale; t = t + 0.5f; r = (int)t;`): any one-expression spelling lets
-     sched1 interleave the three chains (loads first, then the multiplies, ...), retail's chains are
-     strictly one after the other (the same f0/f1/f2).
-
-   What still differs:
-   - retail keeps every global read of the func_002802E0 call in the order the arguments are
-     processed: the three chains, then `addiu v0,zero,3`, then the loads of D_L02_001B1468 / 146C /
-     the t1 and t3 words, and the stack store in the call's delay slot.  Here the scheduler hoists
-     those four loads (and the `sw`) into the chains' latency gaps; no source spelling tried moves
-     them back.  (Declaring the data volatile would probably keep them in order; not tried, a
-     volatile is not allowed in src/.)
-   - retail's prologue: `daddu $s0,$a0,$zero` right after the `sd $s0` and `swc1 $f20` in the first
-     call's delay slot; here `daddu $s0,$a0` is the delay slot.
-   - retail saves FOUR callee-saved GPRs (s0..s3) and never touches s2: `state` is in $s3 and $s2
-     is only saved and restored, which looks like a pseudo that was given $s2 by the allocator and
-     then rematerialised (the address of ctx, `addiu $a0,$sp,0x10`, at all five uses).  This body
-     saves three, so it is 8 bytes shorter for that alone.  A `char *ctx = buf1` variable gives
-     the pointer to $s2 and `state` to $s3, but keeps `addiu $s2,$sp,0x10` and moves the five
-     arguments from it (700 bytes).
-     A second name for the incoming object (`self = a0`), a second name for `state`, and a second
-     load of `*(a0 + 0x68)` for the +0x118 test do not provoke it either (688, 688 and 700 bytes).
-   - the text lookup result is moved (`daddu $s1,$v0,$zero`) later than retail by the scheduler,
-     and the first block's order of `lw $s0,..($gp)` / the f21 load differs by a few words.
-*/
+     strlen(text)), func_00115DA8 (the sprintf) and func_00288FB8 (the text lookup); buf1 is the
+     0x20-byte block at sp+0x10 (declared FIRST), buf2 the 0x70-byte buffer at sp+0x30;
+   - the text lookups are statements of their own, before the call that uses them;
+   - the colour arguments are `long long` in the prototypes (a 64-bit argument is a pseudo made
+     before the next call: retail's `lw $s0,0x244C($gp)` in front of func_0027C878);
+   - the order of func_0027F640's int and float parameters sets the order its arguments are
+     evaluated in (text call, then the float chains, then the font call);
+   - f20/f21/f22 come out as retail's (0.5 in f22) with the default scheduler;
+   - the three `(int)(x * scale + 0.5f)` arguments are steps on ONE float variable; any
+     one-expression spelling lets sched1 interleave the three chains. */
 
 #include "include_asm.h"
 
@@ -94,6 +100,7 @@ extern u8 D_001395B8[0x100];
 void func_L02_003FF6E8(char *a0) {
     char buf1[0x20];
     char buf2[0x70];
+    char *ctx;
     char *state;
     char *text;
     char *msg;
@@ -102,6 +109,7 @@ void func_L02_003FF6E8(char *a0) {
     int r2;
     int r3;
 
+    ctx = buf1;
     func_L02_003FDDE8(a0, 0);
     state = *(char **)(a0 + 0x68);
     text = func_00288FB8(0x2F45);
@@ -120,16 +128,16 @@ void func_L02_003FF6E8(char *a0) {
     t = t * D_L02_001B3E04;
     t = t + 0.5f;
     r3 = (int)t;
-    func_002802E0(buf1, r1, r2, D_L02_001B1468, D_L02_001B146C, D_L02_001B144C, r3,
+    func_002802E0(ctx, r1, r2, D_L02_001B1468, D_L02_001B146C, D_L02_001B144C, r3,
                   D_L02_001B1470, 3);
     if (*(s16 *)(state + 0x118) == 0 && D_001395B8[func_L02_003F9B70(0)] < 2) {
         text = func_00288FB8(0x2F46);
-        func_00280270(buf1, D_L02_001B1448, text, func_001157AC(text));
+        func_00280270(ctx, D_L02_001B1448, text, func_001157AC(text));
     } else {
         text = func_00288FB8(0x2F62);
         msg = func_00288FB8(0x2F5E);
         func_00115DA8(buf2, D_L02_001B1228, text, *(int *)(state + 0x110), msg);
-        func_00280270(buf1, D_L02_001B1448, buf2, func_001157AC(buf2));
+        func_00280270(ctx, D_L02_001B1448, buf2, func_001157AC(buf2));
     }
     text = func_00288FB8(0x2F47);
     t = (float)D_L02_001B1460;
@@ -144,7 +152,7 @@ void func_L02_003FF6E8(char *a0) {
     t = t * D_L02_001B3E04;
     t = t + 0.5f;
     r3 = (int)t;
-    func_002802E0(buf1, r1, r2, D_L02_001B1468, D_L02_001B146C, D_L02_001B1458, r3,
+    func_002802E0(ctx, r1, r2, D_L02_001B1468, D_L02_001B146C, D_L02_001B1458, r3,
                   D_L02_001B1470, 3);
-    func_00280190(buf1, D_L02_001B1454, text, func_001157AC(text));
+    func_00280190(ctx, D_L02_001B1454, text, func_001157AC(text));
 }
