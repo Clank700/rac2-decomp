@@ -4,6 +4,4 @@ INCLUDE_ASM("asm/us2/game", func_US2_002ECAC8);
 
 INCLUDE_ASM("asm/us2/game", func_US2_002ECC48);
 
-INCLUDE_ASM("asm/us2/game", func_US2_002ED018);
-
 INCLUDE_ASM("asm/us2/game", func_US2_002ED260);

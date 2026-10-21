@@ -1,7 +1,10 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L00_002E7510);
+typedef long s64;
+extern void func_002CBC58(s64);
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L00_002E75C8);
+/* calls the measured callee with zero */
+void func_PAL_L00_002E7610(void) {
+ func_002CBC58(0);
+}
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L00_002E7610);
