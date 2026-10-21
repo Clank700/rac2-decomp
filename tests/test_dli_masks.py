@@ -7,8 +7,8 @@ an explicit missing assembler is an error, never a skip.
 The isolated sign-bit form is independently documented by the public RAC1
 assembler model (GPL-3.0), commit 813090403fe822acd929616da0fee2081131f92e:
 https://github.com/OpenRAC/rac1-decomp/blob/813090403fe822acd929616da0fee2081131f92e/tools/ps2eeas_dli.py
-The test code and constant cases here are authored independently; no game
-bytes, SDK sources, or assembler-output rewriting are used.
+The shifted-mask interval matrix and fixed constant cases are authored
+independently; no game bytes, SDK sources, or assembler-output rewriting are used.
 """
 import json
 import os
@@ -23,9 +23,32 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 import elf
 
-CASES = json.loads((ROOT / "tests/fixtures/dli_masks.json").read_text())
+STATIC_CASES = json.loads((ROOT / "tests/fixtures/dli_masks.json").read_text())
 REGISTERS = (2, 8, 16, 31)
 MASK64 = (1 << 64) - 1
+
+
+def shifted_family_cases():
+    """All positive contiguous runs wider than 32 bits, shifted off bit zero.
+
+    This enumerates the mathematical interval specification independently of
+    gas's low-bit predicate. Both ends have zeros, so both shifts fit 1..31.
+    """
+    cases = []
+    for width in range(33, 63):
+        for low in range(1, 64 - width):
+            value = ((1 << width) - 1) << low
+            left, right = 64 - width, 64 - width - low
+            cases.append({"name": f"shifted_family_w{width}_s{low}",
+                          "literal": f"0x{value:016x}", "value": f"{value:016x}",
+                          "words_r2": ["2402ffff", f"{0x21000 | left << 6 | 0x38:08x}",
+                                       f"{0x21000 | right << 6 | 0x3a:08x}"],
+                          "changed_by_fix": True})
+    return cases
+
+
+SHIFTED_CASES = shifted_family_cases()
+CASES = STATIC_CASES + SHIFTED_CASES
 
 
 def retarget(words, reg):
@@ -79,7 +102,7 @@ def execute_constant(words, result_register):
 
 class FixtureTests(unittest.TestCase):
     def test_baseline_and_expected_sequences_preserve_64_bit_values(self):
-        for case in CASES:
+        for case in STATIC_CASES:
             for reg in REGISTERS:
                 for field in ("baseline_words_r2", "words_r2"):
                     with self.subTest(case=case["name"], reg=reg, version=field):
@@ -87,21 +110,38 @@ class FixtureTests(unittest.TestCase):
                                          int(case["value"], 16))
 
     def test_controls_and_positive_boundaries_are_present(self):
-        cases = {case["name"]: case for case in CASES}
+        cases = {case["name"]: case for case in STATIC_CASES}
         for name in ("zero", "minus_one", "low_run_31", "low_run_63",
                      "pack_neighbor_minus_one", "pack_neighbor_plus_one",
-                     "pack_hole_bit30", "shifted_low_ones_control", "long_max",
-                     "gs_control", "sparse_control", "signed32_control", "unsigned32_control"):
+                     "pack_hole_bit30", "long_max",
+                     "gs_control", "sparse_control", "signed32_control", "unsigned32_control",
+                     "width31_shift2", "width32_shift1", "width32_shift16",
+                     "width16_shift17", "existing_width20_shift36", "internal_hole",
+                     "target_minus1", "target_plus1", "unshifted_width33",
+                     "touch_sign_width59", "touch_sign_width33"):
             with self.subTest(control=name):
                 self.assertFalse(cases[name]["changed_by_fix"])
                 self.assertEqual(cases[name]["words_r2"], cases[name]["baseline_words_r2"])
         expected_lengths = {"sign_bit": 2, "sign_bit_signed": 2, "low_run_32": 5,
-                            "pack_d_mask": 6, "low_run_62": 6}
+                            "pack_d_mask": 6, "low_run_62": 6, "shifted_long_ones": 3}
         for name, length in expected_lengths.items():
             self.assertTrue(cases[name]["changed_by_fix"])
             self.assertEqual(len(cases[name]["words_r2"]), length)
         self.assertEqual(cases["sign_bit"]["words_r2"], ["2402ffff", "000217fc"])
         self.assertEqual(cases["sign_bit"]["words_r2"], cases["sign_bit_signed"]["words_r2"])
+
+
+    def test_exhaustive_shifted_family_specification(self):
+        self.assertEqual(len(SHIFTED_CASES), 465)
+        self.assertEqual(len({case["value"] for case in SHIFTED_CASES}), 465)
+        for case in SHIFTED_CASES:
+            value = int(case["value"], 16)
+            self.assertGreater(value, 0)
+            self.assertLess(value, 1 << 63)
+            self.assertEqual(value & 1, 0)
+            for reg in REGISTERS:
+                with self.subTest(case=case["name"], reg=reg):
+                    self.assertEqual(execute_constant(retarget(case["words_r2"], reg), reg), value)
 
 
 class AssemblerOutputTests(unittest.TestCase):
@@ -139,7 +179,7 @@ class AssemblerOutputTests(unittest.TestCase):
                     cls.outputs[case["name"], reg] = body
 
     def test_forms_encodings_and_sizes_in_four_registers(self):
-        for case in CASES:
+        for case in STATIC_CASES:
             for reg in REGISTERS:
                 with self.subTest(case=case["name"], reg=reg):
                     expected = b"".join(struct.pack("<I", word) for word in retarget(case["words_r2"], reg))
@@ -161,6 +201,18 @@ class AssemblerOutputTests(unittest.TestCase):
                         baseline = b"".join(struct.pack("<I", word)
                                             for word in retarget(case["baseline_words_r2"], reg))
                         self.assertEqual(self.outputs[case["name"], reg], baseline)
+
+    def test_every_shifted_run_uses_the_three_instruction_form(self):
+        failures = []
+        for case in SHIFTED_CASES:
+            for reg in REGISTERS:
+                expected = b"".join(struct.pack("<I", word)
+                                    for word in retarget(case["words_r2"], reg))
+                actual = self.outputs[case["name"], reg]
+                if actual != expected:
+                    failures.append((case["name"], reg, actual.hex(), expected.hex()))
+        self.assertFalse(failures,
+                         f"{len(failures)} shifted cases differ; first ten: {failures[:10]}")
 
 
 if __name__ == "__main__":
