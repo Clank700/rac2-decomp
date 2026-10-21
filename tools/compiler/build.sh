@@ -58,14 +58,15 @@ python3 $T/pad_div_erratum_branch.py gas/config/tc-mips.c >/dev/null
 python3 $T/r5900_mfc1_interlock.py gas/config/tc-mips.c
 python3 $T/tidy_condjump_fallthru.py gcc/flow.c
 python3 $T/zero_ti_store_barrier.py gcc/haifa-sched.c
+python3 $T/qcopy_pattern.py gcc
 sha256sum --check --quiet <<'SUMS'
 1735d566ed655ff8bfe8a7ef6e9270affcc6adaa721986bdf94f3a8dd5e146e5  gcc/config/mips/mips.c
 d43a3f2274e1ca640c1f877b9aa2a82b2e337298d7d0ebf7e5498fe91b3523f4  gcc/config/mips/mips.h
-9f6894ef4dfaa19708b4fd68203a1424e36b680741969b8b3531c92c0a628e40  gcc/config/mips/mips.md
-b0bbdf38fc1096cb53e4ba5e2d851c39e61f5c9514a642e674c2f8fad0369a93  gcc/toplev.c
+790a54f4772853284ab43a7afc9f592913da8f012b46d43abf5f2a3660467eef  gcc/config/mips/mips.md
+bf2c096f86f5194377fc5abfeb7d795dc75f0d3a4b2f4bb0423f941aaaf7674a  gcc/toplev.c
 7f6129ee785e81c4232a1f518e1520318884ce5ce97e9568061cf6196dd9c072  gcc/haifa-sched.c
-601cd4d6d1a2090b7f5db1a1564af9362a0be5665ca6e73fc8127bf33294d55e  gcc/flags.h
-35a06b9ab08420b29503c6bb97d954ddb3d65571326f6f54ba3f315ad6aac029  gas/config/tc-mips.c
+61f918251ebb9ffa43cbf61d481bfdbe91eb9ae152b7e9b277a17abae8358db3  gcc/flags.h
+00f5dfb4791a8a28fe143dc79ecb2d1137bcf0e9c597ba02ac9f49697830ef28  gas/config/tc-mips.c
 SUMS
 
 # bison 1.28: the 1999 grammars need its skeleton.
@@ -97,4 +98,7 @@ cp gcc/cc1 gcc/cpp "$OUT/" && cp gas/as-new "$OUT/as"
 # (a varargs body) needs them on the preprocessor's path.
 mkdir -p "$OUT/include" && cp "$W/src/gcc/ginclude/"*.h "$OUT/include/"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_zero_ti_store.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy.py"
+python3 "$ROOT/tests/test_qcopy_rtl.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_dli_masks.py"
 echo "compiler in $OUT"
