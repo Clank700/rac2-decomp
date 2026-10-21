@@ -13,7 +13,7 @@ extern int D_L05_00221D10[];
 
 extern int func_002ED688(char *);
 extern void func_002EE678(char *, int);
-extern void func_3065F8(int);
+extern void func_00282C88(int);
 
 extern int func_L05_0037BBB8(char *);
 extern int func_L05_0037BB90(char *);
@@ -82,7 +82,7 @@ void func_L05_0037BD40(char *obj)
     } while (t >= 0);
     found = (int *)func_002ED688((char *)addr);
     *(TI128 *)parent = *(TI128 *)found;
-    func_3065F8((int)found);
+    func_00282C88((int)found);
     found[8] = 0;
     parent[8] = 1;
     found[4] = 0;
