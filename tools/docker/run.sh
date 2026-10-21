@@ -1,24 +1,20 @@
 #!/usr/bin/env bash
-# Run a command inside the rac2-build container (see the Dockerfile next to this file), with the
-# repository mounted at the same path it has on the host. Uses a local image, else the published
-# one, else builds it.
+# The private runtime launcher for the workers (not part of the repository).
 #
-#   bash tools/docker/run.sh tools/compiler/build.sh
-#   bash tools/docker/run.sh python3 tools/compiler/sdk/build.py
+# The upstream tools/docker/run.sh builds and runs the "rac2-build:latest" image.
+# The private runtime uses the derived image "rac2-build-win-runtime:py312" (the
+# upstream image with Python 3.12, which the build needs) and lets the bridge
+# mount the worker's own volume over the worker's path, so that the compilers and
+# the extracted programs live in the worker's private volume.
+#
 #   bash tools/docker/run.sh python3 tools/build.py all
 set -euo pipefail
 repo=$(cd "$(dirname "$0")/../.." && pwd)
 CLI="${CONTAINER_CLI:-$(command -v podman >/dev/null 2>&1 && echo podman || echo docker)}"
-GHCR_IMAGE="${RAC2_BUILD_IMAGE:-ghcr.io/openrac/rac2-build:latest}"
-LOCAL_IMAGE="rac2-build:latest"
-if $CLI image inspect "$LOCAL_IMAGE" >/dev/null 2>&1; then
-  image="$LOCAL_IMAGE"
-elif $CLI image inspect "$GHCR_IMAGE" >/dev/null 2>&1 || $CLI pull "$GHCR_IMAGE"; then
-  image="$GHCR_IMAGE"
-else
-  echo "Building $LOCAL_IMAGE (once; about 15 minutes)..."
-  $CLI build --platform linux/386 -t "$LOCAL_IMAGE" -f "$repo/tools/docker/Dockerfile" "$repo"
-  image="$LOCAL_IMAGE"
+IMAGE="${RAC2_BUILD_IMAGE:-rac2-build-win-runtime:py312}"
+if ! $CLI image inspect "$IMAGE" >/dev/null 2>&1; then
+  echo "The image $IMAGE is missing; it cannot be rebuilt from the upstream Dockerfile." >&2
+  exit 1
 fi
 exec $CLI run --rm --platform linux/386 -v "$repo:$repo" -w "$repo" -e WORK=/tmp/rac2-compiler \
-  "$image" bash -c 'wineserver -p >/dev/null 2>&1 || true; exec "$@"' bash "$@"
+  "$IMAGE" bash -c 'wineserver -p >/dev/null 2>&1 || true; exec "$@"' bash "$@"
