@@ -85,7 +85,27 @@ INCLUDE_ASM("asm/levels", func_L06_00459620);
 
 INCLUDE_ASM("asm/levels", func_L06_00459828);
 
-INCLUDE_ASM("asm/levels", func_L06_00459B18);
+extern float func_0032D788(void *, void *);
+
+void func_L06_00459B18(char *a0) {
+    int count;
+    int i;
+    float f;
+
+    if (a0 == 0) {
+        return;
+    }
+    count = *(int *)a0;
+    i = 0;
+    while (i < count) {
+        int off = i * 16;
+
+        f = func_0032D788(a0 + (off + 16), a0 + (((i + 1) % count) * 16 + 0x10));
+        *(float *)(a0 + off + 0x1C) = f;
+        i++;
+        count = *(int *)a0;
+    }
+}
 
 int func_L06_00459BA8(char *a0, char *a1)
 {
@@ -159,7 +179,25 @@ int func_L06_0045A1B0(char *a0, char *a1, float p1, float p2, float p3, float p4
 
 INCLUDE_ASM("asm/levels", func_L06_0045A2D8);
 
-INCLUDE_ASM("asm/levels", func_L06_0045A490);
+extern void func_003514C8(void *, int, void *);
+
+extern int func_0031EBF8(f32, void *, int, void *);
+
+extern void *D_L06_001BFC98;
+
+int func_L06_0045A490(void *a0, void *a1, f32 f12) {
+    char buf[16];
+    int r;
+
+    func_003514C8(a0, 0, buf);
+    r = func_0031EBF8(f12, buf, 0x21, a0);
+    if (r != 0) {
+        if (D_L06_001BFC98 == a1) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 int func_L06_0045A500(char *a0, int a1, int a2)
 {
