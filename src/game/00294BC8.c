@@ -414,7 +414,47 @@ void func_00297E00(int index, unsigned char *output)
 
 
 
-INCLUDE_ASM("asm/game", func_002980D0);
+extern int D_L00_0028D890[];
+extern void *D_L00_001C5620[];
+extern float D_00139A28[];
+
+/* Copies the colour entries of one band of the resident table.
+   The two base addresses are taken in the retail's order - the source
+   table's first - and the two pointers in the retail's order, the
+   destination's first: that is what puts the two lui/addiu pairs and the
+   two argument registers where the retail has them. */
+void func_002980D0(void)
+{
+    int band = D_001A79F0_3;
+    int first;
+    int last;
+    float *colours;
+    void **table;
+    float *dst;
+    void **src;
+
+    if ((unsigned)band >= 0x13)
+        return;
+    first = D_L00_0028D890[band];
+    last = D_L00_0028D890[band + 1];
+    if (first >= last)
+        return;
+    table = D_L00_001C5620;
+    colours = D_00139A28;
+    dst = &colours[first * 4];
+    src = &table[first];
+    first = last - first;
+    do {
+        float *entry = (float *)src[0];
+        if (entry != 0) {
+            dst[0] = entry[4];
+            dst[1] = entry[5];
+            dst[2] = entry[0x3E];
+        }
+        dst += 4;
+        src += 1;
+    } while (--first != 0);
+}
 
 void func_00298170(void)
 {
