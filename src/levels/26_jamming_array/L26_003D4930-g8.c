@@ -1,31 +1,9 @@
-/* Near miss: func_L26_003D4930 (src/levels/26_jamming_array/L26_002EC840.c), 428 bytes against
-   retail's 436. Compile it as a -g8 file (the group count is read through $gp, in a delay slot).
+#include "include_asm.h"
 
-   Everything before the last statement matches word for word at its place: the prologue, the
-   stamp test that opens the group walk (the entity base D_L26_001B1C1C is the bare `lui`/`lw` of
-   the second name below, the group count the delay-slot $gp load), the walk and its callback
-   registration (func_L26_003D4AE8, matched), the signed `% 8` phase (`movn` form), the ring
-   advance, and both calls. Only the 16-byte copy of the object's +0x10 vector into the ring slot
-   differs, and that is the 128-bit copy wall of docs/COMPILER-NOTES.md ("The 128-bit copy wall
-   is a cost tie in the CSE"):
-
-     retail:  lw v1,0x194(s2) ; addiu a0,s1,0x10 ; sll v1,v1,4 ; addu v1,v1,s2 ;
-              addiu v1,v1,0x80 ; lq v0,0(a0) ; sq v0,0(v1)
-     this:    lw v0,0x194(s2) ; lq v1,0x10(s1) ; sll v0,v0,4 ; ... ; addu v0,v0,s2 ;
-              sq v1,0x80(v0)
-
-   The source address (obj + 0x10) and the destination (state + idx * 16 + 0x80) are both kept in
-   a register with a zero displacement in retail, and both fold their constant into the lq/sq here.
-
-   Tried, all 428 bytes with the folded offsets: the one-line cast copy below; pointer locals for
-   source and destination; `(TI128 *)(state + 0x80) + idx` and `((TI128 *)(state + 0x80))[idx]`;
-   the base kept in a `u8 *` local first; the ring as `TI128 ring[8]` in a struct view of the
-   state (`((Ring *)state)->ring[idx]`); a one-member struct around the TI128; a TI128 temporary
-   between the load and the store. None of the escapes listed in the notes (symbol base, loop
-   pointer, pointer with two values at a join, volatile pointer, offset past 32752) is a plain
-   spelling here, and this body has no join between the pointer computation and the copy.
-
-   Would unblock it: a compiler-side tie-break in find_best_addr (gcc/cse.c) for TImode. */
+/* func_L26_003D4930 is a unit of its own: it needs the opt-in quadword-copy profile and its
+   scheduling barrier (-frac2-qcopy -frac2-qcopy-barrier, config/cflags.txt), which give
+   retail's grouped `lq`/`sq` with register addresses and keep the instructions around the
+   copy on their own side of it. */
 
 typedef unsigned char u8;
 typedef unsigned short u16;
