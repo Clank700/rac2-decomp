@@ -100,6 +100,37 @@ what would unblock it, and let it go up one model tier (docs/AGENT_WORKFLOW.md).
 normal result. C that behaves like the function without matching it is useful to the native port,
 never to `src/` or the progress report.
 
+## Shared blocker knowledge (issue #157)
+
+[Issue #157](https://github.com/OpenRAC/rac2-gc-decomp/issues/157) is the shared place
+to investigate matching blockers, record new constraints and connect verified solutions.
+Before retrying a near miss, investigating a blocked family or changing the toolchain,
+read its maintained summary and current contributor comments. Check cited fixes against
+`origin/master`; do not repeat recorded attempts without a new hypothesis or changed input.
+
+When you find a new blocker, useful evidence or a solution, update **one persistent comment
+per GitHub contributor** in that issue. Find your existing comment first; create one only
+if you have none. All agents acting for the same contributor share that comment. Edit it
+in place as findings change, rather than posting one comment per function, agent or session.
+Edit only your own comment; older historical comments need not be deleted.
+
+Keep each finding concise and actionable:
+
+- Identify the function or family, relevant issue section and current status.
+- Record the source/compiler/assembler profile, hypothesis tested, measured result and
+  remaining difference. A negative result belongs here when it rules out a hypothesis or
+  establishes a new constraint; repeated unchanged attempts add no information.
+- Distinguish hypotheses, local candidates, pending PRs and merged fixes. For a solution,
+  link the PR/commit and state the real checks and placement coverage; size equality alone
+  is not a match. Update the status when the fix lands or later evidence supersedes it.
+- For an unresolved blocker, state the next useful experiment or evidence needed to reopen
+  it. Keep useful C in `nonmatching/` and private artifacts outside GitHub under the sourcing
+  rules; the comment is a summary, not an artifact archive.
+
+Maintainers consolidate confirmed findings in the issue summary, linking the persistent
+comments and merged fixes. Do not add a parallel committed register or per-session report.
+Reservations remain exclusively in #152; #157 does not reserve work.
+
 ## Use the machine
 
 Builds and checks are the slow part of this work, and most of them are independent. Run them
