@@ -75,6 +75,17 @@ Qualify every function in an opted-in unit; address formation alone does not
 settle allocation or scheduling. The recipe requires the authored copy controls
 and RTL-contract tests, including volatile accesses and integer/FPU branches.
 
+`hazard_labels.py` adds `-frac2-hazard-labels`, enabled only for qualified files in
+`config/cflags.txt`. cc1 then writes `.set rac2_hazard_labels` at the top of its output, and
+gas keeps a code label in front of the coprocessor hazard `nop` it inserts after the label
+(an FPU compare before its `bc1f`/`bc1t`, an `mtc1` before a reader of the register), where
+GNU `as` moves the label behind the nop. Retail has the label on the nop at all 198 such
+branch targets, and SN ProDG 2.0's `Ps2EeAs` keeps it there for forward, backward, `j` and
+`.word` references alike (docs/COMPILER-NOTES.md). Without the switch neither program's
+output changes. `src/levels/18_damosel/L18_004308F0.c` and `src/levels/shared/L02_00411530.c`
+are the measured witnesses; forcing the switch on every unit changes only the `.mdebug` of
+one `-g` unit. `tests/test_hazard_labels.py` covers the fixed cases and the controls.
+
 Patch `0052` also preserves the original sign-extending expansion for the isolated
 64-bit sign bit and a sign bit followed by a contiguous low run of at least 32
 ones. Positive contiguous runs wider than 32 bits, with zero bits at both ends,
