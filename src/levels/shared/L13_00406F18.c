@@ -151,7 +151,7 @@ extern float func_002F86B0(float);
 
 typedef int TI128 __attribute__((mode(TI)));
 
-INCLUDE_ASM("asm/levels", func_L13_0040A3B0);
+/* func_L13_0040A3B0 is matched in L13_0040A3B0.c (built with -frac2-zero-ti-barrier). */
 
 
 void func_L13_0040A480(char *a0)
