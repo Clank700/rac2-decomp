@@ -156,9 +156,9 @@ INCLUDE_ASM("asm/levels", func_L14_003DECE0);
 
 INCLUDE_ASM("asm/levels", func_L14_003DF200);
 
-INCLUDE_ASM("asm/levels", func_L14_003DF440);
+/* func_L14_003DF440 lives in the -g8 sibling file (it reads a count through $gp). */
 
-INCLUDE_ASM("asm/levels", func_L14_003DF540);
+/* func_L14_003DF540 lives in the -g8 sibling file (it reads a count through $gp). */
 
 void func_L14_003DF650(unsigned char *arg0) {
     if (arg0[0x20] == 0) {
