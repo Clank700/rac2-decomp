@@ -393,6 +393,8 @@ INCLUDE_ASM("asm/levels", func_L00_003E7270);
 
 INCLUDE_ASM("asm/levels", func_L00_003E7650);
 
+INCLUDE_ASM("asm/levels", func_L00_003E9540);
+
 void func_L00_003E7760(void)
 {
 }
@@ -422,7 +424,6 @@ INCLUDE_ASM("asm/levels", func_L00_003E8A98);
 INCLUDE_ASM("asm/levels", func_L00_003E9490);
 
 INCLUDE_ASM("asm/levels", func_L00_003E9540);
-
 /* Shared native body; original game role is unknown. */
 void func_L00_003E9660(int unused, float *p, int n)
 {
