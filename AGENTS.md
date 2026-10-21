@@ -185,7 +185,7 @@ regenerates them conflicts with every other one. So pull requests do not touch t
 1. Work on a branch from an up-to-date `master` (`git switch -c match/<what> origin/master`).
    Never commit to `master` directly and never push to it.
 2. Before pushing, run all of these and keep their output for the PR:
-   - `python3 tools/build.py all` (every program `OK`),
+   - `python3 tools/build.py all --strict` (every program `OK`, no C fallback to assembly),
    - `python3 -m unittest discover -s tests`, `python3 tests/check_repository.py` and `python3 tools/progress.py --check`.
 3. Push your branch and open a pull request to `master` with the template filled in: what you
    matched or changed, the commands you ran and what they printed, and what you did not run.
