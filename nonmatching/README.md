@@ -1910,3 +1910,4 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_002E3BD8`](game/func_002E3BD8.c) | 628 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles; it calls the VU0 routine func_002E4388, so it can only link once that one is `ASM_FUNC` |
 | [`func_002E5F00`](game/func_002E5F00.c) | 56 | the flag byte, the `mult` and the return match; the copy's address is folded into the `sq` displacement where retail keeps it in a register - the cse `find_best_addr` tie; about thirty source shapes measured |
 | [`func_002E6A60`](game/func_002E6A60.c) | 276 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles |
+| [`func_002E6B78`](game/func_002E6B78.c) | 512 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles |
