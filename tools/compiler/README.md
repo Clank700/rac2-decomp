@@ -59,9 +59,12 @@ and RTL-contract tests, including volatile accesses and integer/FPU branches.
 
 Patch `0052` also preserves the original sign-extending expansion for the isolated
 64-bit sign bit and a sign bit followed by a contiguous low run of at least 32
-ones. Its assembler regression controls exercise neighboring masks and four
-destination registers. This does not change the separate shifted-low-ones case
-`0x0FFFFFFFFFFFFFFE`.
+ones. Positive contiguous runs wider than 32 bits, with zero bits at both ends,
+use the existing shift-based mask expansion. This includes
+`0x0FFFFFFFFFFFFFFE`: three instructions instead of seven. Runs of 32 bits or
+fewer retain their previous expansion, including the 20-bit shifted mask used
+by already-matched C. Regression controls exercise every shifted long-run
+interval, neighboring masks, holes and four destination registers.
 
 `build.sh` stops unless `mips.c`, `mips.h`, `mips.md`, `toplev.c`, `flags.h`,
 `haifa-sched.c` and `tc-mips.c` hash as it

@@ -46,7 +46,7 @@ void func_00121B18(void) {
 
 INCLUDE_ASM("asm/core", func_00122760);
 
-INCLUDE_ASM("asm/core", func_00122800);
+/* func_00122800 is in 00122800.c with its SDK compiler profile. */
 
 extern void func_00122760(double *, DoubleParts *);
 extern DoubleParts *func_00122800(DoubleParts *, DoubleParts *, DoubleParts *);

@@ -66,7 +66,7 @@ d43a3f2274e1ca640c1f877b9aa2a82b2e337298d7d0ebf7e5498fe91b3523f4  gcc/config/mip
 bf2c096f86f5194377fc5abfeb7d795dc75f0d3a4b2f4bb0423f941aaaf7674a  gcc/toplev.c
 7f6129ee785e81c4232a1f518e1520318884ce5ce97e9568061cf6196dd9c072  gcc/haifa-sched.c
 61f918251ebb9ffa43cbf61d481bfdbe91eb9ae152b7e9b277a17abae8358db3  gcc/flags.h
-00f5dfb4791a8a28fe143dc79ecb2d1137bcf0e9c597ba02ac9f49697830ef28  gas/config/tc-mips.c
+8b28e280f7d35f0a22a68ac6c2d9e4986913122d7b078ac520e453e0399100af  gas/config/tc-mips.c
 SUMS
 
 # bison 1.28: the 1999 grammars need its skeleton.

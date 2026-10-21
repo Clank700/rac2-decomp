@@ -3,6 +3,7 @@ src/levels/20_yeedil/L20_0039E158.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/20_yeedil/L20_0039F210.c	-O2 -G0 -ffunction-sections -frac2-qcopy -fno-schedule-insns
 src/core/00117278.c	-O0 -G2 -ffunction-sections -mastra-quad-saves
 src/core/00122630.c	-O2 -G0 -ffunction-sections
+src/core/00122800.c	sdk -O2 -G2 -ffunction-sections
 src/core/00123A00-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
 src/core/00123C28-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
 src/core/001286C8-rc2.c	sdk -O2 -G0 -ffunction-sections -fno-builtin
