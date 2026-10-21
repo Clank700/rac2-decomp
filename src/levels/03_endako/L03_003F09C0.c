@@ -70,7 +70,43 @@ INCLUDE_ASM("asm/levels", func_L03_003F09C0);
 
 INCLUDE_ASM("asm/levels", func_L03_003F11A0);
 
-INCLUDE_ASM("asm/levels", func_L03_003F1470);
+extern void func_L02_00327350(s32, s32);
+extern void func_00288308(s32);
+extern s32 func_002AD860(s32);
+extern void func_0029F338(u8 *);
+extern void func_0029B3E0(s32, s32);
+
+/* Two flag bytes of the boot's state block, reached as members of one object: the stores
+ * are then `lui $at ; sb` pairs that stay out of the call's delay slot, as in retail (a
+ * separate symbol per byte puts the second store into the slot). */
+extern u8 D_001A7B08[0x40] __attribute__((sda));
+extern s32 D_L03_001B2A38[] __attribute__((sda));
+
+/* Raises the two flags, sets the entity up from the state's words 0x58 and 0x5C, runs the two
+ * boot steps with 13 (func_002AD860 returns a value that the caller drops; declaring it that way
+ * is what fixes the register choice of the table address), then hands every entity of the
+ * state's group (word 0x80) to func_0029F338 and ends with func_0029B3E0(0, -1). */
+void func_L03_003F1470(u8 *entity) {
+    u8 *state = *(u8 **)(entity + 0x68);
+    u16 *p;
+    u8 *e;
+
+    func_L02_00327350(*(s32 *)(state + 0x58), *(s32 *)(state + 0x5C));
+    D_001A7B08[0x04] = 1;
+    D_001A7B08[0x3C] = 1;
+    func_00288308(13);
+    func_002AD860(13);
+    for (p = (u16 *)D_L03_001FB5A0[*(s32 *)(state + 0x80)];
+         (*(s32 *)(state + 0x80) & 0xFF) != 0xFF && *(s32 *)(state + 0x80) <= D_L03_001B2A38[0] &&
+         p != 0 && ((p != 0 && (s16)p[-1] >= 0) || p == (u16 *)D_L03_001FB5A0[*(s32 *)(state + 0x80)]);
+         p++) {
+        e = D_L03_001B2A1C + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        func_0029F338(e);
+    }
+    func_0029B3E0(0, -1);
+}
 
 INCLUDE_ASM("asm/levels", func_L03_003F4638);
 

@@ -3,6 +3,7 @@ from contextlib import ExitStack, redirect_stdout
 from io import StringIO
 import json
 import os
+import shlex
 import struct
 from pathlib import Path
 import sys
@@ -61,6 +62,7 @@ class ObjectCache(unittest.TestCase):
                 self.write(directory / name, name)
             self.write(directory / "include/stdarg.h", "/* compiler header */\n")
         self.out = build.BUILD / "obj/src/game/example.c.o"
+        self.run_process = build.subprocess.run
         self.compiler = self.stack.enter_context(patch.object(build.subprocess, "run", side_effect=self.compile))
 
     def write(self, path, contents):
@@ -75,6 +77,83 @@ class ObjectCache(unittest.TestCase):
         build.compile_c(self.source)
         build.compile_c(self.source)
         self.assertEqual(self.compiler.call_count, 1)
+
+    def commands(self):
+        lexer = shlex.shlex(self.compiler.call_args.args[0][-1], posix=True, punctuation_chars=";")
+        lexer.whitespace_split = True
+        commands = [[]]
+        for token in lexer:
+            if token == ";":
+                commands.append([])
+            else:
+                commands[-1].append(token)
+        return [command for command in commands if command]
+
+    def test_assembler_options_reach_only_assembler_in_both_chains(self):
+        for prefix, compiler in (("", build.COMPILER / "cc1"), ("sdk ", build.SDK_COMPILER / "xgcc")):
+            with self.subTest(prefix=prefix):
+                self.write(self.root / "config/cflags.txt", "src/game/example.c\t" + prefix
+                    + "-O2 -G2 -Wa,--r5900-sign-bit=unsigned -Wa,--defsym,example=7\n")
+                build.compile_c(self.source)
+                commands = self.commands()
+                frontend = next(command for command in commands
+                                if command[0].replace("\\", "/") == compiler.as_posix())
+                assembler = next(command for command in commands if command[0] == str(build.COMPILER / "as"))
+                self.assertIn("-O2", frontend)
+                self.assertIn("-G2", frontend)
+                self.assertFalse(any(arg.startswith("-Wa") or arg.startswith("--r5900")
+                                     or arg in ("--defsym", "example=7") for arg in frontend))
+                self.assertEqual(assembler[1:], ["--r5900-sign-bit=unsigned", "--defsym", "example=7",
+                                                  "-o", "x.o", "x.s"])
+
+    def test_default_assembler_arguments_and_option_cache_changes(self):
+        build.compile_c(self.source)
+        assembler = next(command for command in self.commands() if command[0] == str(build.COMPILER / "as"))
+        self.assertEqual(assembler[1:], ["-o", "x.o", "x.s"])
+        for mode in ("unsigned", "signed"):
+            before = self.compiler.call_count
+            self.write(self.root / "config/cflags.txt", "src/game/example.c\t-O2 -Wa,--r5900-sign-bit=" + mode + "\n")
+            build.compile_c(self.source)
+            self.assertEqual(self.compiler.call_count, before + 1)
+            build.compile_c(self.source)
+            self.assertEqual(self.compiler.call_count, before + 1)
+
+    def test_empty_assembler_arguments_fail_before_compiling(self):
+        for arg in ("-Wa", "-Wa,", "-Wa,,--example", "-Wa,--example,", "-Wa,--example,,value"):
+            for prefix in ("", "sdk "):
+                with self.subTest(arg=arg, prefix=prefix):
+                    self.write(self.root / "config/cflags.txt", "src/game/example.c\t" + prefix + arg + "\n")
+                    with self.assertRaisesRegex(SystemExit, "nonempty comma-separated assembler arguments"):
+                        build.compile_c(self.source)
+        self.compiler.assert_not_called()
+        self.assertFalse(self.out.with_suffix(".inputs").exists())
+
+    @unittest.skipIf(os.name == "nt", "The build shell runs in Linux; run this test there too")
+    def test_real_shell_preserves_quoted_arguments_for_both_chains(self):
+        # Authored stand-ins record the actual argv received through the build shell.
+        for directory, name, output in ((build.COMPILER, "cpp", ""),
+                                        (build.COMPILER, "cc1", "x.s"),
+                                        (build.SDK_COMPILER, "xgcc", "x.s"),
+                                        (build.COMPILER, "as", "x.o")):
+            tool = directory / name
+            script = "#!/bin/bash\nprintf '%s\\n' \"$@\" > " + shlex.quote(str(tool.with_suffix(".argv"))) + "\n"
+            if output:
+                script += "printf 'authored output' > " + output + "\n"
+            self.write(tool, script)
+            tool.chmod(0o755)
+        self.compiler.side_effect = self.run_process
+        literal = "--note=space ' quote; $(printf BAD)"
+        for prefix, compiler in (("", build.COMPILER / "cc1"), ("sdk ", build.SDK_COMPILER / "xgcc")):
+            with self.subTest(prefix=prefix):
+                self.write(self.root / "config/cflags.txt", "src/game/example.c\t" + prefix + "-O2 "
+                    + shlex.quote("-DNAME=two words") + " " + shlex.quote("-Wa," + literal) + "\n")
+                build.compile_c(self.source)
+                self.assertEqual((build.COMPILER / "as.argv").read_text().splitlines(),
+                                 [literal, "-o", "x.o", "x.s"])
+                frontend = compiler.with_suffix(".argv").read_text().splitlines()
+                self.assertIn("-DNAME=two words", frontend)
+                self.assertNotIn(literal, frontend)
+                self.assertEqual(self.out.read_bytes(), b"authored output")
 
     def test_changed_executables_invalidate_even_with_preserved_mtime_and_size(self):
         for name in ("cpp", "cc1", "as"):

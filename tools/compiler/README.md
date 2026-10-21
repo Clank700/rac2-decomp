@@ -64,6 +64,45 @@ and both for `src/levels/02_maktar_nebula/L02_003F5430-g8.c`. `build.sh` runs
 built tools: each transformer's insertion points, the case each switch changes, controls
 that keep ordinary output, and the default/disabled equality.
 
+`qcopy_pattern.py` adds `-frac2-qcopy`, enabled only for qualified files in
+`config/cflags.txt`. It lowers an aligned TImode memory assignment to a grouped
+`lq`/`sq` pair with register addresses and a declared `$v0` scratch. Sources
+remain ordinary C assignments. The default keeps normal displacement addressing;
+`-fno-rac2-qcopy` restores that default. Memory flags and alias sets are retained,
+explicitly unaligned accesses take the ordinary path, and no memory barrier is
+added. Scalar transfers and zero stores are not selected by this pattern.
+Qualify every function in an opted-in unit; address formation alone does not
+settle allocation or scheduling. The recipe requires the authored copy controls
+and RTL-contract tests, including volatile accesses and integer/FPU branches.
+
+Patch `0052` also preserves the original sign-extending expansion for the isolated
+64-bit sign bit and a sign bit followed by a contiguous low run of at least 32
+ones. Positive contiguous runs wider than 32 bits, with zero bits at both ends,
+use the existing shift-based mask expansion. This includes
+`0x0FFFFFFFFFFFFFFE`: three instructions instead of seven. Runs of 32 bits or
+fewer retain their previous expansion, including the 20-bit shifted mask used
+by already-matched C. Regression controls exercise every shifted long-run
+interval, neighboring masks, holes and four destination registers.
+
+Some SDK objects use the zero-extending seed for the isolated sign bit instead.
+Patch `0059` adds `--r5900-sign-bit=unsigned` for those measured cases;
+`--r5900-sign-bit=signed` explicitly restores the default. Only the isolated
+64-bit sign-bit constant changes, from `addiu -1; dsll32 31` to
+`ori 0x8000; dsll32 16`. Other constants keep their previous encoding.
+
+Pass assembler options per file through standard `-Wa,` syntax in
+`config/cflags.txt`, for example:
+
+```text
+src/core/00122B00.c	sdk -O2 -G2 -ffunction-sections -Wa,--r5900-sign-bit=unsigned
+```
+
+Both compiler profiles stop at assembly, so `tools/build.py` separates these
+arguments and forwards them to the assembler explicitly. The complete flag
+string and assembler binary remain part of the object-cache key. Empty options
+are rejected, and the tests exercise actual argument transport for both
+frontends, default/explicit profiles, invalid values and unchanged controls.
+
 `build.sh` stops unless `mips.c`, `mips.h`, `mips.md`, `toplev.c`, `flags.h`,
 `haifa-sched.c`, `gcse.c`, `flow.c` and `tc-mips.c` hash as it
 lists. The binaries' own hashes depend on the build host and path, so check a compiler by its

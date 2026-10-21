@@ -119,7 +119,7 @@ INCLUDE_ASM("asm/levels", func_L02_003EA4E0);
 
 INCLUDE_ASM("asm/levels", func_L02_003EAA68);
 
-INCLUDE_ASM("asm/levels", func_L02_003EAE10);
+/* func_L02_003EAE10 is matched in L02_003EAE10-g8.c (built with -frac2-zero-ti-barrier). */
 
 /* func_L02_003EB098 is defined in L02_003DB310-g8.c (it reads D_L02_001B35B8 through $gp). */
 
