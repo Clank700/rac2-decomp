@@ -444,7 +444,7 @@ void func_L02_0038BA28(unsigned char *arg0) {
 
 INCLUDE_ASM("asm/levels", func_L02_0038BD00);
 
-INCLUDE_ASM("asm/levels", func_L02_0038C998);
+/* func_L02_0038C998 is defined in L02_002B5F50-g8.c (it reads $gp data). */
 
 INCLUDE_ASM("asm/levels", func_L02_0038CDE8);
 
