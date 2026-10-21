@@ -642,7 +642,7 @@ INCLUDE_ASM("asm/levels", func_L02_003FE8B8);
 
 INCLUDE_ASM("asm/levels", func_L02_003FF6E8);
 
-INCLUDE_ASM("asm/levels", func_L02_003FF9A0);
+/* func_L02_003FF9A0 is defined in L02_003F5430-g8.c ($gp accesses). */
 
 INCLUDE_ASM("asm/levels", func_L02_003FFDB0);
 
@@ -687,7 +687,7 @@ fail:
 
 INCLUDE_ASM("asm/levels", func_L02_00400720);
 
-INCLUDE_ASM("asm/levels", func_L02_00400948);
+/* func_L02_00400948 is defined in L02_003F5430-g8.c ($gp accesses). */
 
 INCLUDE_ASM("asm/levels", func_L02_00400B10);
 
@@ -705,6 +705,6 @@ INCLUDE_ASM("asm/levels", func_L02_00401638);
 
 INCLUDE_ASM("asm/levels", func_L02_00401BF8);
 
-INCLUDE_ASM("asm/levels", func_L02_00401D38);
+/* func_L02_00401D38 is defined in L02_003F5430-g8.c ($gp accesses). */
 
 INCLUDE_ASM("asm/levels", func_L02_00409D78);
