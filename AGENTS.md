@@ -82,11 +82,15 @@ Say which in the commit. A function that is merely hard is a near miss, not hand
 Some functions cannot be matched from C, and some have cost enough. Know which before another
 attempt; OpenRAC's `docs/workflow/BACKFILL.md` has the measurements and the full procedure.
 
-- **Not a function.** It reads a register it never sets, branches outside its own bytes, or has
-  no `jr $ra`: a piece of its neighbour that the catalogue split off. Do not write C; report it,
-  it is a fix in `tools/levels.py`.
+- **Not a function.** Establish from the surrounding retail bytes that the catalogue split off
+  an internal fragment or padding before proposing a fix in `tools/levels.py`. A missing
+  `jr $ra` alone is not evidence: tail calls and non-returning functions are valid. Register
+  inputs and branches outside the extent also need ABI and control-flow analysis.
 - **Handwritten.** COP2/VU0 instructions, `$at` as a working register, a live instruction after
   the return's delay slot, a trapping `addi`: see "Handwritten assembly" above.
+  Decode with the R5900 instruction set before classifying a body. Its three-operand `mult`
+  writes a GPR result; absence of `mflo` does not make that multiplication unused. `por`,
+  `lq`/`sq` and `ldl`/`ldr` are not sufficient evidence of handwritten code.
 - **A tie.** Three different wordings that compile to the same bytes: a fourth will too. So will
   another compiler or another flag: on rac1, three other compilers fixed none of 492 near misses.
 - **Out of budget.** About ten compiles without getting closer.

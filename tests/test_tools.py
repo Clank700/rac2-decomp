@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 import elf  # noqa: E402
 import levels  # noqa: E402
+import check as function_check  # noqa: E402
 
 
 def j(target):
@@ -29,6 +30,23 @@ def lw(rt, rs, imm):
 
 
 JR_RA, NOP = 0x03E00008, 0
+
+
+class R5900Diagnostics(unittest.TestCase):
+    def test_ee_specific_words_keep_their_operands(self):
+        cases = ((0x00A22818, "mult", ["$a1", "$a1", "$v0"]),
+                 (0x700014A9, "por", ["$v0", "$zero", "$zero"]),
+                 (0x70851389, "pcpyld", ["$v0", "$a0", "$a1"]),
+                 (0x78A20010, "lq", ["$v0", "0x10($a1)"]),
+                 (0x7FA20020, "sq", ["$v0", "0x20($sp)"]),
+                 (0x68A20000, "ldl", ["$v0", "0x0($a1)"]),
+                 (0x6CA20000, "ldr", ["$v0", "0x0($a1)"]))
+        for word, mnemonic, operands in cases:
+            with self.subTest(word=hex(word)):
+                rendered = function_check.disassemble(struct.pack("<I", word), 0x1000)[0]
+                instruction, args = rendered.split(None, 1)
+                self.assertEqual(instruction, mnemonic)
+                self.assertEqual([x.strip() for x in args.split(",")], operands)
 
 
 def code(*w):
