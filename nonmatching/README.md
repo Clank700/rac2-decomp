@@ -1911,3 +1911,4 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_002E5F00`](game/func_002E5F00.c) | 56 | the flag byte, the `mult` and the return match; the copy's address is folded into the `sq` displacement where retail keeps it in a register - the cse `find_best_addr` tie; about thirty source shapes measured |
 | [`func_002E6A60`](game/func_002E6A60.c) | 276 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles |
 | [`func_002E6B78`](game/func_002E6B78.c) | 512 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles |
+| [`func_002EE000`](game/func_002EE000.c) | 564 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles |
