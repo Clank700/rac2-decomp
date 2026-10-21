@@ -9,11 +9,7 @@ INCLUDE_ASM("asm/pal/levels", func_PAL_L00_00351000);
 extern int D_00138344;
 extern void func_L00_0030E010(int a);
 
-int func_PAL_L00_00351088(void)
-{
-    func_L00_0030E010(D_00138344);
-    return 0;
-}
+INCLUDE_ASM("asm/pal/levels", func_PAL_L00_00351088);
 
 extern void func_0027C540_1(long);
 extern void func_L00_0030DFE0(void);
