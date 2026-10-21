@@ -83,7 +83,7 @@ extern s32 D_L11_001A8FF4 __attribute__((sda));
 extern char D_00188660[];
 
 /* The aiming target the level's spot checks measure against. */
-extern char D_00168C0[];
+extern char D_L11_001BA8C0[];
 
 extern int func_00283CF0(float);
 
@@ -267,7 +267,7 @@ void func_L11_00454508(char *p)
         D_L11_001A8FF4 == 0) {
         *(u16 *)(p + 0x34) |= 0x400;
         if (*(u8 *)(p + 0x31) != 0) {
-            if (func_00282E48(p + 0x10, D_00168C0) < 24.0f) {
+            if (func_00282E48(p + 0x10, D_L11_001BA8C0) < 24.0f) {
                 func_002A93B0(p);
                 *(u8 *)(p + 0x6F) = 0x16;
             }
