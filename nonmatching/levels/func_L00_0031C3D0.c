@@ -4,9 +4,13 @@
    what func_00283CE0 returns for the seventh argument), four 16-byte stack vectors
    and a loop that scales two of them, adds two more and calls func_002761F8.
 
-   NEAR MISS, not integrated.  Measured with tools/w9.py (compile the candidate and
-   compare it with the retail bytes word by word):
-     candidate 316 bytes against retail's 340; 25 of 85 words identical.
+   NEAR MISS, not integrated.  Checked in src/levels/shared/L00_00316F60.c with
+   `python3 tools/check.py func_L00_0031C3D0 --diff`:
+
+     00_aranos_tutorial: 316 bytes, expected 340
+     ... (the same at every one of the 27 places)
+     func_L00_0031C3D0: 0 of 27 places match (src/levels/shared/L00_00316F60.c)
+
    The frame (0xA0), the calls, their order, the `div.s $f21,$f1,$f0`, the loop's
    `blez`/`bnez` pair and the `add.s $f20,$f20,$f21` in the back edge's delay slot
    are the retail's; what is left is the register allocation and two instructions
