@@ -507,6 +507,9 @@ void func_00298278(void) {
     D_001393E0.field10 = 0;
 }
 
+/* func_00298298: the attempt is in nonmatching/game/func_00298298.c.  It
+   reproduces the control flow but the register allocation and two dead
+   constants still differ. */
 INCLUDE_ASM("asm/game", func_00298298);
 
 extern unsigned int D_001A7424[] __attribute__((sda));
