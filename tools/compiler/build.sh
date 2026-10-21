@@ -63,15 +63,17 @@ python3 $T/gcse_unsplit_edges.py gcc/gcse.c
 python3 $T/keep_block_order.py gcc/flow.c
 python3 $T/qcopy_pattern.py gcc
 python3 $T/hazard_labels.py .
+python3 $T/no_annulled_wide_stores.py gcc/reorg.c
 sha256sum --check --quiet <<'SUMS'
 18e6fffb84ed8d7edd504167462a69cc8a8bedfc260ddae0dd17f21c5830fb47  gcc/config/mips/mips.c
 d43a3f2274e1ca640c1f877b9aa2a82b2e337298d7d0ebf7e5498fe91b3523f4  gcc/config/mips/mips.h
 790a54f4772853284ab43a7afc9f592913da8f012b46d43abf5f2a3660467eef  gcc/config/mips/mips.md
-7479c2cc0f362101cb9594285397778e66e272b456c43dcbaa52df3eedf5678f  gcc/toplev.c
+120d49a9bc715ca05daed245b11d400ce27d065f684bf2b5b7ae4f3aa7ac4cc0  gcc/toplev.c
 7f6129ee785e81c4232a1f518e1520318884ce5ce97e9568061cf6196dd9c072  gcc/haifa-sched.c
-2d88cae8090695044828a35909f78077c76ca9e5ab9190f9bbc5305bdd894a35  gcc/flags.h
+ba4fea7675fe6db3ae46d4045ee5f9568d2f7b5315403e7fb977425720326a02  gcc/flags.h
 02f386e5e25a90684b912fbb11ce1a634a40a80dbefc93b20b0546259e1f8bfc  gcc/gcse.c
 ba947e44256e3d5144e353a4976aac931a4941acc8dcb1dc0fda99fa8b7b504a  gcc/flow.c
+57ed3b11b677ad163a189adf26b0c32b1c856123403de158a08859644bc1b637  gcc/reorg.c
 89227b294163fdd860f559d67c1e4bce6ea2b3b1c86f16a3812401f7b187e1ff  gas/config/tc-mips.c
 SUMS
 
@@ -110,4 +112,5 @@ RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy.py"
 python3 "$ROOT/tests/test_qcopy_rtl.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_dli_masks.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_hazard_labels.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_no_annulled_wide_stores.py"
 echo "compiler in $OUT"
