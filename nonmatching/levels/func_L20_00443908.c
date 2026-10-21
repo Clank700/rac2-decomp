@@ -1,3 +1,25 @@
+/* wave 4 (20_yeedil, 2026-10-20, worker 03): the wall is now understood.
+   The candidate below is EXACT: every instruction of the retail is present, in the retail's
+   order, with the retail's register allocation - only the `por` is missing, and the size is
+   260 against 264.
+   The `por` needs the zero TImode constant to have TWO uses: the chain's compiler only
+   puts a TImode constant in a register when the constant has two or more uses, and with
+   two uses it emits `por $v0,$zero,$zero` in EXACTLY the retail's place (between the
+   `lwc1 $f1,0x20($s2)` and the `lwc1 $f0,0x8($s2)`, i.e. after the first call's delay
+   slot) with the same nine instructions between it and the `sq` - but a second `sq` comes
+   with it, and the retail has only one.
+   Measured and NOT enough: the second use as a second store of the same vector (the DSE
+   removes it and the constant has one use again), as a store of a dead local (removed as
+   well), as a local TI128 variable that is copied (the copy propagation collapses it),
+   through a volatile pointer, with the TI128 typedef'd over int / long long / float /
+   double / char (all the same), with the store written as `*(TI128 *)p = 0`,
+   `= (TI128)0` or through a union, and with the zero store moved before the first call
+   (the store then moves to the top of the function and the order is wrong).
+   So the missing piece is a second use of the zero constant that leaves no trace in the
+   final code; nothing tried produces it.  The fold pass (tools/compiler/transformers/
+   fold_zero_ti_store.py) is not the blocker here: with two uses it does not fold (the
+   register is live after the first store, and the second store's scan back stops at the
+   first `sq`), with one use there is no `por` to fold. */
 /* 0 of 1 places match - last line: 20_yeedil: 260 bytes, expected 264
    Near miss from src/levels/20_yeedil/L20_0043ECB0.c: 260 bytes of candidate against
    264 bytes of retail.  Every instruction of the retail is present, in the retail's order,

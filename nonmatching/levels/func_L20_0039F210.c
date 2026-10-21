@@ -78,3 +78,127 @@ void func_L20_0039F210(char *arg0, char *arg1, int arg2) {
     *(int *)state = 5;
     *(int *)(state + 0xC) = arg2;
 }
+
+/* ---- level-20 wave 4, worker 05 (2026-10-20): the copy wall measured once more ----
+ *
+ * The state stores and the frame are the retail's; the copy is the only difference:
+ * the retail materialises the destination pointer (`addiu $v1,$a0,0x10 ; lq $v0,0($a1)
+ * ; sq $v0,0($v1)`) and this cc1 folds the offset into the store (`sq $v0,0x10($a0)`).
+ *
+ * This wave added these spellings to the list above (all of them fold): the
+ * destination in a `char *`, a `TI128 *`, a `void *` and an `u8 *` variable, the
+ * destination computed by `+=`, the destination copied through a second variable, the
+ * destination assigned in one branch and in the other (the "different values in two
+ * branches" escape: it keeps the address in a register but costs a second `addiu` and
+ * a `movn`), a `do {...} while (0)` around the copy (the loop is removed again and the
+ * fold comes back), a `for` loop that carries the pointer (it keeps the address in a
+ * register - `addu $4,$4,16 ; ... ; sq $2,0($4)` - but the loop costs 32 bytes over),
+ * a `volatile` store, a `volatile` pointer object, a 16-byte struct assignment
+ * (ldl/ldr/sdl/sdr), a struct with a TI128 member (the same lq/sq, still folded), and
+ * the per-file flags `-O1`, `-O3`, `-G8`, `-fno-expensive-optimizations`, `-fno-gcse`,
+ * `-fno-strength-reduce`, `-mno-split-addresses`, `-fno-schedule-insns` and
+ * `-fno-schedule-insns2` (none of them changes the shape).
+ *
+ * Two things this wave measured that the next worker can use:
+ *
+ *  1. THE RELOAD IS WHAT MATERIALISES THE ADDRESS.  With the pointer in a variable the
+ *     front end builds the MEM's address as a pseudo (cc1 -da shows
+ *     `(set (mem:TI (reg/v:SI 87) 0) ...)`) and the CSE's find_best_addr() replaces the
+ *     pseudo by the `plus` (the .cse dump shows
+ *     `(set (mem:TI (plus:SI (reg/v:SI 84) (const_int 16)) 0) ...)`); the reload then
+ *     prints the constant as the displacement.  The retail's shape is the one the reload
+ *     prints when the address is still the pseudo, and the pseudo's value is then
+ *     computed by an `addiu` of its own.
+ *
+ *  2. THE CSE'S TIE IS A COIN FLIP.  find_best_addr() substitutes the `plus` only when
+ *     the class member it finds is not more expensive than the class head; the class
+ *     holds the pseudo and the `plus`, and which of the two the hash lookup returns
+ *     decides whether the substitution happens at all.  That is why the same expression
+ *     folds in one function and not in another, and it is why a spelling that changes
+ *     the class (an extra use of the pointer, a second name for it, a different order of
+ *     the statements) can flip it.  Measured: in func_L20_0039E158 the copy's two
+ *     addresses both fold, and adding a third use of one of them does not change that.
+ *
+ * This body belongs in the `-G8` unit?  No: it reaches no global through $gp. */
+
+/* ---- level-20 wave 5, worker 05 (2026-10-21): the copy wall, measured from the
+ * compiler's own source ----
+ *
+ * The wall is not a spelling problem: it is the CSE.  With the tree under
+ * build/downloads/gnu-ee-binutils-gcc-1.1.tar.gz unpacked and
+ * tools/compiler/patches/ applied, the mechanism is in gcc/cse.c's
+ * find_best_addr() and in gcc/config/mips/mips.h:
+ *
+ *  1. The front end builds the address of a 128-bit access as the pointer's
+ *     pseudo: `(set (mem:TI (reg/v:SI 86) 0) (reg:TI 88))` (cc1 -da, the .rtl
+ *     dump), and the pseudo's value is
+ *     `(set (reg/v:SI 86) (plus:SI (reg/v:SI 84) (const_int 16)))`.
+ *  2. The CSE puts the pseudo and the plus in ONE equivalence class (the
+ *     class is kept sorted by COST(): a pseudo costs 1, a hard register 2 and
+ *     a non-register notreg_cost() = rtx_cost()*2, so the plus costs 10).
+ *  3. find_best_addr() replaces the address with the class member that has
+ *     the highest rtx cost among the members whose CSE_ADDRESS_COST equals
+ *     the address's own.  ADDRESS_COST(REG) is 1 and
+ *     mips_address_cost(plus(reg,small const)) is also 1 (SMALL_INT is the
+ *     whole 16-bit range on MIPS), so the plus wins on the rtx cost and the
+ *     offset is folded into the instruction.
+ *  4. The reload then prints the offset as the displacement, because
+ *     GO_IF_LEGITIMATE_ADDRESS accepts plus(reg,const_int) for TImode while
+ *     the offset is in [-32768, 32752].
+ *
+ * So the address stays in a register exactly when the plus is NOT in the
+ * class of the address pseudo, that is when the pointer's value is not a
+ * plus of a register.  Everything else follows from that, and it is what
+ * this wave measured:
+ *
+ *  * a SYMBOL base: `*(TI128 *)(SYM + 0x10)` gives
+ *    `lui $2,%hi(SYM+16); addiu $2,$2,%lo(SYM+16); sq $3,0($2)` - the address
+ *    IS materialised, because mips_address_cost(plus(symbol,16)) is 3 and not
+ *    1 and because GO_IF_LEGITIMATE_ADDRESS rejects a constant address for
+ *    TImode on the R5900 (`! (TARGET_MIPS5900 && mode == TImode)`);
+ *  * a pointer LOADED FROM MEMORY: `TI128 *d = *(TI128 **)(arg0 + 0x68);`
+ *    gives `lw $3,0($a0); lq $2,0($a1); sq $2,0($3)` - the load's value is
+ *    not a plus, so it is not in the class;
+ *  * a CALL RESULT: `TI128 *d = getp();` gives the same shape;
+ *  * a pointer CARRIED BY A LOOP: `for (i=0;i<2;i++) *d = v;` gives
+ *    `addu $4,$4,16; lq $2,0($a1); sq $2,0($4)` - the address stays in a
+ *    register, but the loop costs 32 bytes over the retail.
+ *
+ * This wave also measured, and all of them FOLD (the offset goes into the
+ * instruction): a pointer variable of type char *, TI128 *, void *, u8 * and
+ * long long *; the pointer assigned with `=`, with `+=` and copied through a
+ * second variable; two C names for one pointer; the pointer used twice, three
+ * times and kept across a call; the pointer assigned in one branch and in the
+ * other; the pointer defined in one basic block and used in another (the
+ * CSE's jump equivalence carries the value across); a `do {} while (0)`; a
+ * 16-byte struct assignment (ldl/ldr/sdl/sdr) and a 16-byte aligned struct
+ * assignment (ld/sd); a struct with a TI128 member; a union; `volatile` on
+ * the store, on the pointee and on the pointer object (the pointer object
+ * costs a stack round trip: `subu $sp,$sp,16; addu $v1,$a0,16; sw $v1,0($sp);
+ * lq $v0,0($a1); lw $v1,0($sp); sq $v0,0($v1)`); an integer cast (signed and
+ * unsigned); a `long long` address (daddu plus dsll/dsra); a stack buffer
+ * addressed as `buf + 0x20` (with the buffer in a variable and with the
+ * variable's address taken, and with the pointer passed to a call as well -
+ * the call's argument setup materialises the address in its own register and
+ * the store still folds: `addu $4,$sp,16; lq $2,0($a1); sq $2,16($sp)`); and
+ * the per-file flags -O1, -O3, -G8, -fno-expensive-optimizations, -fno-gcse,
+ * -fno-strength-reduce, -fforce-addr, -fforce-mem, -mno-split-addresses,
+ * -fno-schedule-insns and -fno-schedule-insns2 (none of them changes the
+ * shape).  This compiler has no -fno-cse.
+ *
+ * The conclusion is that the retail's shape here is the game's own inline
+ * assembly copy macro (its operand has to live in a register) and that src/,
+ * which forbids inline assembly, cannot spell it.  The compiler-side way out
+ * would be to make find_best_addr() keep the pseudo for a TImode address -
+ * a change in tools/compiler/, not in the source.
+ *
+ * The rest of this body IS reachable: the frame is empty, the state pointer
+ * is `*(char **)(arg0 + 0x68)`, the two stores are `*(int *)(state + 0xC) =
+ * arg2` and `*(int *)state = 5`, and the only difference left is the copy.
+ * The retail puts the state pointer in $a1 and the constant 5 in $v0; a
+ * candidate that writes the two stores in the order
+ * `*(int *)(state + 0xC) = arg2;` then `*(int *)state = 5;` gets the state
+ * pointer into $a1 but the constant into $v1 instead of $v0, and the
+ * opposite order gets the constant into $a1 and the pointer into $v1.
+ *
+ * This body belongs in the -G8 unit?  No: it reaches no global through $gp. */

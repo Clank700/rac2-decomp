@@ -62,6 +62,8 @@ INCLUDE_ASM("asm/levels", func_L20_00441CB8);
 INCLUDE_ASM("asm/levels", func_L20_004421A8);
 
 INCLUDE_ASM("asm/levels", func_L20_004424A0);
+/* func_L20_004424A0 reads four constants through $gp: its near miss is in
+   nonmatching/levels/func_L20_004424A0.c and belongs in the -G8 sibling. */
 
 INCLUDE_ASM("asm/levels", func_L20_00442550);
 
@@ -148,6 +150,8 @@ INCLUDE_ASM("asm/levels", func_L20_004431E0);
 extern unsigned int D_L20_001B2F9C __attribute__((sda));
 extern int func_L03_003CA138(char *);
 INCLUDE_ASM("asm/levels", func_L20_004499E8);
+/* func_L20_004499E8 reads a global through $gp: its near miss is in
+   nonmatching/levels/func_L20_004499E8.c and belongs in the -G8 sibling. */
 extern int func_L20_00449AC8(char *);
 
 extern void func_0039BDF0(char *, char *, int, int);
@@ -212,6 +216,8 @@ INCLUDE_ASM("asm/levels", func_L20_00443A10);
 INCLUDE_ASM("asm/levels", func_L20_00443B60);
 
 INCLUDE_ASM("asm/levels", func_L20_00443CF0);
+/* func_L20_00443CF0 is one word pair away: its near miss is in
+   nonmatching/levels/func_L20_00443CF0.c. */
 
 INCLUDE_ASM("asm/levels", func_L20_00443D58);
 
@@ -223,9 +229,8 @@ INCLUDE_ASM("asm/levels", func_L20_00444018);
    $gp and needs its own -fno-schedule-insns). */
 
 
-INCLUDE_ASM("asm/levels", func_L20_00444138);
-/* func_L20_00444138 reads a global through $gp: its near miss is in
-   nonmatching/levels/func_L20_00444138.c and belongs in the -G8 sibling. */
+/* func_L20_00444138 is defined in L20_00444138-g8.c (it reads a global through $gp and
+   needs its own -mno-split-addresses). */
 
 INCLUDE_ASM("asm/levels", func_L20_004441D8);
 
@@ -262,6 +267,8 @@ void func_L20_00444C68(int arg0) {
 INCLUDE_ASM("asm/levels", func_L20_00444CA8);
 
 INCLUDE_ASM("asm/levels", func_L20_004450D8);
+/* func_L20_004450D8 reads a global through $gp: its near miss is in
+   nonmatching/levels/func_L20_004450D8.c and belongs in the -G8 sibling. */
 
 INCLUDE_ASM("asm/levels", func_L20_004451C0);
 
