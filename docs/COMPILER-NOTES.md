@@ -1655,8 +1655,9 @@ bit uses `addiu -1` followed by `dsll32 31`; a sign bit plus a contiguous low ru
 of at least 32 ones keeps the existing sign-extending `lui` path. Other values
 retain patch `0052`'s previous paths. These cases unblock the retained public
 Newlib `_strtol_r` (`func_00117278`, 884 bytes) and GCC double packer
-(`func_00122630`, 300 bytes), one placement each. `0x0FFFFFFFFFFFFFFE` remains a
-different case; this does not establish a general repair for every mask.
+(`func_00122630`, 300 bytes), one placement each. The positive shifted-mask
+case is qualified separately below; these are bounded rules, not a general
+repair for every mask.
 
 The packer and its callers share the 24-byte `DoubleParts` declaration. The
 `func_001175F0` wrapper declares the callee's actual long return and forwards
@@ -1670,3 +1671,59 @@ in `.mdebug`. Remaining attempts `func_00335370`, `func_L20_0044A838` and
 `func_L00_002A6008` now have the correct copy sizes but still differ in ordinary
 allocation or scheduling. Their improved sources and specific remaining
 differences stay in `nonmatching/`; they receive no match credit.
+
+### Positive shifted masks and double addition
+
+The SDK-profile double adder `_fpadd_parts` (`func_00122800`) uses
+`0x0FFFFFFFFFFFFFFE` twice. Patch `0052` now lets positive contiguous runs wider
+than 32 bits, with zero bits at both ends, reach the existing shift-based mask
+expansion. Each use becomes three instructions instead of seven; the retained
+public GCC source becomes 576 bytes instead of 608. The function lives in its
+own unit with `sdk -O2 -G2 -ffunction-sections` and shares `DoubleParts` with
+the packer and callers. The game compiler is not the matching profile for
+this source; earlier retained notes conflated the two profiles.
+
+The width boundary matters: applying this rule to all shifted runs would also
+change the 20-bit mask `0x00FFFFF000000000` in already-matched game code.
+Runs of at most 32 bits, masks with holes, and sign-bit cases keep their prior
+paths. The selector uses unsigned arithmetic without division or undefined
+shifts. It selects a family of values, not a particular function or address.
+
+`tests/test_dli_masks.py` checks all 465 positive long-run intervals with four
+destination registers and 30 fixed boundary/neighbor controls: 1,980 assembled
+outputs. A same-source comparison of all 780 configured units changes
+non-debug sections only in the new double-adder unit; eleven units differ only
+in `.mdebug`. The complete strict build verifies all 28 programs with no C
+fallback, and the container suite passes 73 tests.
+
+### Double multiplication: retain the union and select the assembler seed
+
+`func_00122B00` (`dpmul`, 680 bytes) exposed a source-representation issue:
+the retained simplification of `fp-bit.c` replaced its fraction union with a
+scalar. In the SDK compiler, a direct union-member access has alias-set zero.
+Restoring `union { unsigned long long ll; unsigned int l[2]; }` adds the real
+store-to-store dependence that keeps the fraction store before the class
+constant. The delay-slot pass then emits the retail `bnel` with its annulled
+fraction store. No scheduler modification, artificial barrier or register
+constraint is needed. The enum spelling is immaterial for this witness.
+
+The shared `DoubleParts` header and all its users retain this original union.
+Comparing the four existing units before and after the type correction gives
+identical object sections. Disabling pre-reload scheduling was only diagnostic:
+it repaired the rounding tail but changed allocation and produced 688 bytes.
+Disabling post-reload scheduling left that tail wrong and changed the prologue.
+
+Two isolated sign-bit loads still require the zero-extending assembler seed.
+The default sign-extending seed is needed by already-qualified game code, so
+patch `0059` exposes a per-object `--r5900-sign-bit=unsigned` option instead of
+changing the default. `-Wa,` forwards it from the existing per-file flag table;
+the same source-built assembler handles both forms. Explicit `signed` restores
+the default, and invalid/missing values fail. Both forms compute the same value;
+qualification requires the particular retail encoding.
+
+The assembler controls cover all 1,980 authored outputs in default, signed and
+unsigned profiles. A same-source A/B over 781 configured units changes code only
+in the new multiplier; eleven units differ only in `.mdebug`. All 80 container
+tests pass. `func_00335370` remains a separate nonmatch: its post-reload scheduler
+moves the independent return-address restore into a load-to-address latency gap.
+The retained note records the measured phase and unsuccessful controls.

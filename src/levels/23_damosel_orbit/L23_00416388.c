@@ -211,7 +211,7 @@ INCLUDE_ASM("asm/levels", func_L23_0041B9F0);
 
 INCLUDE_ASM("asm/levels", func_L23_0041C0E8);
 
-INCLUDE_ASM("asm/levels", func_L23_0041C578);
+/* func_L23_0041C578 is defined in L23_00416388-g8.c (it reads $gp data). */
 
 /* func_L23_0041C6B0 is matched in L23_0041C6B0-g8.c (built with -frac2-qcopy). */
 
