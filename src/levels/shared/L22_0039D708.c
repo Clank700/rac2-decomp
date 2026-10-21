@@ -115,8 +115,6 @@ INCLUDE_ASM("asm/levels", func_L22_003A42E8);
 
 INCLUDE_ASM("asm/levels", func_L22_003A4490);
 
-INCLUDE_ASM("asm/levels", func_L22_003A45F0);
-
 typedef struct Ctl_003A47E8 {
     int f0;
     int f4;

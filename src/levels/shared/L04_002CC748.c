@@ -211,7 +211,81 @@ INCLUDE_ASM("asm/levels", func_L04_00365300);
 
 INCLUDE_ASM("asm/levels", func_L04_00378838);
 
-INCLUDE_ASM("asm/levels", func_L04_0039FA08);
+extern void func_00115484(void *dst, s32 value, s32 size);
+
+/* the header of one 0x1190-byte ripple patch */
+typedef struct {
+    u8 pad00[0x20];
+    s32 field20;
+    s32 field24;
+    f32 field28;
+    f32 field2C;
+    f32 field30;
+    f32 field34;
+    f32 field38;
+    f32 field3C;
+    f32 field40;
+    s32 field44;
+} RipplePatch;
+
+/* clears the three grids of every ripple patch and sets the patch's header fields */
+void func_L04_0039FA08(u8 *base, s32 count) {
+    s32 i;
+    s32 j;
+    u8 *g1;
+    u8 *g2;
+    u8 *g3;
+    u8 *g4;
+    u8 *g5;
+    u8 *g6;
+    u8 *g7;
+    u8 *g8;
+    f32 small;
+
+    for (i = 0; i < count; i++) {
+        g8 = base + (i * 0x1190 + 0x5D0);
+        g7 = base + (i * 0x1190 + 0x590);
+        g6 = base + (i * 0x1190 + 0x510);
+        g5 = base + (i * 0x1190 + 0x550);
+        g4 = base + (i * 0x1190 + 0x4D0);
+        g3 = base + (i * 0x1190 + 0x490);
+        g2 = base + (i * 0x1190 + 0x450);
+        g1 = base + (i * 0x1190 + 0x50);
+        small = -0.0016f;
+        for (j = 0; j < 3; j++) {
+            func_00115484(g1, 0, 0x400);
+            g1 += 0x5C0;
+            func_00115484(g2, 0, 0x40);
+            g2 += 0x5C0;
+            func_00115484(g3, 0, 0x40);
+            g3 += 0x5C0;
+            func_00115484(g4, 0, 0x40);
+            g4 += 0x5C0;
+            func_00115484(g5, 0, 0x40);
+            g5 += 0x5C0;
+            func_00115484(g6, 0, 0x40);
+            g6 += 0x5C0;
+            func_00115484(g7, 0, 0x40);
+            g7 += 0x5C0;
+            func_00115484(g8, 0, 0x18);
+            g8 += 0x5C0;
+        }
+        {
+            RipplePatch *q = (RipplePatch *)(base + i * 0x1190);
+
+            q->field30 = 1.5707964f;
+            q->field34 = -1.5707964f;
+            q->field38 = 0.02f;
+            q->field3C = -0.031f;
+            q->field40 = 0.03f;
+            q->field20 = 0;
+            q->field24 = 0;
+            q->field28 = small;
+            q->field2C = small;
+            q->field44 = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L04_0039FC28);
 
