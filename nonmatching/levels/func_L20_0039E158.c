@@ -59,3 +59,72 @@ void func_L20_0039E158(char *arg0) {
         *(TI128 *)(s0 + 0x1F0) = *(TI128 *)((char *)p + 0x10);
     }
 }
+
+/* ---- level-20 wave 4, worker 05 (2026-10-20): the copy wall measured once more ----
+ *
+ * Everything but the copy is the retail's, instruction for instruction: the frame
+ * (0x20), the two saved registers, the branch on `*(s32 *)(state + 0x27C)`, the
+ * `daddu $a2,$zero,$zero` in its delay slot, the float pair (`mtc1 $zero,$f12`,
+ * `mov.s $f13,$f12`) before the call, the `daddu $a3,$zero,$zero` in the call's delay
+ * slot, the `bnez` with the store of the pointer in its delay slot, the reload of
+ * `*(s32 *)(s1 + 0xB8)` after the two stores and the store of it at +0x200.
+ *
+ * The copy: the retail materialises BOTH addresses
+ *     addiu $a1,$s0,0x1F0 ; addiu $a0,$v1,0x10 ; lq $v0,0($a0) ; sq $v0,0($a1)
+ * and this cc1 folds each constant offset back into the `lq`/`sq`
+ *     lq $v0,0x10($v1) ; sq $v0,0x1F0($s0)
+ * - two instructions, the eight bytes of difference.
+ *
+ * This wave added the following spellings to the list above (all of them fold):
+ * a `char *`/`TI128 *`/`u8 *` destination variable, a source variable of the same three
+ * types, the destination and the source each in their own variable, a `volatile` store
+ * through a variable, a `volatile` pointer object, a pointer copied through a second
+ * variable, a pointer computed by `+=`, a pointer assigned in one branch and in the
+ * other (the "different values in two branches" escape: it does keep the address in a
+ * register, but it costs a second `addiu` and a `movn`), a loop that carries the
+ * pointer and increments it at the end of the body (it does keep the address in a
+ * register - `addu $4,$4,16 ; ... ; sq $2,0($4)` - but the loop costs 36 bytes over),
+ * a `do {...} while (0)` around the copy (the loop is removed again and the fold comes
+ * back), the store before the call and after the call, and the per-file flags `-O1`,
+ * `-O3`, `-G8`, `-fno-expensive-optimizations`, `-fno-gcse`, `-fno-strength-reduce`,
+ * `-mno-split-addresses`, `-fno-schedule-insns` and `-fno-schedule-insns2` (none of
+ * them changes the shape).
+ *
+ * The rule that holds, measured in the compiler source: the reload pass accepts
+ * `plus(reg,const_int)` for TImode while the offset is in [-32768, 32752]
+ * (GO_IF_LEGITIMATE_ADDRESS in config/mips/mips.h), so the address is folded into the
+ * displacement; the CSE's find_best_addr() replaces the pseudo of a pointer variable by
+ * the same `plus`, because ADDRESS_COST(REG) and mips_address_cost(plus(reg,small
+ * const)) are both 1 and the rtx-cost tie-break goes to the plus.  The retail's shape
+ * is the one the reload prints when the address is still the pseudo - and the only
+ * escape that reaches it (an offset outside [-32768, 32752], or a base that is not a
+ * register) carries the wrong immediate.
+ *
+ * This body belongs in the `-G8` unit?  No: it reaches no global through $gp. */
+
+/* ---- level-20 wave 5, worker 05 (2026-10-21): the copy wall, from the compiler's
+ * own source ----
+ *
+ * The wall and every escape measured are written down in the note on
+ * func_L20_0039E770 in this directory: the CSE's find_best_addr() folds the
+ * offset of a `plus` of a register into the lq/sq, and the address only
+ * stays in a register when the pointer's value is not a plus of a register
+ * (a symbol, a load, a call result, or a pointer carried by a loop).
+ *
+ * Two spellings measured this wave that the earlier notes do not list, and
+ * both fold:
+ *
+ *  * the offset does not matter: 0x10, 0x80, 0x100, 0x1F0 and 0x230 all
+ *    fold (mips_address_cost() counts a 16-bit offset as cheap on MIPS,
+ *    SMALL_INT is the whole signed 16-bit range);
+ *  * a stack buffer addressed as `buf + 0x20`, with the buffer in a
+ *    variable, with the variable's address taken, with the pointer passed to
+ *    a call, and with the same pointer passed to two calls: the address is
+ *    hoisted into the argument register (`addu $4,$sp,16`) and the 128-bit
+ *    store still folds (`sq $2,16($sp)`), also when the pointer is then kept
+ *    in $s0.
+ *
+ * The two addresses of this body's copy are `state + 0x1F0` and `p + 0x10`,
+ * both with a runtime base, so neither escape applies.
+ *
+ * This body belongs in the -G8 unit?  No: it reaches no global through $gp. */
