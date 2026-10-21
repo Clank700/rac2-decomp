@@ -90,9 +90,81 @@ INCLUDE_ASM("asm/levels", func_L02_003F54D8);
 
 /* func_L02_003F5710 is defined in L02_003F5430-g8.c (three $gp accesses). */
 
-INCLUDE_ASM("asm/levels", func_L02_003F9AF0);
+/* Maps the values 0, 1, 3, 5, 6, 7, 8, 10, 11 and 13 to 0..9 (in no regular order) and any other
+   value to -1. The dispatch reads the level's own jump table (fourteen words in the level's data
+   at 0x2A5520, one per value); `cases` only keeps the labels alive, and each label is named after
+   the value that reaches it. */
+s32 func_L02_003F9AF0(u32 a0) {
+    static void *cases[14] = {&&c0, &&c1, &&dflt, &&c3, &&dflt, &&c5, &&c6, &&c7, &&c8, &&dflt,
+                              &&c10, &&c11, &&dflt, &&c13};
+    if (a0 < 14)
+        goto *D_L02_002A5520[a0];
+    goto dflt;
+c0:
+    return 0;
+c6:
+    return 1;
+c3:
+    return 2;
+c1:
+    return 3;
+c5:
+    return 4;
+c7:
+    return 5;
+c10:
+    return 6;
+c11:
+    return 7;
+c8:
+    return 8;
+c13:
+    return 9;
+dflt:
+    return -1;
+}
 
-INCLUDE_ASM("asm/levels", func_L02_003F9B70);
+/* Maps a value below 14 to an id (0x31 to 0x3B and 0x91 to 0x93, in no regular order) and any
+   other value to -1. The dispatch reads the level's own jump table (fourteen words in the level's
+   data at 0x2A5560, one per value); `cases` only keeps the labels alive, and each label is named
+   after the value that reaches it. */
+s32 func_L02_003F9B70(s32 a0) {
+    static void *cases[14] = {&&c0, &&c1, &&c2, &&c3, &&c4, &&c5, &&c6, &&c7, &&c8, &&c9, &&c10,
+                              &&c11, &&c12, &&c13};
+    if ((u32)a0 < 14)
+        goto *D_L02_002A5560[a0];
+    goto dflt;
+c0:
+    return 0x31;
+c2:
+    return 0x32;
+c3:
+    return 0x33;
+c1:
+    return 0x34;
+c4:
+    return 0x35;
+c5:
+    return 0x36;
+c6:
+    return 0x37;
+c7:
+    return 0x38;
+c9:
+    return 0x39;
+c10:
+    return 0x3A;
+c11:
+    return 0x3B;
+c8:
+    return 0x91;
+c12:
+    return 0x92;
+c13:
+    return 0x93;
+dflt:
+    return -1;
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003F9C10);
 
@@ -634,7 +706,47 @@ INCLUDE_ASM("asm/levels", func_L02_003FD8B8);
 
 INCLUDE_ASM("asm/levels", func_L02_003FDDE8);
 
-INCLUDE_ASM("asm/levels", func_L02_003FE1B0);
+/* Maps a value below 14 to an id (0x2F48 to 0x2F51, 0x2F6E and 0x3240 to 0x3242, in no regular
+   order); any other value gives 0x2F48. The dispatch reads the level's own jump table (fourteen
+   words in the level's data at 0x2A5600, one per value); `cases` only keeps the labels alive, and
+   each label is named after the value that reaches it. */
+s32 func_L02_003FE1B0(u32 a0) {
+    static void *cases[14] = {&&c0, &&c1, &&c2, &&c3, &&c4, &&c5, &&c6, &&c7, &&c8, &&c9, &&c10,
+                              &&c11, &&c12, &&c13};
+    if (a0 < 14)
+        goto *D_L02_002A5600[a0];
+    goto dflt;
+c0:
+    return 0x2F48;
+c2:
+    return 0x2F49;
+c4:
+    return 0x2F4A;
+c9:
+    return 0x2F4B;
+c6:
+    return 0x2F4C;
+c3:
+    return 0x2F4D;
+c1:
+    return 0x2F4E;
+c5:
+    return 0x2F4F;
+c7:
+    return 0x2F6E;
+c10:
+    return 0x2F50;
+c11:
+    return 0x2F51;
+c8:
+    return 0x3240;
+c12:
+    return 0x3241;
+c13:
+    return 0x3242;
+dflt:
+    return 0x2F48;
+}
 
 INCLUDE_ASM("asm/levels", func_L02_003FE250);
 

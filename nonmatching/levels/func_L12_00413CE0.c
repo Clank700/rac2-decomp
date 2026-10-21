@@ -1,37 +1,36 @@
-/* Near miss: func_L12_00413CE0 (src/levels/12_todano/L12_00398E50.c), 444 bytes against retail's
-   452. Compile it as a -g8 file (it reads D_L12_001B1840 through $gp outside a delay slot, and
-   D_L12_001B2EB8, the group count, through $gp in a delay slot).
+/* Near miss: func_L12_00413CE0 (src/levels/12_todano/L12_00398E50.c), 452 bytes, 1 place.  With the
+   opt-in `-frac2-qcopy` profile (#262) in a unit of its own (src/levels/12_todano/L12_00413CE0-g8.c,
+   flags `-O2 -G8 -ffunction-sections -frac2-qcopy`; -G8 for D_L12_001B1840 and D_L12_001B2EB8,
+   read through `$gp`) the C below is retail's 452 bytes and the copy has retail's register
+   addresses (`addiu v1,v1,0x10 ; lq v0,0(v1) ; sq v0,0(sp)`), which is what the earlier 444-byte
+   record lacked.  18 of its 113 words still differ (tools/check.py: 0 of 1 places match, first
+   difference at +0x34), all of them in the front, before the walk:
 
-   Everything matches word for word at its place except the 16-byte copy of the first point of the
-   path list (table[state+0x2C0] + 0x10) into the stack vector, which is the 128-bit copy wall of
-   docs/COMPILER-NOTES.md ("The 128-bit copy wall is a cost tie in the CSE"):
+     retail  lw a0,0x2C0(s3) ; beq ; lui v0 ; sll a0 ; addiu v0 ; addu a0 ; lw v1,0(a0) ; addiu v1,v1,0x10
+             lq v0,0(v1) ; sq v0,0(sp) ; lbu a0,0x21(s4) ; lui v0 ; addiu v1,v0,lo ; lui at ; ori ; mtc1 f20
+             sll a0 ; addu a0,a0,v1 ; lw s2,0(a0) ; daddu s5,zero,zero ; b ; daddu s6,v0,zero
+     here    the same instructions, but the `lbu` of the group byte, the second table's `lui`/`addiu`,
+             the 100000.0f constant, its `lw s2` and `daddu s5` are scheduled between the first table's
+             insns and above the `lq`/`sq`, which moves the allocation of a0/a1/a2/v0/v1 in the front.
 
-     retail:  lw v1,0(a0) ; addiu v1,v1,0x10 ; lq v0,0(v1) ; sq v0,0(sp) ; lbu a0,0x21(s4) ...
-     this:    lw a2,0(v1) ; ... lbu a0,0x21(s4) ... lq v0,0x10(a2) ... sq v0,0(sp)
+   Cause (measured): retail's copy was a volatile asm, a barrier for both scheduling passes, so the
+   walk's setup could not move above it; `rac2_qcopy` is an ordinary insn, and the second chain
+   (the group byte and the second table) fills the load-latency stalls of the first one.  The
+   hoisted insns are pseudo-register computations and loads from the object, which cannot depend
+   on the copy's store (its destination is `vec` on the stack).  Measured in a scratch copy (not
+   allowed in src/): with the copy as one volatile asm, `__asm__ __volatile__("lq $2,0(%1)\n\tsq
+   $2,0(%0)" : : "r"(vec), "r"(D_L12_001FEAC0[state->f2C0] + 0x10) : "$2", "memory")`, the same C
+   is exact (1 of 1 places).  None of -fno-schedule-insns, -fno-schedule-insns2,
+   -fno-sched-interblock, -fno-gcse, -mno-split-addresses, -fno-strength-reduce, -g gets the
+   profile build below 18 words.
+   What would unblock it: a barrier form of the profile (the pattern given a volatile asm's
+   dependences in sched_analyze_insn, as -frac2-zero-ti-barrier does for the clear); the C below
+   would then go into that unit unchanged.
 
-   The folded displacement removes the `addiu` (one word, and the loop-head alignment `nop` that
-   goes with it: the 8 bytes), and the schedule of the front moves with it: this build hoists the
-   `lbu` of the group byte and the second table address above the sq, retail keeps them after it,
-   which also changes a few registers of the front (a2/v1 for a0/v1, a1 for v0 as the high half
-   kept in s6). Measured in scratch copies (not allowed in src/): with the pair written as one
-   volatile asm with a memory clobber (`lq $2,0(src)` / `sq $2,0(dst)`) the same C is exact, 113
-   of 113 words, check.py OK; with the lq as an asm on a register address and the sq as a plain
-   "=m" store the size is exact (452) but the `lbu` is hoisted again (100 of 113). So the pair in
-   retail behaves as a barrier with materialised addresses, which is what an inline-asm copy
-   macro does and a C access never does. The id-list walk, the best/bestd initialisation after the
-   copy (that is what gives s5 = best, s6 = high half of the second table), the PathState member
-   stores (which let the scheduler lift the $gp halfword load D_L12_001B1840 above the stores, as
-   retail has it) and the second names are all right.
-
-   Tried for the copy, all folded: the one-line cast copy below; a pointer local `u8 *pos =
-   list + 0x10`; a struct with the TI128 as a member (`list->first`); a TI128 local; a pointer that
-   takes two values at a join (materialises the address, but changes the allocation and adds the
-   join). None of the escapes in the notes is a plain spelling here: the copy sits right after the
-   `-1` test, with no join, loop or volatile between the pointer and the load.
-
-   Would unblock it: nothing in plain C. A compiler-side tie-break in find_best_addr (gcc/cse.c)
-   would give the unfolded addresses but not the ordering; retail's copy was most likely an asm
-   macro. */
+   Body of the record: the id-list walk, the best/bestd initialisation after the copy (that is what
+   gives s5 = best, s6 = high half of the second table), the PathState member stores (which let the
+   scheduler lift the $gp halfword load D_L12_001B1840 above the stores, as retail has it) and the
+   second names are all right. */
 
 typedef unsigned char u8;
 typedef unsigned short u16;
