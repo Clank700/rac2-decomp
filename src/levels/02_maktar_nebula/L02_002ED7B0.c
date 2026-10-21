@@ -378,7 +378,8 @@ int func_L02_003D1698(char *object) {
 
 /* func_L02_003D18D8 is defined in L02_002ED7B0-g8.c (it reaches D_L02_001B359C through $gp). */
 
-INCLUDE_ASM("asm/levels", func_L02_003D1998);
+/* func_L02_003D1998 is matched in L02_002ED7B0-g8.c (built with -G8: it reads D_L02_001B35B8
+   through $gp). */
 
 /* Chooses the variant the actor plays from how far along the path it has come. */
 void func_L02_003D1C38(char *object) {

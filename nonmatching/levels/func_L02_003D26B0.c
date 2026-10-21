@@ -1,37 +1,51 @@
 /* 0 of 1 places match - candidate is 552 bytes, retail 556. File:
    src/levels/02_maktar_nebula/L02_003D26B0-g8.c (-O2 -G8 -ffunction-sections), placed before
-   func_L02_003D69F0 (the marker sat in L02_003D26B0.c). Checked at commit base 406e81e with
-   the #238 flow-fix cc1 (unchanged by it).
-   The walk (rolled `b TEST; BODY; INCR; TEST`, guarded `for` exit test, $gp bound and the
-   four $gp floats), the call sequence and all the float constants are word-for-word retail
-   apart from three places, and all three come from ONE thing: retail holds a second copy
-   of `e + 0x10` ($s5) that this cc1 never creates.
-     +0x00  addiu $sp,$sp,-0x60 | retail -0x70 (one more saved register: $s5 = the copy,
-            $s6 = state, $s7 = table hi; ours $s5 = state, $s6 = table hi)
-     +0xA8  ours  bc1fl ->p++ with `addiu $s2,$s2,2` in the slot
-            retail bc1f  ->p++ with `daddu $s5,$s4,$zero` in the slot (the copy, hoisted
-            into the slot by dbr from the end of the block)
-     +0xFC  ours  daddu $a0,$sp,$zero ; daddu $a2,$s4,$zero   (3rd arg of func_00282CF0)
-            retail daddu $a2,$s5,$zero ; daddu $a0,$sp,$zero   (reads the copy)
-   Retail keeps `$s4 = e + 0x10` for the first distance call AND for the last call
-   (`func_00282CC0(local, local, e + 0x10)`: `daddu $a2,$s4,$zero`), and only the middle
-   call (`func_00282CF0(local, self + 0x10, e + 0x10)`) reads `$s5`. In gcse terms the
-   middle occurrence was NOT merged by cse1 and is a fully redundant PRE occurrence:
-   "PRE: redundant insn N (expression E) ... PRE/HOIST: end of bb B, copying expression E
-   to reg R" puts `R = epos` after the first addiu. Here cse1 merges all three occurrences
-   (no label between them on the fall-through path; the ternary join label is skipped by
-   cse's skip_blocks "AROUND" path), so PRE finds nothing; the only PRE in this function
-   is the table-address `high` (the `$s7` copy at +0x5C), which matches.
-   Tried (all 552 bytes unless noted): epos/spos as locals (this file); plain `e + 0x10`
-   everywhere (50 diff lines); epos for the first and third use only; epos for the first
-   and second; `tpos = epos` copy for the second use; epos/spos computed before the
-   func_L02_003D7300 call (548 bytes, different shape); the success block placed after
-   the loop behind a goto (layout changes); a second `||` condition or a live if/else
-   diamond before the success block to put a label in front of it (564 / 572 bytes: it
-   changes the code, not the PRE); plain `for` with the guarded condition instead of the
-   `for(;;)` + `goto test` spelling (same bytes). Next idea: find what keeps the second
-   `e + 0x10` out of cse1's equivalence class in the original (a different base pseudo, or
-   an expression cse cannot see as `e + 16`), then check that gcse prints the PRE copy. */
+   func_L02_003D69F0 (the marker sits in L02_003D26B0.c). Rechecked on 21 October 2026 with the
+   #238 flow-fix cc1: unchanged.
+   What differs: retail holds a second copy of `e + 0x10`. $s4 = e + 0x10 is computed before
+   the first distance call and read by calls 1 (func_00282E80) and 3 (func_00282CC0);
+   `daddu $s5,$s4,$zero` sits in the delay slot of the distance test's `bc1f` (+0xAC) and only
+   call 2 (func_00282CF0) reads $s5. Here every use reads one register, so the frame is 0x60
+   against 0x70 (one saved register fewer), the `bc1f` at +0xA8 becomes a `bc1fl` with `p++`
+   in its slot, and call 2 reads $s4.
+   The mechanism, measured (Opus retry, 21 October 2026): the copy is gcse's PRE.
+   - If cse1 has not merged call 2's `e + 0x10`, PRE finds it fully redundant and inserts
+     `R = e + 0x10` at the END of the distance block ("PRE/HOIST: end of bb 7"), which is
+     exactly where retail's copy is; cse2 then turns it into `R = $s4`, i.e. retail's `daddu`.
+   - cse1 merges call 2's `e + 0x10` whenever no CODE_LABEL lies between the two uses, and
+     cse2 re-merges the copy unless a label still lies between it and call 2 (make_regs_eqv
+     keeps $s4 canonical: it lives longer than the copy, so call 2 would read $s4 again).
+   - Witness: adding `|| *(int *)(state + 0x2F0) == 7 || *(int *)(state + 0x2F4) == 9` to the
+     DISTANCE test (a label with two jump uses at the start of the angle block) gives retail's
+     registers exactly: e + 0x10 in one register for calls 1 and 3, the copy in the `bc1f` slot
+     at +0xAC, call 2 reading the copy, DEG2RAD kept in $f21 (584 bytes only because of the two
+     extra tests). The same two tests on the ANGLE test put the label at the start of the
+     success block: the copy appears too, but DEG2RAD is then loaded twice where retail loads it
+     once, so retail's break is at the start of the angle block. With one extra `||` only,
+     cse's skip-blocks AROUND path follows the label and merges again (no copy).
+   - So retail's source has, between the distance test and the angle computation, something
+     that is a control-flow join for cse1 and cse2 and leaves no instruction. Not found. Tried
+     (no copy unless noted): the walk as `for(;;)` + `goto test` or as the FOR_EACH_ID `for`;
+     epos/spos locals in any combination for calls 1-3 (epos for 1 and 3 with `e + 0x10` for 2
+     is what the PRE needs, this draft); nested ifs, `&&`, `if (!(...)) continue/goto`; the
+     angle test as an int temp or a static inline helper, the distance test as a static inline
+     helper (each materialises the boolean: 560-564 bytes); the rotate call duplicated in an
+     if/else for the ternary (556 bytes, 127 lines: the join comes before call 3, so PRE copies
+     for call 3 and cse2 then gives calls 2 AND 3 the copy). Flags, each alone, on this draft:
+     -g, -gstabs, -fno-cse-follow-jumps, -fno-cse-skip-blocks (both), -fedge-lcm, -fno-gcse,
+     -fno-rerun-cse-after-loop (also loses the PRE copy of the table's %hi in $s7, which needs
+     cse2), -fno-expensive-optimizations, -fno-force-mem, -fno-regmove, -fno-schedule-insns{,2},
+     -fno-thread-jumps, -fno-strength-reduce, -fno-rerun-loop-opt, -fno-caller-saves,
+     -fno-peephole2, -fno-sched-interblock, -fno-sched-spec, -fno-strict-aliasing,
+     -fno-defer-pop, -fforce-addr, -fno-function-cse, -fno-edge-sm, -fno-edge-lm,
+     -mno-split-addresses: none gets nearer than 30 lines. A dead if/else at that spot would do
+     it (flow deletes it after cse2), but that is a steering construct, not allowed in src/.
+   - The idiom is shared: func_L02_003F1BA8 and func_L02_0040BBD8 are this function with other
+     offsets, and func_L11_00436D08, func_L11_00449C70, func_L11_0044C850, func_L11_004530E0 and
+     func_L11_004566C0 carry the same loop. Of the 8,606 catalogue functions, 16 keep two saved
+     registers on one `addiu` address after a delay-slot copy and none of them has C yet
+     (3,541 functions do), so this may be a difference of the reconstructed cse/gcse rather
+     than a source shape. */
 
 #include "include_asm.h"
 
