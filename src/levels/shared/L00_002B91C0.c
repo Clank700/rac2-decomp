@@ -2,6 +2,8 @@
 
 typedef unsigned char u8;
 
+typedef unsigned int u32;
+
 #ifndef RAC2_T_TI_F41EB487E
 #define RAC2_T_TI_F41EB487E
 typedef int TI_F41eb487e __attribute__((mode(TI)));
@@ -119,7 +121,48 @@ void func_L00_002B91C0(void)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002B9380);
+/* The direction flag is declared last here: it only changes the order in which the compiler
+   emits the arguments, the values that reach the registers are the same. */
+extern float func_002AA898(float *position, float *velocity, float target, float acceleration, float damping, float limit, int direction);
+
+extern void func_L00_002B3DC0(float a1, float a2, float a3);
+
+/* Reads the state byte and the flag word of the resident block: when the byte is zero the
+   function moves the two resident positions towards zero with the two resident velocities and
+   rebuilds the matrix from them, and any other state falls back to the refresh entry point. */
+void func_L00_002B9380(void)
+{
+    char *base = (char *)&D_00189E20_5;
+    TI_F41eb487e v;
+    int mode;
+    int x;
+
+    mode = *(u8 *)(base + 0x22C3);
+    if (*(short *)(base + 0x218) != 0)
+        mode = 1;
+
+    if (mode == 0) {
+        x = *(int *)(base + 0x2294);
+        if ((u32)(x - 0x24) < 2)
+            return;
+        if (*(int *)(base + 0x229C) == 0x11 || *(int *)(base + 0x229C) == 0x15 ||
+            *(int *)(base + 0x229C) == 0x16 || *(int *)(base + 0x229C) == 0x1F)
+            return;
+        if (x == 0x74 || x == 0x30 || x == 0x2C || x == 0x2B)
+            return;
+        v = *(TI_F41eb487e *)(base + 0x90);
+        func_002AA898((float *)&v, (float *)(base + 0xA0), 0.0f, 0.015f, 0.3f, 0.087266475f, 0);
+        func_002AA898((float *)&v + 1, (float *)(base + 0xA4), 0.0f, 0.015f, 0.3f, 0.087266475f, 0);
+        func_L00_002B3DC0(*(float *)(base + 0xA0), *(float *)(base + 0xA4), 0.0f);
+        return;
+    }
+    if (mode < 0)
+        return;
+    if (mode >= 3)
+        return;
+    func_L00_002B91C0();
+}
+
 
 /* reads a scalar through DATA0 and, when it exceeds 0.001f, re-normalises the vector at DATA0 (and DATA0-112) from the elapsed float, clamping the amount at zero; otherwise it runs the plain refresh entry point. */
 void func_L00_002B94D8(float a0)
