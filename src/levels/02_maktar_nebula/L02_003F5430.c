@@ -575,7 +575,7 @@ void func_L02_003FCA80(char *a0) {
 
 /* func_L02_003FCBF0 is defined in L02_003F5430-g8.c (this unit has no $gp access for it). */
 
-INCLUDE_ASM("asm/levels", func_L02_003FCCA0);
+/* func_L02_003FCCA0 is defined in L02_003F5430-g8.c (D_001A79F8 is a $gp access in a delay slot). */
 
 s32 func_L02_003FD000(char *a0) {
     char buf[16];

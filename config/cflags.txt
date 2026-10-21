@@ -190,6 +190,7 @@ src/game/002A0430.c	-O2 -G8 -ffunction-sections
 src/game/002B1C20.c	-O2 -G8 -ffunction-sections
 src/game/002B5EF8.c	-O2 -G0 -ffunction-sections -g
 src/game/002C9C60.c	-O2 -G0 -ffunction-sections -g
+src/game/002CD620.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
 src/game/002DF1B8.c	sdk -O2 -G2 -ffunction-sections
 src/game/002ED260.c	-O2 -G8 -ffunction-sections
 src/game/002F5220.c	-O2 -G8 -ffunction-sections
@@ -211,7 +212,9 @@ src/game/00343798.c	-O2 -G8 -ffunction-sections
 src/game/00344848.c	-O2 -G8 -ffunction-sections
 src/game/003506A8.c	sdk -O2 -G2 -ffunction-sections
 src/levels/02_maktar_nebula/L02_003CB090.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/02_maktar_nebula/L02_003DB310-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges
 src/levels/02_maktar_nebula/L02_003EEAD8.c	-O2 -G0 -ffunction-sections -g
+src/levels/02_maktar_nebula/L02_003F5430-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges -frac2-keep-block-order
 src/levels/06_notak/L06_003660F0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/07_siberius/L07_003EF1E0.c	-O2 -G0 -ffunction-sections -g
 src/levels/17_smolg/L17_003C71B0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
@@ -242,6 +245,7 @@ src/levels/shared/L05_00443C18.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L05_00446E28.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L10_0037D200.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L18_003F50D8.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/shared/L18_00427BE0.c	-O2 -G0 -ffunction-sections -frac2-keep-block-order
 src/levels/23_damosel_orbit/L23_003BF9B0-g8.c	-O2 -G8 -ffunction-sections -g
 src/levels/23_damosel_orbit/L23_003C00D0.c	-O2 -G0 -ffunction-sections -g
 src/levels/23_damosel_orbit/L23_004160B0-g8.c	-O2 -G8 -ffunction-sections -g
