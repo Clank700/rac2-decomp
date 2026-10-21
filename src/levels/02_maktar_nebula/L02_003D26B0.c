@@ -533,7 +533,81 @@ INCLUDE_ASM("asm/levels", func_L02_003D9728);
 
 INCLUDE_ASM("asm/levels", func_L02_003D9E68);
 
-INCLUDE_ASM("asm/levels", func_L02_003DAB68);
+extern void *func_0029FCC0(char *, int, void *);
+
+extern void func_L00_0031BDC0(void *, void *, void *, char *);
+
+extern void func_00282CF0(void *, void *, void *);
+
+extern void func_00282D30(void *, void *, float);
+
+extern void func_002A8C00(void *, char *, int, void *, float);
+
+extern int func_00277F48(void *, int, char *, void *, float);
+
+typedef struct {
+    char pad0[0x18];
+    unsigned char b18;
+    unsigned char b19;
+    unsigned short h1a;
+    char pad1c[0x14];
+} L02_003DAB68_Rec;
+
+/* Runs only while the state's target pointer (+0x240) is set.  The word at +0x98 of the object
+   table entry the state selects (+0x244) is zeroed for the duration and put back at the end.
+   Four rounds, for the joint pairs (1, 2), (3, 4), (5, 6) and (7, 8): the two joint positions
+   (func_0029FCC0), func_L00_0031BDC0 on them and the target's position, the offset from the
+   actor's position to its result, a vector made of the offset's first two floats turned a
+   quarter turn, scaled by func_00282D30 (2.0) and completed with 1.0 and 5627.925, an effect
+   record started from it (func_002A8C00), and two func_00277F48 calls on that record (0.65 and
+   0.95). */
+void func_L02_003DAB68(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+    float v0[4];
+    float v1[4];
+    float hit[4];
+    float diff[4];
+    float perp[4];
+    L02_003DAB68_Rec rec;
+    char *obj;
+    int saved;
+    char *pos;
+    float *offset;
+    int i;
+    int a;
+    int b;
+    float one;
+
+    if (*(int *)(state + 0x240) != 0) {
+        obj = (char *)((*(int *)(state + 0x244) << 8) + D_L02_001B359C);
+        one = 1.0f;
+        saved = *(int *)(obj + 0x98);
+        *(int *)(obj + 0x98) = 0;
+        offset = diff;
+        pos = arg0 + 0x10;
+        for (i = 0; i < 4; i++) {
+            a = i * 2 + 1;
+            b = i * 2 + 2;
+            func_0029FCC0(arg0, a, v0);
+            func_0029FCC0(arg0, b, v1);
+            func_L00_0031BDC0(hit, v0, v1, *(char **)(state + 0x240) + 0x10);
+            func_00282CF0(offset, hit, pos);
+            perp[0] = -diff[1];
+            perp[1] = diff[0];
+            perp[2] = 0.0f;
+            func_00282D30(perp, perp, 2.0f);
+            perp[2] = one;
+            perp[3] = 5627.925f;
+            func_002A8C00(&rec, arg0, 0x10001, perp, (float)*(unsigned char *)(state + 0x35));
+            rec.b18 = 0;
+            rec.b19 = 1;
+            rec.h1a = *(unsigned short *)(arg0 + 0xAA);
+            func_00277F48(hit, 0, arg0, &rec, 0.65f);
+            func_00277F48(v1, 0, arg0, &rec, 0.95f);
+        }
+        *(int *)((*(int *)(*(char **)(arg0 + 0x68) + 0x244) << 8) + D_L02_001B359C + 0x98) = saved;
+    }
+}
 
 void func_L02_003DAD88(char *arg0) {
     func_L02_003DAE60(
