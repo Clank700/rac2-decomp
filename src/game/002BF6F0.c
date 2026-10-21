@@ -151,7 +151,84 @@ void func_002BF6F0(void *param_1)
 
 INCLUDE_ASM("asm/game", func_002BF728);
 
-INCLUDE_ASM("asm/game", func_002BF8F0);
+extern int func_002A77E0(int);
+extern void func_00282CC0(char *, char *, char *);
+extern float func_00282E20(void *);
+extern void func_00282F70(char *, char *, float);
+extern void func_002AA2E8(float *, float, float);
+extern float func_00283B98(float, float);
+extern float func_00283180(float);
+extern float func_00283198(float);
+extern float D_001B5358;
+
+/* Advances one object: the halfword at offset 10 is capped at 12 and, when the
+   sub-object's float at 0x30 is below the object's float at 0x18, the word at
+   offset 4 is cleared; the packed byte in that word is then rescaled by the
+   halfword, the float at offset 12 grows by 840.0f and is limited by the
+   sub-object's float at 0x3C, the object's vector is moved by the sub-object's
+   motion triple and the last pair of floats is written back from the angle
+   kept in the sub-object. */
+void func_002BF8F0(char *self)
+{
+    char *s1 = self + 0x20;
+    float vec[3];
+    float f0;
+    float f1;
+    float f2;
+    float f3;
+    float g;
+    unsigned int a;
+
+    if (func_00282978((short *)(self + 0xA)) != 0) {
+        func_002B9180(self);
+        return;
+    }
+    f1 = *(float *)(self + 0x18);
+    if (*(float *)(s1 + 0x10) < f1) {
+        *(int *)(s1 + 8) = 0;
+        if (*(short *)(self + 0xA) >= 13) {
+            *(short *)(self + 0xA) = 12;
+        }
+    }
+    if (*(float *)(s1 + 0x10) < *(float *)(self + 0x18) + 8.6666667461395263671875e-01f) {
+        if (func_002A77E0(20) == 0) {
+            if (*(short *)(self + 0xA) >= 13) {
+                *(short *)(self + 0xA) = 12;
+            }
+        }
+    }
+    if (*(short *)(self + 0xA) < 14) {
+        a = *(unsigned int *)(self + 4);
+        *(unsigned int *)(self + 4) = (((int)(a >> 24) * (int)*(short *)(self + 0xA) / 14) << 24) | (a & 0xFFFFFF);
+    }
+    f0 = *(float *)(self + 0xC);
+    f0 = f0 + 8.4000006103515625000000e+02f;
+    *(float *)(self + 0xC) = f0;
+    f1 = *(float *)(s1 + 0xC);
+    if (f1 < f0) {
+        *(float *)(self + 0xC) = f1;
+    }
+    vec[0] = *(float *)(s1 + 0);
+    vec[1] = *(float *)(s1 + 4);
+    vec[2] = *(float *)(s1 + 8);
+    f0 = func_00282E20((void *)vec);
+    func_00282F70((char *)vec, (char *)vec, f0 * 9.7000002861022949218750e-01f);
+    func_00282CC0(self + 0x10, self + 0x10, (char *)vec);
+    func_002AA2E8(&vec[2], 2.1666666492819786071777e-02f, 1.3888889225199818611145e-03f);
+    *(float *)(s1 + 4) = vec[1];
+    *(float *)(s1 + 0) = vec[0];
+    *(float *)(s1 + 8) = vec[2];
+    f0 = func_00283B98(*(float *)(s1 + 0x14), *(float *)(s1 + 0x18));
+    *(float *)(s1 + 0x14) = f0;
+    g = func_00283B98(D_001B5358, 1.5707964897155761718750e+00f);
+    f3 = func_00283198(*(float *)(s1 + 0x14));
+    f2 = f3 * *(float *)(s1 + 0x1C);
+    f0 = func_00283180(g);
+    vec[0] = f0 * f2;
+    vec[1] = func_00283198(g) * f2;
+    vec[2] = 0.0f;
+    func_00282CC0(self + 0x10, self + 0x10, (char *)vec);
+}
 
 INCLUDE_ASM("asm/game", func_002BFB38);
 
