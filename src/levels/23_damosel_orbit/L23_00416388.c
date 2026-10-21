@@ -101,7 +101,7 @@ void func_L23_00419088(char *arg0, s16 arg1) {
 
 INCLUDE_ASM("asm/levels", func_L23_004190C8);
 
-INCLUDE_ASM("asm/levels", func_L23_004196B8);
+/* func_L23_004196B8 is matched in L23_004196B8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L23_00419970);
 
