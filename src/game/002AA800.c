@@ -657,7 +657,38 @@ INCLUDE_ASM("asm/game", func_002AD980);
 INCLUDE_ASM("asm/game", func_002ADB78);
 
 
-INCLUDE_ASM("asm/game", func_002AE730);
+extern int func_00283108(float *);
+extern int func_00283CF0(float);
+
+/* Scales a direction vector into the 0..255 range around 127 and packs it.
+   The unit needs "-g -ffast-math": the two max.s words need the fast-math fold of
+   the float ternary, and the two nops in front of the division need the line label
+   that -g puts before it (config/cflags.txt). */
+int func_002AE730(float *v, int *out)
+{
+    float a = func_00282C48(v[0]);
+    float b = func_00282C48(v[1]);
+    float c = func_00282C48(v[2]);
+    float m;
+    float scale;
+    int n;
+    float t[4];
+    int r;
+
+    m = (a > b) ? a : b;
+    c = (m > c) ? m : c;
+    n = func_00283CF0(c * 158.73016357421875f);
+    n = (n < 256) ? n : 255;
+    n = (n > 0) ? n : 1;
+    t[3] = (float)n;
+    scale = 1.0f / ((float)n * 1.0e-04f);
+    t[0] = v[0] * scale + 127.0f;
+    t[1] = v[1] * scale + 127.0f;
+    t[2] = v[2] * scale + 127.0f;
+    r = func_00283108(t);
+    *out = r;
+    return r;
+}
 
 INCLUDE_ASM("asm/game", func_002AE838);
 
@@ -767,7 +798,6 @@ float func_002AF2E8(char *a0, char *a1, int *a2,
 }
 
 INCLUDE_ASM("asm/game", func_002AF460);
-
 INCLUDE_ASM("asm/game", func_002AF580);
 
 
