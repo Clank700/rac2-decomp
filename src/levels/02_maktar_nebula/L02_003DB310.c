@@ -106,7 +106,7 @@ done:
     return result;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003DBA70);
+/* func_L02_003DBA70 is matched in L02_003DBA70-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por). */
 
 /* func_L02_003DBB70 is matched in L02_003DBB70.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 

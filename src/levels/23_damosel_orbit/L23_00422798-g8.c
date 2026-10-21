@@ -1,30 +1,8 @@
-/* func_L23_00422798 (532 bytes, 1 place: level 23) -- NEAR MISS, not integrated.
-   state: 528 bytes against retail's 532. Aligned word by word, three words differ and nothing else:
-   the whole body, its call order, its constants and its `$gp` words are right (the float words
-   are 0x001B18E0..0x001B190C; `$gp` is 0x001AEFF0). Checked in the -G8 unit; it belongs in
-   L23_0041E418-g8.c.
-   What differs is the single quad zero of the local direction {0, 0, 0, 1}:
-   - retail zeroes it with `por $v0,$zero,$zero` (the MMI word 0x700014A9) at +0x4 and stores the
-     register (`sq $v0,0($sp)`); this cc1 folds the zero into the store (`sq $zero,0($sp)`), one word
-     short, because the compiler's zero-fold pass folds a materialised TI zero whenever the register
-     is dead after its single store;
-   - the `lui $at,0x3F80; mtc1 $at,$f0` pair for 1.0f then issues at +0x4 here and at +0x2C in
-     retail, a consequence of the missing word.
-   Every spelling of the zero reaches the same fold or a worse shape: `*(TI128 *)v = 0` (this
-   file) and a struct or union with a TI member initialised `{0}` or assigned all give
-   `sq $zero`;`float v[4] = {0,0,0,1}` gives a `memset` call (540 bytes, 15 words differ); four
-   scalar stores give 536 bytes; an `int` return value that keeps $v0 live (also with `return` on the
-   last call) does not stop the fold. Retail has the por form for a single quad zero stored to the
-   stack in 62 compiled-looking functions of level 23 (func_00281EB8, func_002A7EA0, func_002AE838,
-   func_002D36A0, func_0030DE88, func_00315E20 ...) against 13 that store `sq $zero` to the stack;
-   func_L23_0041C578 and func_L23_003BFE90 are the same wall. Unblocking it is a change to the
-   zero-fold pass (rac2_fold_zero_ti_store), not to the C.
-   Tuning that did matter: func_00282DF0's result and `D_L23_001B1908 * 0.2f` are computed before
-   the store to +0x18 (retail's registers), and func_L00_002ECFE8 is declared with its integer
-   arguments first. The registers are the same as for the declaration in L02_002B5F50.c (floats in
-   the middle) but the evaluation order differs; the floats-in-the-middle order gives 5 differing
-   words instead of 3.
-*/
+#include "include_asm.h"
+
+/* func_L23_00422798 is a unit of its own: retail clears its local direction as plain C, with the
+   zero materialised (`por $v0,$zero,$zero` ... `sq $v0,0($sp)`), which -frac2-zero-ti-por keeps
+   (config/cflags.txt). */
 
 typedef unsigned char u8;
 

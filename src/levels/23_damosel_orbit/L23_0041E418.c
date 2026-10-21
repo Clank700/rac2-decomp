@@ -16,7 +16,7 @@ INCLUDE_ASM("asm/levels", func_L23_00422540);
 
 /* func_L23_00422668 is matched in L23_00422668.c (built with -frac2-qcopy -frac2-no-annulled-wide-stores). */
 
-INCLUDE_ASM("asm/levels", func_L23_00422798);
+/* func_L23_00422798 is matched in L23_00422798-g8.c (built with -frac2-zero-ti-por). */
 
 INCLUDE_ASM("asm/levels", func_L23_00422A30);
 
@@ -123,7 +123,7 @@ INCLUDE_ASM("asm/levels", func_L23_00429098);
 INCLUDE_ASM("asm/levels", func_L23_00429430);
 
 
-INCLUDE_ASM("asm/levels", func_L23_00429DC8);
+/* func_L23_00429DC8 is matched in L23_00429DC8-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por). */
 
 /* increments the 16-bit counter at object + 0x96 while it stays below 0xFFFF */
 void func_L23_00429FF8(u8 *arg0) {

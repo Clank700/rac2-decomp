@@ -556,7 +556,7 @@ INCLUDE_ASM("asm/levels", func_L02_00413730);
 
 /* func_L02_004216F0 is matched in L02_004216F0-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier -g). */
 
-INCLUDE_ASM("asm/levels", func_L02_00423520);
+/* func_L02_00423520 is matched in L02_00423520-g8.c (built with -frac2-zero-ti-por). */
 
 extern void func_00282D30(void *, void *, float);
 extern void func_00282F20(void *, void *, float);

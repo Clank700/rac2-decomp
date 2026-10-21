@@ -642,7 +642,7 @@ INCLUDE_ASM("asm/levels", func_L02_003DAF90);
 
 
 
-INCLUDE_ASM("asm/levels", func_L02_003DB200);
+/* func_L02_003DB200 is matched in L02_003DB200-g8.c (built with -frac2-zero-ti-por). */
 
 void func_L02_003DB2F0(char *arg0) {
     func_002A7750(arg0, 7, -1);
