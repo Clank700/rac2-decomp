@@ -276,10 +276,7 @@ void func_L00_002D3208(void) {
 
 INCLUDE_ASM("asm/levels", func_L00_002D3248);
 
-/* The 16-byte vector the level state keeps at +672 and +676. */
-extern char D_00189E20_3[];
-
-/* The matrix the level state keeps 0x90 bytes in. */
+/* The matrix the level state keeps 0x90 bytes in; the state itself is 0x90 below it. */
 extern char D_00189EB0[];
 
 extern float func_00283180(float);
