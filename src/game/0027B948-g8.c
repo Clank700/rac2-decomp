@@ -1,6 +1,6 @@
 #include "include_asm.h"
 
-extern void func_002FC560(unsigned int reg, unsigned long value);
+extern void func_002FC560(unsigned int reg, unsigned long long value);
 
 extern int D_001A72E0;
 

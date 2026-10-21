@@ -2,7 +2,7 @@
  *
  * Screened, not matched in wave 13 (worker s1): 15 call(s), no $gp-relative small-data
  * access, MMI words [lq $s6 / sq $v1].  The 16-byte copy is retail's
- * materialised-pointer form and this cc1 always folds a constant offset into the
+ * materialised-pointer form and the tested source forms folded a constant offset into the
  * lq/sq pair.  Twenty spellings were measured and all of them fold it.  No C was
  * written in this wave.
  */

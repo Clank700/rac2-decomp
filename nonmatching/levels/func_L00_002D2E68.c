@@ -10,12 +10,13 @@
    (+0x1220, +0x1224, +0x1228) each get their halfword flag 0x34 set when they are
    not null.
 
-   The blocking word is at +0xF8: `mult $s0,$v0` (the count times 0x50) is followed by
-   `addu $a0,$v1,$s5`, and $v1 is the *high* word the multiply leaves in $hi - the
-   retail takes the high half of a 64-bit product as the address offset, with no
-   `mfhi` and no shift.  Plain C cannot spell that: a 64-bit multiply needs its `mfhi`
-   and its shift, and a 32-bit multiply leaves the low half in $lo, not in the
-   register the address is built from.  The loop's other shapes (the `bnel`/`bnez`
+   The word at +0xF8 was rechecked during integration: it has rs=$s0, rt=$v0 and
+   rd=$v1. R5900 mult supports a GPR destination, also described by the qualified
+   GNU opcode table's `d,s,t` form with WR_d. Thus the following use of $v1 does not
+   require mfhi/mflo and does not prove an unmatchable high-half multiply. The
+   earlier two-operand disassembly omitted rd. No C candidate has been tested
+   here, and this record does not establish a compiler limitation.
+   The loop's other shapes (the `bnel`/`bnez`
    chain, the `sltiu` range test on the count, the `movz` of the walk) are ordinary
    C, and the word at $gp-0x60F0 needs the two-name pattern (an `sda` name for the
    $gp form and an absolute alias for the macro form) in a `-g8` unit. */

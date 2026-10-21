@@ -5,7 +5,9 @@
    keeps and returns the index of the entry, or -1.  Retail re-reads the length
    of the table from memory on every pass of the loop and computes the entry
    address with a shift and an add instead of an induction variable, so the
-   count has to be volatile and the index must not be strength-reduced.
+   retained trial uses a volatile count to preserve reloads and tries to avoid
+   strength reduction. This is a code-generation experiment, not evidence that
+   the original count's type was volatile; it is not an accepted match.
 
    What still differs: retail keeps the high half of the length block's address
    in $t0 and re-materialises the address in the loop, this cc1 keeps the whole

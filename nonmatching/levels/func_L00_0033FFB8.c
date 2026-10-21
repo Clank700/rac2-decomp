@@ -4,7 +4,7 @@
  * access, MMI words [lq $s3 / sq $v1, lq $s4 / sq $s0].  The first 16-byte copy
  * is retail's materialised-pointer form: the destination address is computed with
  * ddiu , , 0x10 and the MMI store uses that register with an offset of zero,
- * while this cc1 always folds a constant offset into the lq/sq pair.  Twenty spellings
+ * while the tested source forms folded a constant offset into the lq/sq pair.  Twenty spellings
  * were measured (see nonmatching/levels/func_L00_003411A0.c) and all of them fold the
  * offset.  No C was written in this wave.
  */

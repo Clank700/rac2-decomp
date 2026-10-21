@@ -9,7 +9,7 @@
  *        addiu $v1, $s1, 0x10      (in the delay slot of the beqz)
  *        lq   $v0, 0($s0)          (quad register $v0/$v1, base $s0 = a0)
  *        sq   $v0, 0($v1)          (base $v1 = s1 + 0x10, offset 0)
- *    this cc1 always folds a constant offset into the lq/sq pair, so it emits
+ *    the tested source forms folded a constant offset into the lq/sq pair, so it emits
  *    `sq $v0, 0x10($s1)` instead.  Twenty spellings were measured (plain
  *    cast assignment, a char* destination variable, a mode(TI)* destination
  *    variable, a mode(TI) temporary, the destination used twice, the offset
