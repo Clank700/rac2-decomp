@@ -7,4 +7,9 @@ void func_US2_002B1880(int first, int second)
     func_0029CC98(func_00288FB8(first), second);
 }
 
-INCLUDE_ASM("asm/us2/game", func_US2_002B18B0);
+extern void func_0029CC50(int, int, int);
+
+void func_US2_002B18B0(int first, int second, int third) {
+    func_0029CC50(first, second, third);
+}
+
