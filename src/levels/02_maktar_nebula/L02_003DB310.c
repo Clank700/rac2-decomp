@@ -135,9 +135,163 @@ INCLUDE_ASM("asm/levels", func_L02_003E6D70);
 
 INCLUDE_ASM("asm/levels", func_L02_003E7370);
 
-INCLUDE_ASM("asm/levels", func_L02_003E75A8);
+extern int func_002B3868(char *);
+extern int func_00282948(int *);
+extern int func_00283CF0(float);
+extern int D_L02_002A53B0[3][9];
 
-INCLUDE_ASM("asm/levels", func_L02_003E77E0);
+/* The actor's state, as far as this function goes: three tracks of nine positions each. */
+typedef struct {
+    char pad0[0x60];
+    float pos[3];
+    int timer[3];
+    int mode[3];
+    float speed[3];
+    int want[3];
+} State003E75A8;
+
+/* Advances the actor's three tracks (position +0x60, countdown +0x6C, mode +0x78, speed +0x84,
+   wanted table entry +0x90), each position kept in [0, 9). The first time func_002B3868 agrees the
+   countdowns are set (100 for the middle track, 50 and 180 for the others, swapped when bit 15 of
+   +0x34 is set) and every mode becomes 1. Mode 1 moves the position back by its speed and becomes
+   mode 2 when func_00282948 says its countdown is over. Mode 2 moves it the same way until the
+   entry D_L02_002A53B0[track][(int)(position + 9) % 9] is the wanted one and the position is less
+   than 0.2 above a whole number: the mode is then 0. Once all three modes are 0 the actor changes
+   state (func_002A7750 with 4). */
+void func_L02_003E75A8(char *arg0) {
+    State003E75A8 *st = *(State003E75A8 **)(arg0 + 0x68);
+    int i;
+
+    if (func_002B3868(arg0)) {
+        st->timer[1] = 100;
+        st->timer[0] = 50;
+        st->timer[2] = 180;
+        if (*(u16 *)(arg0 + 0x34) & 0x8000) {
+            st->timer[0] = 180;
+            st->timer[2] = 50;
+        }
+        st->mode[0] = 1;
+        st->mode[1] = 1;
+        st->mode[2] = 1;
+    }
+    for (i = 0; i < 3; i++) {
+        switch (st->mode[i]) {
+        case 0:
+            break;
+        case 1:
+            st->pos[i] = st->pos[i] - st->speed[i];
+            if (st->pos[i] < 0.0f)
+                st->pos[i] += 9.0f;
+            if (func_00282948(&st->timer[i]))
+                st->mode[i] = 2;
+            break;
+        case 2:
+            st->pos[i] = st->pos[i] - st->speed[i];
+            if (st->pos[i] < 0.0f)
+                st->pos[i] += 9.0f;
+            if (D_L02_002A53B0[i][func_00283CF0(st->pos[i] + 9.0f) % 9] == st->want[i]) {
+                if (st->pos[i] - (float)func_00283CF0(st->pos[i]) < 0.2f)
+                    st->mode[i] = 0;
+            }
+            break;
+        }
+        if (st->mode[0] == 0 && st->mode[1] == 0 && st->mode[2] == 0)
+            func_002A7750(arg0, 4, -1);
+    }
+}
+
+extern void func_00282CC0(void *, void *, void *);
+extern void func_L02_0031E9E8(float *, float);
+extern void func_L01_0031A278(char *, float *, float, float, float);
+extern int func_002E5CF8(int, int, void *);
+extern void func_L00_00321878(char *, int, int, int, int, int, float);
+extern int func_002A68A8(char *, int *);
+extern char *func_003202E8(float *, int, int, int);
+extern void func_00282D30(char *, char *, float);
+extern void func_L02_003A8770(float *, int);
+extern void func_0026FEB8(const char *, ...);
+extern int func_002E5E58(int, unsigned int, void *);
+extern void func_002B0A18(int, int);
+extern char D_L02_001B09C8[];
+extern int D_L02_001AEC78 __attribute__((sda));
+extern int D_L02_001A903C __attribute__((sda));
+extern int D_001A79F8 __attribute__((sda));
+extern void *D_L02_002A52D0[5];
+
+/* The actor's state, as far as this function goes. */
+typedef struct {
+    char pad0[0xA4];
+    int flag;
+} State003E77E0;
+
+/* The global at D_001A7A00: the byte at +0x79 is a one-shot flag. */
+typedef struct {
+    char pad0[0x79];
+    u8 once;
+} Global001A7A00;
+extern Global001A7A00 D_001A7A00 __attribute__((sda));
+
+/* Re-arms the actor (func_002A7750 with 1), builds a random point near it (a, from
+   func_L01_0031A278, plus the offset b from func_L02_0031E9E8) and acts on the mode at +0x5C of
+   its state (the one func_L02_003E79F8 rolls), through the level's own jump table. Mode 1 starts
+   an effect (func_L00_00321878). Mode 2 sets the word at +0xA4, decrements D_L02_001AEC78 and
+   changes the actor's state to 5. Mode 3 scales by 0.35 the state of the object func_003202E8
+   makes at the point. Mode 4 calls func_L02_003A8770 and prints D_L02_001B09C8. Mode 5 runs a
+   one-shot (the flag at D_001A7A00 + 0x79, func_002E5E58, func_002B0A18 and D_L02_001A903C) and
+   adds 300 to D_001A79F8. Modes 1, 3, 4 and 5 call func_002E5CF8 with 2 first, any other mode
+   with 3. */
+void func_L02_003E77E0(char *arg0) {
+    static void *tab[] = { &&c1, &&c2, &&c3, &&c4, &&c5 };
+    char *state = *(char **)(arg0 + 0x68);
+    float a[4];
+    float b[4];
+    int out;
+    char *p;
+    unsigned int sel;
+
+    func_002A7750(arg0, 1, -1);
+    func_L02_0031E9E8(b, 1.0f);
+    func_L01_0031A278(arg0, a, 3.0f, 0.0f, 2.0f);
+    func_00282CC0(a, b, a);
+    sel = *(int *)(state + 0x5C) - 1;
+    if (sel < 5)
+        goto *D_L02_002A52D0[sel];
+    goto other;
+c1:
+    func_002E5CF8(2, 0x20, arg0);
+    func_L00_00321878(arg0, 0xF, 0x41, 3, -1, 4, 0.0f);
+    goto done;
+c2:
+    ((State003E77E0 *)state)->flag = 1;
+    D_L02_001AEC78--;
+    func_002A7750(arg0, 5, -1);
+    goto done;
+c3:
+    func_002E5CF8(2, 0x20, arg0);
+    func_002A68A8(arg0, &out);
+    p = *(char **)(func_003202E8(a, out, -1, 0) + 0x68);
+    func_00282D30(p, p, 0.35f);
+    goto done;
+c4:
+    func_002E5CF8(2, 0x20, arg0);
+    func_L02_003A8770(a, 0);
+    func_0026FEB8(D_L02_001B09C8);
+    goto done;
+c5:
+    func_002E5CF8(2, 0x20, arg0);
+    if (D_001A7A00.once == 0) {
+        D_001A7A00.once = 1;
+        func_002E5E58(1, 0, 0);
+        func_002B0A18(0x1233, -1);
+        D_L02_001A903C = 1;
+    }
+    D_001A79F8 += 300;
+    goto done;
+other:
+    func_002E5CF8(3, 0x20, arg0);
+done:
+    return;
+}
 
 /* func_L02_003E79F8 is defined in L02_003DB310-g8.c (it reads its weights through $gp). */
 
@@ -198,7 +352,82 @@ INCLUDE_ASM("asm/levels", func_L02_003EE938);
 
 INCLUDE_ASM("asm/levels", func_L02_003EEC58);
 
-INCLUDE_ASM("asm/levels", func_L02_003EEDD0);
+extern float func_00282C48(float);
+extern float func_00283248(float, float);
+extern float func_00283B98(float, float);
+extern float func_00283BE0(float, float);
+extern void func_002AAC80(void *, float, float, float, float);
+extern void func_L00_00424B48(int);
+extern void func_L00_00424C28(void);
+extern float D_L02_001B0E90 __attribute__((sda));
+extern char *D_L02_001FF1C0[];
+
+/* Updates the heading (float at +0x38 of the actor's state) from the path D_L02_001FF1C0[*state]:
+   its first word is the point count and its 16-byte points start at +0x10. The segment runs from
+   point i (the index at +0x30, one back when it is the last point) to point j (i plus the
+   lookahead at +0x3C, at most the last point). The segment's angle (func_00283248) minus the
+   angle of the hero's direction vector (floats at +0x160 of its state, the pointer at +0x70 of the
+   object at D_L02_001BA500 + 0x50) turned by pi, wrapped by func_00283B98 and func_00283BE0, clears
+   the heading when it is under about a tenth of a degree; otherwise func_002AAC80 eases the
+   heading towards it, weighted by the progress (+0x34, minus 6, over 8, at least 0). The heading
+   is then copied into the hero's state at +0x1D4, +0x1DC gets 1.0 and, from a progress of 0.9, the
+   two shared calls run. Nothing happens while the hero's halfword at +0x86 is not 0. */
+void func_L02_003EEDD0(char *arg0) {
+    char *hero = *(char **)(&D_L02_001BA500 + 0x50);
+    char *state;
+    char *hs;
+    char *cam;
+    float *dir;
+    char *path;
+    float scale;
+    float a1;
+    float a2;
+    float t;
+    int last;
+    int i;
+    int j;
+
+    if (*(short *)(hero + 0x86) != 0)
+        return;
+    state = *(char **)(arg0 + 0x68);
+    hs = *(char **)(hero + 0x70);
+    cam = hs + 0x1C0;
+    dir = (float *)(hs + 0x160);
+    path = D_L02_001FF1C0[*(int *)state];
+    scale = (*(float *)(state + 0x34) - 6.0f) * 0.125f;
+    if (scale < 0.0f)
+        scale = 0.0f;
+    last = *(int *)path - 1;
+    i = *(int *)(state + 0x30);
+    if (i == last)
+        i--;
+    j = i + *(int *)(state + 0x3C);
+    if (j > last)
+        j = last;
+    {
+        char *p0 = path + i * 16;
+        char *p1 = path + j * 16;
+
+        a1 = func_00283248(*(float *)(p1 + 0x10) - *(float *)(p0 + 0x10),
+                           *(float *)(p1 + 0x14) - *(float *)(p0 + 0x14));
+    }
+    a2 = func_00283248(dir[0], dir[1]);
+    a2 = func_00283B98(a2, 3.1415927f);
+    a1 = func_00283BE0(a1, a2);
+    if (func_00282C48(a1) < 0.0017453294713050127f) {
+        *(float *)(state + 0x38) = 0.0f;
+    } else {
+        t = scale * D_L02_001B0E90;
+        func_002AAC80(state + 0x38, a1, (t + 0.5f) * 0.00027777778450399637f,
+                      (t + 0.5f) * 0.00027777778450399637f, t * 0.01666666753590107f);
+    }
+    *(float *)(cam + 0x1C) = 1.0f;
+    *(float *)(cam + 0x14) = *(float *)(state + 0x38);
+    if (scale >= 0.9f) {
+        func_L00_00424B48(0);
+        func_L00_00424C28();
+    }
+}
 
 typedef int TI128 __attribute__((mode(TI)));
 extern char *D_L02_001FF1C0[];
