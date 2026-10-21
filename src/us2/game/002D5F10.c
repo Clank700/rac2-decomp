@@ -1,7 +1,5 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/us2/game", func_US2_002D5F10);
-
 INCLUDE_ASM("asm/us2/game", func_US2_002D6024);
 
 INCLUDE_ASM("asm/us2/game", func_US2_002D60E8);

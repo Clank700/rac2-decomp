@@ -64,8 +64,24 @@ unsigned long long func_US2_002D3DD8(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/us2/game", func_US2_002D3E90);
+extern void func_0029C7A0(void);
+
+unsigned long long func_US2_002D3E90(void)
+{
+    func_0027C540(0);
+    func_0029C7A0();
+    func_0027C660();
+    return 0;
+}
 
 INCLUDE_ASM("asm/us2/game", func_US2_002D3EC0);
 
-INCLUDE_ASM("asm/us2/game", func_US2_002D3F48);
+extern void func_0029C810(void);
+
+int func_US2_002D3F48(void) {
+    func_0027C540(0);
+    func_0029C810();
+    func_0027C660();
+    return 0;
+}
+
