@@ -131,7 +131,35 @@ INCLUDE_ASM("asm/levels", func_L02_003FB000);
 
 INCLUDE_ASM("asm/levels", func_L02_003FB120);
 
-INCLUDE_ASM("asm/levels", func_L02_003FB4D8);
+extern s32 func_L02_003FB6C0(char *, char *);
+
+/* Looks through the entity list the object's state names for one of kind A1 whose byte at +0x20
+   is 1; records A0 as that entity's owner and returns func_L02_003FB6C0's result for it.
+   The walk is func_L02_003FB5A0's `do { ... } while ((s16)*p++ >= 0);`: a `for (;;)` with the
+   test and the increment in the body makes this cc1 annul the loop-bottom slot (`bgezl`). */
+s32 func_L02_003FB4D8(char *a0, s32 a1, char *a2) {
+    char *state = *(char **)(a0 + 0x68);
+    u32 index = *(u32 *)(state + 0x40);
+    u32 entry;
+    u16 *p;
+    char *rec;
+
+    if (index == 0xFF)
+        return 0;
+    entry = D_L02_001FC060[index];
+    if (entry == 0)
+        return 0;
+    p = (u16 *)entry;
+    do {
+        rec = D_L02_001B359C + ((*p & 0x7FFF) << 8);
+        if (rec != 0 && *(u8 *)(rec + 0x20) != 0xFE && *(u8 *)(rec + 0x20) != 0xFD
+            && *(s16 *)(rec + 0xAA) == a1 && *(u8 *)(rec + 0x20) == 1) {
+            *(char **)(rec + 0xB8) = a0;
+            return func_L02_003FB6C0(a0, rec);
+        }
+    } while ((s16)*p++ >= 0);
+    return 0;
+}
 
 extern char *D_L02_001B359C __attribute__((sda));
 extern u32 D_L02_001FC060[];
