@@ -8,7 +8,7 @@
 # applies the patches in tools/compiler/patches/ (Lombyte's sce-991111b stack, MIT, with its
 # retired 0034 and its earlier 0020), the opt-in 0057 and 0058 extensions and the
 # transformers in tools/compiler/transformers/,
-# refuses to build unless the five patched sources hash as listed below, and builds.
+# refuses to build unless the patched sources hash as listed below, and builds.
 #
 # The binaries' hashes depend on the build host; the sources' do not. A compiler from these
 # sources compiles every matched function in src/ to the retail bytes (tools/build.py).
@@ -62,7 +62,9 @@ sha256sum --check --quiet <<'SUMS'
 8e6d97e725c1af7533d8b474e9b7a12fde95b0363eb4db99040c9e2596daba3a  gcc/config/mips/mips.c
 d43a3f2274e1ca640c1f877b9aa2a82b2e337298d7d0ebf7e5498fe91b3523f4  gcc/config/mips/mips.h
 9f6894ef4dfaa19708b4fd68203a1424e36b680741969b8b3531c92c0a628e40  gcc/config/mips/mips.md
-38d52727addc0b0b299700835788808cf23fe59c863a961cdd6f28170faaf3cc  gcc/toplev.c
+b0bbdf38fc1096cb53e4ba5e2d851c39e61f5c9514a642e674c2f8fad0369a93  gcc/toplev.c
+7f6129ee785e81c4232a1f518e1520318884ce5ce97e9568061cf6196dd9c072  gcc/haifa-sched.c
+601cd4d6d1a2090b7f5db1a1564af9362a0be5665ca6e73fc8127bf33294d55e  gcc/flags.h
 35a06b9ab08420b29503c6bb97d954ddb3d65571326f6f54ba3f315ad6aac029  gas/config/tc-mips.c
 SUMS
 
@@ -94,4 +96,5 @@ cp gcc/cc1 gcc/cpp "$OUT/" && cp gas/as-new "$OUT/as"
 # SDK recipe installs them: an authored unit that includes <stdarg.h>
 # (a varargs body) needs them on the preprocessor's path.
 mkdir -p "$OUT/include" && cp "$W/src/gcc/ginclude/"*.h "$OUT/include/"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_zero_ti_store.py"
 echo "compiler in $OUT"

@@ -87,7 +87,7 @@ no SN tools, so the build is run locally and its result committed.
 
 - **The game's code**: GNU EE-GCC 2.9-ee-991111b rebuilt from its public source with
   Lombyte's patch stack and the transformers this project measured
-  ([tools/compiler/](../tools/compiler/README.md)). The build stops unless the five patched
+  ([tools/compiler/](../tools/compiler/README.md)). The build stops unless the pinned modified
   sources hash as recorded; the binaries' own hashes depend on the host, so a compiler is
   checked by its output.
 - **The boot's SDK units** (the `src/core/` files `config/cflags.txt` marks `sdk`): Sony EE-GCC 2.9-ee-991111-01, unmodified, from

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Make a 128-bit clear a scheduling barrier in gcc/haifa-sched.c, as the game's clear macro was.
+"""Add an opt-in scheduling model for the game's inferred 128-bit clear macro.
 
-In retail a cleared quadword is followed at once by the next most urgent instruction, never by
-an independent one: func_L02_003EAE10 and its family (func_L00_003BFF68, func_L13_0040A3B0,
+In the measured retail family a cleared quadword is often followed by the next dependent load:
+func_L02_003EAE10 and its family (func_L00_003BFF68, func_L13_0040A3B0,
 func_L04_00419918, func_L17_003BCC30, func_L17_003BCEC0, func_L17_003C45A0, func_L02_003EA4E0)
 have `sq $zero,0($sp)` ; `lwc1 $f0,N($sN)` ; the call's argument moves. This cc1 put the moves
 first. sched2 sees a `store` (ready cost 2 on the R5900 memory unit) and the load as dependent on
@@ -20,16 +20,19 @@ The C writes that clear as a TImode store of zero, which rac2_fold_zero_ti_store
 `sq $0` after reload when the zero is not shared (a zero shared by several stores stays `por` +
 `sq`, the C form). This gives exactly those stores a volatile asm's dependences, cost and unit:
 after reload a TImode store from $0, before reload a TImode store of const 0 that is the only one
-between two calls, labels or jumps (one that reload will not share). Measured on 21 October
-2026: the 768 files in src/ compile to the same objects with the old and the new cc1 (the 106
-SDK units through the unchanged SDK cc1); of the 1,688 drafts in nonmatching/, 30 change and
-func_L02_003EAE10 is then exact; func_L00_003BFF68 (12 places) and func_L13_0040A3B0 (3) match
-too, prologue order included, with their call's float argument declared before the pointers."""
+between two calls, labels or jumps. That is a heuristic, not proof of the source's origin;
+it also affects nonzero-displacement stores. Therefore it is disabled by default and enabled
+only with -frac2-zero-ti-barrier for a measured compilation unit in config/cflags.txt.
+The option does not change the separate zero-folding pass. Default output remains unchanged;
+the opt-in witness func_L00_003BFF68 matches at all 12 placements. Compiler regression tests
+cover the selector, call/branch boundaries, shared clears, displacement controls and disabling
+the option again. See docs/COMPILER-NOTES.md for the evidence and limits.
+
+Usage: zero_ti_store_barrier.py <gcc/haifa-sched.c>
+"""
 import sys
 from pathlib import Path
 
-path = Path(sys.argv[1])
-source = path.read_text(encoding="utf-8")
 old = ("/* Analyze an INSN with pattern X to find all dependencies.  */\n"
        "\n"
        "static void\n"
@@ -103,7 +106,7 @@ new = ("/* RAC2: the game cleared a quadword with an inline-asm macro, `sq $0,0x
        "  int i;\n"
        "\n"
        "  /* RAC2: the dependences of a volatile asm (sched_analyze_2), and its cost and unit.  */\n"
-       "  if (rac2_zero_ti_barrier_p (x, insn))\n"
+       "  if (flag_rac2_zero_ti_barrier && rac2_zero_ti_barrier_p (x, insn))\n"
        "    {\n"
        "      int max_reg = max_reg_num ();\n"
        "      for (i = 0; i < max_reg; i++)\n"
@@ -125,5 +128,32 @@ new = ("/* RAC2: the game cleared a quadword with an inline-asm macro, `sq $0,0x
        "      INSN_UNIT (insn) = -1;\n"
        "    }\n"
        "\n")
-assert source.count(old) == 1, ("the head of sched_analyze_insn", source.count(old))
-path.write_text(source.replace(old, new), encoding="utf-8", newline="")
+def replace_once(source: str, before: str, after: str, label: str) -> str:
+    if source.count(before) != 1:
+        raise ValueError(f"{label}: expected one insertion point, found {source.count(before)}")
+    return source.replace(before, after)
+
+
+def patch(path: Path) -> None:
+    top = path.with_name("toplev.c")
+    flags = path.with_name("flags.h")
+    scheduler = replace_once(path.read_text(encoding="utf-8"), old, new, "sched_analyze_insn")
+    driver = replace_once(top.read_text(encoding="utf-8"), "int flag_schedule_insns_after_reload = 0;",
+                          "int flag_schedule_insns_after_reload = 0;\n"
+                          "/* Opt-in model of the game's inferred quadword-clear macro. */\n"
+                          "int flag_rac2_zero_ti_barrier = 0;", "option definition")
+    driver = replace_once(driver, '  {"schedule-insns", &flag_schedule_insns, 1,',
+                          '  {"rac2-zero-ti-barrier", &flag_rac2_zero_ti_barrier, 1,\n'
+                          '   "Model the RAC2 quadword-clear scheduling barrier"},\n'
+                          '  {"schedule-insns", &flag_schedule_insns, 1,', "option table")
+    declarations = replace_once(flags.read_text(encoding="utf-8"),
+                                "extern int flag_schedule_insns_after_reload;",
+                                "extern int flag_schedule_insns_after_reload;\n"
+                                "extern int flag_rac2_zero_ti_barrier;", "option declaration")
+    # Validate every insertion point before modifying any source.
+    for destination, contents in ((path, scheduler), (top, driver), (flags, declarations)):
+        destination.write_text(contents, encoding="utf-8", newline="")
+
+
+if __name__ == "__main__":
+    patch(Path(sys.argv[1]))

@@ -1544,12 +1544,11 @@ only describe, and found the source spellings for two game-wide idioms.
 - **gas turns the compiler's `addu rd,rs,imm` into the retail's `addiu`**, and `move rd,rs`
   into `daddu rd,rs,$zero` - a candidate differing only in those is not a difference.
 
-## The 128-bit clear is a scheduling barrier (21 October 2026)
+## Optional scheduling model for 128-bit clears (21 October 2026)
 
 - **What retail does.** Retail clears a quadword with `sq $zero,0(reg)`. Every one of the 360
   such stores in its compiled code (outside the hand-written COP2/MMI routines) has
-  displacement 0, and after one the next most urgent instruction follows at once, even a load
-  that may alias the cleared quadword. In 71 of 95 cases such a load comes before an
+  displacement 0. In 71 of 95 inspected cases a load that may alias the cleared quadword comes before an
   independent instruction that was ready before the store. For a plain store this scheduler
   does that rarely (43 of 1,499 stores in the functions it already matches), and sp-based
   clears (14 of 14) behave like pointer-based ones. That is the shape of an inline-asm clear,
@@ -1561,17 +1560,33 @@ only describe, and found the source spellings for two game-wide idioms.
   instruction in the cycle that made it ready, so an independent ready instruction always took
   the store's second slot and a dependent load came later. Lowering the store's ready cost to 1
   does not change that.
-- **The change.** `transformers/zero_ti_store_barrier.py` gives those stores, in
+- **The opt-in change.** `transformers/zero_ti_store_barrier.py` gives those stores, in
   `gcc/haifa-sched.c`'s `sched_analyze_insn`, the dependences, cost and unit of a volatile asm
   (as `sched_analyze_2` builds them). After reload that is a TImode store from `$0`. Before
   reload it is a TImode store of const 0 that is the only one between two calls, labels or
   jumps: a zero that several stores share stays `por` + `sq`, the C form, and the fold leaves
-  it alone.
-- **Measured on 21 October.** The 767 files in `src/` compile to the same objects with the old
-  and the new cc1 (the 106 SDK units through the unchanged SDK cc1), except for the witness's
-  own section. `func_L00_003BFF68` (12 places) matches with it, and with the old cc1 the same C
+  it alone. This is enabled only by `-frac2-zero-ti-barrier`, per compilation unit
+  in `config/cflags.txt`; the default remains unchanged. The test controls show
+  that the heuristic also changes a single nonzero-displacement clear. It is not
+  a general detector of original inline assembly, so enabling it elsewhere needs
+  evidence and checks for every function in that file.
+- **Measured on 21 October.** An independent comparison of the same 767 source
+  units found 756 whole objects identical, ten with only `.mdebug` differences,
+  and one changed code section: the witness. The SDK compiler is unchanged.
+  `func_L00_003BFF68` (12 places) matches with the option, and with it disabled the same C
   is 0 of 12: its prologue saves come out grouped, its clear two instructions late, and two
   delay slots differ. Of the 1,779 drafts in `nonmatching/`, 28 change. `func_L02_003EAE10`'s
   record and a new draft of `func_L13_0040A3B0` (3 places) are exact with it. Of the drafts
   that change size, `func_L23_003BFE90` reaches retail's 300 bytes, and `func_L00_003CD160`
-  comes 8 bytes closer to retail's 1,268.
+  comes 8 bytes closer to retail's 1,268. Those draft-screen results were reported
+  for the initial always-enabled proposal; enabling the final option for each
+  additional unit still requires its own validation.
+
+`tests/test_zero_ti_store.py` executes the injected selector against synthetic RTL
+cases: zero/nonzero registers, scalar/quadword memory, neighboring clears and
+call/jump/label/barrier boundaries in both directions. Authored C controls then
+compile and assemble with the real EE tools in default, enabled and explicitly
+disabled modes, covering isolated/shared clears, nonzero displacement, calls and
+branches. `tools/compiler/build.sh` runs these tests after installation and pins
+the scheduler, option declarations and option table alongside the existing source
+hashes. Game-byte equality remains a separate full-build gate.
