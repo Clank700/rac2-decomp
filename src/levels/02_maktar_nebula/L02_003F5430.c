@@ -259,7 +259,7 @@ void func_L02_003FAF90(char *a0) {
 
 INCLUDE_ASM("asm/levels", func_L02_003FB000);
 
-INCLUDE_ASM("asm/levels", func_L02_003FB120);
+/* func_L02_003FB120 is matched in L02_003FB120-g8.c (built with -g). */
 
 extern s32 func_L02_003FB6C0(char *, char *);
 
@@ -370,7 +370,7 @@ s32 func_L02_003FB6C0(char *a0, char *a1) {
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003FB7E0);
+/* func_L02_003FB7E0 is defined in L02_003F5430-g8.c ($gp accesses). */
 
 void func_L02_003FBA58(char *a0) {
     char **p;
@@ -460,7 +460,102 @@ void func_L02_003FBB90(char *a0) {
     } while (*p++ >= 0);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003FBCF8);
+extern s32 D_L02_001B35B8[] __attribute__((sda));
+extern void func_L02_003FC1B0(char *, s32);
+
+/* The test of the entity walks below: the group word at +0x40 is read again for every condition,
+   as the handlers may change it. */
+#define GROUP_LEFT(p) \
+    ((*(s32 *)(state + 0x40) & 0xFF) != 0xFF && *(s32 *)(state + 0x40) <= D_L02_001B35B8[0] && \
+     p != 0 && ((p != 0 && (s16)p[-1] >= 0) || p == (u16 *)D_L02_001FC060[*(s32 *)(state + 0x40)]))
+
+/* Clears the flag (+0x2F6 of a 0x9CA entity's block, +0x4EA of a 0xB22 one) of every entity of
+   the group that has it set and passes the entity's kind to func_L02_003FC1B0; then, twice, picks
+   among the group's entities of those two kinds that are not 0xFE/0xFD, have a state byte (+0x20)
+   of 4 or more and the flag not set, the one nearest to D_00189EA0, sets its flag and takes one
+   off its kind's count (+0x50, +0x54). */
+void func_L02_003FBCF8(char *a0) {
+    char *state = *(char **)(a0 + 0x68);
+    u16 *p;
+    char *e;
+    char *best;
+    float bestd;
+    float d;
+    s32 i;
+    u16 kind;
+    s16 flag;
+
+    for (p = (u16 *)D_L02_001FC060[*(s32 *)(state + 0x40)]; GROUP_LEFT(p); p++) {
+        e = D_L02_001B359C + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        switch (*(s16 *)(e + 0xAA)) {
+        case 0x9CA: {
+            char *q = *(char **)(e + 0x68);
+
+            if (*(s16 *)(q + 0x2F6) == 1) {
+                *(s16 *)(q + 0x2F6) = 0;
+                func_L02_003FC1B0(a0, *(s16 *)(e + 0xAA));
+            }
+            break;
+        }
+        case 0xB22: {
+            char *q = *(char **)(e + 0x68);
+
+            if (*(s16 *)(q + 0x4EA) == 1) {
+                *(s16 *)(q + 0x4EA) = 0;
+                func_L02_003FC1B0(a0, *(s16 *)(e + 0xAA));
+            }
+            break;
+        }
+        }
+    }
+    for (i = 0; i < 2; i++) {
+        best = 0;
+        bestd = 10000.0f;
+        for (p = (u16 *)D_L02_001FC060[*(s32 *)(state + 0x40)]; GROUP_LEFT(p); p++) {
+            e = D_L02_001B359C + ((*p & 0x7FFF) << 8);
+            if (e == 0)
+                break;
+            flag = -1;
+            kind = *(u16 *)(e + 0xAA);
+            switch (*(s16 *)(e + 0xAA)) {
+            case 0x9CA:
+                flag = *(s16 *)(*(char **)(e + 0x68) + 0x2F6);
+                break;
+            case 0xB22:
+                flag = *(s16 *)(*(char **)(e + 0x68) + 0x4EA);
+                break;
+            }
+            if (e != 0 && *(u8 *)(e + 0x20) != 0xFE && *(u8 *)(e + 0x20) != 0xFD &&
+                ((s16)kind == 0x9CA || (s16)kind == 0xB22) && flag != 1 &&
+                *(u8 *)(e + 0x20) >= 4) {
+                if (best == 0) {
+                    best = e;
+                    bestd = func_00282E80(best + 0x10, D_00189EA0);
+                } else {
+                    d = func_00282E80(e + 0x10, D_00189EA0);
+                    if (d < bestd) {
+                        best = e;
+                        bestd = d;
+                    }
+                }
+            }
+        }
+        if (best != 0) {
+            switch (*(s16 *)(best + 0xAA)) {
+            case 0x9CA:
+                *(s16 *)(*(char **)(best + 0x68) + 0x2F6) = 1;
+                *(s32 *)(state + 0x50) -= 1;
+                break;
+            case 0xB22:
+                *(s16 *)(*(char **)(best + 0x68) + 0x4EA) = 1;
+                *(s32 *)(state + 0x54) -= 1;
+                break;
+            }
+        }
+    }
+}
 
 void func_L02_003FC020(char *a0, char *a1) {
     char *a3 = *(char **)(a0 + 0x68);

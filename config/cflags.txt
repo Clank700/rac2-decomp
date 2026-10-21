@@ -51,6 +51,8 @@ src/levels/02_maktar_nebula/L02_003D5118.c	-O2 -G0 -ffunction-sections -frac2-qc
 src/levels/02_maktar_nebula/L02_003D6388-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/02_maktar_nebula/L02_003D6A20-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
 src/levels/07_siberius/L07_003EE708-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003EB648-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003DBB70.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/18_damosel/L18_004308F0.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/levels/shared/L02_00411530.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/levels/23_damosel_orbit/L23_00422668.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-no-annulled-wide-stores
@@ -274,6 +276,7 @@ src/game/00344848.c	-O2 -G8 -ffunction-sections
 src/game/003506A8.c	sdk -O2 -G2 -ffunction-sections
 src/levels/02_maktar_nebula/L02_003007D8-g8.c	-O2 -G8 -ffunction-sections -g
 src/levels/02_maktar_nebula/L02_004002E0-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/02_maktar_nebula/L02_003FB120-g8.c	-O2 -G8 -ffunction-sections -g
 src/levels/02_maktar_nebula/L02_003CB090.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/02_maktar_nebula/L02_003DB310-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges
 src/levels/02_maktar_nebula/L02_003EEAD8.c	-O2 -G0 -ffunction-sections -g

@@ -198,6 +198,85 @@ void func_L02_003FD228(char *a0) {
     HALF(0xE, 0xC4)
 }
 
+extern s32 func_L02_003D77B8(char *);
+
+extern s32 func_L02_003FD000(char *);
+
+extern f32 func_00282E80(char *, char *);
+
+extern char D_00189EA0[];
+
+/* Fills the slot of the list at +0xA8 that the counter at +0xD8 names. It goes on when that slot is
+   empty, or when func_L02_003D77B8 returns 0 for the entity in it and the counter is below the
+   table record's limit (byte +0x12 less one: the counter is then stepped). The entity group the
+   object names (+0x44) is walked: the first entity for which func_L02_003FD000 and
+   func_L02_003D77B8 both return non-zero goes into the slot; if the slot is still empty, the
+   first one with func_L02_003D77B8 non-zero that is more than 30.0 away from D_00189EA0. */
+void func_L02_003FB7E0(char *a0) {
+    char *state = *(char **)(a0 + 0x68);
+    char *rec = *(char **)(D_L02_001B1190[*(s16 *)(state + 0x120)] + 4) + *(s16 *)(state + 0x122) * 0x14;
+    char *at = state + GROUP(0xD8) * 4;
+    char *slot = *(char **)(at + 0xA8);
+    s32 go = 0;
+    u16 *p;
+    u16 *q;
+    char *e;
+
+    if (slot != 0) {
+        if (func_L02_003D77B8(slot) == 0) {
+            if (GROUP(0xD8) < *(u8 *)(rec + 0x12) - 1) {
+                go = 1;
+                GROUP(0xD8) += 1;
+            }
+        }
+    } else {
+        go = 1;
+    }
+    if (go == 0)
+        return;
+    if (GROUP(0x44) == 0xFF)
+        return;
+    q = (u16 *)D_L02_001FC060[GROUP(0x44)];
+    if (q == 0)
+        return;
+    for (p = q; (GROUP(0x44) & 0xFF) != 0xFF && GROUP(0x44) <= D_L02_001B35B8[0] && p != 0 &&
+                ((p != 0 && (s16)p[-1] >= 0) || p == (u16 *)D_L02_001FC060[GROUP(0x44)]);
+         p++) {
+        e = (char *)D_L02_001B359C[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        if (func_L02_003FD000(e) != 0 && func_L02_003D77B8(e) != 0) {
+            char **list = (char **)(state + 0xA8);
+            char **cur = list + GROUP(0xD8);
+
+            *cur = e;
+            break;
+        }
+    }
+    {
+        char **list = (char **)(state + 0xA8);
+        char **cur = list + GROUP(0xD8);
+
+        if (*cur != 0)
+            return;
+    }
+    for (p = (u16 *)D_L02_001FC060[GROUP(0x44)];
+         (GROUP(0x44) & 0xFF) != 0xFF && GROUP(0x44) <= D_L02_001B35B8[0] && p != 0 &&
+         ((p != 0 && (s16)p[-1] >= 0) || p == (u16 *)D_L02_001FC060[GROUP(0x44)]);
+         p++) {
+        e = (char *)D_L02_001B359C[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        if (func_L02_003D77B8(e) != 0 && func_00282E80(e + 0x10, D_00189EA0) > 30.0f) {
+            char **list = (char **)(state + 0xA8);
+            char **cur = list + GROUP(0xD8);
+
+            *cur = e;
+            break;
+        }
+    }
+}
+
 extern unsigned char D_001395B8[0x100];
 
 /* D_001A7A0C, written as the second word of an 8-byte object: cc1 then counts the store as two
