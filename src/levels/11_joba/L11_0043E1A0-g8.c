@@ -35,7 +35,7 @@ extern u32 D_L11_001B32E8[];
 
 extern u8 D_L11_001BA8C0[];
 
-extern u8 *D_L11_001B359C __attribute__((sda));
+extern u8 *D_L11_001B359C[3] __attribute__((sda));
 
 extern u8 *D_L11_001FC420[];
 
@@ -179,3 +179,84 @@ s32 func_L11_00440970(u8 *object, u8 *arg) {
     return 1;
 }
 
+extern s32 D_L11_001B35B8[] __attribute__((sda));
+extern f32 D_L11_001B1614 __attribute__((sda));
+extern f32 D_L11_001B1618 __attribute__((sda));
+extern s32 func_00312B58(u8 *);
+extern s32 func_L02_00416800(u8 *);
+extern s32 func_002A77E0(s32);
+extern void func_L02_00416720(u8 *, u8 *, f32, f32);
+
+#define GROUP(off) (*(s32 *)(state + (off)))
+/* Leaves the function when the group is 0xFF or empty; the braces it opens close in END_IDS. */
+#define FOR_EACH_ID(p, off) \
+    if (GROUP(off) == 0xFF) \
+        return; \
+    { u16 *q = (u16 *)D_L11_001FC420[GROUP(off)]; \
+    if (q == 0) \
+        return; \
+    for (p = q; (GROUP(off) & 0xFF) != 0xFF && GROUP(off) <= D_L11_001B35B8[0] && p != 0 && \
+         ((p != 0 && (s16)p[-1] >= 0) || p == (u16 *)D_L11_001FC420[GROUP(off)]); \
+         p++)
+#define END_IDS }
+/* One half: collect the entities of group OFF for which func_00312B58 holds (counting the
+   others in m), then, up to 1000 passes over the group at state word 0x17C while m is below
+   the record's limit, hand one collected entity at a time to func_L02_00416720 with an entity
+   of that group. */
+#define HALF(limit, off) \
+    { \
+        s32 n, m, i, k; \
+        if (*(s16 *)(rec + (limit)) != 0) { \
+            m = 0; \
+            n = 0; \
+            for (k = 15; k >= 0; k--) \
+                buf[k] = 0; \
+            FOR_EACH_ID(p, off) { \
+                e = D_L11_001B359C[0] + ((*p & 0x7FFF) << 8); \
+                if (e == 0) \
+                    break; \
+                if (func_00312B58(e) == 0) { \
+                    m++; \
+                } else { \
+                    buf[n] = e; \
+                    n++; \
+                } \
+            } END_IDS \
+            if (n != 0) { \
+                for (i = 0; i < 1000 && m < *(s16 *)(rec + (limit)); i++) { \
+                    FOR_EACH_ID(p, 0x17C) { \
+                        e = D_L11_001B359C[0] + ((*p & 0x7FFF) << 8); \
+                        if (e == 0) \
+                            break; \
+                        if (n <= 0) \
+                            break; \
+                        if (func_L02_00416800(e) != 0 && func_002A77E0(6) == 0) { \
+                            n--; \
+                            func_L02_00416720(e, buf[n], D_L11_001B1614 * 0.016666668f, \
+                                              D_L11_001B1618 * 2.908882452175021e-4f); \
+                            m++; \
+                            break; \
+                        } \
+                    } END_IDS \
+                } \
+            } \
+        } \
+    }
+
+/* For each of the object's two groups (state words 0x178 and 0x174), gathers the entities
+   func_00312B58 accepts and counts the ones it refuses; then, while that count is below the
+   limit of the class record the state names (the halfword at 0x10, at 0x12 for the second
+   group), hands the gathered entities, last first, to func_L02_00416720 together with entities
+   of the group at state word 0x17C. */
+void func_L11_00442E38(u8 *object) {
+    u8 *state = *(u8 **)(object + 0x68);
+    JobaClassTableView *entry =
+        ((JobaClassTableView **)&D_L11_001B14F8)[*(s16 *)(state + 0x1F0)];
+    u8 *rec = (u8 *)&entry->records[*(s16 *)(state + 0x1F2)];
+    u8 *buf[16];
+    u16 *p;
+    u8 *e;
+
+    HALF(0x10, 0x178)
+    HALF(0x12, 0x174)
+}
