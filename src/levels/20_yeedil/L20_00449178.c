@@ -68,7 +68,8 @@ INCLUDE_ASM("asm/levels", func_L20_0044A1C8);
 
 INCLUDE_ASM("asm/levels", func_L20_0044AB68);
 
-INCLUDE_ASM("asm/levels", func_L20_0044AC38);
+/* func_L20_0044AC38 is defined in L20_0044AC38-g8.c (it reaches a global
+   through $gp).  Its near miss is nonmatching/levels/func_L20_0044AC38.c. */
 
 INCLUDE_ASM("asm/levels", func_L20_0044AE58);
 
