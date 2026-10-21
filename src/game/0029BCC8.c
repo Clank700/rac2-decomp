@@ -27,7 +27,7 @@ void func_0029BEB8(void) {
         func_0033A6D8(D_001A8CFC + 0x3F138);
 }
 
-INCLUDE_ASM("asm/game", func_0029BF08);
+/* func_0029BF08 is in 0029BCC8-g8.c. */
 
 void func_0029C0D0(void) {
 }
