@@ -120,3 +120,25 @@ int func_PAL_0029D328(int value) {
         return func_0033D028(D_001A8CFC + 0x3DB28, value);
     return 0;
 }
+
+extern void func_0033D2C0(void *);
+
+void func_PAL_0029D368(void) {
+    if (D_001A8CFC != 0)
+        func_0033D2C0(D_001A8CFC + 0x3DB28);
+}
+
+extern int func_0033DC30(void *, int);
+
+int func_PAL_0029D398(int value) {
+    if (D_001A8CFC != 0)
+        return func_0033DC30(D_001A8CFC + 0x3EC00, value);
+    return 0;
+}
+
+extern void func_0033DCC8(void *);
+
+void func_PAL_0029D3D8(void) {
+    if (D_001A8CFC != 0)
+        func_0033DCC8(D_001A8CFC + 0x3EC00);
+}
