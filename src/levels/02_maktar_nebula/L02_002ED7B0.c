@@ -213,7 +213,7 @@ void func_L02_002ED7B0(int flag, float limit) {
 
 INCLUDE_ASM("asm/levels", func_L02_002F2B88);
 
-INCLUDE_ASM("asm/levels", func_L02_003007D8);
+/* func_L02_003007D8 is matched in L02_003007D8-g8.c (built with -G8 and -g). */
 
 typedef struct {
     u8 pad00[0x34];
