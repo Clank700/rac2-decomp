@@ -1544,6 +1544,54 @@ only describe, and found the source spellings for two game-wide idioms.
 - **gas turns the compiler's `addu rd,rs,imm` into the retail's `addiu`**, and `move rd,rs`
   into `daddu rd,rs,$zero` - a candidate differing only in those is not a difference.
 
+## Habits measured on the small unclaimed bodies (21 October 2026)
+
+A wave of sixteen workers over the 159 smallest unclaimed functions in the project
+(level directories and `src/core/`) matched twenty of them. The findings correct
+several earlier notes, which said the opposite.
+
+- **`min.s`/`max.s` ARE reachable, with `-ffast-math`.** `fold()` in fold-const.c only
+  builds a float MIN/MAX_EXPR out of `a < b ? a : b` when the float format is not IEEE or
+  `flag_fast_math` is set. Every earlier "the min/max opcodes are a wall" note is wrong.
+  The flag is per file, and it is what made `func_L01_003BD560` reach the retail's
+  `min.s $f0,$f15,$f12` exactly.
+- **A block written as a `while` whose body returns stays a loop head**, so the label
+  after it is aligned to **eight bytes** (`.p2align 3`) and the assembler pads it with a
+  standalone `nop` - the retail's. The `if` form leaves the label four-byte aligned and
+  the body four bytes short. The eight-byte label alignment has two sources only
+  (final.c): a loop head (`LOOP_ALIGN`) and a jump table (`ADDR_VEC_ALIGN`); a merge
+  point gets four bytes (`mips_align_jumps`).
+- **A positive `addiu $sp,$sp,X` in a row's first bytes is a dead-stripped epilogue,
+  never a prologue** - a C body always allocates its frame with a negative `addiu`. That
+  is how most of the broken `src/core` rows start: the real body sits 8-56 bytes further
+  on. A census from the wave: **1465 catalogue rows open with an
+  `addiu $sp,$sp,+N ; nop` pair, and not one of them has a C definition in `src/`.**
+- **The `$gp` form and the `lui`/`%lo` form need two C names for one address.**
+  `sda` gives `$gp` for every access and `nosda` gives `lui`/`%lo` for every access, so
+  a body that uses both forms names the second access separately. In a `-G0` unit `sda`
+  is not ignored (the global goes through `$gp`); in a `-G8` unit it is `nosda` that
+  keeps the absolute form.
+- **The -G8 profile changes the register allocation, not only the `$gp` data.**
+  `func_L17_003BCBC8` matches only at `-G8`: there the two colour constants land in
+  `$a1`/`$t0` where `-G0` puts them in `$v1`/`$a3` - a body with no `$gp` at all.
+- **A named local for a constant changes the order the constants are materialised in.**
+  `s32 c1 = 0x80404040;` used once inside a branch makes cc1 materialise it *before*
+  `0x80FFFFFF`; with the two literals inline it is the other way round.
+- **A duplicated tail can restore a retail block layout.** For `func_00116300` the plain
+  `if` gave 88 bytes; duplicating the tail in both arms made the compiler keep the
+  retail's `bne` plus the unconditional jump over it.
+- **`sda` bites through the assembler, not the compiler**: cc1 emits an absolute
+  `lui`/`%lo` pair, but the `.extern NAME, size` it emits makes gas produce the
+  `$gp`-relative form. It works for a **scalar** declaration, not for an array.
+- **The retail's `nop` before a `div.s` is not the assembler's** - the game's `as` emits
+  none there, and the compiler has no FPR-hazard nop rule. It is a source shape.
+- **A store to a constant address**: non-volatile gives a split address, volatile gives
+  a materialised one but is not scheduled into a delay slot. A body that wants both
+  needs a register pin, which `src/` forbids.
+- **`sync` is unreachable in both compilers** (no pattern in either `cc1`), so the 22
+  boot bodies with a `sync` cannot be matched from C at all.
+- **`(int)double` compiles to a `jal dptoli` libcall** under the SDK profile, where the
+  retail has the old gcc inline `fixdfsi` - a toolchain difference, not a source shape.
 ## Optional scheduling model for 128-bit clears (21 October 2026)
 
 - **What retail does.** Retail clears a quadword with `sq $zero,0(reg)`. Every one of the 360
