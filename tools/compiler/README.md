@@ -39,6 +39,13 @@ built tools: selector boundaries, isolated/shared/offset clears, calls, branches
 and the default/disabled controls. The host selector tests also run in ordinary
 CI; the EE output tests require the public-built compiler, never game data.
 
+The separate `fold_zero_ti_store.py` pass folds a materialized zero only when
+the store address is a register with no displacement. Offset stores keep their
+`por` producer and register-source `sq`, as measured in the retained vector
+helpers. This address rule applies in every scheduling profile; it does not
+enable `-frac2-zero-ti-barrier` for additional files. Authored positive and
+negative offset controls verify it alongside the zero-displacement controls.
+
 `build.sh` stops unless `mips.c`, `mips.h`, `mips.md`, `toplev.c`, `flags.h`,
 `haifa-sched.c` and `tc-mips.c` hash as it
 lists. The binaries' own hashes depend on the build host and path, so check a compiler by its

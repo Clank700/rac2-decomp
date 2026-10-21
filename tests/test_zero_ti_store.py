@@ -124,7 +124,7 @@ class CompilerOutputTests(unittest.TestCase):
                 subprocess.run([str(compiler / "as"), "-o", str(root / (label+".o")), str(asm)], check=True)
                 text = asm.read_text()
                 cls.outputs[label] = {name:re.search(r"(?ms)^"+name+r":.*?\.end\s+"+name, text).group()
-                                      for name in ("isolated", "pair", "offset", "calls", "branch")}
+                                      for name in ("isolated", "pair", "offset", "negative_offset", "calls", "branch")}
 
     def test_disabled_option_restores_default_for_every_control(self):
         self.assertEqual(self.outputs["default"], self.outputs["disabled"])
@@ -141,10 +141,21 @@ class CompilerOutputTests(unittest.TestCase):
                 self.assertEqual(self.outputs["default"][name], self.outputs["enabled"][name])
         self.assertIn("por", self.outputs["enabled"]["pair"])
 
-    def test_nonzero_displacement_is_explicitly_opt_in_and_still_stored(self):
-        self.assertNotEqual(self.outputs["default"]["offset"], self.outputs["enabled"]["offset"])
+    def test_nonzero_displacement_keeps_a_materialized_zero(self):
         for profile in self.outputs:
-            self.assertRegex(self.outputs[profile]["offset"], r"sq\s+\$0,16\(")
+            for name, displacement in (("offset", 16), ("negative_offset", -16)):
+                with self.subTest(profile=profile, displacement=displacement):
+                    text = self.outputs[profile][name]
+                    zero = re.search(r"por\s+(\$[0-9]+),\$0,\$0", text)
+                    self.assertIsNotNone(zero)
+                    self.assertRegex(text, r"sq\s+" + re.escape(zero.group(1))
+                                     + rf",{displacement}\(")
+                    self.assertNotRegex(text, rf"sq\s+\$0,{displacement}\(")
+
+    def test_zero_displacement_still_folds_in_every_profile(self):
+        for profile in self.outputs:
+            with self.subTest(profile=profile):
+                self.assertRegex(self.outputs[profile]["isolated"], r"sq\s+\$0,0\(")
 
 
 if __name__ == "__main__":

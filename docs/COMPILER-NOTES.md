@@ -1590,3 +1590,38 @@ disabled modes, covering isolated/shared clears, nonzero displacement, calls and
 branches. `tools/compiler/build.sh` runs these tests after installation and pins
 the scheduler, option declarations and option table alongside the existing source
 hashes. Game-byte equality remains a separate full-build gate.
+
+## Preserve materialized zeros for displaced quadword stores (21 October 2026)
+
+The original fold also replaced a dead materialized zero in a store addressed
+as `base + displacement`. That removed one instruction needed by three retained
+vector helpers. The fold now requires a `REG` memory address after reload;
+offset expressions retain their `por` and register-source `sq`. Direct stores
+at displacement zero still fold, and the existing liveness and return-value
+guards still apply. This is a compiler source correction, not an assembly-output
+rewrite or a source barrier.
+
+The same C compared with the preceding compiler gives these results:
+
+| Function | Before | After | Placements |
+| --- | ---: | ---: | ---: |
+| `func_L20_0044AB68` | 200 / 204 bytes | 204 / 204 bytes | 1 / 1 |
+| `func_L20_00443908` | 260 / 264 bytes | 264 / 264 bytes | 1 / 1 |
+| `func_L00_003ACC88` | 108 / 112 bytes | 112 / 112 bytes | 27 / 27 |
+
+The shared helper belongs in the existing `-G8` unit and declares its two local
+vectors in their measured stack order. The existing function in that unit
+continues to pass all 27 placements. Across the 775 configured units preceding
+these additions, the compiler comparison found no changed object sections
+except `.mdebug` in eleven units. These observations do not establish a fix for
+the separate vector-copy address-materialization problem in issue #248.
+
+`tests/test_zero_ti_store.py` compiles authored controls with the real compiler
+in default, enabled and explicitly disabled scheduling profiles. It checks that
+positive and negative offset stores retain a zero-producing register, while
+zero-displacement stores still fold. The compiler build pins the updated source
+hash and requires these controls to pass before installation is accepted.
+
+The integrated correction passes all 28 programs with `tools/build.py all
+--strict` and no rejected C placements; the complete container test suite
+passes 57 tests. The three witnesses add 580 distinct matched code bytes.
