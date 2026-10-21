@@ -73,8 +73,6 @@ char *func_US2_0033D1C0(char *object)
     return object;
 }
 
-INCLUDE_ASM("asm/us2/game", func_US2_0033D1F8);
-
 INCLUDE_ASM("asm/us2/game", func_US2_0033D3C0);
 
 char *func_US2_0033D478(char *object)
@@ -143,8 +141,6 @@ char *func_US2_0033DDC8(char *object)
     return object;
 }
 
-INCLUDE_ASM("asm/us2/game", func_US2_0033DE10);
-
 INCLUDE_ASM("asm/us2/game", func_US2_0033E070);
 
 INCLUDE_ASM("asm/us2/game", func_US2_0033E308);
@@ -154,8 +150,6 @@ char *func_US2_0033E488(char *object)
     Ffb202470_FUN_0033AB50(object + 8);
     return object;
 }
-
-INCLUDE_ASM("asm/us2/game", func_US2_0033E4C0);
 
 INCLUDE_ASM("asm/us2/game", func_US2_0033E5E8);
 

@@ -63,8 +63,6 @@ unsigned long long func_US2_002D4340(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/us2/game", func_US2_002D43B0);
-
 extern void func_0029C5A0(void);
 
 int func_US2_002D4438(void) {

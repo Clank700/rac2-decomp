@@ -82,8 +82,6 @@ char *func_US2_0033AA80(char *object)
     return object;
 }
 
-INCLUDE_ASM("asm/us2/game", func_US2_0033AB18);
-
 INCLUDE_ASM("asm/us2/game", func_US2_0033AF70);
 
 extern void F8ad956d6_FUN_00336320(char *target);
