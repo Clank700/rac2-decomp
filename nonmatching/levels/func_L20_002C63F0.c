@@ -122,4 +122,3 @@ void func_L20_002C63F0(void)
         }
     }
 }
-

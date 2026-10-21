@@ -275,9 +275,9 @@
          object   : []
 
      body   b7  0x002CF2FC     48 bytes    12 insns    0 calls  cases 133
-         calls    : 
+         calls    :
          branches : b -> tail+0x4
-         floats   : 
+         floats   :
          global   : [0, 6192]
          object   : []
 
@@ -429,7 +429,7 @@
          object   : []
 
      body  b29  0x002D3C74     24 bytes     6 insns    0 calls  cases 118
-         calls    : 
+         calls    :
          branches : b -> b56+0x34
          floats   : 0x3DBBBBBC
          global   : [812]
@@ -478,7 +478,7 @@
          object   : []
 
      body  b36  0x002D4CF8     36 bytes     9 insns    0 calls  cases 140
-         calls    : 
+         calls    :
          branches : b -> tail+0x0
          floats   : 0xBEC44445
          global   : [248]
@@ -501,7 +501,7 @@
      body  b39  0x002D5010     20 bytes     5 insns    1 calls  cases 60, 100
          calls    : func_00282C88(a0=D_189F10)
          branches : b -> tail+0x4
-         floats   : 
+         floats   :
          global   : []
          object   : []
 
@@ -514,8 +514,8 @@
 
      body  b41  0x002D5090      8 bytes     2 insns    1 calls  cases 121
          calls    : func_L00_002BA220()
-         branches : 
-         floats   : 
+         branches :
+         floats   :
          global   : []
          object   : []
 
@@ -562,7 +562,7 @@
          object   : []
 
      body  b48  0x002D5510     24 bytes     6 insns    0 calls  cases 65
-         calls    : 
+         calls    :
          branches : b -> b57+0x3c
          floats   : 0x3D4CCCCE
          global   : []
@@ -606,7 +606,7 @@
      body  b54  0x002D5AB0     84 bytes    21 insns    2 calls  cases 145
          calls    : func_L20_002C5A48(a0=$zero); func_0027D330(a0=$zero+0x10)
          branches : beqz $v0 -> tail+0x0; bnez $v0 -> tail+0x4; beq $v1, $v0 -> tail+0x0; b -> tail+0x0
-         floats   : 
+         floats   :
          global   : [480, 8852, 8860, 8897, 9376]
          object   : []
 
@@ -654,15 +654,15 @@
 
      body  b61  0x002D6148     12 bytes     3 insns    1 calls  cases 96, 97
          calls    : func_00282C88(a0=D_189F10)
-         branches : 
-         floats   : 
+         branches :
+         floats   :
          global   : []
          object   : []
 
      body tail  0x002D6154    104 bytes    26 insns    0 calls  cases 5, 32, 33, 38, 45, 49, 58, 59, 61, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 92, 93, 94, 95, 104, 105, 106, 107, 108, 113, 117, 126, 128, 132, 135, 136
-         calls    : 
+         calls    :
          branches : bnel $a0, $v0 -> tail+0x14; bnel $a0, $v0 -> tail+0x24
-         floats   : 
+         floats   :
          global   : [448, 452, 8856]
          object   : [67]
 

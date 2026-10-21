@@ -34,7 +34,7 @@
    - the call to f_0033F540 (func_L00_0032A258) takes the addresses of
      the three level globals as pointers, so they must be declared with a
      type bigger than the -G8 threshold (a TI128) for cc1 to compute
-     $gp+offset instead of loading them out of .sdata. 
+     $gp+offset instead of loading them out of .sdata.
    ------------------------------------------------------------------
    The `por` wall, measured again this wave (2026-10-21, worker 10 of the
    level 20 wave 5), with the answer to "is there a source shape that puts
