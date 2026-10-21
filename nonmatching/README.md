@@ -1913,3 +1913,4 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_002E6B78`](game/func_002E6B78.c) | 512 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles |
 | [`func_002EE000`](game/func_002EE000.c) | 564 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles |
 | [`func_002EE238`](game/func_002EE238.c) | 372 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles |
+| [`func_002EE3B0`](game/func_002EE3B0.c) | 608 | not matched - the draft records the decoded body, the unit it needs (`-G8`) and the obstacles |
