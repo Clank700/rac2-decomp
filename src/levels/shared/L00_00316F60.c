@@ -259,6 +259,7 @@ s32 func_L00_0031BE88(char *a0) {
 }
 
 
+/* func_L00_0031C3D0 is a near miss: nonmatching/levels/func_L00_0031C3D0.c */
 INCLUDE_ASM("asm/levels", func_L00_0031C3D0);
 
 void func_L00_0031C978(void)

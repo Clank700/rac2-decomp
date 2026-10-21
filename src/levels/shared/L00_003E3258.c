@@ -3,13 +3,6 @@
 #define RAC2_T_VEC16_FC936841D
 
 typedef struct {
-    char pad_000[0x140];
-    float x_140;
-    float y_144;
-    float z_148;
-} L00AimVector;
-
-typedef struct {
     float x;
     float y;
     float z;
@@ -25,8 +18,6 @@ typedef struct {
 } Entry_24efc0;
 
 extern char *D_L00_001B2B54 __attribute__((sda));
-
-extern L00AimVector D_L00_001B8C80;
 
 extern void func_002833F0_1(char *a, char *b);
 
@@ -337,8 +328,7 @@ void func_L00_003E7050(char *p, float scale)
     func_00282D30_2(p + 48, p + 48, scale);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003E70B8);
-
+/* func_L00_003E70B8 is defined in L00_003E70B8.c. */
 INCLUDE_ASM("asm/levels", func_L00_003E7270);
 
 INCLUDE_ASM("asm/levels", func_L00_003E7650);
