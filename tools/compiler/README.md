@@ -100,6 +100,19 @@ output changes. `src/levels/18_damosel/L18_004308F0.c` and `src/levels/shared/L0
 are the measured witnesses; forcing the switch on every unit changes only the `.mdebug` of
 one `-g` unit. `tests/test_hazard_labels.py` covers the fixed cases and the controls.
 
+`no_annulled_wide_stores.py` adds `-frac2-no-annulled-wide-stores`, enabled only for qualified
+files in `config/cflags.txt`. When reorg fills the delay slot of a conditional branch from the
+branch's target (`fill_slots_from_thread`, `steal_delay_list_from_target` in `reorg.c`), a store
+wider than 32 bits (`sd`, `sq`) no longer goes into the annulled slot of a branch-likely, and
+the search of that thread stops at it. `optimize_skip`, which annuls the one instruction a branch
+skips, is unchanged. In retail's compiled code the annulled slots hold 2,895 stores and none is
+wider than 32 bits, while the other slots hold 547 `sq` and 497 `sd` (docs/COMPILER-NOTES.md).
+Without the switch the output is unchanged, and forcing it on every other game-compiler unit
+of `src/` changes no object. `src/levels/23_damosel_orbit/L23_00422668.c` (with
+`-frac2-qcopy`) and `src/levels/shared/L02_0042EDD0-g8.c` (with `-frac2-zero-ti-barrier`)
+are the measured witnesses. `tests/test_no_annulled_wide_stores.py` covers both paths and the
+controls.
+
 Patch `0052` also preserves the original sign-extending expansion for the isolated
 64-bit sign bit and a sign bit followed by a contiguous low run of at least 32
 ones. Positive contiguous runs wider than 32 bits, with zero bits at both ends,
@@ -129,6 +142,6 @@ are rejected, and the tests exercise actual argument transport for both
 frontends, default/explicit profiles, invalid values and unchanged controls.
 
 `build.sh` stops unless `mips.c`, `mips.h`, `mips.md`, `toplev.c`, `flags.h`,
-`haifa-sched.c`, `gcse.c`, `flow.c` and `tc-mips.c` hash as it
+`haifa-sched.c`, `gcse.c`, `flow.c`, `reorg.c` and `tc-mips.c` hash as it
 lists. The binaries' own hashes depend on the build host and path, so check a compiler by its
 output: `tools/build.py` compiles every matched function to the retail bytes.

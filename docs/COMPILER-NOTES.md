@@ -1986,3 +1986,88 @@ A copy with no neighbours, a copy in each arm of a branch and copies among volat
 are unchanged. The jump2 difference above is pinned, and every pair stays complete and out of
 delay slots. `tools/compiler/build.sh` runs the test after installation and pins
 `haifa-sched.c`, `toplev.c` and `flags.h`. Game-byte equality remains a separate full-build gate.
+
+## Wide stores kept out of annulled delay slots (21 October 2026)
+
+**Retail census.** Scope: the boot from 0x26EA00 and the 27 level programs, each catalogued
+function once (at its first place), the functions marked `ASM_FUNC` left out: 7,825 functions.
+
+| delay slot of | stores | of which `sd` / `sq` | wide loads (`ld` / `lq`) |
+| --- | ---: | ---: | ---: |
+| a branch-likely (annulled when not taken) | 2,895: 1,433 `sw`, 962 `swc1`, 294 `sb`, 206 `sh` | 0 / 0 | 1,215 / 23 |
+| any other branch or jump | 23,137 | 497 / 547 | 4,054 / 69 |
+
+The ordinary-slot `sq` are 472 after a `jal`, 74 after a branch and 1 after a `jr`; the `sd`
+are 143, 345 and 9. So retail never has a 64- or 128-bit store in an annulled slot, while it
+has them in other slots and has wide loads in annulled ones.
+
+**What this cc1 did.** When reorg fills a conditional branch's slot from the branch's target
+(`fill_eager_delay_slots`, `fill_slots_from_thread`), a store can only go into an annulled
+slot, since the other path needs memory. A loop whose first statement is a 16-byte clear then
+ends in `bnel ... ; sq $zero,0(...)` and its label moves behind the copied store;
+`steal_delay_list_from_target` copies a wide store from the delay list of a branch at the
+target in the same way.
+
+**The change.** [`no_annulled_wide_stores.py`](../tools/compiler/transformers/no_annulled_wide_stores.py)
+adds `-frac2-no-annulled-wide-stores`. With it, `fill_slots_from_thread` stops its search of a
+thread at a store wider than 32 bits that it cannot put into an ordinary slot, and
+`steal_delay_list_from_target` refuses such a store for an annulled slot. Refusing the store
+and searching on would take a later instruction of the thread instead (the first witness below
+needs the stop); reorg's search stops in the same way at an `asm` insn (`stop_search_p`), which
+fits the inline-asm clear inferred above but does not prove it. `optimize_skip`, which annuls
+the one instruction a branch skips, is unchanged: the boot's `func_00116460`, compiled by this
+cc1 and matched, has two `bnel ; sd`. The rule is inferred from retail's code, so it is off by
+default and enabled per unit in `config/cflags.txt`; `-fno-rac2-no-annulled-wide-stores`
+disables it.
+
+**Witnesses.** Each is a unit of its own; `tools/check.py` places both at every place.
+
+- `func_L23_00422668` (300 bytes, 1 place), `src/levels/23_damosel_orbit/L23_00422668.c`,
+  `-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-no-annulled-wide-stores`. The target of the
+  `beqz` that picks the else branch starts with the grouped 16-byte copy, which no slot takes.
+  Without the switch reorg searches past it, takes the `$a0 = $sp` move into the `beqz`'s slot,
+  and the return test's branch becomes a `beql` filled from the epilogue: 296 bytes. With it the
+  `beqz` keeps its `nop`, as retail does. Without `-frac2-qcopy` it is 296 bytes either way.
+- `func_L02_0042EDD0` (476 bytes, 2 places), `src/levels/shared/L02_0042EDD0-g8.c`,
+  `-O2 -G8 -ffunction-sections -frac2-no-annulled-wide-stores -frac2-zero-ti-barrier`. Its
+  second loop starts with `*(TI128 *)v = 0`. Without the switch the loop ends in
+  `bnel $s1,$zero,top+4 ; sq $zero,0($sp)` (first difference at +0xF8, with or without the
+  barrier); with the switch alone it ends in retail's `bnez ; lwc1`, and the first call's slot
+  still differs (check.py: +0x110; retail issues the `swc1` before the `jal` and fills the
+  slot with `p++`); the clear's barrier gives that order.
+
+**Near miss.** `func_L02_003E7370` (564 bytes, 1 place) keeps its marker. Its draft (two loops
+that start with `*(TI128 *)a = 0`, and a clear of a second vector between them) in a `-G8`
+unit with the switch: 564 bytes, both loops close as retail's (`bnez ; por`, `bgtz ; nop`),
+and one call slot in the second loop differs (+0x178: retail `jal ; mov.s $f13,$f21`, then
+`addiu $s1,$s1,1`). Adding `-frac2-zero-ti-barrier` fixes that slot but also selects the clear
+between the loops, which retail writes in the C form (`por` + `sq $v0,0x10($sp)`): before
+reload its address is frame+16, and its barrier reorders the block around it. A scratch cc1
+whose pre-reload selector also requires a register address compiles the same C to retail's
+bytes; that change to `-frac2-zero-ti-barrier` is not made here.
+
+**Neutrality, measured on 21 October 2026** against the tools built from master (e238b93).
+The 796 units of `src/` (688 through this cc1, 108 through the SDK compiler), the two witness
+units without the switch, compile to identical objects. With the switch forced on every
+game-compiler unit, the only objects that change are the two witness units. An instrumented
+scratch build shows the thread search reaching a wide store, without a change, in three
+`-frac2-qcopy` units (the grouped copy), and the steal path in no unit and in no draft built
+`-G0` or `-G8`.
+
+**Screen.** Of the 1,808 drafts in `nonmatching/` named after a function, 786 compile as they
+stand: 2,058 configurations (`-G0`, `-G8`, and both with `-frac2-qcopy` for the drafts that use
+a TImode type). With the switch, 12 configurations of 5 drafts change: `func_L00_003CD160`
+(`-G8 -frac2-qcopy`: 1,212 to 1,220 of 1,268 bytes), `func_L02_003CEFD8` (same sizes),
+`func_L02_0042EDD0`, `func_L23_00422668` (296 to 300 bytes, exact with `-G0 -frac2-qcopy`) and
+`func_L23_00425AF8` (1,496 to 1,488 of 1,516). With `-frac2-zero-ti-barrier` added to every
+configuration, the same 5 drafts change and `func_L02_0042EDD0` is exact too.
+
+`tests/test_no_annulled_wide_stores.py` checks the transformer's anchors, its refusal of a
+drifted or already patched source, and compiles authored fixtures with the real EE tools in
+default, enabled and explicitly disabled modes, in the plain profile and with
+`-fno-thread-jumps` (which keeps the branch to a branch that the steal path needs): loops that
+start with an `sq` or an `sd` clear (the thread path), the stolen `sd`, and controls whose
+output must not change (a word clear keeps its `bnel ; sw`, `optimize_skip`'s `beql ; sd`, an
+`sd` in a `beq` slot, an `sq` in a `b` slot). `tools/compiler/build.sh` runs it after
+installation and pins `reorg.c` beside the updated `toplev.c` and `flags.h`. Game-byte
+equality remains a separate full-build gate.
