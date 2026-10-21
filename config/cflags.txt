@@ -337,3 +337,7 @@ src/pal/game/002B8838-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/pal/game/002DCF20-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/pal/game/00310BE8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/pal/game/00317EF8-rc2.c	-O2 -G0 -fno-strength-reduce -ffunction-sections -fno-builtin
+src/pal/game/002CE480-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/game/002CE600-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/game/002CE690-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/game/002CE6C0-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges

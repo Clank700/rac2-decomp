@@ -10,8 +10,6 @@ INCLUDE_ASM("asm/pal/game", func_PAL_0033B4B8);
 
 INCLUDE_ASM("asm/pal/game", func_PAL_0033B520);
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0033B558);
-
 typedef int s32;
 typedef unsigned char u8;
 
@@ -43,8 +41,6 @@ void func_PAL_0033B6C0(char *p)
 }
 
 INCLUDE_ASM("asm/pal/game", func_PAL_0033B740);
-
-INCLUDE_ASM("asm/pal/game", func_PAL_0033B7D0);
 
 INCLUDE_ASM("asm/pal/game", func_PAL_0033B8D8);
 
