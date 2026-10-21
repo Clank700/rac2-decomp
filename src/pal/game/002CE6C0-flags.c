@@ -68,3 +68,11 @@ after_first:
     D_0025E2B8.f58 = func_00336EF0();
     return result;
 }
+
+extern void *func_00344378(void *);
+
+int func_PAL_002CE818(char *object) {
+    if (D_001A8CFC[0] != 0)
+        *(void **)(object + 0x34) = func_00344378(D_001A8CFC[0] + 0x3A0B0);
+    return 0;
+}

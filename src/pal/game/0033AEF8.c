@@ -66,8 +66,6 @@ char *func_PAL_0033B960(char *object)
     return object;
 }
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0033B9F8);
-
 INCLUDE_ASM("asm/pal/game", func_PAL_0033BE50);
 
 extern void F8ad956d6_FUN_00336320(char *target);
