@@ -108,7 +108,7 @@ void func_L23_004278B0(u8 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L23_004278D8);
+/* func_L23_004278D8 is matched in L23_004278D8-g8.c (built with -g). */
 
 INCLUDE_ASM("asm/levels", func_L23_00427CE8);
 
