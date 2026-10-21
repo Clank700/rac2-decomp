@@ -16,6 +16,9 @@ The retail code was built with GNU EE-GCC 2.9-ee-991111b. `build.sh` rebuilds it
   next block, as GCC 2.95 does. `zero_ti_store_barrier.py` adds the opt-in
   `-frac2-zero-ti-barrier` model of the inferred quadword-clear macro
   (docs/COMPILER-NOTES.md); default compilation retains ordinary scheduling.
+  `gcse_unsplit_edges.py` and `keep_block_order.py` add the opt-in
+  `-frac2-gcse-unsplit-edges` and `-frac2-keep-block-order`, which leave out two
+  Cygnus-local pieces of this tree that GCC 2.95 does not have.
 
 Patch `0057` adds the opt-in `-mastra-split-trunc-slot` switch. It splits the
 two-word `truncdisi2` pattern after reload, before delay-slot scheduling, so
@@ -46,7 +49,22 @@ helpers. This address rule applies in every scheduling profile; it does not
 enable `-frac2-zero-ti-barrier` for additional files. Authored positive and
 negative offset controls verify it alongside the zero-displacement controls.
 
+`-frac2-gcse-unsplit-edges` lets gcse's block LCM run on the unsplit flow graph: this tree's
+`gcse_main` first splits each critical edge that needs no new jump (Cygnus, 1998), so a
+hoisted `%hi` gets a block of its own in front of a label reached only by jumps; GCC 2.95's
+does not split, and its PRE inserts at the end of a block. `-frac2-keep-block-order` skips
+`cygnus_merge_blocks` (Cygnus, 1998), which moves a block reached only by a jump up behind
+its predecessor after the early jump passes; GCC 2.95 has no such pass. A switch whose
+default is its last case keeps its `b default` and the default body last with it. Both are
+inferred from retail's code, so both are off by default and enabled per file in
+`config/cflags.txt`: the gcse switch for `src/levels/02_maktar_nebula/L02_003DB310-g8.c`
+and `src/game/002CD620.c`, the block-order switch for `src/levels/shared/L18_00427BE0.c`,
+and both for `src/levels/02_maktar_nebula/L02_003F5430-g8.c`. `build.sh` runs
+`tests/test_gcse_unsplit_edges.py` and `tests/test_keep_block_order.py` against the newly
+built tools: each transformer's insertion points, the case each switch changes, controls
+that keep ordinary output, and the default/disabled equality.
+
 `build.sh` stops unless `mips.c`, `mips.h`, `mips.md`, `toplev.c`, `flags.h`,
-`haifa-sched.c` and `tc-mips.c` hash as it
+`haifa-sched.c`, `gcse.c`, `flow.c` and `tc-mips.c` hash as it
 lists. The binaries' own hashes depend on the build host and path, so check a compiler by its
 output: `tools/build.py` compiles every matched function to the retail bytes.

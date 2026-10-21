@@ -1625,3 +1625,63 @@ hash and requires these controls to pass before installation is accepted.
 The integrated correction passes all 28 programs with `tools/build.py all
 --strict` and no rejected C placements; the complete container test suite
 passes 57 tests. The three witnesses add 580 distinct matched code bytes.
+
+## Two Cygnus-local passes as opt-in switches (21 October 2026)
+
+This tree carries two pieces of Cygnus's own 1998 work that the GCC 2.95 branch does not
+have. Retail's code in the witnesses below has the placement and the block order without
+them. That is an inference from retail's code, not a dated GCC fix, so both are opt-in
+switches, enabled per unit in `config/cflags.txt`.
+
+- **gcse's critical-edge split.** With `-fno-edge-lcm` (the default since patch 0016),
+  `gcse_main` builds its predecessor and successor lists with `compute_preds_succs (..., 1)`.
+  The last argument is Cygnus's (flow.c, "CYGNUS LOCAL edge splitting/law";
+  `gcc/ChangeLog.Cygnus`, 21 January 1998, restricted on 19 May and 14 September 1998): it
+  splits each critical edge that needs no new jump, a fall-through edge or an edge into a label
+  reached only by jumps, and the block LCM (`pre_lcm`) then inserts on the new block. A hoisted
+  `%hi` gets a block of its own in front of such a label, and the register allocation and the
+  delay slots around it change with it. GCC 2.95.3's `gcse_main` calls a four-argument
+  `compute_preds_succs` that only builds the lists, and its PRE inserts at the end of a block.
+  `-frac2-gcse-unsplit-edges` (`transformers/gcse_unsplit_edges.py`) passes 0 instead of 1,
+  the equivalent of GCC 2.95's call.
+- **The block merge after the jump passes.** `cygnus_merge_blocks` (flow.c, "CYGNUS LOCAL
+  law"; `ChangeLog.Cygnus`, 28 May 1998) runs after the first jump pass and after the jump
+  passes that follow cse, gcse and cse2. It moves a block reached only by a jump, from a block
+  with no other successor, up behind that block and deletes the jump: a `switch` whose default
+  is its last case loses its `b default`, and the default body moves up behind the dispatch.
+  GCC 2.95.3's `rest_of_compilation` calls no such pass. `-frac2-keep-block-order`
+  (`transformers/keep_block_order.py`) returns from it at once, before its own
+  `find_basic_blocks`.
+- **Measured on 21 October.** Against the compiler built from master (356b450), the 775 units
+  of `src/` (669 through this cc1, 106 through the SDK compiler) compile to identical objects
+  with the switches off, with each switch on in every unit, and with both on. An earlier
+  logging build of the 662 game-compiler units then in `src/` counted no block merge at all;
+  the pass merged blocks in 10 of the drafts. Of the 1,687 drafts screened, 11 change with the
+  gcse switch, 10 of them closer to retail (more words in a longest common subsequence with
+  retail's) and one unchanged, and 6 with the
+  block-order switch, 2 of which are SDK-compiler units this cc1 does not build.
+- **The witnesses, now in `src/`.** `func_L02_003E79F8` (`L02_003DB310-g8.c`, gcse switch):
+  360 bytes become retail's 352 at its one place; without the split the two `lui` land above
+  the loop's peeled first test, and reorg can empty the copy's else block into retail's
+  `bgez ; b ; lw`. `func_002CD720` (`src/game/002CD620.c`, gcse switch), with its two arms in
+  retail's order: 344 bytes become 340, at all 28 places. `func_L02_003FCCA0`
+  (`L02_003F5430-g8.c`, both switches): its `switch` gives retail's entry block, prologue and
+  `b default` layout, at its one place. `func_L18_004283F0` (`src/levels/shared/
+  L18_00427BE0.c`, block-order switch): 48 bytes become 56, at all 3 places. With the switches
+  in those four units, `tools/check.py` matches all 57 C functions of the six touched files at
+  every place. Two drafts move closer without matching: `func_L23_0041B9F0` reaches retail's
+  1,148 bytes with the gcse switch and still differs in its 16-byte copy order, and
+  `func_002900B8` goes from 1,364 to 1,380 of 1,388 bytes with the block-order switch.
+- **What a scan of retail does not show.** The split's leftover shape (a lone `lui` at a
+  branch target that nothing falls into, followed by another branch target) occurs in 47 of
+  retail's 8,606 functions, 7 of them already matched with neither switch: switch case tails
+  and constant loads have the same shape, so the count does not measure the split.
+
+`tests/test_gcse_unsplit_edges.py` and `tests/test_keep_block_order.py` check that each
+transformer uses each insertion point once and refuses a drifted source before writing any
+file, then compile authored fixtures with the real EE tools in default, enabled and explicitly
+disabled modes: the case each switch changes (a hoisted high half on a split edge; a `switch`
+with its default last) and controls whose output must not change (a diamond and a loop
+invariant; a default-first `switch`, an if/else chain and a loop). `tools/compiler/build.sh`
+runs both after installation and pins `gcse.c` and `flow.c` beside the updated `toplev.c` and
+`flags.h`. Game-byte equality remains a separate full-build gate.
