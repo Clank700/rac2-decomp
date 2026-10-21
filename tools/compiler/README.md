@@ -66,6 +66,25 @@ fewer retain their previous expansion, including the 20-bit shifted mask used
 by already-matched C. Regression controls exercise every shifted long-run
 interval, neighboring masks, holes and four destination registers.
 
+Some SDK objects use the zero-extending seed for the isolated sign bit instead.
+Patch `0059` adds `--r5900-sign-bit=unsigned` for those measured cases;
+`--r5900-sign-bit=signed` explicitly restores the default. Only the isolated
+64-bit sign-bit constant changes, from `addiu -1; dsll32 31` to
+`ori 0x8000; dsll32 16`. Other constants keep their previous encoding.
+
+Pass assembler options per file through standard `-Wa,` syntax in
+`config/cflags.txt`, for example:
+
+```text
+src/core/00122B00.c	sdk -O2 -G2 -ffunction-sections -Wa,--r5900-sign-bit=unsigned
+```
+
+Both compiler profiles stop at assembly, so `tools/build.py` separates these
+arguments and forwards them to the assembler explicitly. The complete flag
+string and assembler binary remain part of the object-cache key. Empty options
+are rejected, and the tests exercise actual argument transport for both
+frontends, default/explicit profiles, invalid values and unchanged controls.
+
 `build.sh` stops unless `mips.c`, `mips.h`, `mips.md`, `toplev.c`, `flags.h`,
 `haifa-sched.c` and `tc-mips.c` hash as it
 lists. The binaries' own hashes depend on the build host and path, so check a compiler by its

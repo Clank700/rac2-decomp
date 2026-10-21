@@ -150,8 +150,8 @@ fp_number_type *func_00122800(fp_number_type *a, fp_number_type *b,
 
     a_normal_exp = a->exponent;
     b_normal_exp = b->exponent;
-    a_fraction = a->fraction;
-    b_fraction = b->fraction;
+    a_fraction = a->fraction.ll;
+    b_fraction = b->fraction.ll;
 
     diff = a_normal_exp - b_normal_exp;
 
@@ -201,19 +201,19 @@ fp_number_type *func_00122800(fp_number_type *a, fp_number_type *b,
 	{
 	  tmp->sign = 0;
 	  tmp->exponent = a_normal_exp;
-	  tmp->fraction = tfraction;
+	  tmp->fraction.ll = tfraction;
 	}
       else
 	{
 	  tmp->sign = 1;
 	  tmp->exponent = a_normal_exp;
-	  tmp->fraction = -tfraction;
+	  tmp->fraction.ll = -tfraction;
 	}
       /* and renormalize it */
 
-      while (tmp->fraction < IMPLICIT_1 && tmp->fraction)
+      while (tmp->fraction.ll < IMPLICIT_1 && tmp->fraction.ll)
 	{
-	  tmp->fraction <<= 1;
+	  tmp->fraction.ll <<= 1;
 	  tmp->exponent--;
 	}
     }
@@ -221,15 +221,15 @@ fp_number_type *func_00122800(fp_number_type *a, fp_number_type *b,
     {
       tmp->sign = a->sign;
       tmp->exponent = a_normal_exp;
-      tmp->fraction = a_fraction + b_fraction;
+      tmp->fraction.ll = a_fraction + b_fraction;
     }
   tmp->kind = CLASS_NUMBER;
   /* Now the fraction is added, we have to shift down to renormalize the
      number */
 
-  if (tmp->fraction >= IMPLICIT_2)
+  if (tmp->fraction.ll >= IMPLICIT_2)
     {
-      LSHIFT (tmp->fraction);
+      LSHIFT (tmp->fraction.ll);
       tmp->exponent++;
     }
   return tmp;

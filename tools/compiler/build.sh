@@ -6,7 +6,7 @@
 # Run it on 32-bit-capable x86-64 Linux (gcc -m32), e.g. in the rac2-linux container
 # (docs/BUILDING.md). It downloads the two inputs to build/downloads/ and checks them,
 # applies the patches in tools/compiler/patches/ (Lombyte's sce-991111b stack, MIT, with its
-# retired 0034 and its earlier 0020), the opt-in 0057 and 0058 extensions and the
+# retired 0034 and its earlier 0020), the 0057/0058 compiler profiles, the 0059 assembler option and the
 # transformers in tools/compiler/transformers/,
 # refuses to build unless the patched sources hash as listed below, and builds.
 #
@@ -40,6 +40,7 @@ for p in 0000 0001 0015 0016 0019 0020 0021 0022 0025 0026 0027 0028 0029 0030 0
 done
 patch -R -p1 -s < "$HERE"/patches/0001-r5900-quad-saves.patch   # the retail saves in 8-byte slots
 git apply --whitespace=nowarn "$HERE"/patches/0058-*.patch       # the opt-in -mastra-quad-saves switch
+git apply --whitespace=nowarn "$HERE"/patches/0059-*.patch       # per-object sign-bit seed selection
 T=$HERE/transformers
 python3 $T/neutralise_timode_anchor.py gcc/config/mips/mips.c
 python3 $T/enable_loop_padding.py gcc/config/mips/mips.h
@@ -66,7 +67,7 @@ d43a3f2274e1ca640c1f877b9aa2a82b2e337298d7d0ebf7e5498fe91b3523f4  gcc/config/mip
 bf2c096f86f5194377fc5abfeb7d795dc75f0d3a4b2f4bb0423f941aaaf7674a  gcc/toplev.c
 7f6129ee785e81c4232a1f518e1520318884ce5ce97e9568061cf6196dd9c072  gcc/haifa-sched.c
 61f918251ebb9ffa43cbf61d481bfdbe91eb9ae152b7e9b277a17abae8358db3  gcc/flags.h
-8b28e280f7d35f0a22a68ac6c2d9e4986913122d7b078ac520e453e0399100af  gas/config/tc-mips.c
+580af762e720cc989c88a879d8bde05b9d2ad5a630f230b9b6c4843b0f49e218  gas/config/tc-mips.c
 SUMS
 
 # bison 1.28: the 1999 grammars need its skeleton.

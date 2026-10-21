@@ -1,4 +1,14 @@
-/* Retained near miss: 88/88 bytes and 0/28 placements with -O2 -G0 -ffunction-sections -frac2-qcopy. The branch and grouped copy match; the return-address restore is scheduled before the copy. Five bounded source variants were checked. Keep the source marker until the complete unit and linked programs match. */
+/* Retained near miss: 88/88 bytes, 0/28 placements with
+ * -O2 -G0 -ffunction-sections -frac2-qcopy.
+ * The branch and grouped copy match. Post-reload scheduling fills the
+ * field-load-to-address latency gap with the independent ra restore;
+ * before sched2, the copy and restores already have retail order.
+ * -mastra-keep-frame-order leaves the code identical because these restores
+ * are not frame-related. -fno-schedule-insns2 fixes the tail but changes the
+ * prologue. Five earlier source variants also failed.
+ * Reopen with evidence for a legitimate epilogue/scheduling policy or a
+ * meaningful source dependency; do not fabricate a clobber or barrier.
+ */
 
 typedef int TI128 __attribute__((mode(TI)));
 typedef int s32;
