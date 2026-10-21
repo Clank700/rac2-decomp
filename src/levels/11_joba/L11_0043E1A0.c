@@ -364,7 +364,69 @@ void func_L11_00441D08(u8 *object, s32 count) {
 
 INCLUDE_ASM("asm/levels", func_L11_00441FB8);
 
-INCLUDE_ASM("asm/levels", func_L11_00442170);
+extern s32 func_L11_00441FB8(u8 *, u8 *, s32);
+extern void func_L02_003FC248(u8 *, s32, s32);
+extern void func_L11_00449970(u8 *, s32, s32);
+extern s32 func_L11_0043A800(u8 *);
+extern void func_L01_003E9CF8(u8 *, s32, void (*)(u8 *));
+extern void func_L00_002B30E8(void);
+extern u8 D_00189E20[];
+
+/* Hands every entity of the object's group (state word 0xC0) that the shared test func_L11_00441FB8
+   accepts, and whose state byte is not 0xFE, 0xFD or below 3, to the handler of its class (the
+   halfword at +0xAA); then runs the test once more on the entity D_00189E20 holds at +0x2290. */
+void func_L11_00442170(u8 *object) {
+    u8 *state = *(u8 **)(object + 0x68);
+    u16 *p;
+    u8 *e;
+    u8 *player;
+
+    FOR_EACH_ID(p, 0xC0) {
+        e = D_L11_001B359C + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        if (e[0x20] == 0xFE)
+            continue;
+        if (e[0x20] == 0xFD)
+            continue;
+        if (e[0x20] < 3)
+            continue;
+        if (func_L11_00441FB8(object, e, 0) == 0)
+            continue;
+        switch (*(s16 *)(e + 0xAA)) {
+        case 0xD98:
+            func_L11_00449970(e, 0, 0);
+            break;
+        case 0xDCF:
+            func_L02_003FC248(e, 0, -1);
+            func_L11_0044C4F0(e);
+            break;
+        case 0xDF4:
+            func_L02_003FC248(e, 0, -1);
+            func_L11_00452DF8(e);
+            break;
+        case 0xDF7:
+            func_L02_003FC248(e, 0, -1);
+            func_L11_00454DD8(e);
+            break;
+        case 0xDF9:
+            func_L02_003FC248(e, 0, -1);
+            func_L01_003E9CF8(e, 0, func_L11_00456540);
+            break;
+        case 0xD37:
+            func_L02_003FC248(e, 0, -1);
+            func_L11_00436A78(e);
+            break;
+        case 0xD4B:
+            if (func_L11_0043A800(e))
+                func_L11_0043AB28(e);
+            break;
+        }
+    }
+    player = D_00189E20;
+    if (func_L11_00441FB8(object, *(u8 **)(player + 0x2290), 1))
+        func_L00_002B30E8();
+}
 
 INCLUDE_ASM("asm/levels", func_L11_004423F8);
 
