@@ -358,4 +358,4 @@ void func_L14_003F0E98(char *a0)
     *(float *)(a0 + 0x3C) = 1.0f;
 }
 
-INCLUDE_ASM("asm/levels", func_L14_003F0F38);
+/* func_L14_003F0F38 lives in the -g8 sibling file (it reaches a global through $gp). */

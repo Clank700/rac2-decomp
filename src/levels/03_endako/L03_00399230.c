@@ -123,7 +123,7 @@ void func_L03_003CBD70(char *a0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L03_003CBE58);
+/* func_L03_003CBE58 lives in the -G8 sibling L03_00399230-g8.c (it reads $gp-relative floats). */
 
 INCLUDE_ASM("asm/levels", func_L03_003CF0C0);
 

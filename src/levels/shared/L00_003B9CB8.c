@@ -179,7 +179,92 @@ void func_L00_003BC400(Vec16_Fc936841d *object, int index)
 
 INCLUDE_ASM("asm/levels", func_L00_003BC468);
 
-INCLUDE_ASM("asm/levels", func_L00_003BC998);
+/* Measured partial layout of one 0xB0-byte record of the table at D_L00_0023F060. */
+typedef struct Rac2Native_003BC998_Slot {
+    unsigned char prefix_00[0x50];
+    float f_50;
+    float f_54;
+    float f_58;
+    float f_5C;
+    float f_60;
+    float f_64;
+    float f_68;
+    float f_6C;
+    float f_70;
+    float f_74;
+    float f_78;
+    float f_7C;
+    float f_80;
+    float f_84;
+    float f_88;
+    float f_8C;
+    float f_90;
+    float f_94;
+    void *w_98;
+    void *w_9C;
+    void *owner_A0;
+    unsigned char tail_A4[0xC];
+} Rac2Native_003BC998_Slot;
+
+extern Rac2Native_003BC998_Slot D_L00_0023F060[];
+
+extern float func_002A78D8_1(float low, float high);
+
+extern void func_002AF000_1(float *out, float a, float b, float c);
+
+extern void func_00282C88_1(void *p);
+
+/* Claims the first free record of the sixteen 0xB0-byte records at D_L00_0023F060, keeps the
+   owner's pointer in it and fills the drawn values. The base and the output pointer are kept
+   in their own variables, and the two owner words are stored in the order 0x9C, 0x98, so that
+   cc1 keeps the table base and the output pointer in registers and fills the delay slots the
+   way retail does. */
+void func_L00_003BC998(char *owner, char *arg1)
+{
+    Rac2Native_003BC998_Slot *base = D_L00_0023F060;
+    Rac2Native_003BC998_Slot *slot;
+    float *out;
+    char *ctx;
+    int i;
+    float r1;
+    float r2;
+
+    ctx = *(char **)(owner + 0x68);
+    for (i = 0; i < 16; i++) {
+        slot = base + i;
+        if (slot->owner_A0 != 0)
+            continue;
+        slot->owner_A0 = owner;
+        out = (float *)((char *)slot + 0x40);
+        (*(int *)(ctx + 0x58))++;
+        slot->f_50 = func_002A7878_2(-3.14159274f, 3.14159274f);
+        slot->f_54 = func_002A7878_2(-3.14159274f, 3.14159274f);
+        slot->f_58 = func_002A7878_2(-3.14159274f, 3.14159274f);
+        slot->f_74 = func_002A7878_2(-3.14159274f, 3.14159274f);
+        slot->f_78 = func_002A7878_2(-3.14159274f, 3.14159274f);
+        slot->f_7C = func_002A7878_2(-3.14159274f, 3.14159274f);
+        slot->f_5C = func_002A78D8_1(0.1f, 0.5f);
+        slot->f_60 = func_002A78D8_1(0.1f, 0.5f);
+        slot->f_64 = func_002A78D8_1(0.1f, 0.5f);
+        slot->f_80 = func_002A78D8_1(0.1f, 0.5f);
+        slot->f_84 = func_002A78D8_1(0.1f, 0.5f);
+        slot->f_88 = func_002A78D8_1(0.1f, 0.5f);
+        slot->f_68 = func_002A7878_2(3.25f, 4.75f) * 0.25f;
+        slot->f_6C = func_002A7878_2(3.25f, 4.75f) * 0.25f;
+        slot->f_70 = func_002A7878_2(3.25f, 4.75f) * 0.25f;
+        slot->f_8C = func_002A7878_2(3.25f, 4.75f) * 0.25f;
+        slot->f_90 = func_002A7878_2(3.25f, 4.75f) * 0.25f;
+        slot->f_94 = func_002A7878_2(3.25f, 4.75f) * 0.25f;
+        func_00282C88_1(slot);
+        func_00282C88_1((char *)slot + 0x10);
+        slot->w_9C = arg1;
+        slot->w_98 = arg1;
+        r1 = func_002A7940();
+        r2 = func_002A7940();
+        func_002AF000_1(out, *(float *)(ctx + 0x4C), r1, r2);
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003BCC10);
 

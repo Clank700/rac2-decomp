@@ -243,7 +243,8 @@ INCLUDE_ASM("asm/levels", func_L03_0041DAD0);
 
 INCLUDE_ASM("asm/levels", func_L03_0041DCE0);
 
-INCLUDE_ASM("asm/levels", func_L03_0041DFA8);
+/* func_L03_0041DFA8 lives in L03_003F09C0-g8.c (it reaches D_L03_001B1BF0
+ * through $gp). */
 
 /* func_L03_0041E240 lives in L03_003F09C0-g8.c (same $gp access). */
 
