@@ -39,4 +39,15 @@ void func_US2_L00_0030E660(void)
         func_0033A3E0(value + 0x3AF80);
 }
 
-INCLUDE_ASM("asm/us2/levels", func_US2_L00_0030E690);
+extern void func_0033B910(int);
+
+/* Reads the object base from a shared global and, when it is non-zero, calls the handler at a
+ * fixed byte offset in it. */
+void func_US2_L00_0030E690(void)
+{
+    int value = D_L00_001A904C_2;
+
+    if (value != 0)
+        func_0033B910(value + 0x3B6F8);
+}
+
