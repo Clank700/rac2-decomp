@@ -644,7 +644,24 @@ u32 func_L00_002ADFD0(u8 *object,u32 value) {
 INCLUDE_ASM("asm/levels", func_L00_002ADFE8);
 
 
-INCLUDE_ASM("asm/levels", func_L00_002AE070);
+float func_L00_002AE070(int a0)
+{
+    char *base = D_00189E20_2;
+    char *ring;
+    int i;
+    int x;
+
+    if (a0 >= 32)
+        i = 31;
+    else
+        i = a0;
+    if (*(int *)(base + 0x23C0) < i)
+        i = *(int *)(base + 0x23C0);
+    x = *(int *)(base + 0x23BC) - i;
+    ring = base + 0x233C;
+    return *(float *)(ring + ((x + 31) % 32) * 4);
+}
+
 
 
 INCLUDE_ASM("asm/levels", func_L00_002AE0C8);
