@@ -5,6 +5,7 @@ typedef signed short s16;
 typedef signed int s32;
 typedef unsigned int u32;
 typedef float f32;
+typedef int TI128 __attribute__((mode(TI)));
 
 /* The resident global is an array here on purpose: with a scalar declaration
  * cc1 folds the load and reuses the destination as the address base, while the
@@ -103,4 +104,50 @@ void func_L22_003B9358(u32 a0)
     }
     func_0029F338_22((char *)*slot);
     *slot = 0;
+}
+
+/* func_L22_003F5580 is another function of this unit that reaches a level word through
+ * $gp; the scale factor it multiplies is at a different address in the other program that
+ * carries the function, so it takes a per-program name.
+ */
+extern f32 func_00283198(f32);
+extern f32 func_00283180(f32);
+extern void func_00283098(f32 *, const f32 *, const f32 *);
+extern void func_00282CC0(char *, char *, char *);
+extern f32 func_00283B98(f32, f32);
+extern f32 func_002AA2E8(f32 *, f32, f32);
+extern float ref_L22_003F5580_00 __attribute__((sda));
+
+/* Scales the controller of the object: when the controller is idle its position is copied to
+ * the object, otherwise the controller's values are scaled and written back.
+ */
+void func_L22_003F5580(u8 *obj) {
+    u8 *ctl = *(u8 **)(obj + 0x68);
+    f32 buf[4];
+    f32 a, b, c, d, g, r;
+
+    if (*(f32 *)(ctl + 0xBC) == 0.0f) {
+        if (*(f32 *)(ctl + 0xC0) == 0.0f)
+            return;
+        *(TI128 *)(obj + 0xE0) = *(TI128 *)ctl;
+        *(f32 *)(ctl + 0xC0) = 0.0f;
+        return;
+    }
+    a = func_00283198(*(f32 *)(ctl + 0xC4));
+    b = *(f32 *)(ctl + 0xBC);
+    c = func_00283180(*(f32 *)(ctl + 0xB0));
+    b = b * a;
+    c = c * b;
+    buf[0] = c;
+    d = func_00283198(*(f32 *)(ctl + 0xB0));
+    d = d * b;
+    buf[1] = d;
+    buf[2] = 0.0f;
+    func_00283098(buf, buf, obj + 0xC0);
+    buf[3] = 0.0f;
+    func_00282CC0(obj + 0xE0, buf, ctl);
+    r = func_00283B98(*(f32 *)(ctl + 0xC4), *(f32 *)(ctl + 0xC0));
+    g = ref_L22_003F5580_00;
+    *(f32 *)(ctl + 0xC4) = r;
+    func_002AA2E8((f32 *)(ctl + 0xBC), 0.0f, g * (1.0f / 60.0f));
 }
