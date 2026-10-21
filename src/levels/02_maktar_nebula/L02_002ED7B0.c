@@ -93,7 +93,8 @@ INCLUDE_ASM("asm/levels", func_L02_003CADA8);
 /* func_L02_003D01F0 is a near miss: nonmatching/levels/func_L02_003D01F0.c */
 INCLUDE_ASM("asm/levels", func_L02_003D01F0);
 
-int func_L02_003D1880(char *arg0) {
+/* Callers also supply a candidate pointer; this predicate only inspects arg0. */
+int func_L02_003D1880(char *arg0, void *candidate) {
     int v = 0;
     if (*(int *)(*(char **)(arg0 + 0x68) + 0x2E4) != 0) {
         unsigned char c = *(unsigned char *)(arg0 + 0x20);
@@ -355,10 +356,6 @@ extern char D_L02_001BA500;
 
 extern int func_002A77E0(int);
 
-/* func_L02_003D1880 is called with the found object as a second argument (retail sets $a1 in the
-   branch slot); its definition above reads only the first. */
-extern int func_L02_003D1880_2(char *, void *) __asm__("func_L02_003D1880");
-
 /* State 0 of the actor: fills its state record (a random heading of 10 to 30 degrees, either
    sign, then about twenty constants), queues func_L02_003D2390; then, while it is drawn, the
    per-frame part (the pulse test against D_L02_001BA500, the 0x15/0x10 animation switch,
@@ -422,7 +419,7 @@ void func_L02_003D10F0(char *self) {
             p = func_002A9640(self, 0x10000, 1);
             if (p != 0) {
                 *(float *)(s + 0xFC) = 1.0f;
-                if (func_L02_003D1880_2(self, p) != 0) {
+                if (func_L02_003D1880(self, p) != 0) {
                     *(unsigned char *)(s + 0x60) = 0x13;
                     func_002B0ED8(self, s + 0x50, 1);
                     *(unsigned char *)(s + 0x60) = 0x14;
