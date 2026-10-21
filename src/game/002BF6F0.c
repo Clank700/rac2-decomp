@@ -686,7 +686,7 @@ INCLUDE_ASM("asm/game", func_002C5B70);
 
 INCLUDE_ASM("asm/game", func_002C5D00);
 
-INCLUDE_ASM("asm/game", func_002C6360);
+/* func_002C6360 is in the -G8 sibling (its two globals are read through $gp). */
 
 INCLUDE_ASM("asm/game", func_002C64D8);
 
