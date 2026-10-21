@@ -59,14 +59,18 @@ python3 $T/pad_div_erratum_branch.py gas/config/tc-mips.c >/dev/null
 python3 $T/r5900_mfc1_interlock.py gas/config/tc-mips.c
 python3 $T/tidy_condjump_fallthru.py gcc/flow.c
 python3 $T/zero_ti_store_barrier.py gcc/haifa-sched.c
+python3 $T/gcse_unsplit_edges.py gcc/gcse.c
+python3 $T/keep_block_order.py gcc/flow.c
 python3 $T/qcopy_pattern.py gcc
 sha256sum --check --quiet <<'SUMS'
 1735d566ed655ff8bfe8a7ef6e9270affcc6adaa721986bdf94f3a8dd5e146e5  gcc/config/mips/mips.c
 d43a3f2274e1ca640c1f877b9aa2a82b2e337298d7d0ebf7e5498fe91b3523f4  gcc/config/mips/mips.h
 790a54f4772853284ab43a7afc9f592913da8f012b46d43abf5f2a3660467eef  gcc/config/mips/mips.md
-bf2c096f86f5194377fc5abfeb7d795dc75f0d3a4b2f4bb0423f941aaaf7674a  gcc/toplev.c
+da201b8b6d5b151ac76a125f6c0acc024cbd453cd66bbd442a7a969088335f9d  gcc/toplev.c
 7f6129ee785e81c4232a1f518e1520318884ce5ce97e9568061cf6196dd9c072  gcc/haifa-sched.c
-61f918251ebb9ffa43cbf61d481bfdbe91eb9ae152b7e9b277a17abae8358db3  gcc/flags.h
+4df7a6f9d18107584f6522325fc511b4365ed4dee5906a486fc394f293ea40aa  gcc/flags.h
+02f386e5e25a90684b912fbb11ce1a634a40a80dbefc93b20b0546259e1f8bfc  gcc/gcse.c
+ba947e44256e3d5144e353a4976aac931a4941acc8dcb1dc0fda99fa8b7b504a  gcc/flow.c
 580af762e720cc989c88a879d8bde05b9d2ad5a630f230b9b6c4843b0f49e218  gas/config/tc-mips.c
 SUMS
 
@@ -99,6 +103,8 @@ cp gcc/cc1 gcc/cpp "$OUT/" && cp gas/as-new "$OUT/as"
 # (a varargs body) needs them on the preprocessor's path.
 mkdir -p "$OUT/include" && cp "$W/src/gcc/ginclude/"*.h "$OUT/include/"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_zero_ti_store.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_gcse_unsplit_edges.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_keep_block_order.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy.py"
 python3 "$ROOT/tests/test_qcopy_rtl.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_dli_masks.py"

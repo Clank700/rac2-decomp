@@ -76,7 +76,7 @@ INCLUDE_ASM("asm/levels", func_L02_003E75A8);
 
 INCLUDE_ASM("asm/levels", func_L02_003E77E0);
 
-INCLUDE_ASM("asm/levels", func_L02_003E79F8);
+/* func_L02_003E79F8 is defined in L02_003DB310-g8.c (it reads its weights through $gp). */
 
 INCLUDE_ASM("asm/levels", func_L02_003E7B58);
 
