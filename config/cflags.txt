@@ -307,3 +307,6 @@ src/levels/20_yeedil/L20_00444138-g8.c	-O2 -G8 -ffunction-sections -mno-split-ad
 src/levels/shared/L04_00363CA0.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/09_dobbo/L09_002F8BA0-g8.c	-O2 -G8 -ffunction-sections -g
 src/levels/shared/L22_003A5018-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy
+src/levels/07_siberius/L07_003F4578-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/shared/L05_0037BC08-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy
+src/levels/01_oozla/L01_003B49D8.c	-O2 -G0 -ffunction-sections -ffast-math
