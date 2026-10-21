@@ -59,14 +59,15 @@ python3 $T/r5900_mfc1_interlock.py gas/config/tc-mips.c
 python3 $T/tidy_condjump_fallthru.py gcc/flow.c
 python3 $T/zero_ti_store_barrier.py gcc/haifa-sched.c
 python3 $T/qcopy_pattern.py gcc
+python3 $T/hazard_labels.py .
 sha256sum --check --quiet <<'SUMS'
-1735d566ed655ff8bfe8a7ef6e9270affcc6adaa721986bdf94f3a8dd5e146e5  gcc/config/mips/mips.c
+18e6fffb84ed8d7edd504167462a69cc8a8bedfc260ddae0dd17f21c5830fb47  gcc/config/mips/mips.c
 d43a3f2274e1ca640c1f877b9aa2a82b2e337298d7d0ebf7e5498fe91b3523f4  gcc/config/mips/mips.h
 790a54f4772853284ab43a7afc9f592913da8f012b46d43abf5f2a3660467eef  gcc/config/mips/mips.md
-bf2c096f86f5194377fc5abfeb7d795dc75f0d3a4b2f4bb0423f941aaaf7674a  gcc/toplev.c
+cabf290ef493ec57f542695712f398efe01c8e6c32cef4bdda1159f33ee02750  gcc/toplev.c
 7f6129ee785e81c4232a1f518e1520318884ce5ce97e9568061cf6196dd9c072  gcc/haifa-sched.c
-61f918251ebb9ffa43cbf61d481bfdbe91eb9ae152b7e9b277a17abae8358db3  gcc/flags.h
-00f5dfb4791a8a28fe143dc79ecb2d1137bcf0e9c597ba02ac9f49697830ef28  gas/config/tc-mips.c
+6e9a6eb34322381b47fd3546a3cc93520490039eb45834c35e99017ccf398b12  gcc/flags.h
+f9814b6ad761e1718c24c51c228e637435a68beaf14c628de1f3d0b1bdd48032  gas/config/tc-mips.c
 SUMS
 
 # bison 1.28: the 1999 grammars need its skeleton.
@@ -101,4 +102,5 @@ RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_zero_ti_store.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy.py"
 python3 "$ROOT/tests/test_qcopy_rtl.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_dli_masks.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_hazard_labels.py"
 echo "compiler in $OUT"

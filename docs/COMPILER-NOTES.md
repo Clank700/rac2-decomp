@@ -1670,3 +1670,72 @@ in `.mdebug`. Remaining attempts `func_00335370`, `func_L20_0044A838` and
 `func_L00_002A6008` now have the correct copy sizes but still differ in ordinary
 allocation or scheduling. Their improved sources and specific remaining
 differences stay in `nonmatching/`; they receive no match credit.
+
+## Labels in front of the hazard nop (21 October 2026)
+
+When the instruction after a code label needs a coprocessor hazard `nop` (an FPU compare
+before its `bc1f`/`bc1t`, an `mtc1` before a reader of the written register), GNU `as`
+emits the nop in front of that instruction and moves every label defined since the previous
+instruction behind it: in `append_insn`, and in `mips_emit_delays` when the `.set noreorder`
+that opens a branch flushes the delay. A branch to such a label then skips the nop.
+
+**Retail census.** Scope: the boot and the 27 level programs, each catalogued function once
+(at its first place), and only branch and `j` targets inside the function; labels reached
+through data (jump tables) were not counted. A site is a target whose nearest preceding non-nop
+instruction is a coprocessor hazard producer (an FPU compare, `mtc1`, `mfc1`, `ctc1`, `cfc1`)
+outside a delay slot; "reads" follows gas's own hazard tests.
+
+| next instruction | labels | where the label is |
+| --- | --- | --- |
+| reads the compare's condition or the `mtc1` register | 198 (71 compares, 127 `mtc1`), in 148 functions | **on the nop**, every one; all reached by forward branches only; none matched |
+| a division (`div.s`) | 60 | in front of its two nops (the division floor, unchanged) |
+| does not read it | 734 (659 forward, 75 loop heads) | right after the producer, no nop |
+| does not read it | 56 loop heads, all 8-byte aligned | after one nop: the `.p2align 3` fill, not a hazard nop |
+| after `mfc1` | 75 | no nop (interlocked) |
+
+No branch target sits behind a nop that its next instruction needed. The 56 aligned loop
+heads look like "labels after the hazard nop", but their next instruction never reads the
+register: cc1 writes `.p2align 3` before a loop label, gas emits the fill there and defines the
+label after it, and nothing moves (8 of those functions are matched C). Retail has no label
+reached only backward, or both ways, at a needed hazard nop, so the census alone does not say
+where such a label goes; nor does it have any branch target after a `ctc1`, `cfc1` or
+COP2 move.
+
+**Oracle.** SN ProDG 2.0's `Ps2EeAs` (the local `toolchain/` copy, SHA-256 `c839dd63…`),
+given authored snippets, keeps every label on the nop it inserts: reached forward, only
+backward, both ways, by a `j` or by a `.word` in data, two labels at one place, after the
+`li.s` macro, and after `.p2align 3` with or without fill. It gives retail's layout of
+`func_L02_00411530`. With `.set rac2_hazard_labels`, gas places every label of
+`tests/fixtures/hazard_labels.s` where `Ps2EeAs` does; the two remaining differences in that
+file are unrelated (`Ps2EeAs` pads the section end to 8 bytes, and its division floor gives one
+nop where the SDK 3.01 floor measured above gives two).
+
+**What is not proven.** `Ps2EeAs` 2.0 is not established as the shipping assembler (2.0 and
+3.01 disagree on 44 of the 97 synthetic outputs of the division study). The placement of a
+label reached only backward rests on the oracle alone, and `ctc1`/`cfc1`/COP2 hazards on
+the code path alone. The rule covers where a label goes at a hazard nop the assembler inserts;
+it says nothing else about the original assembler.
+
+**The change.** [`hazard_labels.py`](../tools/compiler/transformers/hazard_labels.py) adds
+`-frac2-hazard-labels`. cc1 then writes `.set rac2_hazard_labels` at the top of its output,
+and gas leaves the labels where they were defined in both label loops. It is opt-in per file
+in `config/cflags.txt` because it is inferred: `tools/build.py` passes the per-file flags to cc1
+only and runs `as` without options, so the directive is how a unit reaches the assembler.
+Without the switch neither program's output changes.
+
+**Witnesses.** `func_L18_004308F0` (1,384 bytes, 1 place) in
+`src/levels/18_damosel/L18_004308F0.c` and `func_L02_00411530` (80 bytes, 7 places) in
+`src/levels/shared/L02_00411530.c`, each a unit of its own built with
+`-O2 -G0 -ffunction-sections -frac2-hazard-labels`. Without the switch each is one branch
+offset off (`bc1f` at +0xE4, `bc1tl` at +0x18); with it `tools/check.py` places both at
+every place. Of the 1,794 drafts in `nonmatching/` on 21 October, six changed with the switch
+and one became exact (`func_L18_004308F0`).
+
+**Neutrality, measured on 21 October 2026** against the previous tools. With the switch on
+the two witness units only, the other 779 units (106 SDK) compile to the same objects, and each
+witness differs in that one word from the previous tools' output without the switch (they do
+not know it). With the switch forced on every non-SDK unit of those 779, and with a gas that
+keeps the labels unconditionally (SDK units included), 778 of the 779 are identical; the last,
+`src/game/002B5EF8.c` (built with `-g`), differs only in `.mdebug`, where a line label now
+sits on a nop. Making the behaviour the default would therefore change no code in that corpus;
+that choice is left to the maintainers.
