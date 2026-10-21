@@ -63,7 +63,53 @@ void func_L07_003F6528(u8 *a0)
     func_L07_003F68F0(a0, 0.0f);
 }
 
-INCLUDE_ASM("asm/levels", func_L07_003F65E8);
+extern u16 *D_L07_001FAD60[];
+
+/* `sda` on an array of unknown size: cc1 emits the one-instruction load, which the assembler
+   expands absolute (`lui $r` / `lw $r,%lo($r)`), as retail has it in this -G0 unit. */
+extern u8 *D_L07_001B22DC[] __attribute__((sda));
+extern s32 D_L07_001B22F8[] __attribute__((sda));
+
+extern s32 func_002A77E0(s32 n);
+
+extern s32 func_00282948(s32 *counter);
+
+/* Picks at random one of the group's entities that are in state 1: counts them, draws an index
+   below the count, then walks the list again stepping the index down (func_00282948) until it
+   runs out. Returns 0 when there is none. */
+u8 *func_L07_003F65E8(s32 group)
+{
+    u16 *p;
+    u16 *q;
+    u8 *e;
+    s32 n = 0;
+    s32 k;
+
+    for (p = D_L07_001FAD60[group];
+         (group & 0xFF) != 0xFF && group <= D_L07_001B22F8[0] && p != 0 &&
+         ((s16)p[-1] >= 0 || p == D_L07_001FAD60[group]);
+         p++) {
+        e = D_L07_001B22DC[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        if (e[0x20] == 1)
+            n++;
+    }
+    if (n == 0)
+        return 0;
+    k = func_002A77E0(n);
+    for (q = D_L07_001FAD60[group];
+         (group & 0xFF) != 0xFF && group <= D_L07_001B22F8[0] && q != 0 &&
+         ((s16)q[-1] >= 0 || q == D_L07_001FAD60[group]);
+         q++) {
+        e = D_L07_001B22DC[0] + ((*q & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        if (e[0x20] == 1 && func_00282948(&k) != 0)
+            return e;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L07_003F67B8);
 
@@ -257,13 +303,6 @@ void func_L07_0040EFC8(s32 *a0, f32 *a1, f32 a, f32 b)
 INCLUDE_ASM("asm/levels", func_L07_0040F0D0);
 
 INCLUDE_ASM("asm/levels", func_L07_0040F468);
-
-extern u16 *D_L07_001FAD60[];
-
-/* `sda` on an array of unknown size: cc1 emits the one-instruction load, which the assembler
-   expands absolute (`lui $r` / `lw $r,%lo($r)`), as retail has it in this -G0 unit. */
-extern u8 *D_L07_001B22DC[] __attribute__((sda));
-extern s32 D_L07_001B22F8[] __attribute__((sda));
 
 /* The object's state record up to its three group words (-1 means none). Indexing the array
    member is the spelling that gives retail's address arithmetic (the +0x94 base as a sum of its
