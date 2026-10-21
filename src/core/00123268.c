@@ -1,16 +1,12 @@
 #include "include_asm.h"
+#include "double_parts.h"
 
 typedef int s32;
 
 typedef unsigned int u32;
 
 /* Construct a double through the original runtime packing routine. */
-typedef struct DoubleParts44 {
-    s32 kind;
-    u32 sign;
-    s32 exponent;
-    unsigned long long fraction;
-} DoubleParts44;
+typedef DoubleParts DoubleParts44;
 
 extern double func_00122630(DoubleParts44 *);
 
