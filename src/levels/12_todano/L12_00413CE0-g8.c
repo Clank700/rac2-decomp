@@ -43,7 +43,7 @@ extern u16 D_L12_001B1840_h __asm__("D_L12_001B1840") __attribute__((sda));
 
 extern u8 *D_L12_001FEAC0[];
 
-extern f32 func_2F1B20(void *a, void *b);
+extern f32 func_00282E80(void *a, void *b);
 
 /* Hands the object's path state to the nearest eligible entity of its group. */
 void func_L12_00413CE0(u8 *a0)
@@ -69,7 +69,7 @@ void func_L12_00413CE0(u8 *a0)
             if (e == 0)
                 break;
             sub = *(PathState **)(e + 0x68);
-            d = func_2F1B20(e + 0x10, vec);
+            d = func_00282E80(e + 0x10, vec);
             if (sub != 0 && (sub->f302 & 1)) {
                 if (d < bestd) {
                     bestd = d;
