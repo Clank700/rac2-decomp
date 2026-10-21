@@ -177,7 +177,54 @@ s32 func_L18_00432718(u8 *a0, float *a1) {
            0.00872664712369442f;
 }
 
-INCLUDE_ASM("asm/levels", func_L18_004327B0);
+extern u16 *D_L18_001FB320[];
+
+/* `sda` on an array of unknown size: cc1 emits the one-instruction load, which the assembler
+   expands absolute (`lui $r` / `lw $r,%lo($r)`), as retail has it in this -G0 unit. */
+extern u8 *D_L18_001B281C[] __attribute__((sda));
+extern s32 D_L18_001B2838[] __attribute__((sda));
+
+/* Looks through the object's group (state word 0x7B4) for the entity of class 0xB69, other than
+   the two states 0xFE and 0xFD and with bit 0 of its halfword at +0x34 clear, nearest to the
+   object (the callee measures the distance between the two +0x10 positions); keeps it in the
+   state's +0x7B8 word and tells whether there is one. A group word of -1 means no group. */
+s32 func_L18_004327B0(u8 *arg0)
+{
+    u8 *state = *(u8 **)(arg0 + 0x68);
+    u16 *p;
+    u8 *e;
+    u8 *found;
+    float best;
+    float d;
+
+    if (*(s32 *)(state + 0x7B4) == -1)
+        return 0;
+    found = 0;
+    best = 1000.0f;
+    for (p = D_L18_001FB320[*(s32 *)(state + 0x7B4)];
+         (*(s32 *)(state + 0x7B4) & 0xFF) != 0xFF && *(s32 *)(state + 0x7B4) <= D_L18_001B2838[0] &&
+         p != 0 && ((p != 0 && (s16)p[-1] >= 0) || p == D_L18_001FB320[*(s32 *)(state + 0x7B4)]);
+         p++) {
+        e = D_L18_001B281C[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        if (*(s16 *)(e + 0xAA) == 0xB69) {
+            if (e[0x20] != 0xFE) {
+                if (e[0x20] != 0xFD) {
+                    if ((*(u16 *)(e + 0x34) ^ 1) & 1) {
+                        d = ((float (*)(u8 *, u8 *))func_00282E80)(arg0 + 0x10, e + 0x10);
+                        if (d < best) {
+                            found = e;
+                            best = d;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    *(u8 **)(state + 0x7B8) = found;
+    return found != 0;
+}
 
 extern void func_002B60B0(u8 *arg0, float, float, float, float);
 
@@ -290,7 +337,24 @@ void func_L18_00432D08(u8 *a0) {
     *(u16 *)(s0 + 0x7FA) = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L18_00432D60);
+/* Hands every entity of the object's group (byte 0x21) to func_L18_00432AD0. */
+void func_L18_00432D60(u8 *arg0)
+{
+    u16 *p;
+    u8 *e;
+
+    if (arg0[0x21] == 0xFF)
+        return;
+    p = D_L18_001FB320[arg0[0x21]];
+    while (arg0[0x21] != 0xFF && arg0[0x21] <= D_L18_001B2838[0] && p != 0 &&
+           ((p != 0 && (s16)p[-1] >= 0) || p == D_L18_001FB320[arg0[0x21]])) {
+        e = D_L18_001B281C[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        func_L18_00432AD0(e);
+        p++;
+    }
+}
 
 s32 func_L18_00432E28(u8 *a0) {
     s32 v = *(u8 *)(a0 + 0x20);
