@@ -3,6 +3,7 @@ from contextlib import ExitStack, redirect_stdout
 from io import StringIO
 import json
 import os
+import struct
 from pathlib import Path
 import sys
 import tempfile
@@ -12,6 +13,35 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
 import build
+
+
+class RelocationValidation(unittest.TestCase):
+    def derive(self, mine, retail, relocs, symbol):
+        data = struct.pack("<" + "I" * len(mine), *mine)
+        ref = struct.pack("<" + "I" * len(retail), *retail)
+        image = {"data": ref, "segments": [{"type": 1, "address": 0x200000,
+                  "offset": 0, "filesz": len(ref)}]}
+        obj = {"sections": [{"data": data}], "symbols": [{"name": symbol, "type": 1}],
+               "relocations": {0: [(offset, kind, 0) for offset, kind in relocs]}}
+        with patch.object(build, "program_functions", return_value={}):
+            return build.Placement("boot", image).derive(obj, 0, 0x200000)
+
+    def test_hi_lo_relocations_still_validate_registers_and_opcode(self):
+        relocations = [(0, build.elf.R_MIPS_HI16), (4, build.elf.R_MIPS_LO16)]
+        values, error = self.derive([0x3C020000, 0x8C440000], [0x3C020014, 0x8C449568],
+                                    relocations, "D_00139568")
+        self.assertIsNone(error)
+        self.assertEqual(values["D_00139568"], 0x139568)
+        for retail, part in (([0x3C030014, 0x8C449568], "%hi"),
+                             ([0x3C020014, 0x8C649568], "%lo")):
+            self.assertIn(part, self.derive([0x3C020000, 0x8C440000], retail,
+                                           relocations, "D_00139568")[1])
+
+    def test_gp_and_jump_relocations_do_not_hide_changed_instructions(self):
+        self.assertIn("gp access", self.derive([0x8F820000], [0x8F830000],
+            [(0, build.elf.R_MIPS_GPREL16)], "D_001AEFF0")[1])
+        self.assertIn("jump", self.derive([0x0C000000], [0x08048000],
+            [(0, build.elf.R_MIPS_26)], "func_00120000")[1])
 
 
 class ObjectCache(unittest.TestCase):
