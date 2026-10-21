@@ -277,7 +277,8 @@ INCLUDE_ASM("asm/game", func_0027D900);
 
 INCLUDE_ASM("asm/game", func_0027DB68);
 
-INCLUDE_ASM("asm/game", func_0027DDC0);
+/* func_0027DDC0 is in 0027B948-g8.c (-G8: retail re-materialises the address of the
+   packet pointer for every access, which only that flag reproduces). */
 
 INCLUDE_ASM("asm/game", func_0027DE50);
 

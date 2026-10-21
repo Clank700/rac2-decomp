@@ -1022,7 +1022,6 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L20_0039E158`](levels/func_L20_0039E158.c) | 140 | Plain-C near miss now (the earlier record used the forbidden inline-assembly `qcopy`): 132 bytes; everything but the one 128-bit pair is the retail's, and that pair is the offset fold (`addiu $a1,$s0,0x1F0; addiu $a0,$v1,0x10` against the folded `lq`/`sq`). |
 | [`func_L20_0039F210`](levels/func_L20_0039F210.c) | 32 | 28 bytes; only the materialised destination pointer (`addiu $v1,$a0,0x10`) is missing. The retail's shape is systematic, not an accident: it materialises a 128-bit address in a register when the address is used more than once and folds it into the instruction when it is used once. |
 | [`func_L20_0043D470`](levels/func_L20_0043D470.c) | 100 | 88 bytes: the 128-bit pair at the end differs (this cc1 folds the constant offset into the `lq`/`sq`, the retail materialises the pointer) AND the float registers: the retail puts 8.0f in `$f1` and 2.5f in `$f0`, this cc1 always allocates the other way round. A second use of the address does not break the fold. |
-
 | [`func_00132818`](core/func_00132818.c) | 60 | Body exact (command 8, no data) but retail opens with positive stack adjustments whose epilogue never gives them back; the SDK compiler also sibling-calls the last statement. Part of the 78-function dead-code prologue class that neither compiler in this tree emits for C. |
 | [`func_00132968`](core/func_00132968.c) | 68 | Candidate is 52 bytes; the body is instruction-for-instruction retail, but the row begins with positive stack adjustments whose epilogue never gives them back. Part of the same 78-function dead-code prologue class. |
 | [`func_001329F0`](core/func_001329F0.c) | 104 | Candidate is 72 bytes; the body is instruction-for-instruction retail, but the row begins with positive stack adjustments whose epilogue never gives them back. Part of the same 78-function dead-code prologue class. |
@@ -1063,15 +1062,6 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_L11_004349F8`](levels/func_L11_004349F8.c) | 176 | Candidate is 156 bytes; body shape and calls recovered, but constant-offset quadword stores fold where retail materializes pointers. |
 | [`func_L11_00436768`](levels/func_L11_00436768.c) | 228 | Candidate is 224 bytes; body matches except retail materializes a TImode zero with `por` before `sq`, while this compiler folds it to `sq $zero`. |
 | [`func_L11_00436B78`](levels/func_L11_00436B78.c) | 396 | Candidate is 408 bytes; prologue and branches recovered, but FPR/register allocation and quadword-copy scheduling differ. |
-
-## Linked at some of their places only (2026-10-12)
-
-C that was in `src/` and links in some programs but not in all: a level address written into
-it, a jump table it needs, or two different functions the catalogue holds as one. A function
-counts when it links at every place it has.
-
-| Function | Places it links at | What the build says elsewhere |
-| --- | --- | --- |
 | [`func_002DCAB8`](game/func_002DCAB8.c) | 26 of 28 | instruction at +0x38 differs |
 | [`func_L00_002B1308`](levels/func_L00_002B1308.c) | 0 of 27 | needs .rodata at its place, which is not C |
 | [`func_L00_002D4A38`](levels/func_L00_002D4A38.c) | recovered: 27 of 27 | Current C in `src/levels/shared/L00_002D3798.c` uses an opaque `sda` reference under G0; the old partial draft is retained here for reference. |
@@ -1381,15 +1371,9 @@ counts when it links at every place it has.
 | [`func_L12_0041A460`](levels/func_L12_0041A460.c) | 204 | 168 bytes; the 0x110 table index, the 0x224 offset scaled by 16, the two position differences, both calls and the `& 0x8F` / 0x224-vs-0x220 tail are all decoded and reproduced. Blocked on the 16-byte copy the frame carries: retail reserves 0x30 (0x20 here) and runs `addiu $v1,$v1,0x10 ; lq $at,0x0($v1) ; sq $v0,0x0($sp)` with nothing reading `$sp+0` afterwards; an unused `TI128` local is dropped by this cc1. 0x001FEB40 must be spelled as a SYMBOL - a literal emits `ori` where retail has `lui 0x20 ; addiu -0x1540`. |
 | [`func_L20_0044AB68`](levels/func_L20_0044AB68.c) | 204 | 200 bytes; the frame (0x50), the two saved registers, the 0.3f materialisation, the two float calls, the 14-argument `func_0032C700` call with its four stack words, the branch-likely test and the epilogue are all the retail's. The only difference is the 128-bit ZERO store: the retail writes `por $v0,$zero,$zero ; sq $v0,0x20($sp)` and the chain's fold pass gives `sq $zero` whenever the zero register is dead after the store. The `por` survives only when the zero feeds TWO OR MORE stores; the retail body has one. The float constant of `func_0032C700` is 0.666f (0x3F2A7EFA), not 0.6666667f (0x3F2AAAAB). |
 | [`func_L05_00397F48`](levels/func_L05_00397F48.c) | 208 | Exact retail size and retail's words through +0x40, including the three expected blockers now SOLVED: the four `$gp` floats come out bare (`lwc1 $f0,0x0($gp)` + GPREL16) under `-O2 -G8 -ffunction-sections -mno-split-addresses` (needs its own file - the unit is the -G0 default), the 16-byte copy IS `lq $v0,0x0($s0)`+`sq $v0,0x0($sp)` via `mode(TI)` at offset 0 both sides, and 0x45AFDF66 encodes correctly from the decimal 5627.9248046875f. Left: this cc1 hoists the `lq` above the f1C/0x20 stores where retail keeps that order with `sq` in the `jal` slot. Three placements measured, all +0x40. The constant is 0x810000, not 0x81. |
-
-## Level functions, wave 7 agent lvl7-02 (2026-10-16)
-
 | [`func_L20_004499E8`](levels/func_L20_004499E8.c) | 140 | 132 bytes: the 128-bit copy wall. The retail materialises `addiu $t0,$a0,0x10` and `addiu $a3,$a3,0x50`; cc1 folds both offsets into the `sq`. NEW: a volatile pointer object reaches a plain-register address (`sw ; lq ; lw ; sq $v0,0($reg)`, the retail's zero-displacement `sq`) at the price of a stack store and a reload - eight bytes over the retail's single `addiu`. |
 | [`func_L20_004424A0`](levels/func_L20_004424A0.c) | 176 | The residue is a compiler-model difference, not a source shape: the retail keeps `D_L20_001B2138 * 0.000277777785f` in the CALLER-SAVED `$f0` across `jal f_00330C60` and stores it to state[0xE0] after that call, while this cc1 puts any value live across a call in the callee-saved `$f20` (frame 0x30 against the retail's 0x20). |
 | [`func_L20_00444B48`](levels/func_L20_00444B48.c) | 208 | 204 bytes, every instruction retail's: two residues - the `nop` before the `div.s` (the division floor; the assembler only pads a division when a code label is within two slots, and no source shape puts one there - `do { ... } while (0)` is optimised away and leaves no label) and the swap of `$s1 = $a1` (the retail's `bc1f` delay slot) against `mov.s $f23,$f13` (the retail: four words earlier). The two `nop`s after the `mtc1` and after the `c.le.s` ARE emitted - they are the assembler's mtc1 hazard rule. |
-
-## Level functions, wave 7 agent lvl7-02, tour 2 (2026-10-16)
-
 | [`func_L20_00444088`](levels/func_L20_00444088.c) | 164 | Retail's exact size and every word, with one pair swapped at +0x2c: retail sets `$a3 = $sp+0x20` before `$a2 = $s0`, this cc1 the other way round - the same wall recorded on func_L20_00443D58 next door. A named `float *pf = &f` for the fourth argument costs a frame slot and an `$s3` (176 bytes) |
 | [`func_L20_0043F460`](levels/func_L20_0043F460.c) | 176 | 184 bytes; the shape is recovered (a 210000.0f-scaled two-float helper, a `== 0xB5A` arm choosing between the `$gp` word `D_L20_001B1FC0` and three words retail materialises with one `lui`+`lw` each, so `nosda`, then a six-argument call whose fifth argument rides in `$t0`). A `s32[3]` spelling reaches the absolutes through one shared base and costs two more words (204); the residue is the selector's delay slot (retail carries the `$gp` load there) and the `pair[2]` stores retail keeps on the stack |
 | [`func_L20_00444138`](levels/func_L20_00444138.c) | 156 | 152 bytes; the 0x100-stride object walk is recovered from the matched `L01_003CAFE0-g8.c` / `L04_00422A00-g8.c` recipe and body and tail match word for word (the `bnel` carries the 0xAA halfword in its delay slot, the id arm is the `(u16)(id - 0x1233) < 2 \|\| id == 0x1231 \|\| id == 0x1232` chain). The missing word is retail's fresh `lui $v0,0x1B; lw $v0,0x2FA0($v0)` re-materialisation of the re-read bound on the storing path, where this cc1 keeps the %hi in a caller-saved register; retail also keeps a `nop` after the loop head's `lhu`, and its two bound reloads carry two addressing forms (`$gp` in the bne delay slot, absolute on the storing path) - a second `sda` name reproduces the `$gp` form but turns the `bne` into a `bnel`, and declaring the bound `sda` outright gives 144 bytes with the arm inlined before the tail |
@@ -1418,11 +1402,6 @@ counts when it links at every place it has.
 | [`func_L00_00419A80`](levels/func_L00_00419A80.c) | - | Not a C row: the 16-byte opener is two stack restores (`addiu $sp,$sp,0x50; nop; addiu $sp,$sp,0x30; nop`), the same in both places (00, 14), and the real 196-byte body starts at 0x00419A90. Recovered body in the file, including the per-place `$gp` float (0x2454 / 0x2B1C) |
 | [`func_L01_00416B30`](levels/func_L01_00416B30.c) | 212 | Exactly 212 bytes, every constant right (`-2.25f` is 0xC0100000, not -2.5f), but the prologue's saved pair is swapped: retail keeps the loop counter in `$s2` and the handle in `$s1`, this cc1 the other way, so `sd $s1/$s2` and the whole body shift from +0x8. Counter-first, handle-first and both for-header spellings do not move the pair, and all 24 permutations of the four tail stores (lead lever 1, one ruler call) still fail first at +0x8 - the pair masks the stores |
 | [`func_L01_00416A50`](levels/func_L01_00416A50.c) | 224 | **The `$gp` float wall is broken: 232 bytes with the -g8 sibling plus `-mno-split-addresses`** (lead lever 2), 8 bytes from retail. 248 at -G0, 252 at -G8 alone; the extra flag gives all four `$gp` floats the bare one-instruction `lwc1 $f1,0x2A70($gp)` form, i.e. a `config/cflags.txt` line `-O2 -G8 -ffunction-sections -mno-split-addresses`. This contradicts the earlier "the sda spelling changes nothing for loads" measurement for this unit. The 8 bytes left: a 1-ULP decimal for 0x3998825C, and a `mov.s $f1,$f0` plus one redundant `swc1 $f0,0xF8` where retail stores `$f0` twice |
-
-
-
-## Level functions, wave 7 agent lvl7-03, tour 2 (2026-10-16)
-
 | [`func_L20_0039E0A0`](levels/func_L20_0039E0A0.c) | 184 | 168 bytes (42 instructions against the retail's 46). A third spelling fixes the exit shape (`goto ret` with one shared label), the 32-bit parameter, the `u16 **tbl` table element and TWO of the three guards (the inner `(arg & 0xFF) == 0xFF` test on a 64-bit copy of the 32-bit slot, and `rec == 0` after the increment). Still missing: the always-zero flag retail materialises and tests, the branch-likely back edges with the record word reloaded in both delay slots, the 32-bit count increment and the allocation. |
 | [`func_L30_003848B8`](levels/func_L30_003848B8.c) | 196 | **Size EXACT (196)**, level 30, decoded in full (0x001A63A8 display state, 0x00295C60 class table, `$gp` bitmask 0x001AEC90 = 0x1AEFF0-0x360, needs the -G8 sibling). The size only lands with the negation spelled `(((D >> cls) & 1) ^ 1) != 0`: that `^ 1` is what makes cc1 emit retail's `srav; xori; andi; beqz` - `!(D & (1 << cls))` drops the `xori` and gives 192. Left: layout - retail sends all three guards to ONE return-0 block placed AFTER the body (`+0x24` branches) while this cc1 puts it right after the guard chain (`+0x7`), shifting everything from +0x10, and retail keeps only the HIGH half of 0x001A63A8 in `$t1`, rebuilding it at the tail. Nested-guard and early-return spellings give the same 196 |
 | [`func_L00_004290C0`](levels/func_L00_004290C0.c) | 220 | The whole arm structure is exact - four `obj+0xC/0x10/8/0x14` fields in a nested `>= 0` test whose annulled `bltzl` slots carry the next field's load. Measured 208-212 bytes against 220 for four spellings: retail keeps the shared `r != 0` normalisation in its own block after the arms and every arm branches there with `b` + `nop`, while this cc1 sinks it into each arm's delay slot as `sltu` and branches straight to the epilogue. The two constants (0x00189EA0, the 0x001FDA80 table) must be SYMBOLS: as literals cc1 emits `lui 0x18`/`ori` because bit 15 of the low half is set |
@@ -1502,369 +1481,6 @@ counts when it links at every place it has.
 | [`func_L20_00449CE0`](levels/func_L20_00449CE0.c) | 752 | Not attempted: the 128-bit zero store at 0x00449EEC is the `func_L20_0044AB68` wall. |
 | [`func_L20_0044A658`](levels/func_L20_0044A658.c) | 480 | 452 bytes; everything but the two 16-byte copies matches, including the `beql`/`bc1fl` and the 0x12F2/0x12EF test. The retail spends `$a0`/`$a1` on the copy's addresses, so it keeps the flags in `$v1` and the -1 in `$v0`; with the copy folded this cc1 uses `$v0`/`$a0` instead. |
 | [`func_L20_0044A8F0`](levels/func_L20_0044A8F0.c) | 408 | 388 bytes; the two clamps (pi/4 = 0x3F490FDC, its negation 0xBF490FDC), the `swc1` in the branch delay slots, the `bc1f / b / bc1tl / bc1tl / bc1fl` sequence, the two `mov.s $f0,$f20` (the function returns a float) and the calls all match. But this cc1 emits the ORDERED `c.olt.s` where the retail has the SIGNALLING `c.lt.s`, for the same C. The frame is 0x60 against the retail's 0x70 because the folded copies free one callee-saved register. |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-| function | size | verdict |
-| --- | --- | --- |
 | [`func_L11_00335B88`](levels/func_L11_00335B88.c) | 4 | Catalogue defect: one word at 0x00335B88, `addiu $sp,$sp,0xB00`; a stack adjustment with no return, the linker fill between two bodies; no C can be placed |
 | [`func_L11_003F9F60`](levels/func_L11_003F9F60.c) | 4 | Catalogue defect: one word at 0x003F9F60, `sw $v0,-0x4000($gp)`; a store with no return, a piece of the neighbour the catalogue split off; no C can be placed |
 | [`func_L11_004417A0`](levels/func_L11_004417A0.c) | 4 | Catalogue defect: one word at 0x004417A0, `sw $a1,0x180($a2)`; a store with no return, a piece of the neighbour the catalogue split off; no C can be placed |
@@ -1989,3 +1605,26 @@ counts when it links at every place it has.
 | [`func_L00_003B9310`](levels/func_L00_003B9310.c) | 2472 | Screened, not matched in wave 12 (worker s4): 46 call(s), 7 `$gp`-relative small-data access(es), MMI words [+0x00FC:0x7CA20000 +0x0108:0x7C820000 +0x0220:0x7FA20000 +0x02DC:0x7E820000 +0x04E0:0x7FA20000] (the `lq`/`sq` family, which `mode(TI)` reaches), float constants [none]. The body is straight-line code whose register allocation and the materialisation of its constant addresses have to be reproduced word for word; no C was written in this wave. |
 | [`func_00288F48`](game/func_00288F48.c) | 108 | Not matched in wave 13 (worker g1): the candidate is 100 bytes. Retail re-reads the length of the table on every pass of the loop and computes the entry address with a shift and an add; this cc1 strength-reduces the index into an induction variable and keeps the length block's address in a register. Eight wordings compile to the same bytes. |
 | [`func_002E71B8`](game/func_002E71B8.c) | 144 | Not matched in wave 13 (worker g1): the size is right, the first difference is at +0x24. This cc1 schedules the float store's address materialisation before the short store, retail schedules it after, and retail loads the two positions in the order of the source. Eleven wordings compile to the same bytes. |
+| [`func_0027BA68`](game/func_0027BA68.c) | 772 | Screened, not matched in wave 13 (worker g4): 25 call(s), 0 `$gp`-relative small-data access(es), 15 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 23 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 4 float constant(s). the body carries the MMI lq/sq words (0x78/0x7C/0x7E), which a mode(TI) local reaches, but this cc1 folds the constant offset into the lq/sq where retail materialises the pointer first; it also keeps 23 pointers in 64-bit variables, where retail copies them with daddu $d,$s,$zero and this cc1 sign-extends with dsll/dsra; no C was written in this wave |
+| [`func_0027BD70`](game/func_0027BD70.c) | 1800 | Screened, not matched in wave 13 (worker g4): 87 call(s), 16 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 25 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). 87 calls and 16 $gp-relative small-data accesses: the unit has to be built with -G8 and every small symbol needs a declared size, and the register allocation of a straight-line body of this size has to be reproduced word for word; no C was written in this wave |
+| [`func_0027C540`](game/func_0027C540.c) | 288 | Screened, not matched in wave 13 (worker g4): 0 call(s), 2 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 5 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). the body writes 64-bit zeros (sd) and reaches two $gp-relative small-data words, so the unit needs -G8 and a declared size; five pointers are copied with daddu $d,$s,$zero, where this cc1 sign-extends with dsll/dsra; no C was written in this wave |
+| [`func_0027C878`](game/func_0027C878.c) | 1356 | Screened, not matched in wave 13 (worker g4): 0 call(s), 3 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 3 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). a straight-line body of 1356 bytes with no call at all: its register allocation and the materialisation of its constant addresses have to be reproduced word for word, and three of its words are $gp-relative small data; no C was written in this wave |
+| [`func_0027D330`](game/func_0027D330.c) | 392 | Screened, not matched in wave 13 (worker g4): 17 call(s), 4 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 4 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). 17 calls, a division and four $gp-relative small-data words; the delay slots of the two link branches have to be filled as retail fills them; no C was written in this wave |
+| [`func_0027D5C0`](game/func_0027D5C0.c) | 832 | Screened, not matched in wave 13 (worker g4): 8 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 3 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). 8 calls and 832 bytes of straight-line code: the register allocation and the materialisation of its constant addresses have to be reproduced word for word; no C was written in this wave |
+| [`func_0027D900`](game/func_0027D900.c) | 616 | Screened, not matched in wave 13 (worker g4): 0 call(s), 3 `$gp`-relative small-data access(es), 4 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 0 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). the body carries the MMI lq/sq words (0x78/0x7C), which a mode(TI) local reaches, but this cc1 folds the constant offset into the lq/sq where retail materialises the pointer first; three of its words are $gp-relative small data; no C was written in this wave |
+| [`func_0027DB68`](game/func_0027DB68.c) | 384 | Screened, not matched in wave 13 (worker g4): 6 call(s), 8 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 9 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). 6 calls, 8 $gp-relative small-data accesses and 9 pointers copied with daddu $d,$s,$zero, where this cc1 sign-extends with dsll/dsra; no C was written in this wave |
+| [`func_0027DE50`](game/func_0027DE50.c) | 448 | Screened, not matched in wave 13 (worker g4): 0 call(s), 1 `$gp`-relative small-data access(es), 2 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 0 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). the body carries the MMI sq words (0x7C), which a mode(TI) local reaches, but this cc1 folds the constant offset into the sq where retail materialises the pointer first; one of its words is $gp-relative small data; no C was written in this wave |
+| [`func_0027E018`](game/func_0027E018.c) | 380 | Screened, not matched in wave 13 (worker g4): 0 call(s), 0 `$gp`-relative small-data access(es), 1 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 0 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). the body carries the MMI sq word 0x7C620000, which a mode(TI) local reaches, but this cc1 folds the constant offset into the sq where retail materialises the pointer first; the rest is a straight-line body whose register allocation has to be reproduced word for word; no C was written in this wave |
+| [`func_0027E1A0`](game/func_0027E1A0.c) | 764 | Screened, not matched in wave 13 (worker g4): 4 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 12 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). 12 pointers are copied with daddu $d,$s,$zero, where this cc1 sign-extends with dsll/dsra; the body is straight-line code whose register allocation has to be reproduced word for word; no C was written in this wave |
+| [`func_0027E4A8`](game/func_0027E4A8.c) | 1140 | Screened, not matched in wave 13 (worker g4): 28 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 45 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 1 float constant(s). 28 calls, 45 pointers copied with daddu $d,$s,$zero (where this cc1 sign-extends with dsll/dsra) and 1140 bytes of straight-line code; no C was written in this wave |
+| [`func_0027E920`](game/func_0027E920.c) | 260 | Screened, not matched in wave 13 (worker g4): 0 call(s), 2 `$gp`-relative small-data access(es), 1 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 0 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). the body carries the MMI sq word 0x7C620000, which a mode(TI) local reaches, but this cc1 folds the constant offset into the sq where retail materialises the pointer first; two of its words are $gp-relative small data, so the unit needs -G8; no C was written in this wave |
+| [`func_0027EA28`](game/func_0027EA28.c) | 192 | Screened, not matched in wave 13 (worker g4): 0 call(s), 1 `$gp`-relative small-data access(es), 1 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 0 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). the body carries the MMI sq word 0x7C620000, which a mode(TI) local reaches, but this cc1 folds the constant offset into the sq where retail materialises the pointer first; its last word is a $gp-relative small-data store, so the unit needs -G8; no C was written in this wave |
+| [`func_0027EE58`](game/func_0027EE58.c) | 696 | Screened, not matched in wave 13 (worker g4): 17 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 13 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). 17 calls and 13 pointers copied with daddu $d,$s,$zero, where this cc1 sign-extends with dsll/dsra; no C was written in this wave |
+| [`func_0029DEA8`](game/func_0029DEA8.c) | 4376 | Screened, not matched in wave 13 (worker g4): 3 call(s), 3 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 14 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 3 float constant(s). 4376 bytes: a body of this size has to be reproduced word for word; 14 pointers are copied with daddu $d,$s,$zero (where this cc1 sign-extends with dsll/dsra) and three of its words are $gp-relative small data; no C was written in this wave |
+| [`func_0029EFD0`](game/func_0029EFD0.c) | 248 | Screened, not matched in wave 13 (worker g4): 3 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 8 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). the arguments are 64-bit pointers: retail copies them with daddu $d,$s,$zero and this cc1 sign-extends with dsll/dsra, and the two branch-likely tests have to be produced with their delay slots filled as retail fills them; no C was written in this wave |
+| [`func_0029F0C8`](game/func_0029F0C8.c) | 624 | Screened, not matched in wave 13 (worker g4): 2 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 4 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). 624 bytes of straight-line code with 4 pointers copied with daddu $d,$s,$zero, where this cc1 sign-extends with dsll/dsra; no C was written in this wave |
+| [`func_0029F840`](game/func_0029F840.c) | 288 | Screened, not matched in wave 13 (worker g4): 5 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 16 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). 16 pointers are copied with daddu $d,$s,$zero, where this cc1 sign-extends with dsll/dsra; the float arguments and the branch-likely tests have to be produced as retail produces them; no C was written in this wave |
+| [`func_0029FB20`](game/func_0029FB20.c) | 256 | Screened, not matched in wave 13 (worker g4): 1 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 0 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). a loop of sixteen entries whose body is a nest of branch-likely tests (beql/bnel) whose delay slots carry the consumer of the loaded word; the float constant (1.0f in $f20) and the loop counters have to land in the same registers as retail; no C was written in this wave |
+| [`func_0029FDF0`](game/func_0029FDF0.c) | 240 | Screened, not matched in wave 13 (worker g4): 2 call(s), 1 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 1 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). one of its words is a $gp-relative small-data load, so the unit needs -G8 and a declared size; a pointer is copied with daddu $d,$s,$zero, where this cc1 sign-extends with dsll/dsra; no C was written in this wave |
+| [`func_002A0048`](game/func_002A0048.c) | 308 | Screened, not matched in wave 13 (worker g4): 2 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 1 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). a pointer is copied with daddu $d,$s,$zero, where this cc1 sign-extends with dsll/dsra; the packet writes have to reload the pointer for every word, as retail does; no C was written in this wave |
+| [`func_002A0250`](game/func_002A0250.c) | 172 | Screened, not matched in wave 13 (worker g4): 3 call(s), 0 `$gp`-relative small-data access(es), 0 MMI lq/sq word(s) (the `lq`/`sq` family, which `mode(TI)` reaches), 0 64-bit `daddu` copy(ies) (this cc1 sign-extends with `dsll`/`dsra`), 0 float constant(s). near miss: the body has the retail size (172 bytes), the same three calls, the same statement order and the same stores; this cc1 materialises the address of the u16 at 0x10FFB0 into the destination register and after the prologue where retail uses `$v0` before the prologue, and it hoists the `p + 0x10` of the packet pointer to the top of the second block where retail computes it after the last load; the unit needs -G8, since with -G0 this cc1 common-subexpression-eliminated the lui of the 0x1Bxxxx data into one register (168 bytes against the retail 172); the C attempt is in the deposit. |
