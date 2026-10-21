@@ -281,3 +281,181 @@ void func_L02_003FCCA0(char *a0, int a1) {
     D_001395B8[func_L02_003F9B70(a1)] += 1;
     func_0029B3E0(0, -1);
 }
+
+typedef int TI128 __attribute__((mode(TI)));
+
+extern char D_L02_001B1730[8] __attribute__((sda));
+extern float D_L02_001B1750 __attribute__((sda));
+extern float D_L02_001B1754;
+extern u32 D_L02_001B1758 __attribute__((sda));
+extern u32 D_L02_001B175C;
+extern u32 D_L02_001B1760;
+extern u32 D_L02_001B1764;
+extern u32 D_L02_001B1768;
+extern u32 D_L02_001B176C;
+extern u32 D_L02_001B1770 __attribute__((sda));
+extern u32 D_L02_001B1774;
+extern u32 D_L02_001B1778;
+extern s32 D_L02_001B30C8;
+
+extern void func_00283098(void *, void *, void *);
+extern void func_00282CC0(void *, void *, void *);
+extern float func_002A7878(float, float);
+extern s32 func_002A7820(s32, s32);
+extern void func_002BAE50(void *, void *, u32, s32, s32, s32, s32, s32);
+
+/* Two passes, over the two 16-byte vectors at D_L02_001B1730 in turn.  Each combines the vector
+   with the object's vectors at +0xC0 and +0x10 (func_00283098, func_00282CC0) into v0, builds v1
+   as a vector whose z is -func_002A7878(D_L02_001B1750, D_L02_001B1754) / 60, combines it with
+   A1, and hands v0 and v1 twice to func_002BAE50 with colour words and a pick of func_002A7820:
+   first with one of two sets chosen by bit 0 of D_L02_001B30C8, then with a third set. */
+void func_L02_00401D38(char *a0, char *a1) {
+    float v0[4];
+    float v1[4];
+    float v2[4];
+    float *w = v1;
+    char *p = D_L02_001B1730;
+    s32 i;
+    float f;
+
+    for (i = 1; i >= 0; i--) {
+        func_00283098(v0, p, a0 + 0xC0);
+        p += 0x10;
+        func_00282CC0(v0, v0, a0 + 0x10);
+        *(TI128 *)v2 = 0;
+        f = func_002A7878(D_L02_001B1750, D_L02_001B1754);
+        v2[2] = -(f * 0.016666668f);
+        *(TI128 *)v1 = *(TI128 *)v2;
+        func_00282CC0(v1, v1, a1);
+        if (D_L02_001B30C8 & 1) {
+            func_002BAE50(v0, w, D_L02_001B1758, D_L02_001B175C, func_002A7820(0x12, 0x16), D_L02_001B1770, -10, 1);
+        } else {
+            func_002BAE50(v0, w, D_L02_001B1760, D_L02_001B1764, func_002A7820(0x14, 0x18), D_L02_001B1774, -10, 1);
+        }
+        func_002BAE50(v0, w, D_L02_001B1768, D_L02_001B176C, func_002A7820(0xA, 0xF), D_L02_001B1778, -10, 1);
+    }
+}
+
+extern s32 D_0018C2EC __attribute__((nosda));
+extern float D_L02_001B1534 __attribute__((sda));
+extern s32 func_L02_00400650(char *, s32);
+
+/* Picks the message to ask for after the entity the object is attending to (state word 0xD0),
+   for its kinds 0x9F8 and 0xA44: while D_0018C2EC is not positive, one of two at random (0x10 or
+   0x11, 0x16 or 0x17), dropped when the state's flag for it is set; then 0x12 (0x18) when the
+   entity's float at +0x20 is below its half-word at +0x24 scaled by D_L02_001B1534, unless the
+   state's half-word at 0x1F4 (0x200) is set, and 0x13 (0x19) when that float is not above zero,
+   unless the half-word at 0x1F6 (0x202) is set.  A positive pick is handed to func_L02_00400650. */
+void func_L02_00400948(char *a0) {
+    char *state = *(char **)(a0 + 0x68);
+    char *e = *(char **)(state + 0xD0);
+    char *es;
+    char *eb;
+    char *q;
+    s32 msg;
+
+    if (e == 0)
+        return;
+    msg = -1;
+    switch (*(s16 *)(e + 0xAA)) {
+    case 0x9F8:
+        es = *(char **)(e + 0x68);
+        if ((float)D_0018C2EC <= 0.0f) {
+            msg = func_002A77E0(2) + 0x10;
+            q = state + msg * 2;
+            if (*(s16 *)(q + 0x1D0) != 0)
+                msg = -1;
+        }
+        if (*(s16 *)(state + 0x1F4) == 0) {
+            if (*(float *)(es + 0x20) < (float)*(s16 *)(es + 0x24) * D_L02_001B1534)
+                msg = 0x12;
+        }
+        if (*(s16 *)(state + 0x1F6) == 0) {
+            if (*(float *)(es + 0x20) <= 0.0f)
+                msg = 0x13;
+        }
+        break;
+    case 0xA44:
+        eb = *(char **)(e + 0x68);
+        if ((float)D_0018C2EC <= 0.0f) {
+            msg = func_002A77E0(2) + 0x16;
+            q = state + msg * 2;
+            if (*(s16 *)(q + 0x1D0) != 0)
+                msg = -1;
+        }
+        if (*(s16 *)(state + 0x200) == 0) {
+            if (*(float *)(eb + 0x20) < (float)*(s16 *)(eb + 0x24) * D_L02_001B1534)
+                msg = 0x18;
+        }
+        if (*(s16 *)(state + 0x202) == 0) {
+            if (*(float *)(eb + 0x20) <= 0.0f)
+                msg = 0x19;
+        }
+        break;
+    }
+    if (msg > 0)
+        func_L02_00400650(a0, msg);
+}
+
+extern s32 D_0018C0B4 __attribute__((nosda));
+extern u8 D_001395B8[];
+extern u8 D_00139568[];
+
+typedef struct {
+    char pad0[4];
+    u8 f4;
+    char pad1[0xDB];
+} L02_003FF9A0_Rec;
+
+extern L02_003FF9A0_Rec D_L02_00264A70[];
+
+extern void func_L00_002C42E0(s32, s32);
+extern s32 func_L00_0032EF10(s32, s32, s32 *);
+extern s32 func_L02_003F9B70(s32);
+extern s32 func_00288D58(void);
+extern void func_L02_003FCA80(char *);
+extern void func_L02_003FF6E8(char *);
+extern void func_L00_002E6CF0(void *, void *);
+
+/* Calls func_L00_002C42E0(0x6F, 1) unless D_0018C0B4 already is 0x6F.  When the input test
+   func_L00_0032EF10(0x40, 0x3C, 0) holds, the object changes state to 7 and its selection (state
+   half-word 0x118) moves to the next entry of the table at D_L02_001B1190 that is usable: the flag
+   of D_001395B8 at the index func_L02_003F9B70 gives for the entry's word at +8 is set, entries from
+   12 on also pass func_00288D58, and entries 7 and 8 need the byte at +4 of the record of
+   D_L02_00264A70 that D_00139568[0x1E] (0x2A) names.  The pick is kept in the state and in
+   D_001395B8[0x3C].  Otherwise, when func_L00_0032EF10(0x10, 0x3C, 0) holds, func_L02_003FCA80
+   runs; if neither test holds the callback func_L02_003FF6E8 is registered for the object. */
+void func_L02_003FF9A0(char *a0) {
+    char *state = *(char **)(a0 + 0x68);
+    s32 i;
+    L02_003FF9A0_Rec *r;
+
+    if (D_0018C0B4 != 0x6F)
+        func_L00_002C42E0(0x6F, 1);
+    if (func_L00_0032EF10(0x40, 0x3C, 0) != 0) {
+        func_002A7750(a0, 7, -1);
+        for (i = *(s16 *)(state + 0x118) + 1; i < 0xE; i++) {
+            if (D_001395B8[func_L02_003F9B70(*(s32 *)(D_L02_001B1190[i] + 8))] == 0)
+                continue;
+            if (i >= 0xC && func_00288D58() == 0)
+                continue;
+            if (i == 7) {
+                r = &D_L02_00264A70[D_00139568[0x1E]];
+                if (r->f4 == 0)
+                    continue;
+            }
+            if (i == 8) {
+                r = &D_L02_00264A70[D_00139568[0x2A]];
+                if (r->f4 == 0)
+                    continue;
+            }
+            *(s16 *)(state + 0x118) = i;
+            D_001395B8[0x3C] = *(u8 *)(state + 0x118);
+            return;
+        }
+    } else if (func_L00_0032EF10(0x10, 0x3C, 0) != 0) {
+        func_L02_003FCA80(a0);
+    } else {
+        func_L00_002E6CF0(func_L02_003FF6E8, a0);
+    }
+}

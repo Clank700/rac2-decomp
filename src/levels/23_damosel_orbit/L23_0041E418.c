@@ -30,9 +30,9 @@ INCLUDE_ASM("asm/levels", func_L23_00423378);
 
 INCLUDE_ASM("asm/levels", func_L23_004236B8);
 
-INCLUDE_ASM("asm/levels", func_L23_00425568);
+/* func_L23_00425568 is matched in L23_00425568.c (built with -frac2-qcopy). */
 
-INCLUDE_ASM("asm/levels", func_L23_004256F0);
+/* func_L23_004256F0 is matched in L23_004256F0.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L23_00425848);
 
