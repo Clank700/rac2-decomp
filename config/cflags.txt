@@ -250,6 +250,7 @@ src/game/00343798.c	-O2 -G8 -ffunction-sections
 src/game/00344848.c	-O2 -G8 -ffunction-sections
 src/game/003506A8.c	sdk -O2 -G2 -ffunction-sections
 src/levels/02_maktar_nebula/L02_003007D8-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/02_maktar_nebula/L02_004002E0-g8.c	-O2 -G8 -ffunction-sections -g
 src/levels/02_maktar_nebula/L02_003CB090.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/02_maktar_nebula/L02_003DB310-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges
 src/levels/02_maktar_nebula/L02_003EEAD8.c	-O2 -G0 -ffunction-sections -g
