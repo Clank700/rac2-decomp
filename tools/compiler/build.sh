@@ -59,7 +59,7 @@ python3 $T/r5900_mfc1_interlock.py gas/config/tc-mips.c
 python3 $T/tidy_condjump_fallthru.py gcc/flow.c
 python3 $T/zero_ti_store_barrier.py gcc/haifa-sched.c
 sha256sum --check --quiet <<'SUMS'
-8e6d97e725c1af7533d8b474e9b7a12fde95b0363eb4db99040c9e2596daba3a  gcc/config/mips/mips.c
+1735d566ed655ff8bfe8a7ef6e9270affcc6adaa721986bdf94f3a8dd5e146e5  gcc/config/mips/mips.c
 d43a3f2274e1ca640c1f877b9aa2a82b2e337298d7d0ebf7e5498fe91b3523f4  gcc/config/mips/mips.h
 9f6894ef4dfaa19708b4fd68203a1424e36b680741969b8b3531c92c0a628e40  gcc/config/mips/mips.md
 b0bbdf38fc1096cb53e4ba5e2d851c39e61f5c9514a642e674c2f8fad0369a93  gcc/toplev.c

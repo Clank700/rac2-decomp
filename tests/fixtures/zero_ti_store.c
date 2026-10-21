@@ -19,6 +19,11 @@ void offset(Quad *p, float *value, void *context) {
     consume(p, context, 7, *value);
 }
 
+void negative_offset(Quad *p, float *value, void *context) {
+    p[-1] = 0;
+    consume(p, context, 7, *value);
+}
+
 void calls(Quad *p, float *value, void *context) {
     *p = 0;
     touch(p);
