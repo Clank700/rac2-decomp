@@ -7,12 +7,12 @@
    address and the loaded word.  A file built with -G8 (config/cflags.txt) makes the
    compiler emit a bare symbol reference, which the assembler expands into that
    pair; a -G0 unit emits `lui`/`lw` with two different registers instead.  The
-   same file holds the clear of the EE scratchpad word at 0x10000000, which the
+   same file holds the clear of the fixed-address word at 0x10000000, which the
    retail reaches through its own `lui`/`sw` pair. */
 
 extern int D_001B1688;
 
-/* The EE scratchpad word the particle update clears.  Its address is the same in
+/* The fixed-address word the particle update clears.  Its address is the same in
    every program, so it is named after the address; the incomplete array keeps it
    out of the small-data pool, which is what makes the compiler split the address
    into the retail's `lui`/`sw` pair. */
