@@ -184,7 +184,7 @@ extern void func_00282D30(void *, void *, float);
 
 extern float func_00282C48(float);
 
-INCLUDE_ASM("asm/levels", func_L00_00316F60);
+ASM_FUNC("asm/levels", func_L00_00316F60);
 
 /* computes a scalar complement-power curve by repeated multiplication */
 f32 func_L00_0031A6C8(f32 value, s32 count) {
