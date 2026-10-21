@@ -205,9 +205,9 @@ INCLUDE_ASM("asm/levels", func_L09_00404C50);
 
 INCLUDE_ASM("asm/levels", func_L09_004050E0);
 
-INCLUDE_ASM("asm/levels", func_L09_004052F8);
+/* func_L09_004052F8 is defined in L09_003FEA48-g8.c (it reads the group count through $gp). */
 
-INCLUDE_ASM("asm/levels", func_L09_00405490);
+/* func_L09_00405490 is defined in L09_003FEA48-g8.c (it reads small data through $gp). */
 
 INCLUDE_ASM("asm/levels", func_L09_00405610);
 /* func_L09_00406BF8: 112 bytes against retail's 108, one saved register too many.
