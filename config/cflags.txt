@@ -405,3 +405,10 @@ src/us2/game/0033A5D8-b.c	-O2 -G8 -ffunction-sections
 src/us2/game/0033C958-b.c	-O2 -G8 -ffunction-sections
 src/us2/game/0033C958-c.c	-O2 -G8 -ffunction-sections
 src/us2/game/0033C958-d.c	-O2 -G8 -ffunction-sections
+src/pal/game/002B63E0-flags.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/pal/levels/02_maktar_nebula/L02_003E0110-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/levels/02_maktar_nebula/L02_003EC318-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/levels/23_damosel_orbit/L23_003C5410-flags.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/pal/levels/23_damosel_orbit/L23_00423838-flags.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-no-annulled-wide-stores
+src/pal/levels/23_damosel_orbit/L23_0042CE20-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/pal/levels/23_damosel_orbit/L23_0042E240-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-no-annulled-wide-stores
