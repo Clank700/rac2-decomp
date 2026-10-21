@@ -1,6 +1,13 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L00_00436E20);
+extern void func_0033AB50(char *p);
+
+/* Calls a helper with a pointer to the second 16-byte field of the record and returns the record pointer. */
+char *func_PAL_L00_00436E20(char *object)
+{
+    func_0033AB50(object + 8);
+    return object;
+}
 
 INCLUDE_ASM("asm/pal/levels", func_PAL_L00_004371C0);
 
@@ -38,4 +45,10 @@ INCLUDE_ASM("asm/pal/levels", func_PAL_L00_004392D8);
 
 INCLUDE_ASM("asm/pal/levels", func_PAL_L00_00439630);
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L00_004397D0);
+extern int func_0033AF48(char *p);
+
+int func_PAL_L00_004397D0(char *p)
+{
+    return func_0033AF48(p + 8);
+}
+
