@@ -104,3 +104,113 @@ void func_L22_003B9358(u32 a0)
     func_0029F338_22((char *)*slot);
     *slot = 0;
 }
+
+typedef unsigned short u16;
+
+extern void func_002AFFD8(void *, void *, int);
+
+extern f32 func_00282DB0(void *, void *);
+
+extern f32 func_00283CE0(int);
+
+extern f32 func_002AA140(f32, f32, f32);
+
+/* The resident object the point is derived from, the word that picks one of two threshold
+   pairs, the four threshold words (read through $gp) and, for the two id lists, the table of
+   lists and the base of the 32-byte records each one indexes (read bare: `lui`/`lw` in one
+   register). */
+extern u8 D_L22_001B9C80[];
+
+extern int D_L22_001A8F00;
+
+extern f32 D_L22_001B0A08 __attribute__((sda));
+
+extern f32 D_L22_001B0A04 __attribute__((sda));
+
+extern f32 D_L22_001B0A00 __attribute__((sda));
+
+extern f32 D_L22_001B09FC __attribute__((sda));
+
+extern u16 **D_L22_001A9014;
+
+extern u16 **D_L22_001A901C;
+
+extern u8 *D_L22_001B2794;
+
+extern u8 *D_L22_001B2678;
+
+/* Switches the object on (+0xCC set) when its position (+0xE0) comes within a threshold of the
+   point func_002AFFD8 derives from D_L22_001B9C80 (func_00282DB0 measures it), and off when it
+   moves beyond it; the threshold is interpolated between two words by the index at +0x14
+   (divided by 14), the pair of words depending on D_L22_001A8F00 == 4. Only a change does
+   anything more: switching off clears bit 2 of byte +0x1E of every record of the id list at
+   +0x10 and bit 0 of byte +0x16 of every record of the list at +0x16; switching on sets those
+   bits (a list index below zero means no list). */
+void func_L22_003F58F8(u8 *self) {
+    u8 *state = *(u8 **)(self + 0x68);
+    f32 v[4];
+    f32 dist;
+    f32 thr;
+    f32 f;
+    u16 *p;
+    u8 *e;
+
+    func_002AFFD8(D_L22_001B9C80, v, 1);
+    dist = func_00282DB0(self + 0xE0, v);
+    f = func_00283CE0(*(s16 *)(state + 0x14)) * 0.071428575f;
+    if (D_L22_001A8F00 == 4)
+        thr = func_002AA140(D_L22_001B0A08, D_L22_001B0A04, f);
+    else
+        thr = func_002AA140(D_L22_001B0A00, D_L22_001B09FC, f);
+    if (*(int *)(state + 0xCC) != 0) {
+        if (thr < dist)
+            *(int *)(state + 0xCC) = 0;
+        if (*(int *)(state + 0xCC) != 0)
+            return;
+        if (*(int *)(state + 0x10) >= 0) {
+            for (p = D_L22_001A9014[*(int *)(state + 0x10)];
+                 p != 0 && ((s16)p[-1] >= 0 || p == D_L22_001A9014[*(int *)(state + 0x10)]);
+                 p++) {
+                e = D_L22_001B2794 + ((*p & 0x7FFF) << 5);
+                if (e == 0)
+                    break;
+                e[0x1E] &= 0xFB;
+            }
+        }
+        if (*(s16 *)(state + 0x16) >= 0) {
+            for (p = D_L22_001A901C[*(s16 *)(state + 0x16)];
+                 p != 0 && ((s16)p[-1] >= 0 || p == D_L22_001A901C[*(s16 *)(state + 0x16)]);
+                 p++) {
+                e = D_L22_001B2678 + ((*p & 0x7FFF) << 5);
+                if (e == 0)
+                    break;
+                e[0x16] &= 0xFE;
+            }
+        }
+    } else {
+        if (dist < thr)
+            *(int *)(state + 0xCC) = 1;
+        if (*(int *)(state + 0xCC) == 0)
+            return;
+        if (*(int *)(state + 0x10) >= 0) {
+            for (p = D_L22_001A9014[*(int *)(state + 0x10)];
+                 p != 0 && ((s16)p[-1] >= 0 || p == D_L22_001A9014[*(int *)(state + 0x10)]);
+                 p++) {
+                e = D_L22_001B2794 + ((*p & 0x7FFF) << 5);
+                if (e == 0)
+                    break;
+                e[0x1E] |= 4;
+            }
+        }
+        if (*(s16 *)(state + 0x16) >= 0) {
+            for (p = D_L22_001A901C[*(s16 *)(state + 0x16)];
+                 p != 0 && ((s16)p[-1] >= 0 || p == D_L22_001A901C[*(s16 *)(state + 0x16)]);
+                 p++) {
+                e = D_L22_001B2678 + ((*p & 0x7FFF) << 5);
+                if (e == 0)
+                    break;
+                e[0x16] |= 1;
+            }
+        }
+    }
+}
