@@ -1,7 +1,5 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L18_003F9170);
-
 INCLUDE_ASM("asm/pal/levels", func_PAL_L18_003F9230);
 
 INCLUDE_ASM("asm/pal/levels", func_PAL_L18_003F9470);

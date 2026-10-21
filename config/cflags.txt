@@ -1,3 +1,7 @@
+src/game/0032EB28-g8.c	-O2 -G8 -ffunction-sections -Wa,-G32
+src/game/002BF6F0.c	-O2 -G0 -ffunction-sections -g
+src/game/002AA800.c	-O2 -G0 -ffunction-sections -g -ffast-math
+src/game/002AD250-rc2.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/shared/L00_003B9CB8.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-barrier
 src/levels/02_maktar_nebula/L02_003EAE10-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-barrier
 src/levels/shared/L13_0040A3B0.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-barrier
@@ -23,6 +27,11 @@ src/levels/26_jamming_array/L26_003D4930-g8.c	-O2 -G8 -ffunction-sections -frac2
 src/levels/12_todano/L12_00413CE0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/23_damosel_orbit/L23_0041D0A0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/02_maktar_nebula/L02_00401BF8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003DB200-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/02_maktar_nebula/L02_003DBA70-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/02_maktar_nebula/L02_00423520-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/23_damosel_orbit/L23_00429DC8-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/23_damosel_orbit/L23_00422798-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
 src/levels/18_damosel/L18_004308F0.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/levels/shared/L02_00411530.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/levels/23_damosel_orbit/L23_00422668.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-no-annulled-wide-stores
@@ -332,3 +341,34 @@ src/levels/01_oozla/L01_003D2C38.c	-O2 -G0 -ffunction-sections -mno-split-addres
 src/levels/shared/L08_003DB4A0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/12_todano/L12_00425448.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/02_maktar_nebula/L02_003FD7C8-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges -frac2-keep-block-order
+src/pal/game/0029BFF0-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/pal/game/002B8838-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/pal/game/002DCF20-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/pal/game/00310BE8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/pal/game/00317EF8-rc2.c	-O2 -G0 -fno-strength-reduce -ffunction-sections -fno-builtin
+src/pal/game/002CE480-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/game/002CE600-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/game/002CE690-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/game/002CE6C0-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/game/00342D98-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/pal/levels/shared/L00_003BF2F8-flags.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-barrier
+src/pal/levels/shared/L00_003C6C58-flags.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-barrier
+src/pal/levels/02_maktar_nebula/L02_004013F8-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges -frac2-keep-block-order
+src/pal/levels/shared/L12_0042C130-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/pal/levels/shared/L18_003F9170-flags.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/pal/levels/23_damosel_orbit/L23_003C3978-flags.c	-O2 -G0 -ffunction-sections -g
+src/us2/game/0029C448-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
+src/us2/game/002CE618-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/us2/game/002CE6A8-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/us2/game/002CE6D8-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/us2/game/002D5F10-b.c	-O2 -G8 -ffunction-sections
+src/us2/game/002DCF58-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/us2/game/0033C958-flags.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/us2/game/003424C8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/us2/game/00341C28-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/us2/levels/02_maktar_nebula/L02_003FE240-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges -frac2-keep-block-order
+src/pal/game/0033AEF8-b.c	-O2 -G8 -ffunction-sections
+src/us2/game/0033A5D8-b.c	-O2 -G8 -ffunction-sections
+src/us2/game/0033C958-b.c	-O2 -G8 -ffunction-sections
+src/us2/game/0033C958-c.c	-O2 -G8 -ffunction-sections
+src/us2/game/0033C958-d.c	-O2 -G8 -ffunction-sections

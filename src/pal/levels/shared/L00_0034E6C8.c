@@ -1,3 +1,11 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L00_0034E6C8);
+extern int D_00138344;
+extern void func_L00_0030D718(int a);
+
+int func_PAL_L00_0034E6C8(void)
+{
+    func_L00_0030D718(D_00138344);
+    return 0;
+}
+

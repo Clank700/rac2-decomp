@@ -18,4 +18,17 @@ INCLUDE_ASM("asm/pal/levels", func_PAL_L06_00447DC8);
 
 INCLUDE_ASM("asm/pal/levels", func_PAL_L06_004485C0);
 
-INCLUDE_ASM("asm/pal/levels", func_PAL_L06_00448968);
+extern void func_36C158();
+extern void func_36C1B0(float);
+
+void func_PAL_L06_00448968(char *a0, int a1, int a2)
+{
+    char *p = *(char **)(a0 + 0x68);
+
+    if (a2 == 0) {
+        func_36C158();
+    } else {
+        func_36C1B0(*(float *)(p + 0x31C));
+    }
+}
+
