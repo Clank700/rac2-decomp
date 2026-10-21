@@ -1257,6 +1257,14 @@ The boot-era habits above still hold; these are the ones the level units added.
   `+ -2.0f` is an ADD where `- 2.0f` compiles to `sub.s`; positive `&&` guards match where the
   negated chain does not; two identical adjacent stores are written in the **reverse** of retail's
   order; `&rec->champ` keeps the displacement in a register where `rec->champ` folds it.
+- **Two base addresses, two orders** (func_002980D0): when a body materialises two base
+  addresses and then builds two pointers from them, retail's order of the `lui`/`addiu` pairs
+  and its order of the pointers can differ - the pairs come out in the order the bases are
+  *taken*, the pointers in the order they are *built*.  Taking the two bases into two locals
+  first, in retail's pair order, and then building the two pointers in retail's pointer
+  order, reproduces both: `table = D_L00_001C5620; colours = D_00139A28; dst = &colours[first * 4];
+  src = &table[first];`.  Swapping the two pointer statements alone swaps the pairs as well
+  and then the pointers land in the wrong argument registers.
 - **Float constants can be one ulp off the natural spelling**: `1.0471977f` (`0x3F860A93`, one
   above π/3) and `0.78539824f` (`0x3F490FDC`, one above π/4) are what retail holds; take the bits
   from the disassembly, not from the arithmetic.

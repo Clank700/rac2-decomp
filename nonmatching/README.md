@@ -10,6 +10,10 @@ Drafts marked G8 need a `-g8.c` source unit when checked again.
 Extracted drafts may still need the original source unit's types and declarations. Their
 recorded checks describe the original compilation unit, not standalone syntax or verified behavior.
 
+The new game drafts record experiments with the compiler recipe at
+`ace3f7be822bae9e85af0ae9010bd5c0dca91986`. Their residuals are historical observations,
+not remeasurements with later compiler changes or proof of semantic correctness.
+
 | Function | Size | Bytes that differ |
 | --- | ---: | ---: |
 | [`func_00282BE0`](game/func_00282BE0.c) | 40 | the body is VU0/GTE code: the 0x4A/0x4B words are COP2 special2 instructions and the ldc2/sdc2 are the VU's double load and store; this cc1 emits ldc1/sdc1 for a double and never a COP2 word; plain C cannot emit it |
