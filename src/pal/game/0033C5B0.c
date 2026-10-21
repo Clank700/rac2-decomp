@@ -49,8 +49,59 @@ extern void func_0033AE18(unsigned char *owner, int value);
 /* Measured target: byte-identical across all 27 levels. */
 void func_PAL_0033CD40(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x2C0) = a1; }
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0033CD48);
+/* Measured target: byte-identical across all 27 levels. */
+void func_PAL_0033CD48(u8 *a0, s32 a1) { *(s32 *)(a0 + 0x2C4) = a1; }
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0033CD50);
+extern void func_00335E38(void *, float, float, float, float);
+extern void func_003363C0(void *, float);
 
-INCLUDE_ASM("asm/pal/game", func_PAL_0033CE70);
+void func_PAL_0033CD50(char *object) {
+    char *r = object + 12;
+    char *q = object + 0x188;
+    int i;
+    for (i = 4; i >= 0; i--) {
+        if (*(short *)q != 0) {
+            float *position = *(float **)object;
+            func_00335E38(r, position[0], position[1], 0.0f, 0.0f);
+            func_003363C0(r, *(float *)(object + 0x2A4));
+        }
+        r += 76;
+        q += 2;
+    }
+    if (*(int *)(object + 0x2C0) != 0) {
+        func_00335E38(object + 0x198, (*(float **)object)[0] + *(float *)(object + 0x2A8), (*(float **)object)[1] + *(float *)(object + 0x2AC), 0.0f, 0.0f);
+        func_00335E38(object + 0x248, (*(float **)object)[0] + *(float *)(object + 0x2B8), (*(float **)object)[1] + *(float *)(object + 0x2BC), 0.0f, 0.0f);
+        func_00335E38(object + 0x1F0, (*(float **)object)[0] + *(float *)(object + 0x2B0), (*(float **)object)[1] + *(float *)(object + 0x2B4), 0.0f, 0.0f);
+    }
+}
+
+extern void F624a0727_FUN_00336A78(char *target);
+typedef struct { char pad[8]; short n; void (*fn)(char *); } ENTRY_F624a0727;
+
+void func_PAL_0033CE70(char *object)
+{
+    char *r = object + 12;
+    char *q = object + 60;
+    char *p = object + 392;
+    int i;
+
+    for (i = 4; i >= 0; i--) {
+        if (*(short *)p != 0) {
+            ENTRY_F624a0727 *t = *(ENTRY_F624a0727 **)q;
+            t->fn(r + t->n);
+        }
+        r += 76;
+        q += 76;
+        p += 2;
+    }
+    if (*(int *)(object + 704) != 0) {
+        F624a0727_FUN_00336A78(object + 408);
+        if (*(int *)(object + 708) != 0) {
+            if (*(int *)(object + 716) != 0)
+                F624a0727_FUN_00336A78(object + 584);
+            if (*(int *)(object + 712) != 0)
+                F624a0727_FUN_00336A78(object + 496);
+        }
+    }
+}
+

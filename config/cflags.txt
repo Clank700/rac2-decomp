@@ -341,3 +341,4 @@ src/pal/game/002CE480-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-ed
 src/pal/game/002CE600-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
 src/pal/game/002CE690-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
 src/pal/game/002CE6C0-flags.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/pal/game/00342D98-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
