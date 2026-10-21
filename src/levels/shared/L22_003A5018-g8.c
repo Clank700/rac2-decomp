@@ -60,6 +60,9 @@ extern void func_00291450(int index);
 
 extern void func_0029F338_22(char *object);
 
+extern int D_L22_001A8AB0;
+extern int D_L22_001A8AC0;
+
 /* Drops the resident slot the argument's record selects: the slot word is released and stamped
  * -1, and the object the slot holds is torn down when its id is 0x5F3 and it has not started
  * (the two resident words it owns are cleared first, and its stored index is released when it is
@@ -96,8 +99,8 @@ void func_L22_003B9358(u32 a0)
         char *inner = *(char **)(object + 0x68);
         int index;
 
-        *(int *)0x001A8AB0 = 0;
-        *(int *)0x001A8AC0 = 0;
+        D_L22_001A8AB0 = 0;
+        D_L22_001A8AC0 = 0;
         index = *(short *)(inner + 0x2C);
         if (index != -1)
             func_00291450(index);

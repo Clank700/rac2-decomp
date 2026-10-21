@@ -37,7 +37,7 @@ src/core/001286C8-rc2.c	sdk -O2 -G0 -ffunction-sections -fno-builtin
 src/core/0012CAB0-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
 src/core/001322B8-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
 src/core/001330D0-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
-src/core/00133688-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/core/00133688-rc2.c	-O2 -G8 -mno-split-addresses -ffunction-sections -fno-builtin
 src/game/002729A0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/game/0027C660-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
 src/game/0027C768-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
@@ -50,9 +50,9 @@ src/game/002908D0-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-bu
 src/game/00290978-rc2.c	-fno-builtin -O2 -G8 -mno-split-addresses -ffunction-sections
 src/game/00297BB0-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/game/00297FE8-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
-src/game/0029B628-rc2.c	-O2 -fno-schedule-insns -G8 -mastra-r5900-extern-buffer -ffunction-sections -fno-builtin
+src/game/0029B628-rc2.c	-O2 -fno-schedule-insns -G8 -mno-split-addresses -mastra-r5900-extern-buffer -ffunction-sections -fno-builtin
 src/game/0029B658-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
-src/game/0029DC58-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
+src/game/0029DC58-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
 src/game/002A7398-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/game/002A90C8-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
 src/game/002A9640-rc2.c	-O2 -fno-gcse -G0 -ffunction-sections -fno-builtin
@@ -326,3 +326,9 @@ src/levels/shared/L22_003A5018-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy
 src/levels/07_siberius/L07_003F4578-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/shared/L05_0037BC08-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy
 src/levels/01_oozla/L01_003B49D8.c	-O2 -G0 -ffunction-sections -ffast-math
+src/game/0029DD00.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/shared/L00_002F43D0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/01_oozla/L01_003D2C38.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/shared/L08_003DB4A0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/12_todano/L12_00425448.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/02_maktar_nebula/L02_003FD7C8-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges -frac2-keep-block-order
