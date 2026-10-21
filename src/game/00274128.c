@@ -297,17 +297,17 @@ int func_00274C90(char *object, float *output, int limit)
     return count;
 }
 
-INCLUDE_ASM("asm/game", func_00274D90);
+ASM_FUNC("asm/game", func_00274D90);
 
 ASM_FUNC("asm/game", func_00276158);
 
-INCLUDE_ASM("asm/game", func_002761F8);
+ASM_FUNC("asm/game", func_002761F8);
 
-INCLUDE_ASM("asm/game", func_00277258);
+ASM_FUNC("asm/game", func_00277258);
 
-INCLUDE_ASM("asm/game", func_00277F48);
+ASM_FUNC("asm/game", func_00277F48);
 
-INCLUDE_ASM("asm/game", func_00278870);
+ASM_FUNC("asm/game", func_00278870);
 
 INCLUDE_ASM("asm/game", func_00278CE0);
 
