@@ -75,4 +75,33 @@ void func_US2_0033BE70(char *object) {
     }
 }
 
-INCLUDE_ASM("asm/us2/game", func_US2_0033BF90);
+extern void F624a0727_FUN_00336A78(char *target);
+typedef struct { char pad[8]; short n; void (*fn)(char *); } ENTRY_F624a0727;
+
+void func_US2_0033BF90(char *object)
+{
+    char *r = object + 12;
+    char *q = object + 60;
+    char *p = object + 392;
+    int i;
+
+    for (i = 4; i >= 0; i--) {
+        if (*(short *)p != 0) {
+            ENTRY_F624a0727 *t = *(ENTRY_F624a0727 **)q;
+            t->fn(r + t->n);
+        }
+        r += 76;
+        q += 76;
+        p += 2;
+    }
+    if (*(int *)(object + 704) != 0) {
+        F624a0727_FUN_00336A78(object + 408);
+        if (*(int *)(object + 708) != 0) {
+            if (*(int *)(object + 716) != 0)
+                F624a0727_FUN_00336A78(object + 584);
+            if (*(int *)(object + 712) != 0)
+                F624a0727_FUN_00336A78(object + 496);
+        }
+    }
+}
+
