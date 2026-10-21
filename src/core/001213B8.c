@@ -44,7 +44,43 @@ void func_00121B18(void) {
 
 /* func_00122630 is in 00122630.c with its qualified packing profile. */
 
-INCLUDE_ASM("asm/core", func_00122760);
+/* The runtime's own IEEE double unpacking: the sign, the kind (2 zero,
+   3 normal, 4 infinity, 0 signalling NaN, 1 quiet NaN) and, for every kind
+   but the zero, the fraction left-justified in the top bits of a 64-bit word
+   with the implicit one at 2^60.
+
+   Two spellings carry the retail bytes: the zero case is a `while` whose body
+   returns, which keeps the block a loop head so the label that follows it is
+   aligned to 8 bytes (retail's standalone `nop` at +0x34), and the normal
+   path assigns the exponent, the kind and the fraction in that order, which
+   is where retail puts the three stores. */
+void func_00122760(double *value, DoubleParts *parts) {
+    unsigned long bits = *(unsigned long *) value;
+    unsigned int exponent = (unsigned int) (bits >> 52) & 0x7FF;
+    unsigned long long fraction = bits & 0xFFFFFFFFFFFFFULL;
+
+    parts->sign = (unsigned int) (bits >> 63);
+    while (exponent == 0) {
+        parts->kind = 2;
+        return;
+    }
+    if (exponent == 0x7FF) {
+        if (fraction == 0) {
+            parts->kind = 4;
+            return;
+        }
+        if (fraction & 0x8000000000000ULL) {
+            parts->kind = 1;
+        } else {
+            parts->kind = 0;
+        }
+        parts->fraction.ll = fraction;
+        return;
+    }
+    parts->exponent = (int) exponent - 1023;
+    parts->kind = 3;
+    parts->fraction.ll = (fraction << 8) | 0x1000000000000000ULL;
+}
 
 /* func_00122800 is in 00122800.c with its SDK compiler profile. */
 

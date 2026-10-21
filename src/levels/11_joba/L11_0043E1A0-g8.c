@@ -31,7 +31,7 @@ extern void func_4881A8(void *);
 
 extern void func_488200(void *);
 
-extern u32 D_L11_001B32E8[];
+extern u32 D_L11_001B32E8[1];
 
 extern u8 D_L11_001BA8C0[];
 
@@ -217,6 +217,25 @@ void func_L11_00443380(void) {
     func_488268(2, 0x168);
     func_4881A8(&D_L11_001B1530);
     func_488200(&D_L11_001B1540);
+}
+
+/* Turns the script's angle around the actor and hands the result to the level's
+   helpers when the angle is small enough. */
+void func_L11_004433D8(u8 *obj) {
+    s32 state;
+
+    D_L11_001B32E8[0] = 1;
+    if (func_282E48(D_L11_001BA8C0, &D_L11_001B1530) < 0.01f) {
+        state = obj[0x20];
+        if (state == 4) {
+            func_32C9E0(obj, 7, -1);
+        } else if (state == 5) {
+            func_32C9E0(obj, 6, -1);
+        }
+        func_488268(1, 0);
+        func_4881A8(&D_L11_001B1530);
+        func_488200(&D_L11_001B1540);
+    }
 }
 
 /* Turns the script's angle around the actor, hands the result to the level's helpers

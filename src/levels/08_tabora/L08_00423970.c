@@ -63,9 +63,22 @@ void func_L08_00425448(char *a0) {
     *(u8 *)(a0 + 0xBC) = 1;
 }
 
-/* Near miss: nonmatching/levels/func_L08_004254D0.c - the table load and the shift land in
-   $v0/$v1 the other way round from retail, and `a0 = 0` is not sunk into the beqz slot. */
-INCLUDE_ASM("asm/levels", func_L08_004254D0);
+s32 func_L08_004254D0(s32 a0) {
+    s32 v1;
+    s32 v0;
+    s32 v2;
+    v1 = D_L08_001B29DC;
+    if (a0 != -1) {
+        v0 = a0 << 8;
+        v2 = v1 + v0;
+        a0 = 0;
+        if (v2 == 0 || *(u8 *)(v2 + 0x20) == 0xFE || *(u8 *)(v2 + 0x20) == 0xFD) {
+            a0 = 1;
+        }
+        return a0;
+    }
+    return 1;
+}
 
 s32 func_L08_00425518(s32 a0) {
     s32 v1;

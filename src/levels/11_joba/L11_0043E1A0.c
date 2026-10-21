@@ -476,9 +476,8 @@ void func_L11_00442C80(u8 *object) {
 
 /* func_L11_00442E38 lives in the sibling small-data unit (L11_0043E1A0-g8.c). */
 
-/* func_L11_00443380 lives in the sibling small-data unit (L11_0043E1A0-g8.c). */
-
-INCLUDE_ASM("asm/levels", func_L11_004433D8);
+/* func_L11_00443380 and func_L11_004433D8 live in the sibling small-data unit
+   (L11_0043E1A0-g8.c): they reach the level's globals through $gp. */
 
 INCLUDE_ASM("asm/levels", func_L11_00443498);
 
@@ -487,7 +486,48 @@ INCLUDE_ASM("asm/levels", func_L11_00443940);
 /* maps the class index to its measured identifier */
 extern u32 D_L11_002BB0E0[];
 
-INCLUDE_ASM("asm/levels", func_L11_00443CE0);
+/* The level's own jump table: the address of each case body. */
+extern void *jtbl_002BB0E0[13];
+
+s32 func_L11_00443CE0(s32 a) {
+    static void * volatile tab[] = {
+        &&c0, &&c1, &&c2, &&c3, &&c4, &&c5, &&c6, &&c7,
+        &&c8, &&c9, &&c10, &&c11, &&c12
+    };
+
+    if ((u32)a >= 13) {
+        goto def;
+    }
+    goto *jtbl_002BB0E0[a];
+c0:
+    return 0x2F66;
+c1:
+    return 0x2F67;
+c2:
+    return 0x2F68;
+c3:
+    return 0x2F69;
+c4:
+    return 0x2F6A;
+c5:
+    return 0x2F6B;
+c6:
+    return 0x2F6C;
+c7:
+    return 0x2F6D;
+c8:
+    return 0x2F70;
+c9:
+    return 0x2F71;
+c10:
+    return 0x3243;
+c11:
+    return 0x3244;
+c12:
+    return 0x3245;
+def:
+    return 0x2F66;
+}
 
 INCLUDE_ASM("asm/levels", func_L11_00443D78);
 
@@ -513,7 +553,40 @@ extern u8 D_001A63A8[];
 /* Claims the shared call slot for the state entry the caller's class identifier
    selects, unless the slot is already busy or waiting. */
 
-INCLUDE_ASM("asm/levels", func_L11_00445D28);
+s32 func_L11_00445D28(u8 *obj, s32 idx) {
+    u8 *state = *(u8 **)(obj + 0x68);
+    s32 v;
+
+    if ((u32)idx >= 0x27) {
+        return 0;
+    }
+    if (idx < 0x14) {
+        s32 *p = (s32 *)((u8 *)state + idx * 4);
+        v = p[0x84];
+    } else {
+        s32 *p = (s32 *)((u8 *)state + (idx - 0x14) * 4);
+        v = p[0x98];
+    }
+    {
+        JobaCallSlotView *slot = (JobaCallSlotView *)D_001A63A8;
+
+        if (slot->field68 != 0) {
+            goto fail;
+        }
+        if (slot->field24 != -1) {
+            goto fail;
+        }
+        slot->field24 = (v & 0x3FFF) + 0x7D0;
+        slot->field28 = 0;
+        {
+            s16 *p = (s16 *)((u8 *)state + idx * 2 + 0x2A0);
+            *p = 1;
+        }
+    }
+    return 1;
+fail:
+    return 0;
+}
 INCLUDE_ASM("asm/levels", func_L11_00445DF8);
 
 INCLUDE_ASM("asm/levels", func_L11_00446020);

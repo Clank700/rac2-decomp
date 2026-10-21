@@ -195,8 +195,10 @@ void func_L09_0040B008(char *a0) {
    L09_003FEA48-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L09_00403398);
-/* func_L09_00403700: 160 bytes against retail's 152, the guard comes out as `bnel`.
-   Deposited in nonmatching/levels/func_L09_00403700.c. */
+
+/* func_L09_00403700: 152 bytes, one register off - the loop's trip test compares
+   into $v0 where retail compares into $v1.  Deposited in
+   nonmatching/levels/func_L09_00403700.c. */
 INCLUDE_ASM("asm/levels", func_L09_00403700);
 
 INCLUDE_ASM("asm/levels", func_L09_00403798);
