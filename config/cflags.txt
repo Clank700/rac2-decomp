@@ -330,3 +330,4 @@ src/game/0029DD00.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/shared/L00_002F43D0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/01_oozla/L01_003D2C38.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/shared/L08_003DB4A0.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/12_todano/L12_00425448.c	-O2 -G0 -ffunction-sections -mno-split-addresses
