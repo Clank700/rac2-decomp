@@ -89,6 +89,22 @@ jump2, for one, still deletes a redundant register move across the copy, which a
 asm keeps. `tests/test_qcopy_barrier.py` covers the selector, the default/disabled
 equality, and authored copies among neighbours, calls, branches and volatile accesses.
 
+`zero_ti_por.py` adds `-frac2-zero-ti-por`, enabled only for qualified files in
+`config/cflags.txt`. `rac2_fold_zero_ti_store` then leaves a quadword zero store to `0($sp)`
+alone: the zero keeps its `por $rX,$zero,$zero` and the store its register source, as plain C
+compiles without the fold, while a store through any other register still folds to `sq $zero`.
+Retail clears 396 quadwords with `sq $zero,0(reg)` (263 functions), which the fold models, but
+it also stores a `por`-materialised zero at displacement 0 183 times in 153 functions, always to
+`0($sp)` and never through another register; 82 of the `sq $zero` stores are to `0($sp)` too,
+so the address alone does not decide it and a unit says that its stack clears are plain C.
+`-fno-rac2-zero-ti-por` disables it again. Without the switch no object of `src/` changes;
+forced on everywhere, it changes only the four units whose functions retail clears `0($sp)`
+with `sq $zero`. Five functions are the measured witnesses, each a unit of its own
+(docs/COMPILER-NOTES.md). `tests/test_zero_ti_por.py` covers the transformer's anchors, the
+default/disabled equality, and authored zero stores to the stack, through pointers, to a global
+and in loops, a function with both kinds, nonzero displacements, shared and live zeros and the
+function-value fold.
+
 `hazard_labels.py` adds `-frac2-hazard-labels`, enabled only for qualified files in
 `config/cflags.txt`. cc1 then writes `.set rac2_hazard_labels` at the top of its output, and
 gas keeps a code label in front of the coprocessor hazard `nop` it inserts after the label
