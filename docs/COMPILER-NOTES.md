@@ -1625,3 +1625,48 @@ hash and requires these controls to pass before installation is accepted.
 The integrated correction passes all 28 programs with `tools/build.py all
 --strict` and no rejected C placements; the complete container test suite
 passes 57 tests. The three witnesses add 580 distinct matched code bytes.
+
+## Grouped vector copies and 64-bit masks (21 October 2026)
+
+`-frac2-qcopy` is a default-off, per-file profile for aligned TImode
+memory-to-memory assignments. It keeps destination and source addresses in
+registers and groups their `lq`/`sq` instructions with an explicit `$v0` scratch
+clobber. Plain C remains in `src/`; this is a compiler machine pattern, not an
+assembly-output rewrite. `-fno-rac2-qcopy` restores the default. Scalar moves,
+zero stores and explicitly unaligned accesses retain their ordinary lowering.
+
+The memory operands keep their volatile/structure flags and alias sets. No
+memory barrier is added. The pattern's length is **two instructions** in this
+backend, and assembled regression controls cover integer and FPU branch delay
+slots. Public Lombyte/RAC1 copy helpers motivated the register-address/scratch
+model; their inline assembly is not an admissible C implementation here. See
+the pinned references in [CREDITS.md](../CREDITS.md).
+
+The qualified witnesses are `func_L20_0039E158` (140 bytes) and
+`func_L20_0039F210` (32 bytes), one placement each. The latter uses
+`-fno-schedule-insns` and writes its two distinct state fields in the measured
+order. Restricting all TImode addresses to registers was insufficient: it found
+the right sizes but different allocation/order. Grouping the actual copy is
+what provides these matches. The ordinary folded-copy witness
+`func_L00_00395240` retains its default profile.
+
+The assembler also needs two bounded 64-bit immediate cases: the isolated sign
+bit uses `addiu -1` followed by `dsll32 31`; a sign bit plus a contiguous low run
+of at least 32 ones keeps the existing sign-extending `lui` path. Other values
+retain patch `0052`'s previous paths. These cases unblock the retained public
+Newlib `_strtol_r` (`func_00117278`, 884 bytes) and GCC double packer
+(`func_00122630`, 300 bytes), one placement each. `0x0FFFFFFFFFFFFFFE` remains a
+different case; this does not establish a general repair for every mask.
+
+The packer and its callers share the 24-byte `DoubleParts` declaration. The
+`func_001175F0` wrapper declares the callee's actual long return and forwards
+it directly: an explicit 32-bit truncation adds two instructions absent from
+retail. Accurate prototypes are required even when a previous declaration
+happened to compile to the desired bytes.
+
+Across 779 configured units, the same-source comparison changes non-debug
+sections only in the four new witness units; eleven other units differ only
+in `.mdebug`. Remaining attempts `func_00335370`, `func_L20_0044A838` and
+`func_L00_002A6008` now have the correct copy sizes but still differ in ordinary
+allocation or scheduling. Their improved sources and specific remaining
+differences stay in `nonmatching/`; they receive no match credit.

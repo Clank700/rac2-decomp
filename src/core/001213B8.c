@@ -1,5 +1,6 @@
 #include "common.h"
 #include "structs.h"
+#include "double_parts.h"
 
 extern void r1_func_0011D4A0(void);
 
@@ -41,18 +42,12 @@ void func_00121B18(void) {
    `__udivdi3`/`__umoddi3`) are compiled C now: src/core/00121B20.c and
    src/core/001220F0.c. */
 
-INCLUDE_ASM("asm/core", func_00122630);
+/* func_00122630 is in 00122630.c with its qualified packing profile. */
 
 INCLUDE_ASM("asm/core", func_00122760);
 
 INCLUDE_ASM("asm/core", func_00122800);
 
-typedef struct {
-    int kind;
-    unsigned int sign;
-    int exponent;
-    unsigned long fraction;
-} DoubleParts;
 extern void func_00122760(double *, DoubleParts *);
 extern DoubleParts *func_00122800(DoubleParts *, DoubleParts *, DoubleParts *);
 extern double func_00122630(DoubleParts *);

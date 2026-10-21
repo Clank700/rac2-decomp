@@ -46,6 +46,23 @@ helpers. This address rule applies in every scheduling profile; it does not
 enable `-frac2-zero-ti-barrier` for additional files. Authored positive and
 negative offset controls verify it alongside the zero-displacement controls.
 
+`qcopy_pattern.py` adds `-frac2-qcopy`, enabled only for qualified files in
+`config/cflags.txt`. It lowers an aligned TImode memory assignment to a grouped
+`lq`/`sq` pair with register addresses and a declared `$v0` scratch. Sources
+remain ordinary C assignments. The default keeps normal displacement addressing;
+`-fno-rac2-qcopy` restores that default. Memory flags and alias sets are retained,
+explicitly unaligned accesses take the ordinary path, and no memory barrier is
+added. Scalar transfers and zero stores are not selected by this pattern.
+Qualify every function in an opted-in unit; address formation alone does not
+settle allocation or scheduling. The recipe requires the authored copy controls
+and RTL-contract tests, including volatile accesses and integer/FPU branches.
+
+Patch `0052` also preserves the original sign-extending expansion for the isolated
+64-bit sign bit and a sign bit followed by a contiguous low run of at least 32
+ones. Its assembler regression controls exercise neighboring masks and four
+destination registers. This does not change the separate shifted-low-ones case
+`0x0FFFFFFFFFFFFFFE`.
+
 `build.sh` stops unless `mips.c`, `mips.h`, `mips.md`, `toplev.c`, `flags.h`,
 `haifa-sched.c` and `tc-mips.c` hash as it
 lists. The binaries' own hashes depend on the build host and path, so check a compiler by its

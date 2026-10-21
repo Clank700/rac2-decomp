@@ -211,7 +211,7 @@ extern void func_002B3BA8(char *, int, float, float, int, int);
 
 extern char *func_L20_004448A8(char *, char *);
 
-INCLUDE_ASM("asm/levels", func_L20_0039E158);
+/* func_L20_0039E158 is in L20_0039E158.c with its grouped-copy profile. */
 
 INCLUDE_ASM("asm/levels", func_L20_0039E1E8);
 
@@ -230,7 +230,7 @@ INCLUDE_ASM("asm/levels", func_L20_0039EBB8);
 
 INCLUDE_ASM("asm/levels", func_L20_0039EEC8);
 
-INCLUDE_ASM("asm/levels", func_L20_0039F210);
+/* func_L20_0039F210 is in L20_0039F210.c with its grouped-copy scheduling profile. */
 
 extern void func_L20_0039F268(char *);
 

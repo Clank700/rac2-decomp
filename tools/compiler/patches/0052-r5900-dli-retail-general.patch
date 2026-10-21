@@ -2,7 +2,7 @@ diff --git a/gas/config/tc-mips.c b/gas/config/tc-mips.c
 index 744d28d..2370b49 100644
 --- a/gas/config/tc-mips.c
 +++ b/gas/config/tc-mips.c
-@@ -3056,109 +3056,79 @@ load_register (counter, reg, ep, dbl)
+@@ -3056,109 +3056,100 @@ load_register (counter, reg, ep, dbl)
              }
          }
  
@@ -136,8 +136,29 @@ index 744d28d..2370b49 100644
 +          | (unsigned long long) (unsigned long)
 +            (lo32.X_add_number & 0xffffffff);
 +
++        /* The retail R5900 assembler builds the isolated sign bit from
++           sign-extended -1. Keep every other constant on its existing path. */
++        if (mips_cpu == 5900 && dbl && wide == (1ULL << 63))
++          {
++            expressionS sign_bit;
++            sign_bit.X_op = O_constant;
++            sign_bit.X_add_number = -1;
++            macro_build ((char *) NULL, counter, &sign_bit, "addiu", "t,r,j",
++                         reg, 0, (int) BFD_RELOC_LO16);
++            macro_build ((char *) NULL, counter, NULL, "dsll32", "d,w,<",
++                         reg, reg, 31);
++            return;
++          }
++
 +        if ((hi32.X_add_number & 0xffffffff) != 0xffffffff
-+            && (wide & (wide + 1)) != 0)
++            && (wide & (wide + 1)) != 0
++            /* A sign bit plus a low run of at least 32 ones retains
++               the existing sign-extending lui path below. */
++            && ! (mips_cpu == 5900 && dbl
++                  && (wide & (1ULL << 63)) != 0
++                  && (wide & 0xffffffffULL) == 0xffffffffULL
++                  && ((wide & ~(1ULL << 63))
++                      & ((wide & ~(1ULL << 63)) + 1)) == 0))
 +          {
 +            expressionS field;
 +            int top, cur, next, amount;
