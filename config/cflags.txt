@@ -3,6 +3,9 @@ src/levels/02_maktar_nebula/L02_003EAE10-g8.c	-O2 -G8 -ffunction-sections -frac2
 src/levels/shared/L13_0040A3B0.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-barrier
 src/levels/20_yeedil/L20_0039E158.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/20_yeedil/L20_0039F210.c	-O2 -G0 -ffunction-sections -frac2-qcopy -fno-schedule-insns
+src/levels/02_maktar_nebula/L02_003D4ED0.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/shared/L18_004273F0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy
+src/levels/23_damosel_orbit/L23_0041C6B0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy
 src/core/00117278.c	-O0 -G2 -ffunction-sections -mastra-quad-saves
 src/core/00122630.c	-O2 -G0 -ffunction-sections
 src/core/00123A00-rc2.c	sdk -O2 -ffunction-sections -fno-builtin
