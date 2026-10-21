@@ -127,7 +127,7 @@ void func_L02_003FAF90(char *a0) {
     *(u32 *)(s0 + 0xC0) = 0;
 }
 
-/* func_L02_003FB000 is defined in L02_003F5430-g8.c (two $gp accesses). */
+INCLUDE_ASM("asm/levels", func_L02_003FB000);
 
 INCLUDE_ASM("asm/levels", func_L02_003FB120);
 

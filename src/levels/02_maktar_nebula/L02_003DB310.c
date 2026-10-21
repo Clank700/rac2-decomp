@@ -327,7 +327,7 @@ void func_L02_003F1B70(char *arg0) {
     func_002A7750(arg0, 6, 4);
 }
 
-/* func_L02_003F1BA8 is defined in L02_003DB310-g8.c (it reads the group count through $gp). */
+INCLUDE_ASM("asm/levels", func_L02_003F1BA8);
 
 INCLUDE_ASM("asm/levels", func_L02_003F52B0);
 
