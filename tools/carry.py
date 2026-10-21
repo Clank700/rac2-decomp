@@ -4,6 +4,7 @@ Another release's function catalogues, carried from USA v1.01's by identical cod
 
   python3 tools/carry.py --version pal    # config/pal/boot/functions.tsv, config/pal/levels/functions.tsv
   python3 tools/carry.py --version us2    # config/us2/...
+  python3 tools/carry.py --version pal --demote   # after tools/build.py all --version pal: config/pal/not_carried.tsv
 
 Needs the dumps of both releases (tools/levels.py dump, and with --version V). Writes the two
 catalogues of release V in the formats of USA v1.01's (docs/VERSIONS.md), and
@@ -268,8 +269,39 @@ def joins(aligned: dict, version: str) -> None:
         aligned[p] = out + ext[i:]
 
 
+# Reasons tools/build.py gives for C that does not build to the bytes at a place: what
+# --demote takes as "not the same code" (a knock-on "needs ... which is not C" is not one).
+REAL = ("instruction at", "would be at", "differs", "bytes, expected", "needs two values")
+
+
+def not_carried(version: str) -> set[str]:
+    """config/<version>/not_carried.tsv: v1.01 functions whose code equals this release's with
+    every address masked but whose C does not build to it, as tools/build.py measured: an
+    offset inside an address (a field of a large global) moved. With --demote, the functions
+    the last build of the release (build/<version>/*/placed.json) reports so are added."""
+    v = levels.VERSIONS[version]
+    path = ROOT / v["config"] / "not_carried.tsv"
+    names = {}
+    if path.is_file():
+        for line in path.read_text().splitlines():
+            if line and not line.startswith("#"):
+                name, why = line.split("\t", 1)
+                names[name] = why
+    if "--demote" in sys.argv:
+        for placed in sorted((ROOT / v["build"]).glob("*/placed.json")):
+            for name, why in json.loads(placed.read_text())["differ"].items():
+                if not name.startswith("func_") or "_PAL_" in name or "_US2_" in name:
+                    continue
+                if "which is not C" not in why and any(r in why for r in REAL):
+                    names.setdefault(name, f"{placed.parent.name}: {why}")
+        path.write_text("# v1.01 function\twhat tools/build.py said (the first program) -- tools/carry.py --demote\n" +
+                        "".join(f"{n}\t{w}\n" for n, w in sorted(names.items())))
+    return set(names)
+
+
 def main() -> None:
     version = levels.version_argument()
+    levels.select(version)
     if version == "us":
         sys.exit("USA v1.01 is the catalogue the others are carried from: --version pal or us2")
     tag = levels.VERSIONS[version]["tag"]
@@ -282,6 +314,10 @@ def main() -> None:
         jobs.append((levels.level_dir(number), version, ext))
     with ProcessPoolExecutor() as pool:
         aligned = dict(pool.map(align_program, jobs))
+    kept_out = not_carried(version)
+    for p, ext in aligned.items():
+        aligned[p] = [(e[0], e[1], None, "changed", e[4], e[5]) if e[3] == "same" and e[2] in kept_out else e
+                      for e in ext]
     calls(aligned, version)
     joins(aligned, version)
     levels.select(version)
