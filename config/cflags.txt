@@ -348,3 +348,4 @@ src/pal/levels/02_maktar_nebula/L02_004013F8-g8.c	-O2 -G8 -ffunction-sections -f
 src/pal/levels/shared/L12_0042C130-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
 src/pal/levels/shared/L18_003F9170-flags.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/pal/levels/23_damosel_orbit/L23_003C3978-flags.c	-O2 -G0 -ffunction-sections -g
+src/us2/game/0029C448-rc2.c	-O2 -fno-schedule-insns -G0 -mno-split-addresses -ffunction-sections -fno-builtin
