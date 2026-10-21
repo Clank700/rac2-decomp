@@ -92,6 +92,90 @@ s32 func_L11_00442710(u8 *obj) {
     }
     return result;
 }
+
+/* The group count and the entity table's base, as the walks below reach them: the count through
+   $gp, the base as a bare symbol (a three-word `sda` array keeps the `lui`/`lw` pair). */
+extern s32 D_L11_001B35B8 __attribute__((sda));
+
+extern u8 *D_L11_001B359C_abs[3] __attribute__((sda));
+
+extern char D_00189EA0[];
+
+extern s32 func_L11_00442B60(u8 *);
+
+extern s32 func_L02_003D77B8(u8 *);
+
+extern float func_00282E80(void *, void *);
+
+#define GROUP(off) (*(s32 *)(state + (off)))
+
+/* Claims the slot at the state's count (+0x18C) in its 0x120 table: an empty slot is taken as it
+   is, a filled one only when func_L02_003D77B8 refuses its entity and the count is still below
+   the class record's limit (byte 0x16), which then advances. The slot gets the first entity of the
+   group's id list (state word 0xC4) that func_L11_00442B60 and func_L02_003D77B8 both accept;
+   when the slot is still empty after that walk, the first entity that func_L02_003D77B8 accepts
+   and that lies more than 30.0 from D_00189EA0 takes it. The table address is formed at each use
+   (retail does), which lets GCSE hoist it ahead of the first walk. */
+void func_L11_00440E18(u8 *obj) {
+    u8 *state = *(u8 **)(obj + 0x68);
+    JobaClassTableView *entry = ((JobaClassTableView **)&D_L11_001B14F8)[*(s16 *)(state + 0x1F0)];
+    JobaClassRecordView *rec = &entry->records[*(s16 *)(state + 0x1F2)];
+    u8 *slot = *(u8 **)(state + (*(s32 *)(state + 0x18C) << 2) + 0x120);
+    s32 ok = 0;
+    u16 *q;
+    u8 **slots;
+    u16 *p;
+    u8 *e;
+
+    if (slot != 0) {
+        if (func_L02_003D77B8(slot) == 0 && *(s32 *)(state + 0x18C) < *((u8 *)rec + 0x16) - 1) {
+            ok = 1;
+            *(s32 *)(state + 0x18C) = *(s32 *)(state + 0x18C) + 1;
+        }
+    } else {
+        ok = 1;
+    }
+    if (ok) {
+        if (GROUP(0xC4) == 0xFF)
+            return;
+        q = (u16 *)D_L11_001FC420[GROUP(0xC4)];
+        if (q == 0)
+            return;
+        for (p = q; (GROUP(0xC4) & 0xFF) != 0xFF && GROUP(0xC4) <= D_L11_001B35B8 && p != 0 &&
+                    ((p != 0 && (s16)p[-1] >= 0) || p == (u16 *)D_L11_001FC420[GROUP(0xC4)]);
+             p++) {
+            e = D_L11_001B359C_abs[0] + ((*p & 0x7FFF) << 8);
+            if (e == 0)
+                break;
+            if (func_L11_00442B60(e)) {
+                if (func_L02_003D77B8(e)) {
+                    slots = (u8 **)(state + 0x120);
+                    *(u8 **)((u8 *)slots + (GROUP(0x18C) << 2)) = e;
+                    break;
+                }
+            }
+        }
+        slots = (u8 **)(state + 0x120);
+        if (*(u8 **)((u8 *)slots + (GROUP(0x18C) << 2)) == 0) {
+            for (p = (u16 *)D_L11_001FC420[GROUP(0xC4)];
+                 (GROUP(0xC4) & 0xFF) != 0xFF && GROUP(0xC4) <= D_L11_001B35B8 && p != 0 &&
+                 ((p != 0 && (s16)p[-1] >= 0) || p == (u16 *)D_L11_001FC420[GROUP(0xC4)]);
+                 p++) {
+                e = D_L11_001B359C_abs[0] + ((*p & 0x7FFF) << 8);
+                if (e == 0)
+                    break;
+                if (func_L02_003D77B8(e)) {
+                    if (func_00282E80(e + 0x10, D_00189EA0) > 30.0f) {
+                        slots = (u8 **)(state + 0x120);
+                        *(u8 **)((u8 *)slots + (GROUP(0x18C) << 2)) = e;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
+
 /* The four angle and length constants the script reads through $gp. */
 extern f32 D_L11_001B15AC __attribute__((sda));
 
@@ -179,7 +263,9 @@ s32 func_L11_00440970(u8 *object, u8 *arg) {
     return 1;
 }
 
-extern s32 D_L11_001B35B8[] __attribute__((sda));
+/* The group count once more, read bare (`lui`/`lw`) in these walks, under a second name: the
+   scalar above is read through $gp. */
+extern s32 D_L11_001B35B8_1[] __attribute__((sda));
 extern f32 D_L11_001B1614 __attribute__((sda));
 extern f32 D_L11_001B1618 __attribute__((sda));
 extern s32 func_00312B58(u8 *);
@@ -187,7 +273,6 @@ extern s32 func_L02_00416800(u8 *);
 extern s32 func_002A77E0(s32);
 extern void func_L02_00416720(u8 *, u8 *, f32, f32);
 
-#define GROUP(off) (*(s32 *)(state + (off)))
 /* Leaves the function when the group is 0xFF or empty; the braces it opens close in END_IDS. */
 #define FOR_EACH_ID(p, off) \
     if (GROUP(off) == 0xFF) \
@@ -195,7 +280,7 @@ extern void func_L02_00416720(u8 *, u8 *, f32, f32);
     { u16 *q = (u16 *)D_L11_001FC420[GROUP(off)]; \
     if (q == 0) \
         return; \
-    for (p = q; (GROUP(off) & 0xFF) != 0xFF && GROUP(off) <= D_L11_001B35B8[0] && p != 0 && \
+    for (p = q; (GROUP(off) & 0xFF) != 0xFF && GROUP(off) <= D_L11_001B35B8_1[0] && p != 0 && \
          ((p != 0 && (s16)p[-1] >= 0) || p == (u16 *)D_L11_001FC420[GROUP(off)]); \
          p++)
 #define END_IDS }

@@ -92,7 +92,7 @@ s16 func_L11_00440C80(u8 *obj) {
 
 INCLUDE_ASM("asm/levels", func_L11_00440C90);
 
-INCLUDE_ASM("asm/levels", func_L11_00440E18);
+/* func_L11_00440E18 lives in the sibling small-data unit (L11_0043E1A0-g8.c). */
 
 /* Walks the state's 0x120 slots in order and renews each live entry through the two shared helpers. */
 extern s32 func_417238(s32);
