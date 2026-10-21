@@ -1,14 +1,4 @@
-/* func_L23_003BFE90 (300 bytes, level 23 only) -- NEAR MISS, not integrated.
-   Belongs in src/levels/23_damosel_orbit/L23_0035CE90.c (no $gp access).
-   state: 296 bytes against retail's 300. The integer argument arg2 must be the third
-   integer parameter (the unused int in front of it puts it in $a2, as retail reads it).
-   The 1/60 factor is `D * 0.016666668f`, a mul.s by 0x3C888889 in retail.
-   The one size difference is the 128-bit zero: retail writes it as
-   `por $v0,$zero,$zero` (word 0x700014A9, which rabbitizer prints as INVALID) and then
-   `sq $v0,0x50($sp)`. This toolchain folds the single-use zero into `sq $zero,0x50($sp)`
-   (the fold in tools/compiler/transformers/fold_zero_ti_store.py). A named zero variable
-   folds the same way. The prologue save order also differs (cc1 scheduling).
-*/
+#include "include_asm.h"
 
 typedef int TI16 __attribute__((mode(TI)));
 
@@ -40,15 +30,24 @@ extern void func_L23_00429098(char *, char *, char *, int, float);
 
 extern void func_002E5DA0(int, int, char *, int);
 
+/* Fills the stack vectors v.a, v.b, v.c and v.d from the table at D_00189E20, the owner's helper and a
+   unit vector (0, 1, 0, 1) whose second float is negated when arg2 is set, scales v.d by
+   D_L23_001B370C / 60 and passes it with v.c and arg1 to func_L23_00429098; then calls func_002E5DA0.
+   The clear of v.c is retail's `sq $zero,0($reg)`, a scheduling barrier (-frac2-zero-ti-barrier): the 1.0f
+   is made before it, as retail does, and the table base is one local, so that the `lw 0x2290` and the
+   `addiu 0x80` share its register. */
 void func_L23_003BFE90(char *arg0, float arg1, int unused1, int arg2) {
     char *state = *(char **)(arg0 + 0x68);
     struct Vecs v;
+    char *base = D_00189E20;
+    float one;
 
-    func_00282D30((char *)&v.a, *(char **)(D_00189E20 + 0x2290) + 0xE0, 3.0f);
-    func_00282CC0((char *)&v.a, (char *)&v.a, D_00189E20 + 0x80);
+    func_00282D30((char *)&v.a, *(char **)(base + 0x2290) + 0xE0, 3.0f);
+    func_00282CC0((char *)&v.a, (char *)&v.a, base + 0x80);
+    one = 1.0f;
     v.c = 0;
-    ((float *)&v.c)[1] = 1.0f;
-    ((float *)&v.c)[3] = 1.0f;
+    ((float *)&v.c)[1] = one;
+    ((float *)&v.c)[3] = one;
     if (arg2 != 0)
         ((float *)&v.c)[1] = -((float *)&v.c)[1];
     func_0029FC20(*(char **)(state + 0x2A0), arg2, (char *)&v.b);
