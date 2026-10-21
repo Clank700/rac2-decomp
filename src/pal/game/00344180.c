@@ -1,5 +1,12 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/pal/game", func_PAL_00344180);
+extern void func_00348068(unsigned char *owner, float *records);
 
-INCLUDE_ASM("asm/pal/game", func_PAL_003443E8);
+/* func_00342118 is in 00341C20-g8.c (it reaches small data through $gp). */
+
+void func_PAL_003443E8(unsigned char *owner, float *records)
+{
+    *(float **)(owner + 0x260) = records;
+    func_00348068(owner + 0x188, records);
+}
+
