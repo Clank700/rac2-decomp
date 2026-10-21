@@ -7,7 +7,7 @@ void func_0029BCC8(void)
     ref_L00_0030CDA0_00 = -1;
 }
 
-INCLUDE_ASM("asm/game", func_0029BCD8);
+/* func_0029BCD8 is in 0029BCC8-g8.c. */
 
 extern char *D_001A8CFC;
 extern void func_0034E4D8(void *);
