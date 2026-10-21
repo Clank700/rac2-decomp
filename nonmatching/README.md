@@ -1933,3 +1933,4 @@ recorded checks describe the original compilation unit, not standalone syntax or
 | [`func_0034E070`](game/func_0034E070.c) | 420 | Near miss: the body matches; the loop limit is kept in a callee-saved register in the retail and the address of `D_001A8CFC` is reloaded there. |
 | [`func_0034EB20`](game/func_0034EB20.c) | 188 | Near miss: the body matches; only the order of the four callee-saved registers in the prologue differs. |
 | [`func_00350190`](game/func_00350190.c) | 76 | Near miss: 68 of 76 bytes match; the retail ends in `sync`/`ei`, two privileged instructions this compiler cannot emit. |
+| [`func_00350378`](game/func_00350378.c) | 228 | Near miss: the shape matches; the register allocation of the object pointer and the 0xD9100 constant differs. |
