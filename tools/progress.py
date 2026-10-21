@@ -378,6 +378,7 @@ def main() -> None:
               f"({', '.join(sorted(in_c - placed)[:5])})", file=sys.stderr)
     REPORT.parent.mkdir(exist_ok=True)
     REPORT.write_text(json.dumps(report, indent=1) + "\n")
+    release_table("us", report)
 
     # README table
     placements = sum(len(json.loads((ROOT / "build" / p / "placed.json").read_text())["functions"])
