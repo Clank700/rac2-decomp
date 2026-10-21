@@ -1626,6 +1626,66 @@ The integrated correction passes all 28 programs with `tools/build.py all
 --strict` and no rejected C placements; the complete container test suite
 passes 57 tests. The three witnesses add 580 distinct matched code bytes.
 
+## Two Cygnus-local passes as opt-in switches (21 October 2026)
+
+This tree carries two pieces of Cygnus's own 1998 work that the GCC 2.95 branch does not
+have. Retail's code in the witnesses below has the placement and the block order without
+them. That is an inference from retail's code, not a dated GCC fix, so both are opt-in
+switches, enabled per unit in `config/cflags.txt`.
+
+- **gcse's critical-edge split.** With `-fno-edge-lcm` (the default since patch 0016),
+  `gcse_main` builds its predecessor and successor lists with `compute_preds_succs (..., 1)`.
+  The last argument is Cygnus's (flow.c, "CYGNUS LOCAL edge splitting/law";
+  `gcc/ChangeLog.Cygnus`, 21 January 1998, restricted on 19 May and 14 September 1998): it
+  splits each critical edge that needs no new jump, a fall-through edge or an edge into a label
+  reached only by jumps, and the block LCM (`pre_lcm`) then inserts on the new block. A hoisted
+  `%hi` gets a block of its own in front of such a label, and the register allocation and the
+  delay slots around it change with it. GCC 2.95.3's `gcse_main` calls a four-argument
+  `compute_preds_succs` that only builds the lists, and its PRE inserts at the end of a block.
+  `-frac2-gcse-unsplit-edges` (`transformers/gcse_unsplit_edges.py`) passes 0 instead of 1,
+  the equivalent of GCC 2.95's call.
+- **The block merge after the jump passes.** `cygnus_merge_blocks` (flow.c, "CYGNUS LOCAL
+  law"; `ChangeLog.Cygnus`, 28 May 1998) runs after the first jump pass and after the jump
+  passes that follow cse, gcse and cse2. It moves a block reached only by a jump, from a block
+  with no other successor, up behind that block and deletes the jump: a `switch` whose default
+  is its last case loses its `b default`, and the default body moves up behind the dispatch.
+  GCC 2.95.3's `rest_of_compilation` calls no such pass. `-frac2-keep-block-order`
+  (`transformers/keep_block_order.py`) returns from it at once, before its own
+  `find_basic_blocks`.
+- **Measured on 21 October.** Against the compiler built from master (356b450), the 775 units
+  of `src/` (669 through this cc1, 106 through the SDK compiler) compile to identical objects
+  with the switches off, with each switch on in every unit, and with both on. An earlier
+  logging build of the 662 game-compiler units then in `src/` counted no block merge at all;
+  the pass merged blocks in 10 of the drafts. Of the 1,687 drafts screened, 11 change with the
+  gcse switch, 10 of them closer to retail (more words in a longest common subsequence with
+  retail's) and one unchanged, and 6 with the
+  block-order switch, 2 of which are SDK-compiler units this cc1 does not build.
+- **The witnesses, now in `src/`.** `func_L02_003E79F8` (`L02_003DB310-g8.c`, gcse switch):
+  360 bytes become retail's 352 at its one place; without the split the two `lui` land above
+  the loop's peeled first test, and reorg can empty the copy's else block into retail's
+  `bgez ; b ; lw`. `func_002CD720` (`src/game/002CD620.c`, gcse switch), with its two arms in
+  retail's order: 344 bytes become 340, at all 28 places. `func_L02_003FCCA0`
+  (`L02_003F5430-g8.c`, both switches): its `switch` gives retail's entry block, prologue and
+  `b default` layout, at its one place. `func_L18_004283F0` (`src/levels/shared/
+  L18_00427BE0.c`, block-order switch): 48 bytes become 56, at all 3 places. With the switches
+  in those four units, `tools/check.py` matches all 57 C functions of the six touched files at
+  every place. Two drafts move closer without matching: `func_L23_0041B9F0` reaches retail's
+  1,148 bytes with the gcse switch and still differs in its 16-byte copy order, and
+  `func_002900B8` goes from 1,364 to 1,380 of 1,388 bytes with the block-order switch.
+- **What a scan of retail does not show.** The split's leftover shape (a lone `lui` at a
+  branch target that nothing falls into, followed by another branch target) occurs in 47 of
+  retail's 8,606 functions, 7 of them already matched with neither switch: switch case tails
+  and constant loads have the same shape, so the count does not measure the split.
+
+`tests/test_gcse_unsplit_edges.py` and `tests/test_keep_block_order.py` check that each
+transformer uses each insertion point once and refuses a drifted source before writing any
+file, then compile authored fixtures with the real EE tools in default, enabled and explicitly
+disabled modes: the case each switch changes (a hoisted high half on a split edge; a `switch`
+with its default last) and controls whose output must not change (a diamond and a loop
+invariant; a default-first `switch`, an if/else chain and a loop). `tools/compiler/build.sh`
+runs both after installation and pins `gcse.c` and `flow.c` beside the updated `toplev.c` and
+`flags.h`. Game-byte equality remains a separate full-build gate.
+
 ## Grouped vector copies and 64-bit masks (21 October 2026)
 
 `-frac2-qcopy` is a default-off, per-file profile for aligned TImode
@@ -1655,8 +1715,9 @@ bit uses `addiu -1` followed by `dsll32 31`; a sign bit plus a contiguous low ru
 of at least 32 ones keeps the existing sign-extending `lui` path. Other values
 retain patch `0052`'s previous paths. These cases unblock the retained public
 Newlib `_strtol_r` (`func_00117278`, 884 bytes) and GCC double packer
-(`func_00122630`, 300 bytes), one placement each. `0x0FFFFFFFFFFFFFFE` remains a
-different case; this does not establish a general repair for every mask.
+(`func_00122630`, 300 bytes), one placement each. The positive shifted-mask
+case is qualified separately below; these are bounded rules, not a general
+repair for every mask.
 
 The packer and its callers share the 24-byte `DoubleParts` declaration. The
 `func_001175F0` wrapper declares the callee's actual long return and forwards
@@ -1670,6 +1731,62 @@ in `.mdebug`. Remaining attempts `func_00335370`, `func_L20_0044A838` and
 `func_L00_002A6008` now have the correct copy sizes but still differ in ordinary
 allocation or scheduling. Their improved sources and specific remaining
 differences stay in `nonmatching/`; they receive no match credit.
+
+### Positive shifted masks and double addition
+
+The SDK-profile double adder `_fpadd_parts` (`func_00122800`) uses
+`0x0FFFFFFFFFFFFFFE` twice. Patch `0052` now lets positive contiguous runs wider
+than 32 bits, with zero bits at both ends, reach the existing shift-based mask
+expansion. Each use becomes three instructions instead of seven; the retained
+public GCC source becomes 576 bytes instead of 608. The function lives in its
+own unit with `sdk -O2 -G2 -ffunction-sections` and shares `DoubleParts` with
+the packer and callers. The game compiler is not the matching profile for
+this source; earlier retained notes conflated the two profiles.
+
+The width boundary matters: applying this rule to all shifted runs would also
+change the 20-bit mask `0x00FFFFF000000000` in already-matched game code.
+Runs of at most 32 bits, masks with holes, and sign-bit cases keep their prior
+paths. The selector uses unsigned arithmetic without division or undefined
+shifts. It selects a family of values, not a particular function or address.
+
+`tests/test_dli_masks.py` checks all 465 positive long-run intervals with four
+destination registers and 30 fixed boundary/neighbor controls: 1,980 assembled
+outputs. A same-source comparison of all 780 configured units changes
+non-debug sections only in the new double-adder unit; eleven units differ only
+in `.mdebug`. The complete strict build verifies all 28 programs with no C
+fallback, and the container suite passes 73 tests.
+
+### Double multiplication: retain the union and select the assembler seed
+
+`func_00122B00` (`dpmul`, 680 bytes) exposed a source-representation issue:
+the retained simplification of `fp-bit.c` replaced its fraction union with a
+scalar. In the SDK compiler, a direct union-member access has alias-set zero.
+Restoring `union { unsigned long long ll; unsigned int l[2]; }` adds the real
+store-to-store dependence that keeps the fraction store before the class
+constant. The delay-slot pass then emits the retail `bnel` with its annulled
+fraction store. No scheduler modification, artificial barrier or register
+constraint is needed. The enum spelling is immaterial for this witness.
+
+The shared `DoubleParts` header and all its users retain this original union.
+Comparing the four existing units before and after the type correction gives
+identical object sections. Disabling pre-reload scheduling was only diagnostic:
+it repaired the rounding tail but changed allocation and produced 688 bytes.
+Disabling post-reload scheduling left that tail wrong and changed the prologue.
+
+Two isolated sign-bit loads still require the zero-extending assembler seed.
+The default sign-extending seed is needed by already-qualified game code, so
+patch `0059` exposes a per-object `--r5900-sign-bit=unsigned` option instead of
+changing the default. `-Wa,` forwards it from the existing per-file flag table;
+the same source-built assembler handles both forms. Explicit `signed` restores
+the default, and invalid/missing values fail. Both forms compute the same value;
+qualification requires the particular retail encoding.
+
+The assembler controls cover all 1,980 authored outputs in default, signed and
+unsigned profiles. A same-source A/B over 781 configured units changes code only
+in the new multiplier; eleven units differ only in `.mdebug`. All 80 container
+tests pass. `func_00335370` remains a separate nonmatch: its post-reload scheduler
+moves the independent return-address restore into a load-to-address latency gap.
+The retained note records the measured phase and unsuccessful controls.
 
 ## Labels in front of the hazard nop (21 October 2026)
 

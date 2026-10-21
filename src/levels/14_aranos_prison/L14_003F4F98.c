@@ -155,7 +155,7 @@ INCLUDE_ASM("asm/levels", func_L14_00425CB0);
 
 INCLUDE_ASM("asm/levels", func_L14_004265B8);
 
-INCLUDE_ASM("asm/levels", func_L14_00426D18);
+/* func_L14_00426D18 lives in the -g8 sibling file (it reads a count through $gp). */
 
 extern short D_001A6480[];
 
@@ -191,9 +191,9 @@ INCLUDE_ASM("asm/levels", func_L14_004281D0);
 
 INCLUDE_ASM("asm/levels", func_L14_004286F8);
 
-INCLUDE_ASM("asm/levels", func_L14_00428A08);
+/* func_L14_00428A08 lives in the -g8 sibling file (it reads a count through $gp). */
 
-INCLUDE_ASM("asm/levels", func_L14_00428BA0);
+/* func_L14_00428BA0 lives in the -g8 sibling file (it reads two globals through $gp). */
 
 INCLUDE_ASM("asm/levels", func_L14_00428E68);
 

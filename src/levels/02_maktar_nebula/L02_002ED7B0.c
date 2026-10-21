@@ -293,7 +293,7 @@ INCLUDE_ASM("asm/levels", func_L02_0039D708);
 
 INCLUDE_ASM("asm/levels", func_L02_003CA4A8);
 
-INCLUDE_ASM("asm/levels", func_L02_003CAE68);
+/* func_L02_003CAE68 is matched in L02_003CAE68.c (built with -frac2-qcopy). */
 
 /* func_L02_003CB090 is matched in L02_003CB090.c (built with -mno-split-addresses). */
 

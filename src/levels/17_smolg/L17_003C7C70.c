@@ -45,7 +45,41 @@ INCLUDE_ASM("asm/levels", func_L17_003CC850);
 
 INCLUDE_ASM("asm/levels", func_L17_003D0620);
 
-INCLUDE_ASM("asm/levels", func_L17_003E3148);
+extern u16 *D_L17_001FB720[];
+
+/* `sda` on an array of unknown size: cc1 emits the one-instruction load, which the assembler
+   expands absolute (`lui $r` / `lw $r,%lo($r)`), as retail has it in this -G0 unit; the limit
+   word is loaded in a branch delay slot, so there it becomes the `$gp` form. The pool base is
+   the word D_L17_001B2C1C declared above as an int, reached here as a pointer under a second
+   name. */
+extern u8 *D_L17_001B2C1C_base[] __asm__("D_L17_001B2C1C") __attribute__((sda));
+extern s32 D_L17_001B2C38[] __attribute__((sda));
+
+/* The object's state record up to the group word and the word stored beside it. */
+typedef struct {
+    u8 pad[0x43C];
+    s32 group;
+    s32 mode;
+} L17GroupState;
+
+/* Walks the id list of the state's group and sets the state's mode word to 0x57 for every id
+   that has an entity, stopping at the first that has none. */
+void func_L17_003E3148(u8 *a0)
+{
+    L17GroupState *state = *(L17GroupState **)(a0 + 0x68);
+    u16 *p;
+    u8 *e;
+
+    for (p = D_L17_001FB720[state->group];
+         (state->group & 0xFF) != 0xFF && state->group <= D_L17_001B2C38[0] && p != 0 &&
+         ((p != 0 && (s16)p[-1] >= 0) || p == D_L17_001FB720[state->group]);
+         p++) {
+        e = D_L17_001B2C1C_base[0] + ((*p & 0x7FFF) << 8);
+        if (e == 0)
+            break;
+        state->mode = 0x57;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L17_003E31E8);
 
