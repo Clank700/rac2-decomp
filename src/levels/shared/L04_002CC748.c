@@ -273,7 +273,7 @@ INCLUDE_ASM("asm/levels", func_L04_00362A50);
 
 INCLUDE_ASM("asm/levels", func_L04_00363690);
 
-INCLUDE_ASM("asm/levels", func_L04_00363CA0);
+/* func_L04_00363CA0 is matched in L04_00363CA0.c (built with -frac2-qcopy). */
 
 INCLUDE_ASM("asm/levels", func_L04_00365300);
 
@@ -360,7 +360,7 @@ INCLUDE_ASM("asm/levels", func_L04_0039FC28);
 
 /* func_L04_0039FEA8 is matched in L04_0039FEA8.c (built with -g). */
 
-INCLUDE_ASM("asm/levels", func_L04_0039FEF0);
+/* func_L04_0039FEF0 is matched in L04_0039FEF0-g8.c (built with -G8). */
 
 INCLUDE_ASM("asm/levels", func_L04_003A0008);
 

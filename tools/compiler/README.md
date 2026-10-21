@@ -75,6 +75,20 @@ Qualify every function in an opted-in unit; address formation alone does not
 settle allocation or scheduling. The recipe requires the authored copy controls
 and RTL-contract tests, including volatile accesses and integer/FPU branches.
 
+`qcopy_barrier.py` adds `-frac2-qcopy-barrier`, which matters only together with
+`-frac2-qcopy` and is enabled only for qualified files in `config/cflags.txt`. Both
+schedulers then give the grouped copy the dependences, cost and unit of a volatile asm,
+through the block `-frac2-zero-ti-barrier` uses for the clear, so independent instructions
+stay on their side of the copy, as they do around retail's copy, most likely an inline-asm
+macro. Instructions, operands, register-allocation inputs and memory flags are unchanged,
+and `-fno-rac2-qcopy-barrier` disables it again. Without the switch no object of `src/`
+changes; forced on in the eight `-frac2-qcopy` units, it changes none of their objects.
+Twelve functions (59 places) are the measured witnesses, each a unit of its own with both
+switches (docs/COMPILER-NOTES.md). It models only the schedulers' view of such an asm:
+jump2, for one, still deletes a redundant register move across the copy, which a volatile
+asm keeps. `tests/test_qcopy_barrier.py` covers the selector, the default/disabled
+equality, and authored copies among neighbours, calls, branches and volatile accesses.
+
 `hazard_labels.py` adds `-frac2-hazard-labels`, enabled only for qualified files in
 `config/cflags.txt`. cc1 then writes `.set rac2_hazard_labels` at the top of its output, and
 gas keeps a code label in front of the coprocessor hazard `nop` it inserts after the label

@@ -1905,6 +1905,88 @@ keeps the labels unconditionally (SDK units included), 778 of the 779 are identi
 sits on a nop. Making the behaviour the default would therefore change no code in that corpus;
 that choice is left to the maintainers.
 
+## The grouped copy as a scheduling barrier (21 October 2026)
+
+- **What retail does.** With `-frac2-qcopy` (#262), a dozen near misses have retail's size,
+  copy and register addresses, and differ only in the order of instructions around the copy:
+  instructions this cc1 moves across it (a float constant into the stall before the copy, the
+  epilogue's restores, a call's argument moves, the next statement's address arithmetic) stay
+  on their source side in retail. Each of these records is exact when, in a scratch copy only,
+  its copy is written as `__asm__ __volatile__("lq $2,0(%1)\n\tsq $2,0(%0)" :: "r"(dst),
+  "r"(src) : "$2")`. That is the shape of a volatile inline-asm copy macro. Both schedulers
+  treat such an asm as a barrier: `sched_analyze_2` makes it depend on every earlier register
+  use and set and flushes the pending memory lists, so later instructions depend on it instead
+  of on the instructions before it, and the priorities change. `src/` allows no inline
+  assembly.
+- **What this cc1 did.** `rac2_qcopy` is an ordinary insn. It depends only on its address
+  registers and its two memory operands, so a register-only instruction that is ready earlier
+  takes the issue slot in front of it or sinks behind it, and the dependent counts that break
+  priority ties differ from retail's (the records hold the `-fsched-verbose-5` traces).
+- **The opt-in change.** `transformers/qcopy_barrier.py` recognises the `rac2_qcopy` insn by
+  its shape, a TImode memory-to-memory SET beside a clobber of `(reg:TI 2)`, which no other
+  insn of this backend has, and adds it to the condition of the block `-frac2-zero-ti-barrier`
+  uses for the clear in `haifa-sched.c`'s `sched_analyze_insn`: the dependences of a volatile
+  asm, cost 1 and no unit, before and after reload. Instructions, operands, register-allocation
+  inputs and memory flags are unchanged. It is enabled by `-frac2-qcopy-barrier` per
+  compilation unit in `config/cflags.txt`, only matters together with `-frac2-qcopy` (the only
+  source of the insn), and `-fno-rac2-qcopy-barrier` disables it again.
+- **Neutrality, measured on 21 October** against the compiler built from master (e238b93),
+  each unit compiled with both tools directories. With master's flags all 794 units of `src/`
+  (108 through the SDK compiler), and the twelve new units below with the default flags,
+  give byte-identical objects, all sections included. With the switch forced on in the eight
+  units that use `-frac2-qcopy`, the eight objects are identical too, and `tools/check.py`
+  matches their eight functions at all 64 places with and without it: the barrier moves no
+  instruction in those functions.
+- **Witnesses.** Twelve functions, 3,616 bytes at 59 places, each in a unit of its own built
+  with `-O2 -G0|-G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier`: `func_002B5E48`
+  (21 places) and `func_002EE988` (28) in `src/game/`; `func_L02_003DB158`,
+  `func_L02_003D47B0` and `func_L02_00401BF8` in `src/levels/02_maktar_nebula/`;
+  `func_L12_00413CE0` in `src/levels/12_todano/`; `func_L23_00418650`, `func_L23_003C01F8`,
+  `func_L23_00418DC0`, `func_L23_004256F0` and `func_L23_0041D0A0` in
+  `src/levels/23_damosel_orbit/`; and `func_L26_003D4930` in `src/levels/26_jamming_array/`.
+  With the switch `tools/check.py` places each at every place; without it each is 0 of its
+  places. Ten are their records' C unchanged. Two needed an ordinary C detail:
+  `func_L02_003D47B0` names its destination pointer, because written inline the source's
+  small-data address is forced into a register while the right-hand side is expanded, before
+  the destination's, and the two address registers swap (the asm evaluates its operands in
+  order); `func_L23_003C01F8` takes `b`'s address between its two copies,
+  where retail forms it. `func_L23_0041D0A0`, which the asm copy left one operand order off,
+  is exact. The 90 C functions of the nine files whose markers moved still match.
+- **A near miss.** `func_002B50E0` (372 bytes, 21 places): the switch removes the 8 words
+  around its copy, and 3 remain in the argument moves of the `func_002B5828` call: sched1
+  puts the `$a3` move of `&work[0]` after the `$a0` and `$a1` moves (equal priority, equal
+  dependents, no dying source), where retail has it right after `$a2`. That is a source
+  question, not the barrier; the record stays in `nonmatching/`.
+- **Draft screen.** Of the 475 drafts in `nonmatching/` that declare a TImode type, 438
+  compile as they stand. Each was built with `-G0` and with `-G8`, with `-frac2-qcopy` alone
+  and with both switches, and placed as `tools/check.py` places a function. The barrier
+  changes 165 of their objects. With `-frac2-qcopy` alone 4 drafts are exact at every place;
+  with both switches 31 are, the same 4 among them. Of the 27 that only the barrier makes
+  exact, 9 are the witnesses above and 18 are functions not yet integrated. These are screen
+  results on the drafts' own C: each still needs a unit of its own and the usual checks.
+- **What it is not.** The rule is inferred from these records and their scratch-asm
+  measurements: it is not proof of the original macro, and not a general rule. Enable it in a
+  unit only after checking every function of the unit. It models the schedulers' view of a
+  volatile asm and nothing else: links into the copy keep their producers' latencies (an
+  unrecognised consumer makes them cost 1 in `insn_cost`), interblock motion still classifies
+  the copy as a store, and the other passes see an ordinary insn. jump2, for one, deletes a
+  redundant move across the copy: `find_equiv_reg` stops at a volatile insn, so with the asm a
+  `move $4,$16` before a call is kept, and with the switch it is deleted (an authored control
+  pins this).
+
+`tests/test_qcopy_barrier.py` executes the injected selector against synthetic RTL: the
+pattern's shape, and fifteen near shapes, among them the asm copy's own. It also checks that
+the transformer extends the clear's block and refuses a drifted source before writing any
+file. Then it compiles authored controls with the real EE tools in six profiles: the default,
+`-frac2-qcopy`, both switches, the barrier alone, both switches disabled again, and the copy
+written as the volatile asm. The disabled switch restores `-frac2-qcopy`, and the barrier
+alone restores the default. Six controls are scheduled exactly as with the asm. A float
+constant and the epilogue's restores cross the copy without the switch and do not with it.
+A copy with no neighbours, a copy in each arm of a branch and copies among volatile accesses
+are unchanged. The jump2 difference above is pinned, and every pair stays complete and out of
+delay slots. `tools/compiler/build.sh` runs the test after installation and pins
+`haifa-sched.c`, `toplev.c` and `flags.h`. Game-byte equality remains a separate full-build gate.
+
 ## Wide stores kept out of annulled delay slots (21 October 2026)
 
 **Retail census.** Scope: the boot from 0x26EA00 and the 27 level programs, each catalogued

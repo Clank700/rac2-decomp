@@ -311,7 +311,49 @@ INCLUDE_ASM("asm/levels", func_L02_00411D18);
 
 INCLUDE_ASM("asm/levels", func_L02_004124A0);
 
-INCLUDE_ASM("asm/levels", func_L02_00412808);
+/* The effect's tuning, four resident tables copied onto the stack: the spread and fall speed of
+   the sparks, the two sizes, the two colours and the two byte ranges of the kind. */
+typedef struct { float f[4]; } SparkRange;
+typedef struct { float f[2]; } SparkSizes;
+typedef struct { int i[2]; } SparkColours;
+typedef struct { u8 b[4]; } SparkKinds;
+extern SparkRange D_L02_001B1C10;
+extern SparkSizes D_L02_001B1C20;
+extern SparkColours D_L02_001B1C28;
+extern SparkKinds D_L02_001B1C30;
+extern void func_00283098(void *, void *, void *);
+extern int func_002A7820(int, int);
+extern int func_002A77E0(int);
+extern void *func_002C3150(void *, void *, int, int, int, int, float);
+extern void func_00282C88(void *);
+
+/* Throws two sparks from a point 1.5 in front of the actor (carried by the matrix at +0xC0, then
+   moved to the position at +0x10): the first with a velocity drawn between the first two range
+   words per frame (no spread in this level's table), the second from a random point within 1.5
+   of the first, falling at a speed drawn between the last two. */
+void func_L02_00412808(u8 *a0) {
+    SparkRange range = D_L02_001B1C10;
+    SparkSizes sizes = D_L02_001B1C20;
+    SparkColours colours = D_L02_001B1C28;
+    SparkKinds kinds = D_L02_001B1C30;
+    float vel[4];
+    float front[4];
+    float spot[4];
+
+    *(TI128 *)front = 0;
+    front[2] = 1.5f;
+    func_00283098(front, front, a0 + 0xC0);
+    func_00282CC0(front, front, a0 + 0x10);
+    func_002A7A00(vel, range.f[0] * 0.016666668f, range.f[1] * 0.016666668f);
+    func_002C3150(front, vel, colours.i[0], (u8)func_002A7820(kinds.b[0], kinds.b[1]),
+                  (u8)func_002A77E0(0xFF), 0, sizes.f[0]);
+    func_00282C88(vel);
+    func_002A7A00(spot, 0.0f, 1.5f);
+    func_00282CC0(spot, spot, front);
+    vel[2] = -(func_002A7878(range.f[2], range.f[3]) * 0.016666668f);
+    func_002C3150(spot, vel, colours.i[1], (u8)func_002A7820(kinds.b[2], kinds.b[3]),
+                  (u8)func_002A77E0(0xFF), 0, sizes.f[1]);
+}
 
 INCLUDE_ASM("asm/levels", func_L02_004129D0);
 
@@ -345,13 +387,177 @@ void func_L02_00438B28(void) {
     func_L02_003DB030(*(void **)(p + 0x198));
 }
 
-INCLUDE_ASM("asm/levels", func_L02_00438B90);
+extern void func_L02_004388A0(u8 *);
+extern void func_L02_003FFDB0(u8 *);
+extern int D_L02_001A8F00 __attribute__((sda));
+extern char *D_L02_001B359C __attribute__((sda));
+extern char D_L02_004004D8[];
+extern int D_L02_00258800[];
+extern void func_00282F20(void *, void *, float);
+extern void func_L00_002E6CF0(void *, void *);
+
+typedef struct { u8 pad00[0x78]; int w78; u8 pad7C[0xB8 - 0x7C]; int wB8; } L02_Part;
+typedef struct { u8 pad00[0x30]; int mode; u8 pad34[0x198 - 0x34]; L02_Part *part; int w19C; } L02_Level;
+typedef struct { u8 pad00[4]; int ent; int armed; int ent2; } L02_CtlState;
+typedef struct { u8 pad00[0x6C]; float f6C; } L02_EntVars;
+typedef struct {
+    u8 pad00[0x10];
+    float pos[4];
+    u8 pad20[0x34 - 0x20];
+    u16 flags;
+    u8 pad36[0x43 - 0x36];
+    u8 b43;
+    u8 pad44[0x48 - 0x44];
+    int w48;
+    u8 pad4C[0x68 - 0x4C];
+    L02_EntVars *vars;
+    u8 pad6C[0xD0 - 0x6C];
+    float dir[4];
+    u8 padE0[0x100 - 0xE0];
+} L02_Ent;
+
+/* Controller of the level's moving entity (state byte at +0x20; the words at +0x4 and +0xC of
+   its state name two entities of the table D_L02_001B359C). State 0 shows it (byte +0x30 = 0xFF),
+   clears the armed word at +0x8 and goes to state 1. State 1 follows D_L02_001A8F00: when it is 2
+   the mode of the level block D_L02_001BE200 decides. Mode 0 hands func_L02_003FFDB0 and the
+   handler at D_L02_004004D8 to the second entity and func_L02_004388A0 to itself, and once
+   (func_002A7470 resets the entity's mode first) pushes the first entity by -2 along its +0xD0
+   axis. Mode 1 hands the two handlers to the second entity. Mode 6 does that too, then sets that
+   entity's float at +0x6C to 100.0 and its flag 2, writes the colour 0x40FF00EA to three words of
+   D_L02_00258800 and to the part at +0x198 of the block, and hands func_L02_00438B28 to itself.
+   With D_L02_001A8F00 not 2 it undoes the push (+2 along the axis) and clears the armed word. */
+void func_L02_00438B90(u8 *a0) {
+    L02_CtlState *st = *(L02_CtlState **)(a0 + 0x68);
+    L02_Level *lv;
+    L02_Ent *e;
+    float v[4];
+    int c;
+
+    switch (a0[0x20]) {
+    case 0:
+        a0[0x30] = 0xFF;
+        a0[0x20] = 1;
+        st->armed = 0;
+        break;
+    case 1:
+        if (D_L02_001A8F00 != 2) {
+            if (st->armed != 0) {
+                e = (L02_Ent *)(D_L02_001B359C + (st->ent << 8));
+                st->armed = 0;
+                if (e->b43 != 0) {
+                    func_002A7470(e, 0, 0, 0);
+                    e->w48 = 0;
+                }
+                func_00282F20(v, e->dir, 2.0f);
+                func_00282CC0(e->pos, e->pos, v);
+            }
+        } else {
+            lv = (L02_Level *)D_L02_001BE200;
+            if (lv->mode == 0) {
+                func_L00_002E6CF0(func_L02_003FFDB0, D_L02_001B359C + (st->ent2 << 8));
+                func_L00_002E6CF0(D_L02_004004D8, D_L02_001B359C + (st->ent2 << 8));
+                func_L00_002E6CF0(func_L02_004388A0, a0);
+                if (st->armed == 0) {
+                    e = (L02_Ent *)(D_L02_001B359C + (st->ent << 8));
+                    st->armed = 1;
+                    if (e->b43 != 1) {
+                        func_002A7470(e, 1, 7, 0);
+                        e->w48 = 0;
+                    }
+                    func_00282F20(v, e->dir, -2.0f);
+                    func_00282CC0(e->pos, e->pos, v);
+                }
+            } else if (lv->mode == 1) {
+                func_L00_002E6CF0(func_L02_003FFDB0, D_L02_001B359C + (st->ent2 << 8));
+                func_L00_002E6CF0(D_L02_004004D8, D_L02_001B359C + (st->ent2 << 8));
+            } else if (lv->mode == 6) {
+                c = 0x40FF00EA;
+                func_L00_002E6CF0(func_L02_003FFDB0, D_L02_001B359C + (st->ent2 << 8));
+                func_L00_002E6CF0(D_L02_004004D8, D_L02_001B359C + (st->ent2 << 8));
+                /* indexed, not `base + (n << 8)`: retail adds the shifted index first */
+                ((L02_Ent *)D_L02_001B359C)[st->ent2].vars->f6C = 100.0f;
+                ((L02_Ent *)D_L02_001B359C)[st->ent2].flags |= 2;
+                D_L02_00258800[0x250 / 4] = c;
+                D_L02_00258800[0x258 / 4] = c;
+                D_L02_00258800[0x254 / 4] = c;
+                lv->part->wB8 = lv->w19C;
+                func_L00_002E6CF0(func_L02_00438B28, a0);
+                lv->part->w78 = c;
+            }
+        }
+        break;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L02_00439CD8);
 
 INCLUDE_ASM("asm/levels", func_L02_0043E150);
 
-INCLUDE_ASM("asm/levels", func_L02_00445200);
+typedef struct { u8 pad[0x464]; u8 spent[1]; } L02_CellFlags;
+extern L02_CellFlags D_L02_0021F4F0;
+extern u8 D_0019B4A8[];
+extern int D_001A79F0 __attribute__((sda));
+/* sda in this -G0 unit keeps the address of the ring table one `la`, retail's adjacent `lui`/`addiu`
+   in the last call's setup (a plain declaration splits it and the scheduler lifts the `lui`). */
+extern char D_L02_001A8F20[] __attribute__((sda));
+extern u8 *func_002A9640(u8 *, int, int);
+extern void *func_0029EFD0(int);
+extern void func_002B37E8(void *, u8 *);
+extern int func_002E5CF8(int, int, void *);
+
+/* A breakable placed in the world, numbered by the halfword at +0xB2. Whether it was broken before
+   is kept in D_0019B4A8 (one 1 KB table per planet, a 3-bit count in each nibble, the low bit of
+   the number picking the nibble) and in a flag byte of its own. State 0 releases it when either
+   says so, otherwise it goes to state 1. State 1 asks func_002A9640 what touches it: an actor of
+   kind 0x9C8 breaks it (effect object 0xE43 started on it, the burst and the 0x3FFF ring, the
+   count raised up to 7, the object released); with nothing there it only sets byte +0xA8 to 0xFF. */
+void func_L02_00445200(u8 *a0) {
+    u8 *p;
+    u8 *q;
+    void *fx;
+    int id;
+    int id2;    /* state 1 reads the number again into a register of its own, as retail does */
+    int v;
+
+    switch (a0[0x20]) {
+    case 0:
+        id = *(u16 *)(a0 + 0xB2);
+        if (D_L02_0021F4F0.spent[(s16)id] == 0) {
+            v = D_0019B4A8[((s16)id >> 1) + (D_001A79F0 << 10)];
+            if (id & 1)
+                v = (v >> 4) & 7;
+            else
+                v = v & 7;
+            if (v == 0) {
+                func_002A7750(a0, 1, -1);
+                break;
+            }
+        }
+        func_0029F338(a0);
+        break;
+    case 1:
+        p = func_002A9640(a0, 0x10000, 0);
+        if (p != 0 && (q = *(u8 **)(p + 0x20)) != 0 && *(s16 *)(q + 0xAA) == 0x9C8) {
+            fx = func_0029EFD0(0xE43);
+            if (fx != 0)
+                func_002B37E8(fx, a0);
+            func_002B0A68(a0, 0x3FFF, D_L02_001A8F20, 3.0f, 6.0f, 3.0f, 6.0f, 0xFF);
+            func_002E5CF8(0, 0, a0);
+            id2 = *(u16 *)(a0 + 0xB2);
+            if (id2 & 1) {
+                if (((D_0019B4A8[((s16)id2 >> 1) + (D_001A79F0 << 10)] >> 4) & 7) != 7)
+                    D_0019B4A8[((s16)id2 >> 1) + (D_001A79F0 << 10)] += 0x10;
+            } else {
+                if ((D_0019B4A8[((s16)id2 >> 1) + (D_001A79F0 << 10)] & 7) != 7)
+                    D_0019B4A8[((s16)id2 >> 1) + (D_001A79F0 << 10)] += 1;
+            }
+            func_0029F338(a0);
+        } else {
+            a0[0xA8] = 0xFF;
+        }
+        break;
+    }
+}
 
 /* rac1-decomp src/core/00118A40.c: func_00119100 */
 /* Takes an argument its callers pass (e.g. r1_func_00112468) and ignores
