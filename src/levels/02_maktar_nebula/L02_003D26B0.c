@@ -69,7 +69,7 @@ extern int D_L02_001B359C __attribute__((sda));
 
 extern char *D_0018C2BC;
 
-INCLUDE_ASM("asm/levels", func_L02_003D26B0);
+/* func_L02_003D26B0 is defined in L02_003D26B0-g8.c (it reads the group count through $gp). */
 
 INCLUDE_ASM("asm/levels", func_L02_003D2DE0);
 

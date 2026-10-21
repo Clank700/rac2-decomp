@@ -31,6 +31,62 @@ void func_L02_003F56C0(void) {
         p[0] = f - 1.0f;
 }
 
+/* The pool base and the hero block once more, under second names: this file also declares
+   them as the three-word array the walks below read and as func_L02_003F5710's struct. */
+extern char *D_L02_001B359C_s __attribute__((sda));
+extern unsigned short D_L02_001B1214 __attribute__((sda));
+extern unsigned int D_L02_001FC060[];
+extern char D_00189E20_c[];
+
+/* Counts the entities of six kinds in the list of the object's group (+0x40 of its state) and
+   sums their own scale floats (+0x20 of each one's state) into +0x60 and +0x64, then sets +0x68
+   to the hero's word at +0x24CC, +0x11C to 0 and +0x11E to the halfword D_L02_001B1214. */
+void func_L02_003FB000(char *a0) {
+    char *state = *(char **)(a0 + 0x68);
+    unsigned int index = *(unsigned int *)(state + 0x40);
+    unsigned int entry;
+    short *p;
+    char *tbl;
+    char *rec;
+    char *g;
+
+    *(int *)(state + 0x60) = 0;
+    *(float *)(state + 0x64) = 0;
+    if (index == 0xFF)
+        return;
+    entry = D_L02_001FC060[index];
+    if (entry == 0)
+        return;
+    p = (short *)entry;
+    tbl = D_L02_001B359C_s;
+    do {
+        rec = tbl + ((*(unsigned short *)p & 0x7FFF) << 8);
+        if (rec == 0)
+            continue;
+        if (*(unsigned char *)(rec + 0x20) == 0xFE)
+            continue;
+        if (*(unsigned char *)(rec + 0x20) == 0xFD)
+            continue;
+        if (*(unsigned char *)(rec + 0x20) == 1)
+            continue;
+        {
+            short type = *(short *)(rec + 0xAA);
+            if (type == 0x9CA || type == 0xB22 || type == 0xC3B || type == 0xC3E || type == 0x9F8 || type == 0xA44) {
+                *(int *)(state + 0x60) += 1;
+                *(float *)(state + 0x64) += *(float *)(*(char **)(rec + 0x68) + 0x20);
+            }
+        }
+    } while (*p++ >= 0);
+    g = D_00189E20_c;
+    *(float *)(state + 0x68) = (float)*(int *)(g + 0x24CC);
+    *(short *)(state + 0x11C) = 0;
+    *(unsigned short *)(state + 0x11E) = D_L02_001B1214;
+    /* A statement that compiles to nothing: its loop notes make cc1 align the next code label,
+       the shared return, as retail has it (the `nop` before its `jr $ra`). */
+    do {
+    } while (0);
+}
+
 extern int D_001A8FF0;
 
 /* Four bytes: cc1 then emits the address as a single `la`, which gas expands to an adjacent
