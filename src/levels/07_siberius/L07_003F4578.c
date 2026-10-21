@@ -362,6 +362,6 @@ void func_L07_004106B8(u8 *a0)
 
 INCLUDE_ASM("asm/levels", func_L07_00410700);
 
-INCLUDE_ASM("asm/levels", func_L07_00410930);
+/* func_L07_00410930 is defined in L07_003F4578-g8.c (it takes the address of $gp data). */
 
 INCLUDE_ASM("asm/levels", func_L07_00410C50);
