@@ -455,7 +455,7 @@ INCLUDE_ASM("asm/levels", func_L02_00412D50);
 
 INCLUDE_ASM("asm/levels", func_L02_00413730);
 
-INCLUDE_ASM("asm/levels", func_L02_004216F0);
+/* func_L02_004216F0 is matched in L02_004216F0-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier -g). */
 
 INCLUDE_ASM("asm/levels", func_L02_00423520);
 
@@ -512,7 +512,7 @@ void func_L02_00423838(u8 *a0, float lo, float hi) {
 
 INCLUDE_ASM("asm/levels", func_L02_0042E2F8);
 
-INCLUDE_ASM("asm/levels", func_L02_0042E680);
+/* func_L02_0042E680 is matched in L02_0042E680.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L02_0042E988);
 

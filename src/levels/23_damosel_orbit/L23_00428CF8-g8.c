@@ -1,31 +1,9 @@
-/* func_L23_00428CF8 (level 23, 928 bytes) -- NEAR MISS, not integrated.
-   state: 924 bytes against retail's 928; tools/check.py: 0 of 1 places match ("924 bytes, expected
-   928"). Built as a unit of its own with `-O2 -G8 -ffunction-sections -frac2-qcopy` (an `-g8` unit:
-   retail's `lwc1 $f12,0x2AF4($gp)` is a plain $gp load).
-   matches: everything but the order around the three 16-byte copies: the frame (0xF0; the locals
-   sit at sp+0x20 the moved position, 0x30 the first hit record, 0x60 the vector, 0x70 the second
-   hit record, declared in that order as float[4] / a 0x30-byte struct), the prologue, the state
-   switch, the `||` of the two probes, the three-way class test, both arms and their cross-jumped
-   `func_002A7750` tail, the rotation tail and the clamp. Measured on the way: the literal
-   `moby + 0x10` at every use (no pointer variable) is what gives retail's two registers for it
-   (s0 for the first two uses, a copy in s3 for the rest: most likely gcse's reaching register; one
-   named pointer coalesces them); `5627.9248046875f` is retail's 0x45AFDF66 (5627.907f encodes
-   0x45AFDF42); the global block is read through a local `u8 *base = D_L23_001C0A80;` (retail's
-   `lui $v0 ; addiu $s5,$v0,0xA80`, the lui in the probes' delay slots); the hit records are
-   locals filled by `func_002A8C00` and then patched at +0x18/+0x19/+0x1A.
-   what still differs (17 words, all of it the position of the copies, wall (2) of the brief):
-   retail's `lq $v0,0($s2) ; sq $v0,0($s0)` pair comes FIRST in both arms of the vector set-up,
-   before the `lui/mtc1 $f12` constant and the `daddu $a0,$s0` of the next call (and, because the
-   pair cannot sit in a delay slot, the third class test is a `beql` with a copy of the target's
-   `lbu` in its slot); this cc1 schedules the pair after them (sched1 trace: the copy has priority
-   13, the same as the two argument moves, and the later insns win ties; the constant has 14).
-   In a SCRATCH copy of this file (build/, never src/) with the two arm copies and the copy-back
-   written as `asm volatile ("lq $2,0(%1) ; sq $2,0(%0)" : : "r"(dst), "r"(src) : "$2", "memory")`
-   the same C compiles to retail's 928 bytes with 0 words different: the barrier is the whole gap.
-   tried: -fno-schedule-insns / -fno-schedule-insns2 / both on top of qcopy (932 bytes and 46 words
-   off / 924 and 46 / 944 and 118, against 924 and 17), a TI temporary for the copy (separate lq and
-   `sq $v0,0x60($sp)`: 928 bytes, 9 words off, but a different shape), named position pointers (one or
-   two: wrong registers). */
+#include "include_asm.h"
+
+/* func_L23_00428CF8 is a unit of its own: it needs the opt-in quadword-copy profile and its
+   scheduling barrier (-frac2-qcopy -frac2-qcopy-barrier, config/cflags.txt), which give retail's grouped `lq`/`sq`
+   with register addresses and keep the instructions around the copy on their own side of it;
+   -frac2-no-annulled-wide-stores keeps its 16-byte clear out of a branch-likely's annulled slot. */
 
 typedef unsigned char u8;
 typedef unsigned short u16;

@@ -28,6 +28,29 @@ src/levels/26_jamming_array/L26_003D4930-g8.c	-O2 -G8 -ffunction-sections -frac2
 src/levels/12_todano/L12_00413CE0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/23_damosel_orbit/L23_0041D0A0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/02_maktar_nebula/L02_00401BF8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003EE938.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003E8CE8-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/02_maktar_nebula/L02_003D4E00-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003D6570-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003DB030-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003DAE60-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_004216F0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/02_maktar_nebula/L02_0033C760.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003CADA8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003D01F0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/23_damosel_orbit/L23_003C1B58.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/002B5828.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003D5CF0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/23_damosel_orbit/L23_004183F0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/23_damosel_orbit/L23_0041B6D8-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/23_damosel_orbit/L23_00425848.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003E9040-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/23_damosel_orbit/L23_00428CF8-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-no-annulled-wide-stores
+src/levels/02_maktar_nebula/L02_0042E680.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003D5118.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003D6388-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003D6A20-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/07_siberius/L07_003EE708-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/18_damosel/L18_004308F0.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/levels/shared/L02_00411530.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/levels/23_damosel_orbit/L23_00422668.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-no-annulled-wide-stores

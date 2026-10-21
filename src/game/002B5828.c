@@ -1,17 +1,9 @@
-/* func_002B5828 (916 bytes, boot + 20 levels): plain C compiles to 916 bytes, retail's size, with 13 of 229 words different.
-   Cause, diagnosed: the one 16-byte copy `*(Quad *)position = *(Quad *)newpos` is register-operand inline asm in the original
-   source (`lq $v0,0($s4) ; sq $v0,0($s3)` in retail, both pointers kept in registers). This cc1 folds the constant offset into the
-   store (`sq $v0,0x10($s1)`, scheduled into the jal's delay slot), so `position` has one reference fewer and is allocated $s5
-   instead of retail's $s3 (newpos $s3 against $s4, target $s4 against $s5). Retail materialises `addiu $s3,$s1,0x10` first.
-   Measured (scratch only, never in src/): with that statement replaced by an asm statement whose template is
-   `lq $2,0(%1) ; sq $2,0(%0)` (operands `position` and `newpos` in registers, $2 clobbered), the body below is 916 bytes with
-   0 differing words, so everything else in this C is right. In plain C the following were measured and none materialises the
-   pointer: mode(TI) pointer or struct, volatile, an inline helper, a local pointer. What would unblock it: a maintainer decision on
-   a register-operand quad-copy macro. Same cause as func_002B5678.
-   Also pinned down while getting here: the byte comparisons need `self->b43` read afresh each time and `ctl->bEA = self->b43`
-   written directly (a local `u8` makes this cc1 hoist the load into a delay slot), and the divisor select is best written as
-   `ctl->fD0 != 0.0f ? ctl->fD0 : ctl->f28` (or the same as if/else; `div = ctl->fD0; if (ctl->fD0 == 0.0f) div = ctl->f28;`
-   adds register copies). */
+#include "include_asm.h"
+
+/* func_002B5828 is a unit of its own: it needs the opt-in quadword-copy profile and its
+   scheduling barrier (-frac2-qcopy -frac2-qcopy-barrier, config/cflags.txt), which give retail's grouped `lq`/`sq`
+   with register addresses and keep the instructions around the copy on their own side of it. */
+
 typedef int Quad_002B5828 __attribute__((mode(TI)));
 extern void func_002B5BC0(void *, void *, float);
 extern float func_00282E20(void *);

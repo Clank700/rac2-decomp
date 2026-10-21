@@ -185,7 +185,7 @@ int func_L02_003D4D00(char *arg0) {
     return 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003D4E00);
+/* func_L02_003D4E00 is matched in L02_003D4E00-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 /* func_L02_003D4ED0 is matched in L02_003D4ED0.c (built with -frac2-qcopy). */
 
@@ -212,7 +212,7 @@ void func_L02_003D4FD0(char *arg0, TI128 *arg1, float arg2, float arg3) {
     func_327620(arg0, state + 0x2F4, state + 0x304, 0.5f, 0.087266475f, -1.0f);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003D5118);
+/* func_L02_003D5118 is matched in L02_003D5118.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L02_003D52A8);
 
@@ -337,7 +337,7 @@ void func_L02_003D5C20(char *arg0) {
     func_00282A60(s4, 0, 0x40);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003D5CF0);
+/* func_L02_003D5CF0 is matched in L02_003D5CF0.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 extern void func_3366A8(char *);
 
@@ -375,18 +375,18 @@ void func_L02_003D6348(char *arg0) {
     func_L02_003D6388(arg0, 3, 1);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003D6388);
+/* func_L02_003D6388 is matched in L02_003D6388-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 void func_L02_003D6538(char *arg0) {
     func_L02_003D6570(arg0, 4);
     func_L02_003D6570(arg0, 5);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003D6570);
+/* func_L02_003D6570 is matched in L02_003D6570-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L02_003D6690);
 
-INCLUDE_ASM("asm/levels", func_L02_003D6A20);
+/* func_L02_003D6A20 is matched in L02_003D6A20-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier -g). */
 
 /* Whether the object's variant byte is one of the later ones. */
 int func_L02_003D6BB0(char *arg0) {
@@ -630,13 +630,13 @@ void func_L02_003DAD88(char *arg0) {
                  (*(int *)(*(char **)(arg0 + 0x68) + 0x244) << 8)));
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003DAE60);
+/* func_L02_003DAE60 is matched in L02_003DAE60-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L02_003DAF90);
 
 
 
-INCLUDE_ASM("asm/levels", func_L02_003DB030);
+/* func_L02_003DB030 is matched in L02_003DB030-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
 /* func_L02_003DB158 is matched in L02_003DB158-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
