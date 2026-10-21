@@ -1,3 +1,9 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/us2/levels", func_US2_L00_00327478);
+extern void func_0029CC50(void);
+
+void func_US2_L00_00327478(void)
+{
+    func_0029CC50();
+}
+
