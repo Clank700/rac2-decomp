@@ -153,7 +153,8 @@ class AssemblerOutputTests(unittest.TestCase):
             if "RAC2_COMPILER_ROOT" in os.environ:
                 raise RuntimeError("RAC2_COMPILER_ROOT must contain the newly built as")
             raise unittest.SkipTest("EE assembler absent; compiler build must run with RAC2_COMPILER_ROOT")
-        cls.outputs = {}
+        cls.assembler = assembler
+        cls.profiles = {name: {} for name in ("default", "signed", "unsigned")}
         with tempfile.TemporaryDirectory() as directory:
             temporary = Path(directory)
             lines = [".text", ".set noreorder", ".set noat"]
@@ -164,19 +165,47 @@ class AssemblerOutputTests(unittest.TestCase):
                               f'dli ${reg},{case["literal"]}', f".size {symbol},.-{symbol}"]
             source, output = temporary / "authored.s", temporary / "authored.o"
             source.write_text("\n".join(lines) + "\n")
-            result = subprocess.run([str(assembler), "-o", str(output), str(source)],
-                                    capture_output=True, text=True)
-            if result.returncode:
-                raise RuntimeError(f"authored dli assembly failed: {result.stderr}")
-            obj = elf.read_object(output)
-            symbols = {symbol["name"]: symbol for symbol in obj["symbols"]}
-            for case in CASES:
-                for reg in REGISTERS:
-                    name = f'dli_{case["name"]}_r{reg}'
-                    symbol = symbols[name]
-                    data = obj["sections"][symbol["section"]]["data"]
-                    body = data[symbol["value"]:symbol["value"] + symbol["size"]]
-                    cls.outputs[case["name"], reg] = body
+            for profile, bodies in cls.profiles.items():
+                options = [] if profile == "default" else [f"--r5900-sign-bit={profile}"]
+                result = subprocess.run([str(assembler), *options, "-o", str(output), str(source)],
+                                        capture_output=True, text=True)
+                if result.returncode:
+                    raise RuntimeError(f"authored dli assembly failed ({profile}): {result.stderr}")
+                obj = elf.read_object(output)
+                symbols = {symbol["name"]: symbol for symbol in obj["symbols"]}
+                for case in CASES:
+                    for reg in REGISTERS:
+                        name = f'dli_{case["name"]}_r{reg}'
+                        symbol = symbols[name]
+                        data = obj["sections"][symbol["section"]]["data"]
+                        bodies[case["name"], reg] = data[symbol["value"]:symbol["value"] + symbol["size"]]
+        cls.outputs = cls.profiles["default"]
+
+    def test_explicit_signed_profile_preserves_every_default_output(self):
+        self.assertEqual(self.profiles["signed"], self.outputs)
+
+    def test_unsigned_profile_changes_only_the_isolated_sign_bit(self):
+        for case in CASES:
+            for reg in REGISTERS:
+                with self.subTest(case=case["name"], reg=reg):
+                    body = self.profiles["unsigned"][case["name"], reg]
+                    expected = self.outputs[case["name"], reg]
+                    if int(case["value"], 16) == 1 << 63:
+                        expected = b"".join(struct.pack("<I", word)
+                                            for word in retarget(["34028000", "0002143c"], reg))
+                    self.assertEqual(body, expected)
+                    words = [item[0] for item in struct.iter_unpack("<I", body)]
+                    self.assertEqual(execute_constant(words, reg), int(case["value"], 16))
+
+    def test_bad_or_missing_sign_bit_profile_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source, output = Path(directory) / "control.s", Path(directory) / "control.o"
+            source.write_text(".text\nnop\n")
+            for option in ("--r5900-sign-bit=typo", "--r5900-sign-bit=", "--r5900-sign-bit"):
+                with self.subTest(option=option):
+                    result = subprocess.run([str(self.assembler), "-o", str(output),
+                                             str(source), option], capture_output=True, text=True)
+                    self.assertNotEqual(result.returncode, 0)
 
     def test_forms_encodings_and_sizes_in_four_registers(self):
         for case in STATIC_CASES:

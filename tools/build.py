@@ -238,6 +238,21 @@ def compile_c(source: Path) -> Path:
     """build/obj/<source>.o, reused only with the same source, headers and toolchain."""
     out = BUILD / "obj" / (source.relative_to(ROOT).as_posix() + ".o")
     flags = flags_for(source)
+    # Both frontends stop at assembly; forward standard -Wa, options ourselves.
+    compiler_args, assembler_args = [], []
+    try:
+        for arg in shlex.split(flags[3:] if flags.startswith("sdk") else flags):
+            if arg == "-Wa" or arg.startswith("-Wa,"):
+                forwarded = arg[4:].split(",")
+                if not all(forwarded):
+                    raise ValueError("-Wa, requires nonempty comma-separated assembler arguments")
+                assembler_args.extend(forwarded)
+            else:
+                compiler_args.append(arg)
+    except ValueError as error:
+        sys.exit(f"{source.relative_to(ROOT)} has invalid compiler flags: {error}")
+    compiler_flags = shlex.join(compiler_args)
+    assemble = shlex.join([str(COMPILER / "as"), *assembler_args, "-o", "x.o", "x.s"])
     stamp = out.with_suffix(".inputs")
     key = compile_key(source, flags)
     if out.is_file() and stamp.is_file() and stamp.read_text() == key:
@@ -247,12 +262,12 @@ def compile_c(source: Path) -> Path:
     if flags.startswith("sdk"):
         # the SDK compiler's driver (integrated cpp), then the game compiler's assembler
         script = (f"set -e; t=$(mktemp -d); cd $t; cp '{source}' x.c; "
-                  f"'{SDK_COMPILER}/xgcc' -B'{SDK_COMPILER}/' -S {flags[3:]} -I'{ROOT}/include' -I'{SDK_COMPILER}/include' "
-                  f"-I'{source.parent}' x.c -o x.s; '{COMPILER}/as' -o x.o x.s; cp x.o '{out}'.$$; mv '{out}'.$$ '{out}'; rm -rf $t")
+                  f"'{SDK_COMPILER}/xgcc' -B'{SDK_COMPILER}/' -S {compiler_flags} -I'{ROOT}/include' -I'{SDK_COMPILER}/include' "
+                  f"-I'{source.parent}' x.c -o x.s; {assemble}; cp x.o '{out}'.$$; mv '{out}'.$$ '{out}'; rm -rf $t")
     else:
         script = (f"set -e; t=$(mktemp -d); cd $t; cp '{source}' x.c; "
                   f"'{COMPILER}/cpp' -I'{COMPILER}/include' -I'{ROOT}/include' -I'{source.parent}' x.c > x.i; "
-                  f"'{COMPILER}/cc1' -quiet {flags} x.i -o x.s; '{COMPILER}/as' -o x.o x.s; "
+                  f"'{COMPILER}/cc1' -quiet {compiler_flags} x.i -o x.s; {assemble}; "
                   f"cp x.o '{out}'.$$; mv '{out}'.$$ '{out}'; rm -rf $t")
     result = subprocess.run([*runner, "bash", "-c", script], capture_output=True, text=True)
     if result.returncode:

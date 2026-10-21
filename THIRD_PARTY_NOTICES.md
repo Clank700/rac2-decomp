@@ -42,7 +42,7 @@ MIT License, Copyright (c) 2026 platypet2217-star: ports/pal-functional/LICENSE.
 - `src/core/00117278.c` adapts Newlib's `_strtol_r`, Copyright (c) 1990 The Regents
   of the University of California. The complete Berkeley three-condition notice,
   as retained by public Newlib after its advertising-clause removal, is in that file.
-- `src/core/00122630.c` and `src/core/00122800.c` adapt GNU GCC's public
+- `src/core/00122630.c`, `src/core/00122800.c` and `src/core/00122B00.c` adapt GNU GCC's public
   `fp-bit.c`. Its complete FSF
   1994–1998 copyright, GPL-2.0-or-later terms, historical linking permissions,
   disclaimer and contributor credits are preserved in the source, as with the

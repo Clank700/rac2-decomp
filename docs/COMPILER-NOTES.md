@@ -1695,3 +1695,35 @@ outputs. A same-source comparison of all 780 configured units changes
 non-debug sections only in the new double-adder unit; eleven units differ only
 in `.mdebug`. The complete strict build verifies all 28 programs with no C
 fallback, and the container suite passes 73 tests.
+
+### Double multiplication: retain the union and select the assembler seed
+
+`func_00122B00` (`dpmul`, 680 bytes) exposed a source-representation issue:
+the retained simplification of `fp-bit.c` replaced its fraction union with a
+scalar. In the SDK compiler, a direct union-member access has alias-set zero.
+Restoring `union { unsigned long long ll; unsigned int l[2]; }` adds the real
+store-to-store dependence that keeps the fraction store before the class
+constant. The delay-slot pass then emits the retail `bnel` with its annulled
+fraction store. No scheduler modification, artificial barrier or register
+constraint is needed. The enum spelling is immaterial for this witness.
+
+The shared `DoubleParts` header and all its users retain this original union.
+Comparing the four existing units before and after the type correction gives
+identical object sections. Disabling pre-reload scheduling was only diagnostic:
+it repaired the rounding tail but changed allocation and produced 688 bytes.
+Disabling post-reload scheduling left that tail wrong and changed the prologue.
+
+Two isolated sign-bit loads still require the zero-extending assembler seed.
+The default sign-extending seed is needed by already-qualified game code, so
+patch `0059` exposes a per-object `--r5900-sign-bit=unsigned` option instead of
+changing the default. `-Wa,` forwards it from the existing per-file flag table;
+the same source-built assembler handles both forms. Explicit `signed` restores
+the default, and invalid/missing values fail. Both forms compute the same value;
+qualification requires the particular retail encoding.
+
+The assembler controls cover all 1,980 authored outputs in default, signed and
+unsigned profiles. A same-source A/B over 781 configured units changes code only
+in the new multiplier; eleven units differ only in `.mdebug`. All 80 container
+tests pass. `func_00335370` remains a separate nonmatch: its post-reload scheduler
+moves the independent return-address restore into a load-to-address latency gap.
+The retained note records the measured phase and unsuccessful controls.

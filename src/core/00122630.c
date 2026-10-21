@@ -98,7 +98,7 @@ static __inline__ int fp_pack_iszero(fp_number_type *number) {
 
 FLO_type func_00122630(fp_number_type *src) {
     FLO_union_type dst;
-    fractype fraction = src->fraction;
+    fractype fraction = src->fraction.ll;
     int sign = src->sign;
     int exp = 0;
 
