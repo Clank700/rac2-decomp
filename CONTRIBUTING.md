@@ -30,8 +30,8 @@ file in the same checkout, with no separate wiki clone or browser automation.
 Read existing findings before another trial. Add new measurements or correct a superseded
 conclusion in the relevant entry, with the profile, applicable release, result, remaining
 difference and PR/commit link. Preserve useful dated history and distinguish local candidates
-from merged fixes. Use [issue #157](https://github.com/OpenRAC/rac2-gc-decomp/issues/157) for
-discussion and links to documentation PRs. Reservations stay in issue #152.
+from merged fixes. Discuss uncertain findings in the relevant code or documentation PR;
+issue #157 is retired and kept only as historical provenance. Reservations stay in issue #152.
 
 ## Sending your work
 

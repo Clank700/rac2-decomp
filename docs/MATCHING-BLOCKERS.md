@@ -6,9 +6,10 @@ else. Work in this repository through a fork or topic branch and submit a pull r
 Maintainers review and merge contributions; they are not the only people who can write here.
 A coding AI can edit this Markdown file with ordinary file and Git commands.
 
-[Issue #157](https://github.com/OpenRAC/rac2-gc-decomp/issues/157) is for discussion and links
-to proposed changes. [Issue #152](https://github.com/OpenRAC/rac2-gc-decomp/issues/152) remains
-the reservation noticeboard. Neither a personal comment nor the wiki is a second knowledge
+Discuss proposed changes in the relevant code or documentation PR.
+[Issue #157](https://github.com/OpenRAC/rac2-gc-decomp/issues/157) is retired and preserved
+only as historical provenance. [Issue #152](https://github.com/OpenRAC/rac2-gc-decomp/issues/152)
+remains the reservation noticeboard. Neither a personal comment nor the wiki is a second knowledge
 register. The code and qualified linked builds remain the authority for matching status.
 
 ## How to contribute
@@ -28,8 +29,8 @@ register. The code and qualified linked builds remain the authority for matching
 
 Keep game data, generated assembly, SDK material, trial objects and logs private. Do not
 copy them into a PR or this document. Knowledge edits do not waive the source policy or
-matching gates. Use issue #157 to discuss an uncertain finding, then incorporate the agreed
-result here. A persistent personal issue comment is no longer required for blocker notes.
+matching gates. Discuss an uncertain finding in the relevant PR, then incorporate the
+agreed result here. A persistent personal issue comment is no longer required for blocker notes.
 
 ## Recent verified updates
 

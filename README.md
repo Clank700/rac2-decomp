@@ -197,8 +197,8 @@ researching engine quirks, or improving documentation:
 - `python3 tools/todo.py` sorts the functions still to match into buckets, and
   `tools/check.py func_XXXXXXXX --diff` shows a draft beside retail in seconds.
 - Everyone can improve the [shared matching blockers](docs/MATCHING-BLOCKERS.md) through a
-  pull request. Discuss findings in [issue #157](https://github.com/OpenRAC/rac2-gc-decomp/issues/157)
-  and coordinate scopes in [issue #152](https://github.com/OpenRAC/rac2-gc-decomp/issues/152).
+  pull request, with discussion in the relevant PR. Coordinate scopes in
+  [issue #152](https://github.com/OpenRAC/rac2-gc-decomp/issues/152).
 - Join our **[Discord Community](https://discord.gg/Sfd2B54PDG)** to discuss progress, ask
   questions, and collaborate!
 
