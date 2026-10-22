@@ -2173,3 +2173,31 @@ keeps its `por`; stores at a nonzero displacement from `$sp` or a pointer, one z
 stores, and a zero that stays live past a join are identical in every profile; and the disabled
 switch restores the default. `tools/compiler/build.sh` runs the test after installation and pins
 `mips.c`, `toplev.c` and `flags.h`. Game-byte equality remains a separate full-build gate.
+
+## Habits measured by the eighth wave (22 October 2026)
+
+The eighth wave worked the small tier (up to 400 bytes) of the shared level code with ten
+workers. Most of what it needed was already recorded above; these are the forms it had to
+measure, each on the function named.
+
+- **One buffer for both locals of a grouped copy.** When the retail copies a sixteen-byte
+  block into the destination at `$sp+0x00` and keeps the vector at `$sp+0x10`, two separate
+  locals put the destination at `$sp+0x10` instead. A single `char buf[32]` gives the retail
+  placement (`func_L00_0032A1A8`, 27 places). This is the same grouped quadword copy as
+  above, with one more constraint on the locals.
+- **A threshold in a local variable.** `x > C` folds to `slti x, C+1`; the retail keeps `C` in
+  a register (`addiu` then `slt`). Writing the threshold as a local variable keeps the
+  constant in a register and matches (`func_L00_00410840`). The highest threshold of the
+  same function stays a literal in the retail (`slti`), so the two must not be treated alike.
+- **A store in the retail's delay slot comes from a store written before the call.** The
+  retail puts `D_L00_001B0CA0 = obj` in the delay slot of a `jal`; the source has to write the
+  store before the call, otherwise the scheduler puts the argument there instead
+  (`func_L00_004005B0`, 27 places).
+- **One exit.** `if (o != 0) { ... } return o;` gives the retail's single exit; an early
+  `return 0;` makes two paths and the move disappears (`func_L00_00338D28`, 19 places).
+- **A float load tested against a flag wants the assignment, not a conditional.** `x = load;
+  if (flag) x = 0.0f;` gives the retail's `beqz` with the loaded value in the delay slot;
+  `flag ? 0.0f : load` gives a `beql` with an annulled slot (`func_L00_0042A460`, 27 places).
+- **The R5900 annuls the delay slot of a likely branch on the taken path.** `beql`/`bnel`
+  execute the slot only when the branch is *not* taken, so the source condition has to be the
+  skip (`func_L00_003DF6B0`, 27 places).
