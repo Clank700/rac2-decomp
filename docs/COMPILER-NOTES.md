@@ -2173,3 +2173,67 @@ keeps its `por`; stores at a nonzero displacement from `$sp` or a pointer, one z
 stores, and a zero that stays live past a join are identical in every profile; and the disabled
 switch restores the default. `tools/compiler/build.sh` runs the test after installation and pins
 `mips.c`, `toplev.c` and `flags.h`. Game-byte equality remains a separate full-build gate.
+## Habits measured on the two large level bodies (21 October 2026)
+
+Eleven passes each over `func_L11_0042F018` (10,312 bytes, level 11) and
+`func_L04_002E7C08` (14,304 bytes, level 4) transcribed both bodies almost completely
+(97% and 98% of the instructions) and settled how a body of this size is built. The
+findings are general, and the block maps are in `nonmatching/levels/`.
+
+- **The frame size is a formula, not a choice.** GCC 1.x lays the frame out as
+  `align16(align16(V + G) + F)` - V = bytes of locals at the bottom, G = 8 x saved GPRs
+  above them, F = 8 x saved FPRs 16-byte aligned after that, the whole rounded to 16.
+  A body that keeps one more value across a call gets a bigger frame, so **the frame is
+  emergent from the allocation**: reproduce the prologue by making the body keep the
+  retail's values live, not by choosing a size.
+- **The register choice is a density, not an order.**
+  `QTY_CMP_PRI = log2(n_refs) * n_refs * size / (death - birth)` - the **shortest live
+  range first**, ties by pseudo number. The save order is the order in which the values
+  are first *set* in the source.
+- **The retail's split address is gcc's `LO_SUM` form, and the source shape is a STRUCT
+  CAST on the global's NAME.** `mips_check_split` splits only a bare `SYMBOL_REF`, so
+  `((Actor *)D_00189E20)->field` - the global's name, cast to a struct - makes the CSE
+  build one common expression, and the compiler then emits `lui %hi(D)` ONCE and
+  `addiu %lo(D)` at every use, with the `%hi` live across the calls in a callee-saved
+  register. Measured on the same body: a struct pointer (`p = &D` per case) gives 264
+  `lui`; the struct object gives **one**. A pointer VARIABLE gives the retail's shape
+  too (one `lui` and one `addiu` per block) - it is the *name* that matters, not the
+  pointer.
+- **The anchor's register is not a lever of its own - it moves when the body moves.** A
+  constant pseudo that is live across a call takes a callee-saved register one slot
+  before the anchor and pushes it along. In one body, four calls the retail does not
+  make were enough to move the anchor by itself.
+- **A value that is the CALL'S ARGUMENT does not live across the call** - that is the
+  lever that keeps a value in a call-clobbered `$f0` instead of a callee-saved `$f20`.
+- **A multi-def local keeps its register across every call in between.** Splitting one
+  variable into several (each with its own live range) is often the fix.
+- **A call's result inside a compound expression can be given a stack slot that belongs
+  to ANOTHER variable** (the reload pass), and the expression is then computed from the
+  reloaded value: `f = func(0.2f,0.9f) * 0.2f` multiplies the reloaded `st0.z`; two
+  statements multiply the result in `$f0`.
+- **`if (cond) goto Lelse;` lays the body out as the fall-through** and puts the else
+  block out of line, where a plain `if/else` does the opposite.
+- **`if (a || b)` written as ONE condition gets its second test inverted** by gcc; two
+  separate `if` blocks give the retail's two branch-likelys to the same block.
+- **A plain branch ALWAYS runs its delay slot; a branch-likely runs it only when the
+  branch is TAKEN** (the opposite of the usual MIPS rule). The stores in a plain slot are
+  unconditional.
+- **`idx--` and `idx = -1` are not the same code**: `-1` materialises a constant into
+  its own register, `idx--` gives the retail's `addiu` + `movn`. And the `-1` constant is
+  one register only if all the comparisons around it are SIGNED - an unsigned one
+  becomes 0xFFFFFFFF, materialised with `lui`+`ori` and not CSE'd with the signed ones.
+- **A struct's field offsets must be checked against the retail, never inherited.** In
+  these two bodies the padding was four bytes out from 0xAA0 and two bytes out from
+  0x1492, which made every displacement in the function wrong.
+- **The retail's 16-byte copies are the `-frac2-qcopy` profile's grouped `lq`/`sq`** (the
+  `qcopy_pattern.py` transformer in this repository), with both addresses in registers
+  and a declared `$v0` scratch. `-frac2-qcopy` is an opt-in per file, and the README
+  requires every function in an opted-in unit to be qualified.
+- **`__builtin_expect` does not work on MIPS in this compiler** (the `expect_optab` is
+  empty), so a branch-likely can only come from `reorg.c`'s prediction heuristics.
+- **The u16 sentinel `x != 0xFFFE` is `x < 0xFFFF`** in the retail (`sltu 0xFFFE,x`).
+- **The retail's switch bodies are emitted in SOURCE order** (gcc/stmt.c's
+  `expand_end_case` only moves the dispatch tree to the front), and the gaps in a jump
+  table are filled with the **default** label, so the source's switch needs a default.
+  A chain of `bne` tests whose delay slots load the next case's value puts the body
+  following a test on the value THAT test compares against.
