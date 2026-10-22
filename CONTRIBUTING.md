@@ -20,6 +20,19 @@
 
 Close but not matching: put it in `nonmatching/` with a line in its README.
 
+## Improving shared knowledge
+
+Every contributor can edit any entry in [`docs/MATCHING-BLOCKERS.md`](docs/MATCHING-BLOCKERS.md)
+using a fork/topic branch and a normal PR, even when another person wrote the original note.
+Maintainers review the merge; they are not the sole authors. A coding AI edits this Markdown
+file in the same checkout, with no separate wiki clone or browser automation.
+
+Read existing findings before another trial. Add new measurements or correct a superseded
+conclusion in the relevant entry, with the profile, applicable release, result, remaining
+difference and PR/commit link. Preserve useful dated history and distinguish local candidates
+from merged fixes. Use [issue #157](https://github.com/OpenRAC/rac2-gc-decomp/issues/157) for
+discussion and links to documentation PRs. Reservations stay in issue #152.
+
 ## Sending your work
 
 Branch from `master`, commit, push the branch and open a pull request to `master`. In the pull
