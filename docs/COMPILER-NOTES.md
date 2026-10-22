@@ -2173,3 +2173,55 @@ keeps its `por`; stores at a nonzero displacement from `$sp` or a pointer, one z
 stores, and a zero that stays live past a join are identical in every profile; and the disabled
 switch restores the default. `tools/compiler/build.sh` runs the test after installation and pins
 `mips.c`, `toplev.c` and `flags.h`. Game-byte equality remains a separate full-build gate.
+
+## The yeedil level's 128-bit wall, and the two bodies it freed (22 October 2026)
+
+- **The wall, measured over the whole level.** Of the 3,978 functions that live in level 20,
+  **359** have the retail's shape for a 128-bit copy - an `addiu` whose destination is the base
+  of a zero-displacement `lq`/`sq` - and every one of them was behind the same wall: this cc1
+  folded the constant offset back into the copy (`lq $v0,0x60($a1)` where the retail has
+  `addiu $a2,$a1,0x60 ; lq $v0,0x0($a2)`). The mechanism was read out of the compiler's own
+  source: the front end builds the address as the pointer's pseudo, the CSE's `find_best_addr`
+  (gcc/cse.c) substitutes the class member `plus(reg,const_int)` for it, and the reload keeps
+  that offset because `GO_IF_LEGITIMATE_ADDRESS` (gcc/config/mips/mips.h) accepts it for
+  TImode; the address is materialised only when it is still a pseudo at reload time, that is a
+  plain register, a symbol or a memory reference. The escapes measured were a pointer whose
+  value is LOADED FROM MEMORY (its class member is a MEM, cost 4, so the CSE leaves it alone),
+  a SYMBOL base (`plus(symbol,const)` costs 3), a STACK SLOT at offset 0, a LOOP-CARRIED
+  POINTER, and a VOLATILE POINTER OBJECT (at the price of a stack round trip). A pointer that
+  is `reg + const` was always folded, whatever the source: a TI128 pointer variable, a struct
+  member, an array index, a union, a `volatile` store or pointee, a `__inline__` copy helper,
+  `__builtin_memcpy`, an integer cast, a 32-bit truncation (it keeps the address in a register
+  but costs `sll`/`sra`) and a 64-bit address (it costs `dsll`/`dsra` and a `daddu` where the
+  retail has an `addiu`).
+- **What the profiles do now.** `-frac2-qcopy` (#262) lowers an aligned TImode memory
+  assignment to the grouped `lq`/`sq` pair with register addresses, which IS the retail's
+  shape, and `-frac2-qcopy-barrier` makes the copy a scheduling barrier, which is what the
+  retail's inline-asm macro was. With both, the two yeedil bodies below are exact.
+- **The two bodies.**
+  - `func_L20_0039C448` (248 bytes, level 20 only). Its record had exactly two residues: the
+    128-bit load (the retail keeps the source address in `$s0` and loads from it) and the order
+    of the two saves (the retail's `sd $s0; sd $s2; sd $s1` against this cc1's ascending
+    `sd $s0; sd $s1; sd $s2`). The two are not separable: the save order is a scheduler
+    artefact of a body that differs in the load. `-frac2-qcopy` alone fixes the load and
+    leaves the saves; `-frac2-qcopy-barrier` fixes both. The C is the record's, unchanged.
+  - `func_L20_0043D470` (100 bytes, level 20 only). Its record had the same 128-bit pair as
+    its first residue and, as its second, the FLOAT REGISTER ORDER: the retail puts 8.0f in
+    `$f1` and 2.5f in `$f0`, the first constant of the instruction stream taking the higher
+    register, where this cc1 gives `$f0` to the first constant. The record called that a
+    compiler difference - "the 2.9 local register allocator allocates the FPRs the other way
+    round than the 2.95 one that patch 0047 ports in" - and measured that no source shape
+    produces the retail's combination. **It was the profile after all**: with
+    `-frac2-qcopy` the FPR order comes out the retail's, because the copy's two address
+    registers change the allocator's inputs. A residue that looks like a compiler difference
+    can be the profile's shadow.
+- **The unit.** Both bodies live in `src/levels/20_yeedil/L20_0039C448-qcopy.c`, built with
+  `-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier`. Every function of the unit
+  is one of the two, and both are exact with those flags, which is the qualification the
+  profiles ask for.
+- **What is still measured to be behind the wall.** The other yeedil bodies the record named
+  - `func_L20_0039E770`, `func_L20_0039EBB8`, `func_L20_0039F268`, `func_L20_0043D4D8`,
+  `func_L20_003E6FA0`, `func_L20_0039CF58`, `func_L20_0039DCF8`, `func_L20_0039DBC8`,
+  `func_L20_0039B0A88`, `func_L20_004499E8` and `func_L20_0039F560` - have no C yet, or have a
+  C that still differs in something else. The wall is off them; the rest of the difference is
+  not.
