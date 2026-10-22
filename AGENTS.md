@@ -124,10 +124,10 @@ When you find a blocker, useful evidence or a solution, update the existing entr
   when its fix lands, preserving superseded measurements as clearly dated history.
 - Keep useful C in `nonmatching/`; game data, trial objects, assembly and logs stay private.
 
-[Issue #157](https://github.com/OpenRAC/rac2-gc-decomp/issues/157) remains the discussion
-thread and entry point. Discuss uncertain results there and link a documentation PR;
-consolidate durable knowledge in the shared file. A personal persistent comment is no longer
-required for blocker knowledge. Preserve existing comments as historical sources; do not edit
+Discuss findings in the relevant code or documentation PR and incorporate the result in
+the shared file. [Issue #157](https://github.com/OpenRAC/rac2-gc-decomp/issues/157) is retired
+and retained only as historical provenance, not an active discussion hub or knowledge store.
+A personal persistent comment is not required for blocker knowledge. Preserve existing comments as historical sources; do not edit
 another person's comment. Do not create a parallel register, wiki knowledge copy or
 per-contributor/per-session file. The wiki is only a link to the same repository document.
 Reservations remain exclusively in #152; neither the document nor #157 reserves work.
