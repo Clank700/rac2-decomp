@@ -72,7 +72,7 @@ extern int D_001A7BAC;
 
 extern float D_L00_001A8904;
 
-extern int D_001A8FF0;
+extern int D_L00_001A8FF0;
 
 extern void func_00282CC0(char *, char *, char *);
 
@@ -106,7 +106,7 @@ void func_L00_004263B8(char *object)
     D_L00_001A8904 = value;
     func_00282CC0(local, hero, parameters);
     first = *(float *)(hero + 12);
-    if (D_001A8FF0 != 0) {
+    if (D_L00_001A8FF0 != 0) {
         first = 0.0f;
     }
     *(float *)(local + 12) = func_00283B98(first, *(float *)(parameters + 12));

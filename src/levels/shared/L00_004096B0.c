@@ -130,7 +130,7 @@ INCLUDE_ASM("asm/levels", func_L00_00410508);
 
 INCLUDE_ASM("asm/levels", func_L00_00410690);
 
-/* Reads the halfword at +0x1A of the object's node and grades it: 4 above 90, 3 above 60,
+/* Reads the halfword at +0x1A of the object's node and grades it: 4 at or above 90, 3 above 60,
    2 above 30, else 1. The two lower bounds stay in variables, which is what keeps them in
    registers instead of an immediate compare. */
 int func_L00_00410840(char *object)

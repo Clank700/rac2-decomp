@@ -2198,6 +2198,5 @@ measure, each on the function named.
 - **A float load tested against a flag wants the assignment, not a conditional.** `x = load;
   if (flag) x = 0.0f;` gives the retail's `beqz` with the loaded value in the delay slot;
   `flag ? 0.0f : load` gives a `beql` with an annulled slot (`func_L00_0042A460`, 27 places).
-- **The R5900 annuls the delay slot of a likely branch on the taken path.** `beql`/`bnel`
-  execute the slot only when the branch is *not* taken, so the source condition has to be the
-  skip (`func_L00_003DF6B0`, 27 places).
+- **A likely branch executes its delay slot only when taken.** `beql`/`bnel` annul
+  the slot on the *not-taken* path; identify which source path skips the slot's operation (`func_L00_003DF6B0`, 27 places).

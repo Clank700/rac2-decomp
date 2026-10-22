@@ -8,13 +8,13 @@
 
 typedef int TI128 __attribute__((mode(TI)));
 
-extern int func_3100D8(int id);
-extern void func_2EE950(char *a, char *b);
-extern int func_37DC20(char *a, int b);
-extern void func_2EE0D0(char *a);
-extern int func_37E0F8(char *a, int b, float x, float y, float z);
-extern int func_312B78(char *a);
-extern float D_0019E20[];
+extern char *func_0029EFD0(int id);
+extern void func_002833F0(char *a, char *b);
+extern int func_002FEC78(char *a, int b);
+extern void func_00282C88(char *a);
+extern int func_002FED90(char *a, int b, float x, float y, float z);
+extern int func_002A0F48(char *a);
+extern float D_00189E20[];
 extern char *D_L00_001B0CA0 __attribute__((sda));
 extern int D_L00_001B2C28;
 
@@ -22,7 +22,7 @@ extern int D_L00_001B2C28;
    given, then sets the record's vector and flags. */
 char *func_L00_004005B0(char *arg0, char *arg1)
 {
-    char *obj = (char *)func_3100D8(0xE79);
+    char *obj = func_0029EFD0(0xE79);
     char *rec;
     TI128 tmp;
     int iv;
@@ -41,25 +41,25 @@ char *func_L00_004005B0(char *arg0, char *arg1)
         *(unsigned short *)(obj + 0x34) = *(unsigned short *)(obj + 0x34) | 0x100;
         obj[0x20] = 0;
 
-        *(float *)(obj + 0xF0) = D_0019E20[0x24];
-        *(float *)(obj + 0xF4) = D_0019E20[0x25];
-        *(float *)(obj + 0xF8) = D_0019E20[0x26];
-        func_2EE950(obj + 0xC0, obj + 0xF0);
+        *(float *)(obj + 0xF0) = D_00189E20[0x24];
+        *(float *)(obj + 0xF4) = D_00189E20[0x25];
+        *(float *)(obj + 0xF8) = D_00189E20[0x26];
+        func_002833F0(obj + 0xC0, obj + 0xF0);
 
         *(int *)(rec + 0x5C) = 0x7F000000;
         D_L00_001B0CA0 = obj;
-        iv = func_37DC20(obj, 0);
+        iv = func_002FEC78(obj, 0);
         *(int *)(rec + 0x6C) = iv;
-        *(int *)(rec + 0x70) = func_37DC20(obj, 4);
-        *(int *)(rec + 0x74) = func_37DC20(obj, 3);
+        *(int *)(rec + 0x70) = func_002FEC78(obj, 4);
+        *(int *)(rec + 0x74) = func_002FEC78(obj, 3);
 
-        func_2EE0D0(rec + 0x10);
+        func_00282C88(rec + 0x10);
         *(float *)(rec + 0x10) = 1.0f;
         *(TI128 *)(rec + 0x20) = *(TI128 *)(rec + 0x10);
 
-        D_L00_001B2C28 = func_37E0F8(obj, 0, 1.0f, 1.0f, 1.0f);
+        D_L00_001B2C28 = func_002FED90(obj, 0, 1.0f, 1.0f, 1.0f);
         *(float *)(rec + 0x7C) = 1.75f;
-        func_312B78(obj);
+        func_002A0F48(obj);
     }
     return obj;
 }

@@ -273,7 +273,7 @@ INCLUDE_ASM("asm/levels", func_L00_00300618);
 
 /* func_L00_003032F0 is matched in L00_003032F0.c (built with -fno-gcse). */
 
-extern unsigned char D_L00_001CF9340[];
+extern unsigned char D_L00_001C9340[];
 
 extern int func_00283D80(void *, void *, void *);
 
@@ -281,7 +281,7 @@ extern int func_00283D80(void *, void *, void *);
    index of the first entry the shared test accepts, zero when none does. */
 int func_L00_00303388(unsigned char *object)
 {
-    unsigned char *data = D_L00_001CF9340;
+    unsigned char *data = D_L00_001C9340;
     int i = *(int *)(data + 0xC) - 1;
 
     if (i >= 0) {

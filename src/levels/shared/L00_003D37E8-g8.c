@@ -24,7 +24,7 @@ int func_L00_003DF108(void)
 
 extern void func_L00_003B8138(void);
 
-/* Writes the object's state byte (7 for the first argument, 5 otherwise), lets the shared
+/* Writes the object's state byte (7 when arg0 is zero, 5 otherwise), lets the shared
  * updater run, then writes the caller's value in the object's slot - 10 when it is -1. */
 void func_L00_003DF6B0(int arg0, int arg1)
 {
