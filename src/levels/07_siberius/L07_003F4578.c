@@ -335,8 +335,6 @@ void func_L07_0040EFC8(s32 *a0, f32 *a1, f32 a, f32 b)
 
 INCLUDE_ASM("asm/levels", func_L07_0040F0D0);
 
-INCLUDE_ASM("asm/levels", func_L07_0040F468);
-
 /* The object's state record up to its three group words (-1 means none). Indexing the array
    member is the spelling that gives retail's address arithmetic (the +0x94 base as a sum of its
    own, the group word read again inside the walk); a cast sum or a pointer variable does not. */
