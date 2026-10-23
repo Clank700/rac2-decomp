@@ -1257,6 +1257,8 @@ instead gives 1084 bytes. Eight bounded source/profile trials were retained
 privately; reopen on independent evidence for the original counter-array
 lifetimes, rather than repeating the declaration permutations. No assembly
 classification or matching credit is claimed.
+### Packet-rendering and effect-state constraints
+
 The retained `func_L00_003EFA98`/`func_L00_003EFD00` quad renderers reach
 612/600 bytes with game O2/G8, but remain 0/27 in all three releases. Their
 transform is one three-row object: `func_00283098` reads rows at +0/+16/+32.
