@@ -351,6 +351,17 @@ No jr, two returns, a short size, or a register read before its local definition
 
 The 49-worker wave reported roughly 30 suspects. Those are historical candidates; later rules in PRs #239/#241/#253 resolve specific filler/residue cases. Mixed prefix/body boundaries and the appendix's other proposals remain separate individually evidenced tasks.
 
+**Independent discovery control, USA v1.01 (23 October 2026).**
+[PS2Recomp's ELF parser](https://github.com/ran-j/PS2Recomp/blob/e5636981a1c9de368f6b71e819c3dc188dfedbf4/ps2xRecomp/src/lib/elf_parser.cpp)
+was built and run without our catalogue, Ghidra map or signature database, against the original boot and lossless, symbol-free ELF wrappers of levels 00, 02, 23 and 30. Each input was checked against `config/programs.tsv`. This confirms some historical entry proposals, but does not qualify a catalogue change or new C:
+
+- It finds `001158F8`, `004277B8` in level 23 and `00404610` in level 30, respectively 4, 8 and 8 bytes after the current entries. Retail direct calls confirm the first; the level-23 data pointer at `002ABE40` confirms the second. Its inferred ends for both level functions include four extra padding bytes: their retained bodies are 44 and 228 bytes, not the parser's 48 and 232.
+- It misses level 02's `0035BD70` despite the retail data pointer at `00289490`; the 16-byte prefix proposal remains an independent audit. It also misses boot `0011F380`: the current `0011F364` extent has seven fill words (28 bytes), settling the appendix's conflicting prefix counts for this release only.
+- It overextends `func_00308600` to 376 bytes, swallowing 16 bytes of `func_00308768`. This does not resolve the retained 356/360 C near miss. As a positive control, it recovers `_fpadd_parts` at `00122800` with exactly 576 bytes.
+- It splits `func_L00_002B1308` into 40/24/8-byte extents at `002B1308`, `002B1330` and `002B1348`. The latter two are switch targets inside the existing 72-byte function. Its analyzer detects no table even when supplied that complete range; its separate recompiler control-flow pass does recover both internal targets. Reading all 31 retail table entries independently confirms action cases 14, 26, 27, 43 and 44. Do not promote these labels to functions.
+
+For level 23, the preceding return is at `004277A4`, its delay slot restores `0xD0` at `004277A8`, and `004277AC` is padding. The positive `0x190` adjustment at `004277B0` is an unmatched residue after that completed return, **not** its delay slot. Future boundary fixes must preserve skipped bytes, verify other entry evidence and all applicable releases, regenerate through `tools/levels.py`, and pass strict linked builds. This control adds no integrated C, catalogue correction or progress credit.
+
 <a id="blocker-19"></a>
 
 ## 19. The delay slot's filler is chosen by the scheduler, not by you
