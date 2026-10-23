@@ -1329,3 +1329,20 @@ attributed for provenance, not exclusive ownership.
 - `func_L30_0040E660` (236 bytes, 8 leading): address pair in 1 program
 
 </details>
+
+## Shared hero table and object helpers
+
+The retained `func_L00_002D1DA0` attempt now passes its input to the canonical
+identity helper and calls `func_002A7820(0, count - 1)`. The latter's two-argument
+implementation selects an inclusive integer range: the live second argument was
+missing from the old draft, not a dead instruction to preserve artificially.
+With game `-O2 -G8`, the corrected C is 312/312 bytes but still 0/27 in each of
+USA v1.01, PAL and USA v2.00. The first difference is +0x9C: two loop-preheader
+words exchange the pointer copy and terminator, and the final record address has
+the opposite `addu` operand order. Scheduling-profile alternatives did not fix it.
+
+`func_L00_002D1B70` now has a real C selector/search attempt rather than a screen.
+The GP word at -0x60F0 in `func_L00_002D6418` is the level mode
+`D_L00_001A8F00`; the old retained note incorrectly identified it as the resident
+state base. Its shared rejection label recovers the block order but is not exact.
+The retained sources and measured profiles are in `nonmatching/levels/`.

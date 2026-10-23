@@ -1,4 +1,3 @@
-/* Default profile: 144/152 bytes, 0/27 in each USA release and PAL. Corrected pointer arguments and canonical callees; copied-address scheduling remains to qualify. */
 #include "include_asm.h"
 
 #ifndef RAC2_T_V4_F6A70B950

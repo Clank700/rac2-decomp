@@ -1,4 +1,3 @@
-/* Default profile: equal-sized draft, 0/27 in each USA release and PAL; instruction at +0xA4 differs. Canonical callees and the resident data name are corrected. */
 #include "include_asm.h"
 
 extern char D_00189E20[];
