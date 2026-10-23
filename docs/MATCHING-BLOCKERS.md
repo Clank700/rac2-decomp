@@ -1494,3 +1494,24 @@ The GP word at -0x60F0 in `func_L00_002D6418` is the level mode
 `D_L00_001A8F00`; the old retained note incorrectly identified it as the resident
 state base. Its shared rejection label recovers the block order but is not exact.
 The retained sources and measured profiles are in `nonmatching/levels/`.
+
+### Shared hero selection and transition interfaces
+
+The selector reconstructions use the actual `func_L00_002AE388` interface:
+two integer-register pointers and four floats. The region predicate is
+`func_002ACBC8(point, index)`, and the probe's object predicate is
+`func_002ABB78(object)`; omitting the live index or object would be a false ABI.
+In `func_L00_002C3E18`, private record +4 is loaded/stored as a float, not an
+integer copy, and its private pointer is captured before updating the shared
+outputs. Unsigned node bytes and a heading snapshot before default-range
+selection are material source details in `func_L00_002C3BB0`.
+
+`func_L00_002CA898` has two genuinely variable external identities: its five
+dispatch calls and three selector calls use separate function-scoped references,
+with `int(int, int)` and `int(int)` interfaces respectively. A per-function byte
+check alone can pass a misleading direct catalogue name at these call sites.
+The retained `func_L00_002CAB08` dispatcher and `func_L00_002C2DE8` first callee
+likewise use scoped references for measured placement-dependent families.
+Duplicate numbered data externs used during clock/range experiments were removed:
+the retained drafts preserve each actual containing object under one canonical
+identity and report the resulting nonmatching measurements.
