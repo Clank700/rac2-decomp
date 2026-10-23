@@ -4,7 +4,14 @@ extern unsigned char D_0013957F[];
 typedef struct { char pad[112]; float scale; char tail[108]; } TableEntry;
 extern char D_L00_00262570[];
 extern void *D_0018C0B0;
-extern char D_L00_001BF220[];
+/* The collision query writes this prefix and additional vector fields after it. */
+typedef struct {
+    char state[24];
+    void *object;
+    unsigned int detail;
+    float position[4];
+} CollisionResultPrefix;
+extern CollisionResultPrefix D_L00_001BF200;
 extern void func_00282F20(void *, void *, float);
 extern int func_002761F8(void *, void *, int, void *, void *);
 extern void func_L00_003A8238(char *, void *);
@@ -29,9 +36,9 @@ int func_L00_003A80F8(char *object, void *target)
     else
         *(TI128 *)(local + 48) = *(TI128 *)(object + 16);
     if (func_002761F8(target, local + 48, 0, D_0018C0B0, local) != 0) {
-        func_L00_003A8238(object, D_L00_001BF220);
-        if (*(void **)(D_L00_001BF220 - 8) != 0)
-            func_00334160(*(void **)(D_L00_001BF220 - 8), 23, *(int *)(object + 184));
+        func_L00_003A8238(object, D_L00_001BF200.position);
+        if (D_L00_001BF200.object != 0)
+            func_00334160(D_L00_001BF200.object, 23, *(int *)(object + 184));
         return 1;
     }
     return 0;
