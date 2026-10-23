@@ -1497,6 +1497,13 @@ The retained sources and measured profiles are in `nonmatching/levels/`.
 
 ### Shared hero selection and transition interfaces
 
+**Linked qualification, 23 October 2026:** [the three C definitions](https://github.com/OpenRAC/rac2-decomp/commit/112b1c8333a75a9e435614f3e17db541d8e6d734)
+add 1,912 distinct bytes. `func_L00_002C3BB0` and `func_L00_002C3E18` pass
+26/26 places each in all three releases; `func_L00_002CA898` passes 20/20 in
+both USA releases and is absent from PAL's catalogue: 196 placements total.
+The combined tree passes all 84 strict program builds, 143 tests, repository
+hygiene and progress checks, without C fallback or report regeneration.
+
 The selector reconstructions use the actual `func_L00_002AE388` interface:
 two integer-register pointers and four floats. The region predicate is
 `func_002ACBC8(point, index)`, and the probe's object predicate is
