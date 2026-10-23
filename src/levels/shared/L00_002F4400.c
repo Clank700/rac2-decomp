@@ -54,7 +54,7 @@ void func_L00_002F5890(int a0) {
 INCLUDE_ASM("asm/levels", func_L00_002F59A8);
 
 
-INCLUDE_ASM("asm/levels", func_L00_002F6B90);
+/* func_L00_002F6B90 is matched in L00_002F6B90.c. */
 
 
 INCLUDE_ASM("asm/levels", func_L00_002F7298);
