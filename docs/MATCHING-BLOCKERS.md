@@ -146,6 +146,31 @@ Named counterexamples now pass: func_L09_004081F0 and func_L12_0041BDF8 each 1/1
 
 The wave 8 allocator investigation remains useful: global.c prioritizes approximately floor_log2(n_refs)*n_refs/live_length, with loop-weighted references; cc1 -dl exposes refs/live_length. In two samples, changing actual references moved a saved-register assignment while 15 declaration permutations did not. Inspect real live ranges and distinct pseudos before editing reference counts. Several identical compiles justify stopping one approach, not declaring every other meaningful source/profile impossible.
 
+**Large state dispatchers (23 October 2026).** The retained
+[`func_L22_002BF1B0`](../nonmatching/levels/func_L22_002BF1B0.c) now contains the
+complete Dobbo Orbit state body: 147 selector values, 63 retail destinations and
+all 135 distinct direct callees. Its 37,268-byte extent has one normal epilogue
+and no external non-call branches; its size does not justify splitting the
+catalogue or classifying it as handwritten assembly.
+
+With the qualified game compiler/SN assembler and `-O2 -G8 -ffunction-sections`,
+the first ordinary-local form compiled to 37,460 bytes with a `0x5A0` frame.
+`-frac2-qcopy` tied; restoring whole-case retail order gave 37,464 bytes.
+The state arms do not keep their temporary vector/probe pointers across common
+tails, so a typed union can share their storage. This and an explicit entry
+selector snapshot produce **37,280 bytes, 0/1 USA v1.01 places**, warning-free
+with `-Wall -Werror`. The frame is `0x1A0` against `0x1B0`, with six saved FPRs
+against five; register/block allocation and the emitted 588-byte switch table
+still differ or remain unqualified. No PAL/USA v2.00 row carries this name.
+
+The next useful experiment is the actual resident-object field model and saved
+object lifetime, followed by complete switch-table placement. Do not add padding,
+duplicate extern aliases or artificial references to close a size difference.
+Preserve the measured 48-byte probe and 64-byte matrix outputs and the live
+integer/FP inputs and return values; several older helper declarations omit
+them. A compiled complete draft and a small size delta are neither a byte match
+nor a runtime validation.
+
 <a id="blocker-02"></a>
 
 ## 2. LICM: the retail re-materialises a base inside a loop
