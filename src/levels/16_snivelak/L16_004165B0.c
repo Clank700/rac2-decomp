@@ -90,7 +90,7 @@ INCLUDE_ASM("asm/levels", func_L16_0041CB30);
 
 INCLUDE_ASM("asm/levels", func_L16_0041CF80);
 
-INCLUDE_ASM("asm/levels", func_L16_0041E370);
+/* func_L16_0041E370 lives in L16_0041E370.c. */
 
 INCLUDE_ASM("asm/levels", func_L16_0041EBE8);
 
@@ -121,7 +121,7 @@ void func_L16_0041F150(char *arg0) {
     obj[9] = (u8)(func_002E8648(4.0f) - 16);
 }
 
-INCLUDE_ASM("asm/levels", func_L16_0041F1F0);
+/* func_L16_0041F1F0 lives in L16_0041F1F0.c. */
 
 INCLUDE_ASM("asm/levels", func_L16_0041F360);
 
