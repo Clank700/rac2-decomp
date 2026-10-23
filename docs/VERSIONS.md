@@ -150,9 +150,9 @@ Matched, when this layout landed (the three reports from one build):
 
 | Version | Release | Functions | Boot code | Level code | Total code |
 | --- | --- | ---: | ---: | ---: | ---: |
-| `SCUS_972.68` | USA v1.01 | 4,144 of 8,601 | 339,508 of 1,046,952 | 367,144 of 4,482,204 | 706,652 of 5,529,156 (12.78%) |
-| `SCES_516.07` | Europe/Australia v1.00 | 3,552 of 8,693 | 281,324 of 1,056,500 | 263,020 of 4,650,756 | 544,344 of 5,707,256 (9.54%) |
-| `SCUS_972.68_v2` | USA v2.00 (Greatest Hits) | 3,946 of 8,655 | 303,780 of 1,050,472 | 361,808 of 4,532,644 | 665,588 of 5,583,116 (11.92%) |
+| `SCUS_972.68` | USA v1.01 | 4,192 of 8,601 | 339,508 of 1,046,952 | 378,708 of 4,482,204 | 718,216 of 5,529,156 (12.99%) |
+| `SCES_516.07` | Europe/Australia v1.00 | 3,576 of 8,693 | 281,324 of 1,056,500 | 268,448 of 4,650,756 | 549,772 of 5,707,256 (9.63%) |
+| `SCUS_972.68_v2` | USA v2.00 (Greatest Hits) | 3,994 of 8,655 | 303,780 of 1,050,472 | 373,372 of 4,532,644 | 677,152 of 5,583,116 (12.13%) |
 
 (`tools/progress.py --version pal|us2` keeps the last two lines current.) PAL counts fewer
 matched functions than v1.01 because 1,036 of v1.01's matched functions are another
