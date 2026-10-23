@@ -44,6 +44,7 @@ older claims that the following mechanisms are universally impossible are supers
 | A register-fed clear of `0($sp)` | [#281](https://github.com/OpenRAC/rac2-gc-decomp/pull/281) is merged; older source notes calling it proposed are historical. |
 | `_fpadd_parts` and `dpmul` | [#265](https://github.com/OpenRAC/rac2-gc-decomp/pull/265) and [#267](https://github.com/OpenRAC/rac2-gc-decomp/pull/267) are merged SDK-profile matches. |
 | `game/00308600` follow-up | [#287](https://github.com/OpenRAC/rac2-gc-decomp/pull/287) adds `func_0030E700`, 424 bytes at 28/28 places in each USA release, with 28 strict programs per release and 139 tests passing. `func_00308600` remains retained at 356/360 bytes, 0/28 USA v1.01 places. |
+| Existing compiler profiles, argument ABIs and shared-data identities | Qualification on 23 October 2026 adds 39 primary shared functions (9,208 distinct bytes), including the ten in [#300](https://github.com/OpenRAC/rac2-decomp/pull/300), plus a separate 148-byte PAL timer. The combined source tree passes 28 strict programs in each release (84 total), 143 tests and all 2,781 new-function placements. Three existing ABI controls add 171 placement checks. No report was regenerated. |
 
 These summaries do not award additional matching credit or replace the build. Check current
 source before relying on any older count, profile or pending-PR label in the imported notes.
@@ -165,13 +166,13 @@ The wave 8 allocator investigation remains useful: global.c prioritizes approxim
 
 **What is not if-converted:** `movz`/`movn` are emitted by this cc1 (`c ? a : b` gives `movz $2,$5,$6`, `if (b) r = 0;` gives `movz $2,$4,$5`), so a retail body that uses them is reachable - the shape to try is section 16's, not a constant selection.
 
-**23 October 2026 local C qualification:** `func_L00_003266D8` stores the incremented
+**23 October 2026 linked C qualification:** `func_L00_003266D8` stores the incremented
 counter before clamping it with a second conditional store. This meaningful source
 shape preserves retail's branch and both stores, unlike the earlier ternary's
 conditional move. A dedicated `-G8` unit passes `check.py` at 27/27 placements in
 USA v1.01, PAL and USA v2.00. The two absolute/SDA aliases are checked to bind the
-same respective words at every placement. Full linked builds remain pending with
-the integrating maintainer; this is not additional progress credit.
+same respective words at every placement. The combined tree passes all 84 strict
+program builds; the placement count does not multiply distinct-function credit.
 
 <a id="blocker-04"></a>
 
@@ -195,22 +196,23 @@ Several historical attempts lost two nops before float division. This is not uni
 its real integer-to-float helper is `func_00283CE0(int)`, followed by division
 on its own source line and `func_00283CF0(float)`. The default profile emitted
 100/108 bytes; a dedicated `-O2 -G0 -ffunction-sections -g` unit passes 27/27
-placements in each release. This is a local check result pending linked integration.
+placements in each release, followed by all 84 strict program builds of the combined tree.
 
 Other division/label-boundary failures remain bounded near misses. Retain exact source, line layout and profile; do not add dummy instructions or manual padding.
 
-`func_L00_003A2408` provides another local control: the complete reconstructed body is
+`func_L00_003A2408` provides another control: the complete reconstructed body is
 348/356 bytes with the default profile, differing only by the two pre-division nops.
 Putting the conversion call and division on separate C source lines in a dedicated
-`-g` unit gives 27/27 checks in each of USA v1.01, PAL and USA v2.00. Linked strict
-qualification is still required; this is an existing debug-label mechanism.
-**23 October 2026 local C qualification:** `func_L00_0031C3D0` passes `check.py`
+`-g` unit gives 27/27 checks in each of USA v1.01, PAL and USA v2.00. The combined
+tree passes all 84 strict builds; this is an existing debug-label mechanism.
+
+**23 October 2026 linked C qualification:** `func_L00_0031C3D0` passes `check.py`
 at 27/27 placements in each of USA v1.01, PAL and USA v2.00 in its dedicated
 `-O2 -G0 -ffunction-sections -g` unit. The debug labels account for the two
 missing pre-division nops. The retained draft also needed the real integer
 conversion ABI, an initialized interpolation fraction, distinct vector arguments
 and the boolean return value. Its former allocation mismatch was not a compiler
-impossibility. Full linked builds remain pending with the integrating maintainer.
+impossibility. The combined tree subsequently passes all 84 strict program builds.
 
 <a id="blocker-06"></a>
 
@@ -290,13 +292,13 @@ both USA releases (the name is absent from PAL). The previous MMI-impossible scr
 was incorrect. A union with TImode and float-array members keeps the scalar field
 at a fixed stack offset; casting a TImode local to `float *` instead retained a
 pointer across calls and added one saved register (340 bytes). Profile: default
-`-O2 -G0 -ffunction-sections`; linked full-build validation is still required.
+`-O2 -G0 -ffunction-sections`. The combined tree passes all 84 strict program builds.
 
 <a id="blocker-12"></a>
 
 ## 12. A catalogue entry whose body differs between programs
 
-**23 October 2026 local timer qualification:** `func_L00_002A5480` has genuine
+**23 October 2026 linked timer qualification:** `func_L00_002A5480` has genuine
 USA/PAL timing differences at +0x38 and +0x70: 30/20 frames in both USA releases,
 25/17 in PAL. An address relocation cannot represent them. Adding only this timer
 to PAL's `not_carried.tsv` and running the maintained `carry.py --version pal`
@@ -306,15 +308,15 @@ existing C is demoted; the caller remains an `INCLUDE_ASM` marker. Repeating the
 generator produces identical catalogues. Separate G8 C bodies pass 27/27 places
 for each applicable release, including equality of the tick word's SDA/absolute
 aliases. The 148-byte extents end at entry+0x94 and retain the four-byte gap before
-the next entry at +0x98. Full linked builds remain with the integrating maintainer.
+the next entry at +0x98. The combined tree passes all 84 strict program builds.
 
 The PAL timer uses the shared resident identity `D_00189E20`, whose PAL binding is
 `0x00189EA0`. The canonical `D_00189EA0` instead names the distinct 128-bit constant
 used by `func_00334710` (PAL binding `0x00189F20`). Per-function relocation checks
 alone did not expose the collision from naming the timer base by its PAL physical
 address. A joint binding control with `func_L00_002D3248` and `func_00334710`
-checks these identities together at every PAL placement; strict linked builds
-remain required.
+checks these identities together at every PAL placement. Subsequent strict builds
+pass all 28 PAL programs with both identities present and no C fallback.
 
 **Current scope:** func_L00_00424BB8 remains a marker. The 23/27 report is historical; section 34 describes different field offsets. Re-extract the current extents before changing their grouping.
 
@@ -877,8 +879,8 @@ Their former "jump table, no C" records were screens, not proof of an assembly
 origin. `func_L00_00420638` (324 bytes) also passes 27/27 in each release with
 `-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier`: retaining the
 axis pointer's two real uses and the projection copied at the owner's +0x70
-reproduces the allocation. These are local placement checks pending strict linked
-integration, not full-program build credit. The neighboring `func_L00_00420388`
+reproduces the allocation. The combined tree passes all 84 strict program builds.
+The neighboring `func_L00_00420388`
 remains a 280/280-byte near miss, first difference +0x1C in all 27 placements of
 each release; its `func_L00_002DB350` call must forward the float margin, which
 the callee saves from `$f12` and uses in its radius test.
@@ -990,8 +992,8 @@ were left on the table for nothing. The over-broad classes are:
   qcopy-barrier profiles close `func_L00_003E5650`, `func_L00_003E9490`,
   `func_L00_003E7650` and `func_L00_003E51C0` locally. Each passes all 27
   placements in both USA releases; 5650, 9490 and 51C0 also pass PAL's 27
-  placements, while 7650's canonical name is absent there. Linked strict builds
-  remain the integration gate. The older retained drafts also needed real input
+  placements, while 7650's canonical name is absent there. The combined tree then
+  passes all 84 strict program builds. The older retained drafts also needed real input
   and ABI corrections: 9490 subtracts the source from the other vector; 51C0
   preserves the half-angle across sine/cosine calls and releases the previous
   global object. Its byte view of the resident pointer and header store order
@@ -1163,7 +1165,7 @@ For #267, a same-source comparison of 781 configured units changed code only in 
 
 ### Camera and effect-record follow-up (23 October 2026)
 
-Local placement checks, pending strict linked validation: `func_L00_002D9D98`
+Placement checks, followed by all 84 strict builds of the combined tree: `func_L00_002D9D98`
 (228 bytes) and `func_L00_0033C638` (400 bytes) pass 27/27 placements in USA,
 PAL and USA v2. `func_L00_0033E888` (372 bytes) passes 27/27 in USA and USA v2;
 that name is absent from PAL's catalogue. All use the qualified qcopy/barrier
@@ -1180,7 +1182,7 @@ next source hypotheses are retained in `nonmatching/`. Equal-size candidates
 `func_L00_003B6858` (384 bytes), `func_L00_002DB350` (356 bytes) and
 `func_L00_0033AA40` (384 bytes) still differ at +0x40, +0x4 and +0x24 respectively.
 The collision-grid function consumes both the incoming position pointer and f12
-margin. No progress regeneration or full linked build is claimed by these checks.
+margin. No progress report was regenerated.
 ### Shared object-vector and effect helpers
 
 The retained C for `func_L00_00387BB0` and `func_L00_0038A650` reaches the

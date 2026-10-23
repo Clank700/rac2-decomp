@@ -1,7 +1,7 @@
 /* Retained plain-C attempt: 228/228 bytes; first difference +0x50.
  * us: 0/27, pal: name absent, us2: 0/27.
  * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-gcse.
- * The loop counter/table registers, initial counter copy and null/type branch remain different. Real aligned C copies replace the obsolete MMI-impossibility screen. The callee func_L00_002D3778 requires destination/source pointers plus a float; its existing float-only wrapper definition needs separate correction.
+ * The loop counter/table registers, initial counter copy and null/type branch remain different. Real aligned C copies replace the obsolete MMI-impossibility screen. The callee func_L00_002D3778 requires destination/source pointers plus a float; the shared wrapper now forwards that measured interface.
  */
 typedef int Quad __attribute__((mode(TI)));
 extern char D_00189E20[];
