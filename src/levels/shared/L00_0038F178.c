@@ -72,7 +72,7 @@ typedef struct {
 
 extern void func_0029F338(NativeUpdate775View *object);
 
-INCLUDE_ASM("asm/levels", func_L00_0038F178);
+/* func_L00_0038F178 is defined in L00_0038F178-effects.c. */
 
 /* Family 6eb4f363e5305bed: seed body at func_L00_00387408. */
 void func_L00_0038F3D8(char *object)
@@ -150,7 +150,7 @@ void func_L00_0038F5F0(char *object)
 
 INCLUDE_ASM("asm/levels", func_L00_0038F8B8);
 
-INCLUDE_ASM("asm/levels", func_L00_0038FC48);
+/* func_L00_0038FC48 is defined in L00_0038FC48-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_0038FE10);
 
@@ -303,7 +303,7 @@ INCLUDE_ASM("asm/levels", func_L00_003959C0);
 
 INCLUDE_ASM("asm/levels", func_L00_00395A88);
 
-INCLUDE_ASM("asm/levels", func_L00_00396078);
+/* func_L00_00396078 is defined in L00_00396078-g64.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_00396288);
 
@@ -362,7 +362,7 @@ void func_L00_0039E5B0(NativeUpdate775View *object)
         func_0029F338(object);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0039E600);
+/* func_L00_0039E600 is defined in L00_0039E600.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_0039E7A8);
 
