@@ -1163,6 +1163,26 @@ next source hypotheses are retained in `nonmatching/`. Equal-size candidates
 `func_L00_0033AA40` (384 bytes) still differ at +0x40, +0x4 and +0x24 respectively.
 The collision-grid function consumes both the incoming position pointer and f12
 margin. No progress regeneration or full linked build is claimed by these checks.
+### Shared object-vector and effect helpers
+
+The retained C for `func_L00_00387BB0` and `func_L00_0038A650` reaches the
+248-byte target size with `-frac2-qcopy -frac2-qcopy-barrier -g`, but matches
+0/27 USA placements: allocation differs at +0x10 and CSE forwards a copy from
+the original input instead of reloading the first local. Their `por` zero and
+`lq`/`sq` operations are compiler-reachable. The former MMI-only exclusions
+were screens, not measured C impossibility proofs.
+
+`func_L00_0038D650` likewise reaches 252 bytes with `-frac2-zero-ti-por` and
+matches 0/27: the final packed-colour shift/OR order first differs at +0xC0.
+The retained sources and concise `nonmatching/README.md` entries identify the
+remaining lifetime and source-shape hypotheses. Equal size gives no matching
+credit, and these bodies retain their `INCLUDE_ASM` markers.
+
+The effect callers also expose an ABI requirement: `func_002A7A00` forwards its
+incoming two floating bounds unchanged into `func_002A7878` before drawing the
+two angles. The bounds belong in the prototype and in that first call; an
+argument-free declaration can preserve incidental registers while describing
+the wrong C interface. Caller reconstruction must account for these bounds.
 
 ### Newly qualified compiler profiles and review findings
 

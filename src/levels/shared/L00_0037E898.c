@@ -304,8 +304,6 @@ INCLUDE_ASM("asm/levels", func_L00_00384D40);
 
 INCLUDE_ASM("asm/levels", func_L00_00384E08);
 
-INCLUDE_ASM("asm/levels", func_L00_00384F28);
-
 INCLUDE_ASM("asm/levels", func_L00_00385040);
 
 INCLUDE_ASM("asm/levels", func_L00_003851A0);
@@ -584,8 +582,6 @@ INCLUDE_ASM("asm/levels", func_L00_0038ADD0);
 
 INCLUDE_ASM("asm/levels", func_L00_0038B208);
 
-INCLUDE_ASM("asm/levels", func_L00_0038B6F8);
-
 extern void *D_L00_001BF218;
 
 extern void *ref_L00_0038B848_00(void *arg);
@@ -741,8 +737,6 @@ void func_L00_0038BE70(char *object)
 
 INCLUDE_ASM("asm/levels", func_L00_0038BF18);
 
-INCLUDE_ASM("asm/levels", func_L00_0038D368);
-
 /* Dispatches on a byte mode at object+32: mode 0 updates two float angles from a linked node and runs a follow-up call; mode 1 refreshes a 16-byte block and a node copy then calls a final update. */
 void func_L00_0038D468(char *object)
 {
@@ -779,5 +773,3 @@ INCLUDE_ASM("asm/levels", func_L00_0038D650);
 INCLUDE_ASM("asm/levels", func_L00_0038DE70);
 
 INCLUDE_ASM("asm/levels", func_L00_0038E880);
-
-INCLUDE_ASM("asm/levels", func_L00_0038F020);
