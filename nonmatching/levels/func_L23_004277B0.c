@@ -8,7 +8,7 @@ typedef int s32;
  * and complete, but check.py compares the full 52 catalogued bytes.
  *
  * retail, extent 0x004277B0..0x004277E4 (52 bytes):
- *   0x004277B0  addiu $sp, $sp, 0x190     <- the PREVIOUS body's frame restore
+ *   0x004277B0  addiu $sp, $sp, 0x190     <- unmatched restore after a completed return
  *   0x004277B4  nop
  *   0x004277B8  addiu $sp, $sp, -0x10     <- real entry, 44-byte wrapper
  *   0x004277BC  sd $s0, 0x0($sp)
@@ -21,11 +21,14 @@ typedef int s32;
  *   0x004277E0  addiu $sp, $sp, 0x10
  *   0x004277E4  nop                       <- the next entry's own alignment word
  *
- * The two leading instructions belong to the body before it (its `jr $ra` sits at
- * 0x004277AC, so 0x004277B0 restores a 0x190 frame and 0x004277B4 is padding): the
- * catalogue marks the extent 8 bytes early, exactly the defect documented for the
- * function above. The wrapper is not in doubt - it holds only argument copies because
- * the first call clobbers $a0:
+ * Retail control on 23 October 2026: the preceding `jr $ra` is at 0x004277A4,
+ * its delay slot at 0x004277A8 restores 0xD0, and 0x004277AC is nop. The
+ * positive 0x190 adjustment is therefore unmatched residue, not that return's
+ * delay slot. The data pointer at 0x002ABE40 targets 0x004277B8. PS2Recomp
+ * independently finds that entry but includes the trailing nop in its 48-byte
+ * extent; the wrapper itself is 44 bytes. A generator correction still needs
+ * qualification; this retained C is not an integrated match. It preserves arg0
+ * because the first call clobbers $a0:
  */
 
 extern void func_L23_004277E8(u8 *);
