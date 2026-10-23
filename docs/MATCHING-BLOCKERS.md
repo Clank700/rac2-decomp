@@ -191,6 +191,12 @@ placements in each release. This is a local check result pending linked integrat
 
 Other division/label-boundary failures remain bounded near misses. Retain exact source, line layout and profile; do not add dummy instructions or manual padding.
 
+`func_L00_003A2408` provides another local control: the complete reconstructed body is
+348/356 bytes with the default profile, differing only by the two pre-division nops.
+Putting the conversion call and division on separate C source lines in a dedicated
+`-g` unit gives 27/27 checks in each of USA v1.01, PAL and USA v2.00. Linked strict
+qualification is still required; this is an existing debug-label mechanism.
+
 <a id="blocker-06"></a>
 
 ## 6. Switch tables that travel with the function
@@ -373,6 +379,13 @@ For level 23, the preceding return is at `004277A4`, its delay slot restores `0x
 <a id="blocker-19"></a>
 
 ## 19. The delay slot's filler is chosen by the scheduler, not by you
+
+Check the actual callee ABI before treating a slot difference as a scheduler wall.
+`func_L00_00413870` was 164/164 bytes with a +0x54 argument-setup difference when
+its draft declared `func_002FC560(int, int)`. The callee stores its second input
+as a 64-bit packet value. Its real unsigned 64-bit declaration and literal recover
+27/27 checks in both USA releases; the name is absent from PAL's catalogue.
+No flag or artificial scheduling dependency is needed beyond the existing G8 unit.
 
 **Named examples now resolved:** func_L18_0042FAA8, func_L02_003D69F0 and func_L23_003C0E98 each pass1/1. Their older measurements below are retained as history, not current blockers.
 

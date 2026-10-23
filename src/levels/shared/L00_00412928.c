@@ -63,7 +63,7 @@ void func_L00_00413298(char *object)
 
 INCLUDE_ASM("asm/levels", func_L00_00413358);
 
-INCLUDE_ASM("asm/levels", func_L00_00413870);
+
 
 INCLUDE_ASM("asm/levels", func_L00_00413918);
 

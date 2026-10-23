@@ -5,7 +5,7 @@ extern int D_L00_001B13C4 __attribute__((sda));
 extern int D_L00_001B13C8 __attribute__((sda));
 extern int D_L00_001B13CC __attribute__((sda));
 extern int D_L00_001B13D0 __attribute__((sda));
-extern void func_002FC560(int, int);
+extern void func_002FC560(unsigned int, unsigned long long);
 extern void func_L00_00413918(char *, int, int, int, int);
 
 void func_L00_00413870(char *object)
@@ -17,7 +17,7 @@ void func_L00_00413870(char *object)
     if (value <= -8.0f) {
         *(float *)(state + 0x14) = value + 8.0f;
     }
-    func_002FC560(0x47, 0x51001);
+    func_002FC560(0x47, 0x51001ULL);
 
     func_L00_00413918(object, *(int *)(state + 0), D_L00_001B13C4, D_L00_001B13CC, 10);
     func_L00_00413918(object, *(int *)(state + 4), D_L00_001B13C8, D_L00_001B13D0, 20);
