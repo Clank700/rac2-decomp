@@ -1226,6 +1226,21 @@ two angles. The bounds belong in the prototype and in that first call; an
 argument-free declaration can preserve incidental registers while describing
 the wrong C interface. Caller reconstruction must account for these bounds.
 
+### Eight-slot envelope aggregation, `func_L00_002D6BA8`
+
+Retained, not matched (23 October 2026): default `-O2 -G0 -ffunction-sections`,
+1068/1068 bytes, 0/27 placements in each of USA, PAL and USA v2, first difference
++0x18. The actual C covers signed short lifetime/phase updates, all six real
+retail dispatch arms, seven canonical conversion/sine calls, and both additive
+and multiplicative channel averages. Separate final walking pointers recover
+the retail body size; merging them gives 1060 bytes. The remaining count-array
+bases occupy the opposite s3/s4 registers, with entry/final-loop scheduling and
+two pointer-add operand orders still different. The qualified `-g` experiment
+instead gives 1084 bytes. Eight bounded source/profile trials were retained
+privately; reopen on independent evidence for the original counter-array
+lifetimes, rather than repeating the declaration permutations. No assembly
+classification or matching credit is claimed.
+
 ### Newly qualified compiler profiles and review findings
 
 - **Copy scheduling, merged #275:** `-frac2-qcopy-barrier` supplies the schedulers' conservative volatile-copy dependence model while game sources remain ordinary C assignments. Twelve witnesses pass 59 placements. Independently checked: 113 tests, all 28 strict programs, and an 814-unit comparison with no code changes by default; only the twelve selected units change. This models scheduling, not every optimizer effect of inline assembly, and does not establish the original macro or justify `ASM_FUNC` classification.
