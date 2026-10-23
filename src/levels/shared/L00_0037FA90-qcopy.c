@@ -22,7 +22,8 @@ extern void func_002ACEC0(void *, void *, void *, float);
 extern void func_00282D30(void *, void *, float);
 
 extern L00_0037FA90_TI128 D_L00_001BF220;
-extern char D_L00_001B8FF0[];
+/* The input at +0x230 and the lower vector share this measured data block. */
+extern char D_L00_001B8DC0[0x240];
 
 /* The level's own data: the vector block the reach is measured against and the
    pointer the shared test takes. */
@@ -36,7 +37,7 @@ extern L00_0037FA90_Data D_00189E20;
 
 void func_L00_0037FA90(char *a0, char *a1, float f12, float f13, float f14)
 {
-    char *p = D_L00_001B8FF0;
+    char *p = D_L00_001B8DC0 + 0x230;
     char local[16];
     char local2[16];
     float reach;
