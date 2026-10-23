@@ -462,6 +462,7 @@ src/levels/16_snivelak/L16_00404F50.c	-O2 -G0 -ffunction-sections -frac2-qcopy -
 src/levels/shared/L00_003F4B68-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L00_003EED10-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L00_003EF3E0-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/01_oozla/L01_003B4200.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-gcse -mno-split-addresses
 src/levels/16_snivelak/L16_0041F1F0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/16_snivelak/L16_0041E370.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
 src/levels/16_snivelak/L16_003F55A0-g8.c	-O2 -G8 -ffunction-sections -g
