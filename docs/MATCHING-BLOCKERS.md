@@ -996,6 +996,16 @@ were left on the table for nothing. The over-broad classes are:
   preserves the half-angle across sine/cosine calls and releases the previous
   global object. Its byte view of the resident pointer and header store order
   recover the remaining allocation and scheduling.
+  **51C0 ordering caveat:** retail level 00 executes `lw a0,0x68(s4)` in
+  the unconditional delay slot of `beqz s4` at offsets +0x34/+0x38. The C
+  preserves that read before its null test; no non-null allocator guarantee has
+  been established, and an allocation-failure path has not been runtime-tested.
+  Three natural guarded forms were measured with the same qualified profile:
+  loading at first use or at guarded-block entry stays 356 bytes but changes
+  scheduling (first difference +0x14); an early null return gives 364 bytes in US.
+  The private first-use guarded draft is 0/27 in each of US, PAL and US2;
+  it does not reproduce the observed unconditional load. This is a preserved
+  retail-ordering caveat, not evidence that allocation always succeeds.
 * **The floating-point register allocation is not a source detail.**
   `func_L00_003E9540` and `func_L00_003BC108` have retail's size and retail's
   instruction sequence, and differ only in which of $f2..$f8 holds which value.
