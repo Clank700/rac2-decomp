@@ -249,7 +249,7 @@ void func_L00_0031AD40(float *a0, float *a1, float *a2, float t)
 /* func_L00_0031B9F8 is matched in L00_0031B9F8.c (built with -g). */
 
 
-INCLUDE_ASM("asm/levels", func_L00_0031BDC0);
+/* func_L00_0031BDC0 is defined in L00_0031BDC0.c. */
 
 /* True only when the pending object exists and its inner flag is set. */
 s32 func_L00_0031BE88(char *a0) {
@@ -573,7 +573,7 @@ INCLUDE_ASM("asm/levels", func_L00_003296C0);
 
 INCLUDE_ASM("asm/levels", func_L00_00329E90);
 
-INCLUDE_ASM("asm/levels", func_L00_00329FF0);
+/* func_L00_00329FF0 is defined in L00_00329FF0-g.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_0032A088);
 

@@ -1,14 +1,13 @@
-/* 0 of 27 places match - last line: 00_aranos_tutorial: instruction at +0x74 differs
-   35 of 37 instructions identical: right size (148), $gp read through the sda symbol,
-   bnez with the tick load in its delay slot, both calls and the 0x1e stamp all exact.
-   This cc1 only swaps the two closing ADDU: it builds ((tick + second) + (first + 0x14))
-   where retail builds ((tick + (first + 0x14)) + second). Every spelling tried (nested
-   parentheses, results in variables, += chains, second term first, reversed comparison)
-   either keeps that association or loses an instruction.
-   This unit must be compiled -G8 for the sda attribute to bite: a sibling
-   <unit>-g8.c source restores it (see src/levels/shared/L00_00316F60-g8.c), or a
-   -O2 -G8 -ffunction-sections line in config/cflags.txt. Under -G8 a plain
-   `extern int` still comes out absolute, which is what the two stamped reads need. */
+/* G8 profile: 27/27 in both USA releases; PAL 0/27, instruction at +0x38 differs. Preserve the canonical-data draft; qualify the PAL timing-constant difference before integration. */
+#include "include_asm.h"
+
+/* func_L00_002A5480 is a unit of its own: it reads the tick counter through $gp, so it
+   needs the -G8 profile (the -g8 name gives it), and the two names of the one address
+   (D_L00_001B19C8 through $gp, ref_L00_002A5480_00 in absolute) are what the retail does: the
+   comparison reads the small-data copy and the arithmetic the absolute one. The stamp
+   is the tick plus the first call's result plus 0x14, plus the second call's result; the
+   tick has to be read into a variable of its own first, or this cc1 makes the first
+   call's result the accumulator and the two closing ADDU come out the other way round. */
 
 typedef unsigned char u8;
 
@@ -16,25 +15,36 @@ typedef int s32;
 
 extern u8 D_00189E20[];
 
-extern int D_001B19C8 __attribute__((sda));
+extern s32 D_L00_001B19C8 __attribute__((sda));
 
-extern int D_001B19C8_1;
+extern s32 ref_L00_002A5480_00;
 
-extern int func_002A77E0(int);
+extern s32 func_002A77E0(s32);
 
-void func_L00_002A5480(void) {
- u8 *b=D_00189E20;
- if(*(int *)(b+0x1180)!=0) return;
- if(*(int *)(b+0x1188)==0) {
-  *(int *)(b+0x1184)=D_001B19C8_1+0x1e;
-  return;
- }
- if(D_001B19C8>*(int *)(b+0x1184)) {
-  int t;
-  int t2;
-  *(int *)(b+0x1180)=1;
-  t=func_002A77E0(*(int *)(b+0x1188));
-  t2=func_002A77E0(*(int *)(b+0x1188));
-  *(int *)(b+0x1184)=D_001B19C8_1+(t+0x14)+t2;
- }
+/* One-shot delay timer: the first pass stamps the resident block, the second one asks
+   the helper twice and stores the sum of the two answers. */
+void func_L00_002A5480(void)
+{
+    u8 *b = D_00189E20;
+    s32 t;
+    s32 t2;
+    s32 s;
+    s32 k;
+
+    if (*(s32 *)(b + 0x1180) != 0)
+        return;
+    if (*(s32 *)(b + 0x1188) == 0) {
+        *(s32 *)(b + 0x1184) = ref_L00_002A5480_00 + 0x1e;
+        return;
+    }
+    if (D_L00_001B19C8 > *(s32 *)(b + 0x1184)) {
+        *(s32 *)(b + 0x1180) = 1;
+        t = func_002A77E0(*(s32 *)(b + 0x1188));
+        t2 = func_002A77E0(*(s32 *)(b + 0x1188));
+        s = t + 0x14;
+        k = ref_L00_002A5480_00;
+        k = k + s;
+        k = k + t2;
+        *(s32 *)(b + 0x1184) = k;
+    }
 }
