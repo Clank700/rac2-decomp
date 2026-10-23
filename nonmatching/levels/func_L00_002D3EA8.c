@@ -1,4 +1,9 @@
-/* Default profile: 132/136 bytes, 0/27 in each USA release and PAL. One instruction short; retain the canonical-call draft for a new source/profile hypothesis. */
+/* Canonical callees, qcopy/barrier plus no-schedule-insns: 132/136 bytes in us/pal/us2, 0/27 each. The copy stays grouped, but the stack argument setup still fills the mode branch delay slot. No exact placement; next useful input is a comparable solved conditional stack-copy wrapper.
+ * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-schedule-insns
+ * us: 132 bytes, expected 136
+ * pal: 132 bytes, expected 136
+ * us2: 132 bytes, expected 136
+ */
 #include "include_asm.h"
 
 #ifndef RAC2_T_V4_F6A70B950
