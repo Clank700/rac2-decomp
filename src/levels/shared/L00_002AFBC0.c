@@ -200,7 +200,7 @@ extern void *D_L00_002A00A0[31];
 void func_L00_002B1308(int a0)
 {
     /* Keeps the two arms alive: the addresses land in the discarded .data. */
-    static void *volatile cases[31] = {
+    static void *cases[31] = {
         &&arm, &&ret, &&ret, &&ret, &&ret, &&ret, &&ret, &&ret,
         &&ret, &&ret, &&ret, &&ret, &&arm, &&arm, &&ret, &&ret,
         &&ret, &&ret, &&ret, &&ret, &&ret, &&ret, &&ret, &&ret,
