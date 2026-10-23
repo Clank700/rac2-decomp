@@ -427,3 +427,11 @@ src/levels/shared/L00_002EE050.c	-O1 -G0 -ffunction-sections -ffast-math
 src/levels/shared/L00_0032A1A8.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/shared/L00_002D3248.c	-O2 -G0 -ffunction-sections -fno-schedule-insns
 src/levels/20_yeedil/L20_0039C448-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003B7410-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_0041A490-dbg.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L00_0031BDC0.c	-O2 -G0 -ffunction-sections -ffast-math
+src/levels/shared/L00_00329FF0-g.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L00_0037FA90-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/shared/L00_00384CA8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_00387370-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003E4B80-g.c	-O2 -G0 -ffunction-sections -g
