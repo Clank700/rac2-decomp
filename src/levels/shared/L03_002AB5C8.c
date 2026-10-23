@@ -40,7 +40,7 @@ INCLUDE_ASM("asm/levels", func_L03_002AB5C8);
 
 INCLUDE_ASM("asm/levels", func_L03_002AD540);
 
-INCLUDE_ASM("asm/levels", func_L03_002ADC00);
+/* func_L03_002ADC00 is in its dedicated zero-vector profile unit. */
 
 void func_L03_002ADCA0(void) {
     unsigned char *g = D_L03_00189E20;
@@ -125,7 +125,7 @@ INCLUDE_ASM("asm/levels", func_L03_00329EF0);
 
 INCLUDE_ASM("asm/levels", func_L03_0032AB20);
 
-INCLUDE_ASM("asm/levels", func_L03_00339128);
+/* func_L03_00339128 is defined in L03_00339128-qcopy.c. */
 
 void func_L03_00339268(unsigned char *a0) {
     if (*(short *)(a0 + 0xA) == -1)
@@ -208,9 +208,9 @@ int func_L03_003C41B8(unsigned char *a0, int a1, int a2) {
 
 /* func_L03_003C4240 is defined in L03_002AB5C8-g8.c (it reads two $gp constants). */
 
-INCLUDE_ASM("asm/levels", func_L03_003C4368);
+/* func_L03_003C4368 is defined in L03_003C4368-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L03_003C4468);
+/* func_L03_003C4468 is defined in L03_003C4468-flags.c. */
 
 /* func_L03_003C4578 is defined in L03_002AB5C8-g8.c (it reads $gp data). */
 
