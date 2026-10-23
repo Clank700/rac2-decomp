@@ -269,6 +269,14 @@ The wave 8 correction correctly identified 0x700014A9 as por, not mtsa or an und
 
 lq/sq are not VU0/COP2 and can be emitted from a TImode C assignment. Four targets were nearly misclassified because the reader used a generic instruction category. Use `rabbitizer.Instruction(word, address, rabbitizer.InstrCategory.R5900).disassemble()`; not every generic INVALID word is lq/sq, so decode each exact word. qcopy/qzero inline assembly is not an allowed matching route.
 
+`func_L00_00391398` provides a further plain-C control: its 324-byte body, including
+`por` plus `sq` zero initialization, passed `tools/check.py` at 27/27 placements in
+both USA releases (the name is absent from PAL). The previous MMI-impossible screen
+was incorrect. A union with TImode and float-array members keeps the scalar field
+at a fixed stack offset; casting a TImode local to `float *` instead retained a
+pointer across calls and added one saved register (340 bytes). Profile: default
+`-O2 -G0 -ffunction-sections`; linked full-build validation is still required.
+
 <a id="blocker-12"></a>
 
 ## 12. A catalogue entry whose body differs between programs
