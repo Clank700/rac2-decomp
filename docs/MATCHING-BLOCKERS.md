@@ -1257,6 +1257,31 @@ instead gives 1084 bytes. Eight bounded source/profile trials were retained
 privately; reopen on independent evidence for the original counter-array
 lifetimes, rather than repeating the declaration permutations. No assembly
 classification or matching credit is claimed.
+The retained `func_L00_003EFA98`/`func_L00_003EFD00` quad renderers reach
+612/600 bytes with game O2/G8, but remain 0/27 in all three releases. Their
+transform is one three-row object: `func_00283098` reads rows at +0/+16/+32.
+UV cursors walk the containing 144-byte packet, rather than stepping past an
+eight-float subarray after the last vertex. Object/pointer lifetimes, flag packing
+and store scheduling still differ; a related matched renderer is the next useful
+allocation witness.
+
+`func_L00_003F7268` reaches 872 bytes; its rectangle helper `func_0027DE50`
+stores the fifth argument with `sd`, so the observed colour is the full 64-bit
+`0xFFFFFFFF80808080`, not a guessed 32-bit interface. Its two effect-call sites
+need a function-scoped reference: the callee identity is shared at 25 places and
+different at two. The binder at the end of `func_L00_003F87B0` likewise has
+23/4 identities in both USA releases. These references and all real arguments
+remain in the retained C even though neither body matches. The latter's normalize
+call precedes initialization of its packet input in retail; the source preserves
+that ordering and does not invent a zero vector.
+
+The 320-record state machine `func_L00_003F0680` reaches 796 bytes with O2/G0
+and its SDA declaration, reproducing the initial absolute and later GP table load;
+index/constant/local-vector registers remain permuted. `func_L00_003F6B10`
+reaches 916 bytes and the retail seven-FPR frame after shortening modulation
+lifetimes, but pointer/FPR assignment and scheduling still differ. All six bodies
+remain assembly-backed; the retained sources and README specify their measured
+coverage and one reopening condition each.
 
 ### Newly qualified compiler profiles and review findings
 
