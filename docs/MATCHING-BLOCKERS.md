@@ -165,6 +165,14 @@ The wave 8 allocator investigation remains useful: global.c prioritizes approxim
 
 **What is not if-converted:** `movz`/`movn` are emitted by this cc1 (`c ? a : b` gives `movz $2,$5,$6`, `if (b) r = 0;` gives `movz $2,$4,$5`), so a retail body that uses them is reachable - the shape to try is section 16's, not a constant selection.
 
+**23 October 2026 local C qualification:** `func_L00_003266D8` stores the incremented
+counter before clamping it with a second conditional store. This meaningful source
+shape preserves retail's branch and both stores, unlike the earlier ternary's
+conditional move. A dedicated `-G8` unit passes `check.py` at 27/27 placements in
+USA v1.01, PAL and USA v2.00. The two absolute/SDA aliases are checked to bind the
+same respective words at every placement. Full linked builds remain pending with
+the integrating maintainer; this is not additional progress credit.
+
 <a id="blocker-04"></a>
 
 ## 4. `nop` before `jr $ra`
@@ -196,6 +204,13 @@ Other division/label-boundary failures remain bounded near misses. Retain exact 
 Putting the conversion call and division on separate C source lines in a dedicated
 `-g` unit gives 27/27 checks in each of USA v1.01, PAL and USA v2.00. Linked strict
 qualification is still required; this is an existing debug-label mechanism.
+**23 October 2026 local C qualification:** `func_L00_0031C3D0` passes `check.py`
+at 27/27 placements in each of USA v1.01, PAL and USA v2.00 in its dedicated
+`-O2 -G0 -ffunction-sections -g` unit. The debug labels account for the two
+missing pre-division nops. The retained draft also needed the real integer
+conversion ABI, an initialized interpolation fraction, distinct vector arguments
+and the boolean return value. Its former allocation mismatch was not a compiler
+impossibility. Full linked builds remain pending with the integrating maintainer.
 
 <a id="blocker-06"></a>
 
