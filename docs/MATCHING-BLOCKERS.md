@@ -835,6 +835,20 @@ The historical screen selected 145 proposed functions in fifteen files. Other fi
 
 Use current R5900 decoding, profile evidence and bounded per-function checks. This section is not justification for a blanket file exclusion or unreviewed handwritten classification.
 
+**Additional measured corrections:** `func_L00_002ADFE8` (136 bytes) and
+`func_L00_00421A98` (184 bytes) each pass 27/27 placements in US, PAL and US2
+with computed gotos through their actual retail tables, using default flags.
+Their former "jump table, no C" records were screens, not proof of an assembly
+origin. `func_L00_00420638` (324 bytes) also passes 27/27 in each release with
+`-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier`: retaining the
+axis pointer's two real uses and the projection copied at the owner's +0x70
+reproduces the allocation. These are local placement checks pending strict linked
+integration, not full-program build credit. The neighboring `func_L00_00420388`
+remains a 280/280-byte near miss, first difference +0x1C in all 27 placements of
+each release; its `func_L00_002DB350` call must forward the float margin, which
+the callee saves from `$f12` and uses in its radius test.
+
+
 <a id="blocker-50"></a>
 
 ## 50. Five specifically audited residual extents — resolved by PR #253

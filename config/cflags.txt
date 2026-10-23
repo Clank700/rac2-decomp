@@ -448,3 +448,4 @@ src/levels/shared/L00_003E51C0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -fr
 src/levels/shared/L00_003A1F68-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L00_003A2408.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L00_003A80F8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_00420638-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
