@@ -467,3 +467,4 @@ src/levels/16_snivelak/L16_0041E370.c	-O2 -G0 -ffunction-sections -frac2-zero-ti
 src/levels/16_snivelak/L16_003F55A0-g8.c	-O2 -G8 -ffunction-sections -g
 src/levels/16_snivelak/L16_00411B40-g16.c	-O2 -G16 -ffunction-sections -Wa,-G16
 src/levels/16_snivelak/L16_00411900-g16.c	-O2 -G16 -ffunction-sections -Wa,-G16 -frac2-qcopy -frac2-qcopy-barrier
+src/game/00339078-g16.c	-O2 -G16 -ffunction-sections -Wa,-G16
