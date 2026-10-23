@@ -37,11 +37,11 @@ extern void func_L00_00424A88(int, float, float);
 extern void func_L00_00424B20(float);
 extern void func_L00_00424B48(int);
 extern void func_L00_00424B70(float, float);
-extern void func_L00_00424BB8(float, float);
+extern void ref_L00_002D71A0_01(float, float);
 extern void func_L00_00424C00(void);
 extern void func_L00_00424C28(void);
 extern void func_L00_00424C60(void);
-extern void func_L00_00427290(void);
+extern void ref_L00_002D71A0_00(void);
 extern void func_L00_002D7938(float);
 extern void func_L00_00424F00(void *, float, float);
 extern int func_00282978(void *);
@@ -90,18 +90,18 @@ int func_L00_002D71A0(void)
     if (SLOT(selected)->flag26 != 0)
         func_L00_00424C60();
     if (SLOT(selected)->flag60 != 0)
-        func_L00_00427290();
+        ref_L00_002D71A0_00();
     if (SLOT(selected)->flag24 != 0) {
         func_L00_00424C00();
         func_L00_00424B48(0);
         func_L00_00424C28();
-        func_L00_00424BB8(0.01f, 0.2f);
+        ref_L00_002D71A0_01(0.01f, 0.2f);
         func_L00_00424B70(0.03f, 0.2f);
     }
     if (SLOT(selected)->flag25 != 0) {
         func_L00_00424C28();
         func_L00_00424B70(0.03f, 0.2f);
-        func_L00_00424BB8(0.0075f, 0.2f);
+        ref_L00_002D71A0_01(0.0075f, 0.2f);
     }
     if (SLOT(selected)->blend >= 0.0f)
         func_0026FF08(0, 3, SLOT(selected)->blend, 0.005f, 0.2f, 0.0f);
