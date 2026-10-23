@@ -514,6 +514,16 @@ $s1,0x8($sp)`); `func_L00_003ECB00` (retail `addiu $v1,$zero,0x3` before `lui $v
 
 **Current approach:** compare matched source lifetimes and per-file profiles. The accepted -mastra-keep-frame-order option controls frame-related scheduling, not every prologue/block-order discrepancy; qualify the entire affected unit.
 
+`func_L00_002D71A0` has a complete retained 32-record selector and dispatch body:
+1108/1104 bytes, 0/27 placements in each release with `-O2 -G8 -ffunction-sections`.
+Its first difference at +0x4 accompanies the pool's high address being materialized
+in v0 and copied to s4, where retail keeps that value directly in s4. Later pointer
+lifetimes, slots and return joins also differ. A typed-array source was 1132 bytes;
+the byte-offset record view reduced it to 1108. Disabling GCSE gave 1116; disabling
+sched1 and changing scan/declaration spelling were neutral. A positive selected
+guard plus a named zero gave 1112. Reopen with an independently supported source
+shape for the shared global-address lifetime, rather than repeating those forms.
+
 <a id="blocker-25"></a>
 
 ## 25. Small constants: rematerialised against reused (both directions)
