@@ -311,12 +311,18 @@ aliases. The 148-byte extents end at entry+0x94 and retain the four-byte gap bef
 the next entry at +0x98. The combined tree passes all 84 strict program builds.
 
 The PAL timer uses the shared resident identity `D_00189E20`, whose PAL binding is
-`0x00189EA0`. The canonical `D_00189EA0` instead names the distinct 128-bit constant
+`0x00189EA0`. The canonical `D_00189EA0` instead names the distinct mutable resident vector
 used by `func_00334710` (PAL binding `0x00189F20`). Per-function relocation checks
 alone did not expose the collision from naming the timer base by its PAL physical
 address. A joint binding control with `func_L00_002D3248` and `func_00334710`
 checks these identities together at every PAL placement. Subsequent strict builds
 pass all 28 PAL programs with both identities present and no C fallback.
+
+The resident vector is not a constant or a guaranteed zero: the retail initialization
+body `func_L00_002A4928` writes the chosen actor's position into `D_00189E20 + 0x80`,
+the canonical `D_00189EA0`. Earlier zero/constant labels described a mistaken
+interpretation of `func_00334710`, which returns this stored vector. Preserve the
+shared identities without inventing constness or zero initialization at each read.
 
 **Current scope:** func_L00_00424BB8 remains a marker. The 23/27 report is historical; section 34 describes different field offsets. Re-extract the current extents before changing their grouping.
 
@@ -551,6 +557,17 @@ retail keeps it. The body is then one instruction short in the tested source. Es
 **Measured examples:** `func_L20_004095D0` ("gcc removes the first store (a dead store to the
 same symbol); retail keeps both"); `func_L18_00432630` ("`lh $v0,0x7FC($v1)` is missing -
 it is a DEAD load in retail (`$v0` never read again), which the old note treated as a dead-load blocker; that inference needs its exact ABI/control-flow evidence").
+
+`func_L00_002A4928` contains two measured gathers of seven resident slot words
+into the same local storage, around the state clear; the second loop is not a
+scatter back to the global slots. The retained complete C preserves that ordering
+without volatile or artificial uses. It reaches 1000/1008 bytes, 0/27 USA v1.01
+placements; its canonical name is absent from both other release catalogues.
+Direct resident references remove a spilled full-base pointer and recover retail's
+0x90 frame, but high/base address lifetimes and scheduling still differ. A typed
+field view shortens the body to 984 bytes; disabling GCSE or sched1 gives 996.
+Independent alias/lifetime evidence is the next useful input, not more identical
+loop spellings.
 
 **Consequence:** retain unresolved attempts and their bounded stopping reasons. Do not label the whole category unexpressible or add volatile/artificial uses solely to preserve an operation.
 
