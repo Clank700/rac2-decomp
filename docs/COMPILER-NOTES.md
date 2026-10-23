@@ -225,6 +225,17 @@ The original twelve witnesses total 3,616 bytes at 59 places: `func_002B5E48`,
 `func_L26_003D4930`. Named destination pointers and the point where the second
 copy's address is taken remain source requirements in two cases.
 
+`func_L20_0039C448` (248 bytes) and `func_L20_0043D470` (100 bytes), one place each
+in level 20, are exact together in `L20_0039C448-qcopy.c` with qcopy and the barrier
+([#291](https://github.com/OpenRAC/rac2-decomp/pull/291)). Qcopy alone fixed the
+first body's load but left its saves in this cc1's ascending order where retail has
+`sd $s0; sd $s2; sd $s1`; the barrier fixed both. In the second body, qcopy also
+produced retail's float register order (8.0f in `$f1`, 2.5f in `$f0`), which its
+record had blamed on the allocator itself: the copy's address registers change the
+allocator's inputs. A residue that looks like a compiler difference can be the
+profile's. Of level 20's 3,978 functions, 359 have retail's `addiu` plus
+zero-displacement `lq`/`sq` shape.
+
 This models the schedulers, not every optimizer effect of inline assembly. Incoming
 links retain producer latencies; interblock motion sees a store; jump2 can remove a
 move that a volatile operation retains. `func_002B50E0` retained three argument-move
