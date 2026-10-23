@@ -174,13 +174,13 @@ void func_L00_003EE8E8(Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner *owner)
 
 INCLUDE_ASM("asm/levels", func_L00_003EE920);
 
-INCLUDE_ASM("asm/levels", func_L00_003EED10);
+/* func_L00_003EED10 uses its dedicated quadword-copy profile. */
 
 INCLUDE_ASM("asm/levels", func_L00_003EEE20);
 
 INCLUDE_ASM("asm/levels", func_L00_003EEE90);
 
-INCLUDE_ASM("asm/levels", func_L00_003EF3E0);
+/* func_L00_003EF3E0 uses its dedicated quadword-copy profile. */
 
 extern int D_L00_001B0838 __attribute__((sda));
 
@@ -676,7 +676,7 @@ INCLUDE_ASM("asm/levels", func_L00_003F3D70);
 
 INCLUDE_ASM("asm/levels", func_L00_003F4210);
 
-INCLUDE_ASM("asm/levels", func_L00_003F4B68);
+/* func_L00_003F4B68 uses its dedicated quadword-copy profile. */
 
 INCLUDE_ASM("asm/levels", func_L00_003F4C68);
 
