@@ -426,3 +426,4 @@ src/levels/shared/L00_004005B0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -fr
 src/levels/shared/L00_002EE050.c	-O1 -G0 -ffunction-sections -ffast-math
 src/levels/shared/L00_0032A1A8.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/shared/L00_002D3248.c	-O2 -G0 -ffunction-sections -fno-schedule-insns
+src/levels/20_yeedil/L20_0039C448-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
