@@ -916,6 +916,16 @@ were left on the table for nothing. The over-broad classes are:
   `-frac2-qcopy` reaches the retail's shape; it is already in `config/cflags.txt` for
   two files, and the need for the others is reported here rather than applied, because
   `config/cflags.txt` is not a worker's file.
+  **2026-10-23 recheck:** dedicated units using the already qualified qcopy and
+  qcopy-barrier profiles close `func_L00_003E5650`, `func_L00_003E9490`,
+  `func_L00_003E7650` and `func_L00_003E51C0` locally. Each passes all 27
+  placements in both USA releases; 5650, 9490 and 51C0 also pass PAL's 27
+  placements, while 7650's canonical name is absent there. Linked strict builds
+  remain the integration gate. The older retained drafts also needed real input
+  and ABI corrections: 9490 subtracts the source from the other vector; 51C0
+  preserves the half-angle across sine/cosine calls and releases the previous
+  global object. Its byte view of the resident pointer and header store order
+  recover the remaining allocation and scheduling.
 * **The floating-point register allocation is not a source detail.**
   `func_L00_003E9540` and `func_L00_003BC108` have retail's size and retail's
   instruction sequence, and differ only in which of $f2..$f8 holds which value.

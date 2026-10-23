@@ -440,3 +440,7 @@ src/levels/shared/L00_0033E888-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy 
 src/levels/shared/L00_0033C638-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-barrier
 src/levels/shared/L00_003DB0A8.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L00_003D4958-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L00_003E5650-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003E9490-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003E7650-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003E51C0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
