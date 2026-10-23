@@ -12,7 +12,7 @@ typedef struct {
 extern Particle *func_002B9030(int);
 extern int func_00283CF0(float);
 extern int func_002A77E0(int);
-extern char *func_002AB1F0(int);
+extern int func_002AB1F0(unsigned char *);
 extern unsigned char *D_L00_001FEA78;
 
 Particle *func_L00_0033C638(float life,float secondLife,Quad *position,int size,int color,int mode,int flag,float *vector,int id)
@@ -39,7 +39,7 @@ Particle *func_L00_0033C638(float life,float secondLife,Quad *position,int size,
         *(int *)(out+6)=id;
         out[7]=0;
         if(id) {
-            char *owner=func_002AB1F0(id);
+            char *owner=(char *)func_002AB1F0((unsigned char *)id);
             if(owner) out[7]=*(float *)(owner+0x10);
         }
         { float *dst=out+3; dst[0]=vector[0];dst[1]=vector[1];dst[2]=vector[2]; }
