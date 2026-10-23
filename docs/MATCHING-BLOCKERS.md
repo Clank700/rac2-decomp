@@ -296,6 +296,18 @@ pointer across calls and added one saved register (340 bytes). Profile: default
 
 ## 12. A catalogue entry whose body differs between programs
 
+**23 October 2026 local timer qualification:** `func_L00_002A5480` has genuine
+USA/PAL timing differences at +0x38 and +0x70: 30/20 frames in both USA releases,
+25/17 in PAL. An address relocation cannot represent them. Adding only this timer
+to PAL's `not_carried.tsv` and running the maintained `carry.py --version pal`
+renames exactly two PAL level rows: the timer becomes `func_PAL_L00_002A5310`, and
+its already-ASM direct caller becomes `func_PAL_L00_002A53A8`. No other row or
+existing C is demoted; the caller remains an `INCLUDE_ASM` marker. Repeating the
+generator produces identical catalogues. Separate G8 C bodies pass 27/27 places
+for each applicable release, including equality of the tick word's SDA/absolute
+aliases. The 148-byte extents end at entry+0x94 and retain the four-byte gap before
+the next entry at +0x98. Full linked builds remain with the integrating maintainer.
+
 **Current scope:** func_L00_00424BB8 remains a marker. The 23/27 report is historical; section 34 describes different field offsets. Re-extract the current extents before changing their grouping.
 
 **Signature:** `tools/check.py` reports a partial count (`23 of 27 places match`) and
