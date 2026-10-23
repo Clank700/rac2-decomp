@@ -308,6 +308,14 @@ for each applicable release, including equality of the tick word's SDA/absolute
 aliases. The 148-byte extents end at entry+0x94 and retain the four-byte gap before
 the next entry at +0x98. Full linked builds remain with the integrating maintainer.
 
+The PAL timer uses the shared resident identity `D_00189E20`, whose PAL binding is
+`0x00189EA0`. The canonical `D_00189EA0` instead names the distinct 128-bit constant
+used by `func_00334710` (PAL binding `0x00189F20`). Per-function relocation checks
+alone did not expose the collision from naming the timer base by its PAL physical
+address. A joint binding control with `func_L00_002D3248` and `func_00334710`
+checks these identities together at every PAL placement; strict linked builds
+remain required.
+
 **Current scope:** func_L00_00424BB8 remains a marker. The 23/27 report is historical; section 34 describes different field offsets. Re-extract the current extents before changing their grouping.
 
 **Signature:** `tools/check.py` reports a partial count (`23 of 27 places match`) and

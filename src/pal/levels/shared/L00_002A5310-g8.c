@@ -4,7 +4,7 @@ typedef unsigned char u8;
 
 typedef int s32;
 
-extern u8 D_00189EA0[];
+extern u8 D_00189E20[];
 
 extern s32 D_L00_001B19C8 __attribute__((sda));
 
@@ -16,7 +16,7 @@ extern s32 func_002A77E0(s32);
    the helper twice and stores the sum of the two answers. */
 void func_PAL_L00_002A5310(void)
 {
-    u8 *b = D_00189EA0;
+    u8 *b = D_00189E20;
     s32 first_delay;
     s32 second_delay;
     s32 biased_delay;
