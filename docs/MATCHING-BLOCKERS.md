@@ -782,6 +782,18 @@ are **one** pseudo living across three calls: no reference count can make it eli
 
 **Consequence:** check the `.lreg` for a separate pseudo before touching reference counts. A value present only as `(plus (reg N) K)` explains why edits to a nonexistent separate pseudo cannot help; it is not a universal impossibility proof.
 
+A separate argument-setup tie remains in `func_L00_002A5048`: the retained C
+produces 800/800 bytes with `-O2 -G0 -ffunction-sections -frac2-qcopy
+-frac2-qcopy-barrier`, but passes 0/27 in both US releases (no PAL catalogue
+entry under this name). Only four words differ: the `$f15` zero move and
+`$a2 = 2` exchange order in its first two `func_002AA898` calls, beginning
+at +0x1F8. Idle-first AND tests and the grouped copy reproduce all other
+instructions. Debug compilation, explicit shared parameter locals and GCSE
+disabled preserve that residue; sched1 disabled changes allocation elsewhere.
+The canonical helper prototype is retained. Reopen on new argument-setup
+scheduling/source evidence, rather than changing its signature to steer moves.
+
+
 <a id="blocker-43"></a>
 
 ## 43. Block ordering: distinguish source structure from unavailable flags
