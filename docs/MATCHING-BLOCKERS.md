@@ -320,6 +320,13 @@ at a fixed stack offset; casting a TImode local to `float *` instead retained a
 pointer across calls and added one saved register (340 bytes). Profile: default
 `-O2 -G0 -ffunction-sections`. The combined tree passes all 84 strict program builds.
 
+The retained [func_L11_0046BD18](../nonmatching/levels/func_L11_0046BD18.c)
+provides a separate integer-address control: decode its multiply-add as R5900
+`madd`, and its quadword transfers as ordinary TI assignments. The reconstruction
+compiles those instruction families but remains 1060/1024 bytes, 0/2 placements
+in each release. This supersedes the historical MMI-only screen without claiming
+a whole-body match; frame and address-expression lifetimes remain open.
+
 <a id="blocker-12"></a>
 
 ## 12. A catalogue entry whose body differs between programs
@@ -479,6 +486,15 @@ six waves' drafts (37 of 240 worker notes mention a delay slot).
 
 **Workaround that sometimes works:** section 7's - hoist the instruction the paths share above
 the `if` so the scheduler can fill the slot itself. Otherwise retain the exact near miss/profile and a bounded stopping reason; a few unchanged forms do not prove that no meaningful source/profile lever exists.
+
+A remaining setup-order control is
+[func_L00_003A8238](../nonmatching/levels/func_L00_003A8238.c): 720/720 bytes,
+0/27 placements in each USA release, with no carried PAL name. Only the two
+non-relocation instructions materializing `-1` and `7` exchange positions.
+Typed effect records and the measured floating/integer call interface resolve
+the other observed differences. Nine bounded trials include three forms that
+end in the same two-word tie. Reopen with an independently justified constant
+or loop-lifetime model; another equivalent spelling is not new evidence.
 
 <a id="blocker-20"></a>
 
