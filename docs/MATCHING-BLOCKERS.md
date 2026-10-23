@@ -1051,6 +1051,27 @@ attributed for provenance, not exclusive ownership.
 
 For #267, a same-source comparison of 781 configured units changed code only in the new multiplier; eleven differences were debug-only. The shared union changed no object section in the four existing users. Source, flags and durable explanations are in the merged repository; partial C remains in `nonmatching/`. No progress report was regenerated.
 
+### Camera and effect-record follow-up (23 October 2026)
+
+Local placement checks, pending strict linked validation: `func_L00_002D9D98`
+(228 bytes) and `func_L00_0033C638` (400 bytes) pass 27/27 placements in USA,
+PAL and USA v2. `func_L00_0033E888` (372 bytes) passes 27/27 in USA and USA v2;
+that name is absent from PAL's catalogue. All use the qualified qcopy/barrier
+profile. The camera copy needs a retained local active pointer and ordinary
+three-component scalar copies after the quadword assignment. The effect-record
+sources require full-width incoming integer arguments, with narrowing at their
+byte/halfword stores; the narrower drafts added unwanted sign-extension work.
+
+The retained `func_L00_003B77A8` now contains actual C: its alleged unreachable
+MMI words are `por` zero materialization, and its copies are compiler-reachable
+quadwords. The current candidate is 372/352 bytes, 0/27 USA placements; it is
+not handwritten-assembly evidence. Other measured camera/effect drafts and their
+next source hypotheses are retained in `nonmatching/`. Equal-size candidates
+`func_L00_003B6858` (384 bytes), `func_L00_002DB350` (356 bytes) and
+`func_L00_0033AA40` (384 bytes) still differ at +0x40, +0x4 and +0x24 respectively.
+The collision-grid function consumes both the incoming position pointer and f12
+margin. No progress regeneration or full linked build is claimed by these checks.
+
 ### Newly qualified compiler profiles and review findings
 
 - **Copy scheduling, merged #275:** `-frac2-qcopy-barrier` supplies the schedulers' conservative volatile-copy dependence model while game sources remain ordinary C assignments. Twelve witnesses pass 59 placements. Independently checked: 113 tests, all 28 strict programs, and an 814-unit comparison with no code changes by default; only the twelve selected units change. This models scheduling, not every optimizer effect of inline assembly, and does not establish the original macro or justify `ASM_FUNC` classification.
