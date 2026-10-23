@@ -183,6 +183,12 @@ The wave 8 allocator investigation remains useful: global.c prioritizes approxim
 
 Several historical attempts lost two nops before float division. This is not uniformly unreachable today: compiler notes describe qualified division-padding rules and a separate debug-label remedy. `func_002B5EF8` uses a dedicated `-g` unit with division on its own source line, allowing gas to reproduce label-related padding.
 
+`func_L00_003DB0A8` is another plain-C witness for the debug-label route:
+its real integer-to-float helper is `func_00283CE0(int)`, followed by division
+on its own source line and `func_00283CF0(float)`. The default profile emitted
+100/108 bytes; a dedicated `-O2 -G0 -ffunction-sections -g` unit passes 27/27
+placements in each release. This is a local check result pending linked integration.
+
 Other division/label-boundary failures remain bounded near misses. Retain exact source, line layout and profile; do not add dummy instructions or manual padding.
 
 <a id="blocker-06"></a>
@@ -664,6 +670,12 @@ These are measured source/ABI effects, not permission to invent barriers or fals
 - Named masks and block-local lifetimes sometimes changed allocation/frame size. Outcomes are per body, not universal declaration-order rules.
 - A guard that genuinely exits can leave a different delay slot from one followed by live work. Some store permutations also moved scheduling; other blocks behaved differently.
 - Return declarations affect v0/f0 availability, even when a caller ignores a result. Ignoring it does not prove the callee is void: use ABI evidence, not knowingly false prototypes.
+- `func_L00_003D5358` is a retained 336/336-byte near miss in all three releases
+  (0/27 each, `-O2 -G8 -ffunction-sections -g`): only the float target move and
+  velocity-pointer setup exchange order at +0x104/+0x108. Its real
+  `func_002AA898(position, velocity, direction, target, acceleration, damping, limit)`
+  declaration is preserved. The same prototype constraint affects the retained
+  `func_L00_002B9380`; a direction-last declaration cannot be used to obtain a match.
 - A dead-store observation differed between ordinary code and a delay slot in the sample. Reconfirm actual liveness and control flow; do not manufacture a memory effect to preserve it.
 
 <a id="blocker-40"></a>
@@ -1002,6 +1014,14 @@ only changes the count `tools/progress.py` reports, as rac1-decomp counts them.
 
 
 ## Historical catalogue-boundary proposals and follow-up
+
+`func_L00_0032D208` provides a separate resident-boundary lead: both direct calls
+reach `0x00132828`, the complete prologue inside the current 60-byte boot row
+`func_00132818`. The first sixteen bytes of that row are unmatched positive stack
+adjustments and padding. Its retained C names the actual callable entry and remains
+unlinked (248/260 bytes, 0/27 placements in each release with `-g`). No catalogue
+change is included: verify surrounding returns, incoming references and release
+identities, preserve the skipped bytes and original end, then fix the generator.
 
 The old appendix is an investigation record, not a current work queue. Filler removals, mixed entry corrections and different-callee bindings must remain separate:
 
