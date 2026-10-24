@@ -606,10 +606,18 @@ surrounding flow/returns and incoming references; missing jr alone is insufficie
 Change the generator in tools/levels.py, never the generated catalogue by hand.
 
 Tools/check.py can pass while linking fails: other local C sections, symbol-value
-consistency and data placement are whole-program constraints. A C switch's new
-.rodata/.sdata can be unplaceable. A table already in retail can use its measured
-symbol and computed goto; a static label-address array keeps legitimate arms in
-discarded data. It must describe the right arms and earns no matched-data credit.
+consistency and data placement are whole-program constraints. The build now places
+complete compiler `.rodata`/`.rdata` branch-table sections when every R_MIPS_32
+entry resolves to the correct already-placed C case destination. It interleaves
+the unchanged compiler section with the remaining retail data, then compares all
+loaded bytes. Dependencies are object-scoped; unrelated sections cannot satisfy
+them. Scalar/mixed pools and unsupported `.sdata` remain unplaceable. See
+[switch-table qualification and limits](MATCHING-BLOCKERS.md#blocker-06).
+
+A legacy table already in retail can use its measured symbol and computed goto;
+a static label-address array keeps legitimate arms in discarded data. That array
+must describe the right arms and earns no matched-data credit. New table support
+does not independently requalify those existing source constructs.
 Do not assume every jtbl_/D_ spelling binds identically across releases.
 
 ## Qualification and controls

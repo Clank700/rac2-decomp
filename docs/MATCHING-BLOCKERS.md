@@ -250,17 +250,47 @@ impossibility. The combined tree subsequently passes all 84 strict program build
 
 ## 6. Switch tables that travel with the function
 
-Five early-wave bodies passed quick checks but failed full placement with “needs .rodata at its place, which is not C.” Generated rodata/sdata dependencies remain a linking limitation; strict mode rejects fallback. A named retail table is different, but its dispatch match alone does not validate every computed-goto target or internal case-label placement.
+Five early-wave bodies passed quick checks but failed full placement with “needs .rodata at its place, which is not C.” This was a linker-placement limitation, not evidence that ordinary C switches cannot match. A named retail table is different: its dispatch match alone does not validate every computed-goto target or internal case-label placement.
 
-Confirmed again on 24 October 2026: `func_L04_004323F8` (312 bytes) and
+Historical control, 24 October 2026: `func_L04_004323F8` (312 bytes) and
 `func_L04_00432530` (224 bytes) each pass 5/5 local placements in all three releases,
 but actual USA strict builds reject their generated `.rodata` dependencies.
 An object-dependency audit found the same issue in `func_L19_00421E80` (760 bytes),
 whose local USA checks pass 1/1 in each USA release; an actual USA level19 strict
-build confirms its rejection. PAL has no catalogue entry for that name. All three
-complete reconstructions remain in `nonmatching/` and add no C coverage. Their
-source and relocation dependencies must be qualified together; fabricated aliases,
-external case-label tables and assembly fallback are not fixes.
+build confirmed its rejection. PAL has no catalogue entry for that name.
+
+**Compiler-owned branch tables:** `tools/build.py` now derives a complete
+`.rodata`/`.rdata` input section's address from its C text relocations, checks every
+table word against the independently placed C case destination, and links that
+original compiler section in place of the corresponding retail data span. It
+preserves surrounding assembly data and its labels. Section dependencies are
+scoped to their object, so an unrelated object's `.text` cannot satisfy a binding.
+Overlapping claims, unsupported relocations, missing destinations, scalar pools,
+mixed data and incomplete spans remain rejected. No compiler instruction, table
+entry or source-level switch is patched. Full strict loaded-byte comparison is
+still the acceptance gate.
+
+This follows RAC1's
+[table/data interleaving](https://github.com/OpenRAC/rac1-decomp/blob/de14440819093b81c00a1e219d4fef54d6fccd16/tools/jump_tables.py)
+principle. RAC2 uses existing object relocations instead of renaming compiler
+assembly sections or committing an address registry. The two color conversions,
+Grelbin's `func_L19_00421E80`, format dispatch `func_00118CC8` and DWARF interpreter
+`func_00123D30` are the qualification witnesses. The format dispatch needs game
+`-O2 -G2 -ffunction-sections -mastra-quad-saves`; the current parent unit's SDK
+profile emits a different body. Its own ordinary C translation unit records that
+profile in `config/cflags.txt`.
+
+All five witnesses are integrated as C: 2,420 distinct primary code bytes.
+Qualification passes all 84 strict programs (boot plus 27 levels in USA v1.01,
+USA v2.00 and PAL), with equal loaded bytes and no assembly fallback, plus 171
+tests. The colors pass five placements each per release; Grelbin passes its one
+placement in each USA release and is absent from PAL; both core functions pass
+their boot placement in every release. Generated progress reports are unchanged.
+
+This supports complete input sections, including several tables when their
+original relative layout agrees. It does not split a mixed compiler section,
+repair a switch comparison tree, change arm order, resolve register allocation
+differences, or grant blanket acceptance to legacy external case-label arrays.
 
 A switch's comparison tree is also a separate source problem: func_L19_00423CC0 resisted the tested case permutations, whereas explicit comparisons/gotos matched func_L20_00442C10. Wave8 associated one tree form with three labels, one sharing default; this is a bounded recipe.
 
