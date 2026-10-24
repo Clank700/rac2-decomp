@@ -502,3 +502,4 @@ src/levels/shared/L11_00460258-g32.c	-O2 -G32 -ffunction-sections -Wa,-G32 -g
 src/levels/20_yeedil/L20_0039E770.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/02_maktar_nebula/L02_003CD668.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/01_oozla/L01_002F2570-g8.c	-O2 -G8 -ffunction-sections -Wa,-G8 -g -frac2-zero-ti-por
+src/levels/shared/L05_0037B108.c	-O2 -G0 -ffunction-sections -mno-split-addresses
