@@ -735,7 +735,7 @@ INCLUDE_ASM("asm/levels", func_L02_003D6DF8);
 
 INCLUDE_ASM("asm/levels", func_L02_003D6EE0);
 
-INCLUDE_ASM("asm/levels", func_L02_003D7040);
+/* Defined in L02_003D7040-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L02_003D7140);
 
@@ -945,7 +945,7 @@ INCLUDE_ASM("asm/levels", func_L02_00401530);
 
 INCLUDE_ASM("asm/levels", func_L02_00401ED8);
 
-INCLUDE_ASM("asm/levels", func_L02_00402300);
+/* Defined in L02_00402300-g8.c. */
 
 /* func_L02_00402440 lives in the -g8 sibling: it reads four $gp-relative scalars. */
 
