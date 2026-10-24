@@ -153,7 +153,7 @@ INCLUDE_ASM("asm/levels", func_L00_003B72B0);
 INCLUDE_ASM("asm/levels", func_L00_003B74A8);
 
 /* shared native body of family 32969de2c02196ef */
-void func_L00_003B75C8(void)
+void func_L00_003B75C8(void *object)
 {
     OBJ *p;
     short key = D_L06_001AC000->fAA;
