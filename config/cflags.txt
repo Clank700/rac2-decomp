@@ -525,6 +525,7 @@ src/levels/01_oozla/L01_00416E78-camera.c	-O2 -G0 -ffunction-sections -frac2-qco
 src/levels/01_oozla/L01_003DD3A0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/06_notak/L06_00456F08.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
 src/levels/04_barlow/L04_00412AF8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
+src/levels/10_hrugis_cloud/L10_0042E4D0.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/04_barlow/L04_00422D40-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
 src/levels/09_dobbo/L09_004050E0.c	-O2 -G0 -ffunction-sections -g
 src/game/0027EA28.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
