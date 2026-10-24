@@ -512,3 +512,4 @@ src/levels/23_damosel_orbit/L23_0042AD10.c	-O2 -G0 -ffunction-sections -frac2-qc
 src/levels/02_maktar_nebula/L02_003DAF90-g16.c	-O2 -G16 -Wa,-G16 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L05_0037B108.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/01_oozla/L01_002F2570-g8.c	-O2 -G8 -ffunction-sections -Wa,-G8 -g -frac2-zero-ti-por
+src/levels/shared/L00_00378E90.c	-O2 -G0 -ffunction-sections
