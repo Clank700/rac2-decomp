@@ -77,6 +77,16 @@ original SDK flags.
 
 ## Frames, calls and ABI
 
+### Object extent and stack allocation
+
+A physical stack slot does not establish a C object's size. In
+`func_L01_003DD3A0`, the iterator helper reads and updates one pointer; replacing a
+padded 16-byte cursor struct with a plain `char *` cursor preserves all 776 bytes
+in each carrying release's local check. Keep the compiler's padding implicit.
+Likewise, adjacent GP-relative addresses establish spacing, not the complete size
+of each external object. A known field prefix does not justify a bounded small-data
+declaration when the owning allocation or remaining consumers are unknown.
+
 ### Save order and loop padding
 
 The default game profile uses 8-byte GPR slots and ascending GPR save/restore order.

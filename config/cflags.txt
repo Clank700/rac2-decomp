@@ -496,3 +496,49 @@ src/levels/shared/L00_0038FC48-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -fr
 src/levels/shared/L00_00396078-g64.c	-O2 -G64 -Wa,-G64 -ffunction-sections
 src/levels/shared/L02_00410450-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L02_00410D00-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L18_002CFD68-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/16_snivelak/L16_00416EC8-g16-qcopy.c	-O2 -G16 -Wa,-G16 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L11_00460258-g32.c	-O2 -G32 -ffunction-sections -Wa,-G32 -g
+src/levels/20_yeedil/L20_0039E770.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/06_notak/L06_00400498-g8.c	-O2 -G8 -ffunction-sections -mno-split-addresses
+src/levels/06_notak/L06_003C5ED8.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/levels/02_maktar_nebula/L02_003CD668.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_00413730-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_0040CAF0-g8.c	-O2 -G8 -ffunction-sections
+src/levels/16_snivelak/L16_00413700-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/16_snivelak/L16_00411600-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/16_snivelak/L16_004130B0-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/23_damosel_orbit/L23_0042AD10.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/02_maktar_nebula/L02_003DAF90-g16.c	-O2 -G16 -Wa,-G16 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L05_0037B108.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/01_oozla/L01_002F2570-g8.c	-O2 -G8 -ffunction-sections -Wa,-G8 -g -frac2-zero-ti-por
+src/levels/shared/L00_00378E90.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_00382910.c	-O2 -G32 -Wa,-G32 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003825C8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_00388490.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_0038AAD0.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_002AABE0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-gcse
+src/levels/shared/L00_003B81D0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/03_endako/L03_0041CEB0.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por -mno-split-addresses
+src/levels/07_siberius/L07_003F6328.c	-O2 -G16 -Wa,-G16 -mno-split-addresses -ffunction-sections -Wall -Werror
+src/levels/01_oozla/L01_00416E78-camera.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/01_oozla/L01_003DD3A0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/06_notak/L06_00456F08.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L05_00427B20.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/17_smolg/L17_00340DD0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/11_joba/L11_003F7F58.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L08_003CD648.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L08_003C63F0-g8.c	-O2 -G8 -ffunction-sections
+src/levels/04_barlow/L04_00412AF8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
+src/levels/10_hrugis_cloud/L10_0042E4D0.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L03_003CC478.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/04_barlow/L04_00422D40-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/shared/L02_003D7040-g8.c	-O2 -G32 -Wa,-G32 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/shared/L02_00402300-g8.c	-O2 -G16 -Wa,-G16 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/shared/L16_0040C7E8-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -mno-split-addresses
+src/levels/09_dobbo/L09_004050E0.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L00_00326620.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L01_00311C18.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -ffast-math -g
+src/game/0027EA28.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/0027E920.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L22_003300E8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

@@ -246,6 +246,16 @@ impossibility. The combined tree subsequently passes all 84 strict program build
 
 Five early-wave bodies passed quick checks but failed full placement with “needs .rodata at its place, which is not C.” Generated rodata/sdata dependencies remain a linking limitation; strict mode rejects fallback. A named retail table is different, but its dispatch match alone does not validate every computed-goto target or internal case-label placement.
 
+Confirmed again on 24 October 2026: `func_L04_004323F8` (312 bytes) and
+`func_L04_00432530` (224 bytes) each pass 5/5 local placements in all three releases,
+but actual USA strict builds reject their generated `.rodata` dependencies.
+An object-dependency audit found the same issue in `func_L19_00421E80` (760 bytes),
+whose local USA checks pass 1/1 in each USA release; an actual USA level19 strict
+build confirms its rejection. PAL has no catalogue entry for that name. All three
+complete reconstructions remain in `nonmatching/` and add no C coverage. Their
+source and relocation dependencies must be qualified together; fabricated aliases,
+external case-label tables and assembly fallback are not fixes.
+
 A switch's comparison tree is also a separate source problem: func_L19_00423CC0 resisted the tested case permutations, whereas explicit comparisons/gotos matched func_L20_00442C10. Wave8 associated one tree form with three labels, one sharing default; this is a bounded recipe.
 
 Historical boot candidates func_00119BF8(3072 bytes, table 0x13A7B0) and func_00118D98(3368 bytes, table 0x13A6C0) remain markers. The recorded binary comparison distinguished their vfprintf-family implementation from the public newlib tree: PRINT used memcpy/writer calls instead of iovecs/sprint; cvt returned via a static buffer rather than a digit pointer; the observed Inf/NaN strings differed. func_001185E8's attempted reconstruction was 1508 versus 1496 bytes. These are historical implementation clues, not permission to use prohibited SDK sources or headers.
@@ -713,6 +723,17 @@ agent's did.
 that counts is `tools/build.py`, not `tools/check.py` in the worker's tree. Where a body's own
 unit cannot hold it, it needs a file of its own.
 
+**A separate linked-section dependency, verified on 24 October 2026:**
+`func_00306040` passed local checks while its direct same-unit call required
+`.text.func_00305838`, a boot-only catalogue identity. The level programs instead
+call the already-C `func_L00_003883B8`. All 84 retail call sites resolve to these
+144-byte, byte-identical packet initializers, each consuming one output pointer.
+Using the genuine per-program external `ref_00306040_01(void *packet)` preserves
+both catalogue identities and resolves the dependency; the existing build then
+passes all 84 programs with `--strict`. This is an application of scoped references,
+not an alias or a reason to import a boot-only section into every level. A local
+match cannot establish that the complete program can resolve its C dependencies.
+
 <a id="blocker-33"></a>
 
 ## 33. The 64-bit difference in specific attempts
@@ -819,7 +840,27 @@ These are measured source/ABI effects, not permission to invent barriers or fals
   adjusting only its first pointer. Explicit contracts reproduce the existing
   instructions; these repairs add no new-function credit. Check stack arguments
   beyond the eight GPR slots as well: the retained `func_L03_003C3220` calls
-  `func_L00_0032C700` with four additional words, `1, 0, 0, 0`.
+  `func_0032C700` with four additional slots, `1, 0, 0, NULL`. The helper
+  consumes eight GPR inputs, two floating inputs and those four stack slots;
+  its last slot is a nullable pointer, and it returns the allocated object pointer.
+- **A byte match can hide an incomplete C interface.** Existing wrappers can leave
+  an incoming register or final result untouched without naming it in C. Restoring
+  explicit forwarding makes the contract usable beyond that accidental preservation.
+  `func_002AA738(float, int, float)` preserves the established interleaved parameter
+  order and forwards both floats to `func_00283BE0`; `func_L00_002B9B38` returns
+  its float result. Its `func_002830C0` scratch is four floats, even though only
+  the first two components are read afterward. The old two-float declaration
+  understated the vector write; the honest 16-byte buffer preserves retail's frame.
+  The same input/output audit restores `func_L01_0031BC68`'s live float and integer
+  result, `func_002703B0`'s float result, and the live pointers in
+  `func_L00_003252A8` and `func_L10_0039D728`. Verify the caller, callee and all
+  carrying placements before accepting
+  such repairs; they add no new-function credit.
+- **A pointer-shaped prototype can conceal a numeric argument.** The third GPR
+  input of `func_L16_004116C8` is a signed 32-bit transition duration: its callee
+  tests it with `bgtz`, converts it through `func_00283CE0(int)` and takes a
+  reciprocal. Preserve the separate float input and use an integer duration;
+  casts of frame counts to `void *` are not the semantic contract.
 - **An integer register does not imply an `int` result.** The retained
   `func_L00_002A3B88` forwards `func_0028E640`'s complete 64-bit texture descriptor
   to `func_0028F410`. The callee builds it with a shift and OR; truncating to
@@ -936,6 +977,15 @@ Words **and operands** matter: qualifying sp-by-sp adjustments, zero moves and n
 The four-byte residue rule also needs its measured position after a completed return and delay slot. PR #253 now handles five additional specifically audited mixed-instruction residues (section 50), not an opcode-only generalization.
 
 An extent beginning inside a prior epilogue but containing a later real function needs an entry correction, not deletion. Positive stack adjustment is only a clue. Verify call/data/vtable entries, preserve ends and raw bytes, and preserve boot/level identity when regenerating fingerprints. Other mixed boundaries remain open.
+
+One boot example remains open: USA v1.01 callers `func_0027B440` and
+`func_00291850` enter `0x00126288`, four bytes after the catalogued
+`ASM_FUNC` entry `func_00126284`. A direct read of the boot's loaded ELF bytes
+confirms `0xCDCDCDCD` at `0x00126284`; decoding that filler as `pref` is misleading.
+The following `sll` at `0x00126288` begins the observed call target. Keep the caller
+reconstructions unlinked until the entry, neighbouring extents and corresponding
+release identities are qualified. No catalogue correction, invented symbol or
+additional matching/assembly credit is implied by this observation.
 
 <a id="blocker-48"></a>
 
