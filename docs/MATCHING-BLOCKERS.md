@@ -145,7 +145,11 @@ Historically 148 of 240 notes mentioned allocation disagreements. A common signa
 
 Named counterexamples now pass: func_L09_004081F0 and func_L12_0041BDF8 each 1/1; func_L17_003E6F20 1/1; func_L22_003A2CB8 2/2. Other examples included func_L01_00416B30(five unsuccessful attempts), func_L07_003F8C38(a declaration-order observation), func_L20_00444018, and func_L00_00409480. Their status is not inferred from these successes.
 
+**23 October 2026 retained near miss:** `func_002F71B8` (356 bytes, boot plus 27 levels; game `-O2 -G8 -ffunction-sections`) remains unmatched after ten checker invocations across four plain-C forms. The best draft is exactly 356 bytes but 0/28 in USA v1.01, PAL and USA v2.00; each reports its first mismatch at +0x8. The five-word table copy, guarded call and three 12-byte record stores are recovered, while the prologue/base live ranges and initial register allocation still differ. Explicit SDA declarations produce the two GP-relative references in the size-exact draft; a no-SDA form was 348 bytes. Retained in `nonmatching/game/func_002F71B8.c`; reopen with a measured source-lifetime hypothesis, not artificial barriers.
+
 The wave 8 allocator investigation remains useful: global.c prioritizes approximately floor_log2(n_refs)*n_refs/live_length, with loop-weighted references; cc1 -dl exposes refs/live_length. In two samples, changing actual references moved a saved-register assignment while 15 declaration permutations did not. Inspect real live ranges and distinct pseudos before editing reference counts. Several identical compiles justify stopping one approach, not declaring every other meaningful source/profile impossible.
+
+**func_002A7470 (23 October 2026):** With `-O2 -G8 -ffunction-sections`, six plain-C forms reached a best 356/364 bytes and 0/28 placements in both USA v1.01 and USA v2.00; PAL has no catalogue row. The retained draft reconstructs the early helper, threshold guard and state updates, but its dynamic 16-byte-copy allocation and final table-byte access differ. A 360-byte form matched the `lq`/`sq` copy sequence but kept the animation index in `$s5`, expanding the frame from 0x40 to 0x50. **Next:** preserve the copy's pointer allocation while recomputing the animation index without a callee-saved live range. The size mismatch means the checker did not reach relocation-aware comparison.
 
 **Large state dispatchers (23 October 2026).** The retained
 [`func_L22_002BF1B0`](../nonmatching/levels/func_L22_002BF1B0.c) now contains the
@@ -226,6 +230,8 @@ placements in each release, followed by all 84 strict program builds of the comb
 
 Other division/label-boundary failures remain bounded near misses. Retain exact source, line layout and profile; do not add dummy instructions or manual padding.
 
+**23 October 2026, retained near miss:** `func_002A88A0` (default game -G0, 264 bytes, 28 placements in each release) has a 244-byte plain-C draft; four source forms matched 0/28 in USA v1.01, PAL, and USA v2.00. Its non-NOP instruction sequence aligns after accounting for relocated calls and branch displacements, but retail has five extra `nop` words around three divisions. The cause is unknown and may not be the label-padding case above. Reopen with compiler/source-shape evidence; do not add artificial barriers. The marker is restored and no full build was run.
+
 `func_L00_003A2408` provides another control: the complete reconstructed body is
 348/356 bytes with the default profile, differing only by the two pre-division nops.
 Putting the conversion call and division on separate C source lines in a dedicated
@@ -260,6 +266,16 @@ A switch's comparison tree is also a separate source problem: func_L19_00423CC0 
 
 Historical boot candidates func_00119BF8(3072 bytes, table 0x13A7B0) and func_00118D98(3368 bytes, table 0x13A6C0) remain markers. The recorded binary comparison distinguished their vfprintf-family implementation from the public newlib tree: PRINT used memcpy/writer calls instead of iovecs/sprint; cvt returned via a static buffer rather than a digit pointer; the observed Inf/NaN strings differed. func_001185E8's attempted reconstruction was 1508 versus 1496 bytes. These are historical implementation clues, not permission to use prohibited SDK sources or headers.
 
+**24 October 2026, shared record lookup:** `func_002F6510` remains a
+244/248-byte near miss under game `-O2 -G8 -ffunction-sections`, with 0/28
+placements in each release. Six checker invocations (no scratch compiles)
+measured 232-byte raw-index, 264-byte duplicated-call and 244-byte shared-call
+forms. A named-table computed-goto probe did not preserve retail arm offsets
++0x60/+0x64; the retained semantic switch in `nonmatching/game/func_002F6510.c`
+avoids that invalid binding assumption. Root/index lifetime and address setup
+still differ. Reopen with independent type/lifetime evidence and exact arm
+layout; neither generated switch data nor linking has been qualified.
+
 <a id="blocker-07"></a>
 
 ## 7. Annulled integer branch delay slots
@@ -284,6 +300,8 @@ The historical sample is retained: 47 of 240 notes mentioned gp/sda/G8; one 23-t
 
 Two documented names may express different addressing forms of one real global. They must derive the same true identity; malformed names, invented addresses or aliases hiding inconsistent bindings are not remedies. PR #244's review corrected such naming defects. Use ref_LNN_XXXXXXXX_kk where a target's identity genuinely varies by placement, not as a substitute for a known correct data name.
 
+**24 October 2026, retained near miss:** `func_002721C8` (game `-O2 -G8 -ffunction-sections`) is 176/184 bytes and 0/28 placements in each of USA v1.01, PAL and USA v2.00. A typed partial camera-state view recovers the 0x30 frame and saved registers; a raw byte view was 168 bytes and a `nosda` scalar grew to 200. Retail uses absolute address/first-load forms and a later GP read of the same scalar, while the retained single canonical SDA declaration uses GP throughout. Six checker invocations, no scratch compiles; size mismatch prevents relocation-qualified binding checks. The actual C is in `nonmatching/game/func_002721C8.c`, with its source marker restored. Reopen with evidence for the real scalar storage/declaration and its two addressing forms, without duplicate invented identities or scheduling barriers.
+
 <a id="blocker-09"></a>
 
 ## 9. Folded addresses where retail materialises the base
@@ -307,6 +325,12 @@ explicitly. Seventeen bodies that had been landed with them were removed from `s
 and sit in `nonmatching/` with their notes, waiting for a plain-C spelling. The remaining levers are
 `mode(TI)` assignment (offset folded, wrong when retail materialises) and an aggregate/`memcpy`
 spelling (neither reproduced it in the waves' attempts). A sibling shape was re-confirmed on the `func_L00_003B0AB0` / `B0A28` / `B0CE8` family in wave 8: retail keeps `lui %hi(D) ; addiu %lo(D) ; addiu rd,rs,CONST` with the constant in a **separate** `addiu`, and all seven source forms tried (`D+0xC+idx*0x1C`, `(char *)&D[idx*0x1C]+0x10`, `((char (*)[0x1C])D)[idx]+0x10`, a local base, ...) folded `D+CONST` into the `%lo`. Those seven forms did not close that family; this is a bounded result, not a proof about every legal source form.
+
+**24 October 2026 linked C qualification:** `func_00270D50` (220 bytes) passes 28/28 placements in each of USA v1.01, PAL and USA v2.00 in its dedicated `-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier` unit. The default profile gave 204 bytes; qcopy alone recovered retail size but still moved address/call setup and restores across the copies. The existing barrier profile reproduces the complete body without a source barrier. The C keeps the camera fields within the canonical `D_L00_001B8C80` object and the established six-pointer `func_00270B58` interface; the helper also passes 28/28 checks per release. All 84 strict program builds pass with the candidate linked, without C fallback. This is one distinct function, not one per placement.
+
+**24 October 2026, barrier-profile near-miss requalification:** five retained near misses whose notes named the missing inline-asm copy barrier were closed by moving them to dedicated `-frac2-qcopy -frac2-qcopy-barrier` units: `func_00270EA8` (56 bytes), `func_00270E30` (116), `func_00302A20` (100), `func_003353C8` (88) and `func_002AD6F0` (196). Before the barrier they were one restore or one copy-address allocation away: `func_002AD6F0` was 195/196 bytes, `func_00270E30` 112/116, `func_00302A20` 97/100, `func_003353C8` 88/88 with the epilogue restore hoisted above the copy, and `func_00270EA8` 56/56 with only the copy-address registers wrong. Each passes 28/28 in USA v1.01, PAL and USA v2.00, and the existing `func_002718B8` in the shared `0026EA00-qcopy` unit still passes. The retained drafts are removed once the linked build confirms them.
+
+**24 October 2026, second barrier requalification:** four more reserved near misses close with the same profile: `func_002BB838` (236 bytes, 28 places in all three releases), `func_00313678` (84 bytes, 28 places in all three), and the boot-only twins `func_00304AD0` (148) and `func_00307298` (148), each 1/1 in USA v1.01 and USA v2.00 with no PAL catalogue row. `func_00313678` additionally needed the source to keep the copy source in a `char *` local while the call passes the same pointer; qcopy alone folded the load. The G8 twins needed the barrier to reproduce their first-call argument setup.
 
 <a id="blocker-10"></a>
 
@@ -454,6 +478,8 @@ Merged PR #251 provides the qualified, default-off per-file `-frac2-zero-ti-barr
 A start inside a prior epilogue, measured linker filler, or an implausible entry warrants an extent/reference audit before matching.
 
 No jr, two returns, a short size, or a register read before its local definition is not proof by itself. Trap/tail-call bodies may lack jr; ABI-defined live-ins must be considered. A four-byte residue needs its surrounding completed return and reference evidence, not just its size.
+
+**Unresolved extent/entry hypothesis: `func_002D9730` (USA v1.01, PAL, USA v2.00).** Its 100-byte body has the same decoded sequence across the three releases apart from release-specific call targets. At the USA v1.01 start, the preceding function returns at `0x2D9728` with its stack adjustment in the delay slot; the next word clears object offset `0x44`. The target then makes four positive stack adjustments (`+0x10`, `+0x30`, `+0x10`, `+0x130`), each followed by `nop`, before allocating a 16-byte call frame, saving `$ra`, making three calls and returning 8. A direct branch/call scan of USA v1.01 boot text found no target inside the extent; indirect references have not been traced. The retained C draft compiles to 64 bytes under the default game profile and matches 0/28 places in each release. A 96-byte `__builtin_alloca` probe still emitted the compiler's normal frame-pointer/RA prologue before the clear. This does not distinguish a hidden indirect entry from an extent boundary; do not change the catalogue or classify it handwritten. Next: trace indirect references and the incoming stack/argument ABI before another C attempt.
 
 The 49-worker wave reported roughly 30 suspects. Those are historical candidates; later rules in PRs #239/#241/#253 resolve specific filler/residue cases. Mixed prefix/body boundaries and the appendix's other proposals remain separate individually evidenced tasks.
 
@@ -905,6 +931,20 @@ are **one** pseudo living across three calls: no reference count can make it eli
 
 **Consequence:** check the `.lreg` for a separate pseudo before touching reference counts. A value present only as `(plus (reg N) K)` explains why edits to a nonexistent separate pseudo cannot help; it is not a universal impossibility proof.
 
+**23 October 2026, retained near miss:** `func_002D5048`, USA v1.01 only, 164 bytes at 28 places. The existing game compiler with `-G8` gives 164/164 bytes, 0/28; six tail words differ from the checker first mismatch at +0x70. A named first-path pointer and `nosda` output binding recover the prefix. Six compiles included the stub; the last three source forms gave identical bytes. The real C remains in `nonmatching/game/func_002D5048.c`, its source marker restored. Reopen with independent lifetime/allocation evidence for the second update path; this is neither a match nor a universal compiler limitation.
+
+**23 October 2026, retained near miss:** func_00290B48, default game -G0 profile, 280 bytes at 28 places in each release. Four source arrangements reached retail size but left central allocation, immediate construction and store scheduling different. The retained C corrects memset to its destination-pointer return type; that corrected source is 280 bytes, 0/28 in us, pal and us2, first difference +0x3C. Nine checker invocations total. Boundary-reference roles are inferred and successful per-placement derivation remains unproven. Source marker restored; reopen with state-layout/store-order or matched-equivalent evidence.
+
+**23 October 2026, semantic draft only:** func_00278EB0 remains a marker. Nine checker invocations measured an earlier default -G0 draft at 204 bytes, 0/28 placements in every release, with two independent additions swapped at +0x70/+0x74. Coordinator review found inaccurate callee declarations. The retained nonmatching/game/func_00278EB0.c now uses the existing 64-bit wait-mask and no-argument field-query signatures; its current bytes and placements are unmeasured. The earlier results are superseded as qualification evidence. Reopen with coordinate-type/scheduling evidence and validate the accurate ABI before claiming size or equality.
+
+**23 October 2026, retained near miss:** `func_0028E2A8` has a 332-byte plain-C `-G8` draft against 348 retail bytes, 0/28 in USA v1.01. Ten target runs included one checker environment failure and an incomplete-array compile failure. A separate 344-byte section-annotated diagnostic matched 0/28 in USA v1.01, PAL, and USA v2.00. Recomputing the second record lookup and moving to a G8 sibling improved the draft, but register allocation, branch layout, and external-address materialization remain different. The marker is restored; reopen with verified global storage and argument-layout evidence.
+
+**23 October 2026, retained near miss:** `func_0028B160` uses the default game -G0 profile in `src/game/00288D88.c`; its 292-byte body has 28 placements in each release. Six plain-C candidates were measured, and the best three reached 280 bytes, 0/28 in USA v1.01, PAL, and USA v2.00. Since the size differed, the checker did not perform relocation-adjusted byte comparisons. The retained draft models the count loop, renderer call, and scaled offset update. Its object diff shows different register allocation and layout; the proposed cause is unverified. Reopen with `.lreg` lifetime evidence or a new source-shape hypothesis. The marker is restored and no full build was run.
+
+**23 October 2026, retained near miss:** `func_00280670` is 160 bytes with 28 placements in each release. Ten plain-C forms reached 152 bytes and 0/28 in USA v1.01, PAL, and USA v2.00. The retained record-based counted-threshold loop still differs in register allocation and loop setup. Reopen with verified record-layout or argument-liveness evidence; the marker is restored and no full build was run.
+
+**23 October 2026, retained near miss:** `func_002BCB00` is 340 bytes with 28 placements in USA v1.01 and USA v2.00; PAL has no catalogue entry for the name. Nine default-game-profile source compiles included one failed literal form; the eight compiled variants measured 328, 324, 328, 332, 332, 332, 332 and 336 bytes. The best candidate matched 0/28 in both releases. Its saved-register assignment, pointer setup, and scheduling around vector copies and the float constant still differ. Reopen with ABI or allocation evidence; the marker is restored and no full build was run.
+
 A separate argument-setup tie remains in `func_L00_002A5048`: the retained C
 produces 800/800 bytes with `-O2 -G0 -ffunction-sections -frac2-qcopy
 -frac2-qcopy-barrier`, but passes 0/27 in both US releases (no PAL catalogue
@@ -1169,6 +1209,12 @@ were left on the table for nothing. The over-broad classes are:
 * **An indirect call has no sibling-call form.** `func_002B9380` is a tail call in the
   retail (`jr $v0`) and comes out as `jalr $v0` with an epilogue; five spellings were
   measured and `-mastra-sibcall` does not change the indirect target.
+* `func_002B9390` remains a local near miss under `-O2 -G8 -ffunction-sections`:
+  six plain-C forms model the 0x40-byte record scan and indexed handler call, but the
+  140-byte best form matches 0/28 places in US, PAL and US2. Its prologue saves `$ra`
+  in a stack frame; retail stores it at `$gp+0x2DB8`. Next: find a plain-C source shape
+  that reproduces that return-address slot and the loop branch layout. This is not
+  evidence for handwritten assembly.
 * **A body that a worker could not close in a hundred spellings is a wall to record**,
   not a near miss to retry.
 

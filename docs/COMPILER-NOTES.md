@@ -309,6 +309,18 @@ links retain producer latencies; interblock motion sees a store; jump2 can remov
 move that a volatile operation retains. `func_002B50E0` retained three argument-move
 differences. Artificial clobbers, register pins and inline assembly remain forbidden.
 
+24 October 2026: the barrier closed five retained near misses whose notes had named the
+missing inline-asm copy barrier: `func_00270EA8` (56 bytes), `func_00270E30` (116),
+`func_00302A20` (100), `func_003353C8` (88) and `func_002AD6F0` (196), in qualified
+qcopy/barrier units. Before the barrier they were one restore or one copy-address
+allocation away; after it each is 28/28 in USA v1.01, PAL and USA v2.00. This is further
+evidence for the dependence model, not a blanket claim that every copy near miss closes.
+
+The same profile closed four more near misses: `func_002BB838` (236 bytes), `func_00313678`
+(84), and the boot-only G8 twins `func_00304AD0` and `func_00307298` (148 each; 1/1 in both
+USA releases, no PAL row). For `func_00313678` the copy source had to stay in a `char *`
+local while the call passed the same pointer; qcopy alone folded the load.
+
 The retained `func_00335370` exposes another latency gap: sched2 moves an independent
 return-address restore between a field load and address formation. Correct copy size
 alone did not qualify its epilogue; a repaired tail with scheduling disabled changed
