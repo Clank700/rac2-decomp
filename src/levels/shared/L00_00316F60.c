@@ -121,7 +121,7 @@ extern void func_00283D38_2(s32, s32, f32);
 
 extern void func_002A93B0(void);
 
-extern void func_00283D38(void);
+extern int func_00283D38(int from, int to, float fraction);
 
 extern int func_002EF250(float);
 
@@ -266,9 +266,9 @@ void func_L00_0031C978(void)
     func_002A93B0();
 }
 
-void func_L00_0031C998(void)
+int func_L00_0031C998(int from, int to, float fraction)
 {
-    func_00283D38();
+    return func_00283D38(from, to, fraction);
 }
 
 

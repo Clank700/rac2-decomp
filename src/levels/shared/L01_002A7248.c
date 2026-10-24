@@ -106,7 +106,7 @@ extern void func_002AEC18(void *a0, int a1);
 
 extern float func_002E3B10(float f12, float f13);
 
-extern void func_003212C0(char *a0, char *a1, float f12);
+extern int func_002B50E0(char *a0, char *a1, float f12);
 
 extern char *func_00321F08(int a0);
 
@@ -115,7 +115,6 @@ extern void func_003140B0(char *a0, char *a1, int a2, float f12, float f13,
 
 extern char D_00139A28[];
 
-extern int func_003246F8(void);
 
 extern int D_L01_001A79F0;
 
@@ -364,10 +363,10 @@ void func_L01_003208D0(void *a0, float *a1, int a2) {
 
 INCLUDE_ASM("asm/levels", func_L01_003209F8);
 
-void func_L01_00321178(char *a0, char *a1) {
+int func_L01_00321178(char *a0, char *a1) {
     float v = func_002E3B10(*(float *)(a1 + 0) - *(float *)(a0 + 0x10),
                             *(float *)(a1 + 4) - *(float *)(a0 + 0x14));
-    func_003212C0(a0, a1, v);
+    return func_002B50E0(a0, a1, v);
 }
 
 int func_L01_00322288(int a0, float f12) {
@@ -415,12 +414,9 @@ void func_L01_003246A0(int a) {
         *(int *)p = 1;
 }
 
-void func_L01_003246D0(void) {
-    func_L01_003246A0(func_003246F8());
-}
+/* func_L01_003246D0 is defined in L01_003246D0.c. */
 
-/* scans the half-open span the counter global picks out of the pair table, looking for
-   the caller's key; the key rides in $a0 without a caller-side argument */
+/* Scans the half-open span of the pair table for the caller's key. */
 int func_L01_003246F8(int key) {
  unsigned n=(unsigned)D_L01_001A79F0;
  int i;

@@ -215,7 +215,7 @@ unsigned int func_0026F740(void)
     return 0;
 }
 
-unsigned int func_0026F748(void)
+unsigned int func_0026F748(int unused0, int unused1)
 {
     return 0;
 }
