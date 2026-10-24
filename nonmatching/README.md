@@ -13,6 +13,7 @@ later dated entries record their own profiles and measurements. Neither is proof
 of semantic correctness or matching credit without a strict linked build.
 | Function | Size | Status and remaining differences |
 | --- | ---: | ---: |
+| [`func_00280670`](game/func_00280670.c) | 152 | Ten plain-C variants with the record and counted-threshold loop model; best is 152/160 bytes and 0/28 in USA v1.01, PAL and USA v2.00. Register allocation and the loop setup still differ; retry with verified record-layout or argument-liveness evidence. |
 | [`func_00282BE0`](game/func_00282BE0.c) | 40 | the body is VU0/GTE code: the 0x4A/0x4B words are COP2 special2 instructions and the ldc2/sdc2 are the VU's double load and store; this cc1 emits ldc1/sdc1 for a double and never a COP2 word; plain C cannot emit it |
 | [`func_00282C10`](game/func_00282C10.c) | 32 | the body is VU0/GTE code: the 0x4A/0x4B words are COP2 special2 instructions and the ldc2/sdc2 are the VU's double load and store; this cc1 emits ldc1/sdc1 for a double and never a COP2 word; plain C cannot emit it |
 | [`func_00282C58`](game/func_00282C58.c) | 16 | the 0x70xxxxxx words are MMI0 instructions, which belong to the MMI unit; this cc1 never emits them; plain C cannot emit it |
