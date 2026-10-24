@@ -511,3 +511,4 @@ src/levels/02_maktar_nebula/L02_003DAF90-g16.c	-O2 -G16 -Wa,-G16 -ffunction-sect
 src/levels/16_snivelak/L16_00413700-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
 src/levels/16_snivelak/L16_00411600-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
 src/levels/16_snivelak/L16_004130B0-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/23_damosel_orbit/L23_0042AD10.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
