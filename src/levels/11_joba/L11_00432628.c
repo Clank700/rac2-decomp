@@ -435,7 +435,7 @@ void func_L11_0043AB28(char *obj)
 INCLUDE_ASM("asm/levels", func_L11_0043ACB0);
 
 /* Maps the measured selector onto its small index. */
-INCLUDE_ASM("asm/levels", func_L11_0043E090);
+/* func_L11_0043E090 is defined in L11_0043E090.c. */
 
 /* Maps the measured selector onto its large index. */
-INCLUDE_ASM("asm/levels", func_L11_0043E108);
+/* func_L11_0043E108 is defined in L11_0043E108.c. */

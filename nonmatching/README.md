@@ -491,7 +491,6 @@ of semantic correctness or matching credit without a strict linked build.
 | [`func_L01_0042A6F0`](levels/func_L01_0042A6F0.c) | 132 | Build refusal recorded; the exact remaining discrepancy was not recorded. |
 | [`func_L01_0042E0A8`](levels/func_L01_0042E0A8.c) | 248 | Recorded candidate is 244 bytes; size does not match retail. |
 | [`func_L02_003FCBF0`](levels/func_L02_003FCBF0.c) | 172 | Recorded G8 candidate is 180 bytes; size does not match retail. |
-| [`func_L02_004114A0`](levels/func_L02_004114A0.c) | 144 | Recorded link refusal: needs .rodata at its place, which is not C. |
 | [`func_L03_002AB5C8`](levels/func_L03_002AB5C8.c) | 148 | Recorded candidate is 144 bytes; size does not match retail. |
 | [`func_L03_0038B2E8`](levels/func_L03_0038B2E8.c) | 168 | Recorded instruction mismatch at +0x8. |
 | [`func_L03_0038B4E8`](levels/func_L03_0038B4E8.c) | 192 | Recorded candidate is 184 bytes; size does not match retail. |
@@ -953,8 +952,6 @@ of semantic correctness or matching credit without a strict linked build.
 | [`func_L00_002B1308`](levels/func_L00_002B1308.c) | 0 of 27 | needs .rodata at its place, which is not C |
 | [`func_L00_002D4A38`](levels/func_L00_002D4A38.c) | recovered: 27 of 27 | Current C in `src/levels/shared/L00_002D3798.c` uses an opaque `sda` reference under G0; the old partial draft is retained here for reference. |
 | [`func_L00_00424BB8`](levels/func_L00_00424BB8.c) | 23 of 27 | instruction at +0x28 differs: `16_snivelak`, `22_dobbo_orbit`, `23_damosel_orbit` and `26_jamming_array` hold other constants |
-| [`func_L11_0043E090`](levels/func_L11_0043E090.c) | 0 of 1 | needs .rodata at its place, which is not C |
-| [`func_L11_0043E108`](levels/func_L11_0043E108.c) | 0 of 1 | needs .rodata at its place, which is not C |
 | [`func_00120A30`](core/func_00120A30.c) | 132 | Loop, table and byte-kind test exact; this cc1 leaves the index in `$a0` where retail copies it to `$a2` at entry. Three loop wordings give the same 132 bytes |
 | [`func_00122760`](core/func_00122760.c) | 152 | Every instruction matches; 4 short because retail has a standalone `nop` before the `bnel`, and the normal path's three stores take different slots |
 | [`func_0011B0B0`](core/func_0011B0B0.c) | 144 | C except the two `sync` barriers, which no construct in this toolchain emits (`__sync_synchronize()` becomes a call). May belong as ASM_FUNC |

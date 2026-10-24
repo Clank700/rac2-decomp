@@ -287,6 +287,24 @@ tests. The colors pass five placements each per release; Grelbin passes its one
 placement in each USA release and is absent from PAL; both core functions pass
 their boot placement in every release. Generated progress reports are unchanged.
 
+**Additional switch candidates:** the retained Joba converters
+`func_L11_0043E090` (116 bytes) and `func_L11_0043E108` (148 bytes) illustrate why
+instruction equality alone is insufficient: their old C bodies matched, but
+their generated tables sent several indices to the wrong return-value arms.
+Table qualification rejected both with inconsistent text-section bindings.
+Correcting the ordinary C `case` labels preserves the instruction layout while
+reproducing the actual dispatch mapping; neither table words nor case addresses
+are patched. Their separate translation units preserve retail's spacing between
+tables without adding source padding. The shared message selector
+`func_L02_004114A0` (144 bytes) also brings a branch table, rather than a scalar
+lookup pool, and needs no additional build mechanism.
+
+These three functions are integrated with 408 additional distinct primary code
+bytes. The shared selector passes seven USA v1.01 placements and is absent under
+that name in USA v2.00/PAL; each Joba converter passes one placement per release.
+All 13 function/table placements are linked and audited. The full 84 strict
+program builds, 171 tests and all three progress checks pass; reports are unchanged.
+
 This supports complete input sections, including several tables when their
 original relative layout agrees. It does not split a mixed compiler section,
 repair a switch comparison tree, change arm order, resolve register allocation
