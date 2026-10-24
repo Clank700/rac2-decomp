@@ -546,4 +546,5 @@ src/levels/shared/L22_003300E8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy 
 src/game/002EEB00-flags.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/game/0026EA00-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/002AA800-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/00300618-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/002BB838-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
