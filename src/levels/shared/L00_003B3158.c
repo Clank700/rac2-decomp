@@ -127,7 +127,7 @@ void func_L00_003B6A90(NODE *a0)
 
 INCLUDE_ASM("asm/levels", func_L00_003B6B70);
 
-INCLUDE_ASM("asm/levels", func_L00_003B6F88);
+
 
 void func_L00_003B7190(float *a0, float *a1)
 {
@@ -196,7 +196,7 @@ void func_L00_003B8158(NODE *a0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003B81D0);
+
 
 INCLUDE_ASM("asm/levels", func_L00_003B8420);
 
