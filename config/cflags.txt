@@ -522,6 +522,7 @@ src/levels/shared/L00_003B81D0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2
 src/levels/03_endako/L03_0041CEB0.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por -mno-split-addresses
 src/levels/01_oozla/L01_00416E78-camera.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/01_oozla/L01_003DD3A0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/06_notak/L06_00456F08.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
 src/levels/04_barlow/L04_00412AF8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
 src/levels/04_barlow/L04_00422D40-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
 src/game/0027EA28.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
