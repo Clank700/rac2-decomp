@@ -531,5 +531,6 @@ src/levels/10_hrugis_cloud/L10_0042E4D0.c	-O2 -G8 -ffunction-sections -frac2-qco
 src/levels/04_barlow/L04_00422D40-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
 src/levels/09_dobbo/L09_004050E0.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L00_00326620.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L01_00311C18.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -ffast-math -g
 src/game/0027EA28.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/0027E920.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

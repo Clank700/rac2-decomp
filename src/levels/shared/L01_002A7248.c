@@ -241,7 +241,7 @@ INCLUDE_ASM("asm/levels", func_L01_002E2608);
 INCLUDE_ASM("asm/levels", func_L01_002EABA8);
 
 
-INCLUDE_ASM("asm/levels", func_L01_002F14E8);
+/* Defined in L01_002F14E8-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L01_002F1588);
 
@@ -251,7 +251,7 @@ INCLUDE_ASM("asm/levels", func_L01_002F1FD0);
 
 INCLUDE_ASM("asm/levels", func_L01_00304270);
 
-INCLUDE_ASM("asm/levels", func_L01_00310BC0);
+/* Defined in L01_00310BC0.c. */
 
 /* rac1-decomp src/overlays/shared/mobyutil_0026E8E0.c: func_L01_0026F090 */
 // Walks a list of moby indices and sets the state byte of each one that is non-negative.
@@ -270,7 +270,7 @@ void func_L01_003115E8(int list, int state)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L01_00311C18);
+/* Defined in L01_00311C18.c. */
 
 INCLUDE_ASM("asm/levels", func_L01_003120A8);
 
