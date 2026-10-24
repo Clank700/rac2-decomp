@@ -543,3 +543,4 @@ src/levels/shared/L01_00311C18.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2
 src/game/0027EA28.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/0027E920.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L22_003300E8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/0026EA00-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
