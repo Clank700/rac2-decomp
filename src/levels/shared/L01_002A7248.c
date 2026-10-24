@@ -94,10 +94,6 @@ extern void func_002E3918(void *a0, void *a1, void *a2);
 
 extern void func_002E3470(void *a0, void *a1, void *a2);
 
-extern float func_002E3A60(int a0, int a1);
-
-extern void func_002E4600(int a0, int a1, float f12);
-
 extern float func_00283B98(float f12, float f13);
 
 extern float func_00283198(float f12);
@@ -329,9 +325,9 @@ INCLUDE_ASM("asm/levels", func_L01_0031AB20);
 
 INCLUDE_ASM("asm/levels", func_L01_0031B300);
 
-void func_L01_0031BC68(int a0, int a1) {
-    float v = func_002E3A60(a0, a1);
-    func_002E4600(a0, a1, v * 0.5f + 0.5f);
+int func_L01_0031BC68(int a0, int a1, float phase) {
+    float v = func_00283198(phase);
+    return func_00283D38(a0, a1, v * 0.5f + 0.5f);
 }
 
 

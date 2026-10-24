@@ -15,7 +15,7 @@ extern float func_00283BE0_3(float, float);
 
 extern float func_00282C48_5(float);
 
-extern void func_00283B98_6(float, float);
+extern float func_00283B98(float, float);
 
 typedef unsigned char u8;
 
@@ -430,7 +430,7 @@ float func_002702C8(float *p, float a, float b, float c, float d, float lim)
 }
 
 /* Advances a stored float by a scaled helper result, then clamps it against a positive limit, then clamps it again with a second helper and finally rescales it through a third helper. */
-void func_002703B0(char *obj, float p1, float p2, float p3, float p4, float p5)
+float func_002703B0(char *obj, float p1, float p2, float p3, float p4, float p5)
 {
     float r;
     float t;
@@ -459,7 +459,7 @@ void func_002703B0(char *obj, float p1, float p2, float p3, float p4, float p5)
         *(float *)obj = -func_00282C48_5(r);
     }
 
-    func_00283B98_6(p1, *(float *)obj);
+    return func_00283B98(p1, *(float *)obj);
 }
 
 /* sets the referenced object halfword at 0x7e and clears its byte at 0x7d */

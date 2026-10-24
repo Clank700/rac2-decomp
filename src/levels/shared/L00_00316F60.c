@@ -145,7 +145,7 @@ extern void func_00283098(char *, char *, char *);
 
 extern void func_00282D30(void *, void *, float);
 
-extern void func_002AFFD8_1(u8 *) __asm__("func_002AFFD8");
+extern void func_002AFFD8(char *, char *, int);
 
 extern int D_001A8FF0;
 
@@ -487,9 +487,9 @@ void func_L00_00324F18(char *a0, char *a1, float f12, float f13, float f14) {
     func_00282CC0(a1, a1, a0 + 0x10);
 }
 
-void func_L00_003252A8(u8 *a0)
+void func_L00_003252A8(void *object, void *output, int mode)
 {
-    func_002AFFD8_1(a0 + 0x10);
+    func_002AFFD8((char *)object + 0x10, (char *)output, mode);
 }
 
 /* func_L00_003252C8 (flag-routed handler, reads the caller's a1) is a near miss:
