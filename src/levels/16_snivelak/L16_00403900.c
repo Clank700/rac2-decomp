@@ -171,7 +171,7 @@ INCLUDE_ASM("asm/levels", func_L16_00411368);
 
 /* func_L16_00411480 is defined in L16_00403900-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L16_00411600);
+/* func_L16_00411600 is in L16_00411600-qcopy.c. */
 
 /* Routes one transition request to the handle itself or to its first child, depending on
    the state word and on which of the two animation slots is current. */
@@ -223,7 +223,7 @@ INCLUDE_ASM("asm/levels", func_L16_00412E70);
 
 INCLUDE_ASM("asm/levels", func_L16_00412F48);
 
-INCLUDE_ASM("asm/levels", func_L16_004130B0);
+/* func_L16_004130B0 is in L16_004130B0-qcopy.c. */
 
 INCLUDE_ASM("asm/levels", func_L16_004133B0);
 
@@ -241,7 +241,7 @@ s32 func_L16_00413638(u8 *arg)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L16_00413700);
+/* func_L16_00413700 is in L16_00413700-qcopy.c. */
 
 INCLUDE_ASM("asm/levels", func_L16_00413D10);
 
