@@ -1,7 +1,3 @@
-/* Near miss from src/levels/shared/L02_00410450.c: the build refuses this body at its
-   place — needs .rodata at its place, which is not C. Kept as a starting point;
-   not linked, not counted. */
-
 /* Standalone declarations recovered from src/levels/shared/L02_00410450.c. */
 typedef unsigned char u8;
 
