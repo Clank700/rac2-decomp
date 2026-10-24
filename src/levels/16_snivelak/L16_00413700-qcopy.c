@@ -2,7 +2,7 @@
 typedef int BossQuadword __attribute__((mode(TI)));
 extern void func_00282DD8(void *, void *, void *);
 extern void func_002ACE78(float *, float *, float);
-extern void func_002A7750(u8 *, u8, int);
+extern void func_002A7750(u8 *, int, int);
 
 /* Starts a projectile with its velocity, gravity and perpendicular turn vector. */
 void func_L16_00413700(u8 *moby, float *velocity, float gravity)

@@ -134,8 +134,8 @@ extern void func_00282CC0_32(void *a0, void *a0b, float *local);
 
 extern float func_00282C48_9(float t);
 
-void func_002A7750(u8 *a0,u8 a1,s32 a2) {
- u8 old=a0[0x20];a0[0x20]=a1;a0[0x94]=old;*(short *)(a0+0x96)=0;
+void func_002A7750(u8 *a0,s32 a1,s32 a2) {
+ u8 old=a0[0x20];a0[0x20]=(u8)a1;a0[0x94]=old;*(short *)(a0+0x96)=0;
  a0[0xbe]&=~1;
  if(a2!=-1){a0[0x95]=(u8)a2;a0[0xbe]&=~2;}
 }

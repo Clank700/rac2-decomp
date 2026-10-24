@@ -17,7 +17,7 @@ extern void func_002A7A00(float *, float, float);
 extern void func_00282CC0(float *, float *, float *);
 extern float func_00283B98(float, float);
 extern void func_002AB800(s32, char *);
-extern void func_002A7750(u8 *, u8, s32);
+extern void func_002A7750(u8 *, s32, s32);
 extern void func_L02_0040CF68(u8 *);
 extern u8 D_L02_001BA500[];
 extern u8 D_00188660[];
