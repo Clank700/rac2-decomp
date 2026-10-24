@@ -524,6 +524,7 @@ src/levels/07_siberius/L07_003F6328.c	-O2 -G16 -Wa,-G16 -mno-split-addresses -ff
 src/levels/01_oozla/L01_00416E78-camera.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/01_oozla/L01_003DD3A0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/06_notak/L06_00456F08.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/levels/17_smolg/L17_00340DD0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/11_joba/L11_003F7F58.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/04_barlow/L04_00412AF8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
 src/levels/10_hrugis_cloud/L10_0042E4D0.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
