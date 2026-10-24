@@ -819,7 +819,27 @@ These are measured source/ABI effects, not permission to invent barriers or fals
   adjusting only its first pointer. Explicit contracts reproduce the existing
   instructions; these repairs add no new-function credit. Check stack arguments
   beyond the eight GPR slots as well: the retained `func_L03_003C3220` calls
-  `func_L00_0032C700` with four additional words, `1, 0, 0, 0`.
+  `func_0032C700` with four additional slots, `1, 0, 0, NULL`. The helper
+  consumes eight GPR inputs, two floating inputs and those four stack slots;
+  its last slot is a nullable pointer, and it returns the allocated object pointer.
+- **A byte match can hide an incomplete C interface.** Existing wrappers can leave
+  an incoming register or final result untouched without naming it in C. Restoring
+  explicit forwarding makes the contract usable beyond that accidental preservation.
+  `func_002AA738(float, int, float)` preserves the established interleaved parameter
+  order and forwards both floats to `func_00283BE0`; `func_L00_002B9B38` returns
+  its float result. Its `func_002830C0` scratch is four floats, even though only
+  the first two components are read afterward. The old two-float declaration
+  understated the vector write; the honest 16-byte buffer preserves retail's frame.
+  The same input/output audit restores `func_L01_0031BC68`'s live float and integer
+  result, `func_002703B0`'s float result, and the live pointers in
+  `func_L00_003252A8` and `func_L10_0039D728`. Verify the caller, callee and all
+  carrying placements before accepting
+  such repairs; they add no new-function credit.
+- **A pointer-shaped prototype can conceal a numeric argument.** The third GPR
+  input of `func_L16_004116C8` is a signed 32-bit transition duration: its callee
+  tests it with `bgtz`, converts it through `func_00283CE0(int)` and takes a
+  reciprocal. Preserve the separate float input and use an integer duration;
+  casts of frame counts to `void *` are not the semantic contract.
 - **An integer register does not imply an `int` result.** The retained
   `func_L00_002A3B88` forwards `func_0028E640`'s complete 64-bit texture descriptor
   to `func_0028F410`. The callee builds it with a shift and OR; truncating to
