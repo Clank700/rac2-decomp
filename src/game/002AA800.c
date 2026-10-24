@@ -646,7 +646,7 @@ int func_002AD5F8(char *unused, char *obj, char *arg2, char *arg3, char *arg4, c
     return 1;
 }
 
-INCLUDE_ASM("asm/game", func_002AD6F0);
+/* func_002AD6F0 uses the quadword-copy profile in 002AA800-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002AD7B8);
 
