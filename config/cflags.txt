@@ -550,3 +550,4 @@ src/game/00300618-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-
 src/game/002BB838-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/00304AD0-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/00307298-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/0030F7B0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
