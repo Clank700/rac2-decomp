@@ -16,7 +16,15 @@ extern int func_002712D8(void *, void *);
 
 
 /* Copies the resident object's saved vectors back into its working ones. */
+void func_00270EA8(void)
+{
+    unsigned char *object = (unsigned char *)D_001B5490;
 
+    if (object[2] != 0) {
+        *(TI128 *)(object + 0x50) = *(TI128 *)(object + 0xC0);
+        *(TI128 *)(object + 0x60) = *(TI128 *)(object + 0xD0);
+    }
+}
 
 extern char D_00189F70[];
 extern void func_00282CC0(char *first, char *second, char *third);
