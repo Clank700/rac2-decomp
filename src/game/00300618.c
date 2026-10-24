@@ -344,7 +344,7 @@ INCLUDE_ASM("asm/game", func_00302470);
 
 INCLUDE_ASM("asm/game", func_00302848);
 
-INCLUDE_ASM("asm/game", func_00302A20);
+/* func_00302A20 uses the quadword-copy profile in 00300618-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_00302A88);
 
@@ -372,7 +372,7 @@ INCLUDE_ASM("asm/game", func_00304128);
 
 INCLUDE_ASM("asm/game", func_00304210);
 
-INCLUDE_ASM("asm/game", func_00304AD0);
+/* func_00304AD0 uses the profile in 00304AD0-g8-qcopy.c. */
 
 void func_00304B68(char *object)
 {
@@ -653,7 +653,7 @@ INCLUDE_ASM("asm/game", func_00306680);
 
 INCLUDE_ASM("asm/game", func_00306A40);
 
-INCLUDE_ASM("asm/game", func_00307298);
+/* func_00307298 uses the profile in 00307298-g8-qcopy.c. */
 
 void func_00307330(char *object)
 {
