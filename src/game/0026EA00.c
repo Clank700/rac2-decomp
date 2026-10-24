@@ -570,7 +570,7 @@ void func_00270B58(float *out, float *p0, float *p1, float *dir0, float *dir1, f
     out[2] = func_00282DF0(diff);
 }
 
-INCLUDE_ASM("asm/game", func_00270D50);
+/* func_00270D50 is defined separately in 00270D50.c. */
 
 INCLUDE_ASM("asm/game", func_00270E30);
 
