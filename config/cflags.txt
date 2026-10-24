@@ -505,3 +505,5 @@ src/levels/01_oozla/L01_002F2570-g8.c	-O2 -G8 -ffunction-sections -Wa,-G8 -g -fr
 src/levels/shared/L05_0037B108.c	-O2 -G0 -ffunction-sections -mno-split-addresses
 src/levels/06_notak/L06_00400498-g8.c	-O2 -G8 -ffunction-sections -mno-split-addresses
 src/levels/06_notak/L06_003C5ED8.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/levels/02_maktar_nebula/L02_00413730-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_0040CAF0-g8.c	-O2 -G8 -ffunction-sections
