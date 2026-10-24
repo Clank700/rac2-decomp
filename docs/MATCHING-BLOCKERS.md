@@ -811,6 +811,19 @@ These are measured source/ABI effects, not permission to invent barriers or fals
 
 - **The fifth to the eighth arguments travel in `$t0`-`$t3`,** not on the stack. A body that
   reads `$t0` without a fifth parameter is not a catalogue defect.
+- **Audit the whole call interface before fitting register allocation.** A current C wrapper
+  can omit live forwarded inputs or a return. `func_002AFF08`, `func_L02_00329C48`
+  and `func_L00_00341A88` leave a floating result in `$f0`; their declarations must
+  return it. `func_L02_00329C48` also forwards its third pointer to `func_002B04E0`.
+  `func_L00_003253A0` forwards two pointers and a float to `func_002B00D8` after
+  adjusting only its first pointer. Explicit contracts reproduce the existing
+  instructions; these repairs add no new-function credit. Check stack arguments
+  beyond the eight GPR slots as well: the retained `func_L03_003C3220` calls
+  `func_L00_0032C700` with four additional words, `1, 0, 0, 0`.
+- **An integer register does not imply an `int` result.** The retained
+  `func_L00_002A3B88` forwards `func_0028E640`'s complete 64-bit texture descriptor
+  to `func_0028F410`. The callee builds it with a shift and OR; truncating to
+  32 bits would be a false interface even if a later allocation looked closer.
 - **The dialect is C89:** `long` and `long long` are 64-bit, `int` and pointers are 32-bit, and
   there is no declaration after a statement.
 - **The patched gas expands `move $rd,$zero` into `daddu $rd,$zero,$zero` and `li $v0,1` into
@@ -1195,6 +1208,16 @@ adjustments and padding. Its retained C names the actual callable entry and rema
 unlinked (248/260 bytes, 0/27 placements in each release with `-g`). No catalogue
 change is included: verify surrounding returns, incoming references and release
 identities, preserve the skipped bytes and original end, then fix the generator.
+
+In USA v1.01, the retained `func_L07_002B3580` exposes a different case: two calls reach
+`func_001290BC + 0x24`, a measured VU normalization entry with `(output, input)`
+in `$a0/$a1` and a vector store in the return delay slot. The parent row includes
+preceding stores and padding. A plain C function-pointer expression using that
+canonical symbol plus the addend currently fails assembly (`illegal operands`
+for `jal`, followed by an `elf32-mips.c:2847` assertion), rather than producing a
+measured mismatch. Its full C reconstruction is retained without a fake alias or
+new function boundary. Reopen with a qualified canonical interior-call route or
+an independently established catalogue correction; preserve the original bytes.
 
 The old appendix is an investigation record, not a current work queue. Filler removals, mixed entry corrections and different-callee bindings must remain separate:
 

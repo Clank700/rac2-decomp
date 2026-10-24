@@ -235,6 +235,12 @@ bytes and relocations and pass every carrying release's placement checks.
 The complete strict builds remain the acceptance gate. This is a reconstruction
 profile, not evidence of the shipping compiler's flags.
 
+The same size rule applies beyond vectors. The particle emitters
+`func_L18_003FCD70` and `func_L18_003FCC48` declare their measured 24-byte
+settings records and use `-G32 -Wa,-G32`. `func_L00_00396078` keeps its complete
+four-vector, 64-byte template with `-G64 -Wa,-G64`. Isolate these profiles per
+file; do not shorten an object or raise the global threshold to obtain GP loads.
+
 ## Quadword copies
 
 ### Address formation and grouped lowering
