@@ -372,7 +372,7 @@ INCLUDE_ASM("asm/game", func_00304128);
 
 INCLUDE_ASM("asm/game", func_00304210);
 
-INCLUDE_ASM("asm/game", func_00304AD0);
+/* func_00304AD0 uses the profile in 00304AD0-g8-qcopy.c. */
 
 void func_00304B68(char *object)
 {
