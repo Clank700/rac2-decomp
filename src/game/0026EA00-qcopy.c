@@ -13,7 +13,27 @@ extern int func_002712D8(void *, void *);
 /* Runs the current object through the resident visibility test, then copies
    its four 16-byte blocks into the resident snapshots and clears the test
    state. */
+void func_002718B8(char *object)
+{
+    unsigned char *state = (unsigned char *)D_001B5490;
+    char *dest;
+    int ok;
 
+    if (state[2] == 0)
+        ok = func_00271130(object, state + 0x10);
+    else
+        ok = func_002712D8(object, state + 0x70);
+    if (ok == 0)
+        return;
+
+    dest = D_001B5570;
+    *(TI128 *)(dest + 0x00) = *(TI128 *)object;
+    *(TI128 *)(dest + 0x10) = *(TI128 *)(object + 0x10);
+    *(TI128 *)(dest + 0x20) = *(TI128 *)(object + 0x20);
+    *(TI128 *)(dest - 0x230) = *(TI128 *)(object + 0x30);
+    *(short *)state = 0;
+    state[2] = 0;
+}
 
 /* Copies the resident object's saved vectors back into its working ones. */
 void func_00270EA8(void)
