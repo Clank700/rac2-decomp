@@ -1,32 +1,30 @@
-/*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g -fno-gcse -fno-schedule-insns.
- * Reported final C / retail: 1796 / 1804 bytes; size equality is not a match.
- * us: 0/1 placements; 1796/1804 bytes.
- * us2: 0/1 placements; 1796/1804 bytes.
- * pal: 0/1 placements; 1796/1804 bytes.
- * Residual: First difference +4; source spilling, resident base and loop register allocation.
- * Reopening condition: A matching allocation/source-layout witness for this family.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
+/* Retained C reconstruction; not linked or counted.
+ * Profile: -O2 -G8 -ffunction-sections.
+ * 1756/1804 bytes. us: 0/1 places; us2: 0/1 places; pal: 0/1 places.
+ * Remaining: Late target/origin/ray snapshots use clobbering qcopy. The initial origin
+ * transfer stays an ordinary TI copy because retail interleaves it and uses
+ * a different transfer temporary. The full 128-pointer obstacle array and
+ * integer metadata-word pointer interpretations are retained. Initial-hit
+ * return writes only the local origin; the preferred-candidate direct return
+ * genuinely bypasses collider restoration and is preserved. The 0x320 frame
+ * agrees; base registers, saved pointers and trace-loop scheduling differ.
+ * Reopen with: Independent candidate-local source/FP lifetime evidence. Do not route the
+ * observed direct return through cleanup or invent helper return contracts.
+ * Local size/frame observations are not native runtime validation.
  */
 
-/* Retained plain C reconstruction, 23 October 2026; not matched or linked.
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g -fno-gcse -fno-schedule-insns
- * Final release checks: us: 0/1; us2: 0/1; pal: 0/1. No placement is credited.
- * Remaining differences: scheduling, saved/base register allocation, and address lifetimes.
- * Reopen with an independently matching source/allocation witness.
- */
+#include "common.h"
+
 typedef unsigned int Quad __attribute__((mode(TI)));
 typedef union { Quad q; float f[4]; } Vec;
-extern unsigned char D_00189E20[0x2540];
+extern unsigned char D_00189E20[];
 #define PLAYER (*(char **)(D_00189E20 + 0x2290))
 extern float D_0018A144;
 extern short D_0018A168;
 extern int D_L19_001A8FF0,D_L19_001A8FF4 __attribute__((sda));
 extern float D_L19_001B0380 __attribute__((sda)),D_L19_001B0384 __attribute__((sda));
-extern char *D_L19_001FB960[],*D_L19_001BFE98;
+extern char *D_L19_001FB960[];
+extern char *D_L19_001BFE98 NOT_SDA;
 extern Vec D_L19_001BFEA0;
 extern void func_00282D30(void *,void *,float),func_00282CC0(void *,void *,void *),func_00282CF0(void *,void *,void *);
 extern int func_002761F8(void *,void *,int,void *,void *);
@@ -39,13 +37,14 @@ char *func_L19_003C7618(char *obj,Vec *origin,float *yaw,float *pitch) {
     char *ctx=*(char **)(obj+0x68),*selected=0,*candidate,*definition,*hit;
     int n=0,index=0,tries,accepted,i;
     float best=D_L19_001B0384,heading,elevation,delta,distance,dot,length,angle,radius;
+    /* Retail interleaves this initial transfer and uses a non-helper temporary. */
     frame.origin.q=origin->q;
     func_00282D30(&frame.offset,PLAYER+0xE0,0.5f);
     func_00282CC0(&frame.player,PLAYER+0x10,&frame.offset);
-    if(func_002761F8(&frame.player,&frame.origin,6,PLAYER,0)) { frame.origin.q=D_L19_001BFEA0.q; return 0; }
+    if(func_002761F8(&frame.player,&frame.origin,6,PLAYER,0)) { qcopy(&frame.origin, &D_L19_001BFEA0); return 0; }
     while((candidate=D_L19_001FB960[index])!=0) {
-        if((signed char)candidate[0x20]==-2 || (signed char)candidate[0x20]==-3 || *(short *)(candidate+0xAA)==0xE7D || *(short *)(candidate+0xAA)==0xEB0) goto next;
-        frame.target.q=*(Quad *)(candidate+0x10);
+        if(((u8 *)candidate)[0x20]==254 || ((u8 *)candidate)[0x20]==253 || *(short *)(candidate+0xAA)==0xE7D || *(short *)(candidate+0xAA)==0xEB0) goto next;
+        qcopy(&frame.target, (candidate+0x10));
         definition=(char *)func_002AB1F0((unsigned char *)candidate);
         if(!definition || definition[0xE]==3) goto next;
         func_00282D30(&frame.aim,candidate+0xE0,*(float *)(definition+0x10));
@@ -84,7 +83,7 @@ char *func_L19_003C7618(char *obj,Vec *origin,float *yaw,float *pitch) {
         }
         accepted=1;
         if(angle<D_L19_001B0380*0.017453294f) {
-            frame.ray.q=frame.origin.q; tries=0;
+            qcopy(&frame.ray, &frame.origin); tries=0;
             while(func_002761F8(&frame.ray,&frame.target,6,obj,0)) {
                 if(++tries>6) break;
                 hit=D_L19_001BFE98;
@@ -92,9 +91,9 @@ char *func_L19_003C7618(char *obj,Vec *origin,float *yaw,float *pitch) {
                 if(*(short *)(hit+0xAA)!=0xE7D && *(short *)(hit+0xAA)!=0xEB0) { if(hit!=candidate) accepted=0; break; }
                 frame.disabled[n++]=hit; *(int *)(hit+0x98)=0;
                 if(n>127) break;
-                frame.ray.q=D_L19_001BFEA0.q;
+                qcopy(&frame.ray, &D_L19_001BFEA0);
             }
-            if(accepted) { *pitch=-elevation; if(delta<0.17453295f) *yaw=heading; selected=candidate; best=distance; if(candidate==*(char **)(ctx+0x10)) return candidate; }
+            if(accepted) { *pitch=-elevation; if(delta<0.17453295f) *yaw=heading; selected=candidate; best=distance; /* Retail returns directly here, before collider restoration. */ if(candidate==*(char **)(ctx+0x10)) return candidate; }
         }
 next:
         ++index;
