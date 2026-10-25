@@ -536,6 +536,27 @@ fields `+0xE4/+0xE8` in 23 programs, and `q + 0x20` with `+0x1C/+0x20` in `16_sn
 `do not match` numbers too. `ref_LNN_XXXXXXXX_kk` cannot help here: it names a symbol *value*,
 not an immediate constant. Report the entry and keep the marker in place.
 
+**Byte-identical stubs do not establish one source ABI.**
+`func_L00_00345AF0` has 27 placements per release, all an eight-byte zero
+return. Across USA v1.01, USA v2.00 and PAL, three direct call sites treat V0
+as a nullable pointer; another prepares A0 and clears A1 while ignoring V0.
+Twenty-four initialized `.lit` words per release equal these addresses,
+but their indirect-call contracts have not been traced. Twenty-one canonical
+names share this fingerprint. Preserve observed caller arguments/results;
+do not impose one fixed arity from the stub body, invent a variadic
+signature, or silently drop arguments to agree with its historical C
+prototype. The shared callback family needs reference/ABI qualification.
+
+Four existing C interfaces now agree with independently measured call sites:
+`func_00291450` explicitly forwards the part index; `func_L06_003660F0`
+forwards all three node-initializer inputs; `func_L02_003FC248` retains its
+two unused integer callback slots; and `func_L02_003CAE68` retains the unused
+output pointer supplied by its update caller. Their 94 carrying checker
+placements and the complete 84-program strict build pass with the same retail
+operations. These are source-contract repairs, not new decompiled bytes; the
+ambiguous zero-stub family above remains unchanged.
+[Measured caller-interface repairs](https://github.com/OpenRAC/rac2-decomp/commit/623184a4e99a331b23db8b90f4defb1708f96f75).
+
 <a id="blocker-13"></a>
 
 ## 13. Floating-point literals are calibrated, not computed
@@ -703,9 +724,24 @@ reproduces retail's `sd a2..t3` + `swc1 f12..f18` save prologue **and** the fram
 
 ## 22. Vector copies: address materialisation is only part of the mismatch
 
-Historical Tabora near misses remain separate: func_L08_003D3D80(128-byte target), func_L08_003D8290(96) and func_L08_003D0508(192) differed in pointer materialisation, copy order, frame or scheduling. They are still markers. Approved qcopy/qzero helpers now provide a concrete reopening route; the historical experiments have not thereby gained linked qualification.
+**25 October 2026 linked helper qualification:**
+`func_L08_003D8290` (96 bytes) and `func_L08_003D0508` (192) pass their
+USA v1.01, USA v2.00 and PAL placement checks with the reviewed `qcopy` helper
+and default G0 profiles, then link successfully in all three editions.
+The combined tree passes all 84 strict programs without C fallback.
+[Qualified helper source and retained reconstructions](https://github.com/OpenRAC/rac2-decomp/commit/a49d016ad8f366dce34aebbcdeaa7c9472c074ef). The latter
+draft also needed a semantic repair: only
+initialization is conditional; projection, update and the final position
+snapshot execute unconditionally. Scratch vectors have explicit
+16-byte alignment. The historical folded-copy experiments did not establish
+an impossibility of C or require a new compiler pass.
 
-Plain TI-mode C can emit lq/sq; some struct/memcpy spellings instead emitted scalar or unaligned copies. Roughly twenty forms under game/SDK profiles did not close these candidates. Fixed offsets commonly folded into the access, but “only opaque pointer parameters can work” is too broad: current notes also document held/loop-carried/memory-loaded/join-dependent pointers and out-of-range offsets. These observations neither solve the three candidates nor prove all fixed-offset copies impossible.
+`func_L08_003D3D80` remains a 128/128-byte near miss. Its addressed copy now
+agrees, but the constant, source-byte and payload-pointer scratch roles and
+initialization stores differ from +0x24. Three meaningful record/lifetime
+forms produce identical text; keep the complete retained C and reopen with
+independent allocation or constructor-layout evidence, not another cosmetic
+permutation or an assembly classification.
 
 <a id="blocker-23"></a>
 
@@ -759,6 +795,25 @@ the stores and `$a3` for the argument, where cc1 reuses `$a3`); `func_L18_00437A
 materialises `0xFF` **twice**, `addiu $v0` then `addiu $v1`, cc1 keeps one).
 
 **Historical result:** these attempts did not close the named cases, which remain markers. Temporaries sometimes changed materialisation; that is a case-specific observation, neither a guaranteed repair nor proof that none exists.
+
+**25 October 2026 phase isolation:** `func_00308600` is still 356/360 bytes,
+0/28 in both USA releases; its PAL catalogue name is absent. The initial RTL
+contains separate HI- and QI-mode constants of 255. CSE1 removes the QI
+pseudo and substitutes the low byte of the HI pseudo, before scheduling or
+allocation. Writing the byte sentinel as `-1` while retaining its unsigned
+field type canonicalizes to the same QI constant and gives an identical
+complete object. Changing field signedness or inserting a barrier is not
+justified by that observation.
+
+The pinned public GCC `cse_insn` path searches wider integer modes for this
+constant and builds a low-part view. That path has no
+`flag_expensive_optimizations` guard; nearby guarded AND/MEM transformations
+are different paths. The maintained game patch 0048 does not change this
+block. Do not infer that `-fno-expensive-optimizations` controls it or start
+another flag sweep. The measured pointer/count priority tie could change if
+a real source change restored an instruction within their live intervals;
+that arithmetic model is a hypothesis, not a matching result. A compatibility
+proposal would need independent witnesses and neutral controls first.
 
 <a id="blocker-26"></a>
 
@@ -1731,7 +1786,7 @@ attributed for provenance, not exclusive ownership.
 | Function / family | Status | Evidence and next action |
 | --- | --- | --- |
 | **Vector copy as a scheduling barrier:** `func_002B5E48`, `func_002EE988`, `func_L23_00418650`, `func_L23_003C01F8`, `func_L23_00418DC0`, `func_L23_004256F0`, `func_L02_003DB158`, `func_L02_003D47B0`, `func_L26_003D4930`, `func_L12_00413CE0` (close: `func_002B50E0`, `func_L23_0041D0A0`); from today's first attempts at level 2, also `func_L02_00401BF8`, `func_L02_003F1A88`, `func_L02_003EE938`, `func_L02_003E8CE8` | Merged, #275 | Each is retail's size with `-frac2-qcopy` in a unit of its own. Each is exact when the copy is the volatile asm `lq $2,0(%1) ; sq $2,0(%0)`, in scratch copies only. The profile's grouped pair lets independent instructions cross it. About 50 single flags and many source orders, including `-frac2-zero-ti-barrier`, do not. #275 (merged) adds the opt-in `-frac2-qcopy-barrier`, the clear's block in `sched_analyze_insn` applied to the qcopy insn. Twelve witnesses landed with it. Twenty-three more near misses are exact with it as their records stand, in #283; two more follow. `func_002B50E0` is still 3 words off, a sched1 tie on argument moves. |
-| **The barrier copy's link costs:** `func_L02_003F1A88` | Open, measured | With `-frac2-qcopy-barrier` it is 5 words off. The links into the copy keep their producers' latencies (an `add.s` link costs 3), where a volatile asm makes them cost 1 in `insn_cost`. A constant's load then outranks the state `lw` (priority 24 against 22). With the asm copy in a scratch copy, the priorities tie and it is exact. **Next:** give the barrier's incoming links the asm's cost, then re-check #275's twelve witnesses. |
+| **The barrier copy's link costs:** `func_L02_003F1A88` | Qualified with reviewed helper | The TI/barrier profile was five words off because its producer-link latency differed from the real macro dependency graph. The approved `qcopy` helper closes the 228-byte function under default G0, 1/1 in each release. No compiler link-cost patch is needed. Preserve the original distinction: modeling only part of an inline helper's optimizer effects need not reproduce the actual helper. |
 | **A TImode zero reloaded as a register pair:** `func_L02_004388A0` | Open, measured | 5 words off with the barrier: its 16-byte zero clear is reloaded as a group of two general registers, though the R5900 holds it in one. That makes `$v1` a spill register, so a hoisted sentinel -1 left unassigned gets `$v1` where retail has `$v0`. Without the clear (diagnostic only), every -1 is in `$v0`. |
 | **A register saved and never used:** `func_L02_003FF6E8` | Open, measured | Retail saves `$s2` and never uses it; 21 retail game functions do so, and none of them is C. A plain C spelling reproduces the frame and register roles but keeps the value in `$s2`, 700 bytes against 696. |
 | **Clear through a register address at a nonzero offset:** `func_002B5678` | Open | Retail has `addiu $v0,$s1,0x60 ; sq $zero,0($v0)`, the clear macro's register operand. After #258, C gives `por` + `sq $v0,0x60($s1)`. **Next:** a profile that materializes the address of a displaced const-0 TImode store. |
