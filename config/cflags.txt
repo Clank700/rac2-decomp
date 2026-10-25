@@ -558,3 +558,5 @@ src/game/0030F7B0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-
 src/core/00118CC8.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 src/levels/shared/L22_003A5018.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L22_003B8FE8-g8.c	-O2 -G8 -ffunction-sections
+# A quadword copy plus the line label in front of the division.
+src/game/002AE8C0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
