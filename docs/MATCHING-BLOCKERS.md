@@ -151,6 +151,32 @@ The numbered history below is retained, with obsolete conclusions and incorrect 
 
 ## 1. Register allocation on long bodies (the dominant wall)
 
+**Truthful return types and EE call setup, 25 October 2026:**
+`func_L16_004110D0` is a 664-byte C implementation with its real 0x90
+frame. The earlier draft already matched through its first 356 bytes.
+Auditing every `func_002AAA00` return path established an explicit float
+result, including the early zero and normal updated-rate paths; the caller
+ignores it. Correcting the old void declaration changes four setup slots
+without changing arguments or introducing a result use. An independent
+source-only control confirms this effect.
+
+The actual lower/upper state stores and a typed `func_002A8D70` argument
+interleaving close the remaining differences. It preserves object, bone,
+mode, first, second and third in A0-A3/T0-T1 and x/y/z in F12-F14, with
+no stack arguments. This follows the current RAC1 call-shape practice in
+COMPILER-NOTES.md; it does not fabricate a prototype or reorder a bank.
+Six targeted trials required no compiler change. Both USA placements pass,
+PAL has no corresponding catalogue identity, and all 84 strict programs
+pass with the integrated source set. Different source declarations still
+need a consistent native interface or adapter before a PC-port claim.
+
+The two independent witnesses remain nonmatching: `func_L00_003A2668`
+is 1204/1204 bytes, 0/81 present placements, first difference +0x8.
+`func_L23_0041D398` remains 1432/1432, 0/1; a real phase-lifetime split
+instead gives 1412 bytes and a 0xC0 frame. Useful alternatives stay private.
+These negative controls do not establish a general allocator failure or
+justify repeating the same attempts without new evidence.
+
 **Measured phase-storage remedies, 25 October 2026:**
 In retained `func_L00_00398150`, the 96-byte collision query and later
 attachment transform have disjoint lifetimes; their real union restores
