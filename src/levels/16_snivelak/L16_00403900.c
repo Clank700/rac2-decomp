@@ -165,7 +165,7 @@ INCLUDE_ASM("asm/levels", func_L16_00410E40);
 
 INCLUDE_ASM("asm/levels", func_L16_00410FA8);
 
-INCLUDE_ASM("asm/levels", func_L16_004110D0);
+/* func_L16_004110D0 is compiled from L16_004110D0-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L16_00411368);
 
