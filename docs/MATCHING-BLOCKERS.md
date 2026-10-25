@@ -348,6 +348,8 @@ The historical sample is retained: 47 of 240 notes mentioned gp/sda/G8; one 23-t
 
 Two documented names may express different addressing forms of one real global. They must derive the same true identity; malformed names, invented addresses or aliases hiding inconsistent bindings are not remedies. PR #244's review corrected such naming defects. Use ref_LNN_XXXXXXXX_kk where a target's identity genuinely varies by placement, not as a substitute for a known correct data name.
 
+**24 October 2026, one declaration for both forms at -G0 (wave 10):** in the level-08 twins `func_L08_0042F440`/`0042FAC0`, `extern s32 D_L08_001B3AA0 __attribute__((sda));` under the file's `-O2 -G0` emits `lui`+`%lo` in ordinary flow and the single `$gp` form inside a `jal`/branch delay slot. Retail's body shows exactly that mix for the same word (absolute `lui a0`/`lw a0` for the increment, `lw`/`sw 0x4AB0($gp)` in two slots), so one sda declaration covers it: no -g8 sibling and no second name were needed. This does not contradict the -G8 `func_002721C8` note below, where the same attribute gives GP throughout; the threshold/profile decides. The lever did not close these two bodies' residual setup order.
+
 **24 October 2026, retained near miss:** `func_002721C8` (game `-O2 -G8 -ffunction-sections`) is 176/184 bytes and 0/28 placements in each of USA v1.01, PAL and USA v2.00. A typed partial camera-state view recovers the 0x30 frame and saved registers; a raw byte view was 168 bytes and a `nosda` scalar grew to 200. Retail uses absolute address/first-load forms and a later GP read of the same scalar, while the retained single canonical SDA declaration uses GP throughout. Six checker invocations, no scratch compiles; size mismatch prevents relocation-qualified binding checks. The actual C is in `nonmatching/game/func_002721C8.c`, with its source marker restored. Reopen with evidence for the real scalar storage/declaration and its two addressing forms, without duplicate invented identities or scheduling barriers.
 
 <a id="blocker-09"></a>
@@ -579,6 +581,17 @@ Typed effect records and the measured floating/integer call interface resolve
 the other observed differences. Nine bounded trials include three forms that
 end in the same two-word tie. Reopen with an independently justified constant
 or loop-lifetime model; another equivalent spelling is not new evidence.
+
+**24 October 2026, retained near miss (wave 10):** `func_L08_0042F440` and
+`func_L08_0042FAC0` are 544/544 bytes and 0/1 each, byte-identical through
++0x128. Only two func_334BB0 argument-setup blocks and case 3's counter register
+differ: retail keeps `daddu $a0,$s0` in the `beqz` delay slot and materialises
+the a2 address after a1, this cc1 hoists `lui $a2,%hi` into the slot. Moving the
+last integer argument's declaration after the four floats (the integer/FP bank
+split of COMPILER-NOTES) puts only that argument in the `jal` slot; it does not
+move a2. Two different source orders and the `x = x + 1` / `x++` / named-temp
+counter forms measured. Retained: `nonmatching/levels/func_L08_0042F440.c`,
+`func_L08_0042FAC0.c`.
 
 <a id="blocker-20"></a>
 

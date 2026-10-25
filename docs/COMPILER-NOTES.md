@@ -409,6 +409,11 @@ Combining both switches affects sched1/sched2 differently and needs its own proo
   (`func_L00_00338D28`). An early null return changes the exit structure.
 - A named threshold can retain addiu+slt where a literal becomes slti:
   `func_L00_00410840` needs this at its lower thresholds, not the highest test.
+- A chain of `||` comparisons against adjacent constants is combined into a
+  range test: `st == 0xFE || st == 0xFD || st == 3` becomes
+  `(st + 3) & 0xFF < 2` plus one compare. A right-nested spelling
+  `st == 0xFE || (st == 0xFD || st == 3)` keeps the three separate compares in
+  source order (measured in `func_L08_0042F440`/`0042FAC0`, 544-byte twins).
 - `x = load; if (flag) x = 0.0f;` differs from a ternary in branch polarity and
   likely slots (`func_L00_0042A460`). Store order affects allocation, but there is
   no universal reversal or permutation rule.
