@@ -562,3 +562,7 @@ src/core/0011FC68.c	sdk -O2 -G2 -ffunction-sections
 src/core/00121450.c	sdk -O2 -G2 -ffunction-sections
 src/core/0011C090.c	sdk -O2 -G2 -ffunction-sections
 src/game/0028A278.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/07_siberius/L07_003F6DC0-copy.c	-O2 -G8 -ffunction-sections
+src/levels/23_damosel_orbit/L23_00428490-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L16_003959B8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/20_yeedil/L20_0044B100-g8.c	-O2 -G8 -ffunction-sections -g
