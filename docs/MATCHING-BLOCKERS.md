@@ -186,6 +186,8 @@ nor a runtime validation.
 
 `__attribute__((sda))` in a `-G0` file on an **absolute** symbol stops the hoist: `lui %hi ; lw %lo` stay inside the loop as retail has them (side effect: the prologue's index/base register pair swaps). And there is a sub-case of its own: an **absolute global addressed in a loop that contains calls** - cc1 hoists the address into a callee-saved register (`lui $s1,%hi`, frame 0x20, two extra saves) where retail re-materialises `lui $v1,%hi ; lw $v1,%lo($v1)` at every iteration with one register (`func_L11_00440868`, one instruction off; `func_L11_004411C8`, 8 bytes off - bodies otherwise identical instruction for instruction). In those tested units the attribute produced an unwanted `$gp` form; qualify the actual unit instead of generalizing the declaration rule.
 
+**25 October 2026, saved-pair swap closed by block scope (measured, `func_L00_003EB400`, 528 bytes, 2/2 places):** the remaining disagreement was `$s1`/`$s2` only - retail kept the actor pointer in `$s1` and the precomputed `i + 1` in `$s2`, cc1 the other way. Declaring the loop index **inside the `if` block that owns the loop** (`if (state == 1) { int i; for (i = 0; i < 4; i++) ... }`) instead of at function scope reproduces retail's pair, because the parameter copy then sorts below the loop's live-across-call temporary. In the same body a named `char *row = (char *)state + i * 4;` before `id = *(int *)row;` gives retail's `addu $s0,$s4,$v0` operand order where the inline indexed read gives `addu $s0,$v0,$s4`. Both levers together closed the function; keep the block-scoped index for any similar 4-iteration loop whose counter lands in the wrong one of `$s1`/`$s2`.
+
 <a id="blocker-03"></a>
 
 ## 3. If-conversion
