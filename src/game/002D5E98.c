@@ -254,7 +254,64 @@ int func_002D95D8(char *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002D9600);
+/* Scans the object's 24 effect slots: a slot whose entry flag is clear, whose
+   "used" byte is set, and whose table word is zero is skipped.  Slot 7 also
+   skips a live, in-range material.  The remaining slots dispatch by slot
+   number: most first test the material on the shared record, and every slot
+   that is still live is handed to the effect runner with the "run" flag. */
+typedef struct {
+    char pad00[0x44];
+    char *entries[0x18];
+    unsigned char used[0x18];
+} EffectSlots_2D9600;
+
+extern int D_00261920[];
+
+extern void func_002DF158(char *, int);
+
+int func_002D9600(EffectSlots_2D9600 *o)
+{
+    int i;
+
+    for (i = 0; i < 0x18; i++) {
+        char *entry;
+        unsigned char id;
+
+        if (o->entries[i] == 0)
+            continue;
+        if (o->used[i] != 0)
+            continue;
+        if (D_00261920[i] == 0)
+            continue;
+        if (i == 7
+            && *(short *)(o->entries[7] + 0xAA) == 0x4A
+            && *(unsigned char *)(o->entries[0] + 0x42)
+                   != *(unsigned char *)(o->entries[0] + 0x43))
+            continue;
+        switch (i - 1) {
+        case 0:
+        case 1:
+        case 2:
+        case 4:
+        case 5:
+        case 9:
+        case 10:
+        case 11:
+            entry = o->entries[0];
+            if ((*(unsigned long long *)(entry + 0x40) & 0xFFFF0000ULL) != 0x99990000ULL)
+                goto call;
+            id = *(unsigned char *)(entry + 0x40);
+            if (id < 0x4D)
+                goto call;
+            if (id < 0x92)
+                continue;
+            break;
+        }
+    call:
+        func_002DF158(o->entries[i], 1);
+    }
+    return 4;
+}
 
 INCLUDE_ASM("asm/game", func_002D9730);
 
