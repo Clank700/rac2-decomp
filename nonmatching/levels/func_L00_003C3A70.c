@@ -1,11 +1,17 @@
-/* Complete manual reconstruction; NOT MATCHING and never linked.
-   Tested profile: -O2 -mno-split-addresses -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
-   Actual final-source coverage: us: 0/27 placements, 800 compiled bytes; us2: 0/27 placements, 800 compiled bytes; pal: absent from both catalogues.
-   800/800 bytes but 0/27 placements. First non-relocation difference at +0x30. The complete creation/fallback CFG, 16-byte vectors, history/reset loops, state setup and returned owner are retained. Address formation, entry block scheduling and forward/up/side allocation differ. Equal size earns no match credit.
-   Reopen only with: A measured real object/table address model and pointer lifetimes; the -mno-split-addresses profile repairs constant-addend lowering but changes indexed table formation.
-*/
+/* Bounded manual reconstruction, 2026-10-25; not linked.
+ * Profile: -O2 -mno-split-addresses -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
+ * 800/800 bytes; us: 0/27 placements; us2: 0/27 placements; pal: absent from catalogue.
+ * Full vector copies now use the reviewed helper. The creation/fallback control flow, pointer-
+ * return allocator, history resets and returned owner are retained. Size agrees, but entry/indexed-
+ * table addressing and saved forward/up/side lifetimes differ from +0x30.
+ * Reopen with independent table-address and actual pointer-live-range evidence. Keep unknown table
+ * counts and full vectors.
+ * Original complete variants and allocator diagnostics are preserved privately.
+ * No candidate or linked-build credit is claimed.
+ */
+#include "common.h"
 
-#include "include_asm.h"
+
 typedef int UiQuadword __attribute__((mode(TI)));
 extern char *D_L00_001AFF98 __attribute__((sda));
 extern unsigned char D_L00_001DB2BC;
@@ -64,11 +70,11 @@ unsigned char *func_L00_003C3A70(int mode)
     for (i = 3; i >= 0; i--)
         D_L00_001B2940[i] = 0;
     func_00282F20(D_L00_0023FB80, forward, D_L00_001AFF4C);
-    D_L00_001B2900 = *(UiQuadword *)(up);
+    qcopy(&D_L00_001B2900, up);
     func_00282F20(D_L00_0023FB80 + 0x140, side, D_L00_001AFF4C);
-    D_L00_001B2910 = *(UiQuadword *)(forward);
+    qcopy(&D_L00_001B2910, forward);
     func_00282F20(D_L00_0023FB80 + 0x280, up, D_L00_001AFF4C);
-    D_L00_001B2920 = *(UiQuadword *)(side);
+    qcopy(&D_L00_001B2920, side);
     func_00282CC0(D_L00_0023FB80 + 0x3C0, forward, up);
     entries = (short *)(state + 0x18);
     func_00282F20(D_L00_0023FB80 + 0x3C0, D_L00_0023FB80 + 0x3C0, D_L00_001AFF4C);
@@ -81,7 +87,7 @@ unsigned char *func_L00_003C3A70(int mode)
     D_L00_001B29D4 = 1.0f;
     func_L00_0037E670(mode);
     *(float *)state = func_L00_0037E668();
-    *position = D_00189EA0[0];
+    qcopy(position, D_00189EA0);
     *(int *)(state + 0x14) = 30;
     *(int *)(state + 0xC) = -1;
     *(int *)(state + 0x10) = 0;

@@ -1,12 +1,9 @@
-/* Retained manual C reconstruction; not linked or counted.
- * Retail: 812 bytes. Checked trial: src/levels/shared/L08_003F6018.c
- * Profile: -O2 -G0 -ffunction-sections -fno-strength-reduce -fno-gcse -mno-split-addresses -frac2-qcopy -frac2-qcopy-barrier
- * us: 0/2 placements (exit 1), 808 compiled bytes
- * us2: 0/2 placements (exit 1), 808 compiled bytes
- * pal: 0/2 placements (exit 1), 808 compiled bytes
- * Residual: The source preserves the complete initialization, pool outputs and both pointer-valued 32-bit helper results. Frame/save use, symbol hoisting, copy-address formation and store scheduling remain different.
- * Reopen: Reopen with a concrete source model for the loop-local string/address lifetime; retain full 16-byte vectors and the complete child initialization.
- * The ASM marker and trial-only file profile were restored after checks.
+/* Retained complete C reconstruction; not linked or counted.
+ * Profile: -O2 -G0 -ffunction-sections -fno-strength-reduce -fno-gcse -mno-split-addresses
+ * 808/812 bytes; 0/2 placements in us, us2 and pal.
+ * Residual: The full child initialization and two-slot pool are preserved. Save/base lifetimes, vector-copy and store scheduling still differ. Metadata accessor results remain canonical 32-bit words, explicitly interpreted as pointers here.
+ * Reopen: Independent loop-local format-string or pool-slot address lifetime evidence; retain complete 16-byte vectors and canonical metadata accessors.
+ * Trial-only source markers and profiles are restored after checking.
  */
 
 #include "common.h"
@@ -23,21 +20,30 @@ extern char D_L08_001B0B68[];
 extern char D_L08_001B0BA8[];
 extern int D_L08_001B2508;
 
+/* Bounded view of the owner's two pool slots and their status bytes. */
+typedef struct {
+    u8 unknown00[0x131];
+    u8 activeCount;
+    u8 unknown132;
+    u8 smallScale;
+    int slots[2];
+} PoolSlotsPrefix;
+
 u8 *func_L08_003F6018(u8 *owner, SpawnQuad *position, float *direction)
 {
     u8 *child;
-    u8 *state;
+    PoolSlotsPrefix *state;
     u8 *part;
     int i;
     if (owner == 0)
         return 0;
-    state = *(u8 **)(owner + 0x68);
+    state = *(PoolSlotsPrefix **)(owner + 0x68);
     child = 0;
     for (i = 0; i < 2; i++) {
-        if (func_002A8600(&child, *(int *)(state + 0x134 + i * 4), 1, 1) != 0)
+        if (func_002A8600(&child, state->slots[i], 1, 1) != 0)
             continue;
-        state[0x131]++;
-        *(SpawnQuad *)(child + 0x10) = *position;
+        state->activeCount++;
+        qcopy(child + 0x10, position);
         *(int *)(child + 0x1c) = 0;
         child[0x20] = 0;
         child[0xbc] = 0;
@@ -68,10 +74,10 @@ u8 *func_L08_003F6018(u8 *owner, SpawnQuad *position, float *direction)
         *(float *)(child + 0xf8) = func_00283248(direction[0], direction[1]);
         part = (u8 *)func_002AB220(child);
         if (part != 0)
-            *(SpawnQuad *)(part + 0x80) = *(SpawnQuad *)direction;
+            qcopy(part + 0x80, direction);
         else
             func_0026FEB8(D_L08_001B0B68, *(short *)(child + 0xaa), *(short *)(child + 0xb2), D_L08_001B2508);
-        if (state[0x133])
+        if (state->smallScale)
             *(float *)(child + 0x2c) = *(float *)(*(u8 **)(child + 0x24) + 0x24) * 0.1f;
         if (*(short *)(owner + 0xb4) < *(short *)(child + 0xb4))
             *(short *)(child + 0xb4) = *(short *)(owner + 0xb4);
