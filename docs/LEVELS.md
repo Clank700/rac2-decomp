@@ -67,6 +67,18 @@ catalogue and carrying it with `tools/carry.py --version us2` gives the same
 canonical wrapper at v2.00's `00428CB8`, with its end also unchanged. PAL keeps
 its separate version-specific wrapper and catalogue entry.
 
+Two mixed boot/level extents have measured entry corrections too:
+`func_002C38A0` skips eight leading bytes (64 to 56 bytes), and `func_00335918`
+skips 32 (68 to 36 bytes). Their canonical names and original ends are retained.
+References identify the corrected entries in all 28 programs of each of the
+three releases; the skipped stores/stack adjustments remain in assembly.
+`FUNCTION_ENTRY_OFFSETS` applies these named corrections before fingerprinting.
+The original full-extent identity preserves the level-to-boot pairing when a
+shortened body becomes identical to another boot method. Regeneration validates
+and retains that pairing, including on replay, rather than guessing a new name.
+Regenerate the primary catalogue with `tools/levels.py catalogue`, then carry it
+to the other releases with `tools/carry.py --version us2` and `--version pal`.
+
 Two more kinds of row are measured from the retail bytes, not from a list of
 addresses. An extent whose words are only stack adjustments and nops is the linker's
 filler between two bodies, not a function, and leaves the catalogue: 257 level rows

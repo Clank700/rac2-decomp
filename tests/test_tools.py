@@ -78,6 +78,23 @@ class LevelExtents(unittest.TestCase):
             levels.level_extent(23, 0x4277B0, 8)
 
 
+class FunctionExtents(unittest.TestCase):
+    def test_named_entries_preserve_ends_and_replay_at_each_release_address(self):
+        for name, original, skip in (("func_002C38A0", 64, 8), ("func_00335918", 68, 32)):
+            for address in (0x210000, 0x220008, 0x230010):
+                with self.subTest(name=name, address=address):
+                    entry, size = levels.function_extent(name, address, original)
+                    self.assertEqual((entry, size), (address + skip, original - skip))
+                    self.assertEqual(entry + size, address + original)
+                    self.assertEqual(levels.function_extent(name, entry, size), (entry, size))
+
+    def test_unrelated_name_is_not_shifted_and_unexpected_sizes_fail(self):
+        self.assertEqual(levels.function_extent("func_00002000", 0x2000, 64), (0x2000, 64))
+        for name, size in (("func_002C38A0", 60), ("func_00335918", 64)):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                levels.function_extent(name, 0x2000, size)
+
+
 class Filler(unittest.TestCase):
     """The linker's filler between the bodies: stack adjustments and nops only."""
 
@@ -187,6 +204,50 @@ class Identity(unittest.TestCase):
 
 
 class Catalogue(unittest.TestCase):
+    def test_named_entry_corrections_reach_boot_and_level_copies_and_are_stable(self):
+        # Synthetic bodies, not retail bytes. A different body with the same
+        # leading stack adjustment must not inherit a named correction.
+        first = code(addiu(29, 29, -16), *([addiu(2, 0, 17)] * 10), JR_RA,
+                     addiu(29, 29, 16), NOP)
+        second = code(addiu(29, 29, -32), *([addiu(3, 0, 33)] * 5), JR_RA,
+                      addiu(29, 29, 32), NOP)
+        unrelated = code(addiu(29, 29, 80), NOP) + first.replace(
+            code(addiu(2, 0, 17)), code(addiu(2, 0, 19)))
+        data = code(addiu(29, 29, 80), NOP) + first
+        data += code(*([addiu(29, 29, 16), NOP] * 4)) + second + unrelated + first
+        rows = [("func_002C38A0", 0x1000, 64), ("func_00335918", 0x1040, 68),
+                ("func_00001084", 0x1084, 64), ("func_000010C4", 0x10C4, 56)]
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            boot, catalogue, dump = root / "boot.tsv", root / "levels.tsv", root / "dump"
+            boot.write_text("# name\taddress\tsize\n" + "".join(
+                f"{name}\t{address:08X}\t{size}\n" for name, address, size in rows))
+            catalogue.write_text("# name\tkind\tsize\tfingerprint\tlevels\tplaces\n" + "".join(
+                f"{name}\tboot\t{size}\tunused\t2\t00:{address+0x1000:08X},01:{address+0x2000:08X}\n"
+                for name, address, size in rows[:3]))
+            for number in (0, 1):
+                directory = dump / f"{number:02d}_test"
+                directory.mkdir(parents=True)
+                (directory / "manifest.json").write_text(
+                    '{"sections":[{"name":"text","address":' + str(0x2000 + number * 0x1000) + '}]}')
+                (directory / "text.bin").write_bytes(data)
+            with patch.multiple(levels, BOOT_FUNCTIONS=boot, CATALOGUE=catalogue, LEVELS=root,
+                                BOOT_PAIRS=root / "absent.tsv", DUMP=dump,
+                                NAMES={0:"test", 1:"test"}, BOOT_RESIDUES={}), \
+                 patch.object(levels, "boot_image", return_value=(data, [(0x1000,0,len(data))])), \
+                 patch.object(sys, "argv", ["levels.py", "catalogue"]):
+                levels.catalogue()
+                self.assertEqual(levels.read_boot_functions(), [
+                    ("func_002C38A0", 0x1008, 56), ("func_00335918", 0x1060, 36),
+                    ("func_00001084", 0x1084, 64), ("func_000010C4", 0x10C4, 56)])
+                corrected = {r[0]: (r[2], r[4]) for r in levels.read_catalogue()}
+                self.assertEqual(corrected["func_002C38A0"], (56, [(0,0x2008),(1,0x3008)]))
+                self.assertEqual(corrected["func_00335918"], (36, [(0,0x2060),(1,0x3060)]))
+                self.assertEqual(corrected["func_00001084"], (64, [(0,0x2084),(1,0x3084)]))
+                first_output = boot.read_bytes(), catalogue.read_bytes()
+                levels.catalogue()
+                self.assertEqual((boot.read_bytes(), catalogue.read_bytes()), first_output)
+
     def test_measured_residue_removed_in_boot_and_level_and_replay_is_stable(self):
         # Synthetic residue: a store without a complete function around it.
         # A different store and a tail jump of the same size must remain.

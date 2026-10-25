@@ -398,6 +398,26 @@ def level_extent(number: int, address: int, size: int) -> tuple[int, int]:
     return address + skip, size - skip
 
 
+# Measured mixed extents shared by the boot and level copies. Canonical names
+# stay stable; only the callable entry moves, with the original end preserved.
+FUNCTION_ENTRY_OFFSETS = {
+    "func_002C38A0": (64, 8),
+    "func_00335918": (68, 32),
+}
+
+
+def function_extent(name: str, address: int, size: int) -> tuple[int, int]:
+    """Apply a named, measured entry correction once; reject unexpected extents."""
+    if name not in FUNCTION_ENTRY_OFFSETS:
+        return address, size
+    original, skip = FUNCTION_ENTRY_OFFSETS[name]
+    if size == original - skip:
+        return address, size
+    if size != original:
+        raise ValueError(f"{name}: {size} bytes, expected {original} or {original - skip}")
+    return address + skip, size - skip
+
+
 # The level's linker leaves padding between the bodies, and a body that ends in a
 # `jr $ra` leaves the word after its delay slot behind.  Both are measured from the
 # retail bytes, not from a list of addresses: an extent whose words are only stack
@@ -533,6 +553,16 @@ def catalogue() -> None:
                 if text_va <= a < text_va + text_size]
     else:
         boot = read_boot_functions()
+    # Recover the original complete extent even after a previous regeneration.
+    # Its exact normalized code/size identifies level copies without a table of
+    # per-level addresses, including when starting from the historical inputs.
+    entry_keys = {}
+    for name, a, n in boot:
+        if name in FUNCTION_ENTRY_OFFSETS:
+            original, skip = FUNCTION_ENTRY_OFFSETS[name]
+            function_extent(name, a, n)       # validate before writing any output
+            start = a if n == original else a - skip
+            entry_keys[fingerprint(boot_bytes(start, original), start), original] = name
     boot_by_fp = {}
     # Compute from the pinned retail input even after the rows have been removed,
     # so catalogue regeneration is repeatable. Size and normalised bytes both
@@ -541,6 +571,7 @@ def catalogue() -> None:
     corrected_boot = []
     last_end, last_body = None, b""
     for name, a, n in sorted(boot, key=lambda r: r[1]):
+        a, n = function_extent(name, a, n)
         body = boot_bytes(a, n)
         if (fingerprint(body, a), n) in residue_keys:
             continue
@@ -555,32 +586,47 @@ def catalogue() -> None:
     if from_old:
         for number in NAMES:
             base, data = level_text(DUMP / level_dir(number))
-            extents[number] = [(a, n) for a, n in old_extents(f"{number}_{NAMES[number]}")
+            extents[number] = [(a, n, None) for a, n in old_extents(f"{number}_{NAMES[number]}")
                                if base <= a < base + len(data)]
     else:
         for name, kind, size, fp, places in read_catalogue():
             for number, a in places:
-                extents.setdefault(number, []).append((a, size))
-    found = {}
+                extents.setdefault(number, []).append((a, size, name))
+    found, entry_pairs = {}, {}
     for number in sorted(extents):
         base, data = level_text(DUMP / level_dir(number))
         # the previous extent of the same program, for the epilogue residue
         last_end, last_body = None, b""
-        for a, n in sorted(extents[number]):
+        for a, n, original_name in sorted(extents[number]):
             a, n = level_extent(number, a, n)
             body = data[a - base:a - base + n]
+            entry_name = entry_keys.get((fingerprint(body, a), n))
+            if entry_name:
+                a, n = function_extent(entry_name, a, n)
+                body = data[a - base:a - base + n]
+            elif original_name in FUNCTION_ENTRY_OFFSETS:
+                # Replay keeps the association established by the original
+                # extent, provided the shortened code still matches that boot
+                # function. It may now be identical to other boot methods.
+                if function_extent(original_name, a, n) != (a, n):
+                    raise ValueError(f"{original_name}: level {number} no longer matches its original extent")
+                if original_name not in boot_by_fp.get((fingerprint(body, a), n), ()):
+                    raise ValueError(f"{original_name}: level {number} differs after entry correction")
+                entry_name = original_name
             if (fingerprint(body, a), n) in residue_keys:
                 continue
             if not trim(body) or is_padding(body):
                 continue
             if len(words(body)) == 1 and last_end == a and is_epilogue_residue(body, last_body):
                 continue                # the residue of the previous body's epilogue
+            if entry_name:
+                entry_pairs[number, a] = entry_name
             # the size too: the same instructions with different padding are two functions
             entry = found.setdefault((fingerprint(body, a), n), {"size": n, "places": []})
             entry["places"].append((number, a))
             last_end, last_body = a + n, body
     # Boot functions paired by hand with level places the code alone cannot tell apart.
-    pairs = {}
+    pairs = dict(entry_pairs)
     if BOOT_PAIRS.is_file():
         for line in BOOT_PAIRS.read_text().splitlines():
             if not line.startswith("#"):
