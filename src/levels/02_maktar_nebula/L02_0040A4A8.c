@@ -223,7 +223,7 @@ void func_L02_0040B980(u8 *a0) {
 }
 
 /* sweeps the two effect tracks of the actor relative to a head position */
-INCLUDE_ASM("asm/levels", func_L02_0040BAB8);
+/* func_L02_0040BAB8 is defined in L02_0040BAB8.c. */
 
 /* records the actor's two shot counters, then arms it */
 void func_L02_0040BBA0(u8 *a0) {
