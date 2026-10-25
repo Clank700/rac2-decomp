@@ -91,7 +91,7 @@ INCLUDE_ASM("asm/levels", func_L16_00404E40);
 
 /* func_L16_00404F50 is defined in L16_00404F50.c. */
 
-INCLUDE_ASM("asm/levels", func_L16_004050D8);
+/* func_L16_004050D8 is defined in L16_004050D8-helpers.c. */
 
 INCLUDE_ASM("asm/levels", func_L16_00405488);
 

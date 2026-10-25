@@ -21,7 +21,7 @@ INCLUDE_ASM("asm/levels", func_L01_003A5BB8);
 
 INCLUDE_ASM("asm/levels", func_L01_003A6028);
 
-INCLUDE_ASM("asm/levels", func_L01_003A6280);
+/* func_L01_003A6280 is defined in L01_003A6280-helper-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L01_003A6350);
 

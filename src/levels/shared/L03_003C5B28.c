@@ -349,12 +349,14 @@ void func_L03_00419A60(u32 a0, u8 *a1, s32 a2) {
         *(unsigned short *)(q + (index << 5) + 0x8C) |= 1;
 }
 
-extern void func_L02_0032E998(u8 *, u8 *, u8 *, u8 *, s32, u32, u32);
+extern s32 func_L02_0032E998(u8 *, u8 *, void *, u8 *, s32, s32 *, s32 *, float, float);
 
-void func_L03_00419B10(u32 a0, u8 *a1, u8 *a2, u8 *a3, u32 x4, u32 x5) {
+s32 func_L03_00419B10(u32 a0, u8 *a1, u8 *a2, u8 *a3, s32 *x4, s32 *x5,
+                     float margin, float tolerance) {
     u8 *q = *(u8 **)((u8 *)D_L03_001B2A1C + (a0 << 8) + 0x68);
 
-    func_L02_0032E998(a1, a2, a3, q + 0x80, *(s32 *)(q + 0x480), x4, x5);
+    return func_L02_0032E998(a1, a2, a3, q + 0x80, *(s32 *)(q + 0x480), x4, x5,
+                            margin, tolerance);
 }
 
 s32 func_L03_00419B58(u32 a0, s32 a1) {
@@ -376,10 +378,10 @@ void func_L03_00419B90(u32 a0, u8 *a1, u8 *a2) {
     func_L02_0032EDD8(a1, q + 0x80, *(s32 *)(q + 0x480), (s32 *)a2);
 }
 
-void func_L03_00419C00();
+s32 func_L03_00419C00(u8 *, u8 *, u8 *);
 
-void func_L03_00419BD8(u32 a0) {
-    func_L03_00419C00((u8 *)D_L03_001B2A1C + (a0 << 8));
+s32 func_L03_00419BD8(u32 a0, u8 *first, u8 *second) {
+    return func_L03_00419C00((u8 *)D_L03_001B2A1C + (a0 << 8), first, second);
 }
 
 INCLUDE_ASM("asm/levels", func_L03_00419C00);

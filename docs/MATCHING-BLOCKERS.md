@@ -182,6 +182,17 @@ is not a remedy. All three releases accept their linked placements in the
 84-program strict build.
 [Qualified sources](https://github.com/OpenRAC/rac2-decomp/commit/3ba5ed46c8f1e03dd770bf80f181acf1f78de6e8).
 
+**Real scratch storage and live inputs, 25 October 2026:**
+`func_L20_00443B60` uses a 48-byte, three-row rotation basis alongside two
+16-byte records. The old 16-byte basis under-allocated the real output by
+32 bytes; the actual layout gives the retail 0xD0 frame and closes the
+396-byte body without padding. `func_L20_00443790` supplies the object's
+angles at `object + 0xF0` to the rotation helper, not the object base.
+Scoped constructor results in `func_L16_004050D8` also close its allocation
+while preserving the actual null-result store. These are measured source
+and storage remedies, not general evidence that larger frames need padding.
+[Qualified sources](https://github.com/OpenRAC/rac2-decomp/commit/bf60a47f1dacbbda3eb97762998188e3b4fd89ee).
+
 The wave 8 allocator investigation remains useful: global.c prioritizes approximately floor_log2(n_refs)*n_refs/live_length, with loop-weighted references; cc1 -dl exposes refs/live_length. In two samples, changing actual references moved a saved-register assignment while 15 declaration permutations did not. Inspect real live ranges and distinct pseudos before editing reference counts. Several identical compiles justify stopping one approach, not declaring every other meaningful source/profile impossible.
 
 **func_002A7470 (23 October 2026):** With `-O2 -G8 -ffunction-sections`, six plain-C forms reached a best 356/364 bytes and 0/28 placements in both USA v1.01 and USA v2.00; PAL has no catalogue row. The retained draft reconstructs the early helper, threshold guard and state updates, but its dynamic 16-byte-copy allocation and final table-byte access differ. A 360-byte form matched the `lq`/`sq` copy sequence but kept the animation index in `$s5`, expanding the frame from 0x40 to 0x50. **Next:** preserve the copy's pointer allocation while recomputing the animation index without a callee-saved live range. The size mismatch means the checker did not reach relocation-aware comparison.
@@ -592,6 +603,28 @@ duplicate fourth slot. All 51 carrying placements and the 84 strict programs
 pass. These repairs add no decompiled-byte credit.
 [Caller-interface corrections](https://github.com/OpenRAC/rac2-decomp/commit/a541245e66b8dfc8303cb72e07a4718e47301c76).
 
+Eight further existing interfaces pass 104 carrying placements without
+new byte credit. The two `func_002B60B0` callers retain the object plus four
+float inputs and the real pointer return; `func_L00_00323F28` explicitly
+forwards three floats. `func_L03_00419BD8` and `func_L03_00419B10` propagate
+the query result, point pointers, optional output pointers and floating
+inputs. The Aranos emitter preserves its caller-provided unused F12 slot,
+and `func_L02_003CE8B0` plus its PAL wrapper forward both pointers to the
+first entry hook. All 84 strict programs pass.
+[Caller-interface corrections](https://github.com/OpenRAC/rac2-decomp/commit/4a81f40f3099c9996fe4d8f5224133de7fd03040).
+
+Two explicit alternatives remain unlinked. `func_L03_0041F090` still has
+an existing byte-matched body whose first call relies on the incoming A0
+register being preserved implicitly. Its retained explicit-entity call is
+228/228 bytes but 0/1 in each USA release: a redundant A0 copy occupies
+retail's nop at +0x38. `-fcse-follow-jumps` ties; PAL has no canonical row.
+Do not use the old unspecified-argument declaration as a native interface.
+`func_L03_00419C00` retains corrected three-pointer/integer-return C at
+84/84 bytes and 0/2 in each release; sentinel stores and setup scheduling
+still differ from +0x1C. Neither case justifies a false prototype, pin or
+assembly classification. Reopen with independent reaching-value or output-
+lifetime evidence; the complete alternatives are in `nonmatching/`.
+
 <a id="blocker-13"></a>
 
 ## 13. Floating-point literals are calibrated, not computed
@@ -825,6 +858,26 @@ evidence. In `func_L07_003E5070`, the two observed 144-byte packets and the
 unqualified. Do not invent a third packet, padding or a complete global
 extent to reproduce the frame. Complete corrected C and measured reopening
 conditions remain in `nonmatching/`.
+
+**Additional qualified source remedies, 25 October 2026:**
+Three Aranos constructors/updates, four Yeedil handlers, a Snivelak
+constructor, two shared list/counter handlers and an Oozla effect add
+11 functions, 2,976 distinct bytes and 42 accepted carrying placements.
+The source keeps actual pointer returns, full aligned transfers, correct
+guard polarity and the real integer counter identity. All 84 strict
+programs pass; complete host/runtime source sets and hashes agree before
+and after qualification, with no compiler change or report regeneration.
+[Source remedies and retained large reconstructions](https://github.com/OpenRAC/rac2-decomp/commit/bf60a47f1dacbbda3eb97762998188e3b4fd89ee).
+
+Larger Endako, Jamming Array and Snivelak bodies remain near misses.
+Their corrected C preserves actual record strides, audio-bank views,
+aggregate alignment and context overlaps instead of fabricated extents.
+Store scheduling, state branches, floating setup and saved-value lifetimes
+remain measured constraints; equal sizes and matching prefixes are not
+matches. Keep the per-source residuals and reopening conditions when
+revisiting them. The Yeedil handler with a remaining post-branch nop
+is another witness for the scheduling issue in [section 30](#blocker-30),
+not proof that the function is handwritten or impossible in C.
 
 <a id="blocker-23"></a>
 
