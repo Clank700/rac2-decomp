@@ -143,6 +143,11 @@ silently changing neighbouring definitions.
   Do not invent a void return or an assembler-name alias to steer allocation.
 - A 64-bit colour/result must keep its ABI width. `func_001175F0` forwards a long
   result; explicit 32-bit truncation adds two instructions.
+- A colour constant's declared argument width selects its materialisation. Through
+  an `unsigned long`/`long long` parameter, 0x80F0F0F0 becomes `ori`+`dsll`+`ori`;
+  through `unsigned int` the same value is `lui`+`ori`. The icon colours of
+  `func_L00_003781B0` and `func_L00_00378388` take the wider form (measured
+  2026-10-25 with the game cc1 at `-O2 -G0`/`-G8`, scratch objects).
 - Integer and FP arguments use separate register banks. Their declaration order
   can affect setup while preserving the measured ABI: `func_0030E700` and existing
   Barlow effect-helper declarations are witnesses. A float declared third among
