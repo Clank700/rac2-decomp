@@ -157,6 +157,19 @@ Named counterexamples now pass: func_L09_004081F0 and func_L12_0041BDF8 each 1/1
 
 **23 October 2026 retained near miss:** `func_002F71B8` (356 bytes, boot plus 27 levels; game `-O2 -G8 -ffunction-sections`) remains unmatched after ten checker invocations across four plain-C forms. The best draft is exactly 356 bytes but 0/28 in USA v1.01, PAL and USA v2.00; each reports its first mismatch at +0x8. The five-word table copy, guarded call and three 12-byte record stores are recovered, while the prologue/base live ranges and initial register allocation still differ. Explicit SDA declarations produce the two GP-relative references in the size-exact draft; a no-SDA form was 348 bytes. Retained in `nonmatching/game/func_002F71B8.c`; reopen with a measured source-lifetime hypothesis, not artificial barriers.
 
+**Further qualified lifetime remedies, 25 October 2026:**
+`func_L00_004284B0` separates its initialization-only pointer from the
+reloaded persistent state; `func_L00_00427BE8` forms its target
+pointer where the copy and subsequent weight store actually use it.
+`func_L02_003C0890` uses separate metadata, snapshot and flag views for the
+three real child-pointer reloads. These are ordinary object/scope changes,
+without register pins or artificial references. The latter body and
+`func_L02_00348420` retain ordinary TImode transfers where their retail
+scheduling requires them; replacing every vector assignment with `qcopy`
+is not a remedy. All three releases accept their linked placements in the
+84-program strict build.
+[Qualified sources](https://github.com/OpenRAC/rac2-decomp/commit/3ba5ed46c8f1e03dd770bf80f181acf1f78de6e8).
+
 The wave 8 allocator investigation remains useful: global.c prioritizes approximately floor_log2(n_refs)*n_refs/live_length, with loop-weighted references; cc1 -dl exposes refs/live_length. In two samples, changing actual references moved a saved-register assignment while 15 declaration permutations did not. Inspect real live ranges and distinct pseudos before editing reference counts. Several identical compiles justify stopping one approach, not declaring every other meaningful source/profile impossible.
 
 **func_002A7470 (23 October 2026):** With `-O2 -G8 -ffunction-sections`, six plain-C forms reached a best 356/364 bytes and 0/28 placements in both USA v1.01 and USA v2.00; PAL has no catalogue row. The retained draft reconstructs the early helper, threshold guard and state updates, but its dynamic 16-byte-copy allocation and final table-byte access differ. A 360-byte form matched the `lq`/`sq` copy sequence but kept the animation index in `$s5`, expanding the frame from 0x40 to 0x50. **Next:** preserve the copy's pointer allocation while recomputing the animation index without a callee-saved live range. The size mismatch means the checker did not reach relocation-aware comparison.
@@ -557,6 +570,16 @@ operations. These are source-contract repairs, not new decompiled bytes; the
 ambiguous zero-stub family above remains unchanged.
 [Measured caller-interface repairs](https://github.com/OpenRAC/rac2-decomp/commit/623184a4e99a331b23db8b90f4defb1708f96f75).
 
+Five further existing caller interfaces preserve their actual inputs:
+`func_L09_00404F90`, `func_L02_003CE8B0` and their PAL-specific wrappers
+explicitly forward the two incoming pointers to integer-returning
+`func_L01_00321178`. The old no-argument calls happened to leave those
+registers intact. `func_L00_003BFF68` forwards its fourth incoming pointer as
+the third argument of `func_002B04E0`, without the invented
+duplicate fourth slot. All 51 carrying placements and the 84 strict programs
+pass. These repairs add no decompiled-byte credit.
+[Caller-interface corrections](https://github.com/OpenRAC/rac2-decomp/commit/a541245e66b8dfc8303cb72e07a4718e47301c76).
+
 <a id="blocker-13"></a>
 
 ## 13. Floating-point literals are calibrated, not computed
@@ -742,6 +765,35 @@ initialization stores differ from +0x24. Three meaningful record/lifetime
 forms produce identical text; keep the complete retained C and reopen with
 independent allocation or constructor-layout evidence, not another cosmetic
 permutation or an assembly classification.
+
+**Further qualified copy remedies, 25 October 2026:**
+`func_L02_002EF968` uses the real 144-byte packet and normal memory-clobbering
+`qcopy`; `func_L02_0032EF10` keeps its first transfer ordinary and uses
+`qcopy` for the conditional output transfers, preserving the subsequent Z
+write. `func_L07_003E5C78` captures the state pointer before the state-change
+call, then performs exactly two copies. The Joba position-choice family and
+the Dobbo Orbit constructors/update bodies also close with the reviewed
+helper and actual value lifetimes. The combined source change adds 17
+functions, 4,224 distinct bytes and 365 accepted placements across the three
+releases; all 84 strict programs pass. No new compiler mechanism was needed.
+[Source remedies and retained reconstructions](https://github.com/OpenRAC/rac2-decomp/commit/3ba5ed46c8f1e03dd770bf80f181acf1f78de6e8).
+
+The retained Feltzin color constructors now pass the packed-color result
+to the spawner independently of the converted angle; their smaller frames
+and timer/state lifetimes still differ. The half-speed store in
+`func_L05_00426568` is unconditional in retail and in its corrected draft.
+`func_L22_003C9D48` clears and copies local vectors, not controller fields.
+These semantic repairs are not matches. The three Joba visibility bodies
+remain 628/632 bytes with a 0x70 frame instead of 0x80 after restoring the
+true absolute entity-pool pointer and integer dispatcher interface.
+Preserve those fixes; their former invented array extent was not valid.
+
+Large Snivelak trail renderers still need independent packet/state-lifetime
+evidence. In `func_L07_003E5070`, the two observed 144-byte packets and the
+64-byte/48-byte matrix outputs leave an additional retail local range
+unqualified. Do not invent a third packet, padding or a complete global
+extent to reproduce the frame. Complete corrected C and measured reopening
+conditions remain in `nonmatching/`.
 
 <a id="blocker-23"></a>
 
