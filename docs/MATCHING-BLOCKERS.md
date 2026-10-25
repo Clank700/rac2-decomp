@@ -1345,6 +1345,15 @@ only changes the count `tools/progress.py` reports, as rac1-decomp counts them.
 
 ## Historical catalogue-boundary proposals and follow-up
 
+**Measured generator corrections:** `func_002C38A0` now starts eight bytes later
+and spans 56 bytes; `func_00335918` starts 32 bytes later and spans 36 bytes.
+The correction covers the boot and 27 level copies in each release, preserves
+ends and canonical names, and leaves all prefix bytes in assembly. The shortened
+first body collides with other boot bodies under normalized comparison, so the
+generator retains its proven original pairing rather than renaming its level
+copies. These are catalogue corrections, with no new C-match credit. Their
+retained notes in `nonmatching/` are starting points for future source work.
+
 `func_L00_0032D208` provides a separate resident-boundary lead: both direct calls
 reach `0x00132828`, the complete prologue inside the current 60-byte boot row
 `func_00132818`. The first sixteen bytes of that row are unmatched positive stack
