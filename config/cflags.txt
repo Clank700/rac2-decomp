@@ -566,3 +566,9 @@ src/levels/07_siberius/L07_003F6DC0-copy.c	-O2 -G8 -ffunction-sections
 src/levels/23_damosel_orbit/L23_00428490-g8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L16_003959B8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
 src/levels/20_yeedil/L20_0044B100-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/02_maktar_nebula/L02_003F1608.c	-O2 -G0 -ffunction-sections
+src/levels/02_maktar_nebula/L02_003E7370-g8.c	-O2 -G8 -ffunction-sections
+src/levels/02_maktar_nebula/L02_003F1A88.c	-O2 -G0 -ffunction-sections
+src/levels/06_notak/L06_003F3EF0-helpers.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L11_003F4198-helpers.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/shared/L11_00397C08-helpers.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g

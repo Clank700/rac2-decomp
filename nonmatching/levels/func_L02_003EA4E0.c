@@ -1,3 +1,17 @@
+/*
+ * Updated manual-C near miss, 2026-10-25.
+ * Measured unit: src/levels/02_maktar_nebula/L02_003EA4E0-g8.c
+ * Profile: -O2 -G8 -ffunction-sections
+ * Actual release coverage: US 0/1 (exit1); US2 0/1 (exit1); PAL absent (exit1).
+ * Current residual: 1416/1416 bytes. The owned nine-label dispatch, full matrix extents,
+ * qzero/qcopy and owner-flag prefix view are retained. At+0x94 the ushort postincrement
+ * still emits ANDI instead of DADDU; later scheduling also differs. A separated
+ * load/increment form gives 1412 bytes.
+ * Reopen only for: A true counter/field semantics or scheduling explanation that retains
+ * dispatch ownership and canonical integer/FP contracts.
+ * Older notes below are historical. Marker and trial-only profiles were restored.
+ */
+
 /* Signature/interface follow-up, 23 October 2026.
  * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-
  * barrier.
@@ -23,7 +37,9 @@ extern int D_L02_001B0D54 __attribute__((sda));
 extern float D_L02_001B0D58 __attribute__((sda));
 extern float D_L02_001B0D5C __attribute__((sda));
 extern int D_L02_001B30C8;
-extern unsigned char D_001395BB;
+/* Prefix view of the shared owner flag; the whole object remains unqualified. */
+typedef struct { unsigned char pad[3]; unsigned char active; } OwnerFlagView;
+extern OwnerFlagView D_001395B8 __attribute__((nosda));
 extern char D_00188660[], D_00189F10[];
 extern void func_L02_003EAA68(void *);
 extern int func_002B38B8(void *);
@@ -59,18 +75,18 @@ void func_L02_003EA4E0(char *actor) {
     float speed, distance, target;
     unsigned int mode = *(unsigned char *)(actor + 0x20);
     if (mode >= 9) return;
-    goto *D_L02_002A5420[mode];
+    goto *cases[mode];
 start:
     func_L02_003EAA68(actor);
     return;
 activate:
     if (D_L02_001B0D50 == 0) {
-        unsigned int timer;
+        int timer;
         if (!func_002B38B8(actor)) return;
         timer = (*(unsigned short *)(actor + 0x96))++;
-        if (timer < 6) return;
+        if ((unsigned int)timer < 6) return;
     }
-    if (*(int *)(state + 4)) { D_001395BB = 1; func_0029B3E0(0, -1); }
+    if (*(int *)(state + 4)) { D_001395B8.active = 1; func_0029B3E0(0, -1); }
     *(int *)(state + 0x2C) = func_002E5CF8(0, 4, actor);
     func_L02_003EAD38(actor);
     return;
@@ -87,7 +103,7 @@ wait:
 swing:
     speed = 0.016666668f;
     if (func_002B3868(actor)) speed = 60.0f;
-    *(Quad *)angles = 0;
+    qzero(angles);
     angles[2] = *(float *)(state + 0x3C);
     func_002833F0(rotation, angles);
     func_00283698(inverse, rotation);
@@ -103,7 +119,7 @@ swing:
     return;
 travel:
     if (func_002B3868(actor)) {
-        *(Quad *)(state + 0x40) = *(Quad *)(actor + 0x10);
+        qcopy(state + 0x40, actor + 0x10);
         *(float *)(state + 0x10) = 0;
         *(float *)(state + 0xC) = 0;
     }

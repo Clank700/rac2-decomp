@@ -78,7 +78,7 @@ int func_L06_003F3760(int a0, char *a1)
 
 INCLUDE_ASM("asm/levels", func_L06_003F3800);
 
-INCLUDE_ASM("asm/levels", func_L06_003F3EF0);
+/* func_L06_003F3EF0 is defined in L06_003F3EF0-helpers.c. */
 
 extern void func_0029F338(char *a0);
 

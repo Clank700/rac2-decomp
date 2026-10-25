@@ -1,12 +1,14 @@
-/* 472/472; us/us2/pal 0/4 each.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g.
- * The curve and interior jitter are reconstructed. First call setup, copy scheduling and division labels differ. A pure TImode-local variant produced 464 bytes; the union-vector draft is retained. Reopen with local aggregate/argument-lifetime evidence.
- */
+#include "common.h"
+
+/* Samples the cubic segment, adds jitter only to interior points, then
+ * extrapolates its final point. The retail contract requires count >= 3,
+ * count aligned 16-byte output vectors and four aligned control vectors. */
 typedef int TI128 __attribute__((mode(TI)));
 typedef union { TI128 q; float f[4]; } CurveVector;
 extern void func_00282CC0(void *, void *, void *);
 extern float func_00283CE0(int);
-extern void func_L00_003A2018(void *, void *, void *, void *, void *, float);
+/* The five-pointer/one-FP interpolation leaf differs between programs. */
+extern void ref_L11_00397C08_00(void *, void *, void *, void *, void *, float);
 extern float func_002A7878(float, float);
 extern void func_00282F20(void *, void *, float);
 extern void func_00282CF0(void *, void *, void *);
@@ -15,13 +17,13 @@ void func_L11_00397C08(CurveVector *points, int count, CurveVector *control, flo
     CurveVector first, second, jitter;
     float inverse;
     int i;
-    first.q = control[2].q;
+    qcopy(&first, &control[2]);
     func_00282CC0(&first, &first, &control[0]);
-    second.q = control[3].q;
+    qcopy(&second, &control[3]);
     func_00282CC0(&second, &second, &control[1]);
     inverse = 1.0f / func_00283CE0(count - 2);
     for (i = 0; i < count - 1; i++) {
-        func_L00_003A2018(&points[i], &control[0], &control[1], &first, &second, func_00283CE0(i) * inverse);
+        ref_L11_00397C08_00(&points[i], &control[0], &control[1], &first, &second, func_00283CE0(i) * inverse);
         if (i > 0 && i < count - 2) {
             jitter.f[3] = 0.0f;
             jitter.f[0] = func_002A7878(-1.0f, 1.0f);

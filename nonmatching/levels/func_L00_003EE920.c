@@ -1,11 +1,16 @@
-/* Bounded manual reconstruction; not linked.
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * 1004/1004 bytes; us: 0/27 places; us2: 0/27 places; pal: absent from catalogue.
- * Collision query and vector copies reproduce size and frame. The absolute scalar access
- * at001B0808 stays nosda. First difference+0x7c is pointer scheduling; later register lifetimes
- * differ. Query members not initialized in retail remain uninitialized. Reopen with a matching
- * collision-query lifetime witness.
+/* Bounded manual reconstruction, 2026-10-25; not linked.
+ * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -mno-split-addresses.
+ * 1004/1004 bytes; us: 0/27 placements; us2: 0/27 placements; pal: absent from catalogue.
+ * Measured workspace member positions and both complete contact vectors are preserved; the overall
+ * contact-result extent remains unknown. The source agrees through the prefix before +0x22c, then
+ * materializes the contact-result base early across two calls. Equal size is not a match.
+ * Reopen with evidence for the contact-result pointer lifetime or allocator scheduling. A local-
+ * scope pointer trial gave identical bytes; do not add an artificial barrier or dependency.
+ * Prior complete variants and diagnostic dumps are preserved privately.
+ * No candidate or linked-build credit is claimed.
  */
+#include "common.h"
+
 typedef int BounceWord128 __attribute__((mode(TI)));
 typedef union { BounceWord128 word; float f[4]; } BounceVector;
 typedef struct {
@@ -38,69 +43,79 @@ extern void func_002A9288(void *, float);
 extern float D_L00_001B0808 __attribute__((nosda));
 extern float D_L00_001B0828 __attribute__((sda));
 extern float D_L00_001B082C __attribute__((sda));
-extern BounceVector D_L00_001BF220 __attribute__((nosda));
-extern BounceVector D_L00_001BF240 __attribute__((nosda));
+/* Retail forms the normal address from the same result base plus 32 bytes.
+   Keep the overall extent unknown while retaining both complete vector views. */
+extern unsigned char D_L00_001BF220[] __attribute__((nosda));
 #define BW(p,o) (*(BounceWord128 *)((p)+(o)))
 #define BF(p,o) (*(float *)((p)+(o)))
 #define BI(p,o) (*(int *)((p)+(o)))
 
+/* Full transient query workspace. The exclusion list and vector members have
+   the storage and natural alignment observed in the retail stack layout. */
+typedef struct {
+    BounceVector previous;
+    int excluded[2];
+    BounceVector aim;
+    BounceQuery query;
+    BounceVector point, normal, offset;
+} BounceWorkspace;
+
 void func_L00_003EE920(unsigned char *object) {
     char *state = *(char **)(object + 0x68);
-    BounceVector previous, aim, point, normal, offset;
-    BounceQuery query;
-    int excluded[2], collision;
+    BounceWorkspace work;
+    int collision;
     char *info, *spawn;
     short category;
     switch (object[0x20]) {
     case 0:
         object[0x20] = 1;
     case 1:
-        previous.word = BW(object, 0x10);
-        func_002AFFD8((char *)&previous, (char *)&aim, 1);
+        qcopy(&work.previous, object + 0x10);
+        func_002AFFD8((char *)&work.previous, (char *)&work.aim, 1);
         func_00282CC0(object + 0x10, object + 0x10, state);
         func_00300190(object + 0x10, object + 0x10);
         func_00300248((int)state, (int)state);
         func_002FEE70(BI(state, 0x34), state, 0);
         func_002FE880(object + 0x10, (float *)state, D_L00_001B0808 * 0.00027777778f);
-        excluded[0] = 0;
-        excluded[1] = 0xCE3;
-        query.previous.word = previous.word;
-        query.position.word = BW(object, 0x10);
-        query.velocity.word = BW(state, 0);
-        query.hit = object;
-        query.excluded = excluded;
-        query.mode = 2;
-        query.radius = 0.25f;
-        query.response = D_L00_001B0828;
-        query.friction = D_L00_001B082C;
-        query.flags0 = 0;
-        query.flags1 = 0;
-        query.active = 0;
-        collision = func_002FE9D0(&query);
-        BW(object, 0x10) = query.position.word;
-        BW(state, 0) = query.velocity.word;
-        BW(state, 0x20) = query.previous.word;
+        work.excluded[0] = 0;
+        work.excluded[1] = 0xCE3;
+        qcopy(&work.query.previous, &work.previous);
+        qcopy(&work.query.position, object + 0x10);
+        qcopy(&work.query.velocity, state);
+        work.query.hit = object;
+        work.query.excluded = work.excluded;
+        work.query.mode = 2;
+        work.query.radius = 0.25f;
+        work.query.response = D_L00_001B0828;
+        work.query.friction = D_L00_001B082C;
+        work.query.flags0 = 0;
+        work.query.flags1 = 0;
+        work.query.active = 0;
+        collision = func_002FE9D0(&work.query);
+        qcopy(object + 0x10, &work.query.position);
+        qcopy(state, &work.query.velocity);
+        qcopy(state + 0x20, &work.query.previous);
         if (collision == 2)
             object[0x20] = 2;
-        if (query.hit) {
-            category = *(short *)(*(char **)(query.hit + 0x24) + 0x46);
-            if (category == 5 || category == 9 || (*(unsigned short *)(query.hit + 0x34) & 0x4000)) {
-                info = (char *)func_002AB1F0(query.hit);
-                func_002FE8D8(query.hit + 0x10, normal.f);
-                point.word = BW(object, 0x10);
+        if (work.query.hit) {
+            category = *(short *)(*(char **)(work.query.hit + 0x24) + 0x46);
+            if (category == 5 || category == 9 || (*(unsigned short *)(work.query.hit + 0x34) & 0x4000)) {
+                info = (char *)func_002AB1F0(work.query.hit);
+                func_002FE8D8(work.query.hit + 0x10, work.normal.f);
+                qcopy(&work.point, object + 0x10);
                 if (info) {
-                    func_00282D30(&offset, &normal, BF(info, 0x10));
-                    func_00282CC0(&point, &point, &offset);
+                    func_00282D30(&work.offset, &work.normal, BF(info, 0x10));
+                    func_00282CC0(&work.point, &work.point, &work.offset);
                 }
-                func_00282D30(&normal, &normal, -3.0f);
-                func_00282CC0(&normal, &normal, &point);
+                func_00282D30(&work.normal, &work.normal, -3.0f);
+                func_00282CC0(&work.normal, &work.normal, &work.point);
                 object[0x20] = 2;
-                BW(object, 0x10) = D_L00_001BF220.word;
-                BW(state, 0x20) = D_L00_001BF240.word;
+                qcopy(object + 0x10, D_L00_001BF220);
+                qcopy(state + 0x20, D_L00_001BF220 + 0x20);
                 func_00282F20(state + 0x20, state + 0x20, 1.0f);
-                if (func_002761F8(&point, &normal, 6, query.hit, 0)) {
-                    BW(object, 0x10) = D_L00_001BF220.word;
-                    BW(state, 0x20) = D_L00_001BF240.word;
+                if (func_002761F8(&work.point, &work.normal, 6, work.query.hit, 0)) {
+                    qcopy(object + 0x10, D_L00_001BF220);
+                    qcopy(state + 0x20, D_L00_001BF220 + 0x20);
                     func_00282F20(state + 0x20, state + 0x20, 1.0f);
                 }
             }

@@ -150,7 +150,7 @@ void func_L08_003D0040(void *object) {
 
 INCLUDE_ASM("asm/levels", func_L08_003D00C8);
 
-INCLUDE_ASM("asm/levels", func_L08_003D0508);
+/* func_L08_003D0508 is defined in L08_003D0508-qcopy.c. */
 
 INCLUDE_ASM("asm/levels", func_L08_003D2F50);
 
@@ -204,6 +204,6 @@ void func_L08_003D7E68(void *arg0) {
 
 INCLUDE_ASM("asm/levels", func_L08_003D7FB8);
 
-INCLUDE_ASM("asm/levels", func_L08_003D8290);
+/* func_L08_003D8290 is defined in L08_003D8290-qcopy.c. */
 
 INCLUDE_ASM("asm/levels", func_L08_003D82F0);
