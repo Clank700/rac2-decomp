@@ -1,40 +1,44 @@
-/* func_L02_003DBEC8 (120 bytes, 8 places) - best attempt, NOT MATCHED (register wall).
- *
- * Docker-free ruler (scratch/wslcmp.py): "02_maktar_nebula: 112 bytes, expected 120".
- * Loads, stores, store order, the table lookup, the 16-byte lq/sq copy and the trailing
- * func_002A7750(a0,1,-1) are all in the retail sequence; the whole residue is allocation:
- *   retail: daddu $a2,$a0,$zero ; lw $a3,0x68($a2) ; ... ; sw $zero,0x4($a3)
- *   mine  : daddu $t1,$a0,$zero ; lw $t0,0x68($t1) ; ... ; sw $zero,0x4($t0)
- * and this cc1 sinks the epilogue's `ld $ra,0x0($sp)` into the bnez delay slot where retail
- * reloads the parameter copy into $a3 there, which is where the four missing instructions go.
- *
- * The sibling func_L02_003D7B88 asks for $t1/$t0 (from the same spelling) and func_L08's
- * table gate wants the mirror image, so the register pick is a property of the body, not of
- * the spelling.  Two waves have now hit this wall; needs a lever on the allocator.
+/* Bounded manual reconstruction, 2026-10-25; not linked.
+ * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
+ * 120/120 bytes; us: 0/8 placements; us2: 0/8 placements; pal: 0/8 placements.
+ * The state pointer is read before the guard, preserving retail ordering. A known state prefix
+ * retains the index, elapsed word, phase and target pointer without asserting the complete object
+ * extent. The full position copy is preserved. Owner/state GPR allocation and table-base sharing
+ * differ from +0x4 despite equal size.
+ * Reopen with actual owner/state live-range evidence. The typed prefix did not change the emitted
+ * bytes; avoid more declaration permutations.
+ * Prior complete variants and allocator diagnostics are preserved privately.
+ * No candidate or linked-build credit is claimed.
  */
+#include "common.h"
 
-typedef unsigned char u8;
-typedef signed int s32;
-typedef float f32;
 
 typedef int TI128 __attribute__((mode(TI)));
 
 extern char *D_L02_001FF1C0[];
-extern void func_002A7750(void *, int, int);
+extern void func_002A7750(u8 *, s32, s32);
+
+/* Known state prefix only; later fields and total extent are unspecified. */
+struct TableState {
+    s32 index;
+    u8 unknown04[4];
+    s32 elapsed;
+    f32 phase;
+    char *target;
+};
 
 void func_L02_003DBEC8(char *a0)
 {
-    char *q;
+    struct TableState *q = *(struct TableState **)(a0 + 0x68);
     char *e;
     if (*(u8 *)(a0 + 0x20) != 0) {
         return;
     }
-    q = *(char **)(a0 + 0x68);
     *(u8 *)(a0 + 0x30) = 0x80;
-    *(f32 *)(q + 0xC) = -1.0f;
-    e = D_L02_001FF1C0[*(s32 *)q];
-    *(s32 *)(q + 0x8) = 0;
-    *(char **)(q + 0x10) = e;
-    *(TI128 *)(a0 + 0x10) = *(TI128 *)(e + 0x10);
-    func_002A7750(a0, 1, -1);
+    q->phase = -1.0f;
+    e = D_L02_001FF1C0[q->index];
+    q->elapsed = 0;
+    q->target = e;
+    qcopy(a0 + 0x10, e + 0x10);
+    func_002A7750((u8 *)a0, 1, -1);
 }

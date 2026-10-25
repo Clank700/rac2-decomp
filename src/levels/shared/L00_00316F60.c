@@ -127,7 +127,7 @@ extern int func_002EF250(float);
 
 extern int func_002ABB78(char *);
 
-extern void func_002AF000(void *);
+extern void func_002AF000(float *, float, float, float);
 
 extern void func_00282CC0(void *, void *, void *);
 
@@ -441,9 +441,9 @@ void func_L00_00323E48(GornRecordWrite64 *record, u32 selector,
     }
 }
 
-void func_L00_00323F28(void *a0, void *a1) {
-    int buf[4];
-    func_002AF000(buf);
+void func_L00_00323F28(void *a0, void *a1, float a, float b, float c) {
+    float buf[4];
+    func_002AF000(buf, a, b, c);
     func_00282CC0(a0, buf, a1);
 }
 
