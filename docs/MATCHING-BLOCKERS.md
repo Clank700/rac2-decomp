@@ -1828,3 +1828,32 @@ likewise use scoped references for measured placement-dependent families.
 Duplicate numbered data externs used during clock/range experiments were removed:
 the retained drafts preserve each actual containing object under one canonical
 identity and report the resulting nonmatching measurements.
+
+### Level-shared bodies that read $gp (wave 10, 25 October 2026)
+
+Three retained near misses from this wave (`func_L09_003FE0C0`, `func_L10_00423788`,
+`func_L12_003E1EE8`) plus the observations below.
+
+- A `disp($gp)` access in a body that is byte-identical at several places reads the
+  **same absolute address** in every program (GP is 0x1AEFF0 everywhere), so the C name
+  is the defining level's `D_LNN_XXXXXXXX` (GP + disp) in a `-g8.c` sibling, declared
+  `__attribute__((sda))` when it must stay a scalar. Measured in this wave:
+  0x1550/0x1554/0x1560/0x1564/0x1568 -> D_L11_001B0540/..44/..50/..54/..58,
+  0x1390/0x13A0 -> D_L17_001B0380/001B0390, 0x3758 -> D_L17_001B2748,
+  0xAB0 -> D_L05_001AFAA0, 0x2250/0x227C/0x2290/0x2294 -> D_L18_001B1240/..6C/..80/..84,
+  0x1B20 -> D_L12_001B1B10, -0x3FEC -> D_L17_001AB004, -0x66F0 -> D_L00_001A8900.
+  The `L12_003E1CB0-g8.c` header records the sda-size and second-name tricks needed to
+  keep a nearby `lui`/`lw` bare while the scalar takes the `$gp` form.
+- `func_L17_003A4740` starts with `sw $a0,-0x3FEC($gp); nop` **before** `addiu $sp,-0xB0`.
+  This cc1 never schedules a store ahead of the frame adjustment, so plain C cannot
+  produce the first two words. The extent itself is not suspect: the preceding row
+  `func_L04_003C6FE8` ends exactly at 0x3A4740. Do not call it handwritten on this
+  alone; the entry needs an indirect-reference audit first.
+- `func_L11_003F2A30` dispatches through a compiler jump table of 11 entries based at
+  D_L11_002BAA10 (`lw $a0,0($v1); jr $a0`, cases reached from `a0[0x42]`). wslcmp
+  checks only the function bytes, so a `switch` whose case *order* differs can look
+  close; `tools/build.py`'s jump-table qualification is the real check.
+- `func_L18_00428138` repeats its last two guards (`D_L18_001AFBB0 != 0` and
+  `D_L18_00189E20+0x2294 == 0x6F`) inside each case of its kind switch after checking
+  them before the switch. The duplication is in retail, so the retained C has to spell
+  it twice; merging it changes the branch layout.
