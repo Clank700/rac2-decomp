@@ -182,19 +182,14 @@ INCLUDE_ASM("asm/game", func_0028A670);
 
 INCLUDE_ASM("asm/game", func_0028AB20);
 
-void func_0028AB70(void)
-{
-}
+INCLUDE_ASM("asm/game", func_0028AB70);
+
 
 INCLUDE_ASM("asm/game", func_0028ACB0);
 
-void func_0028AE88(void)
-{
-}
+INCLUDE_ASM("asm/game", func_0028AE88);
 
-void func_0028AFE8(void)
-{
-}
+INCLUDE_ASM("asm/game", func_0028AFE8);
 
 INCLUDE_ASM("asm/game", func_0028B160);
 
