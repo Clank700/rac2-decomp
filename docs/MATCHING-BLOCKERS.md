@@ -472,6 +472,15 @@ Two literals verified against this toolchain, their bodies placed by the build (
 *is* the retail word): `0.017453294f` (pi/180) in `src/levels/12_todano/L12_00398E50.c`, and
 `0.055268768f` in `src/levels/shared/L01_00397110.c`.
 
+**Measured 2026-10-25 (wave 10), the loss is in `as`, not `cc1`:** for `pi/4` and `pi/6` the
+`li.s` line in `cc1`'s `.s` already holds the retail word (`7.85398185253143310547e-1` =
+`0x3F490FDC`, `5.23598790168762207031e-1` = `0x3F060A93`), but the assembled object holds one
+ulp less (`0x3F490FDB`, `0x3F060A92`). The pinned `as` re-parses the printed decimal
+imprecisely, so bisect the *object* word, not the `.s`. The pair that lands correctly is
+`0.78539825f` and `0.52359885f` (each makes `cc1` print the next float up, which `as` then
+rounds down onto the retail word). Debug recipe: compile a one-line probe with
+`scratch/wslcc.sh` and read the object, not the assembly.
+
 <a id="blocker-14"></a>
 
 ## 14. Store order is not one universal rotation
