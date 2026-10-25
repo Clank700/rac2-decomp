@@ -1313,8 +1313,9 @@ never comes out of a C body.
 
 **The rule that follows, and the traps it avoids:**
 
-* A word of opcode 0x12 (COP2) is evidence. Nothing else is needed: a function that
-  has one cannot be C.
+* A decoded COP2 instruction on a reachable path from a verified entry is evidence
+  for original assembly under the qualified plain-C toolchain. An opcode-shaped
+  data word alone is not evidence, and the function's extent must be coherent.
 * A word of opcode 0x1C is evidence **unless** it is the SPECIAL2 arithmetic or the
   `por $rd,$zero,$rt` form. A body that carries only a `por` is not hand-written:
   `func_00308768` and `func_00322138` carry one and are ordinary C with a 128-bit
@@ -1341,6 +1342,50 @@ contributor's reservation, and the measurement is handed over with them, because
 holder of a body is the one who decides its marker. The marker changes no link — the
 build takes those bodies from the game's own assembly whatever the marker says — it
 only changes the count `tools/progress.py` reports, as rac1-decomp counts them.
+
+### Reachable-instruction classification
+
+The remaining available bodies were checked across all three releases. **27
+functions, 990 placements** have a decoded instruction outside the qualified C
+output, an external call/branch or code/data address witness at the entry, and
+coherent reachable exits. They are marked `ASM_FUNC`, with no byte or C change.
+This classification records the assembly required by these bodies; it does not
+claim to recover whether their historical source was a separate assembler file
+or mixed C/assembly.
+
+The discriminating operations include real VU transfers/arithmetic and packed
+integer operations, not the compiler's ordinary `por`, `mult1`/`madd`, quadword
+copies or unaligned scalar loads. In particular:
+
+- `func_00115250` uses parallel byte tests (`psubb`, `pnor`, `pand`, `pxor`) and
+  packing, not just an ordinary `lq`/`sq` copy.
+- `func_00282A18` uses `plzcw` with trapping `addi` and `sub`; the finding is about
+  those exact instructions, not every opcode in the MMI space.
+- `func_00283658` stores `$vf0` with `sqc2` in the return delay slot. That slot is
+  executable evidence, unlike words beyond the return and its slot.
+- The level vector/matrix helpers and the release-specific packed-rendering
+  counterparts have the same instruction evidence at every applicable placement.
+
+As negative controls, the reachable code of **4,863 current C functions in 1,484
+compiled objects** contained none of the selected discriminating instructions.
+Eight synthetic controls cover reachable vector/packed operations, live delay
+slots, literals after a return or behind an unconditional branch, truncated
+extents and compiler-reachable copies/zeroing. Separate TI, bit-count and scalar
+arithmetic probes were compiled under the game and SDK profiles: successful
+probes did not emit those operations; unsupported wide-integer expressions were
+recorded as compilation errors, not evidence of a match. Absence from the C
+control set alone is not a general impossibility proof for arbitrary compilers.
+
+Four entries are deliberately still open: `func_001158F4` has no external witness
+at its current entry, `func_00129410` is an incomplete fallthrough extent, and
+`func_US2_L01_00305170` / `func_PAL_L01_00305C50` have outgoing-flow/extent
+uncertainty. Their bytes and retained notes remain untouched; none receives
+assembly-completion credit. Other contributors' reservations were excluded.
+
+Retained attempts stay in `nonmatching/`, with their historical status made
+explicit; this does not turn them into matched C or validated portable replacements.
+Report checks distinguish pending C from pending original assembly, without
+regenerating the reports or changing the progress policy.
 
 
 ## Historical catalogue-boundary proposals and follow-up

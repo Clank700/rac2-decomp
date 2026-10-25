@@ -497,6 +497,39 @@ class IsoTest(unittest.TestCase):
 
 
 class ProgressChecks(unittest.TestCase):
+    def test_primary_check_keeps_pending_original_assembly_separate_from_c(self):
+        import contextlib
+        import io
+        import progress
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/"report.json"
+            path.write_text(json.dumps({"units":[{"functions":[]}]}))
+            before=path.read_bytes();output=io.StringIO()
+            with patch.object(progress,"REPORT",path), \
+                 patch.object(progress,"source_functions",return_value={"x.c":[("c_body",True),("assembly_body",False)]}), \
+                 patch.object(progress,"handwritten",return_value={"assembly_body"}), \
+                 patch.object(sys,"argv",["progress.py","--check"]), contextlib.redirect_stdout(output):
+                progress.check()
+            self.assertIn("1 C and 1 original-assembly functions",output.getvalue())
+            self.assertEqual(path.read_bytes(),before)
+
+    def test_release_check_does_not_present_new_asm_func_as_new_c(self):
+        import contextlib
+        import io
+        import progress
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);path=root/"report.json"
+            path.write_text(json.dumps({"units":[{"functions":[{"name":"assembly_body","fuzzy_match_percent":0.0}]}]}))
+            before=path.read_bytes();output=io.StringIO()
+            with patch.object(progress,"ROOT",root), \
+                 patch.object(progress,"release_functions",return_value={"assembly_body":(0x1000,8,"boot",None)}), \
+                 patch.object(progress,"source_functions",return_value={"x.c":[("assembly_body",False)]}), \
+                 patch.object(progress,"handwritten",return_value={"assembly_body"}), \
+                 patch.object(sys,"argv",["progress.py","--check"]), contextlib.redirect_stdout(output):
+                progress.release_check("pal",path)
+            self.assertIn("0 C and 1 original-assembly functions",output.getvalue())
+            self.assertEqual(path.read_bytes(),before)
+
     def release(self, functions, flags=(), where=None):
         import progress
         with tempfile.TemporaryDirectory() as d:
