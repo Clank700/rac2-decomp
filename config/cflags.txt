@@ -553,10 +553,13 @@ src/game/002BB838-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-
 src/game/00304AD0-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/00307298-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/0030F7B0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
-
 # Format dispatch preserves the retail quadword return-address save.
 src/core/00118CC8.c	-O2 -G2 -ffunction-sections -mastra-quad-saves
 src/levels/shared/L22_003A5018.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L22_003B8FE8-g8.c	-O2 -G8 -ffunction-sections
 # A quadword copy plus the line label in front of the division.
 src/game/002AE8C0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/core/0011FC68.c	sdk -O2 -G2 -ffunction-sections
+src/core/00121450.c	sdk -O2 -G2 -ffunction-sections
+src/core/0011C090.c	sdk -O2 -G2 -ffunction-sections
+src/game/0028A278.c	-O2 -G0 -ffunction-sections -mno-split-addresses
