@@ -4,7 +4,7 @@ extern void func_L08_00328BB0();
 
 extern int func_L01_00321178(char *, char *);
 
-extern void func_002B4FF0(f32 a);
+extern int func_002B4FF0(char *, float *, float);
 
 extern char *D_L09_001B285C __attribute__((sda));
 
@@ -153,7 +153,7 @@ void func_L09_00404F90(char *a0, char *a1, s32 a2) {
     if (a2 == 0) {
         func_L01_00321178(a0, a1);
     } else {
-        func_002B4FF0(*(f32 *)(p + 0x33C));
+        func_002B4FF0(a0, (float *)a1, *(f32 *)(p + 0x33C));
     }
 }
 
