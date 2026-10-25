@@ -446,7 +446,63 @@ void func_002CAAA0(void)
 
 INCLUDE_ASM("asm/game", func_002CAB00);
 
-INCLUDE_ASM("asm/game", func_002CADB0);
+extern short D_001A63AC;
+extern int D_001C51D0;
+extern int D_00239BA0[];
+extern unsigned char D_00139568[];
+extern int func_002B4B70(int, int);
+extern int func_002B49E0(int, int, int, int, void *);
+extern void func_002B7CE0(int);
+extern void func_00294420(int);
+
+typedef struct {
+    char pad00[0x1C];
+    int mode;
+    char pad20[0x04];
+    volatile int count;
+    char pad28[0x08];
+    int field30;
+    char pad34[0x0C];
+    int field40;
+    char pad44[0xB0];
+    int fieldF4;
+} GameState_1F2840;
+
+void func_002CADB0(void)
+{
+    int n = ((GameState_1F2840 *)D_001F2840)->count;
+
+    if (n != 0)
+        ((GameState_1F2840 *)D_001F2840)->count = n - 1;
+    if (((GameState_1F2840 *)D_001F2840)->count != 0)
+        return;
+    if (D_001A63AC != 0)
+        return;
+    if (((GameState_1F2840 *)D_001F2840)->mode == 2) {
+        func_002B4B70(0, D_001C51D0);
+    } else if (((GameState_1F2840 *)D_001F2840)->mode == 3) {
+        func_002B49E0(1, 1, 0, ((GameState_1F2840 *)D_001F2840)->fieldF4, 0);
+    } else if (((GameState_1F2840 *)D_001F2840)->mode == 4) {
+        func_002B49E0(1, 1, 0, ((GameState_1F2840 *)D_001F2840)->fieldF4, 0);
+    } else if (((GameState_1F2840 *)D_001F2840)->mode == 6) {
+        func_002B49E0(1, 1, 0, ((GameState_1F2840 *)D_001F2840)->fieldF4, 0);
+    } else if (((GameState_1F2840 *)D_001F2840)->mode == 5) {
+        func_002B49E0(2, 1, ((GameState_1F2840 *)D_001F2840)->fieldF4, 0, 0);
+    } else {
+        func_002B4B70(0, 0);
+    }
+    if (((GameState_1F2840 *)D_001F2840)->field40 != 0 &&
+        ((GameState_1F2840 *)D_001F2840)->field30 != ((GameState_1F2840 *)D_001F2840)->field40) {
+        int id;
+        int *rec;
+        func_002B7CE0(1);
+        id = ((GameState_1F2840 *)D_001F2840)->field40;
+        rec = (int *)((char *)D_00239BA0 + D_00139568[id] * 0xE0);
+        func_00294420(rec[5]);
+        func_002B7CE0(1);
+    }
+    func_002B7CE0(1);
+}
 
 /* func_002CB820 reads $gp slots: it is defined in 002C7748-g8.c. */
 
@@ -458,7 +514,43 @@ s32 func_002CB4E8(s32 a0) {
  return result;
 }
 
-INCLUDE_ASM("asm/game", func_002CB510);
+/* Level-select state: a count, the current entry and a per-entry list. */
+typedef struct {
+    int count;
+    int id;
+    int pad;
+    int state[64];
+} LevelSelect_210A40;
+
+extern LevelSelect_210A40 D_00210A40;
+extern unsigned char D_001A7BC8[];
+extern unsigned char D_001A7C01;
+extern int D_00258D70[];
+extern void func_00288CB0(int, int);
+
+int func_002CB510(int flags)
+{
+    int result = -1;
+    int i;
+
+    for (i = 0; i <= D_00210A40.count; i++) {
+        if (func_002CB4E8(i))
+            D_00210A40.state[i] = D_001A7BC8[i] != 0;
+    }
+    D_00210A40.state[0] = 0;
+    if (flags & 0x1000) {
+        func_002C9A98((s32 *)&D_00210A40);
+    } else if (flags & 0x4000) {
+        func_002C9AD8((s32 *)&D_00210A40);
+    } else if (flags & 0x40) {
+        result = D_00210A40.id;
+        if (D_00258D70[result * 2] == 0xB47 && D_001A7C01 == 0)
+            func_00288CB0(0x19, 1);
+        else
+            func_00288CB0(result, 1);
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/game", func_002CB648);
 
