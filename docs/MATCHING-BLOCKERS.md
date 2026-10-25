@@ -645,6 +645,23 @@ Likewise, retained `func_L00_003EEE90` normalizes an impulse before its
 first fill, as retail does; do not conceal that constraint with invented
 initialization or describe every complete reconstruction as native-safe.
 
+Two indexed animation wrappers now preserve independently observed live
+inputs. `func_L09_00329178` forwards count/value in A2/A3 to
+`func_002B6228`; `func_L09_0033E690` forwards its F12 base to
+`func_L06_00382850`. Their L18 caller already supplies all these arguments
+and is unchanged. The former two-argument declarations matched because
+the register contents survived implicitly. The explicit contracts pass
+all 33 carrying placements and all 84 strict programs, with no new credit.
+[Measured wrapper repairs](https://github.com/OpenRAC/rac2-decomp/commit/e9253b20eda332eba59ec959541bf25013fbc7ec).
+
+Keep unused results distinct from unproved results. The actual allocation
+paths of `func_002C2210`, `func_002C16C0` and `func_002BFB38` return a
+pointer or null; `func_00277F48` returns a 32-bit count. Retained callers
+that ignore these results must not invent a void contract. Conversely,
+a live F0 scratch value alone does not establish a floating return:
+inspect a real consuming caller before changing an unrelated helper's
+interface. Physical input banks and stack words need the same control.
+
 <a id="blocker-13"></a>
 
 ## 13. Floating-point literals are calibrated, not computed
@@ -922,6 +939,43 @@ the 5,716/5,868-byte residual unchanged. Preserve that order even when an
 older, incorrect variant fit the frame better. Its Aranos counterpart
 remains 5,828/5,868 with independently measured scratch ranges and a
 0x440 frame. Neither frame agreement nor a size improvement is a match.
+
+**Storage and source identity before allocator tuning, 25 October 2026:**
+Retained `func_L02_0043F4C8` had three matrix rows but calls
+`func_00283698`, whose output needs four rows. `func_L02_00421860` had
+a 32-byte impact record, but its initializer writes a word at +0x20;
+the aligned record needs 48 bytes. The real phase-local union and complete
+query fields recover the corresponding retail frames without invented
+padding. They remain near misses. For the beam packet, the initializer
+touches 36 bytes and the handwritten query consumer copies 40; the
+existing aligned 48-byte record covers both observed spans.
+
+`func_L00_003A3B58` also loads a quadword using a scalar's eight-aligned
+address. [PCSX2's LQ implementation](https://github.com/PCSX2/pcsx2/blob/master/pcsx2/R5900OpcodeImpl.cpp)
+rounds the effective address down to 16 bytes. This does not establish
+the surrounding C object's ownership or extent. The retained diagnostic
+stays unlinked; do not invent a vector global or bypass the reviewed
+copy helper's alignment precondition to claim a match.
+
+Check the generated behavior as well as the source. Two identifiers with
+the same assembler label can still hide their overlap from the compiler.
+In retained `func_L23_0041A7A0`, separate GP/absolute views made a clamp
+compare the old value: old 9 plus increment 2 with maximum 10 would leave 11.
+One scalar identity restores the compare against the sum, even though
+mixed retail address selection remains unmatched. Similarly,
+`func_L23_0041D398` now represents its observed ten pointer slots as one
+array with two five-slot windows; indexing past a declared five-element
+array was invalid even when another array followed it physically.
+
+Verify initialization and comparison polarity in each body's own retail.
+The Aranos/Grelbin beams zero Z before publishing the vector. Two burst
+effects also contain unconditional drift clears omitted by their older
+drafts; this is different from a genuinely uninitialized retail read.
+Preserve unordered branch behavior instead of rewriting every inverted
+comparison as an ordered `<=` or `>=`. Complete corrected reconstructions,
+their actual release coverage and reopening conditions remain unlinked;
+equal size, matching frames and prefixes receive no matching credit.
+[Retained source corrections](https://github.com/OpenRAC/rac2-decomp/commit/7799e607437c4e999af6be52050c904bbc5ef069).
 
 <a id="blocker-23"></a>
 
