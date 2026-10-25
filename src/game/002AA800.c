@@ -131,8 +131,8 @@ void func_002AA800 (float *p, int a1, float fx, float fl)
 extern void func_002AA198(float *, float, float, float, float);
 extern float func_00282C48(float);
 
-float func_002AA898(float *position, float *velocity, int direction,
-                   float target, float acceleration, float damping, float limit)
+float func_002AA898(float *position, float *velocity, float target,
+                   float acceleration, float damping, float limit, int direction)
 {
     float distance;
     float residual;

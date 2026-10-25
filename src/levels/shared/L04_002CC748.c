@@ -253,8 +253,8 @@ extern void func_00282DD8(void *dst, void *a, void *b);
 extern void func_00283430(void *dst, void *src);
 extern void func_00283788(void *a, void *b, void *c);
 extern void func_002830C0(void *a, void *b, void *c);
-extern f32 func_002AA898(f32 *position, f32 *velocity, s32 direction, f32 target,
-                         f32 acceleration, f32 damping, f32 limit);
+extern f32 func_002AA898(f32 *position, f32 *velocity, f32 target,
+                         f32 acceleration, f32 damping, f32 limit, s32 direction);
 extern void func_002AB6D8(f32 *src, f32 *out);
 
 /* Copies the caller's matrix into a local one, takes the two aim angles off
@@ -298,7 +298,7 @@ void func_L04_00347AB8(void *a0, void *a1, void *a2, void *a3, f32 f1, f32 f2, f
         ang = 0.0f;
         d = 0.0f;
     }
-    func_002AA898(&pos, (f32 *)a2, 0, base, f1, f2, f3);
+    func_002AA898(&pos, (f32 *)a2, base, f1, f2, f3, 0);
     vec[0] = 0.0f;
     vec[1] = 0.0f;
     vec[2] = pos;
