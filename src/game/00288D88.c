@@ -42,7 +42,43 @@ void func_00288D88(void)
 {
 }
 
-INCLUDE_ASM("asm/game", func_00288D90);
+typedef struct {
+    int active;
+    int timer;
+    char pad08[0x18];
+    int entryIndex;
+    int unk24;
+} SubtitleState;
+
+extern SubtitleState D_00254E78;
+
+void func_00288D90(void)
+{
+    switch (D_00254E78.active) {
+    case 0:
+        D_00254E78.unk24 = -1;
+        return;
+    case 1:
+    case 2:
+        D_00254E78.active = 7;
+        D_00254E78.timer = 0;
+        return;
+    case 3:
+        D_00254E78.active = 7;
+        D_00254E78.timer = 0;
+        return;
+    case 4:
+        D_00254E78.active = 6;
+        D_00254E78.timer = 4 - D_00254E78.timer;
+        return;
+    case 5:
+        D_00254E78.active = 6;
+        D_00254E78.timer = 0;
+        return;
+    case 7:
+        return;
+    }
+}
 
 typedef struct { int active; char reserved04[0x20]; int key; int selection; char reserved2C[0x14]; int value40; int value44; } SelectorState;
 typedef struct { char reserved00[0x24]; int key; char reserved28[0x40]; int active;
@@ -66,19 +102,10 @@ int func_00288E18(int key, int selection)
 }
 
 
-typedef struct {
-    int active;
-    int timer;
-    char pad08[0x18];
-    int entryIndex;
-    int unk24;
-} SubtitleState;
-
 typedef struct { int unk00; int unk04; int id; int unk0C; } TextEntry;
 
 typedef struct { char pad00[0x2A20]; int unk2A20[1]; } DiscToc;
 
-extern SubtitleState D_00254E78;
 extern TextEntry *D_001B1840 __attribute__((sda));
 extern DiscToc D_0014B540;
 
