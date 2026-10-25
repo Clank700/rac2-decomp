@@ -81,7 +81,7 @@ extern void func_L02_003D28E0(void);
 
 extern void func_L02_00333438(void);
 
-extern void func_L01_00321178(void);
+extern int func_L01_00321178(char *, char *);
 
 extern void func_002B4FF0(float);
 
@@ -452,13 +452,13 @@ INCLUDE_ASM("asm/levels", func_L02_003CE4D0);
 
 /* Runs the kind's entry hook: the first when the level flag is set, the second when the third
    argument is clear, the third with the object's own angle otherwise. */
-void func_L02_003CE8B0(char *a0, int a1, int a2) {
+void func_L02_003CE8B0(char *a0, char *a1, int a2) {
     char *p = *(char **)(a0 + 0x68);
 
     if (D_L02_001A8FF0)
         func_L02_00333438();
     else if (a2 == 0)
-        func_L01_00321178();
+        func_L01_00321178(a0, a1);
     else
         func_002B4FF0(*(float *)(p + 0x31C));
 }

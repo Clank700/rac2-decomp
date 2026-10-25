@@ -1,7 +1,5 @@
-/* 248/248, all three releases 0/9.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy.
- * Explicit hit pointer preserves retail saved-register setup. Remaining differences are initial copy/call delay slot and fallback copy ordering. Six array/union/TImode and qcopy-barrier forms tried. Reopen with stack-object lifetime evidence.
- */
+#include "common.h"
+
 typedef int TI128 __attribute__((mode(TI)));
 typedef union { TI128 q; float f[4]; } MoveVector;
 extern int func_002C94C8(int, void *, void *, void *);
@@ -19,9 +17,9 @@ void func_L02_0032EF10(MoveVector *start, MoveVector *target, MoveVector *output
         func_00282D30(hit, hit, 0.9900000095367432f);
         func_00282CC0(&destination, &intersection, &source);
     } else {
-        destination.q = target->q;
+        qcopy(&destination, target);
     }
     if (!func_002C9218(path, &destination, output, radius))
-        output->q = destination.q;
+        qcopy(output, &destination);
     output->f[2] = target->f[2];
 }

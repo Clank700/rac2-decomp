@@ -1,8 +1,12 @@
-/* Not landable: this body reaches a 128-bit copy through `qcopy`/`qzero` or a local
-   `__asm__` helper, and AGENTS.md's "Plain C" rule (no inline assembly in a function)
-   forbids that as a matching route. Kept as a starting point. Removed from src/ 2026-10-13. */
+/* Choose a randomized point around the supplied full vector and store it in the private state.
+ * The shared helper transfers the complete aligned 16-byte input vector.
+ */
+#include "common.h"
 
-func_L02_0040BAB8(u8 *a0, float *a1) {
+extern float func_00283248(float,float),func_002A7878(float,float);
+extern float func_00283180(float),func_00283198(float);
+
+void func_L02_0040BAB8(u8 *a0, float *a1) {
     float v, t, h, k;
     u8 *q;
 

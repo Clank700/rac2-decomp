@@ -572,3 +572,8 @@ src/levels/02_maktar_nebula/L02_003F1A88.c	-O2 -G0 -ffunction-sections
 src/levels/06_notak/L06_003F3EF0-helpers.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L11_003F4198-helpers.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
 src/levels/shared/L11_00397C08-helpers.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/shared/L02_003C0890-helpers.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L02_00348420-helpers.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L02_002EF968-helpers.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L02_0032EF10-helpers.c	-O2 -G0 -ffunction-sections
+src/levels/07_siberius/L07_003E5C78-helpers.c	-O2 -G0 -ffunction-sections
