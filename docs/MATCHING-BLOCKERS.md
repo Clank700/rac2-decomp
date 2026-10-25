@@ -196,6 +196,16 @@ scheduling options did not close the body; the best remains 37,280/37,268 bytes.
 The three-function address follow-up adds no C match. Keep the retained body and
 reopen with independent object/lifetime evidence, not fabricated reference counts.
 
+The shorter retained `func_L00_003A2258` is still 420/420 bytes: its first
+pointer has 7 references over a live length of 60, versus the index's 9 over
+114. The ordinary and diagnostic objects agree, but the first-input/index
+roles still take the wrong saved registers at +0x3C. Earlier increments and
+non-clobbering local copies did not close that allocation. In
+`func_L00_003A8670`, a measured 112-byte record and explicit configuration
+branches improve 364 bytes to the retail 356; column/index association and
+three address/schedule words remain different after the matching prefix
+through +0xFC. Neither equal size nor a neutral allocator-dump build is a match.
+
 <a id="blocker-02"></a>
 
 ## 2. LICM: the retail re-materialises a base inside a loop
@@ -381,6 +391,12 @@ Two documented names may express different addressing forms of one real global. 
 
 **24 October 2026, retained near miss:** `func_002721C8` (game `-O2 -G8 -ffunction-sections`) is 176/184 bytes and 0/28 placements in each of USA v1.01, PAL and USA v2.00. A typed partial camera-state view recovers the 0x30 frame and saved registers; a raw byte view was 168 bytes and a `nosda` scalar grew to 200. Retail uses absolute address/first-load forms and a later GP read of the same scalar, while the retained single canonical SDA declaration uses GP throughout. Six checker invocations, no scratch compiles; size mismatch prevents relocation-qualified binding checks. The actual C is in `nonmatching/game/func_002721C8.c`, with its source marker restored. Reopen with evidence for the real scalar storage/declaration and its two addressing forms, without duplicate invented identities or scheduling barriers.
 
+A bounded `-mno-split-addresses` trial for `func_L00_00396288` and
+`func_L00_00392530` fails in the qualified GNU assembler with the internal
+assertion at `tc-mips.c:11867`. The retained drafts use their ordinary profiles;
+this is a failure of that tested path, not evidence of handwritten game code
+or a reason to rewrite the output instructions.
+
 <a id="blocker-09"></a>
 
 ## 9. Folded addresses where retail materialises the base
@@ -402,9 +418,43 @@ scope. All 28 programs pass --strict and all 71 tests pass in the final tree.
 helpers under `AGENTS.md`. Their real memory effects still need source/ABI and
 strict linked qualification. Seventeen bodies that had been landed with helpers
 were removed under the earlier policy on 2026-10-13
-and sit in `nonmatching/` with their notes, waiting for a plain-C spelling. The remaining levers are
-`mode(TI)` assignment (offset folded, wrong when retail materialises) and an aggregate/`memcpy`
-spelling (neither reproduced it in the waves' attempts). A sibling shape was re-confirmed on the `func_L00_003B0AB0` / `B0A28` / `B0CE8` family in wave 8: retail keeps `lui %hi(D) ; addiu %lo(D) ; addiu rd,rs,CONST` with the constant in a **separate** `addiu`, and all seven source forms tried (`D+0xC+idx*0x1C`, `(char *)&D[idx*0x1C]+0x10`, `((char (*)[0x1C])D)[idx]+0x10`, a local base, ...) folded `D+CONST` into the `%lo`. Those seven forms did not close that family; this is a bounded result, not a proof about every legal source form.
+and their retained drafts require fresh qualification under the approved helper policy.
+The historical `mode(TI)` and aggregate/`memcpy` experiments did not reproduce those
+transfers; those failures do not rule out the now-approved helpers. A sibling shape was re-confirmed on the `func_L00_003B0AB0` / `B0A28` / `B0CE8` family in wave 8: retail keeps `lui %hi(D) ; addiu %lo(D) ; addiu rd,rs,CONST` with the constant in a **separate** `addiu`, and all seven source forms tried (`D+0xC+idx*0x1C`, `(char *)&D[idx*0x1C]+0x10`, `((char (*)[0x1C])D)[idx]+0x10`, a local base, ...) folded `D+CONST` into the `%lo`. Those seven forms did not close that family; this is a bounded result, not a proof about every legal source form.
+
+**25 October 2026 helper and lifetime follow-up:** nineteen functions totaling
+7,580 distinct C bytes pass all 84 strict program builds across USA v1.01,
+USA v2.00 and PAL; all 162 carrying placements use C without fallback.
+Catalogue absences are recorded separately, not counted as checks or matches.
+[Qualified source and retained reconstructions](https://github.com/OpenRAC/rac2-decomp/commit/f8236cfde5556b48cb745ba3907af9d8c94b1c8f).
+The approved helpers recover complete transfers without guessing local extents.
+`func_L23_00428490` keeps its measured 144-byte packet and sixth integer argument;
+`func_L07_003F8010` needs a single 64-byte affine matrix, rather than separate
+48-byte and 16-byte locals. The ribbon drafts `func_L00_003973E8` and
+`func_L00_00395A88` now copy all four components on the zero-length ray path;
+the old drafts copied only the last two. Their 1480/1488 and 1508/1516-byte
+results remain near misses, with loop lifetimes and saved-register allocation
+still different. The allocator diagnostic reproduces the ordinary compiled
+objects; it measures interference and priorities, not semantic correctness.
+
+Copy independence includes later writes: the fourth matrix row in
+`func_L23_0042A018` and `func_L23_0042A8C0` is followed by a write to its W
+component, so it uses clobbering `qcopy`. Only the first three independent rows
+use `qcopy_nc`. Rechecking this repair leaves the measured object bytes
+unchanged; equality alone would not have justified the weaker memory contract.
+The existing `func_002B5678` definition also now declares the unused fourth
+scratch-pointer slot supplied by its C caller. The retail body does not read
+that input; no dummy use or instruction is added.
+
+Two residuals need source evidence, not padding or instruction rewriting:
+`func_L18_003FD630` is 252/252 bytes with a 0x90 frame instead of 0xF0;
+only four input control vectors are established, so an extra 0x60-byte local
+would be unsupported. `func_L18_002CFF48` is 504/504 bytes and agrees through
++0x194; a plain branch at +0x198 differs from the retail likely branch, with
+a different global-mode temporary. Duplicate calls worsen it to 520 bytes;
+natural switch/goto forms tie. Reopen with independent storage or conditional
+lifetime evidence. Final profiles, release coverage and reopening conditions
+remain beside the retained C in `nonmatching/`.
 
 **24 October 2026 linked C qualification:** `func_00270D50` (220 bytes) passes 28/28 placements in each of USA v1.01, PAL and USA v2.00 in its dedicated `-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier` unit. The default profile gave 204 bytes; qcopy alone recovered retail size but still moved address/call setup and restores across the copies. The existing barrier profile reproduces the complete body without a source barrier. The C keeps the camera fields within the canonical `D_L00_001B8C80` object and the established six-pointer `func_00270B58` interface; the helper also passes 28/28 checks per release. All 84 strict program builds pass with the candidate linked, without C fallback. This is one distinct function, not one per placement.
 

@@ -167,6 +167,13 @@ each have their own worktree for that reason (docs/AGENT_WORKFLOW.md).
 - **English.** Everything that lands here is in English: code, comments, commit messages,
   issues, pull requests, reviews, and the notes kept in `nonmatching/`. Translate before it is
   published.
+- **LF line endings.** Save every new or edited versioned text file with LF (`\n`),
+  never CRLF or mixed endings. This applies to C, headers, scripts, configuration and
+  documentation; binary assets are not text. Preserve the existing `.gitattributes`
+  byte-preserving policy: Git must not silently rewrite source bytes for Windows.
+  After staging, check `git ls-files --eol -- <changed paths>`: text files must show
+  `i/lf` and `w/lf` (`none` is valid for an empty file or a file without newlines).
+  Normalize the files in your change, not unrelated historical files.
 - **Flags per file, never per function** (`config/cflags.txt`). If one function needs other flags,
   it belongs in a file of its own with those flags.
 - **Assembler/linker compatibility follows RAC1's evidence rule.** A compatibility pass
