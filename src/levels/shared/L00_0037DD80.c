@@ -54,7 +54,30 @@ s32 func_L00_0037DDE8(u32 key,u32 owner) {
 
 INCLUDE_ASM("asm/levels", func_L00_0037DE30);
 
-INCLUDE_ASM("asm/levels", func_L00_0037DEF8);
+extern int func_L00_0037DD80(int a0, int a1);
+extern int func_L00_0037DE30(char *a0, char **a1, int a2, int a3);
+
+int func_L00_0037DEF8(char *a0, char **a1, int a2, int *a3, int a4)
+{
+    int i;
+
+    *a3 = 1;
+    for (i = 0; i < a2; i++) {
+        if (a4 > 0 && *(short *)(*(int *)(a1[i] + 0x24) + 0x46) != a4)
+            continue;
+        if (func_L00_0037DD80((int)a0, (int)a1[i]) == 1)
+            return (int)a1[i];
+    }
+    if (a2 < 2)
+        return 0;
+    {
+        int result = func_L00_0037DE30(a0, a1, a2, a4);
+
+        if (result != 0)
+            *a3 = 0;
+        return result;
+    }
+}
 
 /* Near miss: nonmatching/levels/func_L00_0037E000.c - the condition chain is right but this
    cc1 runs the loop downwards (i = 31, i--) where retail counts up, and the `e != 0` test

@@ -404,6 +404,8 @@ void func_L00_002AA478(char *self, int arg1)
     }
 }
 
+/* Near miss: nonmatching/levels/func_L00_002AA570.c - 472/480 bytes; retail
+   keeps the base's %hi in $s5 and re-materialises it inside the loop. */
 INCLUDE_ASM("asm/levels", func_L00_002AA570);
 
 INCLUDE_ASM("asm/levels", func_L00_002AA750);

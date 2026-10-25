@@ -446,7 +446,65 @@ void func_002CAAA0(void)
 
 INCLUDE_ASM("asm/game", func_002CAB00);
 
-INCLUDE_ASM("asm/game", func_002CADB0);
+extern short D_001A63AC;
+extern int D_001C51D0;
+extern int D_00239BA0[];
+extern unsigned char D_00139568[];
+extern int func_002B4B70(int, int);
+extern int func_002B49E0(int, int, int, int, void *);
+extern void func_002B7CE0(int);
+extern void func_00294420(int);
+
+typedef struct {
+    char pad00[0x1C];
+    int mode;
+    char pad20[0x04];
+    volatile int count;
+    char pad28[0x08];
+    int field30;
+    char pad34[0x0C];
+    int field40;
+    char pad44[0xB0];
+    int fieldF4;
+} GameState_1F2840;
+
+void func_002CADB0(void)
+{
+    int n = ((GameState_1F2840 *)D_001F2840)->count;
+
+    if (n != 0)
+        ((GameState_1F2840 *)D_001F2840)->count = n - 1;
+    if (((GameState_1F2840 *)D_001F2840)->count != 0)
+        return;
+    if (D_001A63AC != 0)
+        return;
+    if (((GameState_1F2840 *)D_001F2840)->mode == 2) {
+        func_002B4B70(0, D_001C51D0);
+    } else if (((GameState_1F2840 *)D_001F2840)->mode == 3) {
+        func_002B49E0(1, 1, 0, ((GameState_1F2840 *)D_001F2840)->fieldF4, 0);
+    } else if (((GameState_1F2840 *)D_001F2840)->mode == 4) {
+        func_002B49E0(1, 1, 0, ((GameState_1F2840 *)D_001F2840)->fieldF4, 0);
+    } else if (((GameState_1F2840 *)D_001F2840)->mode == 6) {
+        func_002B49E0(1, 1, 0, ((GameState_1F2840 *)D_001F2840)->fieldF4, 0);
+    } else if (((GameState_1F2840 *)D_001F2840)->mode == 5) {
+        func_002B49E0(2, 1, ((GameState_1F2840 *)D_001F2840)->fieldF4, 0, 0);
+    } else {
+        func_002B4B70(0, 0);
+    }
+    if (((GameState_1F2840 *)D_001F2840)->field40 != 0 &&
+        ((GameState_1F2840 *)D_001F2840)->field30 != ((GameState_1F2840 *)D_001F2840)->field40) {
+        int id;
+        int *rec;
+        func_002B7CE0(1);
+        id = ((GameState_1F2840 *)D_001F2840)->field40;
+        rec = (int *)((char *)D_00239BA0 + D_00139568[id] * 0xE0);
+        func_00294420(rec[5]);
+        func_002B7CE0(1);
+    }
+    func_002B7CE0(1);
+}
+
+/* func_002CB820 reads $gp slots: it is defined in 002C7748-g8.c. */
 
 INCLUDE_ASM("asm/game", func_002CAF18);
 
@@ -456,6 +514,8 @@ s32 func_002CB4E8(s32 a0) {
  return result;
 }
 
+/* Near miss: nonmatching/game/func_002CB510.c (312/312 bytes, three
+   register-choice words in the loop setup's two address materialisations). */
 INCLUDE_ASM("asm/game", func_002CB510);
 
 INCLUDE_ASM("asm/game", func_002CB648);
@@ -474,7 +534,7 @@ int func_002CB7D0(int mode)
 }
 
 
-INCLUDE_ASM("asm/game", func_002CB820);
+/* func_002CB820 reads $gp slots: it is defined in 002C7748-g8.c. */
 
 INCLUDE_ASM("asm/game", func_002CB8A0);
 
@@ -538,6 +598,8 @@ done:
 
 INCLUDE_ASM("asm/game", func_002CC528);
 
+/* Near miss: nonmatching/game/func_002CC550.c (316/316 bytes; the two address
+   materialisations in the loop preheader keep a separate %hi temporary). */
 INCLUDE_ASM("asm/game", func_002CC550);
 
 int func_002CC690(void) {
@@ -687,3 +749,4 @@ return_value:
     }
     return result;
 }
+

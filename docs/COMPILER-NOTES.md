@@ -13,6 +13,29 @@ inline assembly, pin registers or invent barriers/interfaces. Keep upstream
 provenance and licences, and recheck every affected function through the strict
 linked build.
 
+Check the current RAC1 source **and its active build inputs** before rejecting a
+source method or adding a compiler mechanism. At revision
+[`b7d23028`](https://github.com/OpenRAC/rac1-decomp/tree/b7d2302814e50be29b8cd2848d21f47c4c5740d4),
+`config/text.objects` and `Makefile.sn` include these examples:
+
+- [`movie/vobuf.c`](https://github.com/OpenRAC/rac1-decomp/blob/b7d2302814e50be29b8cd2848d21f47c4c5740d4/src/game/movie/vobuf.c#L68)
+  and [`hud.c`](https://github.com/OpenRAC/rac1-decomp/blob/b7d2302814e50be29b8cd2848d21f47c4c5740d4/src/game/hud.c#L469)
+  use volatile memory fields to retain reloads. Such a field need not be MMIO:
+  establish the actual access widths, offsets and ordering from the retail body.
+  A synthetic volatile local or extra access is not equivalent evidence.
+- [`map.c`](https://github.com/OpenRAC/rac1-decomp/blob/b7d2302814e50be29b8cd2848d21f47c4c5740d4/src/game/map.c#L640)
+  declares the same target with different integer/FP interleavings. The EE assigns
+  the two banks independently. A typed interleaving may change argument setup
+  scheduling while preserving the call, provided order, count and widths within
+  each bank, stack slots, return contract and side effects remain unchanged.
+  This does not justify permuting arguments inside a bank or omitting an argument.
+
+RAC2 already uses this call-shape method in `func_0030E700` and Barlow helpers.
+Different C declarations across units need a consistent interface or adapter for
+a native ABI; an EE match alone does not establish a working native port.
+Qualify the actual RAC2 source/profile and every carrying release, rather than
+assuming that an example in RAC1 guarantees a match here.
+
 ### Diagnosing allocation before changing source
 
 Run `python3 tools/regalloc.py func_XXXXXXXX --version us` on a current C
@@ -179,6 +202,11 @@ silently changing neighbouring definitions.
   Do not invent a void return or an assembler-name alias to steer allocation.
 - A 64-bit colour/result must keep its ABI width. `func_001175F0` forwards a long
   result; explicit 32-bit truncation adds two instructions.
+- A colour constant's declared argument width selects its materialisation. Through
+  an `unsigned long`/`long long` parameter, 0x80F0F0F0 becomes `ori`+`dsll`+`ori`;
+  through `unsigned int` the same value is `lui`+`ori`. The icon colours of
+  `func_L00_003781B0` and `func_L00_00378388` take the wider form (measured
+  2026-10-25 with the game cc1 at `-O2 -G0`/`-G8`, scratch objects).
 - Integer and FP arguments use separate register banks. Their declaration order
   can affect setup while preserving the measured ABI: `func_0030E700` and existing
   Barlow effect-helper declarations are witnesses. A float declared third among
@@ -447,6 +475,11 @@ Combining both switches affects sched1/sched2 differently and needs its own proo
   (`func_L00_00338D28`). An early null return changes the exit structure.
 - A named threshold can retain addiu+slt where a literal becomes slti:
   `func_L00_00410840` needs this at its lower thresholds, not the highest test.
+- A chain of `||` comparisons against adjacent constants is combined into a
+  range test: `st == 0xFE || st == 0xFD || st == 3` becomes
+  `(st + 3) & 0xFF < 2` plus one compare. A right-nested spelling
+  `st == 0xFE || (st == 0xFD || st == 3)` keeps the three separate compares in
+  source order (measured in `func_L08_0042F440`/`0042FAC0`, 544-byte twins).
 - `x = load; if (flag) x = 0.0f;` differs from a ternary in branch polarity and
   likely slots (`func_L00_0042A460`). Store order affects allocation, but there is
   no universal reversal or permutation rule.

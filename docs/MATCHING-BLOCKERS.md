@@ -252,6 +252,8 @@ through +0xFC. Neither equal size nor a neutral allocator-dump build is a match.
 
 `__attribute__((sda))` in a `-G0` file on an **absolute** symbol stops the hoist: `lui %hi ; lw %lo` stay inside the loop as retail has them (side effect: the prologue's index/base register pair swaps). And there is a sub-case of its own: an **absolute global addressed in a loop that contains calls** - cc1 hoists the address into a callee-saved register (`lui $s1,%hi`, frame 0x20, two extra saves) where retail re-materialises `lui $v1,%hi ; lw $v1,%lo($v1)` at every iteration with one register (`func_L11_00440868`, one instruction off; `func_L11_004411C8`, 8 bytes off - bodies otherwise identical instruction for instruction). In those tested units the attribute produced an unwanted `$gp` form; qualify the actual unit instead of generalizing the declaration rule.
 
+**25 October 2026, saved-pair swap closed by block scope (measured, `func_L00_003EB400`, 528 bytes, 2/2 places):** the remaining disagreement was `$s1`/`$s2` only - retail kept the actor pointer in `$s1` and the precomputed `i + 1` in `$s2`, cc1 the other way. Declaring the loop index **inside the `if` block that owns the loop** (`if (state == 1) { int i; for (i = 0; i < 4; i++) ... }`) instead of at function scope reproduces retail's pair, because the parameter copy then sorts below the loop's live-across-call temporary. In the same body a named `char *row = (char *)state + i * 4;` before `id = *(int *)row;` gives retail's `addu $s0,$s4,$v0` operand order where the inline indexed read gives `addu $s0,$v0,$s4`. Both levers together closed the function; keep the block-scoped index for any similar 4-iteration loop whose counter lands in the wrong one of `$s1`/`$s2`.
+
 <a id="blocker-03"></a>
 
 ## 3. If-conversion
@@ -425,6 +427,8 @@ The historical sample is retained: 47 of 240 notes mentioned gp/sda/G8; one 23-t
 
 Two documented names may express different addressing forms of one real global. They must derive the same true identity; malformed names, invented addresses or aliases hiding inconsistent bindings are not remedies. PR #244's review corrected such naming defects. Use ref_LNN_XXXXXXXX_kk where a target's identity genuinely varies by placement, not as a substitute for a known correct data name.
 
+**24 October 2026, one declaration for both forms at -G0 (wave 10):** in the level-08 twins `func_L08_0042F440`/`0042FAC0`, `extern s32 D_L08_001B3AA0 __attribute__((sda));` under the file's `-O2 -G0` emits `lui`+`%lo` in ordinary flow and the single `$gp` form inside a `jal`/branch delay slot. Retail's body shows exactly that mix for the same word (absolute `lui a0`/`lw a0` for the increment, `lw`/`sw 0x4AB0($gp)` in two slots), so one sda declaration covers it: no -g8 sibling and no second name were needed. This does not contradict the -G8 `func_002721C8` note below, where the same attribute gives GP throughout; the threshold/profile decides. The lever did not close these two bodies' residual setup order.
+
 **24 October 2026, retained near miss:** `func_002721C8` (game `-O2 -G8 -ffunction-sections`) is 176/184 bytes and 0/28 placements in each of USA v1.01, PAL and USA v2.00. A typed partial camera-state view recovers the 0x30 frame and saved registers; a raw byte view was 168 bytes and a `nosda` scalar grew to 200. Retail uses absolute address/first-load forms and a later GP read of the same scalar, while the retained single canonical SDA declaration uses GP throughout. Six checker invocations, no scratch compiles; size mismatch prevents relocation-qualified binding checks. The actual C is in `nonmatching/game/func_002721C8.c`, with its source marker restored. Reopen with evidence for the real scalar storage/declaration and its two addressing forms, without duplicate invented identities or scheduling barriers.
 
 A bounded `-mno-split-addresses` trial for `func_L00_00396288` and
@@ -507,6 +511,12 @@ remain beside the retained C in `nonmatching/`.
 <a id="blocker-11"></a>
 
 ## 11. MMI and undecodable words
+
+`func_002A0A28` has a retained review observation about working-register `$at`
+use and trapping arithmetic. The proposed `nonmatching/` file contained only
+that note, not a C reconstruction, so the observation belongs here instead.
+The `INCLUDE_ASM` marker is unchanged: instruction-set/control-flow review and
+the handwritten-assembly acceptance rule still apply before `ASM_FUNC` credit.
 
 The wave 8 correction correctly identified 0x700014A9 as por, not mtsa or an undecodable word. The recorded mtsa zero encoding was 0x00000029. A por-plus-sq zero mismatch remains separate from a decoder error (section 17).
 
@@ -676,6 +686,15 @@ Two literals verified against this toolchain, their bodies placed by the build (
 *is* the retail word): `0.017453294f` (pi/180) in `src/levels/12_todano/L12_00398E50.c`, and
 `0.055268768f` in `src/levels/shared/L01_00397110.c`.
 
+**Measured 2026-10-25, the loss is in `as`, not `cc1`:** for `pi/4` and `pi/6` the
+`li.s` line in `cc1`'s `.s` already holds the retail word (`7.85398185253143310547e-1` =
+`0x3F490FDC`, `5.23598790168762207031e-1` = `0x3F060A93`), but the assembled object holds one
+ulp less (`0x3F490FDB`, `0x3F060A92`). The pinned `as` re-parses the printed decimal
+imprecisely, so bisect the *object* word, not the `.s`. The pair that lands correctly is
+`0.78539825f` and `0.52359885f` (each makes `cc1` print the next float up, which `as` then
+rounds down onto the retail word). Debug recipe: compile a one-line probe with
+the configured compiler/profile and inspect the object, not only the assembly.
+
 <a id="blocker-14"></a>
 
 ## 14. Store order is not one universal rotation
@@ -794,6 +813,17 @@ Typed effect records and the measured floating/integer call interface resolve
 the other observed differences. Nine bounded trials include three forms that
 end in the same two-word tie. Reopen with an independently justified constant
 or loop-lifetime model; another equivalent spelling is not new evidence.
+
+**24 October 2026, retained near miss:** `func_L08_0042F440` and
+`func_L08_0042FAC0` are 544/544 bytes and 0/1 each, byte-identical through
++0x128. Only two func_334BB0 argument-setup blocks and case 3's counter register
+differ: retail keeps `daddu $a0,$s0` in the `beqz` delay slot and materialises
+the a2 address after a1, this cc1 hoists `lui $a2,%hi` into the slot. Moving the
+last integer argument's declaration after the four floats (the integer/FP bank
+split of COMPILER-NOTES) puts only that argument in the `jal` slot; it does not
+move a2. Two different source orders and the `x = x + 1` / `x++` / named-temp
+counter forms measured. Retained: `nonmatching/levels/func_L08_0042F440.c`,
+`func_L08_0042FAC0.c`.
 
 <a id="blocker-20"></a>
 
@@ -2030,7 +2060,7 @@ attributed for provenance, not exclusive ownership.
 | **Jump tables the build cannot place:** `func_L06_003FDA08`, `func_L13_00422CB8`, `func_L03_003C4578`, `func_L02_003F9AF0`, `func_L02_003F9B70`, `func_L02_003FE1B0` | Solved, PR pending | A computed goto through retail's own table, in the form of `func_00310A40`, matches all six. The three level 2 records' in-order switches were wrong: retail's tables map the values to the bodies in another order. Decode the table before trusting a record's `switch`. |
 | **Labels behind hazard nops:** `func_L18_004308F0`, `func_L02_00411530` | Merged, #264 | Opt-in `-frac2-hazard-labels`. 198 retail branch targets after a compare or `mtc1` sit on the nop, and SN's `Ps2EeAs` agrees. Forced on everywhere it is neutral (778 of 779, one `.mdebug`). |
 | **gcse critical-edge split, Cygnus block merge:** `func_002CD720`, `func_L02_003E79F8`, `func_L02_003FCCA0`, `func_L18_004283F0` | Merged, #261 | Opt-in `-frac2-gcse-unsplit-edges` and `-frac2-keep-block-order`. `func_L23_0041B9F0` reaches retail's size with the gcse switch and still stops at the copy order. |
-| **PRE keeps a load across a store to another offset:** `func_L02_003EEC58` (and `func_L23_0041C0E8`) | Open | Retail reloads the index after a store to a disjoint offset of the same base. A `volatile` read reproduces it, which is not allowed. **Next:** an opt-in PRE rule in which any store kills the load. |
+| **PRE keeps a load across a store to another offset:** `func_L02_003EEC58` (and `func_L23_0041C0E8`) | Open | Retail reloads the index after a store to a disjoint offset of the same base. A historical `volatile` probe reproduces it. Current RAC1 also uses volatile fields; this is not a blanket-forbidden source method (see COMPILER-NOTES.md). **Next:** establish whether a faithful field qualifier describes the target's actual accesses before considering an opt-in PRE rule. The old probe alone does not qualify either solution. |
 | **Wide store in an annulled slot:** `func_L02_0042EDD0`, `func_L23_00422668`, `func_L02_003E7370` | Merged, #279 | Retail's game code has no `sd` or `sq` among the 2,895 stores in annulled slots. Ordinary slots hold 547 `sq` and 497 `sd`, and annulled slots do take wide loads.<br><br>PR #279 adds the opt-in `-frac2-no-annulled-wide-stores` (reorg's thread and steal paths; `optimize_skip` is kept). It is neutral by default (796 of 796 units); forced on in every game-compiler unit, it changes only the two witnesses. `func_L02_0042EDD0` (2 places, with the clear barrier) and `func_L23_00422668` (with `-frac2-qcopy`) are exact with it. `func_L02_003E7370` also needs the clear barrier in a call slot, and the barrier then also catches a plain C clear. |
 | **Catalogue rows that are not functions:** `func_00288D40` (20 bytes), `func_00290718` (4), `func_00298D10` (20), `func_002B4068` (36), `func_002B49A0` (12), `func_002ED570` (4), `func_002FC460`, `func_002FC510`, `func_002FC618`, `func_002FC868` (4 each), `func_0033B538` (4) | Evidence, left as markers | Each row starts right after a complete function, its `jr $ra` and the delay slot, and ends at the next function. No branch or jump in any catalogued boot function reaches it (scan of every boot row). Their words, like `sw $v0,-0x3D14($gp)` or `addiu $sp,$sp,0x10 ; nop`, read as unreachable tails. **Next:** a `tools/levels.py` rule for unreachable inter-function words, if maintainers want one. |
 | **Rows that begin inside the previous epilogue:** 113 unmatched level-catalogue rows, 8 of them reserved by me (`func_L02_003EA180`, `func_L02_004004D0`, `func_L02_00439CD8`, `func_L03_00421398`, `func_L19_003DCCC8`, `func_L19_003DD9D8`, `func_L23_00415988`, `func_L23_004277B0`) | Evidence for §47's entry corrections | Each row starts with 8 to 104 bytes of epilogue words (a positive `addiu $sp,$sp,N`, `nop`), then directly a prologue `addiu $sp,$sp,-N`. None of the 137 rows that begin with such words is C. In all 1,065 placements, no branch or jump reaches the leading words.<br><br>106 rows have a reference to the prologue (a code address pair, a data pointer or a call) and none into the leading words. Two also have a data word equal to a leading address. Five have no reference found.<br><br>`func_L02_004004D0` is one of them: `func_L02_003FAF28` passes `D_L02_004004D8` as a callback, and its C equals retail from +8 except for the copy barrier. **Next:** entry corrections such as `LEVEL_ENTRY_OFFSETS`, keyed so that boot and level identity holds. I can prepare them for my eight if wanted. The list is below the table. |
@@ -2197,3 +2227,32 @@ likewise use scoped references for measured placement-dependent families.
 Duplicate numbered data externs used during clock/range experiments were removed:
 the retained drafts preserve each actual containing object under one canonical
 identity and report the resulting nonmatching measurements.
+
+### Level-shared bodies that read $gp (wave 10, 25 October 2026)
+
+Three retained near misses from this wave (`func_L09_003FE0C0`, `func_L10_00423788`,
+`func_L12_003E1EE8`) plus the observations below.
+
+- A `disp($gp)` access in a body that is byte-identical at several places reads the
+  **same absolute address** in every program (GP is 0x1AEFF0 everywhere), so the C name
+  is the defining level's `D_LNN_XXXXXXXX` (GP + disp) in a `-g8.c` sibling, declared
+  `__attribute__((sda))` when it must stay a scalar. Measured in this wave:
+  0x1550/0x1554/0x1560/0x1564/0x1568 -> D_L11_001B0540/..44/..50/..54/..58,
+  0x1390/0x13A0 -> D_L17_001B0380/001B0390, 0x3758 -> D_L17_001B2748,
+  0xAB0 -> D_L05_001AFAA0, 0x2250/0x227C/0x2290/0x2294 -> D_L18_001B1240/..6C/..80/..84,
+  0x1B20 -> D_L12_001B1B10, -0x3FEC -> D_L17_001AB004, -0x66F0 -> D_L00_001A8900.
+  The `L12_003E1CB0-g8.c` header records the sda-size and second-name tricks needed to
+  keep a nearby `lui`/`lw` bare while the scalar takes the `$gp` form.
+- `func_L17_003A4740` starts with `sw $a0,-0x3FEC($gp); nop` **before** `addiu $sp,-0xB0`.
+  This cc1 never schedules a store ahead of the frame adjustment, so plain C cannot
+  produce the first two words. The extent itself is not suspect: the preceding row
+  `func_L04_003C6FE8` ends exactly at 0x3A4740. Do not call it handwritten on this
+  alone; the entry needs an indirect-reference audit first.
+- `func_L11_003F2A30` dispatches through a compiler jump table of 11 entries based at
+  D_L11_002BAA10 (`lw $a0,0($v1); jr $a0`, cases reached from `a0[0x42]`). wslcmp
+  checks only the function bytes, so a `switch` whose case *order* differs can look
+  close; `tools/build.py`'s jump-table qualification is the real check.
+- `func_L18_00428138` repeats its last two guards (`D_L18_001AFBB0 != 0` and
+  `D_L18_00189E20+0x2294 == 0x6F`) inside each case of its kind switch after checking
+  them before the switch. The duplication is in retail, so the retained C has to spell
+  it twice; merging it changes the branch layout.
