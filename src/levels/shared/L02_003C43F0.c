@@ -840,7 +840,8 @@ void func_L02_003F0628(char *a0) {
 INCLUDE_ASM("asm/levels", func_L02_003F0788);
 
 /* Forwards the first argument with a null second and a third of three. */
-void func_L02_003FC248(void *a0) {
+/* Its callback callers also supply two integer slots that this body ignores. */
+void func_L02_003FC248(void *a0, int unused_a1, int unused_a2) {
     func_002A6C58(a0, 0, 3);
 }
 

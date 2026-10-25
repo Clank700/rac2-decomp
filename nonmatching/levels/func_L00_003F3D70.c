@@ -1,11 +1,16 @@
-/* Bounded manual reconstruction; not linked.
+/* Bounded manual reconstruction, 2026-10-25; not linked.
  * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * 1188/1180 bytes; us: 0/27 places; us2: absent from catalogue; pal: absent from catalogue.
- * Full controller and three-shot path preserves current helper interfaces, timer return banks
- * and resident identities. Raw resident globals produce different address sharing and register
- * allocation; retail 0xc0 frame agrees. Reopen with a typed resident player state and a matching
- * controller allocation witness.
+ * 1192/1180 bytes; us: 0/27 placements; us2: absent from catalogue; pal: absent from catalogue.
+ * The full controller and three-shot path remain intact. The permission result is assigned on its
+ * actual branch. Resident address sharing and integer lifetimes still differ despite the agreeing
+ * frame.
+ * Reopen with qualified resident identity or actual branch-local lifetime evidence, not declaration
+ * permutations.
+ * Prior complete variants and diagnostic dumps are preserved privately.
+ * No candidate or linked-build credit is claimed.
  */
+#include "common.h"
+
 typedef int ShotWord128 __attribute__((mode(TI)));
 typedef union { ShotWord128 word; float f[4]; } ShotVector;
 typedef struct { char prefix[0x50]; float speed, cooldown; char suffix[0xE0-0x58]; } ShotTuning;
@@ -50,7 +55,7 @@ void func_L00_003F3D70(unsigned char *object) {
     ShotVector aim, velocity, position, direction, rotation, rotated;
     char *spawn, *target;
     unsigned int color;
-    int allowed = 1;
+    int allowed;
     float speed;
     if (object[0x20] == 0)
         object[0x20] = 1;
@@ -71,8 +76,10 @@ void func_L00_003F3D70(unsigned char *object) {
         D_0018AA18 = D_0018B270;
     if (D_0018C0B4 == 0x1D)
         allowed = func_00282948(&D_0018C354) != 0;
-    else
+    else {
         D_0018C354 = 0x28;
+        allowed = 1;
+    }
     if (func_002829D8(state) && !D_0018C0DC && D_0018B060 > 22 && allowed) {
         if ((D_00138320 & D_0018B050) && func_L00_002D3F30(-1, 1)) {
             func_0029FCC0((char *)object, 0, (char *)&aim);
@@ -81,10 +88,10 @@ void func_L00_003F3D70(unsigned char *object) {
             speed = D_L00_00262570[D_00139580].speed * 0.016666668f;
             if (D_0018C30C == 1) {
                 func_00282F20(&velocity, object + 0xD0, -speed);
-                position.word = aim.word;
+                qcopy(&position, &aim);
             } else {
                 func_00282F20(&velocity, &D_0018A580, speed);
-                position.word = aim.word;
+                qcopy(&position, &aim);
                 if (D_0018B320)
                     func_L00_0037FA90((char *)&velocity, (char *)&position, speed, 32.0f, 0.6981318f);
             }
@@ -99,7 +106,7 @@ void func_L00_003F3D70(unsigned char *object) {
             if (D_0018A168 == 0)
                 func_002AFFD8((char *)object + 0x10, (char *)&direction, 1);
             else
-                direction.word = *(ShotWord128 *)(D_0018C0B0 + 0xE0);
+                qcopy(&direction, D_0018C0B0 + 0xE0);
             func_002AB668(&rotation, (int)&direction, -0.122173056f);
             func_002ACDE8(&rotated, &velocity, &rotation);
             spawn = func_L00_003AA4C8(&position, &rotated, object, target);
