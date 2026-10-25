@@ -272,7 +272,7 @@ void func_L01_003115E8(int list, int state)
 
 /* Defined in L01_00311C18.c. */
 
-INCLUDE_ASM("asm/levels", func_L01_003120A8);
+/* func_L01_003120A8 is defined in L01_003120A8-helpers.c. */
 
 void func_L01_003128C0(char *p) {
     *(int *)(p + 0x70) = 0;

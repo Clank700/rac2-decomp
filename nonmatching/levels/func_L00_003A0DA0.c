@@ -1,9 +1,20 @@
-/* Nonmatching: 384 bytes versus 396; USA 0/27 placements.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * +0x0: the rotation temporary remains live in a callee-saved TImode register instead of a second stack vector. A struct assignment regressed to 420 bytes; qcopy barrier toggling did not improve it. Reopen with a memory-lifetime explanation. */
+/* Retained C reconstruction; not linked or counted.
+ * Profile: -O2 -G0 -ffunction-sections.
+ * 396/396 bytes. us: 0/27 places; us2: 0/27 places; pal: 0/27 places.
+ * Remaining: The scalar TI rotation snapshot is now addressable through its final
+ * real qcopy, instead of remaining in a saved 128-bit register. A measured
+ * adjacent pair of complete 16-byte vectors gives the exact 0xA0 frame and
+ * retail-sized 396-byte extent. Initial 1/255 materialization and header-store
+ * schedule differ from +0xC0; the final timer reload uses v1 instead of v0.
+ * An alternative store order merges two retail 255 constants and gives 392.
+ * Reopen with: Independent object-header or timer lifetime evidence; no register pins,
+ * artificial stores or forced duplicate constants.
+ */
+
+#include "common.h"
 
 typedef int Quad __attribute__((mode(TI)));
-extern char *func_0029EFD0(int);
+extern void *func_0029EFD0(int);
 extern float func_002A7878(float,float);
 extern void func_002A0488(void *,unsigned char,unsigned char,unsigned char);
 extern void func_002A0F48(void *);
@@ -12,24 +23,27 @@ char *func_L00_003A0DA0(int value,Quad *position,Quad *velocity,int timer,
 {
     char *object=func_0029EFD0(1192);
     char *state;
-    Quad angles;
-    union { Quad quad; float f[4]; } random;
+    /* Two adjacent complete vectors occupy retail stack offsets 0 and 0x10. */
+    struct {
+        Quad angles;
+        union { Quad quad; float f[4]; } random;
+    } scratch;
     if(object) {
         state=*(char **)(object+0x68);
-        random.quad=0;
-        random.f[0]=func_002A7878(-3.1415927410125732f,3.1415927410125732f);
-        random.f[1]=func_002A7878(-3.1415927410125732f,3.1415927410125732f);
-        random.f[2]=func_002A7878(-3.1415927410125732f,3.1415927410125732f);
-        angles=random.quad;
+        scratch.random.quad=0;
+        scratch.random.f[0]=func_002A7878(-3.1415927410125732f,3.1415927410125732f);
+        scratch.random.f[1]=func_002A7878(-3.1415927410125732f,3.1415927410125732f);
+        scratch.random.f[2]=func_002A7878(-3.1415927410125732f,3.1415927410125732f);
+        scratch.angles=scratch.random.quad;
         object[0x20]=0; object[0x23]=flags; object[0x31]=1; *(unsigned char *)(object+0x30)=255;
         *(unsigned short *)(object+0x32)=255;
         func_002A0488(object,red,green,blue);
         *(float *)(state+0x18)=*(float *)(object+0x2C)*scale;
         *(float *)(object+0x2C)=0.0f;
         *(int *)(state+0x10)=value;
-        *(Quad *)(object+0x10)=*position;
-        *(Quad *)state=*velocity;
-        *(Quad *)(object+0xF0)=angles;
+        qcopy(object+0x10, position);
+        qcopy(state, velocity);
+        qcopy(object+0xF0, &scratch.angles);
         *(short *)(state+0x1E)=flags;
         *(int *)(state+0x14)=timer;
         *(short *)(state+0x1C)=*(unsigned short *)(state+0x14);

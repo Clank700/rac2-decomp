@@ -151,6 +151,18 @@ The numbered history below is retained, with obsolete conclusions and incorrect 
 
 ## 1. Register allocation on long bodies (the dominant wall)
 
+**Measured phase-storage remedies, 25 October 2026:**
+In retained `func_L00_00398150`, the 96-byte collision query and later
+attachment transform have disjoint lifetimes; their real union restores
+the retail 0x1B0 frame, but 1,724/1,728 bytes remain 0/27 in each USA
+release with game `-O2 -G0 -ffunction-sections` (PAL absent). In
+`func_L06_003D64C0`, initializing the distance at its measured post-selection
+phase restores 0x440 instead of 0x450; 5,692/5,868 bytes remain 0/1 in
+USA v1.01 with game `-O2 -G8 -ffunction-sections` (other releases absent).
+Keep the full collision arrays and matrix outputs. Neither observation
+justifies padding or invented reference counts; reopen with independent
+phase/CFG or floating-live-range evidence. [Retained C](https://github.com/OpenRAC/rac2-decomp/commit/e73fb043ed96233298f7aaf60854484c0046ee16).
+
 Historically 148 of 240 notes mentioned allocation disagreements. A common signature was identical instruction order/size with different caller-saved registers, or an entry copy coalesced away. The approximate 250-byte threshold was a sample observation, not a compiler limit.
 
 Named counterexamples now pass: func_L09_004081F0 and func_L12_0041BDF8 each 1/1; func_L17_003E6F20 1/1; func_L22_003A2CB8 2/2. Other examples included func_L01_00416B30(five unsuccessful attempts), func_L07_003F8C38(a declaration-order observation), func_L20_00444018, and func_L00_00409480. Their status is not inferred from these successes.
@@ -779,6 +791,25 @@ reproduces retail's `sd a2..t3` + `swc1 f12..f18` save prologue **and** the fram
 <a id="blocker-22"></a>
 
 ## 22. Vector copies: address materialisation is only part of the mismatch
+
+**Qualified packet and call-contract remedies, 25 October 2026:**
+The 2,192-byte Damosel beam uses the real 144-byte packet, clobbering
+`qcopy` transfers and corner addresses formed at use. Its color packing
+casts to `u32` before shifting: the updater reaches fade 64, making signed
+alpha shifts undefined. The 168-byte effect wrapper preserves the optional
+fifth-GPR vector pointer; the 308-byte query wrapper preserves its integer
+mode and canonical interleaved FP arguments. Together with the target and
+constructor helpers, 7 functions (3,848 distinct bytes) pass 47
+carrying placements and all 84 strict programs without a compiler change.
+Profiles are game `-O2 -ffunction-sections`: `-G0` for the query and Dobbo
+helpers, `-G8` for the beam, effect wrapper, spawn and target helpers.
+[Qualified sources](https://github.com/OpenRAC/rac2-decomp/commit/e73fb043ed96233298f7aaf60854484c0046ee16).
+
+Retained storage repairs are not matches. `func_L23_0042ADB0` needs the
+rotation helper's full three-row, 48-byte output. `func_L06_003D64C0`
+uses a 32-bit cooldown with `func_00282948(int *)`, while its fork timers
+remain 16-bit with `func_00282978(short *)`. Preserve those measured widths
+and the complete buffers when revisiting their scheduling differences.
 
 **25 October 2026 linked helper qualification:**
 `func_L08_003D8290` (96 bytes) and `func_L08_003D0508` (192) pass their

@@ -123,7 +123,7 @@ INCLUDE_ASM("asm/levels", func_L08_0042E678);
 
 INCLUDE_ASM("asm/levels", func_L08_0042EF00);
 
-INCLUDE_ASM("asm/levels", func_L08_00435600);
+/* func_L08_00435600 is defined in L08_00435600-helpers.c. */
 
 /* Stores one 16-byte block through the pointer at 0x68 of the argument. */
 void func_L08_004356A0(u8 *a0, void *a1)

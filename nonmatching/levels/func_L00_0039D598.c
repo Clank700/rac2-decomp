@@ -1,4 +1,15 @@
-/* Nonmatching: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier. us: func_L00_0039D598: 0 of 27 places match (src/levels/shared/L00_0039D598.c); us2: func_L00_0039D598: 0 of 27 places match (src/levels/shared/L00_0039D598.c); pal: absent. Manual reconstruction2976/3004 frame0x80. True128-byte light-state layout with three5-byte color settings and overlaid initial delay byte in origin.w; aligned u64 flag-pair reads preserved. Explicit symmetric RNG upper bounds, typed integer lifetime/light IDs and fivefloat lightallocator arguments verified. Remaining register/branch/local ordering differences; reopen with original source expressions. */
+/* Retained C reconstruction; not linked or counted.
+ * Profile: -O2 -G0 -ffunction-sections.
+ * 2968/3004 bytes. us: 0/27 places; us2: 0/27 places; pal: absent.
+ * Remaining: Real qcopy preserves all four components, including the overlaid origin
+ * startup byte and the offset W/flags save/restore. Actor flags use unsigned
+ * bytes as retail loads them. The 128-byte light-state and aligned 64-bit flag
+ * pair reads are unchanged. The 0x80 frame agrees, but scalar allocation,
+ * color-cycle branch layout and initialization order remain different.
+ * Reopen with: Independent light-cycle expressions or lifetime evidence; neither equal
+ * frame size nor reviewed helpers establish an exact match.
+ */
+
 #include "common.h"
 typedef int Quad __attribute__((mode(TI)));
 typedef union { Quad quad; float f[4]; } Vector;
@@ -59,7 +70,7 @@ extern int func_L00_002FCF18(void *, float, float, float, float, float);
         } \
     }
 /* Updates a configured animated point light: radius, RGB cycles and attachment. */
-void func_L00_0039D598(char *actor) {
+void func_L00_0039D598(u8 *actor) {
     LightState *s;
     Vector sphere, origin, offset;
     u8 startup;
@@ -72,7 +83,7 @@ void func_L00_0039D598(char *actor) {
     if (!(u8)actor[0x20]) {
         actor[0x30] = 0xFF;
         startup = *((u8 *)&s->origin + 12); actor[0xBC] = startup;
-        s->origin.quad = *(Quad *)(actor + 0x10);
+        qcopy(&s->origin, (actor + 0x10));
         s->light = -1;
         s->timer[1] = s->interval[1]; *((u8 *)&s->origin + 12) = startup;
         *(u32 *)&s->offset.f[3] = s->flags;
@@ -91,17 +102,17 @@ void func_L00_0039D598(char *actor) {
         if (s->light != -1) { func_00291450(s->light); s->light = -1; }
         func_0029F338(actor); return;
     }
-    sphere.quad = *(Quad *)(actor + 0x10); sphere.f[3] = s->radius;
+    qcopy(&sphere, (actor + 0x10)); sphere.f[3] = s->radius;
     if (func_00283DB8(&sphere, 255) == -1) {
         if (s->light != -1) { func_00291450(s->light); s->light = -1; }
         return;
     }
-    if (s->parent) origin.quad = *(Quad *)(s->parent + 0x10);
-    else origin.quad = s->origin.quad;
+    if (s->parent) qcopy(&origin, (s->parent + 0x10));
+    else qcopy(&origin, &s->origin);
     if (!(s->flags & 0x800000)) {
         if (!(s->flags & 0x100000)) {
             saved = *(u32 *)&s->offset.f[3]; s->offset.f[3] = 0;
-            offset.quad = s->offset.quad; *(u32 *)&s->offset.f[3] = saved;
+            qcopy(&offset, &s->offset); *(u32 *)&s->offset.f[3] = saved;
         } else if (!(s->flags & 0x200000)) {
             saved = *(u32 *)&s->offset.f[3]; s->offset.f[3] = 0;
             func_00282D30(&offset, &s->offset, func_002A7878(s->offset.f[3], 1));
@@ -113,7 +124,7 @@ void func_L00_0039D598(char *actor) {
         }
         if ((s->flags & 0x400000) && s->parent) func_00283098(&offset, &offset, s->parent + 0xC0);
         func_00282CC0(actor + 0x10, &origin, &offset);
-    } else *(Quad *)(actor + 0x10) = origin.quad;
+    } else qcopy((actor + 0x10), &origin);
     if (s->interval[3] && func_00282978(&s->timer[3])) {
         s->timer[3] = s->interval[3];
         radiusReset = (s->flags & 4) != 0;
@@ -148,54 +159,10 @@ void func_L00_0039D598(char *actor) {
         s->light = func_L00_002FCF18(actor + 0x10, s->radius * 0.8f, intensity, s->rgb[0], s->rgb[1], s->rgb[2]);
     } else {
         index = s->light;
-        D_L00_001C6F40[index][1].quad = *(Quad *)(actor + 0x10);
+        qcopy(&D_L00_001C6F40[index][1], (actor + 0x10));
         D_L00_001C6F40[index][1].f[3] = s->radius * 0.8f;
         D_L00_001C6F40[index][0].f[0] = s->rgb[0]; D_L00_001C6F40[index][0].f[1] = s->rgb[1]; D_L00_001C6F40[index][0].f[2] = s->rgb[2];
         D_L00_001C6F40[index][0].f[3] = func_00283CE0(s->intensity) * 0.01f;
     }
 }
 #undef UPDATE_COLOR
-
-/* Historical screening only; superseded by the measured reconstruction above. */
-/* func_L00_0039D598 - 3004 bytes, 27 place(s), level 00_aranos_tutorial,
-   retail at 0x0039d598. Screened with tools/w10_screen.py: 48 call(s)
-   [func_00283CE0@0039D644, func_00283CE0@0039D654, func_00283CE0@0039D664,
-   func_00282948@0039D700, func_00291450@0039D71C, func_0029F338@0039D728,
-   func_00283DB8@0039D754, func_002A7878@0039D7D0, func_002A7878@0039D7E0,
-   func_002A7878@0039D7F0, func_002A7878@0039D818, func_00282D30@0039D828,
-   func_00283098@0039D878, func_00282CC0@0039D888, func_00282978@0039D8AC,
-   func_002829A8@0039D9D4, func_002A7878@0039DA08, func_00282978@0039DA20,
-   func_00283CE0@0039DAC4, func_00283CE0@0039DAD0, func_00283CE0@0039DB24,
-   func_00283CE0@0039DB30, func_002829A8@0039DB90, func_00283CF0@0039DBDC,
-   func_00283CF0@0039DC00, func_002A7878@0039DC18, func_00282978@0039DC30,
-   func_00283CE0@0039DCD4, func_00283CE0@0039DCE0, func_00283CE0@0039DD34,
-   func_00283CE0@0039DD40, func_002829A8@0039DDA0, func_00283CF0@0039DDEC,
-   func_00283CF0@0039DE10, func_002A7878@0039DE28, func_00282978@0039DE40,
-   func_00283CE0@0039DEE4, func_00283CE0@0039DEF0, func_00283CE0@0039DF44,
-   func_00283CE0@0039DF50, func_002829A8@0039DFB0, func_00283CF0@0039DFFC,
-   func_00283CF0@0039E020, func_002A7878@0039E038, func_00283CE0@0039E068,
-   func_L00_002FCF18@0039E090, func_00283CE0@0039E0EC,
-   func_00291450@0039E118]; data addresses materialised [0x3c230000,
-   0x1b0000, 0x800000, 0x100000, 0x200000, 0x400000, 0xffff0000, 0x80000,
-   0xffff0000, 0x10000, 0x3c230000, 0x3c230000, 0x3c230000, 0xffff0000,
-   0x20000, 0x3c230000, 0x3c230000, 0x3c230000, 0xffff0000, 0x40000,
-   0x3c230000, 0x3c230000, 0x3c230000, 0x1c0000, 0x3f4c0000, 0x3c230000,
-   0x3f4c0000, 0x3c230000]; float constants [0x437f0000, 0x3f800000]; $gp-
-   relative small data: no   saves: -; callee-saved registers saved [-];
-   words plain C cannot emit [LQ/SQ 78620000@0x0064, LQ/SQ 7C820000@0x0068,
-   LQ/SQ 78620000@0x01a0, LQ/SQ 7FA20000@0x01a4, LQ/SQ 78820000@0x01e4,
-   LQ/SQ 7C620000@0x01e8, LQ/SQ 78620000@0x01fc, LQ/SQ 7C820000@0x0200,
-   LQ/SQ 7A420000@0x02ac, LQ/SQ 7C620000@0x02b0, LQ/SQ 7A820000@0x0300,
-   LQ/SQ 7EA20000@0x0304, COP1 46800020@0x04b0, COP1 46806320@0x0640, COP1
-   4680A520@0x0658, COP1 46806320@0x0664, COP1 46806B60@0x0678, COP1
-   46800020@0x06c0, COP1 46806320@0x0850, COP1 4680A520@0x0868, COP1
-   46806320@0x0874, COP1 46806B60@0x0888, COP1 46800020@0x08d0, COP1
-   46806320@0x0a60, COP1 4680A520@0x0a78, COP1 46806320@0x0a84, COP1
-   46806B60@0x0a98, LQ/SQ 7AA20000@0x0b18, LQ/SQ 7C620000@0x0b1c]. Head:
-   addiu $sp, $sp, -0x80 ; sd $s1, 0x38($sp) ; sd $s0, 0x30($sp) ; daddu
-   $s1, $a0, $zero ; sd $s2, 0x40($sp) ; sd $s3, 0x48($sp). Not matched in
-   this wave: the 128-bit copy needs an `lq`/`sq` pair; plain C reaches it
-   only through a `mode(TI)` local, and this cc1 folds the destination
-   offset into the `sq` where retail materialises the pointer first. What
-   would unblock it: the exact source expression tree, so this cc1 picks the
-   same registers in the same order. */

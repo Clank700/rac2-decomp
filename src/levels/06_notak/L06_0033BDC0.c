@@ -3,7 +3,7 @@
 INCLUDE_ASM("asm/levels", func_L06_0033BDC0);
 
 
-INCLUDE_ASM("asm/levels", func_L06_00361728);
+/* Implemented in L06_00361728-helpers.c. */
 
 /* func_L06_003660F0 is matched in L06_003660F0.c (built with -mno-split-addresses). */
 
