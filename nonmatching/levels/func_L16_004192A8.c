@@ -1,17 +1,24 @@
-/* Manual reconstruction, 2026-10-23; retained, not linked.
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * us: 16_snivelak: 788 bytes, expected 800; func_L16_004192A8: 0 of 1 places match (src/levels/16_snivelak/L16_004192A8-g8-qcopy.c)
- * us2: 16_snivelak: 788 bytes, expected 800; func_L16_004192A8: 0 of 1 places match (src/levels/16_snivelak/L16_004192A8-g8-qcopy.c)
- * pal: func_L16_004192A8 is in neither catalogue of pal; func_L16_004192A8 is in neither catalogue of pal
- * 788/800 bytes in both USA releases; state-chain merging, initialization-loop shape and field/FP scheduling remain different. One manual C trial. Reopen with original state-chain/source-lifetime evidence.
+/* Retained C reconstruction; not linked or counted.
+ * Profile: -O2 -G8 -ffunction-sections.
+ * Compiled 796 bytes; retail 800 bytes.
+ * us: 0/1 placements match (exit 1).
+ * us2: 0/1 placements match (exit 1).
+ * pal: canonical name absent; no match credit.
+ * Remaining: The explicit active/init/common state chain and four-element cursor initialization
+ * reach 796 bytes, up from 788. The frame is 0x90 against retail 0xA0, with one fewer saved GPR.
+ * Resident-state base addressing, request scratch and float schedules still differ. The state
+ * helper takes a full-width integer.
+ * Reopen: A verified resident player/request workspace layout and pointer lifetime witness that
+ * reproduces the 0xA0 frame.
  */
+
 #include "common.h"
 typedef int Vector128 __attribute__((mode(TI)));
 typedef struct { int a,b,c,d; } __attribute__((aligned(16))) Quad16;
 typedef struct { Quad16 vector; int owner,flags; unsigned char enabled,kind; unsigned short id; float distance; int active; } CollisionRequest;
 typedef struct { Vector128 position,offset; CollisionRequest request; Vector128 direction; } MarkerWorkspace;
 extern float func_002A7940(void);
-extern void func_002A7750(unsigned char *,unsigned char,int);
+extern void func_002A7750(unsigned char *,int,int);
 extern void func_00282F20(void *,void *,float);
 extern void func_00282CC0(void *,void *,void *);
 extern int func_00277258(void *,int,void *,float);
@@ -28,7 +35,7 @@ extern Vector128 D_00189EA0;
 extern char *D_0018C0B0;
 extern char *D_0018A15C;
 extern int D_0018A160;
-extern char *D_L16_001BFF58 __attribute__((nosda));
+extern char *D_L16_001BFF58 NOT_SDA;
 extern Quad16 D_L16_001A8F20;
 extern float D_L16_001B1CA0 __attribute__((sda));
 extern float D_L16_001B1CA4 __attribute__((sda));
@@ -39,19 +46,24 @@ void func_L16_004192A8(char *object)
     float *state=*(float **)(object+0x68);
     float value;
     int i;
-    if (*(unsigned char *)(object+0x20)==0) {
+    if (*(unsigned char *)(object+0x20)==1) goto active;
+    if (*(unsigned char *)(object+0x20)>=2) goto common;
+
         state[0]=1.0f;
         state[8]=func_002A7940();
         state[2]=0.5f;
         state[1]=0.0f;
         state[0]=1.0f;
-        for(i=7;i>=4;i--) state[i]=1.0f;
+        { float *values=state+7; for(i=3;i>=0;i--) *values--=1.0f; }
         *(unsigned char *)(object+0x30)=0xff;
         func_002A7750((unsigned char *)object,1,-1);
         object[0x31]=0;
         *(unsigned short *)(object+0x34)|=1;
-    } else if (*(unsigned char *)(object+0x20)==1 && D_001A79F0==16) {
-        *(Vector128 *)&local.position=D_00189EA0;
+    goto common;
+active:
+    if (D_001A79F0==16) {
+
+        qcopy(&local.position,&D_00189EA0);
         func_00282F20(&local.offset,D_0018C0B0+0xe0,0.75f);
         func_00282CC0(&local.position,&local.position,&local.offset);
         if (func_00277258(&local.position,0,D_0018C0B0,0.5f)!=0 && D_L16_001BFF58!=0 && D_L16_001BFF58==object) {
@@ -70,6 +82,7 @@ void func_L16_004192A8(char *object)
             func_L00_002B30E8();
         }
     }
+common:
     if (state[0]!=0.0f) {
         func_00282D60(&local.position,object,0.0009765625f);
         state[8]=func_00283B98(state[8],D_L16_001B1CA0*0.0002908882452f);

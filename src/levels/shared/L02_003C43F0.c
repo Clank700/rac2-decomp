@@ -216,11 +216,8 @@ void func_L02_003C46E0(struct Outer *p)
         func_002E5DA0(1, 0, g->arr[0], 2198);
 }
 
-/* Clears the sub-object flags of three inline pointer arrays, turns a frame counter into a
-   rotation, and pushes each element's 128-bit block one object forward.
-   The C is in nonmatching/levels/func_L02_003C4848.c: it needs the -frac2-qcopy unit and
-   the counter increment of the second and third loop still lands in the loop header. */
-INCLUDE_ASM("asm/levels", func_L02_003C4848);
+/* Clears the three pointer-list flags, updates their counters and copies the vectors. */
+/* Defined in L02_003C4848-helpers.c. */
 
 INCLUDE_ASM("asm/levels", func_L02_003C49A0);
 
@@ -732,7 +729,7 @@ void func_L02_003D6BC0(char *a0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003D6DF8);
+/* Defined in L02_003D6DF8-helpers.c. */
 
 INCLUDE_ASM("asm/levels", func_L02_003D6EE0);
 

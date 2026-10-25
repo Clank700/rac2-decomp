@@ -46,7 +46,7 @@ void func_L14_00328E90(char *arg0, char *arg1, char *arg2) {
 
 INCLUDE_ASM("asm/levels", func_L14_0035F510);
 
-INCLUDE_ASM("asm/levels", func_L14_00390DF8);
+/* func_L14_00390DF8 is defined in L14_00390DF8-helpers.c. */
 
 INCLUDE_ASM("asm/levels", func_L14_00390EC0);
 
@@ -93,7 +93,7 @@ INCLUDE_ASM("asm/levels", func_L14_003C96E0);
 
 INCLUDE_ASM("asm/levels", func_L14_003CB258);
 
-INCLUDE_ASM("asm/levels", func_L14_003CB4D8);
+/* func_L14_003CB4D8 is defined in L14_003CB4D8-g8.c. */
 
 extern void func_00283698(void *dst, void *src);
 
@@ -346,7 +346,7 @@ void func_L14_003DF690(char *arg0, int arg1) {
     *(int *)(*(int *)(arg0 + 0x68) + 0x7C) = arg1;
 }
 
-INCLUDE_ASM("asm/levels", func_L14_003DF6A0);
+/* func_L14_003DF6A0 is defined in L14_003DF6A0-g8.c. */
 
 /* func_L14_003DF7F8 is defined in L14_00304190-g8.c (this unit has no $gp access for it). */
 

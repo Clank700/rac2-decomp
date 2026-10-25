@@ -1,22 +1,18 @@
 /*
- * Manual reconstruction retained as a near miss; no linked-build or runtime credit.
- * Prior worker profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
- * -frac2-zero-ti-por.
- * Prior worker coverage: US 0/1; US2 0/1; PAL absent from catalogue.
- * These are the recorded worker checks; no fresh compilation was run for retention.
+ * Complete manual reconstruction retained as nonmatching; no coverage credit.
+ * Fresh checks on the qualified current compiler, 2026-10-25.
+ * Profile: -O2 -G8 -ffunction-sections -frac2-zero-ti-por
+ * Coverage: US: 0/1; US2: 0/1; PAL: absent from catalogue.
+ * Compiled text: 1036 bytes; retail text: 1044 bytes.
+ * Remaining difference: Frame 0xE0 matches and the first 228 bytes agree after relocation
+ * normalization. The explicit base-flags store plus conditional override fixes the early
+ * context/control model. Material/global addressing and later allocation remain different; body
+ * 1036 versus 1044.
+ * Reopen when: Recover the same measured character/collision-global source layouts as 0038BF40
+ * before further allocation trials.
  */
 
-/*
- * Manual C reconstruction retained after bounded retail comparison.
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
- * Measured text: 1036 bytes; retail: 1044 bytes. Stack frame 0xE0; retail 0xE0.
- * Final coverage: US 0/1, US2 0/1, PAL absent. Absences are not matches.
- * 2 measured source/profile forms. Register scheduling around the zero quadwords and
- * collision context differs, with an eight-byte text gap. -mno-split-addresses did not
- * improve size and was reverted. FD1B8 keeps three GPR and four float inputs, and 312D58
- * returns a pointer. Reopen on zero/vector and effect-emission lifetimes.
- * All carrying checks are nonmatches (exit 1); no linked-build credit.
- */
+#include "common.h"
 
 typedef int Quad __attribute__((mode(TI)));
 typedef union { Quad q; float f[4]; } Vector;
@@ -90,18 +86,19 @@ void func_L26_0038BB28(char *object) {
     force.f[2] = 0.033333335f;
     normal.q = 0;
     normal.f[2] = 1.0f;
-    previous.q = *(Quad *)(object + 0x10);
+    qcopy(&previous, (object + 0x10));
     func_00282CC0(object + 0x10, private, object + 0x10);
     func_002FEE70(*(int *)(private + 0x1C), private, 0);
     func_00300190(object + 0x10, object + 0x10);
     func_00300248((int)private, (int)private);
     func_002FE880(object + 0x10, (float *)private, 0.0030555557f);
     func_L00_0038F178(object);
-    context.flags = *(int *)(private + 0x18) < 290 ? 0x830001 : 0x830000;
+    context.owner = object;
+    context.flags = 0x830000;
+    if (*(int *)(private + 0x18) < 290) context.flags = 0x830001;
     context.tail[0] = 1;
     context.material = *(float *)(D_L26_002622F0 + (unsigned int)D_00139574 * 0xE0 + 0x70);
-    context.direction.q = *(Quad *)private;
-    context.owner = object;
+    qcopy(&context.direction, private);
     func_00282F70(&context.direction, &context.direction, 1.0f);
     context.id = *(unsigned short *)(object + 0xAA);
     context.direction.f[2] = 1.0f;
@@ -147,7 +144,7 @@ void func_L26_0038BB28(char *object) {
             goto finish;
     } else if (D_L26_001BEFDC < 1) goto finish;
     object[0xBC] = 1;
-    *(Quad *)(object + 0x10) = D_L26_001BEFE0.q;
+    qcopy((object + 0x10), &D_L26_001BEFE0);
     func_00283028(&force, private, &D_L26_001BF000);
     func_00282F20(&force, &force, 0.033333335f);
     func_00282F20(&normal, &D_L26_001BF000, 1.0f);
