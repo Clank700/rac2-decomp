@@ -1,24 +1,21 @@
-/* Retained boss update reconstruction, 2026-10-23.
- * -O2 -G8 -ffunction-sections -g -frac2-qcopy -frac2-qcopy-barrier
- * -frac2-zero-ti-por: 6444/6484 bytes, 0/1 US and 0/1 us2 placements.
- * This canonical function is absent from PAL. Retail and C both use a 0x90
- * frame and 169 named direct calls, but saved-register allocation differs at
- * +0x4 and control-flow, scalar allocation and mixed absolute/GP loads remain.
- * Four bounded trials covered ordinary C (6408 bytes), qualified copy/zero
- * scheduling (6420), separate turning-animation branches (6444), and a tied
- * keep-block-order profile (6444). No retained flag entry is needed in src/.
- * The partial private-state layout, 64-byte matrix/vector union and 16-byte
- * velocity vector reflect observed storage. Retail-qualified live inputs are
- * preserved, including initial a0, sound-owner a2, the f12 particle parameter,
- * and the ballistic helper's two FP inputs, optional output and f0 result.
- * The transition wrapper's third formal is a verified signed frame duration;
- * the matching helper's declaration is repaired separately in its existing TU.
- * Discarded return types of assembly-only effect helpers are not fully known.
- * Reopen with evidence for original state-variable/control-flow lifetimes and
- * shared-global addressing. Do not use register pins, fake aliases or padding.
+/* Bounded manual reconstruction, 2026-10-25; not linked.
+ * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g -frac2-zero-ti-por.
+ * 6456/6484 bytes; us: 0/1 placements; us2: 0/1 placements; pal: absent from catalogue.
+ * The complete boss update, 64-byte matrix/vector union, full last-player snapshot and previously
+ * qualified input banks are retained. Actual initial ELF R_MIPS_GPREL16 references to resident
+ * globals 0013963B, 00189FD8 and 0018C2BC were outside signed 16 range; NOT_SDA repairs now remove
+ * them. Frame 0x90 agrees, but saved-register allocation, scalar/control-flow scheduling and mixed
+ * global address forms still differ. Discarded ASM-only helper result contracts remain explicitly
+ * unqualified.
+ * Reopen with original state-variable and shared-global storage lifetimes. Keep the proved
+ * absolute-address repairs even when the generated body grows.
+ * The damage helper return is the verified 32-bit query count; its six GPR and three FP inputs are unchanged.
+ * Original variants, retail context and allocator diagnostics remain private.
+ * No exact-C, linked-build or runtime credit is claimed.
  */
-
 #include "common.h"
+
+
 
 typedef int BossQuadword __attribute__((mode(TI)));
 
@@ -82,9 +79,11 @@ typedef struct {
 } BarlowUtilityQueueView;
 
 extern float D_00189EA0[4], D_00189EF0[4];
-extern u8 D_0013963B;
-extern int D_0018C0B4, D_00189FD8;
-extern u8 *D_0018C2BC;
+/* These resident scalars/pointer are outside the GP-relative range. */
+extern u8 D_0013963B NOT_SDA;
+extern int D_0018C0B4;
+extern int D_00189FD8 NOT_SDA;
+extern u8 *D_0018C2BC NOT_SDA;
 extern u8 D_00188660[];
 extern BarlowUtilityQueueView D_L16_001BFD00;
 extern int D_L16_001A8F00 __attribute__((sda));
@@ -108,7 +107,7 @@ extern void func_002F5CB8(int, int);
 extern int func_002F5D10(void);
 extern void func_L16_00412D48(u8 *);
 extern void func_L16_00412E70(u8 *);
-extern void func_002A7750(u8 *, u8, int);
+extern void func_002A7750(u8 *, s32, s32);
 extern int func_002B3868(u8 *);
 extern void func_L16_004116C8(u8 *, int, int, float);
 extern int func_002A77E0(int);
@@ -139,7 +138,7 @@ extern void func_002A7470(u8 *, int, int, int);
 extern float func_002AA2E8(float *, float, float);
 extern void func_L00_002E6CF0(void (*)(void *), void *);
 extern void func_L16_00412560(void *);
-extern void func_002A8C28(u8 *, void *, int, int, int, int, float, float, float);
+extern int func_002A8C28(u8 *, void *, int, int, int, int, float, float, float);
 extern u8 *func_L16_004130B0(u8 *, int);
 extern void func_L16_00411D00(u8 *);
 extern void func_0029FC20(char *, int, char *);
@@ -259,7 +258,7 @@ void func_L16_0040ECC0(u8 *moby)
                 if (*(unsigned short *)(moby + 0x96) > 900) {
                     func_002A7750(moby, 11, -1);
                     state->target = 0;
-                    *(BossQuadword *)state->lastPlayer = *(BossQuadword *)D_00189EF0;
+                    qcopy(state->lastPlayer, D_00189EF0);
                 }
                 func_L16_00410B88(moby);
                 break;

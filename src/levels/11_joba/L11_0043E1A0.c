@@ -554,7 +554,7 @@ INCLUDE_ASM("asm/levels", func_L11_004425C8);
 
 INCLUDE_ASM("asm/levels", func_L11_004427B8);
 
-INCLUDE_ASM("asm/levels", func_L11_00442B60);
+/* func_L11_00442B60 is defined in its dedicated source unit. */
 
 extern void func_L02_003A6F78(u8 *);
 

@@ -1,15 +1,11 @@
-/* Retained reconstruction, 23 October 2026. Game -O2 -G8 with
-   -frac2-qcopy -frac2-qcopy-barrier: 1764/1804 bytes, 0/2 placements in
-   each of USA v1.01, USA v2.00 and PAL. Default profile trials were 1740 and
-   1732 bytes; grouped-copy trials remained 1764. Remaining differences include
-   the initial interleaved vector transfer, folded adjacent tag predicates,
-   saved-register/stack-slot allocation and float hazard/scheduling words.
-   Source trials moved real initialization to its observed lifetime and retained
-   an unsigned integer tag. Reopen with independently established original
-   control-flow/record types or a qualified compiler model for the mixed copies.
-   Early selected-target return intentionally skips temporary-obstacle restore,
-   as the retail control flow does. No linked match is claimed. */
-#include "include_asm.h"
+/* Nonmatching C: Select a visible target using angular limits and temporary obstacle filtering.
+ * Tested profile: -O2 -G8 -ffunction-sections.
+ * Measured US size: 1764 bytes; retail: 1804 bytes.
+ * Placement checks: US, US2 and PAL: 0/2 each.
+ * Remaining: The initial transfer, adjacent tag tests, saved registers, scratch addresses and floating-point scheduling still differ.
+ * Reopen with independent origin, target and trace lifetimes; preserve the 128-entry obstacle list, observed early return and explicit pointer casts of generic metadata words.
+ */
+#include "common.h"
 
 typedef int Quad __attribute__((mode(TI)));
 typedef struct { char pad[0x18]; char *object; int count; Quad position; char gap[16]; char normal[16]; } Hit;
@@ -29,7 +25,7 @@ extern float D_L15_001AFEB4 __attribute__((sda));
 extern void func_00282D30(void *, void *, float);
 extern void func_00282CC0(void *, void *, void *);
 extern int func_002761F8(void *, void *, int, void *, void *);
-extern char *func_002AB1F0(void *);
+extern s32 func_002AB1F0(u8 *);
 extern float func_00283248(float, float);
 extern float func_00282E80(void *, void *);
 extern float func_00283C80(float, float);
@@ -39,19 +35,19 @@ extern float func_00282DB0(void *, void *);
 extern float func_00282C48(float);
 extern float func_00282DF0(void *);
 extern float func_002831B0(float);
-extern void func_002AF000(void *, float, float, float);
+extern void func_002AF000(float *, float, float, float);
 extern float func_00283CE0(int);
 
 char *func_L15_003E2788(char *object, void *point, float *yaw, float *pitch)
 {
-    float origin[4];
-    char offset[16];
-    char start[16];
+    float origin[4] __attribute__((aligned(16)));
+    char offset[16] __attribute__((aligned(16)));
+    char start[16] __attribute__((aligned(16)));
     char *ignored[128];
-    float candidate[4];
-    char aim[16];
-    char trace[16];
-    char projection[16];
+    float candidate[4] __attribute__((aligned(16)));
+    char aim[16] __attribute__((aligned(16)));
+    char trace[16] __attribute__((aligned(16)));
+    char projection[16] __attribute__((aligned(16)));
     char *owner = object;
     char *state;
     char *selected;
@@ -60,14 +56,14 @@ char *func_L15_003E2788(char *object, void *point, float *yaw, float *pitch)
     char *target;
     float bestDistance;
 
-    *(Quad *)origin = *(Quad *)point;
+    qcopy(origin, point);
     bestDistance = D_L15_001AFEB4;
     state = *(char **)(object + 0x68);
     func_00282D30(offset, D_00189E20.player + 0xe0, 0.5f);
     selected = 0;
     func_00282CC0(start, D_00189E20.player + 0x10, offset);
     if (func_002761F8(start, origin, 6, D_00189E20.player, 0)) {
-        *(Quad *)origin = D_L15_001BFC00.position;
+        qcopy(origin, &D_L15_001BFC00.position);
         return 0;
     }
     ignoredCount = 0;
@@ -84,8 +80,8 @@ char *func_L15_003E2788(char *object, void *point, float *yaw, float *pitch)
         if (tag == 0xfe || tag == 0xfd ||
             *(short *)(target + 0xaa) == 0xe7d || *(short *)(target + 0xaa) == 0xeb0)
             goto next;
-        *(Quad *)candidate = *(Quad *)(target + 0x10);
-        info = func_002AB1F0(target);
+        qcopy(candidate, target + 0x10);
+        info = (char *)func_002AB1F0((u8 *)target);
         if (!info || (unsigned char)info[0xe] == 3)
             goto next;
         func_00282D30(aim, target + 0xe0, *(float *)(info + 0x10));
@@ -130,12 +126,12 @@ char *func_L15_003E2788(char *object, void *point, float *yaw, float *pitch)
             goto next;
         if (D_L15_001AFEB4 < distance)
             goto next;
-        func_002AF000(aim, distance, *yaw, *pitch + D_00189E20.pitch * 0.5f);
+        func_002AF000((float *)aim, distance, *yaw, *pitch + D_00189E20.pitch * 0.5f);
         func_00282CC0(aim, aim, origin);
         sweepAngle = func_002831B0(func_00282E48(aim, candidate) / (distance + distance));
         sweepAngle += sweepAngle;
         if (D_L15_001AFEB0 * 0.01745329424738884f < sweepAngle) {
-            info = func_002AB1F0(target);
+            info = (char *)func_002AB1F0((u8 *)target);
             if (info) {
                 float radius = func_00283CE0((unsigned char)info[0xa]) * 0.125f;
                 float angle = func_002831B0(radius / distance);
@@ -149,7 +145,7 @@ char *func_L15_003E2788(char *object, void *point, float *yaw, float *pitch)
         if (!(sweepAngle < D_L15_001AFEB0 * 0.01745329424738884f))
             goto next;
         clearPath = 1;
-        *(Quad *)trace = *(Quad *)origin;
+        qcopy(trace, origin);
         traceCount = 0;
         while (func_002761F8(trace, candidate, 6, owner, 0)) {
             char *hit = D_L15_001BFC00.object;
@@ -164,7 +160,7 @@ char *func_L15_003E2788(char *object, void *point, float *yaw, float *pitch)
                 *(int *)(hit + 0x98) = 0;
                 if (ignoredCount >= 128)
                     break;
-                *(Quad *)trace = D_L15_001BFC00.position;
+                qcopy(trace, &D_L15_001BFC00.position);
             } else {
                 if (hit != target)
                     clearPath = 0;
