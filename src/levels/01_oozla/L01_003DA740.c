@@ -22,7 +22,7 @@ extern void func_32EF38(void *buf, s32 a1, s32 a2, s32 a3, f32 x, f32 y);
 
 extern void func_00115484(void *buf, s32 value, s32 count);
 
-extern s32 func_00277F48(void *pos, s32 flag, void *obj, s32 arg, f32 radius);
+extern s32 func_00277F48(f32 radius, void *pos, s32 flag, void *obj, s32 arg);
 
 /* The level's table of the records the spawner looks through. */
 extern u32 D_L01_001C3980[];
@@ -53,7 +53,7 @@ void func_L01_003DC8B8(u8 *a0, void *a1, void *a2) {
 
     func_00115484(out, 0, 4);
     *count = 0;
-    n = func_00277F48(a0 + 0x10, 1, a0, 0, 3.0f);
+    n = func_00277F48(3.0f, a0 + 0x10, 1, a0, 0);
     if (n <= 0)
         return;
     for (i = 0; i < n; i++) {

@@ -543,7 +543,7 @@ extern void func_00282D30(void *, void *, float);
 
 extern void func_002A8C00(void *, char *, int, void *, float);
 
-extern int func_00277F48(void *, int, char *, void *, float);
+extern int func_00277F48(float, void *, int, char *, void *);
 
 typedef struct {
     char pad0[0x18];
@@ -602,8 +602,8 @@ void func_L02_003DAB68(char *arg0) {
             rec.b18 = 0;
             rec.b19 = 1;
             rec.h1a = *(unsigned short *)(arg0 + 0xAA);
-            func_00277F48(hit, 0, arg0, &rec, 0.65f);
-            func_00277F48(v1, 0, arg0, &rec, 0.95f);
+            func_00277F48(0.65f, hit, 0, arg0, &rec);
+            func_00277F48(0.95f, v1, 0, arg0, &rec);
         }
         *(int *)((*(int *)(*(char **)(arg0 + 0x68) + 0x244) << 8) + D_L02_001B359C + 0x98) = saved;
     }

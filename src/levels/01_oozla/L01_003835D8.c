@@ -52,7 +52,7 @@ INCLUDE_ASM("asm/levels", func_L01_003B1F08);
 
 extern void func_00115484(void *, int, int);
 
-extern int func_00277F48(char *, int, char *, int, float);
+extern int func_00277F48(float, char *, int, char *, int);
 
 extern void *D_L01_001C3980[];
 
@@ -63,7 +63,7 @@ void func_L01_003B45D8(void *arg0, void **arg1, int *arg2) {
 
     func_00115484(arg1, 0, 4);
     *arg2 = 0;
-    count = func_00277F48((char *)arg0 + 0x10, 1, (char *)arg0, 0, 3.5f);
+    count = func_00277F48(3.5f, (char *)arg0 + 0x10, 1, (char *)arg0, 0);
     if (count <= 0)
         return;
     for (i = 0; i < count; i++) {

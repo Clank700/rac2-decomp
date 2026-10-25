@@ -381,7 +381,7 @@ INCLUDE_ASM("asm/game", func_002C23B8);
 
 extern void func_002C96F8(float, float, void *, int *, float *, void *);
 
-extern int func_00277F48(void *, int, int, int, float);
+extern int func_00277F48(float, void *, int, int, int);
 
 extern float func_00283CE0(int);
 
@@ -437,7 +437,7 @@ void func_002C2658(char *obj)
                                              func_00283CE0(index) * 0.0106666666f);
     }
 
-    count = func_00277F48(vec, 16, *(int *)(motion + 0x14), 0, 0.15f);
+    count = func_00277F48(0.15f, vec, 16, *(int *)(motion + 0x14), 0);
     local[1] = *(V4_Fc3cb9262 *)(obj + 0x10);
     func_002A9850((void *)*(int *)(motion + 0x14), (Vec16_F5621621c *)&local[1],
                    D_001BF000, count, 0, 0x810001, 2, 1, 2.0f, 1.0f, 1.0f);
