@@ -629,7 +629,7 @@ Five existing C interfaces now preserve another measured call contract:
 the Maktar and Dobbo wrappers, including their PAL forms, explicitly pass
 the live object and target pointers plus the float amount to
 `func_002B4FF0`. `func_003225C0` accepts an object pointer and gives
-`func_0028FCC0` its full aligned 16-byte output instead of a 12-byte local.
+`func_0029FCC0` its full aligned 16-byte output instead of a 12-byte local.
 All 24 carrying placements and 84 strict programs pass, without new byte
 credit. [Interface and storage repairs](https://github.com/OpenRAC/rac2-decomp/commit/3638916fe51ef118070c96fd7eae30d3f580269b).
 
