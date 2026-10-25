@@ -514,43 +514,9 @@ s32 func_002CB4E8(s32 a0) {
  return result;
 }
 
-/* Level-select state: a count, the current entry and a per-entry list. */
-typedef struct {
-    int count;
-    int id;
-    int pad;
-    int state[64];
-} LevelSelect_210A40;
-
-extern LevelSelect_210A40 D_00210A40;
-extern unsigned char D_001A7BC8[];
-extern unsigned char D_001A7C01;
-extern int D_00258D70[];
-extern void func_00288CB0(int, int);
-
-int func_002CB510(int flags)
-{
-    int result = -1;
-    int i;
-
-    for (i = 0; i <= D_00210A40.count; i++) {
-        if (func_002CB4E8(i))
-            D_00210A40.state[i] = D_001A7BC8[i] != 0;
-    }
-    D_00210A40.state[0] = 0;
-    if (flags & 0x1000) {
-        func_002C9A98((s32 *)&D_00210A40);
-    } else if (flags & 0x4000) {
-        func_002C9AD8((s32 *)&D_00210A40);
-    } else if (flags & 0x40) {
-        result = D_00210A40.id;
-        if (D_00258D70[result * 2] == 0xB47 && D_001A7C01 == 0)
-            func_00288CB0(0x19, 1);
-        else
-            func_00288CB0(result, 1);
-    }
-    return result;
-}
+/* Near miss: nonmatching/game/func_002CB510.c (312/312 bytes, three
+   register-choice words in the loop setup's two address materialisations). */
+INCLUDE_ASM("asm/game", func_002CB510);
 
 INCLUDE_ASM("asm/game", func_002CB648);
 
@@ -632,6 +598,8 @@ done:
 
 INCLUDE_ASM("asm/game", func_002CC528);
 
+/* Near miss: nonmatching/game/func_002CC550.c (316/316 bytes; the two address
+   materialisations in the loop preheader keep a separate %hi temporary). */
 INCLUDE_ASM("asm/game", func_002CC550);
 
 int func_002CC690(void) {
