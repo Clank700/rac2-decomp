@@ -79,7 +79,7 @@ extern void func_L00_002E6EF8(void *, void *);
 
 extern void func_L02_003D28E0(void);
 
-extern void func_L02_00333438(void);
+extern void func_L02_00333438(char *, char *);
 
 extern int func_L01_00321178(char *, char *);
 
@@ -456,7 +456,7 @@ void func_L02_003CE8B0(char *a0, char *a1, int a2) {
     char *p = *(char **)(a0 + 0x68);
 
     if (D_L02_001A8FF0)
-        func_L02_00333438();
+        func_L02_00333438(a0, a1);
     else if (a2 == 0)
         func_L01_00321178(a0, a1);
     else
