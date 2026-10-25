@@ -625,6 +625,26 @@ still differ from +0x1C. Neither case justifies a false prototype, pin or
 assembly classification. Reopen with independent reaching-value or output-
 lifetime evidence; the complete alternatives are in `nonmatching/`.
 
+Five existing C interfaces now preserve another measured call contract:
+the Maktar and Dobbo wrappers, including their PAL forms, explicitly pass
+the live object and target pointers plus the float amount to
+`func_002B4FF0`. `func_003225C0` accepts an object pointer and gives
+`func_0029FCC0` its full aligned 16-byte output instead of a 12-byte local.
+All 24 carrying placements and 84 strict programs pass, without new byte
+credit. [Interface and storage repairs](https://github.com/OpenRAC/rac2-decomp/commit/3638916fe51ef118070c96fd7eae30d3f580269b).
+
+The callback retains a real retail constraint: it reads its own uninitialized
+Z slot, adds the first RNG result and stores it before the bone helper
+initializes the output. Its existing matched C preserves that sequence;
+byte equality does not make it defined native C. The complete alternative
+in `nonmatching/game/func_003225C0.c` keeps the RNG call for its state
+effect and removes the dead, indeterminate calculation. It is 176/188
+bytes, 0/3 placements in each release, and remains unlinked. Native execution
+and floating-point exception-state equivalence have not been tested.
+Likewise, retained `func_L00_003EEE90` normalizes an impulse before its
+first fill, as retail does; do not conceal that constraint with invented
+initialization or describe every complete reconstruction as native-safe.
+
 <a id="blocker-13"></a>
 
 ## 13. Floating-point literals are calibrated, not computed
@@ -878,6 +898,30 @@ matches. Keep the per-source residuals and reopening conditions when
 revisiting them. The Yeedil handler with a remaining post-branch nop
 is another witness for the scheduling issue in [section 30](#blocker-30),
 not proof that the function is handwritten or impossible in C.
+
+**Mixed transfers and independently bounded storage, 25 October 2026:**
+`func_L00_003F3518` keeps its two stack copies as ordinary TImode
+assignments and uses `qcopy` for two external transfers. Its real scratch
+storage is a 0x460-byte buffer, a 0x120-byte color array and six vectors;
+blanket helper substitution gives 648 bytes rather than the qualified 644.
+`func_L02_003D6690` uses four `qcopy_nc` table writes only after checking
+source and destination independence, including later accesses. Its
+captures and dependent transfers still clobber memory. The existing
+per-file `-frac2-hazard-labels` profile is unchanged.
+`func_L11_00442B60` restores the dot helper's second vector input and three
+full aligned vectors. These three functions add 1,792 distinct bytes and
+41 accepted placements across the releases; all 84 strict programs pass.
+[Qualified sources and retained reconstructions](https://github.com/OpenRAC/rac2-decomp/commit/db63b6b650a4765c84221ea7e3dfdda96f9ce1fc).
+
+Retained renderers require semantic review before allocator tuning. The
+actual `func_00283678` output is 48 bytes, whereas `func_00283698` writes
+64; qualify each producer independently rather than transferring an extent
+between similar names. The corrected Yeedil beam stores noise Z before
+publishing its vector, changing its frame from 0x440 to 0x430 while leaving
+the 5,716/5,868-byte residual unchanged. Preserve that order even when an
+older, incorrect variant fit the frame better. Its Aranos counterpart
+remains 5,828/5,868 with independently measured scratch ranges and a
+0x440 frame. Neither frame agreement nor a size improvement is a match.
 
 <a id="blocker-23"></a>
 

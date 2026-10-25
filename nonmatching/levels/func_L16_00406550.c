@@ -1,22 +1,19 @@
-/* 2026-10-23 C reconstruction. Measured with -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-
-   barrier -frac2-zero-ti-por. us: 0/3 placements, 16_snivelak: 3152 bytes, expected 3164; us2: 0/3
-   placements, 16_snivelak: 3152 bytes, expected 3164; pal: canonical name absent. All explosion groups
-   and final particle setup reconstructed with real pointer returns, integer conversion calls, FP banks
-   and the twelve-GPR collider tail. Frame0xE0 agrees; source emits por clears, superseding the
-   historical impossibility claim. No-split gave3144, so the3152-byte grouped-copy profile is retained.
-   Reopen when: A matching particle-loop/global-address expression witness and final all-placement
-   checks. Historical screening follows unchanged.
+/* Bounded manual reconstruction, 2026-10-25; not linked.
+ * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por.
+ * 3152/3164 bytes; us: 0/3 placements; us2: 0/3 placements; pal: absent from catalogue.
+ * All explosion groups, real pointer-return emitters, FP inputs and complete collider stack tail
+ * remain. The real zero-velocity-to-position transfer uses qcopy; observed register-fed TI zero
+ * materialization is retained. Frame 0xe0 agrees, but particle-loop/source-base allocation and
+ * global-address scheduling still differ.
+ * Reopen with an independently matched particle-loop/global-base lifetime witness. Keep all vectors
+ * and outgoing stack inputs; do not revive the superseded MMI impossibility claim.
+ * Both helper-transferred local vectors explicitly require 16-byte alignment.
+ * Original variants, retail context and allocator diagnostics remain private.
+ * No exact-C, linked-build or runtime credit is claimed.
  */
-
-/* MMI (SPECIAL2) instruction: no C spelling. 3164 bytes, level 16_snivelak.
-   Retail at 0x00406550 carries the SPECIAL2 word 0x700014A9 (+0x0960) -
-   opcode 0x1C, which rabbitizer prints as `INVALID`; it is the MMI family
-   (pcpyld and its relatives) the sixth wave recorded and that no C spelling
-   reaches. This cc1 emits `lq`/`sq` for a `mode(TI)` local and
-   `ldl`/`ldr`/`sdl`/`sdr` for a struct assignment, never the packed copy.
-   ASM_FUNC candidate, as for the rest of the family. */
-
 #include "common.h"
+
+
 typedef int Quad __attribute__((mode(TI)));
 #define F(p,o) (*(float *)((u8 *)(p)+(o)))
 #define I(p,o) (*(int *)((u8 *)(p)+(o)))
@@ -45,7 +42,9 @@ extern u8 *func_002BDCE8(void *,int,void *,int,int,float,float,float,float);
 extern float func_00283CE0(int);
 void func_L16_00406550(u8 *object)
 {
-    float position[4],velocity[4],rotation[4];
+    float position[4] __attribute__((aligned(16)));
+    float velocity[4] __attribute__((aligned(16)));
+    float rotation[4];
     u8 *state=*(u8 **)(object+0x68),*effect;
     float inner,outer,angle,size,speed,radius,roll,turn;
     int i,lifetime,phase,sign;
@@ -128,7 +127,7 @@ void func_L16_00406550(u8 *object)
     if (I(state,0x34)) {
         *(Quad *)velocity=0;
         velocity[2]=F(state,0x14)*0.13333334f;
-        *(Quad *)position=*(Quad *)velocity;
+        qcopy(position, velocity);
         func_00308408(object,object+0x10,position,16,0,0,255,40,F(state,0x14)*3.5f);
     }
     func_002ABBB8(object,D_L16_001A8F20,object+0x10,0,0,0,-1,0,0,-1,0,0x810001,0.0f,0.0f,0.0f,0.0f,9.0f,0.0f,F(state,0x14)*20.0f);

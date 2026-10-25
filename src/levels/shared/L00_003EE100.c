@@ -616,7 +616,7 @@ void func_L00_003F3160(char *obj)
 
 /* func_L00_003F34D8 is in L00_003F34D8-qcopy.c (its own file: the quadword-copy profile). */
 
-INCLUDE_ASM("asm/levels", func_L00_003F3518);
+/* func_L00_003F3518 is defined in L00_003F3518-helpers.c. */
 
 extern void ref_L00_003F37A0_00(void *p, char *obj);
 

@@ -83,7 +83,7 @@ extern void func_L02_00333438(char *, char *);
 
 extern int func_L01_00321178(char *, char *);
 
-extern void func_002B4FF0(float);
+extern int func_002B4FF0(char *, float *, float);
 
 extern struct S_001A63A8 D_001A63A8;
 
@@ -457,7 +457,7 @@ void func_L02_003CE8B0(char *a0, char *a1, int a2) {
     else if (a2 == 0)
         func_L01_00321178(a0, a1);
     else
-        func_002B4FF0(*(float *)(p + 0x31C));
+        func_002B4FF0(a0, (float *)a1, *(float *)(p + 0x31C));
 }
 
 /* Clears the two angle words at +0x310 and +0x312 and counts up the +0x96 word, then runs the

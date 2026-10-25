@@ -384,7 +384,7 @@ void func_L02_003D6538(char *arg0) {
 
 /* func_L02_003D6570 is matched in L02_003D6570-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
-INCLUDE_ASM("asm/levels", func_L02_003D6690);
+/* func_L02_003D6690 is defined in L02_003D6690-helpers-g8.c. */
 
 /* func_L02_003D6A20 is matched in L02_003D6A20-g8.c (built with -frac2-qcopy -frac2-qcopy-barrier -g). */
 

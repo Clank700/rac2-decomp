@@ -1,26 +1,22 @@
-/* Signature/interface follow-up, 23 October 2026.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * USA v1.01: 1568/1576 bytes, 0/1 carrying placements.
- * USA v2.00: canonical name absent from the catalogue.
- * PAL: canonical name absent from the catalogue.
- * Interface assumption: the incoming owner/key in a0 is preserved. The current void(void)
- * wrapper forwards live a0 into its key query, so original arity is underspecified and no
- * surplus argument is proven.
- * The retained C remains nonmatching. Earlier sizes and residual offsets below are
- * historical and superseded by this measurement; their reopening hypotheses remain
- * unqualified. No linked build was run for this follow-up.
+/*
+ * Complete manual reconstruction retained as nonmatching; no coverage credit.
+ * Fresh qualified-compiler checks, 2026-10-25.
+ * Profile: -O2 -G0 -ffunction-sections
+ * Coverage: US: 0/1; US2: absent from catalogue; PAL: absent from catalogue.
+ * Compiled text: 1560 bytes; retail: 1576 bytes.
+ * Remaining difference: The 1560/1576 body uses an actual compiler-owned five-destination constant
+ * label table. Its computed goto reads that local table; the old external retail table and unused
+ * label-table workaround are gone. A normal switch collapsed the empty fifth state into its
+ * default and selected branches. Entry/global/controller lifetimes and later scheduling remain
+ * different. 88FB8 and85828 use their canonical 32-bit word contracts, and B49E0 has its pointer
+ * fifth argument and integer return.
+ * Reopen when: Recover actual branch-local vector and owner/global lifetimes; any future exact
+ * text must additionally qualify the complete compiler-owned table placement in a strict linked
+ * build.
  */
 
-/* Historical measurements, superseded where inconsistent with the follow-up above. */
-/* USA v1.01 0/1; absent from us2 and PAL catalogues; 1568/1576 bytes.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Retail jump-table dispatch restored; state-transition branching, global-base forms and gaze float scheduling remain. Original ordinary switch was 1572 bytes. Reopen with typed state and target layouts.
- */
-typedef unsigned char u8;
-typedef signed char s8;
-typedef unsigned short u16;
-typedef unsigned int u32;
-typedef float f32;
+#include "common.h"
+
 typedef int TI128 __attribute__((mode(TI)));
 typedef union { TI128 q; f32 f[4]; } BarlowVector;
 extern u8 *D_L04_001B24DC;
@@ -36,12 +32,12 @@ extern int func_L01_003245E0(void *, int, f32);
 /* Interface assumption: retain the incoming owner/key in a0. The current
  * linked wrapper is declared void(void), but its query forwards a live a0
  * key; removing this input is not independently justified. */
-extern void func_L01_003246D0(void *);
+extern void func_L01_003246D0(int);
 extern int func_00288AA0(void *, int);
 extern int func_00288BE8(void *);
 extern int func_002F5D10(void);
 extern void func_002A7750(void *, int, int);
-extern int func_00282948(void *);
+extern int func_00282948(int *);
 extern f32 func_002A7878(f32, f32);
 extern int func_00283CF0(f32);
 extern void func_002A7470(void *, int, int, int);
@@ -56,32 +52,30 @@ extern void func_00282CF0(void *, void *, void *);
 extern f32 func_00283BE0(f32, f32);
 extern f32 func_00282E20(void *);
 extern void func_002AEC48(void *, void *, int, f32, f32);
-extern void *D_L04_002CA3C0[];
 extern u32 D_001397A4;
 extern u8 D_0013965C;
 extern void func_L04_00439870(void *);
 extern void func_00282F20(void *, void *, f32);
 extern void func_00282CD8(void *, void *, void *);
 extern void func_L00_002B9D60(void *, void *, int, int);
-extern void *func_00288FB8(int);
-extern void func_00285828(void *, int, void *, int);
+extern int func_00288FB8(int);
+extern void func_00285828(int, int, int, int);
 extern void func_00285788(int, int);
-extern void func_002B49E0(int, int, int, int, int);
+extern int func_002B49E0(int, int, int, int, unsigned char *);
 
 void func_L04_00439950(u8 *object) {
-    static void *cases[5] = {&&state0, &&state1, &&state2, &&state3, &&stateDone};
+    static void *const cases[5] = {&&state0, &&state1, &&state2, &&state3, &&stateDone};
     unsigned int state;
     BarlowVector target, origin, delta;
     u8 *data = *(u8 **)(object + 0x68);
     u8 *linked;
-    void *message;
+    int message;
     f32 rate;
     f32 heading, yaw, pitch;
     int look;
     func_L04_00439870(object);
     state = object[0x20];
-    if (state < 5)
-        goto *D_L04_002CA3C0[state];
+    if (state < 5) goto *cases[state];
     goto stateDone;
 state0:
         linked = D_L04_001B24DC + *(int *)(data + 0x120) * 256;
@@ -89,11 +83,12 @@ state0:
         linked[0x31] = 0;
         *(u16 *)(linked + 0x34) |= 1;
         func_L01_003128C0(object);
-        func_002A7750(object, (D_001397A4 & 0x20000000) ? 4 : 1, -1);
+        if (D_001397A4 & 0x20000000) func_002A7750(object, 4, -1);
+        else func_002A7750(object, 1, -1);
         goto stateDone;
 state1:
         if (func_L01_003245E0(object, 10, 6.5f)) {
-            func_L01_003246D0(object);
+            func_L01_003246D0((int)object);
             func_00288AA0(D_L04_001BF880, 0x3D);
             func_00288BE8(D_L04_001BF880);
             func_002A7750(object, 2, -1);
@@ -127,7 +122,7 @@ state3:
         goto stateDone;
 stateDone:
     if (object[0x20] != 0) {
-        if (object[0x43] == 0 && func_00282948(data + 0x11C)) {
+        if (object[0x43] == 0 && func_00282948((int *)(data + 0x11C))) {
             *(int *)(data + 0x11C) = func_00283CF0(func_002A7878(1200.0f, 2400.0f));
             if (object[0x43] != 1)
                 func_002A7470(object, 1, 0, 10);
@@ -144,12 +139,12 @@ stateDone:
             if (func_00282DF0(D_00189F30) > 0.01f)
                 *(int *)(data + 0x114) = 120;
             else
-                func_00282948(data + 0x114);
+                func_00282948((int *)(data + 0x114));
         } else if (*(int *)(data + 0x114)) {
             *(int *)(data + 0x114) = 0;
-            *(TI128 *)(data + 0x100) = D_00189F00.q;
+            qcopy((data + 0x100), &D_00189F00);
         }
-        if (func_00282948(data + 0x118)) {
+        if (func_00282948((int *)(data + 0x118))) {
             *(int *)(data + 0x118) = func_00283CF0(func_002A7878(180.0f, 300.0f));
             heading = func_00283B98(*(f32 *)(object + 0xF8), func_002A7878(-90.0f, 90.0f) * 0.01745329424738884f);
             pitch = func_002A7878(0.0f, 30.0f) * 0.01745329424738884f;
@@ -157,14 +152,14 @@ stateDone:
             func_00282CC0(data + 0x100, data + 0x100, object + 0x10);
         }
         if (*(int *)(data + 0x114)) {
-            target.q = D_00189F00.q;
+            qcopy(&target, &D_00189F00);
             rate = 0.04f;
         } else {
-            target.q = *(TI128 *)(data + 0x100);
+            qcopy(&target, (data + 0x100));
         }
     }
     if (look) {
-        origin.q = *(TI128 *)(object + 0x10);
+        qcopy(&origin, (object + 0x10));
         origin.f[2] += 2.0f;
         func_00282CF0(&delta, &target, &origin);
         yaw = func_00283BE0(func_00283248(delta.f[0], delta.f[1]), *(f32 *)(object + 0xF8));
