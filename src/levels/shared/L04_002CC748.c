@@ -569,7 +569,7 @@ void func_L04_003A1FA0(u8 *self) {
         *(u8 *)(*(u32 *)(self + 0x28) + 0x20) = 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L04_003A1FE0);
+/* func_L04_003A1FE0 is matched in L04_002CC748-g8.c (built with -G8). */
 
 INCLUDE_ASM("asm/levels", func_L04_003A21F8);
 
