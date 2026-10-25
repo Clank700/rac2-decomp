@@ -1,16 +1,23 @@
-/* Manual reconstruction, 2026-10-23; retained, not linked.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -mno-split-addresses.
- * us: 16_snivelak: instruction at +0xac differs; func_L16_004185C0: 0 of 1 places match (src/levels/16_snivelak/L16_004185C0-qcopy.c)
- * us2: 16_snivelak: instruction at +0xac differs; func_L16_004185C0: 0 of 1 places match (src/levels/16_snivelak/L16_004185C0-qcopy.c)
- * pal: func_L16_004185C0 is in neither catalogue of pal; func_L16_004185C0 is in neither catalogue of pal
- * 988/988 bytes; first remaining difference +0xac in both USA releases, in table-pointer materialization/allocation. Corrected unsigned state bytes and flag operation order; direct and no-split-address forms were measured. Reopen with independently justified source layout/lifetime evidence.
+/* Retained C reconstruction; not linked or counted.
+ * Profile: -O2 -G0 -ffunction-sections -mno-split-addresses.
+ * Compiled 988 bytes; retail 988 bytes.
+ * us: 0/1 placements match (exit 1).
+ * us2: 0/1 placements match (exit 1).
+ * pal: canonical name absent; no match credit.
+ * Remaining: Retail size and initial frame/copies agree. First difference +0xAC: table-address
+ * result registers; later object-table and sound-pointer allocation also differ. Shared qcopy
+ * does not resolve them. The audio-bank view now follows D_00188660 + handle*0x70 with owner at
+ * +0x88 and active at +0x74, rather than a shifted record slice. Separate target-pointer
+ * lifetimes worsen allocation and grow to 996 bytes.
+ * Reopen: Independent table-pointer liveness evidence preserving the measured object stride and
+ * audio-bank field offsets.
  */
+
 #include "common.h"
 typedef int Vector128 __attribute__((mode(TI)));
 typedef struct { Vector128 position,angles,delta,step; } RotatingMoverWorkspace;
-typedef struct { unsigned char active; char reserved[19]; char *owner; char tail[88]; } SoundRecord;
 extern char *D_L16_001B2B1C;
-extern SoundRecord D_001886D4[];
+extern char D_00188660[];
 extern float func_00283BE0(float,float);
 extern float func_00283B98(float,float);
 extern void func_00282F20(void *,void *,float);
@@ -23,9 +30,9 @@ void func_L16_004185C0(char *object)
     RotatingMoverWorkspace local;
     char *state=*(char **)(object+0x68);
     char *target;
-    SoundRecord *sound;
-    *(Vector128 *)&local.position=*(Vector128 *)(object+0x10);
-    *(Vector128 *)&local.angles=*(Vector128 *)(object+0xf0);
+    char *sound;
+    qcopy(&local.position,(object+0x10));
+    qcopy(&local.angles,(object+0xf0));
     if(*(unsigned char *)(object+0x20)==0) {
         *(unsigned char *)(object+0x30)=0xff;
         object[0x20]=1;
@@ -54,8 +61,8 @@ void func_L16_004185C0(char *object)
                 func_00282CC0(object+0x10,&local.step,object+0x10);
                 target=D_L16_001B2B1C+*(int *)(state+0x6c)*0x100+0x10;
                 func_00282CC0(target,&local.step,target);
-                sound=D_001886D4+*(int *)(state+0x70);
-                if(sound->owner!=object || sound->active==0) *(int *)(state+0x70)=func_002E5CF8(0,4,object);
+                sound=D_00188660+0x70**(int *)(state+0x70);
+                if((*(char **)(sound+0x88))!=object || (*(unsigned char *)(sound+0x74))==0) *(int *)(state+0x70)=func_002E5CF8(0,4,object);
             }
         } else {
             if(*(short *)(object+0xaa)==0x10fe) {

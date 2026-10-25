@@ -22,14 +22,14 @@ extern f32 D_L03_001B0050 __attribute__((sda));
 extern f32 D_L03_001B0054 __attribute__((sda));
 extern f32 D_L03_001B0058[2] __attribute__((sda));
 extern char D_L03_00188660[];
-extern void func_31B920(char *a0, s32 a1, s32 a2);
-extern f32  func_2F0000(f32 a0, f32 a1);
-extern void func_2E77F0(void *a0, void *a1);
+extern void func_002A7750(char *a0, s32 a1, s32 a2);
+extern f32  func_00283B98(f32 a0, f32 a1);
+extern void func_L00_002E6CF0(void *a0, void *a1);
 extern void func_L03_003C6208(void);
-extern s32  func_32AB10(char *a0);
-extern void func_31EBA8(f32 *a0, f32 a1, f32 a2);
-extern void func_360780(s32 a0);
-extern s32  func_360A80(s32 a0, s32 a1, char *a2);
+extern s32  func_002B38B8(char *a0);
+extern void func_002AA2E8(f32 *a0, f32 a1, f32 a2);
+extern void func_002E59F8(s32 a0);
+extern s32  func_002E5CF8(s32 a0, s32 a1, char *a2);
 
 void func_L03_003C5FE8(char *a0)
 {
@@ -39,7 +39,7 @@ void func_L03_003C5FE8(char *a0)
     switch (*(u8 *)(s1 + 0x20)) {
     case 0:
         *(f32 *)(s1 + 0x2C) = *(f32 *)(*(s32 *)(s1 + 0x24) + 0x24) * *(f32 *)s2;
-        func_31B920(s1, 1, -1);
+        func_002A7750(s1, 1, -1);
         *(u16 *)(s1 + 0x34) |= 1;
         *(u8 *)(s1 + 0x31) = 0;
         *(f32 *)(s2 + 0x14) = 1.0f;
@@ -50,18 +50,18 @@ void func_L03_003C5FE8(char *a0)
         f32 *p = (f32 *)(s2 + 8);
         s32 i;
 
-        *(f32 *)(s2 + 4) = func_2F0000(*(f32 *)(s2 + 4), D_L03_001B0050 * k);
-        *(f32 *)(s2 + 0x10) = func_2F0000(*(f32 *)(s2 + 0x10), D_L03_001B0054 * k);
+        *(f32 *)(s2 + 4) = func_00283B98(*(f32 *)(s2 + 4), D_L03_001B0050 * k);
+        *(f32 *)(s2 + 0x10) = func_00283B98(*(f32 *)(s2 + 0x10), D_L03_001B0054 * k);
         for (i = 1; i >= 0; i--) {
-            *p = func_2F0000(*p, *c * 0.000290888245f);
+            *p = func_00283B98(*p, *c * 0.000290888245f);
             p++;
             c++;
         }
-        func_2E77F0(func_L03_003C6208, s1);
-        if (func_32AB10(s1) != 0) {
-            func_31EBA8((f32 *)(s2 + 0x14), 0.0f, 0.0333333351f);
+        func_L00_002E6CF0(func_L03_003C6208, s1);
+        if (func_002B38B8(s1) != 0) {
+            func_002AA2E8((f32 *)(s2 + 0x14), 0.0f, 0.0333333351f);
             if (*(f32 *)(s2 + 0x14) <= 0.0f) {
-                func_31B920(s1, 2, -1);
+                func_002A7750(s1, 2, -1);
                 *(s32 *)(s1 + 0x98) = 0;
             }
         }
@@ -72,7 +72,7 @@ void func_L03_003C5FE8(char *a0)
         char *p = D_L03_00188660 + *(s32 *)(s2 + 0x18) * 0x70;
 
         if (*(char **)(p + 0x88) != s1 || *(u8 *)(p + 0x74) == 0)
-            *(s32 *)(s2 + 0x18) = func_360A80(0, 4, s1);
+            *(s32 *)(s2 + 0x18) = func_002E5CF8(0, 4, s1);
     } else {
         s32 v = *(s32 *)(s2 + 0x18);
 
@@ -80,7 +80,7 @@ void func_L03_003C5FE8(char *a0)
             char *p = D_L03_00188660 + v * 0x70;
 
             if (*(char **)(p + 0x88) == s1 && *(u8 *)(p + 0x74) != 0)
-                func_360780(v);
+                func_002E59F8(v);
         }
         *(s32 *)(s2 + 0x18) = -1;
     }

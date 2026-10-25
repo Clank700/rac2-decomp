@@ -1,3 +1,16 @@
+/*
+ * Updated manual-C near miss, 2026-10-25.
+ * Measured unit: src/levels/02_maktar_nebula/L02_003E91F0-g8.c
+ * Profile: -O2 -G8 -ffunction-sections
+ * Actual release coverage: US 0/1 (exit1); US2 0/1 (exit1); PAL absent (exit1).
+ * Current residual: 1728/1720 bytes. Canonical AB1F0 integer return is explicitly converted
+ * to the actual pointer view, and the old four-byte table declaration is incomplete. Full
+ * vector copies and both 20-point strands remain. FP/copy allocation and scheduling differ.
+ * Reopen only for: A measured lifetime/container hypothesis after the real table extent is
+ * qualified; preserve the corrected call input and return width.
+ * Older notes below are historical. Marker and trial-only profiles were restored.
+ */
+
 /* Nonmatching: USA v1.01: 0/1 carrying places; USA v2.00: 0/1 carrying places; PAL: absent. Final C 1736/1720 retail bytes. Game -O2 -G8 -frac2-qcopy -frac2-qcopy-barrier. Rope relaxation, two-strand animation and spark emission reconstructed. Three trials: expression staging identical, then corrected live object argument to func_002AB1F0. Original 0x110 frame; remaining register roles/copy/float scheduling. Reopen with lifetime/container hypothesis; no linked builds.  */
 #include "common.h"
 typedef int Quad __attribute__((mode(TI)));
@@ -13,9 +26,9 @@ extern int D_L02_001B0C7C __attribute__((sda));
 extern float D_L02_00249090[2][20][4];
 extern float D_L02_00249310[20], D_L02_00249360[20][4], D_L02_002494A0[20];
 extern char D_0018A0E0[], D_0018A560[], D_0018A570[];
-extern char D_L02_001A8F20[4] __attribute__((sda));
+extern char D_L02_001A8F20[] __attribute__((sda));
 extern float func_00283B98(float, float), func_00283BE0(float, float);
-extern char *func_002AB1F0(void *);
+extern int func_002AB1F0(void *);
 extern float func_00282E48(void *, void *);
 extern void func_00282CF0(void *, void *, void *);
 extern void func_00282F20(void *, void *, float);
@@ -40,8 +53,8 @@ void func_L02_003E91F0(char *actor) {
     D_L02_001B0C30 = func_00283BE0(D_L02_001B0C30, D_L02_001B0C34);
     D_L02_001B0C44 = func_00283B98(D_L02_001B0C44, D_L02_001B0C48);
     if (*(char **)(state + 0x4C)) {
-        char *settings = func_002AB1F0(*(char **)(state + 0x4C));
-        *(Quad *)endpoint = *(Quad *)(*(char **)(state + 0x4C) + 0x10);
+        char *settings = (char *)func_002AB1F0(*(char **)(state + 0x4C));
+        qcopy(endpoint, *(char **)(state + 0x4C) + 0x10);
         endpoint[2] += *(float *)(settings + 0x10);
         length = func_00282E48(state + 0x20, endpoint);
     }
@@ -54,8 +67,8 @@ void func_L02_003E91F0(char *actor) {
         func_002ACEC0(direction, direction, delta, 0.17453295f);
     }
     func_00282D30(tangent, direction, length);
-    *(Quad *)D_L02_00249090[0][0] = *(Quad *)(state + 0x20);
-    *(Quad *)D_L02_00249090[1][0] = *(Quad *)(state + 0x20);
+    qcopy(D_L02_00249090[0][0], state + 0x20);
+    qcopy(D_L02_00249090[1][0], state + 0x20);
     for (i = 1; i < 20; i++) {
         float *point = D_L02_00249090[0][i];
         float *previous = D_L02_00249090[0][i - 1];
@@ -68,11 +81,11 @@ void func_L02_003E91F0(char *actor) {
         func_00282CF0(delta, point, previous);
         func_00282D08(blended, delta, tangent, 0.85f);
         distance = func_00282DF0(blended);
-        if (distance == 0.0f) *(Quad *)point = *(Quad *)previous;
+        if (distance == 0.0f) qcopy(point, previous);
         else {
             func_00282D30(blended, blended, length / distance);
             func_00282CC0(point, previous, blended);
-            *(Quad *)tangent = *(Quad *)blended;
+            qcopy(tangent, blended);
         }
         point[2] += height;
         func_00282CF0(delta, point, previous);
@@ -91,7 +104,7 @@ void func_L02_003E91F0(char *actor) {
         oscillation = func_002ABB18(D_L02_001B0C44 + (float)i * D_L02_001B0C4C);
         lateral = func_00283198(oscillation);
         lateral = D_L02_001B0C3C * lateral;
-        *(Quad *)D_L02_00249090[1][i] = *(Quad *)point;
+        qcopy(D_L02_00249090[1][i], point);
         lateral *= func_00283198(phase);
         D_L02_002494A0[i] = lateral;
         D_L02_00249090[1][i][2] += lateral;
@@ -101,10 +114,10 @@ void func_L02_003E91F0(char *actor) {
         sideways[0] = func_00283180(heading) * width;
         sideways[1] = func_00283198(heading) * width;
         sideways[2] = 0;
-        *(Quad *)D_L02_00249360[i] = *(Quad *)sideways;
+        qcopy(D_L02_00249360[i], sideways);
         func_00282CC0(D_L02_00249090[1][i], D_L02_00249090[1][i], sideways);
     }
-    *(Quad *)(state + 0x30) = *(Quad *)D_L02_00249090[0][19];
+    qcopy(state + 0x30, D_L02_00249090[0][19]);
     oscillation = func_002A78D8(0.52359885f, 1.0471977f);
     phase = func_002A7878(-0.52359885f, 1.0471977f);
     func_00282D30(toward, direction, D_L02_001B0CAC);

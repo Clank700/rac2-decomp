@@ -15,15 +15,15 @@
    the table entry's pending word, the frame hooks and the shutdown of the two
    cached records. */
 extern char D_L05_002A1800[];
-extern int func_37AAC8(void);
+extern int func_002ED8A0(void);
 
 void func_L05_0041FE98(void)
 {
     char *p = (char *)D_L05_00221D10;
     int index;
 
-    func_37B210();
-    func_379F18(1);
+    func_L05_0037B210();
+    func_L05_00379F18(1);
     D_L05_001B1360 = -2;
     *(int *)(p + 0x2C) = 1;
     *(int *)(p + 0x28) = 100;
@@ -32,21 +32,21 @@ void func_L05_0041FE98(void)
     D_L05_001B13E8 = 1;
     D_L05_001B1364 = 0;
     *(int *)(p + 0x14) = 0;
-    index = func_37AAC8();
+    index = func_002ED8A0();
     D_L05_001B13F0 = 0;
     *(int *)(D_L05_002A1800 + index * 0x28 + 0x14)
         = *(int *)(D_L05_002A1800 + index * 0x28 + 0x10);
-    func_37D6E8();
-    func_379F68();
-    func_445A98();
+    func_L05_0037D6E8();
+    func_L05_00379F68();
+    func_L05_00445A98();
     *(float *)(p + 0x30) = 8.0f;
-    func_379F28(0);
+    func_L05_00379F28(0);
     if (D_L05_001B13B4 != 0) {
-        func_328870(D_L05_001B13B4);
+        func_0029F338(D_L05_001B13B4);
         D_L05_001B13B4 = 0;
     }
     if (D_L05_001B13B8 != 0) {
-        func_328870(D_L05_001B13B8);
+        func_0029F338(D_L05_001B13B8);
         D_L05_001B13B8 = 0;
     }
     D_L05_001B2000 = D_L05_001B3558;

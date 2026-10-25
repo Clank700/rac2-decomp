@@ -1,4 +1,9 @@
-/* Nonmatching: USA v1.01: 0/1 carrying places; USA v2.00: 0/1 carrying places; PAL: 0/1 carrying places. Final C 1716/1804 retail bytes. Game -O2 -G8 -frac2-qcopy -frac2-qcopy-barrier. Aim-assist target selector and obstruction probing reconstructed from verified retail assembly/reference. First trial 1716/1804 bytes with original 0x320 frame; final trial preserves ordered float threshold semantics and canonical level data identities. Remaining block/register and scalar-field source shape; reopen with target iteration/typed-actor hypothesis. No linked builds.  */
+/* Nonmatching: 1716/1804 bytes.
+ * Profile: -O2 -G8 -ffunction-sections.
+ * Placement checks: US: 0/1; US2: 0/1; PAL: 0/1.
+ * 1716/1804 bytes, frame0x320. All128 disabled-actor pointers and full start/target/trace vectors are retained. AB1F0 keeps its canonical int32 metadata return with explicit pointer casts. Player XY fields are based at the actual player object+0x80/+0x84; query hit/position are fields of the real query result at+0x18/+0x20. Target-local scopes and owner views do not close allocation, branch and query-loop differences.
+ * Reopen with independent actor/query cursor and FP-result lifetime evidence. Keep raw metadata contracts and complete query storage; do not specialize a generic accessor to a pointer return.
+ */
 #include "common.h"
 typedef int Quad __attribute__((mode(TI)));
 extern float D_L02_001B0610 __attribute__((sda)), D_L02_001B0614 __attribute__((sda));
@@ -7,38 +12,47 @@ extern int D_L02_001A8FF0;
 extern int D_L02_001A8FF4 __attribute__((sda));
 extern short D_0018A168;
 extern float D_0018A144;
-extern float D_00189EA0[4];
+extern char D_00189E20[] NOT_SDA;
 extern char *D_L02_001FC420[];
-extern char *D_L02_001C0958;
-extern float D_L02_001C0960[4];
+typedef union { Quad quad; float f[4]; } QueryVector;
+typedef struct {
+    int prefix[6];
+    char *hit;
+    int mesh;
+    QueryVector position, unknown30, normal, edgeStart, edgeEnd, tail;
+} CollisionResult;
+extern CollisionResult D_L02_001C0940;
 extern void func_00282D30(void *, void *, float), func_00282CC0(void *, void *, void *);
 extern int func_002761F8(void *, void *, int, void *, int);
-extern char *func_002AB1F0(void *);
+extern int func_002AB1F0(u8 *);
 extern float func_00283248(float, float), func_00282E80(void *, void *), func_00283C80(float, float), func_00282E48(void *, void *);
 extern void func_00282CF0(void *, void *, void *);
 extern float func_00282DB0(void *, void *), func_00282C48(float), func_00282DF0(void *), func_002831B0(float), func_00283CE0(int);
 extern void func_002AF000(void *, float, float, float);
-/* Chooses an aim-assist target, probing visibility through temporarily disabled obstacles. */
+
 char *func_L02_003DEDA0(char *actor, float *origin, float *yaw, float *pitch) {
-    float start[4], offset[4], viewStart[4];
+    float start[4] __attribute__((aligned(16))), offset[4] __attribute__((aligned(16)));
+    float viewStart[4] __attribute__((aligned(16)));
     char *disabled[128];
-    float targetPoint[4], aimPoint[4], relative[4], vertical[4];
+    float targetPoint[4] __attribute__((aligned(16))), aimPoint[4] __attribute__((aligned(16)));
+    float relative[4] __attribute__((aligned(16))), vertical[4] __attribute__((aligned(16)));
     char *state = *(char **)(actor + 0x68);
     char *selected = 0;
-    char *target, *settings, *hero;
+    char *target;
     int disabledCount = 0, index, i;
     float bestDistance = D_L02_001B0614;
-    float targetYaw, targetPitch, headingDifference, distance, dot, magnitude, angle, radius;
-    int close, clear, blocks;
-    *(Quad *)start = *(Quad *)origin;
+    qcopy(start, origin);
     func_00282D30(offset, D_0018C0B0 + 0xE0, 0.5f);
     func_00282CC0(viewStart, D_0018C0B0 + 0x10, offset);
     if (func_002761F8(viewStart, start, 6, D_0018C0B0, 0)) return 0;
     for (index = 0; (target = D_L02_001FC420[index]) != 0; index++) {
+        char *settings, *hero;
+        float targetYaw, targetPitch, headingDifference, distance, dot, magnitude, angle, radius;
+        int close, clear, blocks;
         if (*(unsigned char *)(target + 0x20) == 0xFE || *(unsigned char *)(target + 0x20) == 0xFD ||
             *(short *)(target + 0xAA) == 0xE7D || *(short *)(target + 0xAA) == 0xEB0) continue;
-        *(Quad *)targetPoint = *(Quad *)(target + 0x10);
-        settings = func_002AB1F0(target);
+        qcopy(targetPoint, target + 0x10);
+        settings = (char *)func_002AB1F0((u8 *)target);
         if (!settings || *(unsigned char *)(settings + 0xE) == 3) continue;
         func_00282D30(aimPoint, target + 0xE0, *(float *)(settings + 0x10));
         func_00282CC0(targetPoint, targetPoint, aimPoint);
@@ -52,7 +66,7 @@ char *func_L02_003DEDA0(char *actor, float *origin, float *yaw, float *pitch) {
         hero = D_0018C0B0;
         if (D_L02_001A8FF0 == 0 && D_0018A168 == 0 && D_L02_001A8FF4 == 0) {
             if (distance < 2.5f) {
-                angle = func_00283248(*(float *)(target + 0x10) - D_00189EA0[0], *(float *)(target + 0x14) - D_00189EA0[1]);
+                angle = func_00283248(*(float *)(target + 0x10) - *(float *)(D_00189E20 + 0x80), *(float *)(target + 0x14) - *(float *)(D_00189E20 + 0x84));
                 if (func_00283C80(*(float *)(hero + 0xF8), angle) < 1.0471977f && func_00282C48(start[2] - targetPoint[2]) < 2.0f) close = 1;
             }
         } else if (distance < 2.5f) {
@@ -79,7 +93,7 @@ char *func_L02_003DEDA0(char *actor, float *origin, float *yaw, float *pitch) {
         angle = func_002831B0(angle / (distance + distance));
         angle += angle;
         if (angle > D_L02_001B0610 * 0.017453294f) {
-            settings = func_002AB1F0(target);
+            settings = (char *)func_002AB1F0((u8 *)target);
             if (settings) {
                 radius = func_00283CE0(*(unsigned char *)(settings + 0xA));
                 magnitude = func_002831B0((radius * 0.125f) / distance);
@@ -91,12 +105,12 @@ char *func_L02_003DEDA0(char *actor, float *origin, float *yaw, float *pitch) {
         }
         if (!(angle < D_L02_001B0610 * 0.017453294f)) continue;
         clear = 1;
-        *(Quad *)relative = *(Quad *)start;
+        qcopy(relative, start);
         blocks = 0;
         for (;;) {
             char *obstacle;
             if (!func_002761F8(relative, targetPoint, 6, actor, 0) || ++blocks > 6) break;
-            obstacle = D_L02_001C0958;
+            obstacle = D_L02_001C0940.hit;
             if (!obstacle) { clear = 0; break; }
             if (*(short *)(obstacle + 0xAA) != 0xE7D && *(short *)(obstacle + 0xAA) != 0xEB0) {
                 if (obstacle != target) clear = 0;
@@ -105,7 +119,7 @@ char *func_L02_003DEDA0(char *actor, float *origin, float *yaw, float *pitch) {
             disabled[disabledCount++] = obstacle;
             *(int *)(obstacle + 0x98) = 0;
             if (disabledCount >= 128) break;
-            *(Quad *)relative = *(Quad *)D_L02_001C0960;
+            qcopy(relative, &D_L02_001C0940.position);
         }
         if (clear) {
             *pitch = -targetPitch;

@@ -1,15 +1,14 @@
-/* Retained manual C reconstruction; not linked or counted.
- * Retail: 552 bytes, 1 place (12:00420950).
- * Checked trial profile: -O2 -G8 -ffunction-sections -frac2-qcopy.
- * us: 0/1 placements, 520 compiled bytes.
- * Residual: the 0xDF-record loop, the two table lookups and the -frac2-qcopy lq/sq copies
- * are semantically right, but the frame is 0xC0 instead of retail's 0xE0 and the inner loop
- * carries three address pointers where retail keeps one; the 0x20-byte tail of the local
- * object is not explained. First differing word is +0x4 (prologue size).
- * Reopen with evidence for the real submission object (its 0x80/0x90 size) and its two
- * float output pointers; do not add a dummy local just to grow the frame.
- *
- * The ASM marker was restored in src/levels/12_todano/L12_0041E3E8.c after the checks.
+/* Retained complete C repair, 2026-10-25; not linked or counted.
+ * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy.
+ * Private placement checks: us: 0/1, us2: 0/1, pal: 0/1.
+ * The submission object is 144 bytes: four vectors, four color words, eight UV
+ * floats and four genuine 64-bit register words. The initializer writes the
+ * four tail fields at +0x70/+0x78/+0x80/+0x88, and the submit consumer reads
+ * them. Its optional second input is a matrix pointer, null here. Historical
+ * screening used an incomplete 112-byte object.
+ * Current code is 520/552 bytes. The object extent and frame 0xE0 now agree
+ * with retail; address/index allocation and the two inner loops still differ.
+ * No dummy frame bytes were added.
  */
 
 #include "common.h"
@@ -24,13 +23,14 @@ extern float D_L12_002A38F8[][2];
 extern char D_L12_002A11B0[][16];
 extern short D_L12_002A2410[][12];
 
-extern void func_2EF5E0(void *, int, int, int);
-extern void func_2EE220(void *, int, int);
+extern void func_00281DE8(void *, int, int, int);
+extern void func_00280B90(void *, void *, int);
 
 typedef struct {
     L12_TI128 v[4];
     int i[4];
     float f[8];
+    u64 registers[4];
 } L12Buf_420950;
 
 void func_L12_00420950(char *a0)
@@ -41,7 +41,7 @@ void func_L12_00420950(char *a0)
     int i;
     int j;
 
-    func_2EF5E0(&buf, D_L12_001B1F40, 2, 0x80);
+    func_00281DE8(&buf, D_L12_001B1F40, 2, 0x80);
     buf.i[0] = D_L12_001B1F34;
     buf.i[3] = D_L12_001B1F34;
     buf.i[2] = D_L12_001B1F34;
@@ -64,10 +64,10 @@ void func_L12_00420950(char *a0)
             f0p += 2;
             f1p += 2;
         }
-        func_2EE220(&buf, 0, 0);
+        func_00280B90(&buf, 0, 0);
         p += 12;
     }
-    func_2EF5E0(&buf, D_L12_001B1F40 + 1, 2, 0x80);
+    func_00281DE8(&buf, D_L12_001B1F40 + 1, 2, 0x80);
     for (i = 0; i < 0xDF; i++) {
         char *dst;
         float *f0p;
@@ -90,6 +90,6 @@ void func_L12_00420950(char *a0)
             f0p += 2;
             f1p += 2;
         }
-        func_2EE220(&buf, 0, 0);
+        func_00280B90(&buf, 0, 0);
     }
 }

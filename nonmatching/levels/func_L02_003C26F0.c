@@ -1,30 +1,10 @@
-/* Retained readable reconstruction, 23 October 2026; not linked.
- * Latest profile: -O2 -G16 -ffunction-sections -Wa,-G16 -frac2-qcopy
- * -frac2-qcopy-barrier -frac2-zero-ti-barrier.
- * us: 6508/6516 bytes, 0/8 carrying placements, check.py exit 1.
- * us2/pal: name absent from both catalogues (checked, not a positive match).
- * Six bounded trials: standard G16 6236; qualified copy/clear profile 6308;
- * pointer loops 6300; duplicated cancellation arms 6500; current global view
- * 6508. Adding -mno-split-addresses instead hit gas assertion tc-mips.c:11867
- * and was rejected. No custom compiler/assembler changes were attempted.
- * The 0xF0 frame and control flow are reconstructed; saved-register allocation,
- * address lifetimes, clear/copy scheduling and case/block layout remain unlike
- * retail. Reopen with independent source/layout or compiler evidence for those
- * differences; a close byte count is not evidence of a near instruction match.
- * Three actor arrays really hold 20 pointers each. All vectors are 16 bytes,
- * matrices 64 bytes; the global view retains the measured +0x380 field offset.
- * The effect call preserves 8 GPR + 2 FP + four stack arguments; its result is
- * a pointer. Unresolved ignored helper returns are marked explicitly below.
- * No full linked qualification was run for this reconstruction.
+/* Nonmatching: 6492/6516 bytes.
+ * Profile: -O2 -G16 -ffunction-sections -Wa,-G16.
+ * Placement checks: US: 0/8; US2 absent from catalogue; PAL absent from catalogue.
+ * 6492/6516 bytes, frame0xf0,0/8 US placements. Three actor arrays retain all20 pointers each. Full vectors, the64-byte transform, real callbacks and all call parameters remain. A7750 uses the canonical32-bit state parameter. Case-local pointer/integer scopes change the6508-byte helper form to6492 bytes, but saved-register assignment, cancellation arms and case/loop layout still differ. US2 andPAL lack this catalogue name.
+ * Reopen with independent case-local object lifetimes or control-flow evidence. Size proximity is not a close instruction match. The previously rejected unsplit-address assembler assertion was not retried.
  */
-
-/* Challenge controller. The object/state types below are views of the fields
- * touched by this routine, not a claim about every allocation of those types.
- * Vectors and matrices retain their complete retail extents. */
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned int u32;
-typedef unsigned long long u64;
+#include "common.h"
 typedef int Quad __attribute__((mode(TI)));
 typedef union { Quad bits; float f[4]; } Vector;
 typedef struct { Vector row[4]; } Matrix;
@@ -111,7 +91,7 @@ extern void func_0029FC20(char *, int, char *);
 extern void func_0029FCC0(char *, int, char *);
 extern void func_002A0430(unsigned int);
 extern void func_002A0468(u64 *, u64, u64, u64, u64);
-extern void func_002A7750(u8 *, u8, int);
+extern void func_002A7750(u8 *, int, int);
 extern float func_002A7940(void);
 extern int func_002A8508(int, int);
 extern void func_002AA800(float *, int, float, float);
@@ -135,9 +115,7 @@ extern int func_L02_003C4068(char *);
 extern void func_L02_003C4E18(char *);
 extern void func_L02_003C46E0(void *);
 
-/* These helpers have qualified inputs, but their ignored retail result banks
- * do not prove an original return declaration. Void here is an interface
- * assumption for side-effect calls, not a recovered return contract. */
+
 extern void func_00294420(int);
 extern void func_002B0CE0(int, int, int);
 extern void func_00335370(const void *), func_003353C8(const void *);
@@ -158,17 +136,19 @@ void func_L02_003C26F0(char *object)
     ChallengeState *state = *(ChallengeState **)(object + 0x68);
     Vector position, target, rotation;
     Matrix transform;
-    char *actor, *record, *vars;
-    int *linked;
-    float *randomAngle;
-    u16 *list;
-    u16 last, id;
-    u8 *counter;
-    int i, status, completed;
-    float angle;
+    int status;
 
     switch ((u8)object[0x20]) {
-    case 0:
+    case 0: {
+        char *actor;
+        char *record;
+        int *linked;
+        float *randomAngle;
+        u16 *list;
+        u16 last;
+        u16 id;
+        int i;
+        int status;
         object[0x30] = 0x40;
         if (state->disabled != 0) {
             *(int *)(object + 0x98) = 0;
@@ -178,9 +158,9 @@ void func_L02_003C26F0(char *object)
             for (i = 1; i >= 0; i--)
                 *randomAngle++ = func_002A7940();
             func_0029FCC0(object, 1, (char *)&position);
-            target.bits = position.bits;
+            qcopy(&target, &position);
             target.f[2] += 1.0f;
-            rotation.bits = position.bits;
+            qcopy(&rotation, &position);
             rotation.f[2] -= 1.0f;
             if (func_002761F8(&target, &rotation, 2, object, 0))
                 *(float *)(object + 0x18) += (D_L02_001C0968 - position.f[2]) + D_L02_001AFD40;
@@ -193,10 +173,10 @@ void func_L02_003C26F0(char *object)
         state->decoration = 0;
         record = D_L02_001B368C + state->record * 0x80;
         *(float *)(record + 0x38) += 2.0f;
-        D_L02_001C8280.transform.row[1].bits = *(Quad *)(D_L02_001B368C + state->record * 0x80 + 0x30);
-        D_L02_001C8280.transform.row[0].bits = D_L02_001AFD20.bits;
-        D_L02_001C8280.transform.row[3].bits = 0;
-        D_L02_001C8280.transform.row[2].bits = 0;
+        qcopy(&D_L02_001C8280.transform.row[1], D_L02_001B368C + state->record * 0x80 + 0x30);
+        qcopy(&D_L02_001C8280.transform.row[0], &D_L02_001AFD20);
+        qzero(&D_L02_001C8280.transform.row[3]);
+        qzero(&D_L02_001C8280.transform.row[2]);
         D_L02_001C8280.transform.row[1].f[3] = 0.0f;
         if (func_002A8508((u8)object[0x21], -1) >= 2) {
             list = D_L02_001FC060[(u8)object[0x21]];
@@ -257,7 +237,9 @@ void func_L02_003C26F0(char *object)
         object[0x30] = 0xFF;
         break;
 
-    case 1:
+    }
+    case 1: {
+
         if (func_L02_003C5098(object) && D_001A7B1E) {
             func_002B0CE0(12, 0x27BD, 1);
             if (func_00294630(*(int *)(D_L02_00264A70 + D_00139568[0x26] * 0xE0 + 0x14)) == 0) {
@@ -273,7 +255,9 @@ void func_L02_003C26F0(char *object)
             func_L02_003C4ED8(object);
         break;
 
-    case 2:
+    }
+    case 2: {
+        float angle;
         func_002B0CE0(1, 0, 1);
         func_0029FC20(object, 1, (char *)&transform);
         func_002830C0(&rotation, &D_L02_001AFD30, &transform);
@@ -300,7 +284,10 @@ void func_L02_003C26F0(char *object)
         }
         break;
 
-    case 3:
+    }
+    case 3: {
+        char *record;
+        int status;
         func_002B0CE0(1, 0, 1);
         D_00189E20.controlMode = 3;
         if (D_00189E20.flags & 2)
@@ -308,9 +295,9 @@ void func_L02_003C26F0(char *object)
         func_0029FCC0(object, 0, (char *)&position);
         if (func_00282E48(&D_L02_001BA500, &position) <= 0.5f) {
             record = D_L02_001B368C + state->record * 0x80;
-            target.bits = *(Quad *)(record + 0x30);
-            rotation.bits = *(Quad *)(record + 0x70);
-            transform.row[0].bits = target.bits;
+            qcopy(&target, record + 0x30);
+            qcopy(&rotation, record + 0x70);
+            qcopy(&transform.row[0], &target);
             transform.row[0].f[2] += 30.0f;
             func_00335438(&transform, &rotation, 2, 480, 0);
             *(int *)(*(char **)(D_L02_001BA550 + 0x70) + 0xE0) = 0x1C2;
@@ -323,7 +310,7 @@ void func_L02_003C26F0(char *object)
                 state->decoration[0x30] = 0x80;
                 *(u16 *)(state->decoration + 0x32) = 0x80;
                 *(u16 *)(state->decoration + 0x34) &= 0xFFBE;
-                *(Quad *)(state->decoration + 0x10) = *(Quad *)(record + 0x30);
+                qcopy(state->decoration + 0x10, record + 0x30);
                 *(float *)(state->decoration + 0x18) += 15.0f;
                 *(u16 *)(state->decoration + 0x34) &= 0xFF7F;
             }
@@ -340,7 +327,9 @@ void func_L02_003C26F0(char *object)
         }
         break;
 
-    case 4:
+    }
+    case 4: {
+        int status;
         func_002B0CE0(1, 0, 1);
         D_00189E20.controlMode = 3;
         status = func_L00_002D40F0();
@@ -352,7 +341,7 @@ void func_L02_003C26F0(char *object)
             position.f[2] = 0.0f;
             func_0029FCC0(object, 0, (char *)&target);
             func_00282CC0(&position, &target, &position);
-            rotation.bits = *(Quad *)(object + 0xF0);
+            qcopy(&rotation, object + 0xF0);
             rotation.f[2] = func_00283B98(*(float *)(object + 0xF8), 3.141593f);
             func_00335438(&D_L02_001BA500, &D_L02_001BA510, 3, 300, 0);
             func_00335370(&position);
@@ -368,10 +357,17 @@ void func_L02_003C26F0(char *object)
         }
         break;
 
-    case 5:
+    }
+    case 5: {
+
         break;
 
-    case 6:
+    }
+    case 6: {
+        char *actor;
+        char *vars;
+        int i;
+        int status;
         if (D_L02_001A8F00 != 7) {
             if (*(u16 *)(object + 0x96) < 6)
                 break;
@@ -432,14 +428,14 @@ void func_L02_003C26F0(char *object)
         }
         for (i = 0; i < state->platformCount; i++) {
             func_L02_003C4280(state->platforms[i], 0);
-            position.bits = *(Quad *)(state->platforms[i] + 0x10);
+            qcopy(&position, state->platforms[i] + 0x10);
             func_L02_003C5438(&position, 6, 0x88802020, 4, 0x7F6F6FFF);
         }
         for (i = 0; i < state->gateCount; i++) {
             status = func_L02_003C4068(state->gates[i]);
             switch (status) {
             case 0:
-                position.bits = *(Quad *)(state->gates[i] + 0x10);
+                qcopy(&position, state->gates[i] + 0x10);
                 func_L02_003C5438(&position, 6, 0x88802020, 4, 0x7F6F6FFF);
                 break;
             case 1:
@@ -449,7 +445,7 @@ void func_L02_003C26F0(char *object)
                 vars = *(char **)(state->gates[i] + 0x68);
                 state->completed++;
                 actor = D_L02_001B359C + *(int *)vars * 0x100;
-                position.bits = *(Quad *)(actor + 0x10);
+                qcopy(&position, actor + 0x10);
                 func_L02_003C49A0(&position, 50);
                 func_L02_003C49A0(&position, 50);
                 position.f[2] += 1.0f;
@@ -459,7 +455,7 @@ void func_L02_003C26F0(char *object)
                 vars = *(char **)(state->gates[i] + 0x68);
                 actor = D_L02_001B359C + *(int *)vars * 0x100;
                 if (*(int *)(*(char **)(vars + 8) + 8) != 0) {
-                    position.bits = *(Quad *)(actor + 0x10);
+                    qcopy(&position, actor + 0x10);
                     position.f[2] += 1.0f;
                     func_L02_003C5438(&position, 6, 0x88FF1010, 4, 0x7F6F6FFF);
                     --*(int *)(*(char **)(vars + 8) + 8);
@@ -474,7 +470,11 @@ void func_L02_003C26F0(char *object)
         }
         break;
 
-    case 7:
+    }
+    case 7: {
+        char *actor;
+        char *vars;
+        int i;
         if (D_L02_001A8F00 != 7) {
             if (*(u16 *)(object + 0x96) < 6)
                 break;
@@ -531,7 +531,7 @@ void func_L02_003C26F0(char *object)
             actor = state->gates[i];
             vars = *(char **)(actor + 0x68);
             if (*(int *)(*(char **)(vars + 8) + 4) != 1) {
-                position.bits = *(Quad *)(actor + 0x10);
+                qcopy(&position, actor + 0x10);
                 if (*(int *)(vars + 0x14) < **(int **)(vars + 0x18) - 1) {
                     func_L02_003C5438(&position, 6, 0x88802020, 4, 0x7F6F6FFF);
                 } else {
@@ -545,17 +545,21 @@ void func_L02_003C26F0(char *object)
             }
         }
         for (i = 0; i < state->platformCount; i++) {
-            position.bits = *(Quad *)(state->platforms[i] + 0x10);
+            qcopy(&position, state->platforms[i] + 0x10);
             func_L02_003C5438(&position, 6, 0x88802020, 4, 0x7F6F6FFF);
         }
         break;
 
-    case 8:
+    }
+    case 8: {
+        u16 id;
+        u8 *counter;
+        int i;
         if (D_L02_001A8F00 == 7) {
             func_L00_002E6CF0(func_L02_003C43F0, object);
             for (i = 0; i < state->platformCount; i++) {
                 func_L02_003C4280(state->platforms[i], 1);
-                position.bits = *(Quad *)(state->platforms[i] + 0x10);
+                qcopy(&position, state->platforms[i] + 0x10);
                 func_L02_003C5438(&position, 60, 0x8800FF00, 4, 0x7F6F6FFF);
             }
             if (!(D_00138180.buttons.word.high & 0x10) && *(u16 *)(object + 0x96) < 241)
@@ -621,7 +625,11 @@ void func_L02_003C26F0(char *object)
         }
         break;
 
-    case 9:
+    }
+    case 9: {
+        char *actor;
+        u16 *list;
+        u16 last;
         func_002B0CE0(1, 0, 1);
         func_L00_002C42E0(0x6F, 1);
         if (func_00282E48(&D_L02_001BA500, D_L02_001B368C + state->record * 0x80 + 0x30) <= 1.0f) {
@@ -654,7 +662,12 @@ void func_L02_003C26F0(char *object)
         }
         break;
 
-    case 10:
+    }
+    case 10: {
+        char *actor;
+        int i;
+        int completed;
+        float angle;
         func_L00_002E6CF0(func_L02_003C43F0, object);
         completed = 0;
         for (i = 0; i < state->rotatorCount; i++) {
@@ -679,6 +692,7 @@ void func_L02_003C26F0(char *object)
             func_002A7750((u8 *)object, 6, -1);
         }
         break;
+    }
     }
 
     status = (u8)object[0x20];

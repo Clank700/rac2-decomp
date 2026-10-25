@@ -139,7 +139,7 @@ void func_L00_00426480(char *object)
     func_00282CC0_4(object + 48, D_00189EA0 + 208, object + 48);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00426560);
+/* func_L00_00426560 is defined in L00_00426560-helpers.c. */
 
 /* clears the seven words of the sub-object at +0x70 (the last after a refresh call), then
    clears the flag word and the identity word-16 of the table entry and the owner's +0x7E. */
@@ -321,10 +321,7 @@ extern void func_L00_002D7958_1(float *, void *, float);
 /* 128-bit copies reach lq/sq only through TImode. */
 typedef int TQ_00427BE8 __attribute__((mode(TI)));
 
-/* func_L00_00427BE8: five spellings give the same 128-byte object, retail is 144 -
-   both quadword destinations stay folded on $s0 here where retail holds each in a
-   register. Deposited in nonmatching/levels/func_L00_00427BE8.c. */
-INCLUDE_ASM("asm/levels", func_L00_00427BE8);
+/* func_L00_00427BE8 is defined in L00_00427BE8-helpers.c. */
 
 /* resets a sub-object reached through field +112 of its argument: two int zeros through a pointer 176 bytes in, twelve float constants (0.3/0.04/0.07/1.0/0.99) and three int zeros over offsets 40..172, then four calls (sub-object, +80, +144, the argument) and a 16-bit zero at +126 */
 void func_L00_00427C78(char *self)
@@ -395,7 +392,7 @@ int func_L00_004284A8(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_004284B0);
+/* func_L00_004284B0 is defined in L00_004284B0-helpers.c. */
 
 void func_L00_00428580(void)
 {
@@ -617,7 +614,7 @@ void func_L00_0042C6C8(void)
 }
 
 /* Return the complete supplied unsigned-long 64-bit value unchanged. */
-/* Target: FUN_003427B0 — identity function returning its first argument */
+/* Target: FUN_003427B0 â€” identity function returning its first argument */
 /* Disassembly: jr ra; move v0,a0 (MIPS delay slot) */
 /* Compiled with: -O2 -G0 -ffunction-sections */
 

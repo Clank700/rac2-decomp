@@ -23,9 +23,9 @@
 extern int D_L00_0022F7C0[];
 extern float D_L00_001B25E0 __attribute__((sda));
 extern int D_001A79F8;
-extern int func_2F4668(int id);
-extern void func_2E9540(int sprite, int x, unsigned long color, int id, int y);
-extern void func_2E9A10(int sprite, int x, unsigned long color, int id, int y);
+extern int func_00288FB8(int id);
+extern void func_0027F5B8(int sprite, int x, unsigned long color, int id, int y);
+extern void func_0027FA10(int sprite, int x, unsigned long color, int id, int y);
 
 typedef struct {
     int first;
@@ -40,15 +40,15 @@ void func_L00_003781B0(void)
     if (D_L00_0022F7C0[0x84 / 4] != 0) {
         L00_003781B0_Cell *cell = (L00_003781B0_Cell *)((char *)D_L00_0022F7C0 + 0x144);
         if (D_001A79F8 >= cell[D_L00_0022F7C0[0x80 / 4]].first) {
-            func_2E9540(0x28, L00_003781B0_X, 0x80F0F0F0UL, func_2F4668(0x113B), -1);
-            func_2E9A10(0x118, L00_003781B0_X, 0x80F0F0F0UL, func_2F4668(0x1138), -1);
+            func_0027F5B8(0x28, L00_003781B0_X, 0x80F0F0F0UL, func_00288FB8(0x113B), -1);
+            func_0027FA10(0x118, L00_003781B0_X, 0x80F0F0F0UL, func_00288FB8(0x1138), -1);
         } else {
-            func_2E9A10(0x118, L00_003781B0_X, 0x80F0F0F0UL, func_2F4668(0x1124), -1);
+            func_0027FA10(0x118, L00_003781B0_X, 0x80F0F0F0UL, func_00288FB8(0x1124), -1);
         }
     } else {
         L00_003781B0_Cell *cell = (L00_003781B0_Cell *)((char *)D_L00_0022F7C0 + 0x144);
         if (cell[D_L00_0022F7C0[0x80 / 4]].first > 0)
-            func_2E9540(0x28, L00_003781B0_X, 0x80F0F0F0UL, func_2F4668(0x1125), -1);
-        func_2E9A10(0x118, L00_003781B0_X, 0x80F0F0F0UL, func_2F4668(0x2D4F), -1);
+            func_0027F5B8(0x28, L00_003781B0_X, 0x80F0F0F0UL, func_00288FB8(0x1125), -1);
+        func_0027FA10(0x118, L00_003781B0_X, 0x80F0F0F0UL, func_00288FB8(0x2D4F), -1);
     }
 }

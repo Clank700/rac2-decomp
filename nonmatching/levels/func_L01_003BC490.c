@@ -1,48 +1,50 @@
-/* func_L01_003BC490 (176 bytes, 1 place) -- NEAR MISS, not integrated.
-   Allocates the 0xA26 object, copies its flag bytes, the 16-byte quad from the
-   second argument, three floats and the +0x38 word, then seeds an angle with
-   rand(-pi, pi).  Every instruction matches except the quad store: retail
-   materialises the destination first (`addiu $a1,$s0,0x10` then `sq $v0,0($a1)`)
-   where this cc1 folds the constant offset into the store (`sq $v1,0x10($s0)`),
-   so the candidate is 172 bytes against 176.  Measured again here on five more
-   spellings (plain cast, `TI128 *d` local, struct member through the prepared
-   L01_003BC490_OBJ typedef, volatile, and a staged local) - all fold.  This is
-   the TI-destination wall the sixth wave reported: only a compiler-side lever
-   (or the SDK qcopy asm) reaches the addiu. */
-typedef int TI128 __attribute__((mode(TI)));
+/*
+ * Retained complete manual C reconstruction; not linked or counted.
+ * Profile: -O2 -G0 -ffunction-sections
+ * 176/176 bytes; 0/1 placements in us, us2 and pal.
+ * Residual: The full position and 64-bit identity copy, pre-RNG rotation read and calls agree.
+ * Inherited header loads/stores still differ at +0x34.
+ * Reopen: Independent inherited-header field/lifetime evidence beyond the tied raw and typed
+ * forms; preserve all 64 identity bits and pre-call sequencing.
+ * Trial-only source markers and profiles are restored after checking.
+ */
 
-extern void func_002A0F48(char *);
+#include "common.h"
+typedef int CtorVector __attribute__((mode(TI)));
+/* Accessed base-object fields, not the complete allocation extent. */
+typedef struct {
+    u8 unknown00[0x10];
+    CtorVector position;
+    u8 mode;
+    u8 unknown21[0xF];
+    u8 intensity, enabled;
+    u16 colour;
+    u8 unknown34[4];
+    u64 ownerIdentity;
+    u8 unknown40[0xB0];
+    float rotationX, rotationY, rotationZ;
+} CtorObject;
 extern void *func_0029EFD0(int);
 extern float func_002A7878(float, float);
+extern void func_002A0F48(void *);
 
-char *func_L01_003BC490(char *a0, char *a1)
+/* Install the full position and owner identity before activating the new object. */
+CtorObject *func_L01_003BC490(CtorObject *owner, const CtorVector *position)
 {
-    char *s0 = func_0029EFD0(0xA26);
-
-    if (s0 != 0) {
-        *(unsigned char *)(s0 + 0x30) = *(unsigned char *)(a0 + 0x30);
-        *(unsigned char *)(s0 + 0x20) = 1;
-        *(unsigned short *)(s0 + 0x32) = *(unsigned short *)(a0 + 0x32);
-        *(unsigned char *)(s0 + 0x31) = 1;
-        *(TI128 *)(s0 + 0x10) = *(TI128 *)a1;
-        *(float *)(s0 + 0xF0) = *(float *)(a0 + 0xF0);
-        *(float *)(s0 + 0xF8) = func_002A7878(-3.1415927f, 3.1415927f);
-        *(float *)(s0 + 0xF4) = *(float *)(a0 + 0xF4);
-        func_002A0F48(s0);
-        *(int *)(s0 + 0x38) = *(int *)(a0 + 0x38);
+    CtorObject *object = func_0029EFD0(0xA26);
+    if (object != 0) {
+        u8 intensity = owner->intensity;
+        u16 colour = owner->colour;
+        object->intensity = intensity;
+        object->mode = 1;
+        object->colour = colour;
+        object->enabled = 1;
+        qcopy(&object->position, position);
+        object->rotationX = owner->rotationX;
+        object->rotationY = owner->rotationY;
+        object->rotationZ = func_002A7878(-3.1415927f, 3.1415927f);
+        object->ownerIdentity = owner->ownerIdentity;
+        func_002A0F48(object);
     }
-    return s0;
+    return object;
 }
-
-/* Wave 24 (worker 09) -- confirms the TI-destination wall and adds what is
-   left of it.  The source below reaches 168 bytes against 176: the load
-   (lq $v0, 0x0($s2), a plain pointer) is instruction-exact, the store is not
-   (retail: addiu $a1, $s0, 0x10 ; sq $v0, 0x0($a1); here: sq $v0, 0x10($s0)),
-   and the two float constants are scheduled before the copy here and after it
-   in retail.  The object is allocated with func_00305EE8(0xA26) (the boot
-   function at 0x002761F8 is at 01:00305EE8? no: retail's callee is
-   f_00305EE8), the angle is seeded with func_00310580(-pi, pi), whose result
-   is stored at +0xF8, and the +0x38 word is copied with func_00308938.
-
-   Checked with: python3 tools/check.py func_L01_003BC490 --diff
-   Last line: func_L01_003BC490: 0 of 1 places match (src/levels/01_oozla/L01_003BB9D0.c) */

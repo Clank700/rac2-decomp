@@ -1,22 +1,19 @@
 /*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por.
- * Reported final C / retail: 668 / 656 bytes; size equality is not a match.
- * us: 0/1 placements; 668/656 bytes.
- * us2: 0/1 placements; 668/656 bytes.
- * pal: absent from catalogue (not a match).
- * Residual: Loop register allocation and instruction scheduling; all eight spark GPR inputs retained.
- * Reopening condition: Reopen only after independent source, data-layout, ABI or compiler evidence specifically explains the residual above; then test that single hypothesis. Do not repeat tied source forms or flag sweeps.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
+ * Complete manual reconstruction retained as nonmatching; no coverage credit.
+ * Fresh qualified-compiler checks, 2026-10-25.
+ * Profile: -O2 -G8 -ffunction-sections -frac2-zero-ti-por
+ * Coverage: US: 0/1; US2: 0/1; PAL: absent from catalogue.
+ * Compiled text: 660 bytes; retail: 656 bytes.
+ * Remaining difference: The materialized POR-zero, Z assignment and full clear-to-velocity
+ * transfer are preserved. The latter intentionally remains ordinary TI: retail separates its LQ
+ * and SQ around the bone-query JAL with SQ in the delay slot; opaque qcopy cannot preserve that
+ * event and gave668 bytes. Ordinary transfer gives660/656 with correct frame0x60; bone increment
+ * phase and call-argument scheduling remain different. All8 spark GPR inputs remain, and BAE50 is
+ * correctly a pointer/null factory with ignored result.
+ * Reopen when: Independent integer-loop/argument lifetime evidence; do not force registers or use
+ * an opaque helper where the observed load/store straddles a call.
  */
 
-/* Manual reconstruction, 2026-10-23: NOT MATCHED. US 668/656 bytes,
- * 0/1 placements; profile: -O2 -ffunction-sections G8 qcopy/qcopy-barrier/zero-ti-por.
- * Loop register allocation and instruction scheduling; all eight spark GPR inputs retained.
- * Historical screening notes below are preserved; the current measured
- * residual replaces any earlier claim that lq/sq/por cannot be emitted. */
 #include "common.h"
 typedef int BossQuadword __attribute__((mode(TI)));
 extern unsigned int D_L16_001B2648;
@@ -30,7 +27,7 @@ extern float D_L16_001B18D4 __attribute__((sda));
 extern float func_002A7878(float, float);
 extern int func_002A7820(int, int), func_002A77E0(int);
 extern void func_0029FCC0(char *, int, char *);
-extern void func_002BAE50(void *, void *, int, int, int, int, int, int);
+extern void *func_002BAE50(void *, void *, int, int, int, int, int, int);
 extern void func_00282F20(void *, void *, float);
 extern void func_00282D30(void *, void *, float);
 extern void func_00282CF0(void *, void *, void *);
@@ -39,11 +36,11 @@ extern float func_00282DF0(void *);
 extern void func_002AAC80(float *, float, float, float, float);
 extern float func_00283248(float, float);
 extern void func_002AAA00(float *, float *, int, float, float, float, float);
-extern int func_002A8D70(float, float, float, void *, void *, int, int, int, int);
+extern int func_002A8D70(float, float, float, void *, int, int, int, int, int);
 extern void func_L16_00410FA8(u8 *);
 extern u8 *func_0029EFD0(int);
 extern void func_002B37E8(u8 *, u8 *);
-extern void func_002A7750(u8 *, u8, int);
+extern void func_002A7750(u8 *, int, int);
 extern void func_00282C90(void *);
 extern int func_00283DB8(void *, float);
 extern void func_002830C0(void *, void *, void *);

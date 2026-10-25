@@ -164,9 +164,25 @@ each have their own worktree for that reason (docs/AGENT_WORKFLOW.md).
   independently evidenced file-scope padding are permitted. No register pins, empty asm
   barriers, fake dependencies, false prototypes or invented volatile accesses. A helper
   or primitive is not a match: validate its actual compiled bytes and every linked place.
+- **Check current RAC1 before rejecting a method.** Inspect its current source and build
+  inputs, rather than treating an old experiment or private worker restriction as a ban.
+  Methods used there are available here, subject to the same sourcing and strict-build
+  checks. Measured `volatile` fields can describe real reload/store sequences; they are
+  not limited to memory-mapped hardware. Typed integer/FP argument interleavings are
+  permitted when the EE ABI preserves each register bank's argument order, count and
+  widths, stack arguments, return contract and side effects. Do not invent accesses or
+  change the callee's physical interface to influence allocation. See
+  [the examples and limits](docs/COMPILER-NOTES.md#source-methods-shared-with-rac1).
 - **English.** Everything that lands here is in English: code, comments, commit messages,
   issues, pull requests, reviews, and the notes kept in `nonmatching/`. Translate before it is
   published.
+- **LF line endings.** Save every new or edited versioned text file with LF (`\n`),
+  never CRLF or mixed endings. This applies to C, headers, scripts, configuration and
+  documentation; binary assets are not text. Preserve the existing `.gitattributes`
+  byte-preserving policy: Git must not silently rewrite source bytes for Windows.
+  After staging, check `git ls-files --eol -- <changed paths>`: text files must show
+  `i/lf` and `w/lf` (`none` is valid for an empty file or a file without newlines).
+  Normalize the files in your change, not unrelated historical files.
 - **Flags per file, never per function** (`config/cflags.txt`). If one function needs other flags,
   it belongs in a file of its own with those flags.
 - **Assembler/linker compatibility follows RAC1's evidence rule.** A compatibility pass

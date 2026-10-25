@@ -389,7 +389,7 @@ void func_L11_00449970(char *a0, int a1, int a2)
         func_L11_00449878(a0);
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00449AD8);
+/* func_L11_00449AD8 is defined in L11_00449AD8-helpers.c. */
 
 INCLUDE_ASM("asm/levels", func_L11_00449C70);
 
@@ -409,7 +409,7 @@ void func_L11_0044C0F0(char *a0)
 
 /* advances the sub-object's ring cursor, hands the new slot of the 0x370 table to the scene
    manager, and refreshes the matching slot of the 0x270 table from the live 0x4A4 record */
-INCLUDE_ASM("asm/levels", func_L11_0044C180);
+/* func_L11_0044C180 is defined in L11_0044C180-helpers.c. */
 
 /* func_L11_0044C220 is defined in L11_004465F8-g8.c (its globals are reached through $gp). */
 
@@ -512,7 +512,7 @@ void func_L11_0044C4F0(char *object) {
     *(u16 *)(object + 0x34) = (*(u16 *)(object + 0x34) & 0xEFFF) | 0x47;
 }
 
-INCLUDE_ASM("asm/levels", func_L11_0044C688);
+/* func_L11_0044C688 is defined in L11_0044C688-helpers.c. */
 
 void func_L11_0044C818(char *a0)
 {
@@ -624,7 +624,7 @@ void func_L11_00452DF8(char *object) {
 }
 
 
-INCLUDE_ASM("asm/levels", func_L11_00452F30);
+/* func_L11_00452F30 is defined in L11_00452F30-helpers.c. */
 
 void func_L11_004530C0(char *a0)
 {

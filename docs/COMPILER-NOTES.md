@@ -13,6 +13,29 @@ inline assembly, pin registers or invent barriers/interfaces. Keep upstream
 provenance and licences, and recheck every affected function through the strict
 linked build.
 
+Check the current RAC1 source **and its active build inputs** before rejecting a
+source method or adding a compiler mechanism. At revision
+[`b7d23028`](https://github.com/OpenRAC/rac1-decomp/tree/b7d2302814e50be29b8cd2848d21f47c4c5740d4),
+`config/text.objects` and `Makefile.sn` include these examples:
+
+- [`movie/vobuf.c`](https://github.com/OpenRAC/rac1-decomp/blob/b7d2302814e50be29b8cd2848d21f47c4c5740d4/src/game/movie/vobuf.c#L68)
+  and [`hud.c`](https://github.com/OpenRAC/rac1-decomp/blob/b7d2302814e50be29b8cd2848d21f47c4c5740d4/src/game/hud.c#L469)
+  use volatile memory fields to retain reloads. Such a field need not be MMIO:
+  establish the actual access widths, offsets and ordering from the retail body.
+  A synthetic volatile local or extra access is not equivalent evidence.
+- [`map.c`](https://github.com/OpenRAC/rac1-decomp/blob/b7d2302814e50be29b8cd2848d21f47c4c5740d4/src/game/map.c#L640)
+  declares the same target with different integer/FP interleavings. The EE assigns
+  the two banks independently. A typed interleaving may change argument setup
+  scheduling while preserving the call, provided order, count and widths within
+  each bank, stack slots, return contract and side effects remain unchanged.
+  This does not justify permuting arguments inside a bank or omitting an argument.
+
+RAC2 already uses this call-shape method in `func_0030E700` and Barlow helpers.
+Different C declarations across units need a consistent interface or adapter for
+a native ABI; an EE match alone does not establish a working native port.
+Qualify the actual RAC2 source/profile and every carrying release, rather than
+assuming that an example in RAC1 guarantees a match here.
+
 ### Diagnosing allocation before changing source
 
 Run `python3 tools/regalloc.py func_XXXXXXXX --version us` on a current C

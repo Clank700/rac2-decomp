@@ -1,25 +1,22 @@
-/* Retained manual C reconstruction; not linked or counted.
- * Retail: 576 bytes, 1 place (14:00423000).
- * Checked trial profile: -O2 -G0 -ffunction-sections -frac2-qcopy.
- * us: 0/1 placements; the candidate also reaches 576 bytes without -frac2-qcopy, and
- * 620 bytes with -O1.
- * Residual: the whole field list and both call sites are present and the frame/size agree
- * with -frac2-qcopy, but the independent field stores are emitted in a different order
- * (first difference +0x2c) and the entry float constants are materialised in another
- * order (retail loads 0.5f before 0.1f and 1/240 before 1/120). The tail's n==3 guard is
- * also laid out differently (retail uses beql for the 0x730 == -1 test).
- * Reopen with the original statement order for the field block, or measured evidence that
- * retail's schedule is reachable from a grouped source; no artificial barriers.
- *
- * The ASM marker was restored in src/levels/14_aranos_prison/L14_003F4F98.c after the checks.
+/* Retained complete C repair, 2026-10-25; not linked or counted.
+ * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy.
+ * Private placement checks: us: 0/1, us2: 0/1, pal: absent.
+ * This partial state view preserves the observed unknown bytes at
+ * +0x734..+0x737. The output at +0x200 contains up to 32 actual 32-byte
+ * records through +0x600: one 1024-byte array. B60B0 receives the live object
+ * pointer and four FP values; its pointer/null result is ignored. Historical
+ * screening used incorrect tail offsets and an incomplete callee declaration.
+ * Current code is 580/576 bytes. Scheduling/constants and explicit object
+ * forwarding still differ. Tail offsets and the actual output range are
+ * corrected; this partial view does not claim a whole game-object extent.
  */
 
 typedef int L14_TI128 __attribute__((mode(TI)));
 
-extern void func_335B78(float, float, float, float);
-extern int func_331260(char *, int, void *, int);
-extern int func_322028(int);
-extern void func_321F58(char *, int, int);
+extern void *func_002B60B0(char *, float, float, float, float);
+extern int func_L02_0032E508(char *, int, void *, int);
+extern int func_002A77E0(int);
+extern void func_002A7750(char *, int, int);
 
 typedef struct {
     unsigned char pad00[0x20];
@@ -70,13 +67,13 @@ typedef struct {
     char *p158;
     char *p15C;
     unsigned char pad160[0x200 - 0x160];
-    char area200[0x100];
-    char pad300[0x600 - 0x300];
+    char area200[0x400];
     char area600[0x80];
     char area680[0x90];
     L14_TI128 vec710;
     unsigned char pad720[0x730 - 0x720];
     int i730;
+    unsigned char unknown734[4];
     int i738;
     int i73C;
     float f740;
@@ -127,7 +124,7 @@ void func_L14_00423000(char *a0)
     s->f118 = 0.5f;
     s->i14C = -1;
     s->f120 = 3.141590118408203f;
-    func_335B78(0.0033333334140479565f, 0.10000000894069672f,
+    func_002B60B0(a0, 0.0033333334140479565f, 0.10000000894069672f,
                 0.0034906589426100254f, 0.20943954586982727f);
 
     s->f740 = s->f740 * 0.01745329424738884f;
@@ -135,20 +132,20 @@ void func_L14_00423000(char *a0)
     s->p15C = s->area600;
     if (s->i738 != -1)
         s->i14C = s->i738;
-    s->i750 = func_331260(a0, s->i73C, s->area200, 0x20);
-    s->h77C = func_322028(2);
+    s->i750 = func_L02_0032E508(a0, s->i73C, s->area200, 0x20);
+    s->h77C = func_002A77E0(2);
 
     s->vec710 = *(L14_TI128 *)(a0 + 0x10);
 
     n = s->h774;
     if (n > 0) {
         if (n != 3)
-            func_321F58(a0, n, 1);
+            func_002A7750(a0, n, 1);
         else if (s->i730 != -1)
-            func_321F58(a0, 3, 1);
+            func_002A7750(a0, 3, 1);
         else
-            func_321F58(a0, 1, 1);
+            func_002A7750(a0, 1, 1);
     } else {
-        func_321F58(a0, 1, 1);
+        func_002A7750(a0, 1, 1);
     }
 }

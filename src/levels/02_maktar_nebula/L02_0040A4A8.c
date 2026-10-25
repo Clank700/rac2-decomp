@@ -18,7 +18,7 @@ extern void func_002A0488(void *, void *, void *, void *);
 extern void func_002B0990(void *, void *, int, int, float);
 extern void func_002A8C28(void *, void *, int, float, float, float, int, int, int);
 extern void func_L00_003D7250(void *, void *, float, int, int, int);
-extern void func_002B60B0(float, float, float, float);
+extern void *func_002B60B0(u8 *, float, float, float, float);
 extern void func_002A7470(void *, int, int, int);
 extern float func_002A7878(float, float);
 extern float func_00283248(float, float);
@@ -178,7 +178,7 @@ void func_L02_0040B868(u8 *a0, int a1) {
 
     *(float *)(s0 + 0x20) = (float)*(s16 *)(s0 + 0x24);
     *(u16 *)(s0 + 0x2E2) = one;
-    func_002B60B0(0.004444444552063942f, 0.13333334028720856f,
+    func_002B60B0(a0, 0.004444444552063942f, 0.13333334028720856f,
                   0.0011635529808700085f, 0.10471977293491364f);
     func_002A7750(a0, 3, 1);
     if (*(u8 *)(a0 + 0x43) != 2)
@@ -223,7 +223,7 @@ void func_L02_0040B980(u8 *a0) {
 }
 
 /* sweeps the two effect tracks of the actor relative to a head position */
-INCLUDE_ASM("asm/levels", func_L02_0040BAB8);
+/* func_L02_0040BAB8 is defined in L02_0040BAB8.c. */
 
 /* records the actor's two shot counters, then arms it */
 void func_L02_0040BBA0(u8 *a0) {

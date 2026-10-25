@@ -14,15 +14,15 @@
  */
 typedef int V4_003F6008 __attribute__((mode(TI)));
 extern unsigned char ref_L04_003F6008_00[];
-extern void func_30EDC8(float *, void *, float *);
-extern void func_30F090(float *, float *, float);
-extern void func_30ED98(float *, float *, float *);
-extern int func_30E9D8(void *);
-extern float func_30FF88(int);
-extern float func_30ECD8(float);
-extern void *func_30FFE0(unsigned int, unsigned int, float);
-extern int func_30FF98(float);
-extern void func_35D650(void *, void *, int, int, int, int, int, float);
+extern void func_00282CF0(float *, void *, float *);
+extern void func_00282F20(float *, float *, float);
+extern void func_00282CC0(float *, float *, float *);
+extern int func_00282948(void *);
+extern float func_00283CE0(int);
+extern float func_00282C48(float);
+extern void *func_00283D38(unsigned int, unsigned int, float);
+extern int func_00283CF0(float);
+extern void func_002C2FD8(void *, void *, int, int, int, int, int, float);
 
 void func_L04_003F6008(unsigned char *a0)
 {
@@ -36,10 +36,10 @@ void func_L04_003F6008(unsigned char *a0)
 
     *(V4_003F6008 *)src = *(V4_003F6008 *)(a0 + 0x10);
     src[2] += 0.25f;
-    func_30EDC8(m, ref_L04_003F6008_00, src);
-    func_30F090(m, m, -0.3f);
-    func_30F090(q, m, 0.1f);
-    func_30ED98(m, m, src);
+    func_00282CF0(m, ref_L04_003F6008_00, src);
+    func_00282F20(m, m, -0.3f);
+    func_00282F20(q, m, 0.1f);
+    func_00282CC0(m, m, src);
 
     fp = (float *)(st + 0x14);
     ip = (int *)(st + 0x34);
@@ -53,17 +53,17 @@ void func_L04_003F6008(unsigned char *a0)
         else
             fp[0] = v;
 
-        if (func_30E9D8(&ip[i]))
+        if (func_00282948(&ip[i]))
             ip[i] = 0xFF;
 
-        v = func_30ECD8(1.0f - func_30FF88(0xFF - ip[i]) * 0.0039215689f);
+        v = func_00282C48(1.0f - func_00283CE0(0xFF - ip[i]) * 0.0039215689f);
         {
-            void *color = func_30FFE0(0x4040FFFF, 0x1040FFFF, v);
+            void *color = func_00283D38(0x4040FFFF, 0x1040FFFF, v);
 
-            func_35D650(m, color, func_30FF98(fp[0]) & 0xFF,
+            func_002C2FD8(m, color, func_00283CF0(fp[0]) & 0xFF,
                         0x35, 1, 2, 0, ((float *)(st + 0x44))[i]);
         }
         fp++;
-        func_30ED98(m, m, q);
+        func_00282CC0(m, m, q);
     }
 }

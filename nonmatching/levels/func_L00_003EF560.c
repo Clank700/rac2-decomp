@@ -1,11 +1,16 @@
-/* Bounded manual reconstruction; not linked.
+/* Bounded manual reconstruction, 2026-10-25; not linked.
  * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por.
- * 1180/1180 bytes; us: 0/27 places; us2: 0/27 places; pal: absent from catalogue.
- * Full burst sequence preserves 9/10/50 emission loops and six-color copies. Four emitter APIs
- * were checked in retail: five/four/eight/eight GPR inputs, respectively, with 0/0/2/1 float
- * inputs and pointer results. Frame0xf0 differs from retail 0x110 and allocation/scheduling
- * remains different. Reopen with a matching array-copy/emitter lifetime witness.
+ * 1180/1180 bytes; us: 0/27 placements; us2: 0/27 placements; pal: absent from catalogue.
+ * Complete six-color aggregates and all 9/10/50 emission loops are preserved. Only local aggregate
+ * alignment is 16 bytes; each color aggregate remains 24 bytes. Frame 0xf0 differs from retail
+ * 0x110; floating constant lifetimes and outgoing-call storage remain unresolved.
+ * Reopen with independent evidence for original floating constant and emitter-call local lifetimes.
+ * Do not invent stack padding.
+ * Prior complete variants and diagnostic dumps are preserved privately.
+ * No candidate or linked-build credit is claimed.
  */
+#include "common.h"
+
 typedef int BurstWord128 __attribute__((mode(TI)));
 typedef union { BurstWord128 word; float f[4]; } BurstVector;
 typedef struct { unsigned int values[6]; } BurstColors;
@@ -33,7 +38,9 @@ extern char *func_002BCB00(void *, void *, int, int, int, int, int, int, float);
 
 void func_L00_003EF560(char *object, BurstVector *position) {
     BurstVector delta, velocity, random;
-    BurstColors colorsA, colorsB;
+    /* Both 24-byte local copies begin on observed 16-byte stack boundaries. */
+    BurstColors colorsA __attribute__((aligned(16)));
+    BurstColors colorsB __attribute__((aligned(16)));
     float distance, pitch, yaw, speed;
     int i, a, b, lifetimeA, lifetimeB;
     int colorA, colorB;
@@ -44,7 +51,7 @@ void func_L00_003EF560(char *object, BurstVector *position) {
     random.f[1] = func_002A7878(-1.0f, 1.0f);
     random.f[2] = func_002A7878(-1.0f, 1.0f);
     delta.f[2] += distance * 0.5f;
-    velocity.word = random.word;
+    qcopy(&velocity, &random);
     func_00282F20(&velocity, &velocity, distance * 0.0033333336468786f);
     func_00282F20(&delta, &delta, (distance + distance) * 0.016666668f);
     func_00282CC0(&velocity, &velocity, &delta);

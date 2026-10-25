@@ -1,43 +1,32 @@
-/* Reconstruction checked 23 October 2026.
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Final check.py coverage: us 0/27, us2 0/27.
- * Manual aim/spawn reconstruction952/980 with qcopy/barrier G8.
- * Remaining: Aim-result/target globals, mixed GP/direct state access, branches and register allocation differ.
- * Reopen with a measured target-state aggregate model.
- * The qualified R5900 view decodes the cited SPECIAL2 word as por, not an unknown instruction.
- * Historical screening below is preserved; its blanket C/ISA claims are not acceptance evidence.
+/* Complete nonmatching reconstruction: 972/980 bytes.
+ * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -mno-split-addresses.
+ * Placement checks: US: 0/27; US2: 0/27; PAL absent from catalogue.
+ * The target branch is corrected to (target && mode) || (globalTarget && !mode), and the light factory keeps its real position/color/f12/f13 ABI and int32 result. All five vectors are16-byte aligned. D_0018AA18 remains a scalar pointer at its actual address. The retail LQ silently aligns that address down from0x18aa18 to0x18aa10, unlike its scalar LW. The explicit address mask is a hardware-semantics diagnostic only: the aligned block owner and extent are still unqualified, so this source must not be promoted.972/980 bytes remain nonmatching; frame0xa0 differs from retail0xb0, and global-base/branch/register allocation differs. The zero target vector and all four emissions remain.
+ * Reopen only after independently qualifying the aligned block owner/readable extent behind the AA18-based LQ, then real target/global-state lifetimes. Do not declare a false16-byte AA18 object, add an alias global, or pass an8-byte-aligned address directly to qcopy.
  */
-
-/* MMI (SPECIAL2) instruction: no C spelling. 980 bytes, level
-   00_aranos_tutorial. Retail at 0x003A3B58 carries the SPECIAL2 word
-   0x700014A9 (+0x02CC) - opcode 0x1C, which rabbitizer prints as `INVALID`;
-   it is the MMI family (pcpyld and its relatives) the sixth wave recorded
-   and that no C spelling reaches. This cc1 emits `lq`/`sq` for a `mode(TI)`
-   local and `ldl`/`ldr`/`sdl`/`sdr` for a struct assignment, never the
-   packed copy. ASM_FUNC candidate, as for the rest of the family. */
-
 #include "common.h"
 typedef int VectorBits __attribute__((mode(TI)));
+typedef float Vector[4] __attribute__((aligned(16)));
 typedef struct { char prefix[0x50]; float speed; char tail[0x8C]; } WeaponEntry;
 extern WeaponEntry D_L00_00262570[];
 extern unsigned char D_0013957F NOT_SDA;
 extern short D_0018C30C NOT_SDA;
 extern float D_0018A580[4];
 extern int D_0018B320 NOT_SDA;
-extern VectorBits D_0018AA18;
+extern char *D_0018AA18 NOT_SDA;
 extern int D_L00_001ADB2C __attribute__((sda));
 extern char *D_0018C0B0 NOT_SDA;
 extern char *D_L00_001BF218 NOT_SDA;
 extern void func_0029FCC0(char *, int, char *);
 extern void func_00282F20(void *, void *, float);
-extern int func_00291308(int, void *, unsigned int, float);
+extern int func_00291308(void *, unsigned int, float, float);
 extern void func_L00_0037FA90(char *, char *, float, float, float);
 extern void func_L00_0032A1A8(char *, char *, char *, float);
 extern void func_00282CF0(void *, void *, void *);
 extern float func_00282DB0(void *, void *);
 extern void func_00282D30(void *, void *, float);
 extern char *func_L00_003A7C30(void *, void *, int, int);
-extern int func_00277F48(void *, int, void *, int, float);
+extern int func_00277F48(void *, int, void *, void *, float);
 extern int func_002ABB78(char *);
 extern int func_L00_003A80F8(char *, void *);
 extern char *func_002C2210(void *, int, unsigned int, int, int, void *, int, float, float, float);
@@ -45,7 +34,7 @@ extern char *func_002C2210(void *, int, unsigned int, int, int, void *, int, flo
 /* Aim and spawn a beam, then flash four layers around its muzzle. */
 void func_L00_003A3B58(char *moby)
 {
-    float origin[4], velocity[4], targetPosition[4], delta[4], unit[4];
+    Vector origin, velocity, targetPosition, delta, unit;
     char *state = *(char **)(moby + 0x68);
     char *beam;
     float speed = D_L00_00262570[D_0013957F].speed * (1.0f / 60.0f);
@@ -57,21 +46,22 @@ void func_L00_003A3B58(char *moby)
         func_0029FCC0(moby, 0, (char *)origin);
         func_00282F20(velocity, D_0018A580, speed);
     }
-    *(int *)(state + 0x10) = func_00291308(0, origin, 0x7F608060, 15.0f);
+    *(int *)(state + 0x10) = func_00291308(origin, 0x7F608060, 15.0f, 0.0f);
     *(int *)(state + 0x14) = 30;
     if (D_0018B320) {
         mode = 1;
         func_L00_0037FA90((char *)velocity, (char *)origin, speed, 128.0f, 0.3490659595f);
-    } else if (*(char **)&D_0018AA18) {
-        func_L00_0032A1A8(*(char **)&D_0018AA18, (char *)origin, (char *)velocity, speed);
+    } else if (D_0018AA18) {
+        func_L00_0032A1A8(D_0018AA18, (char *)origin, (char *)velocity, speed);
     }
     if (D_L00_001ADB2C) {
         char *target = *(char **)(state + 0x30);
-        if ((target && D_0018B320) || !*(char **)&D_0018AA18 || D_0018B320) {
+        if ((target && D_0018B320) || (D_0018AA18 && !D_0018B320)) {
             if (target)
-                *(VectorBits *)targetPosition = *(VectorBits *)(target + 0x10);
+                qcopy(targetPosition, (target + 0x10));
             else
-                *(VectorBits *)targetPosition = D_0018AA18;
+                /* LQ discards the low four address bits; the scalar at +8 is distinct. */
+                qcopy(targetPosition, (void *)((unsigned int)&D_0018AA18 & ~15U));
             func_00282CF0(delta, targetPosition, origin);
             mode = 2;
             func_00282F20(unit, velocity, 1.0f);

@@ -1,7 +1,7 @@
 /* Near miss retained from the interrupted wave 10 worker 08: 516 bytes against 520,
  * 0 of 3 places (01_oozla and its two copies). Last measured with
  *   python scratch/wslcmp.py src/levels/shared/L01_002A7248.c func_L01_002B3D28
- * The tail call to func_313A58 and the final float constant setup are the residue:
+ * The tail call to func_002AA3A8 and the final float constant setup are the residue:
  * this cc1 emits the `ori` after the `mtc1` and calls an unbound index.
  * The source marker is restored; this is a starting point, not a match. */
 

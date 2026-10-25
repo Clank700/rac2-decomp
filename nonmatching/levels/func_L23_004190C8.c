@@ -1,26 +1,20 @@
-/* 0 of 1 places match - last line: 23_damosel_orbit: 1448 bytes, expected 1520
-   Built in src/levels/23_damosel_orbit/L23_00416388-g8.c: it has no $gp access, but it calls
-   func_L23_00419088 with an int while the -G0 file defines that function with an s16
-   parameter (which would add a sign-extension retail does not have).
-   Matching: the prologue, the n == 0 and mode-0 paths (`dir *= -1`, `v == 0 ? 1 : -1`, a
-   function-scope `k` that retail keeps in $s0 for the tail too), the fill loop's shape, the
-   switch tree (case 2 shares default), and the case-1, case-3 and first default loops apart
-   from scratch registers (one counter `j` per loop, `ok`/`d`/`f` block-scoped: retail gives
-   each loop its own pseudos).
-   The wall is the second default loop: retail copies its four 16-byte vectors through
-   pointers held in registers (`lq $v0,0($v1)` / `sq $v0,0($s2)`, the pointers hoisted as loop
-   invariants and spilled to 0xF0-0x100), the shape of an inline-asm qcopy; this cc1's CSE
-   folds the frame offset back into every `lq`/`sq` (`*(TI128 *)a = *(TI128 *)n1`, an inline
-   copy helper and TI scalars all measured the same).  With those four addresses no longer
-   loop invariants, fewer pseudos spill (frame 0x170 against 0x180, the res base in 0xF0
-   against 0x104) and reload picks other scratch registers in the earlier loops, which is
-   most of what remains.  The fill loop also allocates k*4 to $s0 and swaps $a0/$a1 against
-   retail; declaration orders, statement orders and branch polarity (16 variants) do not move
-   it.  `-0.35f` is a local set before the loop guard ($f22), as in retail. */
+/* Retained C reconstruction; not linked or counted.
+ * Profile: -O2 -G8 -ffunction-sections.
+ * Compiled 1508 bytes; retail 1520 bytes.
+ * us: 0/1 placements match (exit 1).
+ * us2: 0/1 placements match (exit 1).
+ * pal: 0/1 placements match (exit 1).
+ * Remaining: Four complete qcopy transfers in the default loop restore the 0x180 frame (formerly
+ * 0x170) and reach 1508 bytes, up from 1448. Loop arrays, mask decisions and target-key
+ * selection remain complete. Fill-loop allocation and vector/call scheduling still differ. The
+ * final index uses the current canonical s16 func_L23_00419088 argument; its old broad-int
+ * declaration is not retained.
+ * Reopen: A target-picker fill-loop and live-array witness consistent with the qualified narrow
+ * index contract.
+ */
 
+#include "common.h"
 typedef int TI128 __attribute__((mode(TI)));
-
-typedef unsigned long long u64;
 
 /* The level state fields the target picker reads. */
 typedef struct {
@@ -63,7 +57,7 @@ extern int func_L23_00418F30(PickMoby *, u64, int *, int);
 
 extern int func_L23_00418FD0(PickMoby *, int, short);
 
-extern void func_L23_00419088(PickMoby *, int);
+extern void func_L23_00419088(PickMoby *, s16);
 
 extern int func_L23_00419CE0(u64);
 
@@ -119,7 +113,7 @@ void func_L23_004190C8(PickMoby *arg0, u64 mask, int mode, int check) {
 
         state->dir = v == 0 ? 1 : -1;
         state->res = v;
-        func_L23_00419088(arg0, k);
+        func_L23_00419088(arg0, (s16)k);
         return;
     }
     for (i = 0; i < n; i++) {
@@ -212,10 +206,10 @@ void func_L23_004190C8(PickMoby *arg0, u64 mask, int mode, int check) {
                 func_00282CF0(d2, pts[j], state->origin);
                 func_00282F20(n1, d1, 1.0f);
                 func_00282F20(n2, d2, 1.0f);
-                *(TI128 *)a = *(TI128 *)n1;
-                *(TI128 *)b = *(TI128 *)n2;
-                *(TI128 *)up1 = arg0->up;
-                *(TI128 *)up2 = arg0->up;
+                qcopy(a ,n1);
+                qcopy(b ,n2);
+                qcopy(up1,&arg0->up);
+                qcopy(up2,&arg0->up);
                 func_00282DD8(c1, up1, a);
                 func_00282DD8(c2, up2, b);
                 func_L00_00325600(a, state->frame, 0);
@@ -232,5 +226,5 @@ void func_L23_004190C8(PickMoby *arg0, u64 mask, int mode, int check) {
     k = idx[best];
     state->dir = res[best] == 0 ? 1 : -1;
     state->res = res[best];
-    func_L23_00419088(arg0, k);
+    func_L23_00419088(arg0, (s16)k);
 }

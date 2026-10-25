@@ -1,10 +1,9 @@
-/* Reconstructed 2026-10-23; -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por.
- * us: 0/2, us2: absent, pal: absent.
- * 5568/5680 bytes, expected 0xA0 frame.
- * Dispatcher block layout, shared transitions and register allocation differ.
- * Case22 second vector zeroing and mode5 tuning corrected.
- * Independent API review corrected AA548 float return, C58F0 vector pointer and 419818 integer owner.
- * Reopen with independently measured original switch/transition layout; this C is not semantically validated as a native-port replacement.
+/* Nonmatching C: Run the movement and interaction state machine for the grouped object.
+ * Tested profile: -O2 -G8 -ffunction-sections.
+ * Measured US size: 5552 bytes; retail: 5680 bytes.
+ * Placement checks: US: 0/2; US2 and PAL: absent from their catalogues.
+ * Remaining: Dispatcher block layout, shared transitions and register allocation still differ.
+ * Reopen with independent transition and pointer-lifetime evidence; preserve all complete motion vectors, both final clears and the measured helper contracts.
  */
 #include "common.h"
 typedef int Quad __attribute__((mode(TI)));
@@ -12,8 +11,8 @@ typedef union { Quad q; float f[4]; } MotionVector;
 typedef struct {
     u8 reserved00[0x18]; u8 enabled, count, kind; u8 reserved1B[0x65]; u8 payload[1];
 } DispatchContext;
-extern float D_00189EA0[4], D_00189F00[4];
-extern int D_0018A090, D_0018A08C;
+extern float D_00189EA0[], D_00189F00[];
+extern u8 *D_0018A090, *D_0018A08C;
 extern s16 D_0018CB20, D_0018CB38, D_0018CDCC, D_0018CB2C, D_0018CF58, D_0018CDE4;
 extern int D_0018CB4C;
 extern int D_L03_001B2548;
@@ -31,7 +30,7 @@ extern int func_002B3868(u8 *);
 extern int func_002B38B8(u8 *);
 extern void *func_002B60B0(u8 *, float, float, float, float);
 extern unsigned long func_002B1C20(void *, DispatchContext *);
-extern void func_002A7750(u8 *, u8, int);
+extern void func_002A7750(u8 *, s32, s32);
 extern int func_00288E18(int, int);
 extern int func_002A77E0(int);
 extern void func_002A7470(u8 *, int, int, int);
@@ -50,23 +49,25 @@ extern void func_00282CC0(void *, void *, void *), func_00282CF0(void *, void *,
 extern void func_00282F20(void *, void *, float), func_00283098(void *, void *, void *);
 extern int func_L01_00322288(int, float);
 extern int func_00282948(void *);
-extern int func_L03_003C5DC8(u8 *, void *), func_L03_004197A8(u8 *);
+extern int func_L03_003C5DC8(u8 *, u8 *);
+extern u32 func_L03_004197A8(u8 *);
 extern void func_L03_00419818(u8 *, u32);
 extern void func_002AFDD8(char *, char *, char *, char *);
 extern void func_0029F338(void *);
 extern u8 *func_L03_003C4D40(u8 *);
 extern void func_L03_003C5B28(u8 *, float);
-extern int func_002761F8(void *, void *, int, void *, int);
+extern int func_002761F8(void *, void *, int, void *, void *);
 extern int func_002AEB60(char *, float);
-extern int func_002A8D70(float, float, float, void *, void *, int, int, int, int);
+extern int func_002A8D70(float, float, float, void *, int, int, int, int, int);
 extern float func_0029F530(char *);
 extern float func_L02_00321C30(void *, void *, float);
-extern void func_L03_00419A60(int, void *, int);
-extern int func_L03_003C5CE8(void *), func_L03_003CAAC8(void *, void *);
+extern void func_L03_00419A60(u32, u8 *, s32);
+extern int func_L03_003C5CE8(u8 *);
+extern u32 func_L03_003CAAC8(u8 *, u8 *);
 extern void func_L03_003C5EE8(void *);
 extern void func_002AC9F8(float *, float);
 extern void func_0029FCC0(char *, int, char *);
-extern void func_L03_003CA220(void *, float), func_L00_003294F0(u8 *, int);
+extern void func_L03_003CA220(u8 *, float), func_L00_003294F0(u8 *, int);
 extern float func_002AA548(void *, void *, float, float, float, float);
 extern float func_002A89A8(u8 *, int, float);
 extern int func_L03_00419C00(void *, void *, void *);
@@ -78,7 +79,7 @@ extern void func_002B5258(char *), func_L03_003C4468(u8 *), func_002A677C(u8 *);
 #define OF(o) (*(float *)(object + (o)))
 #define ANIM_FRAMES(off) (*(u8 *)(*(u8 **)(*(u8 **)(object + 0x24) + (off)) + 0x10))
 
-/* Dispatches movement, interaction and carried-object states. */
+
 void func_L03_003C1BF0(u8 *object)
 {
     MotionVector point, other, delta;
@@ -145,7 +146,7 @@ void func_L03_003C1BF0(u8 *object)
             }
             break;
         case 2:
-            if (D_0018A090 == (int)object || D_0018A08C == (int)object)
+            if (D_0018A090 == object || D_0018A08C == object)
                 func_L03_003C4368(object, D_00189EA0);
             func_L03_003C4240(object);
             if (object[0x31]) func_L03_003C4BD8(object);
@@ -162,9 +163,9 @@ void func_L03_003C1BF0(u8 *object)
         case 4:
             if (func_002B3868(object)) {
                 if (object[0x43]) func_002A7470(object, 0, func_002A77E0(ANIM_FRAMES(0x48)), 15);
-                SI(0x380) = 2; *(Quad *)(state + 0x1B0) = 0;
+                SI(0x380) = 2; qzero(state + 0x1B0);
             }
-            if (D_0018A090 == (int)object || D_0018A08C == (int)object)
+            if (D_0018A090 == object || D_0018A08C == object)
                 func_L03_003C4368(object, D_00189EA0);
             func_L03_003C4240(object);
             distance = func_00282E80(object + 0x10, D_00189EA0);
@@ -229,7 +230,7 @@ void func_L03_003C1BF0(u8 *object)
             }
             func_L03_003C41B8(object, (int)(target + 0x10), 0);
             if ((D_L03_001B2548 & 3) == (((u32)object >> 8) & 3)) {
-                point.q = *(Quad *)(object + 0x10); point.f[2] += 0.2f;
+                qcopy(&point, object + 0x10); point.f[2] += 0.2f;
                 func_00282F20(&other, object + 0xC0, 0.3330000042915344f);
                 func_00282CC0(&other, &other, object + 0x10); other.f[2] += 0.2f;
                 if (func_002761F8(&point, &other, 0, object, 0) && D_L03_001BFDD8 == SP(0x358)) {
@@ -240,7 +241,7 @@ void func_L03_003C1BF0(u8 *object)
             break;
         case 10:
             if (func_002AEB60((char *)object, 14.0f))
-                func_002A8D70(0.3330000042915344f, 4.0f, 1.0f, object, (void *)1, 0x10000, 0, 1, 0);
+                func_002A8D70(0.3330000042915344f, 4.0f, 1.0f, object, 1, 0x10000, 0, 1, 0);
             else if (object[0x60] & 2) {
                 SP(0x358) = func_L03_003C4D40(object);
                 if (!SP(0x358)) {
@@ -328,7 +329,7 @@ void func_L03_003C1BF0(u8 *object)
             func_002AC9F8(point.f, 0.4166666865348816f);
             func_00282CC0(object + 0x10, object + 0x10, &point);
             if (object[0x42] == object[0x43]) {
-                *(Quad *)(object + 0x10) = *(Quad *)(state + 0x340);
+                qcopy(object + 0x10, state + 0x340);
                 func_002A7750(object, 6, 1);
             }
             break;
@@ -360,7 +361,7 @@ void func_L03_003C1BF0(u8 *object)
         case 22:
             func_00282CC0(object + 0x10, object + 0x10, state + 0x1B0);
             type = *(s16 *)(object + 0xAA);
-            point.q = 0; other.q = 0; point.f[2] = type == 0x964 ? 0.3f : 0.8f;
+            qzero(&point); qzero(&other); point.f[2] = type == 0x964 ? 0.3f : 0.8f;
             other.f[2] = point.f[2];
             func_00283098(&point, &point, object + 0xC0);
             if (SF(0x1B8) < 0.0f) {

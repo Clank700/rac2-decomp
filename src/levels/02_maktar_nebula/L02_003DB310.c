@@ -133,7 +133,7 @@ INCLUDE_ASM("asm/levels", func_L02_003DEDA0);
 
 INCLUDE_ASM("asm/levels", func_L02_003E6D70);
 
-INCLUDE_ASM("asm/levels", func_L02_003E7370);
+/* func_L02_003E7370 is defined in L02_003E7370-g8.c. */
 
 extern int func_002B3868(char *);
 extern int func_00282948(int *);
@@ -594,7 +594,7 @@ void func_L02_003F1578(char *arg0) {
 
 extern void func_002A91F0(char *, char *);
 
-INCLUDE_ASM("asm/levels", func_L02_003F1608);
+/* func_L02_003F1608 is defined in L02_003F1608.c. */
 
 /* func_L02_003F16A8 is defined in L02_003DB310-g8.c (this unit has no $gp access for it). */
 
@@ -729,7 +729,7 @@ void func_L02_003F18E8(char *arg0) {
         (*(unsigned short *)(arg0 + 0x34) & 0xEFFF) | 0x47;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003F1A88);
+/* func_L02_003F1A88 is defined in L02_003F1A88.c. */
 
 void func_L02_003F1B70(char *arg0) {
     char *state = *(char **)(arg0 + 0x68);

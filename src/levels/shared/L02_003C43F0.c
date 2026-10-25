@@ -79,11 +79,11 @@ extern void func_L00_002E6EF8(void *, void *);
 
 extern void func_L02_003D28E0(void);
 
-extern void func_L02_00333438(void);
+extern void func_L02_00333438(char *, char *);
 
-extern void func_L01_00321178(void);
+extern int func_L01_00321178(char *, char *);
 
-extern void func_002B4FF0(float);
+extern int func_002B4FF0(char *, float *, float);
 
 extern struct S_001A63A8 D_001A63A8;
 
@@ -216,11 +216,8 @@ void func_L02_003C46E0(struct Outer *p)
         func_002E5DA0(1, 0, g->arr[0], 2198);
 }
 
-/* Clears the sub-object flags of three inline pointer arrays, turns a frame counter into a
-   rotation, and pushes each element's 128-bit block one object forward.
-   The C is in nonmatching/levels/func_L02_003C4848.c: it needs the -frac2-qcopy unit and
-   the counter increment of the second and third loop still lands in the loop header. */
-INCLUDE_ASM("asm/levels", func_L02_003C4848);
+/* Clears the three pointer-list flags, updates their counters and copies the vectors. */
+/* Defined in L02_003C4848-helpers.c. */
 
 INCLUDE_ASM("asm/levels", func_L02_003C49A0);
 
@@ -452,15 +449,15 @@ INCLUDE_ASM("asm/levels", func_L02_003CE4D0);
 
 /* Runs the kind's entry hook: the first when the level flag is set, the second when the third
    argument is clear, the third with the object's own angle otherwise. */
-void func_L02_003CE8B0(char *a0, int a1, int a2) {
+void func_L02_003CE8B0(char *a0, char *a1, int a2) {
     char *p = *(char **)(a0 + 0x68);
 
     if (D_L02_001A8FF0)
-        func_L02_00333438();
+        func_L02_00333438(a0, a1);
     else if (a2 == 0)
-        func_L01_00321178();
+        func_L01_00321178(a0, a1);
     else
-        func_002B4FF0(*(float *)(p + 0x31C));
+        func_002B4FF0(a0, (float *)a1, *(float *)(p + 0x31C));
 }
 
 /* Clears the two angle words at +0x310 and +0x312 and counts up the +0x96 word, then runs the
@@ -732,7 +729,7 @@ void func_L02_003D6BC0(char *a0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003D6DF8);
+/* Defined in L02_003D6DF8-helpers.c. */
 
 INCLUDE_ASM("asm/levels", func_L02_003D6EE0);
 
@@ -840,7 +837,8 @@ void func_L02_003F0628(char *a0) {
 INCLUDE_ASM("asm/levels", func_L02_003F0788);
 
 /* Forwards the first argument with a null second and a third of three. */
-void func_L02_003FC248(void *a0) {
+/* Its callback callers also supply two integer slots that this body ignores. */
+void func_L02_003FC248(void *a0, int unused_a1, int unused_a2) {
     func_002A6C58(a0, 0, 3);
 }
 

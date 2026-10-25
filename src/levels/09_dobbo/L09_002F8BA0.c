@@ -281,7 +281,7 @@ void func_L09_003FDED8(unsigned char *a0) {
                   0.02f);
 }
 
-INCLUDE_ASM("asm/levels", func_L09_003FDFF0);
+/* func_L09_003FDFF0 is defined in L09_003FDFF0-helpers.c. */
 
 INCLUDE_ASM("asm/levels", func_L09_003FE0C0);
 

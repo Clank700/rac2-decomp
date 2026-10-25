@@ -1,36 +1,20 @@
-/*
- * Manual reconstruction retained as a near miss; no linked-build or runtime credit.
- * Prior worker profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Prior worker coverage: US 0/1; US2 absent from catalogue; PAL absent from catalogue.
- * These are the recorded worker checks; no fresh compilation was run for retention.
+/* Bounded complete manual reconstruction, 2026-10-25; not linked or counted.
+ * Profile: -O2 -G0 -ffunction-sections.
+ * 14416/14864 bytes; us: 0/1 placements; us2: absent from catalogue; pal: absent from catalogue.
+ * All 88 action labels and the named call sequence, including recursive transitions, are preserved.
+ * The 26 real resident/object captures use clobbering qcopy. A measured action-header prefix names
+ * only its actual fields; the external union extent is unchanged. The prefix control has identical
+ * text to the helper-only form. Frame 0x50 agrees, but global reload/address lifetimes, saved-
+ * register roles and branch layout differ throughout. A4EF0 remains 64-bit and FD1B8 retains three
+ * GPR/four FP inputs. Original ignored-return declarations and CAF20 formal arity remain
+ * unqualified.
+ * Reopen with: Independent original player alias/storage and branch-layout evidence, with actual
+ * callee qualification. Do not repeat the seven historical profile/temporary forms or alter the
+ * global extent to tune allocation.
+ * Original drafts, useful variants and diagnostics remain private.
+ * No linked-image equality or complete native behavior is established.
  */
-
-/* Retained readable reconstruction, 23 October 2026; not linked.
- * Latest measured profile: -O2 -G0 -ffunction-sections -frac2-qcopy
- * -frac2-qcopy-barrier (an explicit override on the tested -g8.c sibling).
- * US: 14408/14864 bytes, 0/1 placements, check.py exit 1.
- * US2/PAL: the name is absent from both catalogues, not a match.
- * Seven bounded trials: initial13732/frame0x60; scoped captures13728;
- * qualified float fields14032; independent temporaries14016/frame0x50;
- * grouped copies underG8 14260; G0 14332; separate source cases14408.
- * The 88-case controller and recursive transitions are reconstructed. Separate
- * logical temporaries recover the retail frame and saved-register count, but
- * register roles, global reload/address lifetimes, copies and block layout
- * still differ substantially. Close size is not instruction matching evidence.
- * The full 64-bit canonical A4EF0 result and FD1B8's 3GPR/4FP inputs are kept.
- * Unresolved ignored return declarations and CAF20 arity are explicit below.
- * Reopen with independent player-view/alias or branch-layout evidence; do not
- * use duplicated data identities, register pins, barriers or repeat old flags.
- * No linked qualification or game-behavior validation was run.
- */
-
-/* Player action transitions. Resident storage is viewed at measured byte
- * offsets, without claiming a complete player-object layout. The union extends
- * through the last accessed statistic at +0x2A94 and keeps vector accesses full
- * width. Word views preserve fields whose original interpretation is unknown. */
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned int u32;
+#include "common.h"
 typedef int Quad __attribute__((mode(TI)));
 typedef union { Quad q; float f[4]; } Vector;
 typedef union {
@@ -45,6 +29,15 @@ typedef union {
 } PlayerActionView;
 
 extern PlayerActionView D_00189E20;
+/* Only the measured action-header fields are named here. The external union
+ * and its minimum accessed extent remain unchanged. */
+typedef struct {
+    u8 reserved0000[0x2290]; char *object;
+    int action, variant, state, previousAction, previousState, previousFrame;
+    int olderAction, olderState; u8 mode;
+} ActionHeaderPrefix;
+#define ACTION_HEADER ((ActionHeaderPrefix *)&D_00189E20)
+
 #define P_B(o) D_00189E20.bytes[(o)]
 #define P_H(o) D_00189E20.halves[(o) / 2]
 #define P_S(o) D_00189E20.signedHalves[(o) / 2]
@@ -54,18 +47,18 @@ extern PlayerActionView D_00189E20;
 #define P_PTR(o) D_00189E20.pointers[(o) / 4]
 #define P_V(o) D_00189E20.vectors[(o) / 16]
 #define P_ADDR(o) (D_00189E20.bytes + (o))
-#define OBJECT P_PTR(0x2290)
-#define ACTION P_I(0x2294)
-#define VARIANT P_I(0x2298)
-#define STATE P_I(0x229C)
-#define PREVIOUS_ACTION P_I(0x22A0)
-#define PREVIOUS_STATE P_I(0x22A4)
-#define PREVIOUS_FRAME P_I(0x22A8)
-#define OLDER_ACTION P_I(0x22AC)
-#define OLDER_STATE P_I(0x22B0)
-#define MODE P_B(0x22B4)
+#define OBJECT ACTION_HEADER->object
+#define ACTION ACTION_HEADER->action
+#define VARIANT ACTION_HEADER->variant
+#define STATE ACTION_HEADER->state
+#define PREVIOUS_ACTION ACTION_HEADER->previousAction
+#define PREVIOUS_STATE ACTION_HEADER->previousState
+#define PREVIOUS_FRAME ACTION_HEADER->previousFrame
+#define OLDER_ACTION ACTION_HEADER->olderAction
+#define OLDER_STATE ACTION_HEADER->olderState
+#define MODE ACTION_HEADER->mode
 
-/* The table is indexed with an observed 44-byte record stride. */
+
 typedef struct {
     int variant, limit;
     u8 remaining[0x2C - 8];
@@ -121,13 +114,10 @@ extern void func_L00_00322A98(void *, char *);
 extern void func_L00_00322AC0(void *, int, int, float);
 extern void func_L00_002D3B58(void *, void *, float);
 extern int func_L00_002ADF80(void);
-/* The callee normalizes v0 to 0/1. The observed caller supplies an a0 context,
- * which this callee does not consume; its original formal arity is uncertain. */
+
 extern int func_L00_002CAF20(int);
 
-/* Qualified inputs for side-effect calls. Their ignored result banks do not
- * establish original return declarations: void is an interface assumption.
- */
+
 extern void func_L00_002AF3D8(int, int);
 extern void func_L00_002D2168(int, int, float);
 extern void func_002A7470(char *, int, int, int);
@@ -207,7 +197,7 @@ int func_L08_002D2ED8(int action, int animate)
             func_L01_002C1988(0);
             return 1;
         }
-        P_V(0x160).q = P_V(0x120).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x120));
         if (P_B(0x1492) && func_00282E20(P_ADDR(0x160)) > 0.008333334f) {
             redirectAction = 0x2E;
             goto redirect;
@@ -235,7 +225,7 @@ int func_L08_002D2ED8(int action, int animate)
         P_W(0x24A0) = 0;
         if (PREVIOUS_STATE != 4 && OLDER_STATE != 4)
             P_F(0x1B4) = func_L00_002D3A58(P_ADDR(0x120));
-        P_V(0x3F0).q = P_V(0).q;
+        qcopy(P_ADDR(0x3F0), P_ADDR(0));
         P_W(0x410) = 0;
         P_F(0x408) = P_F(0x98);
         if (P_F(0x1B4) > 0.116666675f)
@@ -285,7 +275,7 @@ int func_L08_002D2ED8(int action, int animate)
     case 3:
         STATE = 1;
         P_W(0x24A0) = 0;
-        P_V(0x160).q = P_V(0x120).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x120));
         if (P_B(0x1492)) { redirectAction = 0x2E; goto redirect; }
         if (P_B(0x149A)) {
             if (P_S(0x34C) == 0) { redirectAction = 0x76; goto redirect; }
@@ -309,7 +299,7 @@ int func_L08_002D2ED8(int action, int animate)
         if (P_F(0x1B4) > 0.116666675f) P_F(0x1B4) = 0.116666675f;
         if (P_B(0x149A) && P_S(0x34C) == 0) { redirectAction = 0x76; goto redirect; }
         P_W(0x1188) = 0x68;
-        P_V(0x160).q = P_V(0x120).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x120));
         func_002AC9F8(P_V(0x160).f, 0.116666675f);
         if (P_F(0x178) > 0.058333337f) func_L00_002B9B88(9, 0);
         if (animate) {
@@ -340,7 +330,7 @@ int func_L08_002D2ED8(int action, int animate)
         }
         P_W(0x1188) = 0x68;
         VARIANT = 0;
-        P_V(0xF0).q = P_V(0x120).q;
+        qcopy(P_ADDR(0xF0), P_ADDR(0x120));
         if (!animate) goto finish;
         if (P_F(0x31C) > 1.75f) {
             func_L00_002D2168(11, 0, 12.0f);
@@ -354,7 +344,7 @@ int func_L08_002D2ED8(int action, int animate)
     case 15: case 16: case 17: case 18: case 0x1B: case 0x28: case 0x29:
     case 0x38: case 0x45: case 0x48: case 0x5B: case 0x66: case 0x6E:
     case 0x81: case 0x89: case 0x92:
-        /* Enter an aerial action, retaining the fields not initialized here. */
+
         actor = P_PTR(0x33C);
         if (ACTION != 0x81 && actor &&
             (*(short *)(actor + 0xAA) == 0x9B9 || *(short *)(actor + 0xAA) == 0xF05)) {
@@ -386,7 +376,7 @@ int func_L08_002D2ED8(int action, int animate)
             func_L00_002A61C8(equipment, 0, 0, 30);
             func_L00_002A61C8(equipment, 1, 0, 30);
         }
-        P_V(0xF0).q = P_V(0x120).q;
+        qcopy(P_ADDR(0xF0), P_ADDR(0x120));
         if (ACTION != 18 && P_B(0x1494) && P_F(0x88) < P_F(0x330) + 0.5f)
             func_L00_002AABE0(3, 16, 0);
         if (ACTION == 0x66) func_L00_002B9B88(8, 0);
@@ -600,7 +590,7 @@ standardJumpLimits:
             func_L00_002D6900(27);
             P_H(0x52A) = 80;
             P_F(0x520) = 0.008055556f;
-            P_V(0x4F0).q = P_V(0x4E0).q;
+            qcopy(P_ADDR(0x4F0), P_ADDR(0x4E0));
             P_B(0x52C) = 1;
             P_H(0x24D8) = 1;
             P_B(0x22B7) = 1;
@@ -677,10 +667,10 @@ standardJumpLimits:
             P_B(0x49F) = 1;
             P_F(0x4A8) = 3.2f;
             P_F(0x4C4) = func_L00_002AE070(10);
-            P_V(0x480).q = P_V(0).q;
+            qcopy(P_ADDR(0x480), P_ADDR(0));
             P_I(0x4D4) = func_L00_002C3A78();
             P_F(0x4C0) = P_F(0x1A0);
-            P_V(0x470).q = P_V(0x190).q;
+            qcopy(P_ADDR(0x470), P_ADDR(0x190));
             P_F(0x4D8) = P_F(0x174) > 0.025000002f ? P_F(0x174) : 0.0f;
             P_F(0x4DC) = 0.0f;
             P_B(0x52C) = 1;
@@ -688,7 +678,7 @@ standardJumpLimits:
                 P_B(0x52D) = 0;
             } else {
                 P_F(0x4C0) = P_F(0x1458);
-                P_V(0x470).q = P_V(0x1440).q;
+                qcopy(P_ADDR(0x470), P_ADDR(0x1440));
                 P_B(0x52D) = 1;
                 P_F(0x4DC) = 0.08333333582f;
             }
@@ -760,14 +750,14 @@ standardJumpLimits:
         P_W(0x24A0) = 0;
         if (P_F(0x170) > 0.075f) func_L00_002B6118(0.075f / P_F(0x170));
         P_W(0x24C8) = 0;
-        P_V(0xF0).q = P_V(0x110).q;
+        qcopy(P_ADDR(0xF0), P_ADDR(0x110));
         if (!animate) goto finish;
         blend = -2.0f;
         animation = 0x13;
         break;
     case 0x13: case 0x14: case 0x15: case 0x1F:
     case 0x22: case 0x4D: case 0x83: case 0x93:
-        /* Attack bookkeeping uses saturating 16-bit counters and unsigned maxima. */
+
         STATE = 6;
         if (P_I(0x1500) && (u32)(ACTION - 0x13) < 3) {
             limit = D_001A7390;
@@ -899,7 +889,7 @@ standardJumpLimits:
         func_L00_002B6118(0.5f);
         func_L00_002D6900(18);
         P_H(0x20E) = 45;
-        P_V(0xF0).q = P_V(0x120).q;
+        qcopy(P_ADDR(0xF0), P_ADDR(0x120));
         func_002AC9F8(P_V(0xF0).f, 0.116666675f);
         actor = func_002A9640(OBJECT, 1, 0);
         func_L00_002A4EF8(actor ? func_00283CF0(*(float *)(actor + 0x2C)) : 1);
@@ -985,7 +975,7 @@ standardJumpLimits:
         actor = P_PTR(0xAA4);
         P_F(0x1A0) = func_00283248(*(float *)(actor + 0x10) - P_F(0x80),
                                    *(float *)(actor + 0x14) - P_F(0x84));
-        if (PREVIOUS_ACTION == 0x28) P_V(0x160).q = P_V(0xF0).q;
+        if (PREVIOUS_ACTION == 0x28) qcopy(P_ADDR(0x160), P_ADDR(0xF0));
         goto playTargetAction;
     case 0x24:
         P_B(0x22BC) = 1;
@@ -1053,7 +1043,7 @@ standardJumpLimits:
         P_W(0x24A0) = 7;
         STATE = 2;
         func_00282C88(&P_V(0xA0).q);
-        P_V(0xF0).q = P_V(0x120).q;
+        qcopy(P_ADDR(0xF0), P_ADDR(0x120));
         if (!animate) goto finish;
         animation = 11;
         blend = 15.0f;
@@ -1061,7 +1051,7 @@ standardJumpLimits:
     case 0x2F:
         STATE = 8;
         P_W(0x24A0) = 0;
-        P_V(0x160).q = P_V(0x110).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x110));
         func_L00_002D2168(func_L04_002CC748(0), 0, 5.0f);
         P_H(0x1EC) = 7;
         goto finish;
@@ -1093,7 +1083,7 @@ standardJumpLimits:
         STATE = 17;
         P_W(0x24A0) = 11;
         P_B(0x22B7) = 1;
-        P_V(0x160).q = P_V(0x120).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x120));
         P_W(0x1188) = 0x68;
         frames = PREVIOUS_ACTION == 0x34 ? -2 : 35;
         if (!animate) goto finish;
@@ -1147,7 +1137,7 @@ standardJumpLimits:
         P_F(0x79C) = P_F(0x330);
         P_W(0x7A0) = 0;
         P_F(0x790) = (P_F(0x88) - P_F(0x330)) - -0.12f;
-        P_V(0x160).q = P_V(0x120).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x120));
         P_F(0x168) = 0.0f;
         func_002AC9F8(P_V(0x160).f, 0.09166667f);
         P_W(0x1188) = 0x68;
@@ -1158,7 +1148,7 @@ standardJumpLimits:
     case 0x39:
         STATE = 20;
         P_W(0x24A0) = 0;
-        P_V(0x160).q = P_V(0x120).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x120));
         if (!animate) goto finish;
         animation = 0x45;
         blend = 12.0f;
@@ -1230,7 +1220,7 @@ standardJumpLimits:
         STATE = 1;
         P_W(0x24A0) = 0;
         P_F(0x1B4) = func_L00_002D3A58(P_ADDR(0x120));
-        P_V(0x160).q = P_V(0x120).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x120));
         if (!animate) goto finish;
         sourceAnimation = (u8)originalObject[0x42];
         goto chooseLocomotion;
@@ -1267,7 +1257,7 @@ standardJumpLimits:
         if (P_I(0xA50) > 2 && P_H(0x2A8C) != 0xFFFF) P_H(0x2A8C)++;
         if (P_W(0x2A90) < D_001A7390) P_W(0x2A90) = D_001A7390;
         P_W(0x2A94) |= (1u << (D_001A79F0 & 31)) | 0x80000000u;
-        P_V(0x160).q = P_V(0x120).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x120));
         if (!animate) goto finish;
         animation = 0x58;
         blend = 10.0f;
@@ -1304,7 +1294,7 @@ standardJumpLimits:
         P_W(0x24A0) = 0;
         func_L00_002B6118(0.5f);
         P_B(0x22B7) = 1;
-        P_V(0xF0).q = P_V(0x110).q;
+        qcopy(P_ADDR(0xF0), P_ADDR(0x110));
         actor = func_002A9640(OBJECT, 1, 0);
         func_L00_002A4EF8(actor ? func_00283CF0(*(float *)(actor + 0x2C)) : 1);
         P_H(0x1DC) = 77;
@@ -1326,7 +1316,7 @@ standardJumpLimits:
     case 0x76:
         STATE = 2;
         P_W(0x24A0) = 0;
-        P_V(0xF0).q = P_V(0x120).q;
+        qcopy(P_ADDR(0xF0), P_ADDR(0x120));
         if (!animate) goto finish;
         animation = 11;
         blend = 12.0f;
@@ -1353,7 +1343,7 @@ standardJumpLimits:
         P_W(0x1188) = 0x68;
         STATE = 28;
         P_W(0x24A0) = 0;
-        P_V(0xF0).q = P_V(0x110).q;
+        qcopy(P_ADDR(0xF0), P_ADDR(0x110));
         if (P_I(0x1298) != 0x36) {
             P_W(0x22CC) = 0x36;
             P_I(0x2304) = P_I(0x1298);
@@ -1381,7 +1371,7 @@ standardJumpLimits:
         STATE = 20;
         P_B(0x22B7) = 1;
         P_W(0x24A0) = 0;
-        P_V(0x160).q = P_V(0x120).q;
+        qcopy(P_ADDR(0x160), P_ADDR(0x120));
         if (!animate) goto finish;
         animation = 0x79;
         blend = 10.0f;
@@ -1403,7 +1393,7 @@ standardJumpLimits:
         P_H(0x5BE) = 0;
         P_W(0x5A8) = 0;
         P_W(0x5A4) = 0;
-        P_V(0xF0).q = P_V(0x110).q;
+        qcopy(P_ADDR(0xF0), P_ADDR(0x110));
         P_H(0x5BC) = 7;
         if (!animate) goto finish;
         animation = 0x13;
@@ -1417,7 +1407,7 @@ standardJumpLimits:
         if (animate) func_L00_002D2168(0x4F, 0, 5.0f);
         actor = P_PTR(0x1830);
         P_F(0x98) = *(float *)(actor + 0xF8);
-        P_V(0x80).q = *(Quad *)(actor + 0x10);
+        qcopy(P_ADDR(0x80), actor + 0x10);
         func_00282C88(&P_V(0xF0).q);
         goto finish;
     case 0x8A:

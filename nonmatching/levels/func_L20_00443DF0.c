@@ -2,7 +2,7 @@
    place (20_yeedil @0x00443DF0).  Two instructions differ:
    - +0xA4: retail `b` targets the nop at +0xB0 (offset 0xA), this C targets the
      comparison at +0xB4 (offset 0xB); same target, one label to the left.
-   - +0x1D4: this C fills the func_302548 call delay slot with `sw $zero,0x28($sp)`
+   - +0x1D4: this C fills the func_00282F20 call delay slot with `sw $zero,0x28($sp)`
      and sets $a1 before the jal; retail stores the zero before the jal and puts
      `daddu $a1,$s1` in the delay slot.
    Everything else, including both clamps, the constant words and the whole
@@ -15,17 +15,17 @@
    assembler's decimal parser rounds 0.7853982f to 0x3F490FDB, and retail holds
    0x3F490FDC (pi/4), hence 0.78539825f; likewise 0.52359885f for 0x3F060A93. */
 
-extern void func_443B60(char *, float *, float *, float *);
-extern float func_303270(float, float);
-extern float func_302858(float);
-extern float func_302870(float);
-extern int func_32F680(int);
-extern void func_3022D0(float *, float *, float);
-extern float func_32F718(float, float);
-extern void func_302260(float *, float *, float *);
-extern void func_302290(float *, char *, float *);
-extern void func_302548(float *, float *, float);
-extern void func_3E3BA0(char *, int, float *, float *, float *, int, int, int);
+extern void func_L20_00443B60(char *, float *, float *, float *);
+extern float func_00283B98(float, float);
+extern float func_00283180(float);
+extern float func_00283198(float);
+extern int func_002A77E0(int);
+extern void func_00282D30(float *, float *, float);
+extern float func_002A7878(float, float);
+extern void func_00282CC0(float *, float *, float *);
+extern void func_00282CF0(float *, char *, float *);
+extern void func_00282F20(float *, float *, float);
+extern void func_L03_003D09D0(char *, int, float *, float *, float *, int, int, int);
 extern char D_00188660[];
 
 /* Quarter-turn quantiser: the aim snaps to +-pi/6 inside +-pi/4, and to
@@ -42,7 +42,7 @@ void func_L20_00443DF0(char *a0)
     float f;
 
     t = 0.78539825f;
-    func_443B60(s2, ang, v, &t);
+    func_L20_00443B60(s2, ang, v, &t);
     ang[2] = ang[2] + 1.0f;
     if (t < 0.0f) {
         if (t > -0.52359885f)
@@ -55,18 +55,18 @@ void func_L20_00443DF0(char *a0)
         else if (t < 0.52359885f)
             t = 0.52359885f;
     }
-    f = func_303270(t, *(float *)(s2 + 0xF8));
-    v[0] = func_302858(f) * 0.16666667f;
-    v[1] = func_302870(f) * 0.16666667f;
+    f = func_00283B98(t, *(float *)(s2 + 0xF8));
+    v[0] = func_00283180(f) * 0.16666667f;
+    v[1] = func_00283198(f) * 0.16666667f;
     v[2] = -0.033333335f;
-    if (func_32F680(2) != 0) {
-        func_3022D0(w, v, 90.0f);
+    if (func_002A77E0(2) != 0) {
+        func_00282D30(w, v, 90.0f);
     } else {
-        func_3022D0(w, v, func_32F718(0.4f, 0.6f) * 180.0f);
+        func_00282D30(w, v, func_002A7878(0.4f, 0.6f) * 180.0f);
     }
-    func_302260(w, w, ang);
-    func_302290(w, D_00188660, w);
+    func_00282CC0(w, w, ang);
+    func_00282CF0(w, D_00188660, w);
     *(int *)&w[2] = 0;
-    func_302548(w, w, 0.16666667f);
-    func_3E3BA0(s2, 0, ang, v, w, 0xB4, 0x258, *(unsigned char *)(s4 + 0x36));
+    func_00282F20(w, w, 0.16666667f);
+    func_L03_003D09D0(s2, 0, ang, v, w, 0xB4, 0x258, *(unsigned char *)(s4 + 0x36));
 }

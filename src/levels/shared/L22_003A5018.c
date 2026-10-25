@@ -235,7 +235,7 @@ INCLUDE_ASM("asm/levels", func_L22_003F5688);
 
 INCLUDE_ASM("asm/levels", func_L22_003F85A0);
 
-INCLUDE_ASM("asm/levels", func_L22_003F8658);
+/* func_L22_003F8658 is defined in L22_003F8658-helper-g8.c. */
 
 
 INCLUDE_ASM("asm/levels", func_L22_003FB1F8);
@@ -255,20 +255,20 @@ INCLUDE_ASM("asm/levels", func_L22_003FC048);
 INCLUDE_ASM("asm/levels", func_L22_003FC338);
 
 
-INCLUDE_ASM("asm/levels", func_L22_003FC780);
+/* func_L22_003FC780 is defined in L22_003FC780-helper-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L22_003FC870);
 
 INCLUDE_ASM("asm/levels", func_L22_003FCF08);
 
-INCLUDE_ASM("asm/levels", func_L22_003FD1E8);
+/* func_L22_003FD1E8 is defined in L22_003FD1E8-helper-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L22_003FD2D8);
 
 INCLUDE_ASM("asm/levels", func_L22_003FD958);
 
 
-INCLUDE_ASM("asm/levels", func_L22_0040DD40);
+/* func_L22_0040DD40 is defined in L22_0040DD40-helper-g8.c. */
 
 extern f32 func_002A7878(f32 low, f32 high);
 

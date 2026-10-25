@@ -1,25 +1,11 @@
-/* Nonmatching reconstruction checked 23 October 2026.
+/* Complete nonmatching reconstruction: 3168/3200 bytes.
  * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -mno-split-addresses.
- * Final check.py coverage: us 0/27, us2 0/27; no candidate.
- * Manual acquisition/firing update 3016/3200; qualified unsplit qcopy profile 3064/3200 retained. Current C emits mtlo and three-operand madd for weapon-table indexing.
- * Remaining: Target-state CFG, scalar/packet workspace allocation and index/register scheduling differ. The former SPECIAL2/no-C hypothesis is superseded.
- * Reopen with a measured weapon/target-state CFG and helper ABI/lifetime evidence; no ASM classification follows from these words.
- * Both retail words are decoded as madd after mtlo initializes the table base.
- * Ordinary compiled C also emits this family; incoming-HI decompiler artifacts do not imply an extra ABI input.
- * Historical screening below is preserved, not treated as acceptance evidence.
+ * Placement checks: US: 0/27; US2: 0/27; PAL absent from catalogue.
+ * The complete acquisition/firing controller retains its six live16-byte vectors and48-byte damage packet. Metadata access keeps the canonical int32 return and explicit pointer interpretation. func_00291308 takes position/color plus radius/spread in f12/f13, and returns an int32 index or -1. Range captures now occur after first-time initialization. The light offset is really cleared before its XYZ stores. Each light-field write reloads the current slot after the transform call, as retail does; this changes3064 to3168 bytes with the retail0x110 frame. Target CFG, state/global bases, packet and table-index allocation still differ.
+ * Reopen with independent target-state CFG and real global-owner evidence, or measured acquisition/firing pointer lifetimes. Preserve complete damage storage, actual call banks and per-write light-slot reloads.
  */
-
-/* MMI (SPECIAL2) instruction: no C spelling. 3200 bytes, level
-   00_aranos_tutorial. Retail at 0x003A6C30 carries the SPECIAL2 words
-   0x70461000, 0x70431000 (+0x08A0, +0x08E0) - opcode 0x1C, which rabbitizer
-   prints as `INVALID`; it is the MMI family (pcpyld and its relatives) the
-   sixth wave recorded and that no C spelling reaches. This cc1 emits
-   `lq`/`sq` for a `mode(TI)` local and `ldl`/`ldr`/`sdl`/`sdr` for a struct
-   assignment, never the packed copy. ASM_FUNC candidate, as for the rest of
-   the family. */
-
 #include "common.h"
-typedef int VectorBits __attribute__((mode(TI)));
+typedef float Vector[4] __attribute__((aligned(16)));
 struct Rac2Native_5f824a0e369ccf7b_src_record { u8 b0,b1,b2,b3; u16 s4,s6,s8,s10,s12; u8 e,f; };
 extern struct Rac2Native_5f824a0e369ccf7b_src_record D_L00_00294980[],D_L00_00294A00[];
 extern int D_0018B064 NOT_SDA,D_0018B320 NOT_SDA,D_0018C0B4 NOT_SDA,D_0018C354 NOT_SDA,D_00189FF8 NOT_SDA;
@@ -50,10 +36,10 @@ extern void func_00273318(void *,unsigned int,void *,int,int,int,float,float,flo
 extern float func_00282E48(void *,void *),func_00282C48(float),func_00283CE0(int);
 extern void func_002A75E0(void *,int,int,int,int),func_002A7470(void *,int,int,int),func_L00_002C42E0(int,int);
 extern void func_L00_003A78B0(void *),func_L00_003E4968(void *),func_L00_002AF568(void),func_L00_002AF7D0(void);
-extern int func_00291308(int,void *,unsigned int,float),func_002E5DA0(int,int,char *,int),func_002E5CF8(int,int,char *);
+extern int func_00291308(void *,unsigned int,float,float),func_002E5DA0(int,int,char *,int),func_002E5CF8(int,int,char *);
 extern int func_L00_002D6998(struct Rac2Native_5f824a0e369ccf7b_src_record *),func_L00_002D6978(int);
 extern void func_L00_003E2180(void *,char *,char *,float),func_L00_0041EB38(void *,char *,char *);
-extern int func_00277F48(void *,int,void *,int,float);
+extern int func_00277F48(void *,int,void *,void *,float);
 extern void func_002A8E20(void *,void *),func_002AFFD8(char *,char *,int),func_L00_003E3258(void *,int,int);
 extern void func_L00_002D6B70(void),func_00291450(int),func_00283098(void *,void *,void *);
 
@@ -61,10 +47,10 @@ extern void func_L00_002D6B70(void),func_00291450(int),func_00283098(void *,void
 void func_L00_003A6C30(char *moby)
 {
     char *state = *(char **)(moby + 0x68);
-    float muzzle[4],targetPosition[4],playerPoint[4],offset[4],direction[4],damageVelocity[4],center[4];
-    char damage[0x30];
+    Vector muzzle,targetPosition,playerPoint,offset,direction,center;
+    char damage[0x30] __attribute__((aligned(16)));
     char *target = 0;
-    float previousRange = D_L00_001B286C, horizontal = D_L00_001B2868, vertical;
+    float previousRange, horizontal, vertical;
     int specialMode = D_0018B064 == 3;
     if (D_L00_001A8F00 == 8)
         return;
@@ -72,6 +58,8 @@ void func_L00_003A6C30(char *moby)
         *(u8 *)(moby + 0x20) = 2;
         func_L00_003A7AF0(moby);
     }
+    horizontal = D_L00_001B2868;
+    previousRange = D_L00_001B286C;
     D_L00_001B286C = *(short *)(moby + 0xAA) == 0x5D2 ? 20.0f : 30.0f;
     if (*(short *)(moby + 0xAA) == 0x5D2)
         func_0029FCC0(moby,0,(char *)muzzle);
@@ -95,7 +83,7 @@ void func_L00_003A6C30(char *moby)
             func_00282D30(offset,locked + 0xE0,*(float *)((char *)component + 0x10));
             func_00282CC0(targetPosition,locked + 0x10,offset);
         } else {
-            *(VectorBits *)targetPosition = *(VectorBits *)(locked + 0x10);
+            qcopy(targetPosition, (locked + 0x10));
         }
         if (*(u8 *)(locked + 0x20) != 0xFE && *(u8 *)(locked + 0x20) != 0xFD &&
             (!component || *component > 0.0f || func_002ABB78(locked)) && *(u8 *)(locked + 0x31) && !D_0018C30C) {
@@ -132,7 +120,7 @@ void func_L00_003A6C30(char *moby)
                     func_00282D30(direction,candidate + 0xE0,*(float *)((char *)component + 0x10));
                     func_00282CC0(targetPosition,candidate + 0x10,direction);
                 } else {
-                    *(VectorBits *)targetPosition = *(VectorBits *)(candidate + 0x10);
+                    qcopy(targetPosition, (candidate + 0x10));
                 }
                 target = candidate;
             }
@@ -185,7 +173,7 @@ void func_L00_003A6C30(char *moby)
                 if (*(u8 *)(moby + 0x43) != 2)
                     func_002A7470(moby,2,0,0);
                 if (*(int *)(state + 0x24) == -1)
-                    *(int *)(state + 0x24) = func_00291308(0,moby + 0x10,0,4.0f);
+                    *(int *)(state + 0x24) = func_00291308(moby + 0x10,0,4.0f,0.0f);
                 *(int *)(state + 0x28) = 10;
                 func_002E5DA0(0,0,moby,*(short *)(moby + 0xAA));
                 if (*(short *)(moby + 0xAA) == 0x5D2)
@@ -212,7 +200,7 @@ void func_L00_003A6C30(char *moby)
                     *(char **)(damage + 0x10) = moby;
                     func_00282CF0(offset,hit + 0x10,muzzle);
                     func_00282F20(offset,offset,D_L00_00262570[D_00139586].speed * (1.0f / 60.0f));
-                    *(VectorBits *)damage = *(VectorBits *)offset;
+                    qcopy(damage, offset);
                     func_00282F20(damage,damage,1.0f);
                     *(short *)(damage + 0x1A) = *(short *)(moby + 0xAA);
                     *(u8 *)(damage + 0x18) = 1;
@@ -252,20 +240,20 @@ void func_L00_003A6C30(char *moby)
     }
     if (*(int *)(state + 0x24) != -1) {
         if (!specialMode && *(int *)(state + 0x28) > 0) {
-            MuzzleLight *light = &D_L00_001C6F40[*(int *)(state + 0x24)];
             float ratio,total;
-            offset[0] = 2.0f; offset[1] = 0.0f; offset[2] = 2.0f;
+            qzero(offset);
+            offset[0] = 2.0f; offset[2] = 2.0f;
             func_00283098(offset,offset,D_0018A550);
-            light->position[0] = D_00189EA0[0] + offset[0];
-            light->position[1] = D_00189EA0[1] + offset[1];
-            light->position[2] = D_00189EA0[2] + offset[2];
-            light->position[3] = 4.0f;
+            D_L00_001C6F40[*(int *)(state + 0x24)].position[0] = D_00189EA0[0] + offset[0];
+            D_L00_001C6F40[*(int *)(state + 0x24)].position[1] = D_00189EA0[1] + offset[1];
+            D_L00_001C6F40[*(int *)(state + 0x24)].position[2] = D_00189EA0[2] + offset[2];
+            D_L00_001C6F40[*(int *)(state + 0x24)].position[3] = 4.0f;
             ratio = func_00283CE0(*(int *)(state + 0x28));
             total = func_00283CE0(10);
             ratio /= total;
-            light->radius = ratio;
-            light->spread = ratio * 0.5f;
-            light->power = light->spread;
+            D_L00_001C6F40[*(int *)(state + 0x24)].radius = ratio;
+            D_L00_001C6F40[*(int *)(state + 0x24)].spread = ratio * 0.5f;
+            D_L00_001C6F40[*(int *)(state + 0x24)].power = D_L00_001C6F40[*(int *)(state + 0x24)].spread;
         } else {
             func_00291450(*(int *)(state + 0x24));
             *(int *)(state + 0x24) = -1;

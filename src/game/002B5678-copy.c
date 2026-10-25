@@ -37,7 +37,10 @@ extern int func_00282948(void *);
 extern int func_002B5D38(void *, void *);
 extern int func_002B5E48(void *, void *);
 
-void func_002B5678(Self_002B5678 *self, Ctl_002B5678 *ctl, float *target)
+/* Retail callers also pass a fourth scratch pointer. This body does not read it;
+ * keep the slot explicit so its C interface agrees with those callers.
+ */
+void func_002B5678(Self_002B5678 *self, Ctl_002B5678 *ctl, float *target, void *unused_output)
 {
     Vec4Q_002B5678 saved;
     Quad_002B5678 *position = (Quad_002B5678 *)self->pos;

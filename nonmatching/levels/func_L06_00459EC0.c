@@ -14,7 +14,7 @@
    of both arms rather than the fall-through of the flag test.
    Calibrated literals: the turn limit is one ulp above 2*pi (0x40C90FDC, source 6.283186f,
    not 6.2831855f); the sine scale is 5.2f (0x40A66666); the direction scale constant is
-   1.5f. func_31DB98 takes a fifth integer argument 0 and func_31EBF8 takes a trailing
+   1.5f. func_002761F8 takes a fifth integer argument 0 and func_00277258 takes a trailing
    float argument 1.5f; both are passed in the delay slots. The two identical stores at
    the end are what the arms share; the loop's `continue` shape (add inside the if) is what
    reproduces retail's bnel/beql pair. */
@@ -23,15 +23,15 @@
 
 typedef unsigned char u8;
 
-extern float func_32DBB8(float);
-extern float func_32DBD0(float);
-extern void func_32D5C8(char *, char *, char *);
-extern int func_35BE08(void *, void *, int);
-extern int func_31DB98(void *, void *, int, void *, int);
-extern int func_31EBF8(void *, int, void *, float);
-extern float func_32D538(float);
-extern float func_32E5D0(float, float);
-extern float func_32DC80(float, float);
+extern float func_00283180(float);
+extern float func_00283198(float);
+extern void func_00282CC0(char *, char *, char *);
+extern int func_002A8AF0(void *, void *, int);
+extern int func_002761F8(void *, void *, int, void *, int);
+extern int func_00277258(void *, int, void *, float);
+extern float func_00282C48(float);
+extern float func_00283B98(float, float);
+extern float func_00283248(float, float);
 
 void func_L06_00459EC0(char *a0, char *a1)
 {
@@ -44,38 +44,38 @@ void func_L06_00459EC0(char *a0, char *a1)
     float total;
 
     if (*(int *)(st + 0x124) != 0) {
-        dir[0] = func_32DBB8(*(float *)(obj + 0xF8)) * 5.2f;
-        dir[1] = func_32DBD0(*(float *)(obj + 0xF8)) * 5.2f;
+        dir[0] = func_00283180(*(float *)(obj + 0xF8)) * 5.2f;
+        dir[1] = func_00283198(*(float *)(obj + 0xF8)) * 5.2f;
         dir[2] = 0.0f;
-        func_32D5C8((char *)dir, (char *)dir, obj + 0x10);
+        func_00282CC0((char *)dir, (char *)dir, obj + 0x10);
         p = *(char **)(st + 0x118);
-        if (func_35BE08(dir, p + 0x10, *(int *)p) != 0 &&
-            func_31DB98(obj + 0x10, dir, 0x24, obj, 0) == 0 &&
-            func_31EBF8(dir, 0x24, obj, 1.5f) == 0)
+        if (func_002A8AF0(dir, p + 0x10, *(int *)p) != 0 &&
+            func_002761F8(obj + 0x10, dir, 0x24, obj, 0) == 0 &&
+            func_00277258(dir, 0x24, obj, 1.5f) == 0)
             return;
-        step = func_32D538(*(float *)(st + 0x130));
+        step = func_00282C48(*(float *)(st + 0x130));
         ang = *(float *)(obj + 0xF8);
         total = 0.0f;
         do {
-            ang = func_32E5D0(ang, *(float *)(st + 0x130));
-            dir[0] = func_32DBB8(ang) * 5.2f;
-            dir[1] = func_32DBD0(ang) * 5.2f;
+            ang = func_00283B98(ang, *(float *)(st + 0x130));
+            dir[0] = func_00283180(ang) * 5.2f;
+            dir[1] = func_00283198(ang) * 5.2f;
             dir[2] = 0.0f;
-            func_32D5C8((char *)dir, (char *)dir, obj + 0x10);
+            func_00282CC0((char *)dir, (char *)dir, obj + 0x10);
             p = *(char **)(st + 0x118);
-            if (func_35BE08(dir, p + 0x10, *(int *)p) == 0 ||
-                func_31DB98(obj + 0x10, dir, 0x24, obj, 0) != 0 ||
-                func_31EBF8(dir, 0x24, obj, 1.5f) != 0) {
+            if (func_002A8AF0(dir, p + 0x10, *(int *)p) == 0 ||
+                func_002761F8(obj + 0x10, dir, 0x24, obj, 0) != 0 ||
+                func_00277258(dir, 0x24, obj, 1.5f) != 0) {
                 total += step;
                 continue;
             }
             *(float *)(st + 0x12C) = ang;
             return;
         } while (total < 6.283186f);
-        *(float *)(st + 0x12C) = func_32DC80(*(float *)(st + 0xE0) - *(float *)(obj + 0x10),
+        *(float *)(st + 0x12C) = func_00283248(*(float *)(st + 0xE0) - *(float *)(obj + 0x10),
                                              *(float *)(st + 0xE4) - *(float *)(obj + 0x14));
     } else {
-        *(float *)(st + 0x12C) = func_32DC80(*(float *)(st + 0xE0) - *(float *)(obj + 0x10),
+        *(float *)(st + 0x12C) = func_00283248(*(float *)(st + 0xE0) - *(float *)(obj + 0x10),
                                              *(float *)(st + 0xE4) - *(float *)(obj + 0x14));
     }
 }

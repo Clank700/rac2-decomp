@@ -1,24 +1,14 @@
-/* Near miss, not linked. Boot function func_0029B910 (328 bytes, 28 places),
-   profile -O2 -G8 -ffunction-sections (sibling 0029AE78-g8.c).
-
-   Last verdict: `python scratch\wslcmp.py src/game/0029AE78-g8.c func_0029B910 full`
-   -> 272 bytes, expected 328; 0 of 28 places match.
-
-   The control flow and the record/list addresses are understood: the four mission slot
-   ids are at 0x1A9AC8, the 0x28-byte record table starts at 0x262940 (state +0x18,
-   count s16 +0x1C, level u16 +0x20, unlocked word +0x24) and the 0x18-byte list entries
-   start at 0x256418. Retail writes the entry's `second` through a base at 0x25641C plus a
-   byte-offset induction variable and the colour/id through a second pointer induction
-   variable at 0x256420, and it keeps the record base 0x262940 in one register while the
-   level/flag field addresses are folded to 0x262960/0x262964 inside the loop. A single
-   struct-array expression (below) makes the compiler use one output pointer and the
-   record base with displacements, so the two output induction variables and the folded
-   field bases are the remaining difference; the loop body, the if/else mode selection
-   (0 when the slot is live, 2 when it is not) and the 0x6029A1FF/0x60F0F0B0 colours are
-   otherwise right. */
+/* Retained complete C repair, 2026-10-25; not linked or counted.
+ * Profile: -O2 -G8 -ffunction-sections.
+ * Private placement checks: us: 0/28, us2: absent, pal: absent.
+ * The observed loop reads four mission IDs; all four words are now within the
+ * declared table. Historical screening measured 272/328 bytes.
+ * Current code is 280/328 bytes. Separate output induction pointers and
+ * record/global address scheduling still differ.
+ */
 
 extern char *D_001A8CFC[] __attribute__((sda));
-extern int D_001A9AC8[2] __attribute__((sda));
+extern int D_001A9AC8[4] __attribute__((sda));
 extern int func_002ED8A0(int);
 
 typedef struct {

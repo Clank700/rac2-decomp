@@ -1,24 +1,27 @@
 /*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G16 -ffunction-sections -Wa,-G16 -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por.
- * Reported final C / retail: 1460 / 1524 bytes; size equality is not a match.
- * us: 0/1 placements; 1460/1524 bytes.
- * us2: 0/1 placements; 1460/1524 bytes.
- * pal: absent from catalogue (not a match).
- * Residual: Frame 0xB0 versus retail 0xC0; loop pointer lifetimes and stores differ. Four dust stack words retained.
- * Reopening condition: Reopen only after independent source, data-layout, ABI or compiler evidence specifically explains the residual above; then test that single hypothesis. Do not repeat tied source forms or flag sweeps.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
+ * Complete manual reconstruction retained as nonmatching; no coverage credit.
+ * Fresh qualified-compiler checks, 2026-10-25.
+ * Profile: -O2 -G16 -Wa,-G16 -ffunction-sections
+ * Coverage: US: 0/1; US2: 0/1; PAL: absent from catalogue.
+ * Compiled text: 1496 bytes; retail: 1524 bytes.
+ * Remaining difference: The complete interpolation prefix now has four full16-byte nodes, three
+ * float progress/rate values and the measured sound handle. The real two position transfers use
+ * qcopy and state dispatch follows the observed switch. Frame0xC0 now agrees; body1496/1524 still
+ * differs in node/progress loop pointer lifetimes, sound-address formation and scheduling. Both
+ * actual three-float coefficient arrays and all four explosion stack words remain. The factory
+ * return and nullable stack-pointer contract are repaired.
+ * Reopen when: Independent exact loop/global-owner lifetime evidence within this measured prefix;
+ * do not add padding or alter the three-point interpolation/particle inputs.
  */
 
-/* Manual reconstruction, 2026-10-23: NOT MATCHED. US 1460/1524 bytes,
- * 0/1 placements; profile: -O2 -ffunction-sections G16 asG16 qcopy/qcopy-barrier/zero-ti-por.
- * Frame 0xB0 versus retail 0xC0; loop pointer lifetimes and stores differ. Four dust stack words retained.
- * Historical screening notes below are preserved; the current measured
- * residual replaces any earlier claim that lq/sq/por cannot be emitted. */
 #include "common.h"
 typedef int MissileQuadword __attribute__((mode(TI)));
+typedef union { MissileQuadword q; float f[4]; } PositionVector;
+/* Measured interpolation/sound prefix; the complete allocation extent is unknown. */
+typedef struct {
+    PositionVector point[4]; float progress[3]; u8 gap4C[4];
+    float rate[3]; u8 gap5C[12]; int sound;
+} MissileState;
 extern u8 D_00188660[];
 extern float D_00189EA0[4], D_L16_001B9B00[4];
 extern int D_L16_001A8F00;
@@ -35,8 +38,8 @@ extern float func_00283248(float, float), func_002A78D8(float, float), func_002A
 extern void func_002AA800(float *, int, float, float), func_L16_0040DC70(u8 *);
 extern void *func_002A9640(void *, int, int);
 extern u8 *func_00273730(void *, int, int, int, void *, void *, void *, int, float, float);
-extern void func_0032C700(void *, int, int, int, int, int, int, int, float, float, int, int, int, int);
-extern void func_0029F338(void *), func_002A7750(void *, u8, int);
+extern void *func_0032C700(void *, int, int, int, int, int, int, int, float, float, int, int, int, void *);
+extern void func_0029F338(void *), func_002A7750(void *, int, int);
 extern int func_002761F8(void *, void *, int, void *, void *);
 extern int func_00277258(void *, int, void *, float);
 extern void func_0032DA58(void *, void *, void *, float);
@@ -46,30 +49,31 @@ extern int func_002A8C28(void *, void *, int, int, float, float, float, int, int
  * active byte are checked before stopping a handle that may have been reused. */
 void func_L16_0040D4E8(u8 *moby)
 {
-    u8 *state = *(u8 **)(moby + 0x68);
+    MissileState *state = *(MissileState **)(moby + 0x68);
     float oldPosition[4] __attribute__((aligned(16)));
     float delta[4] __attribute__((aligned(16)));
     float velocity[4] __attribute__((aligned(16)));
     int handle, i;
-    if (moby[0x20] == 0) {
-        handle = *(int *)(state + 0x68);
+    switch (moby[0x20]) {
+    case 0:
+        handle = state->sound;
         if (*(u8 **)(D_00188660 + handle * 0x70 + 0x88) != moby ||
             !D_00188660[handle * 0x70 + 0x74])
-            *(int *)(state + 0x68) = func_002E5CF8(0, 4, moby);
-        *(MissileQuadword *)oldPosition = *(MissileQuadword *)(moby + 0x10);
-        *(MissileQuadword *)(moby + 0x10) = *(MissileQuadword *)state;
+            state->sound = func_002E5CF8(0, 4, moby);
+        qcopy(oldPosition, (moby + 0x10));
+        qcopy((moby + 0x10), &state->point[0]);
         for (i = 0; i < 3; i++) {
-            if (i == 0 || D_L16_001B1664 < *(float *)(state + 0x3c + i * 4)) {
-                func_002AA548((float *)(state + 0x40 + i * 4),
-                    (float *)(state + 0x50 + i * 4), 1.0f,
+            if (i == 0 || D_L16_001B1664 < state->progress[i-1]) {
+                func_002AA548(&state->progress[i],
+                    &state->rate[i], 1.0f,
                     D_L16_001B1648[i] * 0.00027777778f,
                     D_L16_001B1648[i] * 0.00027777778f,
                     D_L16_001B1658[i] * 0.016666668f);
-                if (i == 2 && *(float *)(state + 0x44) > 0.95f && moby[0x43])
+                if (i == 2 && state->progress[1] > 0.95f && moby[0x43])
                     func_002A7470(moby, 0, 0, 20);
             }
-            func_00282CF0(delta, state + (i + 1) * 16, state + i * 16);
-            func_00282D30(delta, delta, *(float *)(state + 0x40 + i * 4));
+            func_00282CF0(delta, &state->point[i+1], &state->point[i]);
+            func_00282D30(delta, delta, state->progress[i]);
             func_00282CC0(moby + 0x10, moby + 0x10, delta);
         }
         func_002AA800((float *)(moby + 0xf8), 0,
@@ -78,10 +82,10 @@ void func_L16_0040D4E8(u8 *moby)
         func_L16_0040DC70(moby);
         if (func_002A9640(moby, 0x10000, 0) || D_L16_001A8F00 == 2) {
             func_002E5CF8(2, 0, moby);
-            handle = *(int *)(state + 0x68);
+            handle = state->sound;
             if (handle != -1 && *(u8 **)(D_00188660 + handle * 0x70 + 0x88) == moby &&
                 D_00188660[handle * 0x70 + 0x74]) func_002E59F8(handle);
-            *(int *)(state + 0x68) = -1;
+            state->sound = -1;
             for (i = 0; i < 3; i++) {
                 float lifetime, size;
                 if (i == 0) func_00282D30(velocity, moby + 0xd0, 0.15f);
@@ -96,27 +100,29 @@ void func_L16_0040D4E8(u8 *moby)
                 1.0f, 20.0f, 1, 0, 0, 0);
             func_0029F338(moby);
         } else {
-            if (*(float *)(state + 0x48) >= 1.0f) func_002A7750(moby, 1, -1);
+            if (state->progress[2] >= 1.0f) func_002A7750(moby, 1, -1);
             if (func_002761F8(oldPosition, moby + 0x10, 0, moby, 0)) {
                 if (D_L16_001BFF58 &&
                     (*(short *)(D_L16_001BFF58 + 0xaa) == 0xf78 ||
                      *(short *)(D_L16_001BFF58 + 0xaa) == 0x7e8)) return;
             } else {
-                if (*(float *)(state + 0x44) < 0.9f) return;
+                if (state->progress[1] < 0.9f) return;
                 if (!func_00277258(moby + 0x10, 0, moby, 1.5f)) return;
             }
             func_002A7750(moby, 1, -1);
         }
-    } else if (moby[0x20] == 1) {
-        handle = *(int *)(state + 0x68);
+        break;
+    case 1:
+        handle = state->sound;
         if (handle != -1 && *(u8 **)(D_00188660 + handle * 0x70 + 0x88) == moby &&
             D_00188660[handle * 0x70 + 0x74]) func_002E59F8(handle);
-        *(int *)(state + 0x68) = -1;
+        state->sound = -1;
         func_002E5CF8(1, 0, moby);
         func_00282CF0(oldPosition, D_L16_001B9B00, moby + 0x10);
         func_00282F20(oldPosition, oldPosition, 1.0f);
         func_0032DA58(moby, moby + 0x10, oldPosition, 0.0f);
         func_002A8C28(moby, moby + 0x10, 0x10001, 0, 2.0f, 5.0f, 1.0f, 1, 0);
         func_0029F338(moby);
+        break;
     }
 }
