@@ -1,5 +1,9 @@
 /* from src/levels/10_hrugis_cloud/L10_003170D0.c: spawns the object's 0x230000 form and
- * settles it on the ground. Best of 2 compiles: 528 bytes against retail's 536, 0/1.
+ * settles it on the ground. Best of 3 compiles: 528 bytes against retail's 536, 0/1
+ * (this file compiles standalone: `python scratch\\wslcmp.py
+ * nonmatching/levels/func_L10_00423788.c func_L10_00423788` prints
+ * `10_hrugis_cloud: 528 bytes, expected 536`). A `goto out` spelling for the early
+ * outs measured worse (524 bytes): the exits merged and the frame grew an $s6 save.
  * Retail's body is reproduced instruction for instruction except that
  *  (a) this cc1 merges the two early returns (`spawned == 0` and the 0xF93 kind test)
  *      into one in-line `daddu $v0,$zero; b` block (2 instructions before the node
@@ -15,6 +19,12 @@
  * Next hypothesis: spell the 0xCBE test so the two zero returns keep separate exits
  * (e.g. return a plain 0 rather than the live local in the first), and read the timer
  * through a fresh `*(u8 **)(a0 + 0x68)` so $s1 stays node and D_L10_001B354C takes $at. */
+typedef signed int s32;
+typedef signed short s16;
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef float f32;
+
 extern s32 func_002A9640(u8 *a0, s32 a1, s32 a2);
 extern void func_002AB8C0(u8 *a0, u8 *a1);
 extern void func_002AB800(u8 *a0, u8 *a1);
