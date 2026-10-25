@@ -1354,13 +1354,32 @@ generator retains its proven original pairing rather than renaming its level
 copies. These are catalogue corrections, with no new C-match credit. Their
 retained notes in `nonmatching/` are starting points for future source work.
 
-`func_L00_0032D208` provides a separate resident-boundary lead: both direct calls
-reach `0x00132828`, the complete prologue inside the current 60-byte boot row
-`func_00132818`. The first sixteen bytes of that row are unmatched positive stack
-adjustments and padding. Its retained C names the actual callable entry and remains
-unlinked (248/260 bytes, 0/27 placements in each release with `-g`). No catalogue
-change is included: verify surrounding returns, incoming references and release
-identities, preserve the skipped bytes and original end, then fix the generator.
+**Further measured entries:** the generator also corrects the remaining supported
+core, game and level entries, with separate rules for release-specific bodies.
+Canonical names and original ends stay fixed; prefix bytes remain assembly.
+The full original code alone does not justify changing a separately named method.
+Likewise, an identity collision after shortening or removing a remnant does not
+justify renaming unaffected methods. Synthetic tests cover both collision types,
+stable replay, invalid extents and disagreement between corrected copies.
+
+`func_L00_0032D208`'s resident boundary is now resolved: both direct calls reach
+`0x00132828`, the corrected 44-byte body of canonical `func_00132818`, after sixteen
+bytes of stack-restoration remnants. Its retained C uses that canonical name and
+remains unlinked; historical results were 248/260 bytes, 0/27 placements in each
+release with `-g`. The catalogue correction does not resolve its register and
+address-reuse differences or qualify a new C match.
+
+The individually checked one-word remnants in `FUNCTION_RESIDUES` follow closed
+returns or a terminal jump and have no measured incoming references. They leave
+the catalogue while their bytes remain in assembly; identical instructions at
+other named entries remain untouched. Original notes and partial C in `nonmatching/`
+remain available as history, rather than being silently discarded.
+
+**Evidence limits remain:** a positive stack adjustment alone is not enough to
+move an entry. `func_L00_002F74F0` has an incoming reference into its proposed prefix;
+`func_00304210` lacks a corrected-entry witness at one placement. Neither is changed
+by these rules. Other candidates without entry witnesses retain their extents;
+arbitrary computed indirect targets are not disproved by the static scans.
 
 In USA v1.01, the retained `func_L07_002B3580` exposes a different case: two calls reach
 `func_001290BC + 0x24`, a measured VU normalization entry with `(output, input)`
@@ -1376,7 +1395,7 @@ The old appendix is an investigation record, not a current work queue. Filler re
 
 - func_L02_0035BD60 was reported 288 bytes with a proposed entry 0035BD70/268 bytes after a preceding tail. This audit does not adopt that correction without current extent/reference verification.
 - Fourteen level 23 candidates were reported eight bytes early: 2F7478,306630,327208,32F798,33F9B0,3427C8,36CE80,3D8EC8,3DFC20,4277B0,441DC8,442300,443788,44D7B8. The recorded positive witness was a vtable/data pointer to 004277B8 for func_L23_004277B0. Level 30 candidates003557F0,003E1BA0,00404608 were reported similarly; the prior caller referenced 00404610. These remain individually checked boundary proposals, not blanket deletion rules.
-- func_L16_00424B48 was reported as an eight-byte restore/nop prefix plus a 160-byte body at 00424B50. func_L11_00440790 was reported 212 bytes with a candidate 192-byte body and an apparently unreachable block. Neither an old size nor an apparently dead block alone proves handwritten code or authorizes a catalogue edit.
+- func_L16_00424B48's eight-byte restore/nop prefix is now independently verified and excluded; its 160-byte body starts at 00424B50. func_L11_00440790 remains a separate historical proposal (212 bytes, candidate 192-byte body and an apparently unreachable block). An old size or apparently dead block alone does not establish that second correction or handwritten code.
 - **Differing-callee case resolved:** func_L00_003F5660 now uses ref_L00_003F5660_00 and passes 27/27, including levels 08,09,19,30. The old assertion that no single definition could represent it was wrong. Genuine nonrelocated immediate differences remain a different problem.
 
 The historical full core scan reported 60 fill-starting entries rather than the earlier 26. Many simple cases were subsequently removed; mixed examples such as func_001158F4, func_0011A7F8, func_0011E920, func_0011ED28, func_0011F364, func_0011FB8C, func_00120354, func_00125D94, func_0012646C, func_0012F998 and func_00130A8C need their own boundary evidence. The old table and prose disagreed on func_0011F364: 28-byte prefix/608-byte body at 11F380 versus 4/632 at 11F368. Neither historical figure is adopted here as a verified correction. Preserve the real code until the discrepancy is resolved.
