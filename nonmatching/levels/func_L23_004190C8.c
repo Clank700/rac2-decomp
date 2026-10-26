@@ -1,16 +1,11 @@
-/* Retained C reconstruction; not linked or counted.
+/* Retained C reconstruction; not linked or counted. Updated by Opus big44, 26 October 2026.
  * Profile: -O2 -G8 -ffunction-sections.
- * Compiled 1508 bytes; retail 1520 bytes.
- * us: 0/1 placements match (exit 1).
- * us2: 0/1 placements match (exit 1).
- * pal: 0/1 placements match (exit 1).
- * Remaining: Four complete qcopy transfers in the default loop restore the 0x180 frame (formerly
- * 0x170) and reach 1508 bytes, up from 1448. Loop arrays, mask decisions and target-key
- * selection remain complete. Fill-loop allocation and vector/call scheduling still differ. The
- * final index uses the current canonical s16 func_L23_00419088 argument; its old broad-int
- * declaration is not retained.
- * Reopen: A target-picker fill-loop and live-array witness consistent with the qualified narrow
- * index contract.
+ * 379/380 instructions, 319 identical; 16 register-blind lines off (was 25).
+ * Fixed: func_L23_00419088 is called unprototyped (as in L23_00418DC0.c), so the int index
+ * passes without a sign extension; the final direction is an if/else.
+ * Remaining: the first loop's sll/sw order, the d2 argument load order in the last loop,
+ * and the tail, where retail loads idx[best] in the join before storing dir (bnez slot
+ * holds the idx address, then-arm ends in b).
  */
 
 #include "common.h"
@@ -57,7 +52,7 @@ extern int func_L23_00418F30(PickMoby *, u64, int *, int);
 
 extern int func_L23_00418FD0(PickMoby *, int, short);
 
-extern void func_L23_00419088(PickMoby *, s16);
+extern void func_L23_00419088();
 
 extern int func_L23_00419CE0(u64);
 
@@ -113,7 +108,7 @@ void func_L23_004190C8(PickMoby *arg0, u64 mask, int mode, int check) {
 
         state->dir = v == 0 ? 1 : -1;
         state->res = v;
-        func_L23_00419088(arg0, (s16)k);
+        func_L23_00419088(arg0, k);
         return;
     }
     for (i = 0; i < n; i++) {
@@ -223,8 +218,11 @@ void func_L23_004190C8(PickMoby *arg0, u64 mask, int mode, int check) {
         }
         break;
     }
+    if (res[best] == 0)
+        state->dir = 1;
+    else
+        state->dir = -1;
     k = idx[best];
-    state->dir = res[best] == 0 ? 1 : -1;
     state->res = res[best];
-    func_L23_00419088(arg0, (s16)k);
+    func_L23_00419088(arg0, k);
 }
