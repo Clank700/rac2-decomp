@@ -627,15 +627,65 @@ INCLUDE_ASM("asm/levels", func_L04_003C3BA0);
 
 INCLUDE_ASM("asm/levels", func_L04_003C4050);
 
-INCLUDE_ASM("asm/levels", func_L04_003C4858);
-
-/* A sixteen-byte record per spawn slot: three floats the level fills in. */
+/* Initialises particle i of this emitter: a random unit-cube direction, a random
+   speed, size and lifetime from the emitter's three ranges, a zero age, the current
+   colour, cleared flags and a start delay staggered by the particle's index. */
+typedef struct {
+    short first;
+    u8 pad2[6];
+    float life_min;
+    float life_max;
+    float speed_min;
+    float speed_max;
+    float size_min;
+    float size_max;
+} ParticleRanges3C4858;
 typedef struct {
     f32 x;
     f32 y;
     f32 z;
     f32 w;
 } L04SpawnRecord;
+
+extern L04SpawnRecord D_L04_0023BDD0[];
+extern f32 D_L04_0023CA50[];
+extern f32 D_L04_0023CD70[];
+extern f32 D_L04_0023D220[];
+extern f32 D_L04_0023D540[];
+extern u8 D_L04_0023D158[];
+extern u16 D_L04_0023D860[];
+extern u16 D_L04_0023D9F0[];
+extern u16 D_L04_0023DB80[];
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern s32 D_L04_001B2E70 MACRO_ADDR;
+extern u16 D_L04_001B2E74 MACRO_ADDR;
+extern f32 func_002A78D8(f32 a0, f32 a1);
+extern f32 func_002A7878(f32 a0, f32 a1);
+
+void func_L04_003C4858(void *emitter, s32 i)
+{
+    ParticleRanges3C4858 *ranges = *(ParticleRanges3C4858 **)((u8 *)emitter + 0x68);
+    L04SpawnRecord *rec;
+    f32 v;
+
+    v = func_002A78D8(0.0f, 1.0f);
+    rec = &D_L04_0023BDD0[i];
+    rec->x = v;
+    rec->y = func_002A78D8(0.0f, 1.0f);
+    rec->z = func_002A78D8(0.0f, 1.0f);
+    D_L04_0023CA50[i] = func_002A7878(ranges->speed_min, ranges->speed_max);
+    D_L04_0023CD70[i] = func_002A7878(ranges->size_min, ranges->size_max);
+    D_L04_0023D220[i] = 0.0f;
+    D_L04_0023D540[i] = func_002A7878(ranges->life_min, ranges->life_max);
+    D_L04_0023D860[i] = D_L04_001B2E74;
+    D_L04_0023D9F0[i] = 0;
+    D_L04_0023DB80[i] = (i - ranges->first + 1) * D_L04_001B2E70;
+    D_L04_0023D158[i] = 0;
+}
+
+/* A sixteen-byte record per spawn slot (L04SpawnRecord, above). */
 
 extern L04SpawnRecord D_L04_0023BDD0[];
 extern f32 D_L04_0023CA50[];

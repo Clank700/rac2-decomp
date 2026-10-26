@@ -446,7 +446,6 @@ int func_002799A8(void)
 
 
 
-INCLUDE_ASM("asm/game", func_00279BD8);
 
 INCLUDE_ASM("asm/game", func_00279D18);
 

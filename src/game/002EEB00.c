@@ -176,7 +176,6 @@ int func_002EEFE0(unsigned int arg0) {
 
 INCLUDE_ASM("asm/game", func_002EF010);
 
-INCLUDE_ASM("asm/game", func_002EF080);
 
 /* func_002EF1E8 is in 002EEB00-g8.c. */
 

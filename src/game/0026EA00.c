@@ -673,7 +673,74 @@ INCLUDE_ASM("asm/game", func_00273318);
 INCLUDE_ASM("asm/game", func_00273418);
 
 
-INCLUDE_ASM("asm/game", func_002735A0);
+/* Blends the fog preset between the two colours and depth ranges of the camera environment
+   region the position falls in (rac1's camera_switch_and_update twin). */
+typedef struct {
+    u8 pad0[0x50];
+    int flags;
+    int negative_color;
+    int positive_color;
+    float negative_depth_start;
+    float negative_value_start;
+    float negative_depth_end;
+    float negative_value_end;
+    float positive_depth_start;
+    float positive_value_start;
+    float positive_depth_end;
+    float positive_value_end;
+    u8 pad7C[4];
+} CameraEnvironmentRegion;
+typedef struct {
+    u8 r, g, b, pad3;
+    float f[4];
+} FogPresetView;
+extern CameraEnvironmentRegion D_001C1740[];
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern FogPresetView D_001B1640 MACRO_ADDR;
+extern int func_002A6640(void *, float *, int *);
+extern int func_00283CF0(float);
+
+void func_002735A0(void *position)
+{
+    float blend;
+    int region_index;
+    CameraEnvironmentRegion *region;
+    unsigned int positive_weight;
+    unsigned int negative_weight;
+    int negative_color;
+    int positive_color;
+    float inverse_blend;
+    unsigned int red, green;
+    unsigned int positive_red, negative_red, positive_green, negative_green, positive_blue, negative_blue;
+
+    if (func_002A6640(position, &blend, &region_index) == 0)
+        return;
+    region = &D_001C1740[region_index];
+    if (!(region->flags & 2))
+        return;
+    positive_weight = func_00283CF0(blend * 255.0f);
+    negative_weight = 255 - positive_weight;
+    inverse_blend = 1.0f - blend;
+    positive_color = region->positive_color;
+    negative_color = region->negative_color;
+    positive_red = (positive_color & 0xFF) * positive_weight;
+    positive_green = ((positive_color >> 8) & 0xFF) * positive_weight;
+    positive_blue = (positive_color >> 16) & 0xFF;
+    negative_red = (negative_color & 0xFF) * negative_weight;
+    negative_green = ((negative_color >> 8) & 0xFF) * negative_weight;
+    negative_blue = (negative_color >> 16) & 0xFF;
+    red = (int)(positive_red + negative_red) >> 8;
+    green = (int)(positive_green + negative_green) >> 8;
+    D_001B1640.b = (int)(positive_blue * positive_weight + negative_blue * negative_weight) >> 8;
+    D_001B1640.r = red;
+    D_001B1640.g = green;
+    D_001B1640.f[0] = (region->positive_depth_start * blend + region->negative_depth_start * inverse_blend) * 1024.0f;
+    D_001B1640.f[1] = (region->positive_depth_end * blend + region->negative_depth_end * inverse_blend) * 1024.0f;
+    D_001B1640.f[2] = 255.0f - (region->positive_value_start * blend + region->negative_value_start * inverse_blend) * 255.0f;
+    D_001B1640.f[3] = 255.0f - (region->positive_value_end * blend + region->negative_value_end * inverse_blend) * 255.0f;
+}
 
 INCLUDE_ASM("asm/game", func_00273730);
 

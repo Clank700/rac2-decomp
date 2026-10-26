@@ -1,4 +1,5 @@
 #include "include_asm.h"
+#include "common.h"
 
 /* Qwen draft (branch qwen/autonomy, c8b09022), checked by tools/check.py */
 void func_002B9180(void *);
@@ -53,7 +54,6 @@ extern void F15a8b7f0_FUN_00282CC0(char *first, char *second, char *third);
 
 extern void F15a8b7f0_FUN_002B9180(char *object);
 
-typedef unsigned char u8;
 
 extern void func_00282CC0_19(void *out, void *in, void *src);
 
@@ -75,7 +75,6 @@ extern void Fa03721e9_FUN_00282CC0(char *a, char *b, char *c);
 
 extern void Fa03721e9_FUN_002B9180(char *p);
 
-typedef int s32;
 
 #ifndef RAC2_T_S16_F570CFB4B
 #define RAC2_T_S16_F570CFB4B
@@ -84,7 +83,6 @@ typedef short s16_F570cfb4b;
 
 extern void func_002B9180_7(u8 *);
 
-typedef float f32;
 
 extern int F7cacd225_FUN_00282978(short *p);
 
@@ -841,7 +839,84 @@ void func_002C6868(char *self)
         func_002B9180(self);
 }
 
-INCLUDE_ASM("asm/game", func_002C6A08);
+/* Follows a sound emitter's moby: fades its volume byte (the top byte of +4) up by 4
+   toward the target while the moby is visible and active, else down by 4 to zero,
+   then places the emitter at the moby (or at its joint, pulled 0.4 of the way toward
+   the camera). A dead or dying moby (state 0xFE/0xFD) or none lets the emitter finish
+   and frees it. */
+typedef int TI128_2C6A08 __attribute__((mode(TI)));
+typedef struct {
+    unsigned char pad0[0x10];
+    float pos[4];
+    unsigned char state;
+    unsigned char pad21[0x10];
+    unsigned char visible;
+    unsigned char pad32[2];
+    unsigned short flags;
+} EmitterMoby2C6A08;
+typedef struct {
+    EmitterMoby2C6A08 *moby;
+    unsigned char pad4[2];
+    short joint;
+    unsigned char pad8[3];
+    signed char target;
+} EmitterRef2C6A08;
+typedef struct {
+    unsigned char pad0[4];
+    int packed;
+    unsigned char ticks;
+    unsigned char pad9[7];
+    float pos[4];
+    EmitterRef2C6A08 ref;
+} Emitter2C6A08;
+extern float D_001B5340[];
+extern int func_002A8860(void *, int);
+extern void func_0029FCC0(void *, int, void *);
+extern void func_00282CF0(void *, void *, void *);
+extern void func_00282F20(void *, void *, float);
+
+void func_002C6A08(Emitter2C6A08 *emitter)
+{
+    float joint[4];
+    float toward[4];
+    EmitterMoby2C6A08 *moby;
+    int level;
+    int target;
+    EmitterRef2C6A08 *ref;
+
+    if (emitter == 0)
+        return;
+    emitter->ticks++;
+    ref = &emitter->ref;
+    moby = ref->moby;
+    if (moby == 0 || moby->state == 0xFE || moby->state == 0xFD) {
+        if (func_002A8860(&emitter->packed, 4) != 0)
+            func_002B9180(emitter);
+        return;
+    }
+    level = emitter->packed >> 24;
+    target = ref->target;
+    if (moby->visible != 0 && !(moby->flags & 2)) {
+        if (level < target) {
+            level += 4;
+            if (target < level)
+                level = target;
+        }
+    } else {
+        level -= 4;
+        if (level < 0)
+            level = 0;
+    }
+    emitter->packed = (emitter->packed & 0xFFFFFF) | (level << 24);
+    if (ref->joint == -1) {
+        qcopy(emitter->pos, ref->moby->pos);
+        return;
+    }
+    func_0029FCC0(ref->moby, ref->joint, joint);
+    func_00282CF0(toward, D_001B5340, joint);
+    func_00282F20(toward, toward, 0.4f);
+    func_00282CC0((char *)emitter->pos, (char *)joint, (char *)toward);
+}
 
 INCLUDE_ASM("asm/game", func_002C6B68);
 

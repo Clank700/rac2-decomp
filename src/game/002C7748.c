@@ -360,7 +360,6 @@ INCLUDE_ASM("asm/game", func_002C9218);
 
 INCLUDE_ASM("asm/game", func_002C94C8);
 
-INCLUDE_ASM("asm/game", func_002C96F8);
 
 
 INCLUDE_ASM("asm/game", func_002C9828);
@@ -456,7 +455,50 @@ int func_002C9C20(void)
 
 INCLUDE_ASM("asm/game", func_002C9CF8);
 
-INCLUDE_ASM("asm/game", func_002C9E60);
+/* Uploads the saved screen image back to VRAM in 0x4000-byte strips (0x600 bytes per
+   line of the current height), from the start buffer or, when a0 is set, ending at
+   0x3FB000, after setting the restore mode (2 with a0, else 1) and bumping the frame
+   counter. */
+typedef struct { long q[12]; } GsLoadImage2C9E60 __attribute__((aligned(16)));
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern int D_001B1598 MACRO_ADDR;
+extern int D_001A7344 MACRO_ADDR;
+extern int D_001A72D4 __attribute__((sda));
+extern void func_002FC3C0(int);
+extern int func_001261F0(int);
+extern int func_00126288(GsLoadImage2C9E60 *, short, short, short, short, short, short, short);
+extern void func_0011AEA0(int);
+extern int func_001265B0(GsLoadImage2C9E60 *, void *);
+extern int func_001244B8(int, int);
+
+void func_002C9E60(int a0)
+{
+    GsLoadImage2C9E60 li;
+    int remaining;
+    int dest;
+    char *src;
+    char *state = D_001F2840;
+
+    *(int *)(state + 0xD0) = a0 != 0 ? 2 : 1;
+    func_002FC3C0(1);
+    func_001261F0(0);
+    D_001B1598++;
+    remaining = D_001A7344 * 0x600;
+    src = *(char **)(state + 0x20);
+    dest = D_001A72D4;
+    if (a0 != 0)
+        dest = 0x3FB000 - remaining;
+    for (; remaining >= 0; remaining -= 0x4000) {
+        func_00126288(&li, dest >> 8, 1, 0, 0, 0, 64, 64);
+        dest += 0x4000;
+        func_0011AEA0(0);
+        func_001265B0(&li, src);
+        src += 0x4000;
+        func_001244B8(0, 0);
+    }
+}
 
 
 INCLUDE_ASM("asm/game", func_002CA070);

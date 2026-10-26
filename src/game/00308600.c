@@ -25,7 +25,7 @@ INCLUDE_ASM("asm/game", func_0030CAD0);
 
 INCLUDE_ASM("asm/game", func_0030CCD0);
 
-INCLUDE_ASM("asm/game", func_0030D430);
+/* func_0030D430 is matched in its own unit, src/game/0030D430-g8.c. */
 
 INCLUDE_ASM("asm/game", func_0030D5B8);
 
