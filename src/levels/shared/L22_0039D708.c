@@ -27,9 +27,10 @@ INCLUDE_ASM("asm/levels", func_L22_003A2160);
 
 INCLUDE_ASM("asm/levels", func_L22_003A2780);
 
-INCLUDE_ASM("asm/levels", func_L22_003A2988);
+/* func_L22_003A2988 is defined in L22_003A2988-qcopy-barrier.c. */
 
-INCLUDE_ASM("asm/levels", func_L22_003A2A28);
+/* func_L22_003A2A28 is defined in L22_003A2A28-qcopy-barrier.c. */
+
 extern int func_L22_003A48F8(int);
 
 /* Collects the set bit positions of VALUE, keeping those a null FLAG lets

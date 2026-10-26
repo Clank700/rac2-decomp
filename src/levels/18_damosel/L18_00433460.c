@@ -124,7 +124,7 @@ INCLUDE_ASM("asm/levels", func_L18_0043C778);
 
 INCLUDE_ASM("asm/levels", func_L18_0043CAF8);
 
-INCLUDE_ASM("asm/levels", func_L18_0043F130);
+/* func_L18_0043F130 is defined in L18_0043F130-qcopy-barrier.c. */
 
 INCLUDE_ASM("asm/levels", func_L18_0043F308);
 

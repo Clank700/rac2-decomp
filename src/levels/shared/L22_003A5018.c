@@ -233,7 +233,7 @@ INCLUDE_ASM("asm/levels", func_L22_003F5688);
 
 /* func_L22_003F58F8 is defined in L22_003A5018-g8.c (it reads $gp data outside a delay slot). */
 
-INCLUDE_ASM("asm/levels", func_L22_003F85A0);
+/* func_L22_003F85A0 is defined in L22_003F85A0-flags-g8.c. */
 
 /* func_L22_003F8658 is defined in L22_003F8658-helper-g8.c. */
 

@@ -72,7 +72,7 @@ INCLUDE_ASM("asm/levels", func_L08_003F6568);
 
 INCLUDE_ASM("asm/levels", func_L08_003F6610);
 
-INCLUDE_ASM("asm/levels", func_L08_0041E4F8);
+/* func_L08_0041E4F8 is defined in L08_0041E4F8-flags-g8.c. */
 
 /* shared native body of family c459a266b43242d6 */
 void func_L08_0041E630(float *a0, float *a1, float *a2, float *a3, float *p4)
