@@ -18,7 +18,7 @@ extern void func_00335668(BatchA_A18_u8 *a0, BatchA_A18_s32 a1, BatchA_A18_s32 a
 
 extern BatchA_A18_u8 D_0018C0D4;
 
-INCLUDE_ASM("asm/levels", func_L18_002C4000);
+/* func_L18_002C4000 is defined in L18_002C4000-hero.c. */
 
 /* func_L18_002C41F0 is defined in L18_002C4000-g8.c (this unit has $gp access for it). */
 

@@ -75,7 +75,6 @@ struct S {
     unsigned short flags;
 };
 
-INCLUDE_ASM("asm/levels", func_L00_002C2DE8);
 
 INCLUDE_ASM("asm/levels", func_L00_002C30B0);
 

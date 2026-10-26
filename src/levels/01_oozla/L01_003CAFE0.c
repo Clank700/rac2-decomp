@@ -89,7 +89,6 @@ void func_L01_003CC898(u8 *a0, u32 a1, u32 a2, u8 a3, u8 *a4)
     *s1 = 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L01_003CC930);
 
 INCLUDE_ASM("asm/levels", func_L01_003CDB40);
 

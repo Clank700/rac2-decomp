@@ -527,7 +527,6 @@ void func_L03_0043AC78(void) {
 
 extern void func_L03_0043ACD8(void);
 
-INCLUDE_ASM("asm/levels", func_L03_0043AD30);
 
 /* rac1-decomp src/game/stub.c: func_001E97C8 */
 /* Takes an argument (callers pass one, e.g. r1_func_001EC210) and ignores

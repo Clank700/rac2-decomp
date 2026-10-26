@@ -25,7 +25,6 @@ typedef struct {
     s32 fielde0, fielde4, fielde8, fieldec, fieldf0, fieldf4;
 } JobaClassCounterView;
 
-INCLUDE_ASM("asm/levels", func_L11_0043E1A0);
 
 /* bumps the 0xFFFF-saturated counter, then starts the state's timer and reports the object */
 extern u8 D_L11_004465F8[];

@@ -1,14 +1,8 @@
-/* Complete reconstruction; one branch target off (not linked).
- * Profile: -O2 -G0 -ffunction-sections (split addresses: retail keeps %hi(D_00189E20) in $s1).
- * 496/496 bytes, us 0/3 at +0x1CC only. 26 October 2026 (M10): the hero block through the Hero
- * union view (constant-address fields legitimized as a based register) closes every other
- * difference. Left: the last `beqz` (% 6 test) branches to the epilogue's `ld $s0` in retail,
- * one past it in ours (reorg treats the restore already done in the earlier bne slot as
- * redundant). Nested-if, return and inverted forms of the tail compile identically.
- * EXACT 3/3 in every release under the held compiler change on branch
- * hold/compiler-trap-redundant-barrier (f67a3bd6: reorg's redundant_insn search stops at a
- * division guard), found by M4. Land in src only once that change is approved.
- */
+/* func_L18_002C4000 (496 bytes, 3 places: levels 18, 19 and 20), in its own unit for the hero
+ * union view: the hero's fixed-address fields are read through one based register. The last
+ * beqz (the % 6 test) reaches the epilogue's ld $s0 through the division-guard barrier on
+ * reorg's redundant-insn search (docs/COMPILER-NOTES.md, "a division guard ends the
+ * redundant-insn search"). */
 #include "common.h"
 typedef unsigned int TI128 __attribute__((mode(TI)));
 typedef union { u8 b[0x2600]; s16 h[0x1300]; s32 i[0x980]; u32 u[0x980]; f32 f[0x980]; u8 *ptr[0x980]; TI128 q[0x260]; } Hero;

@@ -1,54 +1,21 @@
-/*
- * Opus near miss (slates big22, big28 and the reorg research, 2026-10-26); no linked-build or
- * runtime credit.
- * Profile: -O2 -G64 -Wa,-G64 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier,
- * in its own unit (e.g. src/levels/11_joba/L11_0043E1A0-main-g64.c); remove the
- * INCLUDE_ASM from L11_0043E1A0.c when placing it.
- * Measurement: 8096/8096 bytes, 2024/2024 instructions; every opcode in place; first
- * difference +0x1BE0 (0043FD80): 12 same-opcode register differences in one block, the
- * rest of check.py's register column is unrelocated immediates. Frame (0xD0), saved set
- * s0-s6/f20-f21, obj in s4 and state in s3 match.
- *
- * What got it here (big22, each one moved hundreds of instructions):
+/* func_L11_0043E1A0 in its own unit (-G64 -Wa,-G64: the 56-byte class table is small data).
+ * What decided the match:
  * - The state block and the object are real structs (JobaState, JobaObj), not byte views.
  * - Globals by retail form: lui/load in ordinary flow plus $gp in delay slots = a plain
- *   sized scalar; $gp everywhere = sda with its measured size (-G64 for the 56-byte class
- *   table); explicit %hi/%lo = incomplete array.
- * - One local per job; sprintf arguments inline; each sprintf buffer in a nested block.
- * big28 added:
- * - The clear loops count up (k = 0; k < N; k++): loop.c reverses them, and the reversed
- *   biv/giv inits land after gcse's preheader insertions as in retail. The marks and
- *   limits loops share one counter (a0).
- * - Case 2's shared tail is written out in phase 3's else (as an `else if (... != 0)`)
- *   and in phase 1, not reached by a goto: CSE follows phase 3's single-use jump and
- *   reuses s0 = &D_001395B8, and jump2's cross-jumping merges the copies from the call
- *   on. That is retail's "full address carried into the shared block".
- * - Case 9's 13-or-5 code is written per arm with the timer store in each arm, so
- *   cross-jumping keeps retail's then-arm + b instead of jump.c's conditional set.
- * - The sound-slot blocks read st->sound before the slot test (snd1..snd3) and pass the
- *   second slot's buffer as a pointer plus 0xE0 (retail's unfolded addiu pair).
- * - Index-first sums where retail adds the index register first: the camera offset as
- *   D_L11_001B368C + ((camera << 7) + 0x30), the choice table as idx[D_L11_00279BA0].
- *
- * The reorg research (docs/COMPILER-NOTES.md, "reorg: which global loads may fill a slot")
- * closed the three slots and case 8's block, all by declaration, not by compiler change:
- * - 0x001B3774 is element 1 of the sound pair D_L11_001B3770[2]: a symbol+offset access is
- *   length 2 in this cc1 and never fills a slot, so the owner tests' bnez slots stay empty
- *   (0043F384, 0043FC48), while the bare element 0 is stolen as in retail (0043F1E8).
- * - The height band's bounds are two sda scalars, D_L11_001B1580 and D_L11_001B1584: the
- *   bare second bound is length 1 and fills the first bc1f slot from the fall-through
- *   (0043F770), so the D_L11_001A8FF4 load is no longer stolen from the target.
- * - Case 8's wave end reads the class as (u16) into cls3 right after cls1, before the wave
- *   test: a load through $s3 may trap, so it can only reach the bnez slot (0043ED0C) from
- *   before the branch, which also gives retail's count in v0 and class in a1.
- *
- * Remaining difference (allocation, no missing code):
- * - 0043FD80-0043FDE0 (case 9, the class-12 timeout after func_L00_0030DD70): the
- *   light/lamp pointer registers are rotated (retail: light index v0, D_L11_001A9014 in
- *   a2, lamp index v1, moby base a3; here v1, v0, a3, v1). The lreg dump shows the four
- *   pseudos with equal live lengths, so local-alloc's tie order is the likely decider (not
- *   instrumented); the lt4/m2 statement order, inline stores, a closed buf block and
- *   index-first sums do not move it.
+ *   sized scalar; $gp everywhere = sda with its measured size; explicit %hi/%lo = an
+ *   incomplete array. 0x001B3774 is element 1 of the sound pair D_L11_001B3770[2] (a
+ *   symbol+offset access never fills a slot); the height band's bounds are two sda scalars.
+ * - The clear loops count up; the marks and limits loops share one counter.
+ * - Case 2's shared tail is written out per arm; case 9's 13-or-5 code per arm with the
+ *   timer store in each arm (cross-jumping keeps retail's then-arm + b).
+ * - The sound-slot blocks read st->sound before the slot test and pass the second slot's
+ *   buffer as a pointer plus 0xE0; index-first sums where retail adds the index first.
+ * - Case 8's wave end reads the class as (u16) into cls3 right after cls1.
+ * - func_L00_0030DD70 is called for its effect only and declared void here: its ignored
+ *   $v0 result otherwise takes v0 from the case-9 light/lamp chain in local-alloc.
+ *   (Its definition in src/levels/shared/L00_002FC7A0.c returns its argument or the
+ *   helper's value.)
+ * - Case 9's start flags are set D_L11_001A8FF4 first, then D_L11_001A8FF0.
  */
 #include "common.h"
 
@@ -236,7 +203,9 @@ extern void func_L00_002D40A0(void *, int, float);
 extern void func_L00_002E6CF0(void *, void *);
 extern void func_L00_002E6EF8(void *, void *);
 extern void func_L00_00303530(int, int);
-extern int func_L00_0030DD70(int, int);
+/* Defined returning int (L00_002FC7A0.c), but retail compiled this caller as a void call, as
+   the registers after the call show: the original header evidently declared it void. */
+extern void func_L00_0030DD70(int, int);
 extern int func_L00_003206B8(void *, int);
 extern void func_L00_003294F0(u8 *, s32);
 extern void func_L00_003672F8(void);
@@ -829,8 +798,8 @@ void func_L11_0043E1A0(u8 *obj) {
             }
             if (D_L11_001A8FF4 == 0) {
                 if (HERO->f[0x88 / 4] > 480.0f && HERO->f[0x180 / 4] < 0.033333335f) {
-                    D_L11_001A8FF0 = 1;
                     D_L11_001A8FF4 = 1;
+                    D_L11_001A8FF0 = 1;
                     func_L11_00447360((char *)obj);
                     func_L11_00447018(obj, 5);
                 }

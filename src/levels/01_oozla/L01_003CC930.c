@@ -1,30 +1,18 @@
-/* func_L01_003CC930 (4,624 B, 1 place): Opus near miss (big33, 2026-10-26).
- * Profile: own unit L01_003CAFE0-g8.c style, -O2 -G8 -ffunction-sections.
- * 1156/1156 instructions, 1124 aligned with registers (scorer: big25 kit).
- * Spellings that mattered: plain (not sda) scalars for D_L01_001B255C /
- * 001B2088 / 001A8F40 / 001B264C / 001A79F0 (lui/lw in flow, $gp in delay
- * slots); sda scalars for the 0x13A0..0x13DC $gp block; a sized sda
- * table D_L01_001B03D8[2]; func_00355828 returns a value (keeps v1 free and
- * stops a cross-jump); one local per case (e1/e2/e9, pos5/pos6, f5/f7...);
- * separate counters per loop; for (i = 1; i < 8; i++) with i + 1 as the
- * second call's argument; the four post-loop z adds in v20,v40,v30,v50
- * order; atan results in a temp before func_00310D28 / func_002E4548;
- * the mode-7 clamp as a ternary.
- * Remaining (about 30 words):
- *  - mode 6: the spill slots of the gcse PRE pseudos for &v30/&v40/&v50/
- *    &v80/pv+0xDE are in a different order (ours 9C=v30 A0=v40 A4=v50
- *    A8=v80 AC=DE, retail 9C=v40 A0=v50 A4=v80 A8=DE AC=v30).  pre_delete
- *    creates those pseudos in hash-bucket order; the expression hash
- *    table has n_insns/2|1 buckets (561 here).  Retail's order needs 587
- *    or 503 buckets, so retail's body had about 50 more (or 116 fewer)
- *    insns at gcse time.  Hash base for (plus (reg 1) N) is 14030 + N.
- *  - mode 7: the 0.0f of the clamp is shared (CSE) with the later
- *    pv->0x20 <= 0 test and lands in $f20 before func_002E35A0; retail
- *    materialises it twice ($f2, $f0).
- *  - mode 5: 0xF0 constant in v0 instead of v1 (2 words).
- *  - D_L01_001B03D8[2] is sized only to get the $gp address; its real
- *    extent (indexed by func_002D9308() - 1) must be measured before this
- *    goes into src/ (COMPILER-NOTES: never understate an object).
+/* func_L01_003CC930 (4,624 bytes, 1 place). -O2 -G16 -Wa,-G16 -ffunction-sections
+ * -frac2-hazard-labels.
+ * - Plain (not sda) scalars for D_L01_001B255C / 001B2088 / 001A8F40 / 001B264C /
+ *   001A79F0 (lui/lw in flow, $gp in delay slots); sda scalars for the 0x13A0..0x13DC
+ *   $gp block; D_L01_001B03D8 is a 16-byte sda table (D_L01_001B03E8 follows it), which
+ *   needs -G16.
+ * - func_00355828, func_00337A60 and func_00355780 return values: v0 stays taken after
+ *   the calls, so the constants stored after them are built in v1, as retail.
+ * - One local per case and per loop; the mode-7 clamp as an if; qzero_nc for the
+ *   pv+0xA0 clear (cse forgets its 0.0f there, so the later <= 0 test builds its own).
+ * - Every local is initialised where it is declared and call results are named
+ *   locals. The dead initialisers are deleted by flow but counted by gcse: 1,173
+ *   insns give a 587-bucket expression table and retail's spill-slot order for the PRE
+ *   addresses &v30/&v40/&v50/&v80/pv+0xDE (bucket of (plus (reg 1) N) is
+ *   (14030 + N) % buckets). 1,172-1,175 insns all match.
  */
 #include "common.h"
 
@@ -52,7 +40,7 @@ extern f32 D_L01_001B03C4 __attribute__((sda));
 extern f32 D_L01_001B03C8 __attribute__((sda));
 extern s32 D_L01_001B03CC __attribute__((sda));
 extern s32 D_L01_001B03D0 __attribute__((sda));
-extern s32 D_L01_001B03D8[2] __attribute__((sda));
+extern s32 D_L01_001B03D8[4] __attribute__((sda));
 extern u8 *D_L01_001FE180[];
 typedef struct { u8 pad[0x160]; f32 f160; s32 pad164; s32 i168; s32 i16C; } L01Fx;
 extern L01Fx D_L01_001B9380;
@@ -89,9 +77,9 @@ extern s32 func_00311B48(void *, void *, s32);
 extern s32 func_00312B68(u8 *, s32, s32);
 extern void func_00316348(void *, f32);
 extern u8 *func_00327360(void *, void *, void *, s32, s32, s32, s32, s32, s32);
-extern void func_00337A60(void *, void *, void *, s32);
+extern s32 func_00337A60(void *, void *, void *, s32);
 extern void func_0034ECD0(void *, void *);
-extern void func_00355780(s32, s32, u8 *);
+extern s32 func_00355780(s32, s32, u8 *);
 extern s32 func_00355828(s32, s32, u8 *, s32);
 extern void func_L01_003CBCD8(u8 *, s32, s32, s32);
 extern void func_L01_003CBFA8(u8 *);
@@ -110,34 +98,59 @@ void func_L01_003CC930(u8 *self)
     f32 v60[4];
     f32 v70[4];
     f32 v80[4];
-    u8 *pv;
-    u8 *e1;
-    u8 *e2;
-    u8 *e9;
-    u8 *tgt5;
-    u8 *tgt7;
-    u8 *tbl7a;
-    u8 *tbl7b;
-    u8 *pos5;
-    u8 *pos6;
-    u8 *pos7;
-    u8 *p;
-    s32 flag;
-    s32 i1;
-    s32 i2;
-    s32 j;
-    s32 a;
-    s32 b;
-    s32 c;
-    f32 d;
-    f32 f5;
-    f32 f6a;
-    f32 f6;
-    f32 f7;
-    f32 dir5a;
-    f32 dir5b;
-    f32 dir6a;
-    f32 dir6b;
+    u8 *pv = 0;
+    u8 *e1 = 0;
+    u8 *e2 = 0;
+    u8 *e9 = 0;
+    u8 *tgt5 = 0;
+    u8 *tgt7 = 0;
+    u8 *tbl7a = 0;
+    u8 *tbl7b = 0;
+    u8 *pos5 = 0;
+    u8 *pos6 = 0;
+    u8 *pos7 = 0;
+    u8 *p = 0;
+    s32 flag = 0;
+    s32 i1 = 0;
+    s32 i2 = 0;
+    s32 j = 0;
+    s32 a = 0;
+    s32 b = 0;
+    s32 c = 0;
+    f32 d = 0.0f;
+    f32 f5 = 0.0f;
+    f32 f6a = 0.0f;
+    f32 f6 = 0.0f;
+    f32 f7 = 0.0f;
+    f32 dir5a = 0.0f;
+    f32 dir5b = 0.0f;
+    f32 dir6a = 0.0f;
+    f32 dir6b = 0.0f;
+    u8 *e0 = 0;
+    u8 *e3 = 0;
+    u8 *hero5 = 0;
+    u8 *hero6 = 0;
+    s32 lv = 0;
+    f32 rnd = 0.0f;
+    f32 ra = 0.0f;
+    f32 rb = 0.0f;
+    f32 rc = 0.0f;
+    s32 mode6 = 0;
+    s32 hit7 = 0;
+    s32 busy1 = 0;
+    s32 busy2 = 0;
+    s32 busy3 = 0;
+    f32 scale3 = 0.0f;
+    f32 yaw5a = 0.0f;
+    f32 yaw5b = 0.0f;
+    f32 yaw6a = 0.0f;
+    f32 yaw6b = 0.0f;
+    f32 spinx = 0.0f;
+    f32 spiny = 0.0f;
+    f32 rise = 0.0f;
+    f32 scale6 = 0.0f;
+    f32 scale7 = 0.0f;
+    s32 busy8 = 0;
 
     pv = *(u8 **)(self + 0x68);
     func_L01_003CC280(self);
@@ -164,7 +177,8 @@ void func_L01_003CC930(u8 *self)
             }
             if (*(s32 *)(pv + 0xC0) > 0)
                 flag = 1;
-            if (func_00312B68(D_L01_001B255C + (*(s32 *)(pv + 0xB4) << 8), 0x10001, 0) != 0)
+            e0 = D_L01_001B255C + (*(s32 *)(pv + 0xB4) << 8);
+            if (func_00312B68(e0, 0x10001, 0) != 0)
                 flag = 1;
             if (flag) {
                 *(u16 *)(self + 0x34) &= 0xEFFF;
@@ -189,11 +203,13 @@ void func_L01_003CC930(u8 *self)
             func_00310418(self, 2, 1);
             break;
         case 2:
-            if (func_003104E8(4) == 0)
+            busy1 = func_003104E8(4);
+            if (busy1 == 0)
                 func_L01_003CBCD8(self, 3, 10, 1);
             if (!(self[0x60] & 2))
                 break;
-            (D_L01_001B255C + (*(s32 *)(pv + 0xB4) << 8))[0x95] = 1;
+            e3 = D_L01_001B255C + (*(s32 *)(pv + 0xB4) << 8);
+            e3[0x95] = 1;
             if (*(s32 *)(pv + 0xEC) == -1)
                 goto done;
             if (*(f32 *)(pv + 0xD4) > 0.0f)
@@ -209,7 +225,8 @@ void func_L01_003CC930(u8 *self)
         }
         break;
     case 2:
-        if (func_003104E8(5) == 0)
+        busy2 = func_003104E8(5);
+        if (busy2 == 0)
             func_L01_003CBCD8(self, 3, 10, 1);
         if ((self[0x42] == 6 || self[0x42] == 10) && (self[0x60] & 2)) {
             if (*(f32 *)(pv + 0xD4) > 0.0f)
@@ -222,14 +239,16 @@ void func_L01_003CC930(u8 *self)
         }
         break;
     case 3:
-        if (func_003104E8(5) == 0)
+        busy3 = func_003104E8(5);
+        if (busy3 == 0)
             func_L01_003CBCD8(self, 3, 10, 1);
         if (self[0x60] & 2) {
             *(u16 *)(self + 0x34) |= 0x1000;
             *(s32 *)(pv + 0xC0) = 0xF0;
             if (self[0x43] != 1)
                 func_00310138(self, 1, 0, func_00310528(10, 15));
-            *(f32 *)(self + 0x48) = func_00310580(0.8f, 1.2f);
+            scale3 = func_00310580(0.8f, 1.2f);
+            *(f32 *)(self + 0x48) = scale3;
             *(s32 *)(pv + 0xF0) = *(s32 *)(pv + 0xEC);
             func_00310418(self, 0, 5);
         }
@@ -258,7 +277,8 @@ void func_L01_003CC930(u8 *self)
             qcopy(pv + 0x90, pv + 0x80);
             tgt5 = pv + 0x90;
         }
-        if (*(u8 **)(pv + 0x70) == ((Hero *)D_00189E20)->ptr[0x2290 / 4]) {
+        hero5 = ((Hero *)D_00189E20)->ptr[0x2290 / 4];
+        if (*(u8 **)(pv + 0x70) == hero5) {
             func_002E34E0(v10, &((Hero *)D_00189E20)->b[0x110], D_L01_001B0390);
             func_002E3470(v10, v10, *(u8 **)(pv + 0x70) + 0x10);
         } else {
@@ -273,7 +293,8 @@ void func_L01_003CC930(u8 *self)
         dir5a = 0.09599312f;
         if (pv[0xDD] != 0)
             dir5a = -0.09599312f;
-        *(f32 *)(self + 0xF8) = func_002E4460(*(f32 *)(self + 0xF8), dir5a);
+        yaw5a = func_002E4460(*(f32 *)(self + 0xF8), dir5a);
+        *(f32 *)(self + 0xF8) = yaw5a;
         f5 = func_002E3B10(v10[0] - *(f32 *)(self + 0x10), v10[1] - *(f32 *)(self + 0x14));
         func_00310D28(self, pv + 0xCC, f5, 0.002327106f, 0.1f, 0.13962637f);
         if (self[0x60] & 2)
@@ -298,7 +319,8 @@ void func_L01_003CC930(u8 *self)
         dir5b = 0.09599312f;
         if (pv[0xDD] != 0)
             dir5b = -0.09599312f;
-        *(f32 *)(self + 0xF8) = func_002E44A8(*(f32 *)(self + 0xF8), dir5b);
+        yaw5b = func_002E44A8(*(f32 *)(self + 0xF8), dir5b);
+        *(f32 *)(self + 0xF8) = yaw5b;
         break;
     case 6:
         pos6 = self + 0x10;
@@ -334,15 +356,18 @@ void func_L01_003CC930(u8 *self)
             func_00355780(2, 0, self);
             pv[0xDE] = 1;
         }
-        D_L01_001B03D0 = D_L01_001B03D8[func_002D9308(self[0xB0]) - 1];
+        lv = func_002D9308(self[0xB0]);
+        D_L01_001B03D0 = D_L01_001B03D8[lv - 1];
         if (d < (f32)D_L01_001B03D0 &&
             (d < 20.0f || (((Hero *)D_00189E20)->i[0x340 / 4] != 0 && ((Hero *)D_00189E20)->h[0x34E / 2] == 0 &&
                            ((Hero *)D_00189E20)->i[0x229C / 4] != 4))) {
             dir6a = 0.09599312f;
             if (pv[0xDD] != 0)
                 dir6a = -0.09599312f;
-            *(f32 *)(self + 0xF8) = func_002E4460(*(f32 *)(self + 0xF8), dir6a);
-            if (*(u8 **)(pv + 0x70) == ((Hero *)D_00189E20)->ptr[0x2290 / 4]) {
+            yaw6a = func_002E4460(*(f32 *)(self + 0xF8), dir6a);
+            *(f32 *)(self + 0xF8) = yaw6a;
+            hero6 = ((Hero *)D_00189E20)->ptr[0x2290 / 4];
+            if (*(u8 **)(pv + 0x70) == hero6) {
                 func_002E34E0(v20, &((Hero *)D_00189E20)->b[0x110], 55.0f - d);
                 func_002E3470(v20, v20, *(u8 **)(pv + 0x70) + 0x10);
             } else {
@@ -353,7 +378,8 @@ void func_L01_003CC930(u8 *self)
             dir6b = 0.09599312f;
             if (pv[0xDD] != 0)
                 dir6b = -0.09599312f;
-            *(f32 *)(self + 0xF8) = func_002E44A8(*(f32 *)(self + 0xF8), dir6b);
+            yaw6b = func_002E44A8(*(f32 *)(self + 0xF8), dir6b);
+            *(f32 *)(self + 0xF8) = yaw6b;
         }
         if (d > 55.0f && d < 58.0f) {
             if (d <= 56.0f) {
@@ -365,7 +391,8 @@ void func_L01_003CC930(u8 *self)
             for (i2 = 1; i2 < 8; i2++) {
                 func_00307390(self, i2, v20);
                 f6 = func_00311A00(v20, 2, 0.5f);
-                if (func_002D77E8() != 3)
+                mode6 = func_002D77E8();
+                if (mode6 != 3)
                     break;
             }
             v20[2] = f6;
@@ -375,19 +402,24 @@ void func_L01_003CC930(u8 *self)
             qzero(v80);
             v80[3] = D_L01_001B03BC;
             for (j = 0; j < D_L01_001B03CC; j++) {
-                func_002E34E0(v40, v30, func_00310580(0.0f, 1.0f));
+                rnd = func_00310580(0.0f, 1.0f);
+                func_002E34E0(v40, v30, rnd);
                 func_00316348(v40, 0.1f);
                 func_002E3470(v40, v40, v20);
-                func_002E3738(v60, self + 0xD0,
-                              func_00310580(-(D_L01_001B03C4 * 0.016666668f), D_L01_001B03C4 * 0.016666668f));
-                func_002E3738(v70, self + 0xC0,
-                              func_00310580(-(D_L01_001B03C8 * 0.016666668f), D_L01_001B03C8 * 0.016666668f));
+                spinx = func_00310580(-(D_L01_001B03C4 * 0.016666668f), D_L01_001B03C4 * 0.016666668f);
+                func_002E3738(v60, self + 0xD0, spinx);
+                spiny = func_00310580(-(D_L01_001B03C8 * 0.016666668f), D_L01_001B03C8 * 0.016666668f);
+                func_002E3738(v70, self + 0xC0, spiny);
                 func_002E3470(v50, v60, v70);
-                v50[2] = func_00310580(0.0f, D_L01_001B03C0 * 0.016666668f);
+                rise = func_00310580(0.0f, D_L01_001B03C0 * 0.016666668f);
+                v50[2] = rise;
                 v50[3] = D_L01_001B03B8;
-                a = func_002E45B8(func_00310580(D_L01_001B03A0, D_L01_001B03A4));
-                b = func_002E45B8(func_00310580(D_L01_001B03A8, D_L01_001B03AC));
-                c = func_002E45B8(func_00310580(D_L01_001B03B0, D_L01_001B03B4));
+                ra = func_00310580(D_L01_001B03A0, D_L01_001B03A4);
+                a = func_002E45B8(ra);
+                rb = func_00310580(D_L01_001B03A8, D_L01_001B03AC);
+                b = func_002E45B8(rb);
+                rc = func_00310580(D_L01_001B03B0, D_L01_001B03B4);
+                c = func_002E45B8(rc);
                 p = func_00327360(v40, v50, v80, D_L01_001B0398, D_L01_001B039C, a, b, c, -1);
                 if (p != 0 && (func_001163B0() & 1))
                     p[3] = 0x48;
@@ -398,7 +430,8 @@ void func_L01_003CC930(u8 *self)
             *(s32 *)(pv + 0xC4) = 0xB4;
             if (self[0x43] != 1)
                 func_00310138(self, 1, 0, func_00310528(10, 15));
-            *(f32 *)(self + 0x48) = func_00310580(0.8f, 1.2f);
+            scale6 = func_00310580(0.8f, 1.2f);
+            *(f32 *)(self + 0x48) = scale6;
             func_00310418(self, 0, 5);
         }
         break;
@@ -407,7 +440,8 @@ void func_L01_003CC930(u8 *self)
         pos7 = self + 0x10;
         func_002E3470(v10, pos7, pv + 0xA0);
         tbl7a = D_L01_001FE180[*(s32 *)(pv + 0xB8)];
-        if (func_00311B48(v10, tbl7a + 0x10, *(s32 *)tbl7a) != 0) {
+        hit7 = func_00311B48(v10, tbl7a + 0x10, *(s32 *)tbl7a);
+        if (hit7 != 0) {
             qcopy(pos7, v10);
         } else {
             tbl7b = D_L01_001FE180[*(s32 *)(pv + 0xB8)];
@@ -417,11 +451,13 @@ void func_L01_003CC930(u8 *self)
             func_002E3470(pos7, pos7, v20);
         }
         f7 = func_002E35A0((pv + 0xA0)) - 0.0030555557f;
-        f7 = (f7 < 0.0f) ? 0.0f : f7;
+        if (f7 < 0.0f) {
+            f7 = 0.0f;
+        }
         func_002E3738((pv + 0xA0), (pv + 0xA0), f7);
         if (!(self[0x60] & 2))
             break;
-        qzero((pv + 0xA0));
+        qzero_nc((pv + 0xA0));
         if (*(f32 *)(pv + 0x20) <= 0.0f) {
             if (self[0x42] == 3) {
                 if (self[0x43] != 4)
@@ -435,12 +471,14 @@ void func_L01_003CC930(u8 *self)
             *(s32 *)(pv + 0xC4) = 0;
             if (self[0x43] != 1)
                 func_00310138(self, 1, 0, func_00310528(10, 15));
-            *(f32 *)(self + 0x48) = func_00310580(0.8f, 1.2f);
+            scale7 = func_00310580(0.8f, 1.2f);
+            *(f32 *)(self + 0x48) = scale7;
             func_00310418(self, 0, 5);
         }
         break;
     case 8:
-        if (func_003104E8(4) == 0)
+        busy8 = func_003104E8(4);
+        if (busy8 == 0)
             func_L01_003CBCD8(self, 3, 10, 1);
         if (!(self[0x60] & 2))
             break;

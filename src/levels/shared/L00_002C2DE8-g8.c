@@ -1,9 +1,8 @@
-/* 708/708 bytes, first difference +0x70 in both USA releases; canonical name absent from PAL. The two timer cadences, three probes and real object argument to func_002ABB78 are reconstructed. The first callee genuinely varies by placement and uses a scoped void(void) reference. The clock has one canonical identity D_L00_001B19C8: its absolute and GP reads are not represented as invented duplicate extern objects. After merging the experimental duplicate view, reload/CSE scheduling differs again; the second vector-call argument moves also differ. Reopen with a source model of the real clock reload and pointer/flag/float argument setup, preserving the existing truthful callee prototype.
- * Profile: -O2 -G0 -ffunction-sections
- * us: instruction at +0x70 differs; 0/27 placements
- * us2: instruction at +0x70 differs; 0/27 placements
- */
-#include "include_asm.h"
+/* func_L00_002C2DE8 (708 bytes, 27 places), in its own -G8 unit: the frame counter
+ * D_L00_001B19C8 is one .sdata word, read as a lui/lw macro in ordinary flow and through $gp
+ * in a delay slot (the reload after the % 3 guard, docs/COMPILER-NOTES.md, "a division guard
+ * ends the redundant-insn search"). */
+#include "common.h"
 typedef struct {
     unsigned char pad0[0x264]; float scale;
     unsigned char pad1[0x278 - 0x268]; float height;
@@ -22,13 +21,13 @@ typedef struct {
 } SceneProbeState;
 extern SceneProbeState D_L00_001BF200;
 
-extern int D_L00_001B19C8 __attribute__((sda));
+extern int D_L00_001B19C8 MACRO_ADDR;
 extern void ref_L00_002C2DE8_00(void);
 extern int func_L00_002AB108(float *, float, float);
 extern float func_00282E20(void *);
 extern float func_00283248(float, float);
 extern int func_002ABB78(void *);
-extern void func_L00_002D36E0(float *, int, float, float, float);
+extern void func_L00_002D36E0(float *, float, float, int, float);
 extern int func_002761F8(void *, void *, int, void *, int);
 extern float func_00282E48(void *, void *);
 extern int func_00277258(void *, int, void *, float);
@@ -56,8 +55,8 @@ void func_L00_002C2DE8(void)
         D_00189E20.valid = 0;
         D_00189E20.distance = 0.0f;
         if (D_00189E20.enabled == 0) return;
-        func_L00_002D36E0(first, 1, 1.1f, 0.0f, 1.0f);
-        func_L00_002D36E0(second, 1, 1.1f, 0.0f, -20.0f);
+        func_L00_002D36E0(first, 1.1f, 0.0f, 1, 1.0f);
+        func_L00_002D36E0(second, 1.1f, 0.0f, 1, -20.0f);
         if (second[2] < 0.5f) second[2] = 0.5f;
         distance = 20.0f;
         hit = func_002761F8(first, second, 2, D_00189E20.object, 0);
@@ -65,7 +64,7 @@ void func_L00_002C2DE8(void)
         if (!hit || 3.0f < distance) {
             offset = -0.4f;
             do {
-                func_L00_002D36E0(probe, 1, offset + 1.1f, 0.0f, 0.0f);
+                func_L00_002D36E0(probe, offset + 1.1f, 0.0f, 1, 0.0f);
                 if (!func_00277258(probe, 2, 0, D_00189E20.scale)) {
                     D_00189E20.valid = 1;
                     if (!hit) D_00189E20.distance = 20.0f;
