@@ -322,6 +322,7 @@ void func_L00_003ECB00(void)
         D_L00_001B0798[i] = 0;
 }
 
+INCLUDE_ASM("asm/levels", func_L00_003ECB38);
 
 
 INCLUDE_ASM("asm/levels", func_L00_003ECC90);

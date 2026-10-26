@@ -655,7 +655,6 @@ src/levels/00_aranos_tutorial/L00_003CF438-rc2.c	-fno-builtin -O2 -G0 -ffunction
 src/levels/shared/L00_003DC1C0-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
 src/levels/shared/L00_003DFDC0-rc2.c	-fno-builtin -O2 -G0 -ffunction-sections
 src/levels/shared/L00_003E9930-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin -g
-src/levels/shared/L00_003ECB38-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/levels/shared/L00_003FE8D0-rc2.c	-O2 -G8 -mastra-r5900-extern-buffer -ffunction-sections -fno-builtin -fno-schedule-insns
 src/levels/shared/L00_00410430-rc2.c	-fno-builtin -O2 -G0 -mno-split-addresses -ffunction-sections
 src/levels/shared/L00_004263A8-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
