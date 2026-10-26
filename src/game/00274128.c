@@ -313,7 +313,6 @@ INCLUDE_ASM("asm/game", func_00278CE0);
 ASM_FUNC("asm/game", func_00278E78);
 
 
-INCLUDE_ASM("asm/game", func_00278EB0);
 
 extern void func_002FC3C0(int);
 extern void func_002FC138(void);

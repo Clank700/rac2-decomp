@@ -808,7 +808,6 @@ void func_L00_003F71E8(char *a0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003F7268);
 
 INCLUDE_ASM("asm/levels", func_L00_003F8280);
 

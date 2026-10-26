@@ -1,3 +1,4 @@
+#include "include_asm.h"
 typedef struct { float x, y, z, w; } Vector;
 typedef struct { Vector vertices[4]; unsigned int colors[4]; float uv[8]; long zero, texture, state, flags; } Packet;
 typedef struct {
@@ -11,7 +12,7 @@ extern int D_001A79F0 __attribute__((sda));
 extern Vector D_L00_001B8DC0;
 extern void func_002FC560(unsigned int, unsigned long long);
 extern void func_0027DE50(int, int, int, int, unsigned long);
-extern void ref_L00_003F7268_00(void *, int, int, float, float, float, float, float);
+extern void ref_L00_003F7268_00(void *, float, float, float, float, float, int, int);
 extern void func_002AFFD8(char *, char *, int);
 extern float func_00283CE0(int);
 extern int func_00283CF0(float);
@@ -21,6 +22,11 @@ extern void func_00282F20(void *, void *, float);
 extern void func_00282CC0(void *, void *, void *);
 extern void func_00282DD8(void *, void *, void *);
 extern void func_00280B90(void *, void *, int);
+
+static inline float lerp(float a, float b, float t)
+{
+    return a + (b - a) * t;
+}
 
 void func_L00_003F7268(char *object)
 {
@@ -38,11 +44,11 @@ void func_L00_003F7268(char *object)
     if (context->effect != 0) {
         delta = context->end - context->current;
         if (delta < 10) {
-            amount = context->first + (context->second - context->first) * ((float)delta * 0.1f);
-            ref_L00_003F7268_00(object + 0x10, 60, 0, amount, 0.5f, 0.0f, 0.0f, 0.0f);
+            amount = lerp(context->first, context->second, (float)delta * 0.1f);
+            ref_L00_003F7268_00(object + 0x10, amount, 0.5f, 0.0f, 0.0f, 0.0f, 60, 0);
         } else if ((unsigned short)(context->current - 46) < 4) {
-            amount = context->first + (context->second - context->first) * ((float)(context->current - 45) * 0.1f);
-            ref_L00_003F7268_00(object + 0x10, 60, 0, amount, 0.5f, 0.0f, 0.0f, 0.0f);
+            amount = lerp(context->first, context->second, (float)(context->current - 45) * 0.1f);
+            ref_L00_003F7268_00(object + 0x10, amount, 0.5f, 0.0f, 0.0f, 0.0f, 60, 0);
         }
     }
     if (context->active != 0 && D_001A79F0 != 13 && D_001A79F0 != 16 && context->visible != 0) {
