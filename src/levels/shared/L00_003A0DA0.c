@@ -1,16 +1,4 @@
-/* Retained C reconstruction; not linked or counted.
- * Profile: -O2 -G0 -ffunction-sections.
- * 396/396 bytes. us: 0/27 places; us2: 0/27 places; pal: 0/27 places.
- * Remaining: The scalar TI rotation snapshot is now addressable through its final
- * real qcopy, instead of remaining in a saved 128-bit register. A measured
- * adjacent pair of complete 16-byte vectors gives the exact 0xA0 frame and
- * retail-sized 396-byte extent. Initial 1/255 materialization and header-store
- * schedule differ from +0xC0; the final timer reload uses v1 instead of v0.
- * An alternative store order merges two retail 255 constants and gives 392.
- * Reopen with: Independent object-header or timer lifetime evidence; no register pins,
- * artificial stores or forced duplicate constants.
- */
-
+/* func_L00_003A0DA0 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections). */
 #include "common.h"
 
 typedef int Quad __attribute__((mode(TI)));
@@ -35,8 +23,11 @@ char *func_L00_003A0DA0(int value,Quad *position,Quad *velocity,int timer,
         scratch.random.f[1]=func_002A7878(-3.1415927410125732f,3.1415927410125732f);
         scratch.random.f[2]=func_002A7878(-3.1415927410125732f,3.1415927410125732f);
         scratch.angles=scratch.random.quad;
-        object[0x20]=0; object[0x23]=flags; object[0x31]=1; *(unsigned char *)(object+0x30)=255;
+        object[0x20]=0;
+        object[0x23]=flags;
+        *(unsigned char *)(object+0x30)=255;
         *(unsigned short *)(object+0x32)=255;
+        object[0x31]=1;
         func_002A0488(object,red,green,blue);
         *(float *)(state+0x18)=*(float *)(object+0x2C)*scale;
         *(float *)(object+0x2C)=0.0f;

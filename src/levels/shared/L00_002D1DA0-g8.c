@@ -1,9 +1,4 @@
-/* Game -O2 -G8: 312/312 bytes in us/pal/us2, 0/27 each, first mismatch +0x9C. The identity really consumes a0 and the random range helper takes (0, count - 1); the old draft omitted those live arguments. Only two preheader words exchange the table-pointer copy and -1 terminator, plus one addu operand order differs in the chosen-record address. Scheduling profile alternatives did not fix it.
- * Profile: -O2 -G8 -ffunction-sections
- * us: instruction at +0x9c differs
- * pal: instruction at +0x9c differs
- * us2: instruction at +0x9c differs
- */
+/* func_L00_002D1DA0 in its own unit (flags in config/cflags.txt: -O2 -G8 -ffunction-sections). */
 #include "include_asm.h"
 
 typedef struct {
@@ -24,7 +19,6 @@ int func_L00_002D1DA0(int a0, int *a1, int *a2)
 {
     int buf[20];
     Elem *table;
-    Elem *p;
     int count = 0;
     int idx;
     int key;
@@ -40,25 +34,18 @@ int func_L00_002D1DA0(int a0, int *a1, int *a2)
         table = &D_L00_001A7D78;
     }
     if (table != 0) {
-        idx = 0;
-        if (table->key != -1) {
-            p = table;
-            do {
-                if (key == p->key) {
-                    buf[count] = idx;
-                    count++;
-                }
-                p++;
-                idx++;
-            } while (p->key != -1);
+        for (idx = 0; table[idx].key != -1; idx++) {
+            if (key == table[idx].key) {
+                buf[count] = idx;
+                count++;
+            }
         }
     }
     idx = count - 1;
     if (count != 0) {
         int n = func_002A7820(0, idx);
-        Elem *e = &table[buf[n]];
-        *a1 = e->a;
-        *a2 = e->b;
+        *a1 = table[buf[n]].a;
+        *a2 = table[buf[n]].b;
         return 1;
     }
     *a1 = 1;

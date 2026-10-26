@@ -1,14 +1,4 @@
-/* Bounded manual reconstruction, 2026-10-25; not linked.
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -mno-split-addresses.
- * 1004/1004 bytes; us: 0/27 placements; us2: 0/27 placements; pal: absent from catalogue.
- * Measured workspace member positions and both complete contact vectors are preserved; the overall
- * contact-result extent remains unknown. The source agrees through the prefix before +0x22c, then
- * materializes the contact-result base early across two calls. Equal size is not a match.
- * Reopen with evidence for the contact-result pointer lifetime or allocator scheduling. A local-
- * scope pointer trial gave identical bytes; do not add an artificial barrier or dependency.
- * Prior complete variants and diagnostic dumps are preserved privately.
- * No candidate or linked-build credit is claimed.
- */
+/* func_L00_003EE920 in its own unit (flags in config/cflags.txt: -O2 -G8 -ffunction-sections). */
 #include "common.h"
 
 typedef int BounceWord128 __attribute__((mode(TI)));
@@ -40,7 +30,7 @@ extern void func_002FEE50(int);
 extern void func_0029F338(void *);
 extern float func_00283B98(float, float);
 extern void func_002A9288(void *, float);
-extern float D_L00_001B0808 __attribute__((nosda));
+extern float D_L00_001B0808;
 extern float D_L00_001B0828 __attribute__((sda));
 extern float D_L00_001B082C __attribute__((sda));
 /* Retail forms the normal address from the same result base plus 32 bytes.

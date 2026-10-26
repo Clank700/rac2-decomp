@@ -1,33 +1,5 @@
-/* func_L07_00323038 - 584 bytes, 4 place(s), level 07_siberius, retail at
-   0x00323038. Screened with tools/w10_screen.py: 7 call(s)
-   [func_L00_0032C638@00323064, func_00283248@0032308C,
-   func_L01_00322288@00323098, func_002B5BC0@003230AC,
-   func_0029F530@003230B4, func_L07_00321D68@00323100,
-   func_002A88A0@00323174]; data addresses materialised [-]; float constants
-   [0x42800000, 0xbf000000, 0x44160000, 0x42700000, 0x3f800000, 0x40a00000,
-   0x3f800000]; $gp-relative small data: no   saves: -; callee-saved
-   registers saved [-]; words plain C cannot emit [LQ/SQ 7C400000@0x021c].
-   Head: addiu $sp, $sp, -0x50 ; sd $s0, 0x10($sp) ; swc1 $f23, 0x48($sp) ;
-   daddu $s0, $a0, $zero ; swc1 $f22, 0x40($sp) ; mov.s $f23, $f13. Not
-   matched in this wave: the 128-bit copy needs an `lq`/`sq` pair; plain C
-   reaches it only through a `mode(TI)` local, and this cc1 folds the
-   destination offset into the `sq` where retail materialises the pointer
-   first. What would unblock it: the exact source expression tree, so this
-   cc1 picks the same registers in the same order. */
-
-/* Fresh reconstruction, 23 October 2026; supersedes the historical MMI
-   screening above. Game -O2 -G8 -ffunction-sections -frac2-zero-ti-barrier
-   -frac2-qcopy -frac2-qcopy-barrier -g: 584/584 bytes, 0/4 USA v1.01 and
-   0/4 USA v2.00 placements; absent from PAL. Only two nonrelocation words
-   differ: at +0x214/+0x21c C emits a por zero plus offset sq, while retail
-   materializes control +0xa0 then stores architectural zero at offset zero.
-   Separate division statements with -g reproduce retail's hazard padding;
-   reusing the remaining-height variable recovers the f13 duration register.
-   Six bounded legal trials included pointer-form and builtin memset clears;
-   memset grew to 592 bytes. No artificial barriers or volatile are retained.
-   Reopen with an independently supported zero-store address formulation or
-   qualified compiler model, keeping the measured quadratic-helper ABI. */
-#include "include_asm.h"
+/* func_L07_00323038 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections -g). */
+#include "common.h"
 typedef int Quad __attribute__((mode(TI)));
 extern unsigned int func_L00_0032C638(unsigned int);
 extern float func_00283248(float, float);
@@ -88,7 +60,7 @@ int func_L07_00323038(unsigned char *object, float lower, float target, float up
     if (object[0x60] & 2) {
         Quad *motion = (Quad *)(control + 0xa0);
         *(float *)(object + 0x18) = *(float *)(control + 0x90);
-        *motion = 0;
+        qzero(motion);
         return 1;
     }
     return 0;

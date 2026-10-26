@@ -172,8 +172,6 @@ void func_L00_003EE8E8(Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner *owner)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003EE920);
-
 /* func_L00_003EED10 uses its dedicated quadword-copy profile. */
 
 /* func_L00_003EEE20 is defined in L00_003EEE20-g.c. */

@@ -112,8 +112,6 @@ void func_L00_003CA470(void)
         D_L00_00241500[i].field_48 = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003CA650);
-
 INCLUDE_ASM("asm/levels", func_L00_003CA688);
 
 INCLUDE_ASM("asm/levels", func_L00_003CA730);

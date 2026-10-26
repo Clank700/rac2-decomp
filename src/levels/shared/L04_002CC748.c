@@ -592,8 +592,6 @@ void func_L04_003A1A48(u8 *dst, u16 *src, s32 count) {
     } while (count != 0);
 }
 
-INCLUDE_ASM("asm/levels", func_L04_003A1A78);
-
 INCLUDE_ASM("asm/levels", func_L04_003A1C98);
 
 extern u32 func_00282978(u8 *ptr);
