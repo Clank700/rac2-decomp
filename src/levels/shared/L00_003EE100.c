@@ -668,7 +668,6 @@ void func_L00_003F3A88(Obj_L00_003F3A88 *obj)
 
 INCLUDE_ASM("asm/levels", func_L00_003F3AD0);
 
-INCLUDE_ASM("asm/levels", func_L00_003F3D70);
 
 INCLUDE_ASM("asm/levels", func_L00_003F4210);
 

@@ -1,15 +1,11 @@
-/* Retained reconstruction, 23 October 2026.
- * Profile: -O2 -G8 -ffunction-sections.
- * USA v1.01/v2.00: 0/1 each, 736/744 bytes; canonical row absent in PAL. Two source spellings
- * plus canonical-symbol check. The state machine and link cleanup are reconstructed; retail
- * preserves an additional constant-one register and differs in switch/setup allocation. Reopen
- * with state-selector lifetime/type evidence. The cleanup helper is ordinary inlined C, not a
- * scheduling barrier.
- */
+typedef int HeroQ __attribute__((mode(TI)));
+typedef union { unsigned char b[0x2600]; signed char c[0x2600]; short h[0x1300]; unsigned short uh[0x1300]; int i[0x980]; unsigned int u[0x980]; float f[0x980]; char *ptr[0x980]; HeroQ q[0x260]; } Hero;
+extern unsigned char D_00189E20[];
+#define H ((Hero *)D_00189E20)
 
 #include "include_asm.h"
-extern char *D_L16_001B2B1C[];
-extern char D_00189EA0[];
+extern char *D_L16_001B2B1C;
+
 extern char D_00188660[];
 extern int D_L16_001AF894 __attribute__((sda));
 extern int D_L16_001AF898 __attribute__((sda));
@@ -47,13 +43,12 @@ void func_L16_003AA108(char *object)
     char *state = *(char **)(object + 104);
     char *target;
     int index;
-    int active = 1;
     char *record;
     if (*(unsigned char *)(object + 32) != 0) {
         if (*(unsigned char *)(object + 32) == 1) {
-            target = D_L16_001B2B1C[0] + *(int *)(state + 1576) * 256;
+            target = D_L16_001B2B1C + *(int *)(state + 1576) * 256;
             if (target == 0 || *(unsigned char *)(target + 32) == 254 || *(unsigned char *)(target + 32) == 253) {
-                if (func_002ACBC8(D_00189EA0, *(int *)(state + 1632))) {
+                if (func_002ACBC8((&H->c[128]), *(int *)(state + 1632))) {
                     clear_link(state);
                     *(unsigned char *)(object + 32) = 2;
                     goto active;
@@ -72,11 +67,13 @@ active:
     case 0:
         func_L16_003AA3F0(object);
         *(unsigned short *)(state + 16) = *(unsigned short *)(state + 12);
-        *(unsigned char *)(object + 32) = active;
+        *(unsigned char *)(object + 32) = 1;
         *(float *)(state + 1572) = 2.5f;
-        *(short *)(state + 10) = active;
-        *(short *)(state + 8) = active;
+        *(short *)(state + 8) = 1;
+        *(short *)(state + 10) = 1;
         **(int **)(state + 1636) = -1;
+        break;
+    case 1:
         break;
     case 2:
         if (func_00282978(state + 16)) {

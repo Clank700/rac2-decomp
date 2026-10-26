@@ -76,7 +76,6 @@ INCLUDE_ASM("asm/levels", func_L16_00418E38);
 
 INCLUDE_ASM("asm/levels", func_L16_00419140);
 
-INCLUDE_ASM("asm/levels", func_L16_004192A8);
 
 extern char D_00189E20[];
 extern void func_00315728(char *, char *, s32, char *, f32);
@@ -86,7 +85,6 @@ INCLUDE_ASM("asm/levels", func_L16_0041C7A0);
 
 INCLUDE_ASM("asm/levels", func_L16_0041C990);
 
-INCLUDE_ASM("asm/levels", func_L16_0041CB30);
 
 INCLUDE_ASM("asm/levels", func_L16_0041CF80);
 

@@ -37,7 +37,6 @@ void func_L16_003AA0C8(u8 *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L16_003AA108);
 
 INCLUDE_ASM("asm/levels", func_L16_003AA3F0);
 

@@ -1,18 +1,8 @@
-/* Retained C reconstruction; not linked or counted.
- * Profile: -O2 -G8 -ffunction-sections.
- * Compiled 796 bytes; retail 800 bytes.
- * us: 0/1 placements match (exit 1).
- * us2: 0/1 placements match (exit 1).
- * pal: canonical name absent; no match credit.
- * Remaining: The explicit active/init/common state chain and four-element cursor initialization
- * reach 796 bytes, up from 788. The frame is 0x90 against retail 0xA0, with one fewer saved GPR.
- * Resident-state base addressing, request scratch and float schedules still differ. The state
- * helper takes a full-width integer.
- * Reopen: A verified resident player/request workspace layout and pointer lifetime witness that
- * reproduces the 0xA0 frame.
- */
-
 #include "common.h"
+typedef int HeroQ __attribute__((mode(TI)));
+typedef union { unsigned char b[0x2600]; signed char c[0x2600]; short h[0x1300]; unsigned short uh[0x1300]; int i[0x980]; unsigned int u[0x980]; float f[0x980]; char *ptr[0x980]; HeroQ q[0x260]; } Hero;
+extern unsigned char D_00189E20[];
+#define H ((Hero *)D_00189E20)
 typedef int Vector128 __attribute__((mode(TI)));
 typedef struct { int a,b,c,d; } __attribute__((aligned(16))) Quad16;
 typedef struct { Quad16 vector; int owner,flags; unsigned char enabled,kind; unsigned short id; float distance; int active; } CollisionRequest;
@@ -31,12 +21,9 @@ extern void func_L00_002E6CF0(void (*)(void *),void *);
 extern void func_L13_0041FBE0(void *);
 extern float func_002AA2E8(float *,float,float);
 extern int D_001A79F0;
-extern Vector128 D_00189EA0;
-extern char *D_0018C0B0;
-extern char *D_0018A15C;
-extern int D_0018A160;
+
 extern char *D_L16_001BFF58 NOT_SDA;
-extern Quad16 D_L16_001A8F20;
+extern Quad16 D_L16_001A8F20 MACRO_ADDR;
 extern float D_L16_001B1CA0 __attribute__((sda));
 extern float D_L16_001B1CA4 __attribute__((sda));
 extern float D_L16_001B1CA8 __attribute__((sda));
@@ -46,15 +33,14 @@ void func_L16_004192A8(char *object)
     float *state=*(float **)(object+0x68);
     float value;
     int i;
-    if (*(unsigned char *)(object+0x20)==1) goto active;
-    if (*(unsigned char *)(object+0x20)>=2) goto common;
+    switch (*(unsigned char *)(object+0x20)) { case 1: goto active; case 0: break; case 2: default: goto common; }
 
         state[0]=1.0f;
         state[8]=func_002A7940();
         state[2]=0.5f;
         state[1]=0.0f;
         state[0]=1.0f;
-        { float *values=state+7; for(i=3;i>=0;i--) *values--=1.0f; }
+        for(i=3;i>=0;i--) state[i+4]=1.0f;
         *(unsigned char *)(object+0x30)=0xff;
         func_002A7750((unsigned char *)object,1,-1);
         object[0x31]=0;
@@ -63,15 +49,15 @@ void func_L16_004192A8(char *object)
 active:
     if (D_001A79F0==16) {
 
-        qcopy(&local.position,&D_00189EA0);
-        func_00282F20(&local.offset,D_0018C0B0+0xe0,0.75f);
+        qcopy(&local.position,&H->q[8]);
+        func_00282F20(&local.offset,H->ptr[2212]+0xe0,0.75f);
         func_00282CC0(&local.position,&local.position,&local.offset);
-        if (func_00277258(&local.position,0,D_0018C0B0,0.5f)!=0 && D_L16_001BFF58!=0 && D_L16_001BFF58==object) {
+        if (func_00277258(&local.position,0,H->ptr[2212],0.5f)!=0 && D_L16_001BFF58!=0 && D_L16_001BFF58==object) {
             func_002A8C00((char *)&local.request,(int)object,1,100.0f,&D_L16_001A8F20);
             local.request.id=*(unsigned short *)(object+0xaa);
             func_L00_002B30E8();
         }
-        if (D_0018A15C!=0 && D_0018A15C==object && D_0018A160!=0) {
+        if (H->ptr[207]!=0 && H->ptr[207]==object && H->i[208]!=0) {
             ((float *)&local.direction)[0]=0.0f;
             ((float *)&local.direction)[1]=1.0f;
             ((float *)&local.direction)[2]=0.0f;

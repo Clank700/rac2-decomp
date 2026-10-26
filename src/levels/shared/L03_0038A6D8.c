@@ -1,10 +1,3 @@
-/* Nonmatching C: Advance the timed effect states, update drawing and manage the object sound handle.
- * Tested profile: -O2 -G0 -ffunction-sections.
- * Measured US size: 760 bytes; retail: 760 bytes.
- * Placement checks: US and US2: 0/2 each; PAL: absent from the catalogue.
- * Remaining: The first placed instruction difference is at +0x24c in sound-table address allocation. The varying callback interior entry also still needs independent boundary review.
- * Reopen with an allocator witness for the sound-field view and independent qualification of the callback entry; keep the pointer-returning effect allocator and all four stack arguments.
- */
 #include "common.h"
 
 typedef int EffectQuad __attribute__((mode(TI)));
@@ -39,7 +32,6 @@ extern void func_0029F338(void *);
 
 void func_L03_0038A6D8(unsigned char *object) {
     unsigned char *state = *(unsigned char **)(object + 0x68);
-    SoundSlotPrefix *entry;
     union { EffectQuad quad; float values[4]; } position;
     int handle;
     switch (object[0x20]) {
@@ -89,16 +81,14 @@ void func_L03_0038A6D8(unsigned char *object) {
         D_0018CDE4 = 0xFFFF;
         handle = *(int *)(state + 0xD8);
         if (handle != -1) {
-            entry = (SoundSlotPrefix *)(D_00188660 + handle * 0x70);
-            if (entry->owner == object && entry->active)
+            if (((SoundSlotPrefix *)(D_00188660 + handle * 0x70))->owner == object && ((SoundSlotPrefix *)(D_00188660 + handle * 0x70))->active)
                 func_002E59F8(handle);
         }
         *(int *)(state + 0xD8) = -1;
         func_002E5CF8(1, 0, (char *)object);
         func_0029F338(object);
     } else {
-        entry = (SoundSlotPrefix *)(D_00188660 + *(int *)(state + 0xD8) * 0x70);
-        if (entry->owner != object || !entry->active)
+        if (((SoundSlotPrefix *)(D_00188660 + *(int *)(state + 0xD8) * 0x70))->owner != object || !((SoundSlotPrefix *)(D_00188660 + *(int *)(state + 0xD8) * 0x70))->active)
             *(int *)(state + 0xD8) = func_002E5CF8(0, 4, (char *)object);
     }
 }

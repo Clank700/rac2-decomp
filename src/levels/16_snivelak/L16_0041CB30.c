@@ -1,19 +1,3 @@
-/* Retained C reconstruction; not linked or counted.
- * Profile: -O2 -G0 -ffunction-sections.
- * Compiled 1100 bytes; retail 1100 bytes.
- * us: 0/1 placements match (exit 1).
- * us2: 0/1 placements match (exit 1).
- * pal: canonical name absent; no match credit.
- * Remaining: Recomputing the beam address at use removes a saved GPR and restores the exact 0x90
- * frame (formerly 0xA0). Guarded cached sound pointers, actual bank offsets, per-kind state
- * tests and independent fallback snapshots reach 1100 bytes. First difference +0x11C is the
- * sound-address result register; later fallback global loads and call-address schedules differ.
- * The no-split-address trial worsens the first difference to +0x4C. The closest-point helper
- * retains its actual float return.
- * Reopen: A source or allocator-lifetime witness explaining the short-lived audio pointer and
- * fallback snapshot register choices without changing their contracts.
- */
-
 #include "common.h"
 typedef int Vector128 __attribute__((mode(TI)));
 typedef struct { int a,b,c,d; } __attribute__((aligned(16))) Quad16;
@@ -22,9 +6,9 @@ typedef struct { Vector128 beam; CollisionRequest request; Vector128 closest; } 
 extern char D_00188660[];
 extern char *D_L16_001BFF58;
 extern char *D_0018C0B0;
-extern char *D_L16_001B0664;
-extern char *D_L16_001B0F80;
-extern Quad16 D_L16_001A8F20;
+extern char *D_L16_001B0664 MACRO_ADDR;
+extern char *D_L16_001B0F80 MACRO_ADDR;
+extern Quad16 D_L16_001A8F20 MACRO_ADDR;
 extern float func_00283B98(float,float);
 extern float func_00283180(float);
 extern float func_00283198(float);
@@ -44,8 +28,8 @@ void func_L16_0041CB30(char *object)
 {
     LaserWorkspace local;
     char *state=*(char **)(object+0x68);
-    char *target,*fallback;
-    char *sound;
+    char *target;
+    char *sound,*sound2,*sound4;
     int handle;
     switch(*(unsigned char *)(object+0x20)) {
     case 0:
@@ -60,14 +44,14 @@ void func_L16_0041CB30(char *object)
         func_002A7750((unsigned char *)object,1,-1);
         break;
     case 1:
-        sound=D_00188660+0x70**(int *)(state+0x24);
-        if((*(char **)(sound+0x88))!=object || (*(unsigned char *)(sound+0x74))==0) *(int *)(state+0x24)=func_002E5DA0(0,4,object,0x113a);
+        sound4=D_00188660+0x70**(int *)(state+0x24);
+        if((*(char **)(sound4+0x88))!=object || (*(unsigned char *)(sound4+0x74))==0) *(int *)(state+0x24)=func_002E5DA0(0,4,object,0x113a);
         func_002AA458(object+0x10,state+0x10,state+0x20,0.001111111138f,0.002222222276f,0.06666667014f);
         if(func_00282E80(object+0x10,state+0x10)<0.03333333507f) func_002A7750((unsigned char *)object,2,-1);
         break;
     case 2:
-        sound=D_00188660+0x70**(int *)(state+0x24);
-        if((*(char **)(sound+0x88))!=object || (*(unsigned char *)(sound+0x74))==0) *(int *)(state+0x24)=func_002E5DA0(0,4,object,0x113a);
+        sound2=D_00188660+0x70**(int *)(state+0x24);
+        if((*(char **)(sound2+0x88))!=object || (*(unsigned char *)(sound2+0x74))==0) *(int *)(state+0x24)=func_002E5DA0(0,4,object,0x113a);
         func_002AA458(object+0x10,state,state+0x20,0.001111111138f,0.002222222276f,0.06666667014f);
         if(func_00282E80(object+0x10,state)<0.03333333507f) func_002A7750((unsigned char *)object,1,-1);
         break;
@@ -88,9 +72,8 @@ void func_L16_0041CB30(char *object)
         *(int *)(state+0x28)=func_002E5DA0(1,0,object,0x113a);
     }
 sound_ready:
-    fallback=D_L16_001B0F80;
     target=D_L16_001B0664;
-    if(target==0) target=fallback;
+    if(target==0) target=D_L16_001B0F80;
     if(target!=0) {
         func_L01_00311C18(&local.closest,object+0x10,((float *)&local.beam),target+0x10);
         if(func_00282E80(&local.closest,target+0x10)<0.15f) {
