@@ -763,7 +763,6 @@ void func_00307440(void *object)
 INCLUDE_ASM("asm/game", func_00307500);
 
 
-INCLUDE_ASM("asm/game", func_00307808);
 
 void func_003079E8(Owner_F9e2cd219 *self)
 {

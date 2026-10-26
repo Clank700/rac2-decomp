@@ -779,7 +779,6 @@ int func_L00_003F6A58(int *a0)
     return count;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003F6B10);
 
 extern void func_002AD0E0(char *a0, char *a1, char *a2, char *a3, char *a4, char *a5);
 
