@@ -1,29 +1,27 @@
-/* Nonmatching C: Visit the object group and emit an effect at each class-specific transformed point.
- * Tested profile: -O2 -G8 -ffunction-sections.
- * Measured US size: 556 bytes; retail: 524 bytes.
- * Placement checks: US, US2 and PAL: 0/2 each.
- * Remaining: Truthful table declarations do not reproduce the observed table addressing; inner-loop setup scheduling also differs.
- * Reopen with independent data-layout evidence for the id and vector tables and a supported way to express their observed small-data addressing without disguising arrays as scalar integers.
- */
+/* func_L03_003C4800: visit the object group and emit an effect at each class-specific
+   transformed point. Retail reads the id and vector tables $gp-relative, so they are sda
+   arrays of their measured sizes (the largest 48 bytes) in a -G64 unit; the 80-byte table and
+   the incomplete group table stay absolute. The entry base pointer is a MACRO_ADDR scalar
+   (tied lui/lw), and the copy goes straight into the stack vector. */
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
 
 extern int D_L03_001B2A38 __attribute__((sda));
-extern unsigned char *D_L03_001B2A1C;
+extern unsigned char *D_L03_001B2A1C MACRO_ADDR;
 extern unsigned short *D_L03_001FB5A0[];
 
 extern void func_0029FC20(char *, int, char *);
 extern void func_002830C0(void *, void *, void *);
 extern void func_L00_00325AE8(void *, int, float, float);
 
-extern int D_L03_001AFF60[] __attribute__((sda));
-extern int D_L03_001AFF78[] __attribute__((sda));
-extern int D_L03_001AFF88[] __attribute__((sda));
-extern int D_L03_001AFF98[] __attribute__((sda));
-extern TI128 D_L03_001AFFB0[] __attribute__((sda));
-extern TI128 D_L03_001AFFE0[] __attribute__((sda));
-extern TI128 D_L03_001B0010[] __attribute__((sda));
+extern int D_L03_001AFF60[6] __attribute__((sda));
+extern int D_L03_001AFF78[4] __attribute__((sda));
+extern int D_L03_001AFF88[4] __attribute__((sda));
+extern int D_L03_001AFF98[6] __attribute__((sda));
+extern TI128 D_L03_001AFFB0[3] __attribute__((sda));
+extern TI128 D_L03_001AFFE0[3] __attribute__((sda));
+extern TI128 D_L03_001B0010[3] __attribute__((sda));
 extern TI128 D_L03_0029A880[5];
 
 
@@ -74,14 +72,13 @@ void func_L03_003C4800(unsigned char *a0) {
             n = 3;
             break;
         }
-        vp = v;
         for (j = 0; j < n; j++) {
             func_0029FC20((char *)e, ids[j], (char *)m);
-            qcopy(vp, &vecs[j]);
+            qcopy(v, &vecs[j]);
             w = v[3];
             v[3] = 1.0f;
-            func_002830C0(vp, vp, m);
-            func_L00_00325AE8(vp, *(int *)(e + 0x78), w, 0.08f);
+            func_002830C0(v, v, m);
+            func_L00_00325AE8(v, *(int *)(e + 0x78), w, 0.08f);
         }
     }
 }

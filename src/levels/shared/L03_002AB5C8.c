@@ -210,7 +210,6 @@ int func_L03_003C41B8(unsigned char *a0, int a1, int a2) {
 
 /* func_L03_003C4578 is defined in L03_002AB5C8-g8.c (it reads $gp data). */
 
-INCLUDE_ASM("asm/levels", func_L03_003C4800);
 
 /* func_L03_003C4A10 is defined in L03_002AB5C8-g8.c (it reads $gp data). */
 
