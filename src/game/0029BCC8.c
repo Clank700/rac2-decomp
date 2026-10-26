@@ -573,7 +573,16 @@ INCLUDE_ASM("asm/game", func_0029DB28);
 
 INCLUDE_ASM("asm/game", func_0029DC90);
 
-INCLUDE_ASM("asm/game", func_0029DCD0);
+extern int D_001397C4[];
+extern unsigned char D_001395D5[];
+
+int func_0029DCD0(void) {
+    if (D_001397C4[0] < 0) {
+        if (D_001395D5[0] != 0)
+            return 1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/game", func_0029DD30);
 

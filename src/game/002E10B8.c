@@ -118,7 +118,7 @@ void func_002E10B8(void)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002E11C0);
+/* func_002E11C0 is matched in its own unit, src/game/002E11C0.c (default flags). */
 
 ASM_FUNC("asm/game", func_002E1228);
 
@@ -426,7 +426,7 @@ int func_002E5E58(int index, int value, void *object)
 }
 
 
-INCLUDE_ASM("asm/game", func_002E5F00);
+/* func_002E5F00 is matched in its own unit, src/game/002E5F00-qcopy.c (-frac2-qcopy). */
 
 
 s32 func_002E5F40(s32 index, s32 callback) {

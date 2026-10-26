@@ -264,7 +264,7 @@ void func_L00_002A76B8(void)
 
 INCLUDE_ASM("asm/levels", func_L00_002A7748);
 
-INCLUDE_ASM("asm/levels", func_L00_002A7958);
+/* func_L00_002A7958 is matched in its own unit, src/levels/shared/L00_002A7958-g8.c (-O2 -G8 -ffunction-sections). */
 
 /* raises the pending flag once: registers an update routine with the resident pointer */
 void func_L00_002A7A10(void)

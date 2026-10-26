@@ -507,7 +507,7 @@ INCLUDE_ASM("asm/levels", func_L18_003FAE50);
 
 /* func_L18_003FB500 lives in L18_003FB500.c. */
 
-INCLUDE_ASM("asm/levels", func_L18_003FB5E8);
+/* func_L18_003FB5E8 is matched in its own unit, src/levels/shared/L18_003FB5E8-qcopy.c (-frac2-qcopy). */
 
 void func_L18_003FC958(BatchA_A18_u8 *a0, BatchA_A18_s32 a1) {
     if (a1 != 0) {

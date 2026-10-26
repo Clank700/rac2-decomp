@@ -244,7 +244,7 @@ INCLUDE_ASM("asm/levels", func_L06_0041F558);
 INCLUDE_ASM("asm/levels", func_L06_0041F818);
 
 
-INCLUDE_ASM("asm/levels", func_L06_0041FC58);
+/* func_L06_0041FC58 is matched in its own unit, src/levels/06_notak/L06_0041FC58-qcopy.c (-frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L06_0041FD90);
 

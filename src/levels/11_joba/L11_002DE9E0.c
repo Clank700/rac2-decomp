@@ -61,7 +61,7 @@ INCLUDE_ASM("asm/levels", func_L11_00369700);
 
 INCLUDE_ASM("asm/levels", func_L11_00396DC8);
 
-INCLUDE_ASM("asm/levels", func_L11_003973F8);
+/* func_L11_003973F8 is matched in its own unit, src/levels/11_joba/L11_003973F8-qcopy.c (-frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L11_003974A8);
 

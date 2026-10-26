@@ -78,7 +78,7 @@ void func_L14_00304588(void) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L14_00328E70);
+/* func_L14_00328E70 is matched in its own unit, src/levels/14_aranos_prison/L14_00328E70-qcopy.c (-frac2-qcopy). */
 
 void func_L14_00328E90(char *arg0, char *arg1, char *arg2) {
     char buf[16];
