@@ -1,4 +1,5 @@
 #include "include_asm.h"
+#include "common.h"
 
 extern char F669d6320_D_001BAFC0[];
 
@@ -108,6 +109,8 @@ typedef struct {
 #endif
 
 extern State_001b5200 D_001B5200;
+
+extern void func_002A91F0(void *, float *);
 
 INCLUDE_ASM("asm/game", func_003173B0);
 
@@ -345,7 +348,18 @@ INCLUDE_ASM("asm/game", func_0031CDF8);
 
 INCLUDE_ASM("asm/game", func_0031D070);
 
-INCLUDE_ASM("asm/game", func_0031D268);
+void func_0031D268(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    *(int *)(state + 0x288) = 0;
+    *(int *)(state + 0x284) = (*(int *)(state + 0x284) + 1) % 4;
+    if (*(int *)(state + 0x280) < 4)
+        (*(int *)(state + 0x280))++;
+    func_002A91F0(state + (*(int *)(state + 0x284) * 16 + 0x4A0), (float *)(arg0 + 0xF0));
+    qcopy(state + *(int *)(state + 0x284) * 16 + 0x3A0,
+          (char *)(*(int *)(state + 0x278) + 0x10));
+}
+
 
 /* func_0031D308 is in the -G8 sibling. */
 

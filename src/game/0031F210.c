@@ -1,10 +1,13 @@
 #include "include_asm.h"
+#include "common.h"
 
 extern char D_00189E20_9[];
 
 extern float func_00282C88_1(float *buf);
 
 extern float func_00282DF0(float *buf);
+
+extern void func_002A91F0(void *, float *);
 
 INCLUDE_ASM("asm/game", func_0031F210);
 
@@ -179,7 +182,18 @@ INCLUDE_ASM("asm/game", func_003258C0);
 
 /* func_00325A88 (cursor bookkeeping and a 16-byte copy) is a near miss:
    nonmatching/game/func_00325A88.c */
-INCLUDE_ASM("asm/game", func_00325A88);
+void func_00325A88(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    *(int *)(state + 0x2B8) = 0;
+    *(int *)(state + 0x2B4) = (*(int *)(state + 0x2B4) + 1) % 4;
+    if (*(int *)(state + 0x2B0) < 4)
+        (*(int *)(state + 0x2B0))++;
+    func_002A91F0(state + (*(int *)(state + 0x2B4) * 16 + 0x420), (float *)(arg0 + 0xF0));
+    qcopy(state + *(int *)(state + 0x2B4) * 16 + 0x320,
+          (char *)(*(int *)(state + 0x2A4) + 0x10));
+}
+
 
 /* func_00325B28 is in the -G8 sibling. */
 

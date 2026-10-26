@@ -30,9 +30,6 @@ INCLUDE_ASM("asm/levels", func_L22_003A2780);
 INCLUDE_ASM("asm/levels", func_L22_003A2988);
 
 INCLUDE_ASM("asm/levels", func_L22_003A2A28);
-
-INCLUDE_ASM("asm/levels", func_L22_003A2B90);
-
 extern int func_L22_003A48F8(int);
 
 /* Collects the set bit positions of VALUE, keeping those a null FLAG lets

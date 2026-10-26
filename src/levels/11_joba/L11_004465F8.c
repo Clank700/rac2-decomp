@@ -1,4 +1,5 @@
 #include "common.h"
+#include "include_asm.h"
 
 extern void func_002B60B0(char *, float, float, float, float);
 extern void func_002A7470(char *, int, int, int);
@@ -34,6 +35,12 @@ extern void func_2FD7E8(void *a0, int a1, void *a2, void *a3, int a4, int a5,
 extern void func_32EB98(void *a0, void *a1);
 extern s32 func_441868(s32 a0, s32 a1);
 extern s32 func_33C800(char *a0, s32 a1, s32 a2, s32 a3, float f12, float f13);
+
+extern void func_31EA58(char *, float, float);
+extern void func_002F1F70(void *, void *, void *);
+extern void func_0032B468(char *, int, char *, char *, int, int, float *, void *, void *, float);
+extern void func_003144D8(char *);
+extern char D_L02_001A8F20[] __attribute__((sda));
 
 INCLUDE_ASM("asm/levels", func_L11_004465F8);
 
@@ -260,7 +267,23 @@ void func_L11_004492A0(char *a0)
     *(s32 *)(*(char **)((char *)(long)*(s32 *)(s0 + 0x354) + 0x68) + 0x3C) = 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00449330);
+void func_L11_00449330(char *self, TI128 *pos) {
+    char *state = *(char **)(self + 0x68);
+    float copy[4];
+    float vec[4];
+
+    *(TI128 *)copy = *pos;
+    if (*(unsigned char *)(self + 0x31) != 0) {
+        func_31EA58((char *)vec, 0.10000000894069672f, 0.16666667163372040f);
+        func_002F1F70(vec, vec, D_L02_001A8F20);
+        func_0032B468(self, 0x9D8, *(char **)(state + 0x354) + 0x10, *(char **)(state + 0x354) + 0xF0,
+                    0, 0, vec, D_L02_001A8F20, D_L02_001A8F20, 0.0027777778450399637f);
+    }
+    func_003144D8(*(char **)(state + 0x354));
+    *(char **)(state + 0x354) = 0;
+}
+
+
 
 void func_L11_004496A0(char *object, int mode, int active) {
     char *state = *(char **)(object + 0x68);

@@ -437,7 +437,31 @@ INCLUDE_ASM("asm/levels", func_L05_003D1368);
 
 INCLUDE_ASM("asm/levels", func_L05_003D15E8);
 
-INCLUDE_ASM("asm/levels", func_L05_003D18E0);
+void func_L05_003D18E0(char *obj)
+{
+    char *sub = *(char **)(obj + 0x68);
+    char *table;
+    float a, b, c;
+
+    *(unsigned char *)(obj + 0x20) = 1;
+    *(unsigned short *)(obj + 0x34) = *(unsigned short *)(obj + 0x34) | 0x100;
+    *(int *)(func_379CA0(obj) + 0x148) = 5;
+    func_37AEC0(obj, 1);
+    table = D_L05_001B2614 + D_L05_00221D10[0] * 128;
+    *(float *)(sub + 0x180) = 5.0f;
+    *(int *)(sub + 0x2F0) = -1;
+    *(int *)(sub + 0x2F4) = -1;
+    *(int *)(sub + 0x268) = 0;
+    *(float *)(obj + 0x2C) = 0.04f;
+    a = func_332B50(0.0f, *(float *)table);
+    b = func_332C18();
+    c = func_332C18();
+    func_33B330(obj + 0x10, a, b, c);
+    func_306630(obj + 0x10, table + 0x30, obj + 0x10);
+    *(int *)(sub + 0x26C) = 0;
+}
+
+
 
 /* Spawns the object's effect after three guards, then runs the timer. */
 void func_L05_003D19F0(char *object)
