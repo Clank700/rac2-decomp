@@ -1,3 +1,7 @@
+/* Player frame update: the ordered resident-player steps while control is active.
+   The player record is reached through pointer locals (one per stretch, sharing the
+   %hi of D_00189E20) and the control mode is a macro-addressed word. */
+#include "common.h"
 /*
  * Retained handwritten near miss; historical evidence only.
  * No linked-image equality or complete retail semantics is established.
@@ -27,7 +31,8 @@
  */
 
 extern unsigned char D_00189E20[];
-extern int D_L00_001A8F00;
+extern unsigned char D_00189EA0[];
+extern int D_L00_001A8F00 MACRO_ADDR;
 extern void func_L00_002A65D8(void);
 extern void func_L00_002D24E8(void);
 extern void func_L00_002B36E0(void);
@@ -71,6 +76,7 @@ extern void func_L00_002A9760(void);
 /* Run the frame's ordered resident-player updates while its control mode is active. */
 void func_L00_002A6DD0(void) {
     unsigned char *player = D_00189E20;
+    unsigned char *hero;
     *(short *)(player + 0x2162) = 0;
     *(short *)(player + 0x2160) = 0;
     if (player[0x22B4]) { func_L00_002A65D8(); return; }
@@ -82,8 +88,8 @@ void func_L00_002A6DD0(void) {
     func_L00_002ADD30();
     func_L00_002CB3A8();
     if (D_L00_001A8F00 == 2 || D_L00_001A8F00 == 6) {
-        if (!player[0x22B5]) func_L00_002D3068();
-        else func_L00_002D2E68();
+        if (player[0x22B5]) func_L00_002D2E68();
+        else func_L00_002D3068();
         return;
     }
     func_L00_002AE0C8();
@@ -104,17 +110,18 @@ void func_L00_002A6DD0(void) {
     func_L00_002B2318();
     func_L00_002B2200();
     func_L00_002AFBC0();
-    if (!player[0x22B5] && !func_L00_002D6418()) func_L00_002D3068();
-    else func_L00_002D2E68();
+    if (player[0x22B5] || func_L00_002D6418()) func_L00_002D2E68();
+    else func_L00_002D3068();
     func_L00_002A7958();
     func_L00_002A7748();
     func_L00_002A67F8();
     func_L00_002D5EB8();
     func_L00_002A6420();
     func_L00_002D5158();
-    if ((*(int *)(player + 0x229C) != 0x16 && *(int *)(player + 0x229C) != 0x1F && *(int *)(player + 0x2294) != 0x31) || func_L00_002A7000())
-        func_L00_003080D0(player + 0x80);
-    func_002A677C(*(void **)(player + 0x2290));
+    hero = D_00189E20;
+    if ((*(int *)(hero + 0x229C) != 0x16 && *(int *)(hero + 0x229C) != 0x1F && *(int *)(hero + 0x2294) != 0x31) || func_L00_002A7000())
+        func_L00_003080D0(D_00189EA0);
+    { unsigned char *base = D_00189E20; func_002A677C(*(void **)(base + 0x2290)); }
     func_L00_002A74A8();
     func_L00_002A9760();
 }

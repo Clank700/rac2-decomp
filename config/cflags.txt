@@ -1069,3 +1069,5 @@ src/levels/shared/L02_0043F4C8-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-p
 src/levels/shared/L00_0038ADD0-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/002D84B0.c	-O2 -G0 -ffunction-sections
 src/game/00338AD8.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L02_002EF388.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_002A6DD0.c	-O2 -G0 -ffunction-sections

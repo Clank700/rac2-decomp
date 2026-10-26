@@ -3,7 +3,6 @@
 
 /* func_L02_002DCEA0 is matched in its own unit, src/levels/shared/L02_002DCEA0.c (-g). */
 
-INCLUDE_ASM("asm/levels", func_L02_002EF388);
 
 /* func_L02_002EF968 is defined in L02_002EF968-helpers.c. */
 

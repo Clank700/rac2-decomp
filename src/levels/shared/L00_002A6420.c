@@ -200,7 +200,6 @@ void func_L00_002A6420(void)
 
 INCLUDE_ASM("asm/levels", func_L00_002A67F8);
 
-INCLUDE_ASM("asm/levels", func_L00_002A6DD0);
 
 /* reads a global mode value; for 8, 9 or 19 probes two engine queries and returns 1 if either reports true, else 0 */
 int func_L00_002A7000(void)
