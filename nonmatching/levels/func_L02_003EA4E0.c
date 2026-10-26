@@ -1,3 +1,4 @@
+/* 26 October 2026 (M24): -O2 -G8 -ffunction-sections, 1416/1416 bytes, one line off: the activation timer's post-increment copy is andi 0xFFFF here and a plain daddu in retail (+0x94). State block through a union view (moves the 0x14 store past the D_L02_001B0D58 load), the wait test as !(x > 10.0f), the sound slot computed after the -1 test. */
 /*
  * Updated manual-C near miss, 2026-10-25.
  * Measured unit: src/levels/02_maktar_nebula/L02_003EA4E0-g8.c
@@ -67,6 +68,8 @@ extern int func_L02_003EB138(void *, void *);
 extern float func_00282DB0(void *, void *);
 extern void func_L00_002E6CF0(void (*)(char *), void *);
 extern void func_L02_003EB258(char *);
+typedef union { int i[0x20]; float f[0x20]; } PlatState;
+
 /* Updates the platform's activation, swing, travel and scrolling surface. */
 void func_L02_003EA4E0(char *actor) {
     static void *cases[] = {&&start, &&done, &&activate, &&wait, &&swing, &&travel, &&done, &&release, &&moving};
@@ -81,17 +84,17 @@ start:
     return;
 activate:
     if (D_L02_001B0D50 == 0) {
-        int timer;
+        unsigned int timer;
         if (!func_002B38B8(actor)) return;
         timer = (*(unsigned short *)(actor + 0x96))++;
-        if ((unsigned int)timer < 6) return;
+        if (timer < 6) return;
     }
     if (*(int *)(state + 4)) { D_001395B8.active = 1; func_0029B3E0(0, -1); }
     *(int *)(state + 0x2C) = func_002E5CF8(0, 4, actor);
     func_L02_003EAD38(actor);
     return;
 wait:
-    if (func_00282C48((float)D_L02_001B30C8 - **(float **)(state + 0x28)) <= 10.0f) return;
+    if (!(func_00282C48((float)D_L02_001B30C8 - **(float **)(state + 0x28)) > 10.0f)) return;
     if (func_L02_003EAE10(actor)) {
         **(float **)(state + 0x28) = (float)D_L02_001B30C8;
         func_002A7750(actor, 4, -1);
@@ -135,8 +138,10 @@ travel:
 release:
     if (func_L02_003EAFC8(actor)) {
         int index = *(int *)(state + 0x2C);
-        char *slot = D_00188660 + index * 0x70;
-        if (index != -1 && *(char **)(slot + 0x88) == actor && *(unsigned char *)(slot + 0x74)) func_002E59F8(index);
+        if (index != -1) {
+            char *slot = D_00188660 + index * 0x70;
+            if (*(char **)(slot + 0x88) == actor && *(unsigned char *)(slot + 0x74)) func_002E59F8(index);
+        }
         *(int *)(state + 0x2C) = -1;
         func_L02_003EB098(actor);
         func_002A7750(actor, 8, -1);
@@ -149,15 +154,15 @@ moving:
     if (func_L02_003EB138(actor, angles)) {
         if (D_L02_001B0D58 == target) {
             if (func_00282DB0(D_00189F10, angles) < -0.001f) {
-                if (++*(int *)(state + 0x20) > 30) D_L02_001B0D54 = -D_L02_001B0D54;
-            } else *(int *)(state + 0x20) = 0;
-        } else *(int *)(state + 0x20) = 0;
+                if (++((PlatState *)state)->i[8] > 30) D_L02_001B0D54 = -D_L02_001B0D54;
+            } else ((PlatState *)state)->i[8] = 0;
+        } else ((PlatState *)state)->i[8] = 0;
     }
-    *(float *)(state + 0x14) = func_00283B98(*(float *)(state + 0x14), D_L02_001B0D5C * 0.00029088825f);
-    *(float *)(state + 0x18) += D_L02_001B0D58 * 0.5f;
-    if (*(float *)(state + 0x18) > 1.0f) *(float *)(state + 0x18) -= 1.0f;
-    else if (*(float *)(state + 0x18) < -1.0f) *(float *)(state + 0x18) += 1.0f;
-    func_002AA2E8((float *)(state + 0x1C), 1.0f, 0.016666668f);
+    ((PlatState *)state)->f[5] = func_00283B98(((PlatState *)state)->f[5], D_L02_001B0D5C * 0.00029088825f);
+    ((PlatState *)state)->f[6] += D_L02_001B0D58 * 0.5f;
+    if (((PlatState *)state)->f[6] > 1.0f) ((PlatState *)state)->f[6] -= 1.0f;
+    else if (((PlatState *)state)->f[6] < -1.0f) ((PlatState *)state)->f[6] += 1.0f;
+    func_002AA2E8(&((PlatState *)state)->f[7], 1.0f, 0.016666668f);
     func_L00_002E6CF0(func_L02_003EB258, actor);
 done:
     return;

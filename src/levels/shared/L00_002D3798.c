@@ -372,7 +372,6 @@ unsigned long func_L00_002D3FB0(unsigned long param_1)
   return param_1;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002D3FB8);
 
 extern unsigned char D_L00_00139568[];
 

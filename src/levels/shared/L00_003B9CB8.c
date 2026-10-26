@@ -449,7 +449,6 @@ void func_L00_003C33E0(Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner *owner)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003C3418);
 
 /* The 0x68 context block starts with two words and a halfword that this body clears. */
 void func_L00_003C37A0(char *p)

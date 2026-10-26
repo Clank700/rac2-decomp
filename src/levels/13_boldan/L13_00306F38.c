@@ -234,7 +234,6 @@ INCLUDE_ASM("asm/levels", func_L13_0041BDA8);
 INCLUDE_ASM("asm/levels", func_L13_0041CD18);
 
 
-INCLUDE_ASM("asm/levels", func_L13_0041F8B8);
 
 /* The object's five states, state 0 to 4. The dispatch reads the level's own jump table
    (the five-word table in the level's data at 0x2ADD00); `cases` only keeps the labels alive. */
