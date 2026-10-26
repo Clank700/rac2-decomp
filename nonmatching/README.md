@@ -22,7 +22,6 @@ of semantic correctness or matching credit without a strict linked build.
 | [`func_002DC900`](game/func_002DC900.c) | 428 | 26 October 2026 (M32): 420/428 at -G8; address-sum order and the half-offset branch left. See source. |
 | [`func_002BC768`](game/func_002BC768.c) | 380 | 26 October 2026 (M32): 380/380, one store scheduled two slots late (as func_002BDCE8); in the permuter. See source. |
 | [`func_002C7748`](game/func_002C7748.c) | 320 | 26 October 2026 (M32): 320/320 at -G8 with qcopy; $s0/$s1 swapped only; in the permuter. See source. |
-| [`func_002C36D0`](game/func_002C36D0.c) | 268 | 26 October 2026 (M32): 268/268, callee-saved register assignment only; in the permuter. See source. |
 | [`func_002BDCE8`](game/func_002BDCE8.c) | 452 | 26 October 2026 (M32): 452/452, one store scheduled two slots late; in the permuter. See source. |
 | [`func_00341030`](game/func_00341030.c) | 380 | 26 October 2026 (M32): 368/380; the decrements' extra copy to a test register is not reproduced. See source. |
 | [`func_00270EE0`](game/func_00270EE0.c) | 588 | 26 October 2026 (M32): rac1 start_camera_blend port, exact at all 28 places only with -fno-gcse (gcse keeps the entry %hi of D_001B5490 for the final phase store); not landed. See source. |
@@ -1871,7 +1870,6 @@ of semantic correctness or matching credit without a strict linked build.
 | [`func_L04_00422DA8`](levels/func_L04_00422DA8.c) | 976 | Retained C: 944/976 compiled/retail bytes. See the source header for current release coverage, tested profiles and reopening conditions. |
 | [`func_L04_00423258`](levels/func_L04_00423258.c) | 1652 | M34 2026-10-26: hero view, 1608/1652; the D_L04_001B2228 store form and a missing compare remain. See the source header. |
 | [`func_L04_0043AD48`](levels/func_L04_0043AD48.c) | 1648 | M25 2026-10-26: 1648/1648 bytes with a goto exit in the forward search; register choice (count/path, progress in $f12) and strength reduction of the forward loop remain. See the source header. |
-| [`func_L04_00439950`](levels/func_L04_00439950.c) | 1576 | 26 October 2026 (big38): 393/394 words, only the 0.3f argument of the last two func_002AEC48 calls differs (retail rematerialises it per call, this cc1 keeps it in $f20). In the permuter farm. |
 | [`func_L04_0044D0C0`](levels/func_L04_0044D0C0.c) | 868 | Corrected complete C remains unlinked. 888/868 bytes; see source for measured release coverage, residual differences and reopening conditions. |
 | [`func_L04_0044D428`](levels/func_L04_0044D428.c) | 628 | Corrected complete C remains unlinked. 628/628 bytes; see source for measured release coverage, residual differences and reopening conditions. |
 | [`func_L04_0044D860`](levels/func_L04_0044D860.c) | 612 | Retained C: 612/612 compiled/retail bytes. See the source header for current release coverage, tested profiles and reopening conditions. |
@@ -1899,7 +1897,6 @@ of semantic correctness or matching credit without a strict linked build.
 | [`func_L16_00405488`](levels/func_L16_00405488.c) | 540 | Corrected complete C remains unlinked. 540/540 bytes; see source for measured release coverage, residual differences and reopening conditions. |
 | [`func_L16_0040CD88`](levels/func_L16_0040CD88.c) | 528 | Readable C reconstruction retained. See the source header for current release coverage, tested profiles and reopening conditions. |
 | [`func_L16_0040DAE0`](levels/func_L16_0040DAE0.c) | 396 | Corrected complete C remains unlinked. 400/396 bytes; see source for measured release coverage, residual differences and reopening conditions. |
-| [`func_L16_0040DC70`](levels/func_L16_0040DC70.c) | 432 | 26 October 2026 (M33): 436/432 bytes; origin and the loop &pos do not share $s1 as in retail, so arg moves to $s4. Permuter. |
 | [`func_L16_004133B0`](levels/func_L16_004133B0.c) | 644 | Retained C: 624/644 compiled/retail bytes. See the source header for current release coverage, tested profiles and reopening conditions. |
 | [`func_L16_00413D10`](levels/func_L16_00413D10.c) | 436 | Corrected complete C remains unlinked. 436/436 bytes; see source for measured release coverage, residual differences and reopening conditions. |
 | [`func_L16_00416FB0`](levels/func_L16_00416FB0.c) | 604 | 26 October 2026 (M33): 600/604 bytes, one instruction: the D_L16_001B1AFC l.s macro goes into the jal slot (gas then picks the $gp form). Permuter. |

@@ -568,8 +568,6 @@ void func_002C3280(u8 *self)
 
 INCLUDE_ASM("asm/game", func_002C3430);
 
-INCLUDE_ASM("asm/game", func_002C36D0);
-
 void func_002C37E0(char *obj)
 {
     char *sub = obj + 32;

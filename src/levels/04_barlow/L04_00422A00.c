@@ -127,7 +127,6 @@ void func_L04_00438B50(u8 *object) {
 
 /* func_L04_00439870 is defined in L04_00422A00-g8.c (this unit's -G8 profile gives the
    retail's address forms). */
-INCLUDE_ASM("asm/levels", func_L04_00439950);
 extern void func_40A090(int a0, u8 *a1, u8 *a2, u8 *a3, u8 *a4, u8 *a5);
 
 extern u8 D_L04_001B12B0[] __attribute__((sda));

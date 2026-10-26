@@ -430,8 +430,6 @@ int func_L01_003246F8(int key) {
 
 INCLUDE_ASM("asm/levels", func_L01_00326DD8);
 
-INCLUDE_ASM("asm/levels", func_L01_0032EF38);
-
 INCLUDE_ASM("asm/levels", func_L01_00331CA0);
 
 INCLUDE_ASM("asm/levels", func_L01_00331E08);

@@ -1,13 +1,3 @@
-/* func_L04_00439950 (1 place, 1,576 bytes): Barlow NPC controller (state switch, then head look).
- * Opus draft (big38), 2026-10-26; not linked. Profile: -O2 -G0 -ffunction-sections.
- * 393/394 words; everything matches up to the two closing func_002AEC48 calls. Retail
- * rematerialises the 0.3f argument (lui/ori/mtc1 $f13) before each call; this cc1 keeps it in
- * $f20 across the first call (one word short). In the permuter farm.
- * Found: a plain switch with an empty case 4 gives retail's 5-entry table (no computed goto);
- * hero fields through the Hero union view (retail derives the base as s0 - 0x80);
- * D_001395B8 through a union view (base address in a register); MACRO_ADDR for
- * D_L04_001A8F00, D_L04_001B24DC and D_001A7A40; the 0x1B2228 store is sda D_L04_001B2224[1].
- */
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
@@ -64,6 +54,7 @@ void func_L04_00439950(u8 *object) {
     u8 *linked;
     int message;
     f32 rate;
+    f32 blend = 0.3f;
     f32 heading, yaw, pitch;
     int look;
     func_L04_00439870(object);
@@ -171,6 +162,6 @@ void func_L04_00439950(u8 *object) {
     }
     if (D_001A7A40)
         *(f32 *)(data + 0x70) = 2.75f;
-    func_002AEC48(object, data, 0, rate, 0.3f);
-    func_002AEC48(object, data + 0x80, 1, rate, 0.3f);
+    func_002AEC48(object, data, 0, rate, blend);
+    func_002AEC48(object, data + 0x80, 1, rate, blend);
 }
