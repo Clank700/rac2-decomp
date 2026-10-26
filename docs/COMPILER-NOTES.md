@@ -3,12 +3,17 @@
 ## Source methods shared with RAC1
 
 As of 25 October 2026, reviewed shared EE transfer helpers (`qcopy`, `qcopy_nc`,
-`qzero` in `include/common.h`) and original public runtime-library target
+`qzero`, `qzero_nc` in `include/common.h`) and original public runtime-library target
 primitives are permitted, following RAC1. Older plain-C-only observations remain
 measurements of those attempts, not a current ban on these routes. Quadword
 addresses must be 16-byte aligned. `qcopy` and `qzero` declare memory clobbers;
 `qcopy_nc` follows RAC1's non-clobbering variant and requires an independent
-check of surrounding memory dependencies. Do not replace a function with arbitrary
+check of surrounding memory dependencies. `qzero_nc` is RAC1's own `qzero`, which
+declares no clobbers at all; the same check applies. Its pattern is a bare volatile
+`ASM_OPERANDS`, at which cse flushes its whole table (cse.c, `cse_insn`), so an
+address used before the clear is built again after it: func_L22_002C9898's states
+0x59/0x5A rebuild the hero base with retail's only fresh `lui` there, which
+neither a label nor `qzero` reproduces (a label lets gcse's PRE replace the lui). Do not replace a function with arbitrary
 inline assembly, pin registers or invent barriers/interfaces. Keep upstream
 provenance and licences, and recheck every affected function through the strict
 linked build.
