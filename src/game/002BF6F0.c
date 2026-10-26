@@ -147,7 +147,7 @@ void func_002BF6F0(void *param_1)
   return;
 }
 
-INCLUDE_ASM("asm/game", func_002BF728);
+/* func_002BF728 uses the quadword-copy profile in 002BF728-qcopy.c. */
 
 extern int func_002A77E0(int);
 extern void func_00282CC0(char *, char *, char *);
@@ -232,19 +232,19 @@ INCLUDE_ASM("asm/game", func_002BFB38);
 
 INCLUDE_ASM("asm/game", func_002BFC50);
 
-INCLUDE_ASM("asm/game", func_002BFE80);
+/* func_002BFE80 is defined in 002BFE80-dbg.c. */
 
 INCLUDE_ASM("asm/game", func_002BFFE8);
 
 
 INCLUDE_ASM("asm/game", func_002C01F8);
 
-INCLUDE_ASM("asm/game", func_002C02F0);
+/* func_002C02F0 uses the quadword-copy profile in 002C02F0-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002C04C0);
 
 
-INCLUDE_ASM("asm/game", func_002C0CC0);
+/* func_002C0CC0 uses the quadword-copy profile in 002C0CC0-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002C0E50);
 
@@ -490,7 +490,7 @@ void func_002C28F8(char *object)
 
 INCLUDE_ASM("asm/game", func_002C29A0);
 
-INCLUDE_ASM("asm/game", func_002C2A88);
+/* func_002C2A88 uses the quadword-copy profile in 002C2A88-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002C2C80);
 
@@ -728,11 +728,11 @@ void func_002C5550(Obj_F7cacd225 *o)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002C56B0);
+/* func_002C56B0 uses the quadword-copy profile in 002C56B0-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002C58A8);
 
-INCLUDE_ASM("asm/game", func_002C5B70);
+/* func_002C5B70 uses the quadword-copy profile in 002C5B70-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002C5D00);
 

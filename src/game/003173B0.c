@@ -374,7 +374,7 @@ INCLUDE_ASM("asm/game", func_0031DEE8);
 INCLUDE_ASM("asm/game", func_0031E3A8);
 
 
-INCLUDE_ASM("asm/game", func_0031E560);
+/* func_0031E560 is defined in 0031E560-dbg.c (-g). */
 
 INCLUDE_ASM("asm/game", func_0031E6D8);
 
