@@ -182,8 +182,47 @@ void func_L00_003ECB00(void)
         D_L00_001B0798[i] = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003ECB38);
+typedef struct { char pad[0x2290]; char *tbl; } Rac2Native_003ECB38_ConstBlock;
 
+/* Calls the four table-driven float helpers over a 16-byte scratch record and a
+   second record at +0x10, then when the probe result is not zero computes
+   pi/2 - fn(angle / probe) and hands obj+0xF8, the third parameter and the
+   three incoming floats to the renderer helper; original game role is unknown. */
+void func_L00_003ECB38(char *obj, void *rec, char *mob, float fa, float fb, float fc)
+{
+    extern void func_2EE138(void *, void *, void *);
+    extern float func_2EE1F8(char *, char *);
+    extern void func_2EE178(char *, char *, float);
+    extern float func_2EE238(char *);
+    extern float func_2EE710(float);
+    extern void func_31DE50(char *, float, char *, float, float, float, int);
+    extern Rac2Native_003ECB38_ConstBlock D_00189E20;
+
+    char buf1[0x10];
+    char buf2[0x10];
+    float zero;
+    float angle;
+    float denom;
+    float r1;
+
+    zero = 0.0f;
+
+    func_2EE138(buf1, rec, obj + 0x10);
+
+    r1 = func_2EE1F8(buf1, D_00189E20.tbl + 0xE0);
+    func_2EE178(buf2, D_00189E20.tbl + 0xE0, r1);
+    func_2EE138(buf1, buf1, buf2);
+
+    angle = func_2EE1F8(buf1, D_00189E20.tbl + 0xC0);
+    denom = func_2EE238(buf1);
+    if (denom == zero)
+        return;
+    angle = 1.57079637050628662f - func_2EE710(angle / denom);
+    if (func_2EE1F8(buf1, D_00189E20.tbl + 0xD0) < zero)
+        angle = -angle;
+
+    func_31DE50(obj + 0xF8, angle, mob, fa, fb, fc, 0);
+}
 
 INCLUDE_ASM("asm/levels", func_L00_003ECC90);
 
