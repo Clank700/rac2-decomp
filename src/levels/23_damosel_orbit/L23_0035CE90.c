@@ -320,7 +320,6 @@ void func_L23_003C1AB0(int arg0) {
 
 /* func_L23_003C1E88 is defined in L23_003C1E88-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L23_003D4140);
 
 
 INCLUDE_ASM("asm/levels", func_L23_00415988);

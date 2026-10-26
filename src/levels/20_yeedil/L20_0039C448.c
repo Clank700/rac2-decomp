@@ -317,7 +317,6 @@ void func_L20_003C0350(char *arg0) {
 
 INCLUDE_ASM("asm/levels", func_L20_003E6728);
 
-INCLUDE_ASM("asm/levels", func_L20_003E6FA0);
 
 /* func_L20_00408D98 is defined in L20_0039C448-g8.c (it reaches a global through $gp). */
 

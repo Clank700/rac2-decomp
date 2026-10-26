@@ -822,3 +822,14 @@ src/levels/shared/L08_003DE5E8-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard
 src/levels/09_dobbo/L09_003CBB18-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
 src/levels/11_joba/L11_003D90C0-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
 src/levels/12_todano/L12_003CC140-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/13_boldan/L13_003D1778-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/14_aranos_prison/L14_003D54A8-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/shared/L15_003E2788-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/17_smolg/L17_003D0620-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/19_grelbin/L19_003C7618-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/20_yeedil/L20_003E6FA0-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/22_dobbo_orbit/L22_003CCA50-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/23_damosel_orbit/L23_003D4140-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/24_ship_shack/L24_003B3C38-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/26_jamming_array/L26_003BFF58-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/30_insomniac_museum/L30_003C7180-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels

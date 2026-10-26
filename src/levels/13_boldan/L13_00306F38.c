@@ -118,7 +118,6 @@ INCLUDE_ASM("asm/levels", func_L13_00397A18);
 
 INCLUDE_ASM("asm/levels", func_L13_0039CFF8);
 
-INCLUDE_ASM("asm/levels", func_L13_003D1778);
 
 void func_L13_003E1218(u8 *a0) {
     *(f32 *)(a0 + 0xF4) = func_2F9748(*(f32 *)(a0 + 0xF4), 0.017453296f);

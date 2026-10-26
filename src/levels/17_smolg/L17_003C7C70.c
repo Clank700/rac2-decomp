@@ -81,7 +81,6 @@ s32 func_L17_003CC798(u8 *a0, TI128 *a1, f32 f1, f32 f2) {
 
 INCLUDE_ASM("asm/levels", func_L17_003CC850);
 
-INCLUDE_ASM("asm/levels", func_L17_003D0620);
 
 extern u16 *D_L17_001FB720[];
 
