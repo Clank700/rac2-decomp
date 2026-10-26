@@ -78,7 +78,6 @@ INCLUDE_ASM("asm/levels", func_L00_0041ABB8);
 
 INCLUDE_ASM("asm/levels", func_L00_0041AD40);
 
-INCLUDE_ASM("asm/levels", func_L00_0041AE28);
 
 
 /* shared native body of family 5a97ab89858c */

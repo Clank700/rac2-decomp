@@ -12,7 +12,6 @@ extern char D_00189E20_36[];
 INCLUDE_ASM("asm/levels", func_L00_002CB038);
 
 
-INCLUDE_ASM("asm/levels", func_L00_002CB2D8);
 
 /* func_L00_002CB3A8 is in the sibling file L00_002CB3A8-decider.c (its own profile). */
 
