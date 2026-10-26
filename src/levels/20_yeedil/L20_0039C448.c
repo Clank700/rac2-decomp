@@ -99,8 +99,6 @@ void func_L20_0039DB50(char *arg0, int arg1, int arg2, float f12) {
 
 INCLUDE_ASM("asm/levels", func_L20_0039DBC8);
 
-INCLUDE_ASM("asm/levels", func_L20_0039DCF8);
-
 extern void func_0029F338(int);
 
 extern void func_002A7750(char *, int, int);

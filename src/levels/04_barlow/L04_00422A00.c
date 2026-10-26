@@ -66,7 +66,6 @@ void func_L04_0042BF58(u8 *a0) {
     }
 }
 INCLUDE_ASM("asm/levels", func_L04_00434BB0);
-INCLUDE_ASM("asm/levels", func_L04_004389C0);
 struct BarlowEntry { u8 bytes[256]; };
 extern u8 D_00189EA0[];
 extern u16 *D_L04_001FB1E0[];

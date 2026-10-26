@@ -148,8 +148,6 @@ extern char *D_001B9510;
 
 extern float func_2E3618(char *);
 
-INCLUDE_ASM("asm/levels", func_L01_0042A568);
-
 extern char D_001B9380[];
 
 extern char D_00189EA0[];
