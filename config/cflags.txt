@@ -992,3 +992,4 @@ src/levels/shared/L03_003268C0.c	-O2 -G0 -ffunction-sections
 src/game/0033B910.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L00_00398150.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L00_003F9368.c	-O2 -G0 -ffunction-sections -g -frac2-zero-ti-por
+src/levels/shared/L19_003DFD68.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -ffast-math

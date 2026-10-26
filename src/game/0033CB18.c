@@ -75,10 +75,6 @@ int func_0033CB18(char *a0, int a1)
     return (a1 >> 6) & 1;
 }
 
-/* Near miss: nonmatching/game/func_0033CC20.c - the body is retail's but the
-   callee-saved allocation is shifted by one register. */
-INCLUDE_ASM("asm/game", func_0033CC20);
-
 char *func_0033CD80(char *object)
 {
     extern void func_003363D0(void *);
