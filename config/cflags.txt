@@ -728,3 +728,13 @@ src/levels/22_dobbo_orbit/L22_00415A48-rc2.c	-O2 -G0 -ffunction-sections -fno-bu
 src/levels/26_jamming_array/L26_003DC048-rc2.c	-O2 -G0 -mno-split-addresses -ffunction-sections -fno-builtin
 src/levels/30_insomniac_museum/L30_003848B8-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
 src/levels/30_insomniac_museum/L30_004185E0-rc2.c	-O2 -G8 -ffunction-sections -fno-builtin
+src/levels/20_yeedil/L20_002CD928.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/19_grelbin/L19_002BCA50.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/08_tabora/L08_002CB6E8.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/04_barlow/L04_002E04A8.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/03_endako/L03_002BF8F0.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-hazard-labels
+src/levels/09_dobbo/L09_002BC490.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/11_joba/L11_002D22C8.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/16_snivelak/L16_002B9FF0.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-hazard-labels
+src/levels/07_siberius/L07_002B8618.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/23_damosel_orbit/L23_002C38B0.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
