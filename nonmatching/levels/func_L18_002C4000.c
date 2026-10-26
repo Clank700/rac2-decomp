@@ -5,6 +5,9 @@
  * difference. Left: the last `beqz` (% 6 test) branches to the epilogue's `ld $s0` in retail,
  * one past it in ours (reorg treats the restore already done in the earlier bne slot as
  * redundant). Nested-if, return and inverted forms of the tail compile identically.
+ * EXACT 3/3 in every release under the held compiler change on branch
+ * hold/compiler-trap-redundant-barrier (f67a3bd6: reorg's redundant_insn search stops at a
+ * division guard), found by M4. Land in src only once that change is approved.
  */
 #include "common.h"
 typedef unsigned int TI128 __attribute__((mode(TI)));
