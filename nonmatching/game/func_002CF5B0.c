@@ -5,6 +5,12 @@
  * first and re-tests cost != 0x5A after `limit < cost` (no jump threading), with the table copy
  * in $s0 made in the delay slot; this C tests `cost <= limit` first, which keeps the re-test but
  * moves the branch order and registers. The `(unsigned char)item` compare gives retail's andi.
+ * M39 (2026-10-26): written `(cost != 0x5A && cost <= limit) || ...` the .jump dump has retail's
+ * shape (beq to the re-test, B's fall-through into it), but cse1 skips the B block
+ * (-fcse-skip-blocks), threads the first jump and then folds the fall-through re-test away: 34
+ * off. Retail's re-test survived, so its cse1 could not skip that block; the first jump was
+ * threaded later (jump2). Ternary, unsigned char cost, re-read costs and a separate table
+ * address are all worse (34-67 off).
  */
 #include "common.h"
 

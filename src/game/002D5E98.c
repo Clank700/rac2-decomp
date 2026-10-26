@@ -695,7 +695,6 @@ int func_002DCB28(Handles_2DCB28 *object) {
 
 
 
-INCLUDE_ASM("asm/game", func_002DD400);
 
 INCLUDE_ASM("asm/game", func_002DDA10);
 

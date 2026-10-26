@@ -1132,6 +1132,7 @@ src/levels/shared/L00_003FDE48-g8.c	-O2 -G8 -ffunction-sections -g
 src/game/002CD250-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
 src/pal/game/002CE218-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
 src/us2/game/002CE230-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
+src/game/002DD400-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
 src/game/002D2018-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
 src/game/002D1D20-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
 src/game/002CFBE8-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections

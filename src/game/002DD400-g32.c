@@ -1,11 +1,9 @@
-/*
- * Near miss (M23, 2026-10-26): 1548/1548 bytes; every instruction matches up to +0x564, only the
- * cross-button tail (the slot-status test after `buttons & 0x40`) differs, about 24 instructions.
- * us: 0/28. Profile: -O2 -G32 -Wa,-G32 -ffunction-sections (as its sibling 002DCB58-g32.c).
- * Residual: retail fills the status branch's delay slot with the menu-flags load and starts the
- * `status == -1` arm with a dead `andi $v0, $v0, 0x2000`, so both arms test the 0x2000 flag; this
- * C's else arm steals `li $v1, 1` instead and the then-arm layout shifts by one word.
- */
+/* func_002DD400 in its own unit, a sibling of func_002DCB58 (002DCB58-g32.c): the save-slot
+   menu's handler. -O2 -G32 -Wa,-G32 like its siblings (config/cflags.txt). The screen for the
+   cross button is one store of a conditional value, so its base address is formed once before
+   the test. The empty-slot arm tests the 0x2000 flag as the other arm does; jump2's cross-jumping
+   merges its two identical outcomes after life analysis, which leaves retail's dead
+   `andi 0x2000` there. */
 typedef struct { char p00[0x14]; char *owner; int value; char p1c[0xC4]; char *screen; int fe4; char pe8[0x4C]; int fallback; int busy; int delay; char p140[0x24]; int ready; } MenuRoot;
 typedef struct { char reserved[0x1B4]; int alt; char p1b8[0xC]; int flags; } PadState;
 typedef struct { unsigned char b[8]; } Stamp;
@@ -186,13 +184,14 @@ done:
     }
     if (buttons & 0x40) {
         if (D_001393E0.slots[menu->cursor].status != -1) {
-            if (menu->flags & 0x2000)
-                D_001F2840.value = (int)&D_002613B8;
-            else
-                D_001F2840.value = (int)&D_00261108;
+            D_001F2840.value = (menu->flags & 0x2000) ? (int)&D_002613B8 : (int)&D_00261108;
             D_001F2840.fe4 = (menu->flags & 0x2000) ? 2 : 1;
             D_0025E9E0[0] = menu->cursor;
         } else {
+            if (menu->flags & 0x2000) {
+                menu->stage = 1;
+                return 0;
+            }
             menu->stage = 1;
             return 0;
         }
