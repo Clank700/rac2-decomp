@@ -106,6 +106,8 @@ extern void func_0027C540(long arg0);
 /* External functions declared with exact aliases from task.externals */
 extern void func_0027C540(long param_1);
 
+/* func_002C7748 is a near miss: see nonmatching/game/func_002C7748.c. */
+
 INCLUDE_ASM("asm/game", func_002C7748);
 
 INCLUDE_ASM("asm/game", func_002C7970);

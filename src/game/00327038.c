@@ -96,6 +96,16 @@ extern void func_002AF000(void *, float, float, float);
 
 extern void func_00282CC0(void *, void *, void *);
 
+extern long long func_0027C878(char *p);
+
+extern float func_00283248(float x, float y);
+
+extern float func_00282E80(char *p, float *v);
+
+extern void func_00283410(float *matrix, float *quat);
+
+extern void func_00280B90(char *pkt, float *matrix, int mode);
+
 #ifndef RAC2_T_VEC16_FC936841D
 #endif
 
@@ -290,7 +300,47 @@ INCLUDE_ASM("asm/game", func_00329328);
 
 INCLUDE_ASM("asm/game", func_00329488);
 
-INCLUDE_ASM("asm/game", func_00329630);
+/* Builds a 144-byte packet, aims a quaternion at the shared 0x001B5200 vector from the
+ * object's own position through three float helpers, writes the last matrix row from that
+ * position, then dispatches the packet. */
+void func_00329630(char *self)
+{
+    char pkt[144];
+    float m[16];
+    float quat[4];
+    long long r;
+    int colour;
+
+    F8411efa9_FUN_00328CA8(pkt);
+    r = func_0027C878((char *)0x2E);
+
+    *(long long *)(pkt + 0x78) = r;
+    *(long long *)(pkt + 0x80) = 280993940374112LL;
+    *(long long *)(pkt + 0x88) = ((long long)*(int *)(self + 0x3C) << 2) | 0x8000000040LL;
+    colour = *(int *)(self + 0x30) + (*(unsigned char *)(self + 0x38) << 24);
+    *(long long *)(pkt + 0x70) = 0LL;
+    *(int *)(pkt + 0x4C) = colour;
+    *(int *)(pkt + 0x48) = colour;
+    *(int *)(pkt + 0x44) = colour;
+    *(int *)(pkt + 0x40) = colour;
+
+    quat[3] = 0.0f;
+    quat[2] = func_00283248(D_001B5200.x_140 - *(float *)(self + 0),
+                            D_001B5200.y_144 - *(float *)(self + 4));
+    quat[1] = -func_00283248(func_00282E80(self, &D_001B5200.x_140),
+                             D_001B5200.z_148 - *(float *)(self + 8));
+    quat[0] = *(float *)(self + 0x24);
+
+    func_00283410(m, quat);
+
+    m[12] = *(float *)(self + 0);
+    m[13] = *(float *)(self + 4);
+    m[14] = *(float *)(self + 8);
+    m[15] = 1.0f;
+
+    F8411efa9_FUN_00328D30(pkt, *(float *)(self + 0x28));
+    func_00280B90(pkt, m, 0);
+}
 
 INCLUDE_ASM("asm/game", func_00329768);
 
@@ -344,9 +394,9 @@ void func_0032A978(void)
 INCLUDE_ASM("asm/game", func_0032ABC0);
 
 
+/* func_0032AE30 is a near miss: see nonmatching/game/func_0032AE30.c. */
+
 INCLUDE_ASM("asm/game", func_0032AE30);
-
-
 
 INCLUDE_ASM("asm/game", func_0032B190);
 
