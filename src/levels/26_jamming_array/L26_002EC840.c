@@ -64,8 +64,6 @@ extern char D_L26_001A8F20[];
 
 /* func_L26_003DC128 lives in the -g8 sibling file (it reaches a global through $gp). */
 
-INCLUDE_ASM("asm/levels", func_L26_003DF680);
-
 INCLUDE_ASM("asm/levels", func_L26_003DF7E8);
 
 INCLUDE_ASM("asm/levels", func_L26_004070F8);

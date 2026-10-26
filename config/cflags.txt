@@ -1155,3 +1155,6 @@ src/levels/shared/L00_002D71A0-g8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L19_00422420.c	-O2 -G0 -ffunction-sections -g
 src/game/002ED0A0-g8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L03_003C4800-g64.c	-O2 -G64 -Wa,-G64 -ffunction-sections
+src/levels/06_notak/L06_00457100.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/levels/03_endako/L03_003F6158.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/shared/L00_0033C0D0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

@@ -105,8 +105,6 @@ INCLUDE_ASM("asm/levels", func_L00_0033AA40);
 
 /* func_L00_0033BA68 is matched in L00_0033BA68.c (built with -frac2-qcopy). */
 
-INCLUDE_ASM("asm/levels", func_L00_0033C0D0);
-
 INCLUDE_ASM("asm/levels", func_L00_0033C238);
 
 
