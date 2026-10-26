@@ -1,3 +1,5 @@
+/* func_L17_003A4740 near miss: 516/520 bytes with file flags -O2 -G0 -ffunction-sections -mno-split-addresses (without it 508).
+   Remaining: retail forms the float-global address in a register (lui $v0; addiu $v0,-0xAD4; lwc1 $f21,0($v0)) where cc1 here emits lwc1 through $at; plus the schedule of lui $s5 / ori around it. Tried: [1]/scalar/nosda declarations and a pointer local. */
 #include "common.h"
 
 extern int D_001A7340;

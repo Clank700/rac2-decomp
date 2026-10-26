@@ -650,7 +650,7 @@ retail examples include `1.0471977f` (`0x3F860A93`) and `0.78539824f`
 unexpectedly; check the final lui/ori/mtc1 words before blaming allocation.
 
 Min.s/max.s **are reachable with -ffast-math**: fold admits floating MIN/MAX_EXPR
-under that option. `func_L01_003BD560` is a min.s witness. For the 8-byte maximum
+under that option. `func_L01_003BD560` and `func_L03_00384340` (a max.s of two float results in a 16-entry loop, own -G8 unit) are min/max witnesses. For the 8-byte maximum
 `func_L00_002EE050`, -O1 -ffast-math retains the argument registers, whereas -O2
 adds a move and gives 12 bytes. The older blanket impossibility claim is false.
 

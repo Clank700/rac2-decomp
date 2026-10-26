@@ -109,7 +109,6 @@ void func_0034E220(char *a0, int a1, int a2, int a3, int t0)
     (*(void (**)(char *))(vt + 12))(base + *(short *)(vt + 8));
 }
 
-INCLUDE_ASM("asm/game", func_0034E2E0);
 
 
 

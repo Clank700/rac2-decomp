@@ -833,3 +833,7 @@ src/levels/23_damosel_orbit/L23_003D4140-g8.c	-O2 -G8 -ffunction-sections -g -fr
 src/levels/24_ship_shack/L24_003B3C38-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
 src/levels/26_jamming_array/L26_003BFF58-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
 src/levels/30_insomniac_museum/L30_003C7180-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/shared/L00_004051C8-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/08_tabora/L08_003D7FB8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/08_tabora/L08_00422578.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/0034E2E0-g8.c	-O2 -G8 -ffunction-sections

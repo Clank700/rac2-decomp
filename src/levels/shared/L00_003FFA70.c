@@ -166,7 +166,6 @@ extern void func_0035F450(int a, int b, void *c, int d);
 
 INCLUDE_ASM("asm/levels", func_L00_00404ED8);
 
-INCLUDE_ASM("asm/levels", func_L00_004051C8);
 
 INCLUDE_ASM("asm/levels", func_L00_00405808);
 

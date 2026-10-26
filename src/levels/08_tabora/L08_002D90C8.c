@@ -200,7 +200,6 @@ void func_L08_003D7E68(void *arg0) {
     } while (i >= 0);
 }
 
-INCLUDE_ASM("asm/levels", func_L08_003D7FB8);
 
 /* func_L08_003D8290 is defined in L08_003D8290-qcopy.c. */
 

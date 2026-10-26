@@ -273,7 +273,6 @@ void func_L08_00422428(Ent *a0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L08_00422578);
 
 INCLUDE_ASM("asm/levels", func_L08_00422850);
 
