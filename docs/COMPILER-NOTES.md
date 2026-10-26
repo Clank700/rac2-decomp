@@ -302,6 +302,14 @@ matter; neither `sda` nor `nosda` is a universal opcode selector:
 - A body using both GP and absolute forms needs measured declarations/bindings,
   not a guessed global rule. Split-address uses can keep `%hi` in a saved register
   and add `%lo` at each use (`src/levels/shared/L00_002C2DE8.c`).
+  In retained `func_L01_003B5878` at `-G8`, one `MACRO_ADDR` declaration emits
+  an ordinary absolute load and a GP delay-slot load of the same frame counter.
+  Both retail addresses independently resolve to `0x001B2088` in both USA
+  releases. An additional C declaration with the same assembler name and
+  explicit `sda` instead forces both uses to GP. Adding `MACRO_ADDR` while
+  retaining that alias is object-neutral; removing the alias restores the
+  measured mix. Prefer a single truthful declaration before inventing bindings.
+  This fixes those accesses, not the full caller: it remains nonmatching.
 - Base evaluation and pointer construction can have different orders. In
   `func_002980D0`, forming both bases first and then the pointers preserves both.
 

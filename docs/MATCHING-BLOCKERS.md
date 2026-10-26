@@ -285,22 +285,47 @@ No operation is added to a runtime path. The complete table has 147 self-text
 `R_MIPS_32` relocations and 16-byte alignment. An independent object parse
 confirms the complete selector partition.
 
-This structurally faithful form is now the retained C: **37,336/37,268 bytes,
+That structurally faithful form measured **37,336/37,268 bytes,
 0/1 USA v1.01 places**; the other canonical release identities are absent.
 Its table addresses and text do not match, so it is not linked or credited.
 The frame remains 0x1A0 rather than 0x1B0, with six saved FPRs rather than five,
-and the original object pointer still spills. The former 37,280-byte baseline
+and the original object pointer still spilled. The former 37,280-byte baseline
 and useful alternatives remain private. `-fno-thread-jumps` did not fix the
 merge; this compiler rejects `-fno-crossjumping`. Next: identify the real
 address temporaries competing for `$fp` and their phase lifetimes while
 preserving the recovered topology. A smaller size delta is not a better
 reconstruction when it loses a measured control-flow distinction.
 
+**Resident-field and predicate follow-up:** the retained form is now
+**37,308/37,268 bytes**, still 0/1 USA v1.01 and absent under the other canonical
+release identities. A partial resident view of the actual float at `+0xA2C`
+and signed halfword at `+0xADC`, together with capturing the combined pose
+predicate before the path calls, restores the entry object to `$fp`. The
+configuration-table read remains unconditional. Its twelve references and
+all actual field reloads are preserved; no extra reference or padding is added.
+The isolated field and predicate controls do not recover that allocation.
+All 147 selector slots retain the 63 retail destination classes, complete
+588-byte table and self-text relocations. The frame is still `0x1A0` versus
+`0x1B0`, with six saved FPRs versus five; entry-load order, real workspace
+lifetimes and later address/scheduling differences remain. Investigate those
+measured residuals rather than repeating the archived whole-object views.
+
 **Large Snivelak and Oozla source remedies, 25 October 2026:**
 `func_L16_0040ECC0` captures the actual yaw-field pointer before its eight
 angle calculations. This restores the observed object/state/constant register
-roles and 0x90 frame; the corrected C remains 6476/6484 bytes, 0/1 in each
-USA release, with PAL absent. `func_L16_00403900` now represents the four
+roles and 0x90 frame; that corrected baseline measured 6476/6484 bytes.
+The retained follow-up is **6464/6484 bytes**, still 0/1 in each USA release,
+with PAL absent. Three `MACRO_ADDR` declarations restore the observed mixed
+address forms. A partial sound-anchor view keeps the actual owner pointer
+at `+0x88` and active byte at `+0x74`, independently of the 112-byte index
+stride; it does not claim an array element extent. Real sound phase scopes,
+the projectile-result lifetime joined to one store, positive-first state4
+guard and state19 set/clear order retain the measured operations and unordered
+behavior. The first aligned operation difference moves from `+0x25C` to
+`+0x568`; state3 joins, FP scheduling and later allocation remain unresolved.
+Private diagnostic branch mapping still leaves seven targets unproved and
+cannot substitute for exact text or linked table equality.
+`func_L16_00403900` represents the four
 observed firing phases and two bone sites explicitly, instead of the old
 shared loop skeleton: 2816 becomes 4396/4444 bytes with the real 0x80 frame.
 It remains 0/1 USA v1.01, with the other identities absent. Seven ordered
@@ -315,7 +340,13 @@ frame, 0/1 in both USA releases and PAL absent. It preserves measured mixed
 absolute/GP reads of one mutable frame counter, actual raw-word snapshots,
 complete matrices and the dispatcher's 64-bit return; only its low flag bits
 are consumed. The corrected AAA00 return declaration alone is object-neutral
-here. Early duration/setup, branch layout and allocation remain unresolved.
+here. Separate scalar locals after the complete vector/matrix workspace recover
+the retail F21 zero across the scale call, duration store and comparison at
+`+0x270..+0x2F8`, with unchanged measured scalar slots and frame. A single
+`MACRO_ADDR` frame-counter declaration recovers the absolute read at `+0x6C4`
+and GP read at `+0x99C`; the old explicit SDA alias forced both reads to GP.
+Neither improvement changes the nonmatching status: airborne F0/F1 roles,
+branch layout, target-address lifetimes and final easing setup still differ.
 Keep the useful alternatives private and reopen these bodies with the measured
 field/address and phase-lifetime evidence, not equivalent source permutations.
 

@@ -8,17 +8,20 @@
  * The caller explicitly consumes only status bits 0/1 from the low return word.
  * Raw state-word snapshots preserve the observed LW/SW transfers without FP conversion.
  * Retail phase/fallthrough order, NaN-sensitive guards and RNG draw order are preserved.
- * The frame counter is one canonical mutable object: pursuit-weave reads it absolutely,
- * pursuit-leave reads the independently observed GP form. The read-only alias is used in
- * mutually exclusive phases, with no C write or const/restrict independence assumption.
+ * The frame counter is one mutable MACRO_ADDR object: pursuit-weave reads it absolutely,
+ * pursuit-leave reads the GP form. One declaration reproduces both measured accesses;
+ * the old explicit SDA alias forced GP access in both phases and is removed.
  * The group pointer and attack-animation word retain their measured SDA forms.
  * The local target-to-delta transfer stays ordinary C: retail separates its stack LQ/SQ
  * around the rotation call. The subsequent matrix/target selection keeps its real lifetimes.
  * Dispatcher payload and resident/query total extents are unknown, so only opaque context
  * and incomplete external storage with measured prefix views are declared.
- * Remaining: early duration-zero/FPR lifetime and setup, branch displacement/joins, target
- * address roles and final easing setup differ. Equal size in an earlier variant was not a match.
- * Reopen with independent duration-zero and target/control lifetime evidence; preserve the
+ * Separate scalar locals retain the measured stack slots after the vector/matrix workspace.
+ * This recovers the retail F21 zero across the scale call, store and duration comparison
+ * at +0x270..+0x2F8. The 0x150 frame and the full matrix extents remain unchanged.
+ * Remaining: airborne F0/F1 roles, branch displacement/joins, target-address roles and
+ * final easing setup differ. Equal size in an earlier variant was not a match.
+ * Reopen with independent target/control lifetime or CFG evidence; preserve the
  * measured access identities, complete tables/matrices, call banks/stack and store order.
  * Bank-preserving interleavings were measured, not prohibited or assumed to solve this caller.
  * Normal/dump-enabled compilation agrees. No native-port or strict linked equality is claimed.
@@ -29,7 +32,6 @@ typedef int Quadword __attribute__((mode(TI)));
 typedef struct {
     Quadword previous_position, delta, target;
     Quadword rotation[4], inverse[4], object_inverse[4];
-    float duration, weave, straight, pursuit;
 } MotionWorkspace;
 struct family_27f9_object { unsigned char reserved[248]; float heading; };
 typedef unsigned char QwenRecovery_84e23fd54f9f_AbiByte16;
@@ -96,10 +98,8 @@ typedef struct {
 typedef struct { u8 prefix[0x18]; u8 *object; } CollisionQueryPrefix;
 extern u8 D_00189E20[];
 #define HERO_TARGET ((HeroTargetPrefix *)D_00189E20)
-extern int D_L01_001B2088;
-/* These mutually exclusive phases read the same measured frame counter.
- * Both symbol spellings resolve to one object; this caller never writes it. */
-extern int frame_counter_gp __asm__("D_L01_001B2088") __attribute__((sda));
+/* Mixed absolute/GP reads of the same mutable frame counter. */
+extern int D_L01_001B2088 MACRO_ADDR;
 extern int D_L01_001AFDB0 __attribute__((sda));
 extern u8 *D_L01_001B255C __attribute__((sda));
 extern u8 *D_L01_001B264C NOT_SDA;
@@ -122,6 +122,7 @@ void func_L01_003B5878(u8 *object)
     static void *const actions[8]={&&pursuit_idle,&&pursuit_wait,&&pursuit_weave,&&pursuit_done,
                             &&pursuit_straight,&&pursuit_done,&&pursuit_group,&&pursuit_leave};
     MotionWorkspace local;
+    float duration, weave, straight, pursuit;
     u8 *state;
     u8 *target;
     float speed,frame,angle,pitch,yaw;
@@ -171,13 +172,13 @@ phase_wait:
                 speed=func_00282DF0(&local.delta)*0.03333333507180214f;
             else speed=0.13333334028720856f;
             func_00282F20(&local.delta,&local.delta,speed);
-            local.duration=0.0f;
-            ((float *)&local.delta)[2]=func_L00_0031CDD0(object+0x10,&local.target,&local.duration,speed,-0.004999999888241291f);
+            duration=0.0f;
+            ((float *)&local.delta)[2]=func_L00_0031CDD0(object+0x10,&local.target,&duration,speed,-0.004999999888241291f);
             qcopy(state+0x2F0, &local.delta);
             qcopy(state+0x2E0, &local.target);
             func_002E5CF8(5,0,(char *)object);
             if (object[0x43]!=3) func_002A7470(object,3,0,10);
-            if (local.duration>0.0f) *(float *)(object+0x48)=38.0f/local.duration;
+            if (duration>0.0f) *(float *)(object+0x48)=38.0f/duration;
             func_002A7750(object,1,2);
         }
         break;
@@ -256,9 +257,9 @@ pursuit_wait:
     }
     goto pursuit_done;
 pursuit_weave:
-    local.weave=func_00283198(func_002ABB18(func_00283CE0(D_L01_001B2088)*0.01163553074002266f))*0.8726646900177002f;
-    if (func_00282E80(object+0x10,state+0x230)<4.75f) local.weave=0.0f;
-    func_L01_003B4AD0(object,state+0x2E0,&local.weave);
+    weave=func_00283198(func_002ABB18(func_00283CE0(D_L01_001B2088)*0.01163553074002266f))*0.8726646900177002f;
+    if (func_00282E80(object+0x10,state+0x230)<4.75f) weave=0.0f;
+    func_L01_003B4AD0(object,state+0x2E0,&weave);
     func_L01_003B50C8((char *)object,1,-1.0f);
     target=STATE_POINTER(0x240);
     if (func_00282E80(object+0x10,target+0x10)<3.75f) {
@@ -276,9 +277,9 @@ pursuit_weave:
     }
     goto pursuit_done;
 pursuit_straight:
-    local.straight=0.0f;
-    if (STATE_INT(0x310)==-1) func_L01_003B4AD0(object,state+0x2D0,&local.straight);
-    else func_L01_003B4AD0(object,D_L01_001B264C+STATE_INT(0x310)*128+0x30,&local.straight);
+    straight=0.0f;
+    if (STATE_INT(0x310)==-1) func_L01_003B4AD0(object,state+0x2D0,&straight);
+    else func_L01_003B4AD0(object,D_L01_001B264C+STATE_INT(0x310)*128+0x30,&straight);
     func_L01_003B50C8((char *)object,1,-1.0f);
     if ((object[0x60]&2) && (*(u64 *)(state+0x1A0)&0x18000000000ULL)!=0x10000000000ULL) {
         animation=object[0x43];
@@ -299,9 +300,9 @@ pursuit_group:
         D_L01_001B255C[STATE_INT(0x38C)*256+0xBC])) func_002A7750(object,7,-1);
     goto pursuit_done;
 pursuit_leave:
-    local.pursuit=func_00283198(func_002ABB18(func_00283CE0(frame_counter_gp)*0.01163553074002266f))*0.8726646900177002f;
+    pursuit=func_00283198(func_002ABB18(func_00283CE0(D_L01_001B2088)*0.01163553074002266f))*0.8726646900177002f;
     qcopy(state+0x2E0, D_L01_001B264C+STATE_INT(0x380)*128+0x30);
-    func_L01_003B4AD0(object,state+0x2E0,&local.pursuit);
+    func_L01_003B4AD0(object,state+0x2E0,&pursuit);
     func_L01_003B50C8((char *)object,1,-1.0f);
     if ((STATE_UINT(0x1A4)&0x80) && !object[0x31]) {
         func_0029F338(object);
