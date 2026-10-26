@@ -35,7 +35,6 @@ extern void ref_L05_00424C88_01(void *, void *);
 
 INCLUDE_ASM("asm/levels", func_L05_003D33E8);
 
-INCLUDE_ASM("asm/levels", func_L05_003FE430);
 
 /* shared native body of family 5a97ab89858c */
 void func_L05_00416630(char *p)
@@ -310,7 +309,6 @@ void func_L05_00424C88(char *object)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L05_00424CF0);
 
 INCLUDE_ASM("asm/levels", func_L05_00425058);
 

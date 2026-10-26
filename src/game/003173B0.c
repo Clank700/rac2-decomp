@@ -177,7 +177,6 @@ void func_00319FB8(char *object)
 
 INCLUDE_ASM("asm/game", func_0031A098);
 
-INCLUDE_ASM("asm/game", func_0031A158);
 
 extern void func_0031A098(void *record);
 extern long long func_0027C878_1(int id);
@@ -339,7 +338,6 @@ void func_0031C8E0(char *p)
     *(float *)(p + 60) = 1.0f;
 }
 
-INCLUDE_ASM("asm/game", func_0031C970);
 
 INCLUDE_ASM("asm/game", func_0031CB78);
 

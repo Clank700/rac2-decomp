@@ -391,7 +391,6 @@ void func_L00_003E7050(char *p, float scale)
 }
 
 /* func_L00_003E70B8 is defined in L00_003E70B8.c. */
-INCLUDE_ASM("asm/levels", func_L00_003E7270);
 
 /* func_L00_003E7650 is defined in L00_003E7650-qcopy.c. */
 

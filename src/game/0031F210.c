@@ -169,7 +169,6 @@ void func_003253A0(char *p)
     *(float *)(p + 60) = 1.0f;
 }
 
-INCLUDE_ASM("asm/game", func_00325430);
 
 INCLUDE_ASM("asm/game", func_00325638);
 
