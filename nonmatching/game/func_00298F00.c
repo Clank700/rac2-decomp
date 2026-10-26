@@ -1,29 +1,39 @@
-/* Near miss / handoff (Opus, big6, 2026-10-26): func_00298F00, 7,840 bytes, boot + 27 level
- * places, the memory-card state machine.  It is the same engine routine as rac1-decomp's
- * memcard_update_state (src/game/memcard.c, adapted there from Lombyte's project), grown to
- * two 0xA0-byte cards and 28 states.  This draft is rac1's function text renamed to rac2's
- * symbols, with the rac2-only states (0, 1, 2, 7, 8/0 constants, 10/3, 10/19, 10/21, 16/3,
- * 16/6, 16/7, 17, 18, 24-27) written from the assembly.
+/* Near miss / handoff (Opus big14, 2026-10-26; earlier big6, big11): func_00298F00, 7,840
+ * bytes, boot + 27 level places, the memory-card state machine (rac1-decomp's
+ * memcard_update_state grown to two cards and 28 states; rac1 used for reference only).
  *
  * Profile: default -O2 -G0 -ffunction-sections in its own unit (src/game/00298F00.c), no $gp.
- * Last verdict: tools/check.py func_00298F00 --diff -> 7844 bytes, expected 7840, 0/28;
- * 54 small difference hunks (scratch dd.py count).  Open items, in address order:
- *   - 8/0 directory loop: entry=$s2, filename+5=$s5 in retail, swapped here, and retail
- *     reads the digit through entry (0x24($s2)); spellings tried: field/array/cast forms,
- *     declaration order (worse).
- *   - error chains whose tail is `state = 0; cur = 0; busy = 0;`: retail keeps
- *     `sw err(base)` local and branches to one shared reset block inside state 25 (which
- *     recomputes the base, L0029AAF0); here several chains cross-jump the err store too.
- *     A `goto reset` with the label in state 25 moved the block but made the rest worse
- *     (7788 bytes); the right source shape for that block is the main open question.
- *   - 10/3 and 17: `x340 + x32C` loads into $v1/$v0 swapped; 10/19 store order of
- *     buf/size; 16/6-16/7 operand order of `x28 + (index * x2C + 8)`; 26/27 shared
- *     `sub = (sub / 5 + 1) * 5; state = 25; busy = 0` tail; state 27's flag loop
- *     (retail keeps the old flags in $a2 and ORs 0x81 in one step).
- * Measured rules: error chains store the field in each arm (a local gets if-converted);
- * stores just before a branch: reorg moves the last one into the slot, so write them in
- * retail's order; switch bodies in source order (21/22 sit between 12 and 13, as in rac1);
- * D_0014B540 is a struct (x32C/x340/x344), D_001A63AC is s16, workspace.name[0] is read as u8.
+ * Last verdict: tools/check.py func_00298F00 --diff -> 7840 bytes, expected 7840, 0/28;
+ * first difference at +0x3F8. Exactly 6 instructions differ, all in state 8/0's directory
+ * loop: retail keeps entry in $s2 and filename+5 in $s5 and reads the slot digit as
+ * 0x24($s2); here the two are swapped and the digit is read as -1(filename+5).
+ *
+ * Cause of the last six (loop.c, recombine_givs): the name[4] DEST_ADDR giv is first combined
+ * with the entry giv, then "recombined" with the most recently defined DEST_REG giv, which is
+ * filename+5, because that giv is not maybe_dead (its last use is the call, not another giv).
+ * Retail keeps it on entry, so in retail filename+5 must be maybe_dead or defined later than
+ * the digit read. Spellings tried without success: entry declared after filename, an early
+ * `ext = filename + 5`, D_001C5280[i].size / .name[4] without the entry local, the digit via
+ * filename[4] or (filename + 5)[-1] (these drop the entry giv: 7816 bytes).
+ *
+ * What fixed the rest (big14), for reuse:
+ *   - Error chains: the state-25 reset block is the cross-jump target only when it emits
+ *     busy, state, cur (0x154, 0x15C, 0x14C). sched1 puts the last of a run of independent
+ *     zero stores first, so the source order is state, cur, busy everywhere (state 3's chain
+ *     is err, state, cur, busy).
+ *   - States 26/27: state 27 is if (result >= 0x2800) {...sub++} else sub = (sub/5+1)*5;
+ *     then the shared state = 25; busy = 0; state 26's else is state = 25; sub = ...; busy = 0.
+ *   - State 27's flags: a prev copy (prev = flags; flags = prev | 0x80; ... prev | 0x81) gives
+ *     retail's daddu/ori 0x81; the record advance is p + (((p[1] + 3) / 4) * 4 + 8).
+ *   - The flags word is the player-stats word at D_001A7A00 + 0x20, sda: retail's store is an
+ *     unsplit macro (lui $at) that reorg keeps out of a delay slot, which is the (const (plus
+ *     sym 0x20)) form of an sda symbol (simple_memory_operand rejects CONST, length 2). A bare
+ *     sda D_001A7A20 goes into a beql slot as one GP instruction; a non-sda one is split.
+ *     Lead: please rule on this spelling (base+offset of the real stats struct, not a second
+ *     name in the same form).
+ *   - func_00288970 returns int (0 / -1), which moves x340 into $v1 in 10/3 and 17.
+ *   - 16/6-16/7: x28 + 8 + index * x2C, and finished_card set before the compare in 16/7.
+ *   - 10/19: D_001A79F0 is an sda int (as in src/game/00298E08.c); size before buf.
  */
 #include "common.h"
 
@@ -96,7 +106,7 @@ extern char D_001A7995[];
 extern char D_001A79A0[];
 extern char D_001A79B5[];
 extern char D_001A79D0[];
-extern char D_001A79F0[];
+extern s32 D_001A79F0 __attribute__((sda));
 extern char D_001A9988[];
 extern char D_001A9990[];
 extern char D_001A9998[];
@@ -111,7 +121,7 @@ extern char D_001A53A8[];
 extern int D_00256138[];
 extern int D_00256368[];
 extern s16 D_001A63AC;
-extern s32 D_001A7A20;
+extern s32 D_001A7A00[] __attribute__((sda));
 extern s32 D_0014B884;
 extern struct { u8 pad[0x32C]; s32 x32C; u8 pad330[0x10]; s32 x340; s32 x344; } D_0014B540;
 
@@ -131,7 +141,7 @@ extern int func_00127888(int fd, void *buf, int nbyte);
 extern int func_0029AE78(int *);
 extern int func_00127668(int);
 extern int func_00127630(int, int, char *);
-extern void func_00288970(int, void *);
+extern int func_00288970(int, void *);
 extern int func_002B7B18(int, int, int);
 extern int func_001279A0(int fd, void *buffer, int size);
 extern int func_00128068(int port, int slot, char *fname);
@@ -508,8 +518,8 @@ void func_00298F00(void)
                     D_001393E0.buf = (u8 *)chunk + chunk->x8;
                     break;
                 case 19:
-                    D_001393E0.buf = D_001A79F0;
                     D_001393E0.size = 0xD804;
+                    D_001393E0.buf = &D_001A79F0;
                     break;
                 case 14: {
                     s32 n = func_0029AE78(D_00256138);
@@ -933,10 +943,10 @@ void func_00298F00(void)
             if (D_001393E0.result >= 0) {
                 D_001393E0.sub = 4;
             } else if (func_00127668(D_001393E0.fd) == 0) {
-                D_001393E0.busy = 0;
                 D_001393E0.err = 0x26;
                 D_001393E0.state = 0;
                 D_001393E0.cur = 0;
+                D_001393E0.busy = 0;
             }
             break;
         case 4:
@@ -975,15 +985,15 @@ void func_00298F00(void)
             D_001393E0.busy = 0;
             break;
         case 6:
-            if (func_00127720(D_001393E0.fd, D_001393E0.card[0].x28 + (D_001393E0.index * D_001393E0.card[0].x2C + 8), 0) == 0) {
+            if (func_00127720(D_001393E0.fd, D_001393E0.card[0].x28 + 8 + D_001393E0.index * D_001393E0.card[0].x2C, 0) == 0) {
                 D_001393E0.sub = 7;
             }
             break;
         case 7:
-            if (D_001393E0.result == D_001393E0.card[0].x28 + (D_001393E0.index * D_001393E0.card[0].x2C + 8)) {
+            finished_card = &D_001393E0;
+            if (D_001393E0.result == D_001393E0.card[0].x28 + 8 + D_001393E0.index * D_001393E0.card[0].x2C) {
                 D_001393E0.sub = 8;
             } else {
-                finished_card = &D_001393E0;
                 if (func_00127668(finished_card->fd) == 0) {
                     finished_card->busy = 0;
                     goto reset_state;
@@ -1162,10 +1172,9 @@ void func_00298F00(void)
             break;
         }
         if ((u8)workspace.name[0] == 0) {
-
-            D_001393E0.busy = 0;
             D_001393E0.state = 0;
             D_001393E0.cur = 0;
+            D_001393E0.busy = 0;
             break;
         }
 
@@ -1180,30 +1189,27 @@ void func_00298F00(void)
             if (func_00127888(D_001393E0.result, D_001A2BA8, 0x2800) == 0)
                 D_001393E0.state = 27;
         } else {
-            D_001393E0.sub = (D_001393E0.sub / 5 + 1) * 5;
             D_001393E0.state = 25;
+            D_001393E0.sub = (D_001393E0.sub / 5 + 1) * 5;
             D_001393E0.busy = 0;
         }
         break;
 
     case 27:
-        if (D_001393E0.result < 0x2800) {
-            D_001393E0.sub = (D_001393E0.sub / 5 + 1) * 5;
-            D_001393E0.state = 25;
-            D_001393E0.busy = 0;
-            break;
-        }
-        if (func_00127668(D_001393E0.fd) == 0) {
+        if (D_001393E0.result >= 0x2800) {
+            if (func_00127668(D_001393E0.fd) != 0)
+                break;
             if (func_0029AF58(D_001A2BB0) != 0) {
                 s32 *p = D_001A2BB0 + 2;
                 if (*p != -1) {
-                    s32 flags = D_001A7A20;
+                    s32 flags = D_001A7A00[8];
                     do {
                         if (p[0] == 0xA) {
                             u8 *b = (u8 *)(p + 2);
-                            flags |= 0x80;
+                            s32 prev = flags;
+                            flags = prev | 0x80;
                             if (b[0xA] != 0) {
-                                flags |= 1;
+                                flags = prev | 0x81;
                                 D_001393E0.card[D_001393E0.cur].x1C++;
                             }
                             if (b[0x12] != 0) {
@@ -1224,15 +1230,17 @@ void func_00298F00(void)
                             }
                             break;
                         }
-                        p = (s32 *)((u8 *)p + ((p[1] + 3) / 4) * 4 + 8);
+                        p = (s32 *)((u8 *)p + (((p[1] + 3) / 4) * 4 + 8));
                     } while (*p != -1);
-                    D_001A7A20 = flags;
+                    D_001A7A00[8] = flags;
                 }
             }
             D_001393E0.sub++;
-            D_001393E0.state = 25;
-            D_001393E0.busy = 0;
+        } else {
+            D_001393E0.sub = (D_001393E0.sub / 5 + 1) * 5;
         }
+        D_001393E0.state = 25;
+        D_001393E0.busy = 0;
         break;
     }
 }

@@ -1,17 +1,23 @@
 /*
- * func_L18_003F5650 (5,716 B; levels 18, 19, 20): Opus near miss, 2026-10-26 (slate big5).
- * Profile: -O2 -G16 -Wa,-G16 -ffunction-sections, as its own unit
- * (src/levels/shared/L18_003F5650-g16.c). check.py: 5,724 of 5,716 bytes at all three
- * places; about 39 instructions in three regions still differ:
- *  - case 6: retail cross-jumps the 0xA arm into the other arm's shared "a2 = 0; jal
- *    func_002A7470" tail; this cc1 keeps both calls (+3 instructions).
- *  - case 10 loop: retail keeps &D_00189E20 in $fp as the loop invariant and rematerialises
- *    0xB69 per iteration; this cc1 hoists 0xB69 into $fp and rebuilds the base in the loop.
- *  - case 13 loop: retail recomputes (u8)group and the table index each iteration; this
- *    cc1 hoists both (a reload of the group in the increment instead keeps an extra lw).
- * Everything else (both group loops' guards, the -G16 gp vector, qcopy/qcopy_nc copies,
- * case 14 index selection and store order) matches. The old manual draft (macro aliases,
- * assembler assertion) is replaced by this one.
+ * func_L18_003F5650 (5,716 B; levels 18, 19, 20): Opus near miss, 2026-10-26 (slates big5,
+ * big12). Profile: -O2 -G16 -Wa,-G16 -ffunction-sections, as its own unit
+ * (src/levels/shared/L18_003F5650-g16.c). check.py: 5,716 of 5,716 bytes, opcodes 1,424 of
+ * 1,429 in place; about 27 instructions differ, all in case 13:
+ *  - big12 fixed case 6 (the 0x31 arms each end with the whole 0x48 store, so flow's
+ *    (use 0) after the arm's call no longer blocks cross-jumping) and case 10 (a `char *h`
+ *    copy of D_00189E20 inside the loop, D_00189EA0 read as h + 0x80: global alloc then gives
+ *    $fp to &D_00189E20 and rematerialises 0xB69, as retail does).
+ *  - case 13, the call to func_L14_00423CD0: retail sets a1 before a0; no float position
+ *    in the prototype (0..5 tried) and no declaration order changes it.
+ *  - case 13 group loop: retail recomputes (u8)grp and grp << 2 on each pass. Here PRE
+ *    (classic, non-edge LCM) inserts both at the end of the preheader (gcse -dG: "PRE/HOIST
+ *    end of bb 177"), which also makes loop.c call the loop phony. Retail inserts only the
+ *    %hi of D_L18_001FB320 there ($s3). Rereading the group in the increment, as case 12
+ *    does (`grp = *(s32 *)(st + 0x27C), g++`), gives retail's loop shape exactly but keeps
+ *    the reload lw (+4 bytes) and moves grp/g/lost to a2/a1/t0 (retail a1/a2/a3): the
+ *    reload is fully redundant (no store or call in the loop), yet this PRE does not delete
+ *    it; retail did, or the source differs. A loop-carried `id = grp` copy stops the shift
+ *    hoist but cprop restores the and. Next step: instrument pre_lcm for the 0x27C load.
  */
 #include "common.h"
 
@@ -195,12 +201,13 @@ void func_L18_003F5650(u8 *a0)
                 if (a0[0x43] != 0xA) {
                     func_002A7470(a0, 0xA, 0, func_002A7820(9, 0xF));
                 }
+                *(float *)(a0 + 0x48) = func_002A7878(0.85f, 1.15f);
             } else {
                 if (a0[0x43] != func_002A77E0(2) + 1) {
                     func_002A7470(a0, func_002A77E0(2) + 1, 0, func_002A7820(9, 0xF));
                 }
+                *(float *)(a0 + 0x48) = func_002A7878(0.85f, 1.15f);
             }
-            *(float *)(a0 + 0x48) = func_002A7878(0.85f, 1.15f);
         }
         break;
     case 8:
@@ -283,8 +290,9 @@ void func_L18_003F5650(u8 *a0)
             if (count != 0) {
                 for (i = 0; i < count; i++) {
                     u8 *e = D_L18_001C3C80[i];
-                    if (e == *(u8 **)(D_00189E20 + 0x2290)) {
-                        qcopy(q, D_00189EA0);
+                    char *h = D_00189E20;
+                    if (e == *(u8 **)(h + 0x2290)) {
+                        qcopy(q, h + 0x80);
                     } else {
                         qcopy(q, e + 0x10);
                         if (*(s16 *)(e + 0xAA) == 0xB69) {
