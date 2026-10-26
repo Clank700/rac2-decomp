@@ -314,7 +314,6 @@ void func_L05_003D0320(char *obj)
     func_306630(obj + 0x10, table + 0x30, obj + 0x10);
 }
 
-INCLUDE_ASM("asm/levels", func_L05_003D0538);
 
 /* func_L05_003D0728 is in the sibling unit L05_003D0728-g8.c. */
 

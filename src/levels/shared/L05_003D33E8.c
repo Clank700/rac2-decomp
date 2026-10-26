@@ -88,7 +88,6 @@ void func_L05_00417448(char *object)
     *(float *)(object + 0x2C) = 0.02f;
 }
 
-INCLUDE_ASM("asm/levels", func_L05_00417550);
 
 INCLUDE_ASM("asm/levels", func_L05_00417D48);
 

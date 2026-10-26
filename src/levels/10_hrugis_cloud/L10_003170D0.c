@@ -228,7 +228,6 @@ void func_L10_004184F0(u8 *arg0) {
     *(f32 *)(arg0 + 0x2C) = 0.16f;
 }
 
-INCLUDE_ASM("asm/levels", func_L10_00418588);
 
 INCLUDE_ASM("asm/levels", func_L10_00418768);
 
@@ -288,7 +287,6 @@ void func_L10_00418AD8(u8 *arg0) {
     *(s32 *)(state + 0x268) = 0x1E;
 }
 
-INCLUDE_ASM("asm/levels", func_L10_00418BA0);
 
 INCLUDE_ASM("asm/levels", func_L10_00419188);
 

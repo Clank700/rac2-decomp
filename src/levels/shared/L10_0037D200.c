@@ -110,7 +110,6 @@ void func_L10_004191E8(void *a0)
     *(int *)((char *)s1 + 0x268) = 0x19;
 }
 
-INCLUDE_ASM("asm/levels", func_L10_00419348);
 
 /* func_L10_004235A0 lives in L10_004235A0-g8.c. */
 

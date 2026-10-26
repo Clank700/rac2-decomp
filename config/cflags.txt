@@ -1040,3 +1040,13 @@ src/levels/shared/L00_0041DEF0.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L04_003F9078.c	-O2 -G0 -ffunction-sections
 src/game/002BAA28.c	-O2 -G0 -ffunction-sections
 src/game/002C14D8.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_003FD700-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/0032E700-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003ED850-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/20_yeedil/L20_0039CC10-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L05_003D0538-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
+src/levels/shared/L00_00428000-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
+src/levels/10_hrugis_cloud/L10_00418588-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
+src/levels/10_hrugis_cloud/L10_00418BA0-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
+src/levels/shared/L05_00417550-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
+src/levels/shared/L10_00419348-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por

@@ -370,7 +370,6 @@ INCLUDE_ASM("asm/levels", func_L00_003ECD80);
 
 INCLUDE_ASM("asm/levels", func_L00_003ED198);
 
-INCLUDE_ASM("asm/levels", func_L00_003ED850);
 
 extern void func_00282CF0(char *local, char *first, char *second);
 
