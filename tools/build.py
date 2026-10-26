@@ -243,21 +243,34 @@ def compile_key(source: Path, flags: str) -> str:
     return json.dumps([flags, os.environ.get("RAC2_LINUX", ""), digests])
 
 
+def split_flags(flags: str) -> tuple[list[str], list[str]]:
+    """A unit's flags as (compiler arguments, assembler arguments).
+
+    Both frontends stop at assembly, so standard -Wa, options are forwarded here. SDK units
+    (flags starting with "sdk") also get --r5900-pool-li-d: the SDK's objects pool li.d
+    constants in .lit8, while the game code builds them inline, the assembler's default
+    (docs/COMPILER-NOTES.md, "Double constants in general registers")."""
+    compiler_args, assembler_args = [], []
+    sdk = flags.startswith("sdk")
+    if sdk:
+        assembler_args.append("--r5900-pool-li-d")
+    for arg in shlex.split(flags[3:] if sdk else flags):
+        if arg == "-Wa" or arg.startswith("-Wa,"):
+            forwarded = arg[4:].split(",")
+            if not all(forwarded):
+                raise ValueError("-Wa, requires nonempty comma-separated assembler arguments")
+            assembler_args.extend(forwarded)
+        else:
+            compiler_args.append(arg)
+    return compiler_args, assembler_args
+
+
 def compile_c(source: Path) -> Path:
     """build/obj/<source>.o, reused only with the same source, headers and toolchain."""
     out = BUILD / "obj" / (source.relative_to(ROOT).as_posix() + ".o")
     flags = flags_for(source)
-    # Both frontends stop at assembly; forward standard -Wa, options ourselves.
-    compiler_args, assembler_args = [], []
     try:
-        for arg in shlex.split(flags[3:] if flags.startswith("sdk") else flags):
-            if arg == "-Wa" or arg.startswith("-Wa,"):
-                forwarded = arg[4:].split(",")
-                if not all(forwarded):
-                    raise ValueError("-Wa, requires nonempty comma-separated assembler arguments")
-                assembler_args.extend(forwarded)
-            else:
-                compiler_args.append(arg)
+        compiler_args, assembler_args = split_flags(flags)
     except ValueError as error:
         sys.exit(f"{source.relative_to(ROOT)} has invalid compiler flags: {error}")
     compiler_flags = shlex.join(compiler_args)

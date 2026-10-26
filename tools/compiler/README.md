@@ -30,6 +30,11 @@ The retail code was built with GNU EE-GCC 2.9-ee-991111b. `build.sh` rebuilds it
   fills a reorder-mode delay slot from the previous instruction, as the GNU as that built the
   SDK libraries does (this tree's swap guard reads `&&` for `&` and never swaps). SDK units
   pass it as `-Wa,--r5900-swap-branch-slots` (docs/COMPILER-NOTES.md).
+  `inline_li_d.py` makes gas build every `li.d` into a 64-bit general register inline
+  (load_register's dli form) instead of pooling the values that lack a zero 16-bit chunk in
+  each half in `.lit8`, as the game's own code does; this is the default. The SDK objects
+  pool, so `tools/build.py` passes the opt-out `--r5900-pool-li-d` to every `sdk`-profile unit
+  (docs/COMPILER-NOTES.md).
   `no_recombine_givs.py` drops strength_reduce's call to `recombine_givs` (loop.c), as the
   gcc-2.95 release branch did, so address givs stay on the giv combine_givs chose, as in
   retail; it is unconditional too.

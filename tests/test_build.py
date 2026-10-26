@@ -113,8 +113,10 @@ class ObjectCache(unittest.TestCase):
                 self.assertIn("-G2", frontend)
                 self.assertFalse(any(arg.startswith("-Wa") or arg.startswith("--r5900")
                                      or arg in ("--defsym", "example=7") for arg in frontend))
-                self.assertEqual(assembler[1:], ["--r5900-sign-bit=unsigned", "--defsym", "example=7",
-                                                  "-o", "x.o", "x.s"])
+                # SDK units also pool li.d constants (--r5900-pool-li-d); game units do not.
+                pool = ["--r5900-pool-li-d"] if prefix else []
+                self.assertEqual(assembler[1:], pool + ["--r5900-sign-bit=unsigned", "--defsym",
+                                                         "example=7", "-o", "x.o", "x.s"])
 
     def test_default_assembler_arguments_and_option_cache_changes(self):
         build.compile_c(self.source)
@@ -158,8 +160,9 @@ class ObjectCache(unittest.TestCase):
                 self.write(self.root / "config/cflags.txt", "src/game/example.c\t" + prefix + "-O2 "
                     + shlex.quote("-DNAME=two words") + " " + shlex.quote("-Wa," + literal) + "\n")
                 build.compile_c(self.source)
+                pool = ["--r5900-pool-li-d"] if prefix else []
                 self.assertEqual((build.COMPILER / "as.argv").read_text().splitlines(),
-                                 [literal, "-o", "x.o", "x.s"])
+                                 pool + [literal, "-o", "x.o", "x.s"])
                 frontend = compiler.with_suffix(".argv").read_text().splitlines()
                 self.assertIn("-DNAME=two words", frontend)
                 self.assertNotIn(literal, frontend)

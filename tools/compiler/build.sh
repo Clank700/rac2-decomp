@@ -61,6 +61,7 @@ python3 $T/neutralise_div_dslot.py gcc
 python3 $T/pad_div_erratum_branch.py gas/config/tc-mips.c >/dev/null
 python3 $T/r5900_mfc1_interlock.py gas/config/tc-mips.c
 python3 $T/swap_branch_slots.py gas/config/tc-mips.c
+python3 $T/inline_li_d.py gas/config/tc-mips.c
 python3 $T/tidy_condjump_fallthru.py gcc/flow.c
 python3 $T/zero_ti_store_barrier.py gcc/haifa-sched.c
 python3 $T/gcse_unsplit_edges.py gcc/gcse.c
@@ -87,7 +88,7 @@ e57d41902ac5792fea91c8fb54b529c042004542bc0eef6f1fea866acb3cb233  gcc/reorg.c
 5bc40b011473cd756c2a6128b6106fd2e96569c8e92bba1a8f9bc00f166feac2  gcc/flags.h
 feb3bd29dd08e1d1b1db78861d580c55f161a55e63cedd368e873c48bc36982d  gcc/gcse.c
 ba947e44256e3d5144e353a4976aac931a4941acc8dcb1dc0fda99fa8b7b504a  gcc/flow.c
-0c165d0e10dc0bfc987e53e6d18424093080046b812b467b0d0d1ffc40524eb3  gas/config/tc-mips.c
+319eba2cdeb963cd02b47cc8e2fe2a5d509a36670ecb1f6d8216f817e1fd9cdb  gas/config/tc-mips.c
 a790ca0e7cc378af98fa3f942734c7217cc91f2d2db2f6c2d62d69de8780e1e6  gcc/reload1.c
 2f6ffa23d379d620ec38db4e527b2cbd5583865195cd8b364aa2c1ce07433faf  gcc/loop.c
 SUMS

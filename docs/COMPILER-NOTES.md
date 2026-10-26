@@ -1001,6 +1001,31 @@ the class. The rule is the one rac1's ps2eeas model (tools/ps2eeas_dli.py, check
 871 assembler outputs) uses for the same class. Values with hi32 0xFFFFFFFF keep the old
 path: retail's 0xFFFFFFFF00FFFFFF is addiu -1; dsll 16; ori 0xFF; dsll 16; ori 0xFFFF.
 
+### Double constants in general registers (li.d)
+
+cc1 writes a DFmode constant bound for a general register (a double argument of a
+variadic call under `-msingle-float`, such as `printf(fmt, 0.1f)`) as the macro
+`li.d $r,<value>`. The archive's gas builds it inline only when each 32-bit half has a
+zero 16-bit chunk and otherwise pools it in `.lit8` (`lui $at` plus `ld $r,%lo(..)($at)`).
+The game's own code builds it inline every time with load_register's 64-bit form:
+(double)0.1f, 0x3FB99999A0000000, is `ori 0xFEE6; dsll 17; ori 0xCCCD; dsll 29` in
+`func_002ADB78` (boot) and its 27 level copies (`func_L00_00321878`); (double)1e-4f in
+`func_002D36A0` and its level copies and the constants of `func_00284268` have the same
+form, and no compiled game code in the boot or any level loads a `.lit8` value (every
+`lui $at`/`ld` pair reads the scratchpad in hand-written blocks). The SDK's objects pool:
+`func_0011C090` (libc's exponent formatter, SDK profile) loads 0.1 and 10.0 from `.lit8`
+and matches only that way. So the game code's form is the assembler's default:
+[inline_li_d.py](../tools/compiler/transformers/inline_li_d.py) takes the whole value for every
+`li.d` into a GPR on a 64-bit ISA (the `F` operand of M_LI_D) and builds it with load_register;
+FPR forms and 32-bit ISAs are unchanged. `--r5900-pool-li-d` restores the archive's pooling, and
+`tools/build.py` (`split_flags`) passes it to every unit of the SDK profile (`sdk` flags in
+`config/cflags.txt`), so no flags line changes and the SDK objects assemble as before; no game
+unit needs a switch. `--r5900-inline-li-d` states the default explicitly. An earlier default-on
+trial without the SDK opt-out broke `func_0011C090`. With the default, no matched function in
+any release compiled differently (`build.py all --strict`: us 28/28; pal and us2 only their
+known failures). [tests/test_inline_li_d.py](../tests/test_inline_li_d.py) checks the
+transformer, both profiles' words, and that only SDK units get the opt-out.
+
 Two sign-bit loads need a zero-extending seed. Patch 0059 exposes per-object
 `--r5900-sign-bit=unsigned`; pass it with `-Wa,--r5900-sign-bit=unsigned` in the
 same per-file flag table. Explicit signed restores default; invalid/missing values
@@ -1073,6 +1098,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | Inheritance into non-spill registers | [test_reload_reg_used_guard.py](../tests/test_reload_reg_used_guard.py) |
 | Null-pointer-check pass | [test_no_null_pointer_checks.py](../tests/test_no_null_pointer_checks.py) |
 | Masks/sign seed | [test_dli_masks.py](../tests/test_dli_masks.py) |
+| Inline li.d into GPRs | [test_inline_li_d.py](../tests/test_inline_li_d.py) |
 | Hazard labels | [test_hazard_labels.py](../tests/test_hazard_labels.py), [hazard_labels.s](../tests/fixtures/hazard_labels.s) |
 | Block-move loop padding | [test_block_move_loop.py](../tests/test_block_move_loop.py) |
 | Asm-word loop padding | [test_count_asm_words.py](../tests/test_count_asm_words.py) |
