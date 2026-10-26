@@ -310,7 +310,7 @@ INCLUDE_ASM("asm/levels", func_L00_003EB8E8);
 
 INCLUDE_ASM("asm/levels", func_L00_003EBC68);
 
-INCLUDE_ASM("asm/levels", func_L00_003EC078);
+/* func_L00_003EC078 is defined in L00_003EC078-zero-ti-por-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_003EC140);
 

@@ -438,7 +438,32 @@ void func_L11_0044C0F0(char *a0)
 /* state handler: clears the 0x490 word while the frame byte is out of the 0..3 window, otherwise
    arms the 0x4CA gate through the 0xB8 handle and runs the 100-unit smash into it */
 /*W23B*/
-INCLUDE_ASM("asm/levels", func_L11_0044C268);
+/* Same body as func_L02_003F16F0, with this function's own callees. */
+void func_L11_0044C268(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    if (*(unsigned char *)(arg0 + 0x20) < 4) {
+        *(int *)(state + 0x490) = 0;
+        goto done;
+    }
+
+    if (*(short *)(state + 0x4CA) == 1) {
+        *(short *)(state + 0x4C8) =
+            func_002B3BA8(arg0, *(int *)(state + 0x4C4), 100.0f, 100.0f, 0, 0);
+        *(int *)(state + 0x490) = *(int *)(state + 0x220);
+    } else {
+        if (func_L11_00441868(*(int *)(arg0 + 0xB8), *(short *)(arg0 + 0xAA)) == 0)
+            goto done;
+        *(short *)(state + 0x4CA) = 1;
+        *(short *)(state + 0x4C8) =
+            func_002B3BA8(arg0, *(int *)(state + 0x4C4), 100.0f, 100.0f, 0, 0);
+        *(int *)(state + 0x490) = *(int *)(state + 0x220);
+    }
+    return;
+
+done:
+    *(short *)(state + 0x4CA) = 0;
+}
 /*W23E*/
 
 

@@ -224,7 +224,21 @@ void func_L11_00456540(char *p)
     *(char *)(p + 0x31) = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L11_004565D8);
+/* Same body as func_L02_003F1A88, with this function's own callees. */
+void func_L11_004565D8(char *arg0, char *arg1) {
+    char *state;
+    float angle;
+    float radius;
+
+    angle = func_00283248(*(float *)(arg0 + 0x10) - *(float *)arg1,
+                          *(float *)(arg0 + 0x14) - *(float *)(arg1 + 4));
+    angle += func_002A7878(-0.78539824f, 0.78539824f);
+    radius = func_002A7878(-2.0f, 2.0f) + 8.0f;
+    state = *(char **)(arg0 + 0x68);
+    qcopy(state + 0x230, arg1);
+    *(float *)(state + 0x230) += radius * func_00283180(angle);
+    *(float *)(state + 0x234) += radius * func_00283198(angle);
+}
 
 INCLUDE_ASM("asm/levels", func_L11_004566C0);
 
@@ -380,7 +394,7 @@ void func_L11_00459EA0(char *p)
 
 INCLUDE_ASM("asm/levels", func_L11_00459F30);
 
-INCLUDE_ASM("asm/levels", func_L11_0045A3C8);
+/* func_L11_0045A3C8 is defined in L11_0045A3C8-flags-g8.c. */
 
 /* func_L11_0045A578 lives in the sibling small-data unit (L11_00453358-g8.c). */
 

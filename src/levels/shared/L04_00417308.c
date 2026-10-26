@@ -24,7 +24,7 @@ INCLUDE_ASM("asm/levels", func_L04_00419918);
 
 INCLUDE_ASM("asm/levels", func_L04_0041AD18);
 
-INCLUDE_ASM("asm/levels", func_L04_00423178);
+/* func_L04_00423178 is defined in L04_00423178-flags-g8.c. */
 
 
 INCLUDE_ASM("asm/levels", func_L04_00432258);
@@ -33,7 +33,7 @@ INCLUDE_ASM("asm/levels", func_L04_00432258);
 
 /* func_L04_00432530 is defined in L04_00432530.c. */
 
-INCLUDE_ASM("asm/levels", func_L04_00434AD0);
+/* func_L04_00434AD0 is defined in L04_00434AD0-flags-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L04_0043BC58);
 

@@ -657,7 +657,7 @@ INCLUDE_ASM("asm/levels", func_L11_004456A0);
 
 INCLUDE_ASM("asm/levels", func_L11_00445990);
 
-INCLUDE_ASM("asm/levels", func_L11_00445B30);
+/* func_L11_00445B30 is defined in L11_00445B30-g-g8.c. */
 
 /* Claims the shared call slot for the state entry the identifier names. */
 typedef struct {

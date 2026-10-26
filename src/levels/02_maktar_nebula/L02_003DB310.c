@@ -72,7 +72,18 @@ void func_L02_003DB870(char *arg0, int arg1) {
     *(int *)(*(char **)(arg0 + 0x68) + 0x264) = arg1;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003DB880);
+/* Same body as func_L02_003D4990, with this function's own callees. */
+void func_L02_003DB880(char *arg0) {
+    char *state = *(char **)(arg0 + 0x68);
+
+    if (*(short *)(state + 0x280) != 0)
+        return;
+    (*(short *)(state + 0x282))++;
+    while (*(float *)(state + 0x20) <
+           (float)*(short *)(state + 0x24) * (3.0f - (float)*(short *)(state + 0x282)) * 0.33333334f)
+        (*(short *)(state + 0x282))++;
+    *(short *)(state + 0x280) = 1;
+}
 
 void func_L02_003DB938(char *arg0) {
     char *state = *(char **)(arg0 + 0x68);
