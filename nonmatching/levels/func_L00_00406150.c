@@ -1,20 +1,36 @@
-/* Opus big34, 2026-10-26. Lightning-arc effect update (12 segments of 20 points, three
- * travelling sparks). PERMUTE-FLAGS: -O2 -G64 -ffunction-sections
- * Unit: its own file, src/levels/shared/L00_00406150-g8.c, flags -O2 -G64 -ffunction-sections.
- * Level 0: 917 of 920 instructions, frame 0x380 as retail, 167 differing lines; ignoring
- * register names and spill-slot offsets only 57 (cmp of opcodes/immediates).
+/* Opus big34, then big41 (2026-10-26). Lightning-arc effect update (12 segments of 20 points,
+ * three travelling sparks). PERMUTE-FLAGS: -O2 -G64 -ffunction-sections -g
+ * Unit: its own file, src/levels/shared/L00_00406150-g8.c, flags -O2 -G64 -ffunction-sections -g.
  * Twin: func_L00_003C6B98 has the identical opcode stream (port by renaming its data).
- * What holds: -G64 (int[3]/Vec[3] state arrays are la macros, 20-byte colour table is a local
- * initializer, Collision > 64 bytes), block-local temps (a block-local whose address is taken
- * moves one binding level out at each expression statement of its level, so the D-loop temps
- * sit in an inner block and the colour table in a block after the two calls), one local per job
- * (the disabled-list reset loop needs its own index: -33 lines).
- * Left: (1) spill-slot order of the gcse address pseudos (&m1,&m2,&m3,&v10,&v40,&v270 in retail,
- * &v10,&v40,&v270,&m1.. here): gcse PRE creates reaching regs in hash-bucket order, and the
- * bucket count is n_insns/2, so it moves with the structure (see F26 in ONE-OFF.md);
- * (2) spark-spawn store order; (3) final spark loop: retail reduces &pos and k*16 but leaves
- * timer/age/scale arrays as k*4 + la; (4) a few delay-slot/reload spots (obj reload in the three
- * segment copies, &v40 reuse in the particle calls).
+ * big41 state at level 0: 918 of 920 instructions, 66 differing lines (full compare), 12 ignoring
+ * registers and spill-slot offsets (big34: 167 / 57). What closed:
+ *  - final spark loop indexes the arrays (D_2D30[kk], D_2CC0[kk], D_2C90[kk]) instead of
+ *    pointers: retail's giv choice (active pointer, vel/pos, k*16 spilled) follows by itself;
+ *  - func_002C2210's real prototype (void *, int, float, float, int, int, int, void *, float, int),
+ *    as declared by the L20 callers: retail's argument order;
+ *  - -g: the nop pair before the u = .../E38 div.s;
+ *  - &D_L00_001BF200.point instead of a separate D_L00_001BF220 name (jal delay slot);
+ *  - spawn store order 2D30, 2CF0, 2D10, 2D20, 2D00 (permuted, sched1 weight).
+ * Spill slots (52 of the 66 lines) are fully explained: reload numbers slots in pseudo order, and
+ * the seven spilled gcse PRE pseudos are created in bucket order, bucket = (14030 + K) mod N for
+ * the sp+K addresses and (14030 + regno(i)) mod N for the main loop's i+1. N = (max_cuid/2)|1.
+ * Retail's order (i+1, &m[0..2], &v10, &v40, &v270) needs N = 419 (max_cuid 836..839) with i's
+ * pseudo number 216..236. Verified: this file with 16 extra pseudos before i and F4_N=419 gives
+ * 12 lines, all non-slot. This file has i block-local (regno 226, in range); re-reading
+ * D_L00_001BF200.hit and disabled[q] instead of locals raised it. Left: max_cuid is 826, so
+ * +10..13 insns at gcse with no change to the final code. Only named copies (len = ...; dist = len)
+ * moved it, +1 each; loop spellings, conditions and stores did not. Don't use dead initialisers.
+ * Non-slot leftovers (12 lines):
+ *  (a) spawn pairs: retail's call arg reuses the qcopy asm's input reload (first pair: no reload,
+ *      second: daddu a0,a1). Here cse2 rewrites the arg to the spilled PRE pseudo, combine folds
+ *      the inline's dst copy into the asm, and the arg becomes a plain lw (no inheritance).
+ *      This is the reload-inheritance pattern (F4/F5 research);
+ *  (b) a nop at the head of the spark search loop (retail's bnez targets it): looks like the
+ *      R5900 short-loop pad from mips.c (anchored before the beqz's lw), but the beqz target is
+ *      far away, so the ASTRA P38 rule doesn't fire here. Possible compiler-model evidence;
+ *  (c) seg == 11 path: retail builds &D_254A60[seg-1] as la(D-16)+0xB0, here a1+0xA0 (cse1
+ *      folds through the related value);
+ *  (d) the colors initializer's rodata address (relocation only in the scratch compare).
  */
 #include "common.h"
 
@@ -75,7 +91,7 @@ extern Vec D_L00_00254CA0[][20];
 extern void func_L00_00406040(char *);
 extern void func_L00_00406FB0();
 extern void func_L00_002E6EF8(void *, void *);
-extern Particle *func_002C2210(float, float, float, void *, int, int, int, int, void *, int);
+extern Particle *func_002C2210(void *, int, float, float, int, int, int, void *, float, int);
 extern Particle *func_L00_0033C638(float, float, void *, int, int, int, int, void *, int);
 extern void func_00282CF0(void *, void *, void *);
 extern void func_00282F20(void *, void *, float);
@@ -109,7 +125,7 @@ void func_L00_00406150(char *arg)
     char *obj;
     char *def;
     float dist, t, w, r, ang, f, len, scale;
-    int n, tries, i, j, k, kk, q, sign, seg;
+    int n, tries, j, k, kk, q, sign, seg;
     Particle *p;
 
     v20[3] = 1.0f;
@@ -122,7 +138,8 @@ void func_L00_00406150(char *arg)
         func_00282D30(v40, *(char **)(obj + 0x10) + 0xE0, *(float *)(def + 0x10));
         func_00282CC0(v30, *(char **)(obj + 0x10) + 0x10, v40);
     } else {
-        func_002AF000(v30, D_L00_001B0E38, *(float *)(obj + 0x48), *(float *)(obj + 0x4C));
+        float x = *(float *)(obj + 0x48), y = *(float *)(obj + 0x4C);
+        func_002AF000(v30, D_L00_001B0E38, x, y);
         func_00282CC0(v30, v30, obj);
     }
     n = 0;
@@ -135,18 +152,17 @@ void func_L00_00406150(char *arg)
             char *hit;
             if (++tries >= 7) break;
             col = &D_L00_001BF200;
-            hit = col->hit;
-            if (hit != 0 && (*(short *)(hit + 0xAA) == 0xE7D || *(short *)(hit + 0xAA) == 0xEB0)) {
-                disabled[n++] = hit;
-                *(int *)(hit + 0x98) = 0;
+            if (D_L00_001BF200.hit != 0 && (*(short *)(D_L00_001BF200.hit + 0xAA) == 0xE7D || *(short *)(D_L00_001BF200.hit + 0xAA) == 0xEB0)) {
+                disabled[n++] = D_L00_001BF200.hit;
+                *(int *)(D_L00_001BF200.hit + 0x98) = 0;
                 if (n < 128) {
-                    qcopy(v40, &col->point);
+                    qcopy(v40, &D_L00_001BF200.point);
                     continue;
                 }
             }
             {
                 float v270[4];
-                func_00282CF0(v250, obj, &D_L00_001BF220);
+                func_00282CF0(v250, obj, &D_L00_001BF200.point);
                 f = func_00282DB0(D_00189E20.object + 0xE0, v250);
                 func_00282D30(v260, D_00189E20.object + 0xE0, f);
                 func_00282CF0(v270, v250, v260);
@@ -155,8 +171,7 @@ void func_L00_00406150(char *arg)
             break;
         }
         for (q = 0; q < n; q++) {
-            char *h = disabled[q];
-            *(int *)(h + 0x98) = *(int *)(*(char **)(h + 0x24) + 0x10);
+            *(int *)(disabled[q] + 0x98) = *(int *)(*(char **)(disabled[q] + 0x24) + 0x10);
         }
     } else {
         func_00282CF0(v40, obj, *(char **)(obj + 0x10) + 0x10);
@@ -169,6 +184,8 @@ void func_L00_00406150(char *arg)
     qcopy(&D_L00_00254A60[0], obj);
     qcopy(&D_L00_00254B20[0], obj);
     qcopy(&D_L00_00254BE0[0], obj);
+    {
+    int i;
     for (i = 1; i < 12; i++) {
         func_00300190(&D_L00_00254A60[i], &D_L00_00254A60[i]);
         func_00282CF0(v10, &D_L00_00254A60[i], &D_L00_00254A60[i - 1]);
@@ -210,24 +227,25 @@ void func_L00_00406150(char *arg)
         func_002830C0(&D_L00_00254BE0[i], v20, m);
         }
     }
+    }
     func_L00_002E6EF8(func_L00_00406FB0, arg);
     scale = func_002A7878(0.1f, 1.7f);
     sign = func_002A77E0(2);
     if (sign == 0) sign = sign - 1;
     if (func_002A77E0(2) == 0) {
         qcopy(v40, &D_L00_00254B20[11]);
-        p = func_002C2210(scale * 0.1f, scale, 0.003f, v40, 0x1E, 0x7F103FFF, 0, sign, &D_L00_001A8F20, 1);
+        p = func_002C2210(v40, 0x1E, scale * 0.1f, scale, 0x7F103FFF, 0, sign, &D_L00_001A8F20, 0.003f, 1);
         if (p) p->b2 = D_L00_001FEAC4[0][7];
         sign = -sign;
-        p = func_002C2210(scale * 0.07f, scale * 0.7f, 0.003f, v40, 0x1E, 0x80808080, 1, sign, &D_L00_001A8F20, 1);
+        p = func_002C2210(v40, 0x1E, scale * 0.07f, scale * 0.7f, 0x80808080, 1, sign, &D_L00_001A8F20, 0.003f, 1);
         if (p) p->b2 = D_L00_001FEAC4[0][7];
     }
     if (func_002A77E0(2) == 0) {
         qcopy(v40, &D_L00_00254BE0[11]);
-        p = func_002C2210(scale * 0.1f, scale, 0.003f, v40, 0x1E, 0x80FF4F10, 0, sign, &D_L00_001A8F20, 1);
+        p = func_002C2210(v40, 0x1E, scale * 0.1f, scale, 0x80FF4F10, 0, sign, &D_L00_001A8F20, 0.003f, 1);
         if (p) p->b2 = D_L00_001FEAC4[0][7];
         sign = -sign;
-        p = func_002C2210(scale * 0.07f, scale * 0.7f, 0.003f, v40, 0x1E, 0x80808080, 1, sign, &D_L00_001A8F20, 1);
+        p = func_002C2210(v40, 0x1E, scale * 0.07f, scale * 0.7f, 0x80808080, 1, sign, &D_L00_001A8F20, 0.003f, 1);
         if (p) p->b2 = D_L00_001FEAC4[0][7];
     }
     func_00282CF0(v250, &D_L00_00254A60[1], &D_L00_00254A60[0]);
@@ -260,8 +278,8 @@ void func_L00_00406150(char *arg)
             if (D_L00_001B2D30[k] == 0) {
                 D_L00_001B2D30[k] = 1;
                 D_L00_001B2CF0[k] = D_L00_001B0EA8;
-                D_L00_001B2D20[k] = D_L00_001B0EB8;
                 D_L00_001B2D10[k] = 0;
+                D_L00_001B2D20[k] = D_L00_001B0EB8;
                 D_L00_001B2D00[k] = func_00283CE0(D_L00_001B0EBF);
                 qcopy(&D_L00_001B2C90[k], obj);
                 func_00282CF0(v260, &D_L00_00254A60[1], &D_L00_00254A60[0]);
@@ -271,13 +289,10 @@ void func_L00_00406150(char *arg)
         }
     }
     {
-    int *active = D_L00_001B2D30;
-    Vec *vel = D_L00_001B2CC0;
-    Vec *pos = D_L00_001B2C90;
-    for (kk = 0; kk < 3; kk++, active++, vel++, pos++) {
-        if (*active != 0) {
+    for (kk = 0; kk < 3; kk++) {
+        if (D_L00_001B2D30[kk] != 0) {
             if (func_00282948(&D_L00_001B2CF0[kk]) != 0) {
-                *active = 0;
+                D_L00_001B2D30[kk] = 0;
             } else {
                 float step, u, rem, inv;
                 float v270[4];
@@ -288,12 +303,12 @@ void func_L00_00406150(char *arg)
                 if (u > 1.0f) u = 1.0f;
                 D_L00_001B2D20[kk] = D_L00_001B0EB8 + (D_L00_001B0EB4 - D_L00_001B0EB8) * u;
                 if (D_L00_001B2D10[kk] >= D_L00_001B0E38) {
-                    func_00282D30(v260, vel, step);
-                    func_00282CC0(pos, pos, v260);
+                    func_00282D30(v260, &D_L00_001B2CC0[kk], step);
+                    func_00282CC0(&D_L00_001B2C90[kk], &D_L00_001B2C90[kk], v260);
                 } else {
                     seg = func_00283CF0(D_L00_001B2D10[kk] / D_L00_001B2C80);
                     rem = D_L00_001B2D10[kk] - func_00283CE0(seg) * D_L00_001B2C80;
-                    qcopy(pos, &D_L00_00254A60[seg]);
+                    qcopy(&D_L00_001B2C90[kk], &D_L00_00254A60[seg]);
                     if (seg == 11) func_00282CF0(v260, &D_L00_00254A60[seg], &D_L00_00254A60[seg - 1]);
                     else func_00282CF0(v260, &D_L00_00254A60[seg + 1], &D_L00_00254A60[seg]);
                     inv = func_00282DF0(v260);
@@ -302,8 +317,8 @@ void func_L00_00406150(char *arg)
                         func_00282D30(v270, v260, rem * inv);
                         func_00282CC0(&D_L00_001B2C90[kk], &D_L00_001B2C90[kk], v270);
                         func_00282F20(v270, v260, inv);
-                        func_00282D08(vel, vel, v270, 0.1f);
-                        func_00282F20(vel, vel, 1.0f);
+                        func_00282D08(&D_L00_001B2CC0[kk], &D_L00_001B2CC0[kk], v270, 0.1f);
+                        func_00282F20(&D_L00_001B2CC0[kk], &D_L00_001B2CC0[kk], 1.0f);
                     }
                 }
             }
