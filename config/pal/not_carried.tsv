@@ -36,6 +36,7 @@ func_0029C9D0	boot: instruction at +0x18 differs
 func_0029CA00	boot: instruction at +0x24 differs
 func_0029CA40	boot: instruction at +0x18 differs
 func_0029CBE0	boot: instruction at +0x24 differs
+func_002CD250	00_aranos_tutorial: instruction at +0x54 differs
 func_002CD878	boot: instruction at +0x20 differs
 func_002CD950	boot: instruction at +0x90 differs
 func_002CF188	boot: instruction at +0x20 differs
