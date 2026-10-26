@@ -738,3 +738,9 @@ src/levels/11_joba/L11_002D22C8.c	-O2 -G0 -ffunction-sections -g -ffast-math -fr
 src/levels/16_snivelak/L16_002B9FF0.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-hazard-labels
 src/levels/07_siberius/L07_002B8618.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
 src/levels/23_damosel_orbit/L23_002C38B0.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/shared/L13_002C5760.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/shared/L00_002BA7D8.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/18_damosel/L18_002D7650.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/12_todano/L12_002B85E0.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/22_dobbo_orbit/L22_002BF1B0.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels
+src/levels/01_oozla/L01_002ADDC8.c	-O2 -G0 -ffunction-sections -g -ffast-math -frac2-zero-ti-por -frac2-keep-block-order -frac2-no-null-pointer-checks -frac2-hazard-labels

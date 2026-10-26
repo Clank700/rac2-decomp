@@ -592,7 +592,33 @@ INCLUDE_ASM("asm/game", func_00271E88);
 INCLUDE_ASM("asm/game", func_00271FD8);
 
 
-INCLUDE_ASM("asm/game", func_002721C8);
+/* Advances the shared scalar towards the stored target and updates its timer. */
+typedef struct {
+    char prefix[0x268];
+    float step;
+    float target;
+    int timer;
+} ScalarTransitionView;
+extern ScalarTransitionView D_L00_001B8C80;
+extern float D_L00_001B18E0 __attribute__((sda));
+extern float func_002AA2E8(float *, float, float);
+extern int func_00282948(void *);
+
+void func_002721C8(void)
+{
+    ScalarTransitionView *state = &D_L00_001B8C80;
+
+    if (state->step != 0.0f) {
+        func_002AA2E8(&D_L00_001B18E0,
+                     state->target, state->step);
+        if (D_L00_001B18E0 == state->target) {
+            if (func_00282948(&state->timer) == 1)
+                state->target = 0.0f;
+        }
+        if (D_L00_001B8C80.target <= 0.0f && D_L00_001B18E0 <= 0.0f)
+            D_L00_001B8C80.step = 0.0f;
+    }
+}
 
 INCLUDE_ASM("asm/game", func_00272280);
 
