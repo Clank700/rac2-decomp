@@ -1,44 +1,6 @@
-/*
- * Manual reconstruction retained as a near miss; no linked-build or runtime credit.
- * Prior worker profile: -O2 -G8 -ffunction-sections.
- * Prior worker coverage: US 0/28; US2 0/28; PAL 0/28.
- * These are the recorded worker checks; no fresh compilation was run for retention.
- */
-
-/* Nonmatching manual reconstruction of func_0029DEA8 (4376 retail bytes).
-   Profile: -O2 -G8 -ffunction-sections.
-   Ten bounded meaningful source trials: 4256 -> 4316 -> 4332 -> 4248 ->
-   4388 -> 4376 -> 4384 bytes. The retained 4384-byte form localizes the
-   remaining differences to the last constant cases/shared coordinate tail
-   and the second loop's constant/register allocation. All three releases
-   finish at 0 of 28 places, exit 1. A prior 4376-byte form first differed
-   at +0x160 and hoisted a parent-pointer load across typed field stores.
-   Integer/short/unsigned-short cached-key views tied; do not repeat them.
-
-   The old screening-only note misclassified register copies as fourteen
-   pointer inputs. The actual first input is a signed selector, and the
-   second is tested as a flag. The only direct helper is func_00297FE8,
-   with two FP inputs, two float output pointers and a 32-bit selector.
-   All 87 manually transcribed coordinate pairs agree bit-for-bit with
-   the verified reference. The record stride and field widths come from
-   retail accesses, not host sizes. Signedness of the 16-bit flag field
-   is immaterial to the observed masks; its signed view retains the
-   measured full-width complement mask.
-
-   Binding evidence: ref_0029DEA8_00 is the partial state at boot 0x1C4FA0,
-   level 0 0x1C93A0; ref_01 is the list-pointer table at 0x258C10/0x281650;
-   ref_02 is the target-pointer table at 0x1C1220/0x1C5620; ref_03 is the
-   parent-list pointer at 0x1B1A58/0x1B1D98. The three SDA inputs ref_04,
-   ref_05 and ref_06 are boot 0x1A9598,0x1A9DB0,0x1A9B20 and level 0
-   0x1A98D8,0x1AA0F0,0x1A9E60. ref_06 is a measured adjacent float pair
-   (8 bytes), so ordinary G8 is truthful. The cache arrays each span 21
-   words (0x54 bytes apart). The overall state and target views remain
-   partial layouts. The null-cache-address branch is present in retail
-   despite being unreachable for the observed linked state address.
-
-   Reopen only with a new shared-tail/FPR-lifetime or second-loop
-   allocation hypothesis. No exact candidate or runtime validation claimed.
-*/
+/* func_0029DEA8 in its own unit (-G8 from the file name). Lays out the map
+   markers of one map: fixed marker positions by key, else the projected
+   position of the marker's target, then each marker's visibility. */
 #include "common.h"
 
 /* Only measured fields are named. The terminated entry list advances by 0x28. */
@@ -62,14 +24,16 @@ typedef struct { u8 reserved00[0x10]; float x,y; u8 reserved18[0xE0]; float scal
 typedef struct { u8 reserved00[0x24]; s16 enabled; u8 reserved26[2]; } MapParent;
 typedef struct { float x,y; } MapCoordinates;
 
-/* These objects move between the boot and level placements. */
-extern MapEntryState ref_0029DEA8_00;
-extern MapEntry *ref_0029DEA8_01[];
-extern MapTarget *ref_0029DEA8_02[];
-extern MapParent *ref_0029DEA8_03;
-extern int ref_0029DEA8_04 __attribute__((sda));
-extern int ref_0029DEA8_05 __attribute__((sda));
-extern MapCoordinates ref_0029DEA8_06 __attribute__((sda));
+/* These objects move between the boot and level placements (the levels read theirs
+   from the bytes). The fallback position is two adjacent small-data floats. */
+extern MapEntryState D_001C4FA0;
+extern MapEntry *D_00258C10[];
+extern MapTarget *D_001C1220[];
+extern MapParent *D_001B1A58;
+extern int D_001A9598 __attribute__((sda));
+extern int D_001A9DB0 __attribute__((sda));
+extern float D_001A9B20 __attribute__((sda));
+extern float D_001A9B24 __attribute__((sda));
 extern u8 D_001A7BE8[];
 extern int D_001A79F0;
 typedef struct { u8 reserved00[0x80]; float x,y,z; } MapPlayerView;
@@ -82,26 +46,27 @@ void func_0029DEA8(int selector,int update)
     float x,y,fallbackX,fallbackY;
     MapEntry *entry,*cursor;
     int offset,index,mapSelector;
-    if (selector<21 && D_001A7BE8[selector]) ref_0029DEA8_00.entries=ref_0029DEA8_01[selector];
-    else ref_0029DEA8_00.entries=0;
+    if (selector<21 && D_001A7BE8[selector]) D_001C4FA0.entries=D_00258C10[selector];
+    else D_001C4FA0.entries=0;
     if (D_00189E20.z!=0.0f && selector==D_001A79F0 && update) {
         mapSelector=selector+100;
-        if (!ref_0029DEA8_04) mapSelector=selector;
+        if (!D_001A9598) mapSelector=selector;
         func_00297FE8(D_00189E20.x,D_00189E20.y,&x,&y,mapSelector);
-        ref_0029DEA8_00.cachedX[selector]=(int)(x*4096.0f)<<16;
-        ref_0029DEA8_00.cachedY[selector]=(int)(y*4096.0f)<<16;
-    } else if ((int)ref_0029DEA8_00.cachedX==0) {
-        ref_0029DEA8_00.cachedX[selector]=0x08000000;
-        ref_0029DEA8_00.cachedY[selector]=0x08000000;
+        D_001C4FA0.cachedX[selector]=(int)(x*4096.0f)<<16;
+        D_001C4FA0.cachedY[selector]=(int)(y*4096.0f)<<16;
+    } else if ((int)D_001C4FA0.cachedX==0) {
+        D_001C4FA0.cachedX[selector]=0x08000000;
+        D_001C4FA0.cachedY[selector]=0x08000000;
     }
-    if (!ref_0029DEA8_00.entries) return;
+    if (!D_001C4FA0.entries) return;
     offset=0;
-    while (!(ref_0029DEA8_00.entries[offset].flags&4)) {
-        entry=&ref_0029DEA8_00.entries[offset];
-        if (ref_0029DEA8_05) {
-            fallbackX=ref_0029DEA8_06.x;
-            fallbackY=ref_0029DEA8_06.y;
-            goto writeFallback;
+    while (!(D_001C4FA0.entries[offset].flags&4)) {
+        entry=&D_001C4FA0.entries[offset];
+        if (D_001A9DB0) {
+            fallbackX=D_001A9B20;
+            fallbackY=D_001A9B24;
+            entry->x=fallbackX;
+            entry->y=fallbackY;
         } else {
             if (entry->key==-1000) { entry->x=0.415f; entry->y=0.39f; }
             else if (entry->key==-0x396) { entry->x=0.635f; entry->y=0.065f; }
@@ -189,50 +154,32 @@ void func_0029DEA8(int selector,int update)
             else if (entry->key==-0x3BD) { entry->x=0.18f; entry->y=0.33f; }
             else if (entry->key==-0x3E4) { entry->x=0.422f; entry->y=0.1f; }
             else if (entry->key==-0x3DE) { entry->x=0.486f; entry->y=0.865f; }
-            else if (entry->key==-0x3E3) {
-                fallbackX=0.405f;
-                fallbackY=0.081f;
-writeFallback:
-                entry->x=fallbackX;
-                entry->y=fallbackY;
-            }
+            else if (entry->key==-0x3E3) { entry->x=0.405f; entry->y=0.081f; }
             else if (selector==D_001A79F0) {
-                if (ref_0029DEA8_02[entry->key]) {
-                    func_00297FE8(ref_0029DEA8_02[entry->key]->x,ref_0029DEA8_02[entry->key]->y,
-                        &ref_0029DEA8_00.entries[offset].x,&ref_0029DEA8_00.entries[offset].y,selector);
-                    ref_0029DEA8_00.entries[offset].scale=ref_0029DEA8_02[entry->key]->scale;
+                if (D_001C1220[entry->key]) {
+                    func_00297FE8(D_001C1220[entry->key]->x,D_001C1220[entry->key]->y,
+                        &D_001C4FA0.entries[offset].x,&D_001C4FA0.entries[offset].y,selector);
+                    D_001C4FA0.entries[offset].scale=D_001C1220[entry->key]->scale;
                 }
             } else {
                 func_00297FE8(D_00139A28[entry->key].x,D_00139A28[entry->key].y,
-                    &ref_0029DEA8_00.entries[offset].x,&ref_0029DEA8_00.entries[offset].y,selector);
-                ref_0029DEA8_00.entries[offset].scale=D_00139A28[entry->key].z;
+                    &D_001C4FA0.entries[offset].x,&D_001C4FA0.entries[offset].y,selector);
+                D_001C4FA0.entries[offset].scale=D_00139A28[entry->key].z;
             }
         }
         offset++;
     }
-    if (!(ref_0029DEA8_00.entries[0].flags&4)) {
-        index=0;
-        offset=0;
+    index=0;
+    if (!(D_001C4FA0.entries[0].flags&4)) {
         do {
-        cursor=(MapEntry *)((u8 *)ref_0029DEA8_00.entries+offset);
+        cursor=&D_001C4FA0.entries[index];
         (*(int *)((u8 *)cursor+0x24))=0;
         (*(short *)((u8 *)cursor+4))&=~0x10;
         if ((*(short *)((u8 *)cursor+2))==-1) (*(int *)((u8 *)cursor+0x24))=1;
-        else (*(int *)((u8 *)cursor+0x24))=ref_0029DEA8_03[(*(short *)((u8 *)cursor+2))].enabled==1;
+        else (*(int *)((u8 *)cursor+0x24))=D_001B1A58[(*(short *)((u8 *)cursor+2))].enabled==1;
         if (((*(short *)((u8 *)cursor+4))&0x1000) && ((D_00139A28[(*(short *)cursor)].flags^1)&1)) (*(int *)((u8 *)cursor+0x24))=0;
-        if (ref_0029DEA8_00.entries[index].state) ref_0029DEA8_00.entries[index].flags|=0x10;
-        index++; offset+=0x28;
-        } while (!(ref_0029DEA8_00.entries[index].flags&4));
+        if (D_001C4FA0.entries[index].state) D_001C4FA0.entries[index].flags|=0x10;
+        index++;
+        } while (!(D_001C4FA0.entries[index].flags&4));
     }
 }
-
-/* Historical comments/maps retained from the previous near miss. These describe
- * that previous source; any superseded type, allocation or impossibility claims
- * are historical observations, not properties of the corrected body above. */
-
-/* Historical analysis (summary).
- * Historical screening misread register copies as fourteen pointer inputs and reported a
- * small-data scheduling blocker. The manual reconstruction above qualifies the actual signed
- * selector, flag, record views and floating-output helper. The earlier decoded instruction
- * excerpt remains private; its input-count conclusion is superseded.
- */

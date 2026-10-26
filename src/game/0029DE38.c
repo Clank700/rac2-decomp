@@ -104,7 +104,6 @@ int func_0029DE38(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_0029DEA8);
 
 
 INCLUDE_ASM("asm/game", func_0029EFD0);
