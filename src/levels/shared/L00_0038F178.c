@@ -176,7 +176,6 @@ char *func_L00_00390938(char *p)
 
 INCLUDE_ASM("asm/levels", func_L00_00390E10);
 
-INCLUDE_ASM("asm/levels", func_L00_00390F28);
 
 INCLUDE_ASM("asm/levels", func_L00_00390FF8);
 
