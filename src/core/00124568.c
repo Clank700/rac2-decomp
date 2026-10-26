@@ -172,7 +172,49 @@ void func_00124630(int *arg0) {
 
 INCLUDE_ASM("asm/core", func_001246D0);
 
-INCLUDE_ASM("asm/core", func_00124780);
+extern int r1_func_00118C70(void *);
+extern int r1_D_001313E0;
+extern int r1_D_001313E8;
+extern int r1_D_001313EC;
+extern int r1_D_001313F0;
+struct SemaParam_120B28 {
+    s32 currentCount;
+    s32 maxCount;
+    s32 initCount;
+    s32 numWaitThreads;
+    u32 attr;
+    u32 option;
+};
+extern volatile s32 r1_D_001313E0_120B28[] __asm__("r1_D_001313E0");
+extern s32 r1_D_001313E8_120B28[] __asm__("r1_D_001313E8");
+extern s32 r1_D_001313EC_120B28[] __asm__("r1_D_001313EC");
+extern volatile s32 r1_D_001313F0_120B28[] __asm__("r1_D_001313F0");
+extern s32 r1_func_00118C70_120B28(struct SemaParam_120B28 *) __asm__("r1_func_00118C70");
+
+
+/* rac1-decomp src/core/001208E8.c: func_00124780 */
+/* cmd_sem_init: unless both command semaphores already exist, create them
+   (count 1, max 1) and the completion semaphore (count 0) through
+   r1_func_00118C70 (CreateSema), then clear r1_D_001313F0.
+   Adapted from Lombyte's project (GPL-3.0): src/sdk/library/cmd_sem_init.c, cmd_sem_init. */
+void func_00124780(void) {
+    struct SemaParam_120B28 sema;
+
+    if ((r1_D_001313E8_120B28[0] != -1) && (r1_D_001313EC_120B28[0] != -1)) {
+        return;
+    }
+    sema.option = 0;
+    sema.initCount = 1;
+    sema.maxCount = 1;
+    /* Both results use the same record; storing the first handle inside
+       the second call's argument puts the store in that jal's delay slot,
+       as retail has it (the open residual of the old near-miss). */
+    r1_D_001313EC_120B28[0] = r1_func_00118C70_120B28(
+        (r1_D_001313E8_120B28[0] = r1_func_00118C70_120B28(&sema)) ? &sema : &sema);
+    sema.initCount = 0;
+    r1_D_001313E0_120B28[0] = r1_func_00118C70_120B28(&sema);
+    r1_D_001313F0_120B28[0] = 0;
+}
 
 /* rac1-decomp src/core/001208E8.c: func_00120BC0 */
 /*

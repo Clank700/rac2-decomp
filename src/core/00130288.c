@@ -123,6 +123,24 @@ void func_00130300(void *arg0) {
 
 INCLUDE_ASM("asm/core", func_00130428);
 
-INCLUDE_ASM("asm/core", func_001306D0);
+
+
+/* rac1-decomp src/core/0012AC80.c: func_001306D0 */
+void func_001306D0(unsigned int *o0, unsigned int *o1, unsigned int *o2, unsigned int *o3,
+                   unsigned int *o4, unsigned int *o5, unsigned int *o6, unsigned int *o7,
+                   unsigned int *o8, int a, int b, int c, int w, int h) {
+    unsigned int x = (a & 0xFFFFFFF) | 0x20000000;
+    unsigned int y = (b & 0xFFFFFFF) | 0x20000000;
+    unsigned int z = (c & 0xFFFFFFF) | 0x20000000;
+    int q = (w * h) / 512;
+    int s6, s7, s8;
+    s6 = q * 384; s6 += a;
+    s7 = q * 384; s7 += b;
+    s8 = q * 384; s8 += c;
+    *o0 = x; *o1 = y; *o2 = z; *o3 = x; *o4 = y; *o5 = z;
+    *o6 = (s6 & 0xFFFFFFF) | 0x20000000;
+    *o7 = (s7 & 0xFFFFFFF) | 0x20000000;
+    *o8 = (s8 & 0xFFFFFFF) | 0x20000000;
+}
 
 INCLUDE_ASM("asm/core", func_001307B0);
