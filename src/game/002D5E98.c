@@ -84,7 +84,7 @@ INCLUDE_ASM("asm/game", func_002D6230);
 
 typedef struct { char pad[4]; short mode; } Mode2D6E78;
 typedef struct { char pad[0x29C]; int flags[5]; int selected; } Map2D6E78;
-typedef struct { char pad[0xDB]; unsigned char active; } State2D6E78;
+typedef struct { char pad[0xDB]; unsigned char active; char padDC[0x11C - 0xDC]; unsigned int limit; } State2D6E78;
 extern Mode2D6E78 D_001A63A8;
 extern Map2D6E78 D_001C4FA0;
 extern State2D6E78 D_001F2840;
@@ -175,7 +175,46 @@ int func_002D81A8(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002D81B0);
+typedef struct { char pad0[0x36C]; int offset; char pad370[0x16B0 - 0x370]; int start; int length; } Stream2D81B0;
+typedef struct { unsigned int key; unsigned int flags; } Slot2D81B0;
+extern Stream2D81B0 D_0014B540;
+#define MACRO_ADDR __attribute__((section(".sdata")))
+extern Slot2D81B0 D_001B1F50[] MACRO_ADDR;
+extern int D_001F2958;
+
+/* Halves the stream length while it marks the slots whose key is older than the clock and
+   (outside the mode) asks for the next block; the result picks state 1 or 3. */
+int func_002D81B0(char *object)
+{
+    int length;
+    int i;
+    unsigned int *key;
+    unsigned int *flags;
+
+    func_002DE3A0(1);
+    *(int *)(object + 0x54) = 0;
+    *(int *)(object + 0x38) = 0;
+    length = D_0014B540.length;
+    D_0014B540.length = length / 2;
+    flags = &D_001B1F50[0].flags;
+    key = &D_001B1F50[0].key;
+    for (i = 0; i < 5; i++) {
+        if (*key != 0 && *key < D_001F2840.limit)
+            *flags |= 2;
+        flags += 2;
+        key += 2;
+    }
+    *(int *)(object + 0x50) = 0;
+    if (D_001A63A8.mode == 0) {
+        if (func_002B7B18(D_001F2958, D_0014B540.start + D_0014B540.offset, D_0014B540.length) != 0)
+            *(int *)(object + 0x50) = 1;
+        else
+            *(int *)(object + 0x50) = 3;
+    }
+    *(int *)(object + 0x10) |= 4;
+    D_0014B540.length = length;
+    return 0;
+}
 
 extern short D_001A63AC;
 extern void func_002B7AD0(void);

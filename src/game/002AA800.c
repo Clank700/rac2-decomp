@@ -746,7 +746,29 @@ void func_002AF000(float *p, float a, float b, float c)
 }
 
 
-INCLUDE_ASM("asm/game", func_002AF0A8);
+typedef struct { int items[21]; } Table_002AF0A8;
+
+extern const Table_002AF0A8 D_0026CB30;
+
+extern void func_002B0A18(int, int);
+
+extern void func_002B0CE0(int, int, int);
+
+/* Plays the entry of the 21-entry table the clamped index picks; entry 3 goes through the
+   other player. */
+void func_002AF0A8(int index)
+{
+    Table_002AF0A8 table = D_0026CB30;
+
+    if (index < 0)
+        index = 0;
+    if (index > 20)
+        index = 20;
+    if (index == 3)
+        func_002B0A18(table.items[3], 0xF0);
+    else
+        func_002B0CE0(8, table.items[index], 0xB4);
+}
 
 /* func_002AF1D0 is matched in its own unit, src/game/002AF1D0-qcopy.c (-frac2-qcopy -frac2-qcopy-barrier). */
 

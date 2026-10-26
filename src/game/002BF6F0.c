@@ -487,7 +487,26 @@ void func_002C28F8(char *object)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002C29A0);
+extern int func_00283CF0(float);
+
+/* A drifting spark: moves by its velocity, spins, slows its fall and fades over its last
+   64 frames; it frees itself when the count runs out. */
+void func_002C29A0(char *p)
+{
+    char *vel = p + 0x20;
+
+    func_00282CC0(p + 0x10, p + 0x10, vel);
+    *(float *)(p + 0xC) += 5880.0f;
+    *(float *)(vel + 0x14) *= 0.98f;
+    *(float *)(vel + 0x10) += *(float *)(vel + 0x14);
+    p[8] = func_00283CF0(*(float *)(vel + 0x10));
+    if (--*(short *)(p + 0xA) <= 0)
+        func_002B9180(p);
+    if (*(short *)(p + 0xA) > 0x40)
+        *(int *)(p + 4) = ((0x80 - *(short *)(p + 0xA)) << 24) | 0x808080;
+    else
+        *(int *)(p + 4) = (*(short *)(p + 0xA) << 24) | 0x808080;
+}
 
 /* func_002C2A88 uses the quadword-copy profile in 002C2A88-qcopy.c. */
 

@@ -61,7 +61,7 @@ void func_00291128(void) {
 }
 
 
-INCLUDE_ASM("asm/game", func_00291158);
+/* func_00291158 is matched in its own unit, 00291158.c. */
 
 /* func_00291268 is in 00290A40-g8.c. */
 

@@ -459,7 +459,7 @@ void func_0032A978(void)
 }
 
 
-INCLUDE_ASM("asm/game", func_0032ABC0);
+/* func_0032ABC0 is matched in its own unit, 0032ABC0.c. */
 
 
 /* func_0032AE30 is a near miss: see nonmatching/game/func_0032AE30.c. */
