@@ -508,7 +508,7 @@ void func_002C30F8(char *self)
         func_002B9180(self);
 }
 
-INCLUDE_ASM("asm/game", func_002C3150);
+/* func_002C3150 uses the quadword-copy profile in 002C3150-qcopy.c. */
 
 /* advances three floats of a sub-object by a resident offset triple, calls a three-pointer update, subtracts the offsets back out, rejects the result when any coordinate leaves the 2.0..1021.0 band, and otherwise rescales a 24-bit handle by the ratio of two helper lookups over a signed halfword index */
 void func_002C3280(u8 *self)
@@ -588,7 +588,7 @@ tail:
 
 INCLUDE_ASM("asm/game", func_002C3B08);
 
-INCLUDE_ASM("asm/game", func_002C3D80);
+/* func_002C3D80 uses the quadword-copy profile in 002C3D80-qcopy.c. */
 
 void func_002C3EE8(char *p)
 {
@@ -605,7 +605,7 @@ void func_002C3EE8(char *p)
         Fa03721e9_FUN_002B9180(p);
 }
 
-INCLUDE_ASM("asm/game", func_002C3F88);
+/* func_002C3F88 uses the quadword-copy profile in 002C3F88-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002C4100);
 

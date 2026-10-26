@@ -466,7 +466,9 @@ INCLUDE_ASM("asm/game", func_0032ABC0);
 
 INCLUDE_ASM("asm/game", func_0032AE30);
 
-INCLUDE_ASM("asm/game", func_0032B190);
+
+
+/* func_0032B190 is defined in 0032B190-dbg.c (-g). */
 
 void func_0032B2F0(char *p)
 {

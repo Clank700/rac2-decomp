@@ -581,7 +581,7 @@ INCLUDE_ASM("asm/game", func_002BE278);
 
 INCLUDE_ASM("asm/game", func_002BE400);
 
-INCLUDE_ASM("asm/game", func_002BE7E8);
+/* func_002BE7E8 uses the quadword-copy profile in 002BE7E8-qcopy.c. */
 
 /* calls a three-argument helper on the sub-objects at +16 and +32, then packs ((v[6]*v[4])/v[5])<<24 into the low 24 bits of the word at +4 and conditionally calls a second helper on +48 before a final call. */
 void func_002BE928(s32 *self) {

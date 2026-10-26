@@ -447,7 +447,7 @@ void func_002A91F0(void *a0, float *a1) {
     func_002837D0(a0, a0, v2);
 }
 
-INCLUDE_ASM("asm/game", func_002A9288);
+/* func_002A9288 uses the quadword-copy profile in 002A9288-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002A93B0);
 
