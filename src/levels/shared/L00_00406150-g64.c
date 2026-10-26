@@ -1,37 +1,8 @@
-/* Opus big34, then big41 (2026-10-26). Lightning-arc effect update (12 segments of 20 points,
- * three travelling sparks). PERMUTE-FLAGS: -O2 -G64 -ffunction-sections -g
- * Unit: its own file, src/levels/shared/L00_00406150-g8.c, flags -O2 -G64 -ffunction-sections -g.
- * Twin: func_L00_003C6B98 has the identical opcode stream (port by renaming its data).
- * big41 state at level 0: 918 of 920 instructions, 66 differing lines (full compare), 12 ignoring
- * registers and spill-slot offsets (big34: 167 / 57). What closed:
- *  - final spark loop indexes the arrays (D_2D30[kk], D_2CC0[kk], D_2C90[kk]) instead of
- *    pointers: retail's giv choice (active pointer, vel/pos, k*16 spilled) follows by itself;
- *  - func_002C2210's real prototype (void *, int, float, float, int, int, int, void *, float, int),
- *    as declared by the L20 callers: retail's argument order;
- *  - -g: the nop pair before the u = .../E38 div.s;
- *  - &D_L00_001BF200.point instead of a separate D_L00_001BF220 name (jal delay slot);
- *  - spawn store order 2D30, 2CF0, 2D10, 2D20, 2D00 (permuted, sched1 weight).
- * Spill slots (52 of the 66 lines) are fully explained: reload numbers slots in pseudo order, and
- * the seven spilled gcse PRE pseudos are created in bucket order, bucket = (14030 + K) mod N for
- * the sp+K addresses and (14030 + regno(i)) mod N for the main loop's i+1. N = (max_cuid/2)|1.
- * Retail's order (i+1, &m[0..2], &v10, &v40, &v270) needs N = 419 (max_cuid 836..839) with i's
- * pseudo number 216..236. Verified: this file with 16 extra pseudos before i and F4_N=419 gives
- * 12 lines, all non-slot. This file has i block-local (regno 226, in range); re-reading
- * D_L00_001BF200.hit and disabled[q] instead of locals raised it. Left: max_cuid is 826, so
- * +10..13 insns at gcse with no change to the final code. Only named copies (len = ...; dist = len)
- * moved it, +1 each; loop spellings, conditions and stores did not. Don't use dead initialisers.
- * Non-slot leftovers (12 lines):
- *  (a) spawn pairs: retail's call arg reuses the qcopy asm's input reload (first pair: no reload,
- *      second: daddu a0,a1). Here cse2 rewrites the arg to the spilled PRE pseudo, combine folds
- *      the inline's dst copy into the asm, and the arg becomes a plain lw (no inheritance).
- *      This is the reload-inheritance pattern (F4/F5 research);
- *  (b) a nop at the head of the spark search loop (retail's bnez targets it): looks like the
- *      R5900 short-loop pad from mips.c (anchored before the beqz's lw), but the beqz target is
- *      far away, so the ASTRA P38 rule doesn't fire here. Possible compiler-model evidence;
- *  (c) seg == 11 path: retail builds &D_254A60[seg-1] as la(D-16)+0xB0, here a1+0xA0 (cse1
- *      folds through the related value);
- *  (d) the colors initializer's rodata address (relocation only in the scratch compare).
- */
+/* Lightning-arc effect update: 12 segments of 20 points and three travelling sparks.
+ * Twin of func_L00_003C6B98 (same instructions, its own data).
+ * Spill slots follow gcse's expression-table order, which depends on the insn count
+ * at gcse; the locals' initialisers are part of that. The spawn copies use qcopy_nc:
+ * the call that follows reads the copied vector itself. */
 #include "common.h"
 
 typedef int Quad __attribute__((mode(TI)));
@@ -43,10 +14,11 @@ typedef struct { char pad[0x18]; char *hit; int count; Vec point; Vec normal; ch
 typedef struct { unsigned char pad[0x2290]; char *object; } PlayerView;
 typedef struct { int c[5]; } Colors;
 
+extern Colors D_L00_001B0EC8 NOT_SDA;
+
 extern PlayerView D_00189E20;
 extern char D_0018A0E0[];
 extern Collision D_L00_001BF200;
-extern Vec D_L00_001BF220;
 extern float D_L00_001A8F20;
 extern unsigned char *D_L00_001FEAC4[];
 extern signed char D_L00_001B0EBF;
@@ -90,7 +62,7 @@ extern Vec D_L00_00254CA0[][20];
 
 extern void func_L00_00406040(char *);
 extern void func_L00_00406FB0();
-extern void func_L00_002E6EF8(void *, void *);
+extern void ref_L00_00406150_00(void *, void *);
 extern Particle *func_002C2210(void *, int, float, float, int, int, int, void *, float, int);
 extern Particle *func_L00_0033C638(float, float, void *, int, int, int, int, void *, int);
 extern void func_00282CF0(void *, void *, void *);
@@ -123,10 +95,10 @@ void func_L00_00406150(char *arg)
     char *disabled[128];
     float v250[4], v260[4];
     char *obj;
-    char *def;
-    float dist, t, w, r, ang, f, len, scale;
-    int n, tries, j, k, kk, q, sign, seg;
-    Particle *p;
+    char *def = 0;
+    float dist, t = 0.0f, w, r, ang, f, len = 0.0f, scale;
+    int n, tries, j = 0, k = 0, kk = 0, q = 0, sign = 0, seg = 0;
+    Particle *p = 0;
 
     v20[3] = 1.0f;
     obj = *(char **)(arg + 0x68);
@@ -228,12 +200,12 @@ void func_L00_00406150(char *arg)
         }
     }
     }
-    func_L00_002E6EF8(func_L00_00406FB0, arg);
+    ref_L00_00406150_00(func_L00_00406FB0, arg);
     scale = func_002A7878(0.1f, 1.7f);
     sign = func_002A77E0(2);
     if (sign == 0) sign = sign - 1;
     if (func_002A77E0(2) == 0) {
-        qcopy(v40, &D_L00_00254B20[11]);
+        qcopy_nc(v40, &D_L00_00254B20[11]);
         p = func_002C2210(v40, 0x1E, scale * 0.1f, scale, 0x7F103FFF, 0, sign, &D_L00_001A8F20, 0.003f, 1);
         if (p) p->b2 = D_L00_001FEAC4[0][7];
         sign = -sign;
@@ -241,7 +213,7 @@ void func_L00_00406150(char *arg)
         if (p) p->b2 = D_L00_001FEAC4[0][7];
     }
     if (func_002A77E0(2) == 0) {
-        qcopy(v40, &D_L00_00254BE0[11]);
+        qcopy_nc(v40, &D_L00_00254BE0[11]);
         p = func_002C2210(v40, 0x1E, scale * 0.1f, scale, 0x80FF4F10, 0, sign, &D_L00_001A8F20, 0.003f, 1);
         if (p) p->b2 = D_L00_001FEAC4[0][7];
         sign = -sign;
@@ -254,11 +226,11 @@ void func_L00_00406150(char *arg)
         func_00282F20(v260, arg + 0xD0, D_L00_001B0E9C);
         func_00282CC0(v40, &D_L00_00254A60[0], v260);
         {
-            int colors[5] = { 0x7FFF5F20, 0x7FFF5400, 0x7FFF0000, 0x7FFF6F00, 0x7FFF1010 };
+            Colors colors = D_L00_001B0EC8;
             float up[4], side[4];
             int color, count;
             float a, b;
-        color = colors[func_002A77E0(5)];
+        color = colors.c[func_002A77E0(5)];
         a = func_002A78D8(0.0f, D_L00_001B0E98);
         b = func_002A78D8(0.0f, D_L00_001B0E98);
         func_002ACEC0(up, v250, D_0018A0E0, b);
@@ -309,7 +281,7 @@ void func_L00_00406150(char *arg)
                     seg = func_00283CF0(D_L00_001B2D10[kk] / D_L00_001B2C80);
                     rem = D_L00_001B2D10[kk] - func_00283CE0(seg) * D_L00_001B2C80;
                     qcopy(&D_L00_001B2C90[kk], &D_L00_00254A60[seg]);
-                    if (seg == 11) func_00282CF0(v260, &D_L00_00254A60[seg], &D_L00_00254A60[seg - 1]);
+                    if (seg == 11) func_00282CF0(v260, &D_L00_00254A60[seg], &D_L00_00254A60[seg + -1]);
                     else func_00282CF0(v260, &D_L00_00254A60[seg + 1], &D_L00_00254A60[seg]);
                     inv = func_00282DF0(v260);
                     if (inv != 0.0f) {
