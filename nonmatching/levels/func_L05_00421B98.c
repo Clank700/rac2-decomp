@@ -10,6 +10,20 @@
  * state pointer in $s0 (mine swapped); retail loads the float constants after the y
  * conversion and uses $a0 as the mfc1/mtc1 temporary (arg 0 set last); the countdown
  * box computes x-0x33 before the D_L05_001B2D80 test (args precomputed).
+ * M34 2026-10-26 (about 60 min, no match): what the four retail copies show and what moved.
+ *   - The countdown box y is `y = (float)(Y - 13) * scale + 0.5f; if (D_L05_001B2D80 == 1)
+ *     y += 1.0f;` with `x = D_L05_001B1430 - 0x33` in a local before the if and the
+ *     func_0028E588 call in its own statement first: that gives retail's bne with add.s 0.5
+ *     in the slot and the lone add.s 1.0 (the ?: form adds 0.0 on the other arm). Retail keeps
+ *     the constant 1 for that compare in $s0, set at the head of the arm (unexplained), and
+ *     recomputes &colors (addiu $t1,$sp,0x80) where this cc1 keeps it in a saved register.
+ *   - Every draw: retail issues the y chain (flt Y, S, flt X, mul, add, fix, flt) with no
+ *     filler and only then the -1/1/0 constants and a0 = v0, so the fix temporary is $a0. Here
+ *     sched1/sched2 fill the chain's latency slots with the constants and the a0 move (RTL dumps:
+ *     the CSE'd constant pseudos cross calls, so they carry no dependence on the call). Neither
+ *     -fno-schedule-insns, -fno-schedule-insns2, -g, -ffast-math nor a static inline draw helper
+ *     reproduces it (all worse or unchanged); the helper loads x/y before the call.
+ *   - The unused saved $s2 is still unexplained (no spill slot in retail's frame).
  */
 #include "common.h"
 
@@ -86,7 +100,14 @@ void func_L05_00421B98(int first, int second, int third, int fourth)
                               (float)(int)((float)D_L05_001B1434 * D_L05_001B2D84 + 0.5f), 1.0f, 1.0f, 0.0f);
                 {
                     unsigned int colors[4] = { 0x8080F0F0, 0x8080F0F0, 0x8080F0F0, 0x8080F0F0 };
-                    func_0028EA58(func_0028E588(0xEAA2, 3), D_L05_001B1430 - 0x33, (int)((float)(D_L05_001B1434 - 13) * D_L05_001B2D84 + 0.5f + (D_L05_001B2D80 == 1 ? 1.0f : 0.0f)), 0x1C, 0x1C, colors);
+                    {
+                        int id = func_0028E588(0xEAA2, 3);
+                        int x = D_L05_001B1430 - 0x33;
+                        float y = (float)(D_L05_001B1434 - 13) * D_L05_001B2D84 + 0.5f;
+                        if (D_L05_001B2D80 == 1)
+                            y += 1.0f;
+                        func_0028EA58(id, x, (int)y, 0x1C, 0x1C, colors);
+                    }
                     func_00115DA8(text, "%d", D_001A79FC);
                     func_0027F5B8(D_L05_001B1430 + 5, (int)((float)(D_L05_001B1434 + 2) * D_L05_001B2D84 + 0.5f),
                                   0x80808080ULL, (unsigned char *)text, 0x80);

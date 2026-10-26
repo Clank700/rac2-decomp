@@ -512,7 +512,6 @@ int func_L02_003EEFB8(char *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003F0798);
 
 extern float func_002A7878(float, float);
 extern int func_002A77E0(int);

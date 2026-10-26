@@ -12,6 +12,13 @@
  * interface; preserve all real incoming registers.
  */
 
+/* M34 2026-10-26: hero globals (D_00189EA0/EB0/F00/F30) rewritten as the Hero view of
+ * D_00189E20 (retail keeps the hero base in a saved register): 1608/1652, fewer differences.
+ * Left: retail stores D_L04_001B2228 = 1 as lui $at/sw outside the bne delay slot (here a $gp
+ * sw in the slot; nosda, MACRO_ADDR, [] / [2] / [3] and -mno-split-addresses all worse), the
+ * func_0029B3E0(0, -1) arm placement, a missing neg.s and float compare near +0x5AC, and a
+ * float constant retail rematerialises per call (+0x620).
+ */
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
@@ -20,9 +27,8 @@ extern u8 *D_L04_001B24DC;
 extern u8 D_L04_001BF880[];
 extern int D_L04_001A8F00;
 extern int D_L04_001B2228;
-extern u8 D_00189EA0[], D_00189EB0[];
-extern BarlowVector D_00189F00;
-extern f32 D_00189F30[4];
+typedef union { u8 b[0x2600]; s32 i[0x980]; f32 f[0x980]; TI128 q[0x260]; } Hero;
+extern u8 D_00189E20[];
 extern u8 D_001A7A40;
 extern void func_L01_003128C0(void *);
 extern int func_L01_003245E0(void *, int, f32);
@@ -136,7 +142,7 @@ void func_L04_00423258(u8 *object) {
             int channel = object[0xB0];
             if (!(D_0019B2E8[channel + D_001A79F0 * 16] & 0x80))
                 func_002A0430(channel);
-            func_002DF3F8(D_00189EA0, D_00189EB0);
+            func_002DF3F8(&((Hero *)D_00189E20)->q[0x80 / 16], &((Hero *)D_00189E20)->q[0x90 / 16]);
         }
         func_0029F338(object);
         return;
@@ -154,15 +160,15 @@ stateDone:
     look = 0;
     if (object[0x43] == 0) {
         look = 1;
-        if (func_00282E80(object + 0x10, D_00189EA0) < 8.0f &&
-            func_00283C80(*(f32 *)(object + 0xF8), func_00283248(D_00189F00.f[0] - *(f32 *)(object + 0x10), D_00189F00.f[1] - *(f32 *)(object + 0x14))) < 1.5707964897155762f) {
-            if (func_00282DF0(D_00189F30) > 0.01f)
+        if (func_00282E80(object + 0x10, &((Hero *)D_00189E20)->q[0x80 / 16]) < 8.0f &&
+            func_00283C80(*(f32 *)(object + 0xF8), func_00283248(((Hero *)D_00189E20)->f[0xE0 / 4] - *(f32 *)(object + 0x10), ((Hero *)D_00189E20)->f[0xE4 / 4] - *(f32 *)(object + 0x14))) < 1.5707964897155762f) {
+            if (func_00282DF0(&((Hero *)D_00189E20)->f[0x110 / 4]) > 0.01f)
                 *(int *)(data + 0x114) = 120;
             else
                 func_00282948((int *)(data + 0x114));
         } else if (*(int *)(data + 0x114)) {
             *(int *)(data + 0x114) = 0;
-            qcopy((data + 0x100), &D_00189F00);
+            qcopy((data + 0x100), &((Hero *)D_00189E20)->q[0xE0 / 16]);
         }
         if (func_00282948((int *)(data + 0x118))) {
             *(int *)(data + 0x118) = func_00283CF0(func_002A7878(180.0f, 300.0f));
@@ -172,7 +178,7 @@ stateDone:
             func_00282CC0(data + 0x100, data + 0x100, object + 0x10);
         }
         if (*(int *)(data + 0x114)) {
-            qcopy(&target, &D_00189F00);
+            qcopy(&target, &((Hero *)D_00189E20)->q[0xE0 / 16]);
             rate = 0.04f;
         } else {
             qcopy(&target, (data + 0x100));
