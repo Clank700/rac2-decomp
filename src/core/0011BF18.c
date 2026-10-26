@@ -59,7 +59,24 @@ void func_0011BFC8(int c) {
     }
 }
 
-INCLUDE_ASM("asm/core", func_0011C000);
+/* rac1-decomp src/core/00119D88.c: func_00119EA8 (kprintf float helper). */
+int func_0011C000(unsigned long bits) {
+    long exponent = (long)((bits << 1) >> 53);
+    exponent -= 1075;
+    if (exponent < -53) return 0;
+    if (exponent >= 13) return 9999;
+    bits = (bits << 12) >> 12;
+    bits |= 1UL << 52;
+    if (exponent < 0) {
+        exponent = -exponent;
+        bits >>= (int)(exponent - 2);
+        if ((bits & 3) == 3) bits = (bits >> 2) + 1;
+        else bits >>= 2;
+    } else {
+        bits <<= (int)exponent;
+    }
+    return bits;
+}
 
 /* func_0011C090 is in the dedicated 0011C090.c formatter unit. */
 
