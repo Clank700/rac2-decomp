@@ -1,29 +1,4 @@
-/*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Reported final C / retail: 696 / 720 bytes; size equality is not a match.
- * us: 0/27 placements; 696/720 bytes.
- * us2: 0/27 placements; 696/720 bytes.
- * pal: absent from catalogue (not a match).
- * Residual: 00_aranos_tutorial: 696 bytes, expected 720
- * Reopening condition: A faithful field/lifetime model explaining remaining stack, register or scheduling differences; no arbitrary padding/barriers.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
- */
-
-/* Historical manual summary: The earlier automatic screen is superseded by the current manual reconstruction. Floating comparisons and state-path lifetimes remain source-level questions. The original map is retained privately; no extracted instruction, opcode, address or generated table is reproduced here. */
-
-/*
- * Nonmatching manual reconstruction; retail size 720 bytes.
- * Final US check: 00_aranos_tutorial: 696 bytes, expected 720.
- * Reproduce at src/levels/shared/L00_00385370.c with:
- * -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
- * Full body retained after bounded source/API/layout trials; no matching bytes
- * are claimed. Reopen when a truthful field or lifetime model explains the
- * remaining stack, register and scheduling differences.
- * US/US2/PAL coverage and catalogue absence are recorded in the private result.
- */
+#include "include_asm.h"
 #include "common.h"
 typedef int Quadword __attribute__((mode(TI)));
 typedef union { Quadword bits; float f[4]; } Vector4;
@@ -84,7 +59,8 @@ extern void func_L00_002E6DB8(void (*)(void *),void *);
 extern void func_002A7750(unsigned char *,unsigned char,int);
 extern int func_002B3868(unsigned char *);
 extern float func_002AA548(float *,float *,float,float,float,float);
-extern unsigned char D_L00_00232AC0[][32];
+typedef struct { float x,y,a,b; float pad[4]; } Spark;
+extern Spark D_L00_00232AC0[];
 void func_L00_00385370(unsigned char *object)
 {
     char *work=FIELD(char *,object,0x68);
@@ -102,8 +78,8 @@ void func_L00_00385370(unsigned char *object)
         if(!FIELD(int,work,0x40)) {
             object[0x30]=255;
             for(i=0;i<64;++i) {
-                FIELD(float,D_L00_00232AC0[i],8)=func_002A7878(0.5f,2);
-                FIELD(float,D_L00_00232AC0[i],12)=func_002A7878(0.002f,0.006f);
+                D_L00_00232AC0[i].a=func_002A7878(0.5f,2);
+                D_L00_00232AC0[i].b=func_002A7878(0.002f,0.006f);
             }
         }
         func_002A7750(object,1,-1);return;
@@ -126,7 +102,7 @@ void func_L00_00385370(unsigned char *object)
         if(func_00282948((int *)(work+0x20)))func_002A7750(object,1,-1);
         break;
     case 5:break;
-    default:return;
+    default:break;
     }
     if(!FIELD(int,work,0x40))func_00303BF8(object);
     func_00303AC8(object);func_00302DA0(object);func_00304128(object);

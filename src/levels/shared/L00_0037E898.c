@@ -308,7 +308,6 @@ INCLUDE_ASM("asm/levels", func_L00_003851A0);
 
 INCLUDE_ASM("asm/levels", func_L00_003852A0);
 
-INCLUDE_ASM("asm/levels", func_L00_00385370);
 
 /* func_L00_00387370 is defined in L00_00387370-g8-qcopy.c. */
 

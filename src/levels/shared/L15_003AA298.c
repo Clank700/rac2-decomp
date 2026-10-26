@@ -1,10 +1,4 @@
-/* Nonmatching C: Advance the projectile, construct its collision query and dispatch the collision response.
- * Tested profile: -O2 -G0 -ffunction-sections -frac2-zero-ti-por.
- * Measured US size: 776 bytes; retail: 776 bytes.
- * Placement checks: US and US2: 0/2 each; PAL: absent from the catalogue.
- * Remaining: The first placed instruction difference is at +0x1ac in owner-rejection loads and register allocation.
- * Reopen with independent collision-owner reload and field-view lifetime evidence; preserve the complete 48-byte request and the observed shared vector zero.
- */
+#include "include_asm.h"
 #include "common.h"
 
 typedef int Quad __attribute__((mode(TI)));
@@ -27,7 +21,7 @@ typedef struct { char pad[0x18]; char *object; int count; Quad position; char ga
 extern u8 D_L15_00276FF0[];
 extern Hit D_L15_001BFC00;
 extern void *D_0018C0B0;
-extern void *D_L15_001AC810;
+extern void *D_L15_001AC810 MACRO_ADDR;
 
 
 
@@ -70,7 +64,7 @@ void func_L15_003AA298(unsigned char *object)
             if ((D_L15_001BFC00.object == D_0018C0B0 || *(short *)(D_L15_001BFC00.object + 0xaa) == 0xc0) &&
                 *(int *)(state + 0x18) >= 0x122)
                 goto finished;
-            if (D_L15_001AC810 == *(void **)(D_L15_001BFC00.object + 0x64) && *(short *)(D_L15_001BFC00.object + 0xaa) != 0x336)
+            if (*(void **)(D_L15_001BFC00.object + 0x64) == D_L15_001AC810 && *(short *)(D_L15_001BFC00.object + 0xaa) != 0x336)
                 goto finished;
             *(unsigned char *)(object + 0xbc) = 1;
             qcopy(object + 0x10, &D_L15_001BFC00.position);
