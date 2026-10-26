@@ -577,8 +577,19 @@ class Placement:
         if len(owners) != 1:
             return False
         relocs = sorted(obj["relocations"].get(index, []))
-        if [r[0] for r in relocs] != list(range(0, size, 4)):
+        # Every word is a case entry, except the zero words the compiler's `.align 4`
+        # puts between two tables of one function: each gap is shorter than 16 bytes
+        # and ends at a 16-byte boundary where the next table starts.
+        offsets = [r[0] for r in relocs]
+        covered = set(offsets)
+        if not offsets or offsets[0] != 0 or len(covered) != len(offsets) or any(o % 4 for o in offsets):
             return False
+        for at in range(0, size, 4):
+            if at in covered:
+                continue
+            gap_end = next((o for o in offsets if o > at), None)
+            if gap_end is None or gap_end % 16 or gap_end - at >= 16 or sec["data"][at:at + 4] != bytes(4):
+                return False
         values, why = self.derive(obj, index, address)
         if why:
             return False
