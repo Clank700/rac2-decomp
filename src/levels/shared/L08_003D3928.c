@@ -58,7 +58,7 @@ s32 func_L08_003DB4E8(void)
 
 INCLUDE_ASM("asm/levels", func_L08_003DB518);
 
-INCLUDE_ASM("asm/levels", func_L08_003DB8E8);
+/* func_L08_003DB8E8 is matched in its own unit, L08_003DB8E8-g8.c. */
 
 
 INCLUDE_ASM("asm/levels", func_L08_003E5BB8);

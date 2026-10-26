@@ -577,7 +577,7 @@ void func_L00_002ADCF8(f32 *output) {
  func_L00_002D36E0(0.3f,0.0f,1.34f,output,1);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002ADD30);
+/* func_L00_002ADD30 is matched in its own unit, L00_002ADD30.c. */
 
 /* returns indexed resident word 0x1220 when field 0x1244 equals two, otherwise zero */
 u32 func_L00_002ADE68(s32 index) {

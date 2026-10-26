@@ -161,7 +161,6 @@ void func_L22_003AD090(u8 *a0) {
 }
 
 
-INCLUDE_ASM("asm/levels", func_L22_003B9128);
 
 
 INCLUDE_ASM("asm/levels", func_L22_003C9880);
