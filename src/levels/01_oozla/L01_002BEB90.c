@@ -1,7 +1,5 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/levels", func_L01_002BEB90);
-
 INCLUDE_ASM("asm/levels", func_L01_002C1A70);
 
 typedef int TI128 __attribute__((mode(TI)));

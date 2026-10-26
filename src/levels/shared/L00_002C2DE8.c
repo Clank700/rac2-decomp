@@ -176,7 +176,6 @@ int func_L00_002C3A78(void)
 
 INCLUDE_ASM("asm/levels", func_L00_002C40C0);
 
-INCLUDE_ASM("asm/levels", func_L00_002C42E0);
 
 extern unsigned char D_0018C0D4[];
 
