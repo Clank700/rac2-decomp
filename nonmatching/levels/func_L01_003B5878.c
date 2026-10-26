@@ -1,15 +1,28 @@
-/*
- * Retained complete manual C reconstruction; not linked or counted.
+/* Retained complete manual C reconstruction; nonmatching, not linked or counted.
  * Profile: -O2 -G8 -ffunction-sections -fno-expensive-optimizations -frac2-zero-ti-por
- * 4992/4972 bytes; 0/1 placements in us and us2; pal has no catalogue entry.
- * Residual: The 0x150 frame, full 64-bit dispatch flags and 64-byte matrices are retained. Both
- * real eight-entry const label tables are now used; external retail dispatch dependencies are
- * removed. Branch/call scheduling, resident addressing and ordinary allocation differ.
- * Reopen: Independent phase/action field liveness or mixed frame-counter address evidence;
- * preserve RNG draw order, the NaN-sensitive guard and used compiler-owned dispatch tables.
- * Trial-only source markers and profiles are restored after checking.
+ * Final checks: US 0/1 and US2 0/1; 4968/4972 bytes, frame 0x150 in C and retail.
+ * PAL: this canonical name is absent from both catalogues, not a pass.
+ * AAA00 retains its established float return. Correcting only the old void return
+ * changes no object bytes in this caller. Both used eight-entry const label tables,
+ * all 64-byte matrix outputs and the dispatcher full 64-bit return contract remain.
+ * The caller explicitly consumes only status bits 0/1 from the low return word.
+ * Raw state-word snapshots preserve the observed LW/SW transfers without FP conversion.
+ * Retail phase/fallthrough order, NaN-sensitive guards and RNG draw order are preserved.
+ * The frame counter is one canonical mutable object: pursuit-weave reads it absolutely,
+ * pursuit-leave reads the independently observed GP form. The read-only alias is used in
+ * mutually exclusive phases, with no C write or const/restrict independence assumption.
+ * The group pointer and attack-animation word retain their measured SDA forms.
+ * The local target-to-delta transfer stays ordinary C: retail separates its stack LQ/SQ
+ * around the rotation call. The subsequent matrix/target selection keeps its real lifetimes.
+ * Dispatcher payload and resident/query total extents are unknown, so only opaque context
+ * and incomplete external storage with measured prefix views are declared.
+ * Remaining: early duration-zero/FPR lifetime and setup, branch displacement/joins, target
+ * address roles and final easing setup differ. Equal size in an earlier variant was not a match.
+ * Reopen with independent duration-zero and target/control lifetime evidence; preserve the
+ * measured access identities, complete tables/matrices, call banks/stack and store order.
+ * Bank-preserving interleavings were measured, not prohibited or assumed to solve this caller.
+ * Normal/dump-enabled compilation agrees. No native-port or strict linked equality is claimed.
  */
-
 #include "common.h"
 
 typedef int Quadword __attribute__((mode(TI)));
@@ -20,12 +33,8 @@ typedef struct {
 } MotionWorkspace;
 struct family_27f9_object { unsigned char reserved[248]; float heading; };
 typedef unsigned char QwenRecovery_84e23fd54f9f_AbiByte16;
-typedef struct {
-    unsigned char reserved_00[0x18];
-    unsigned char enabled, count, kind;
-    unsigned char reserved_1b[0x65];
-    unsigned char payload[1];
-} Rac2Native_bf55aa2a4d0dd351_SDataCallDispatchContext;
+/* The dispatcher context is opaque here; its payload extent is not established. */
+typedef struct DispatchContext Rac2Native_bf55aa2a4d0dd351_SDataCallDispatchContext;
 typedef unsigned long Rac2Native_bf55aa2a4d0dd351_SDataCallDispatchFlags;
 
 extern void func_L01_003B53C8(u8 *);
@@ -61,7 +70,7 @@ extern float func_00282E80(void *,void *);
 extern float func_00283C80(float,float);
 extern int func_L01_003B4C20(u8 *);
 extern void func_L01_003B4BD8(u8 *);
-extern void func_002AAA00(float *,float *,int,float,float,float,float);
+extern float func_002AAA00(float *,float *,int,float,float,float,float);
 extern int func_002A8D70(float,float,float,void *,int,int,int,int,int);
 extern Rac2Native_bf55aa2a4d0dd351_SDataCallDispatchFlags func_002B1C20(void *,Rac2Native_bf55aa2a4d0dd351_SDataCallDispatchContext *);
 extern void func_0029F338(void *);
@@ -85,12 +94,17 @@ typedef struct {
     u8 *object;
 } HeroTargetPrefix;
 typedef struct { u8 prefix[0x18]; u8 *object; } CollisionQueryPrefix;
-extern HeroTargetPrefix D_00189E20;
+extern u8 D_00189E20[];
+#define HERO_TARGET ((HeroTargetPrefix *)D_00189E20)
 extern int D_L01_001B2088;
-extern int D_L01_001AFDB0;
-extern u8 *D_L01_001B255C;
+/* These mutually exclusive phases read the same measured frame counter.
+ * Both symbol spellings resolve to one object; this caller never writes it. */
+extern int frame_counter_gp __asm__("D_L01_001B2088") __attribute__((sda));
+extern int D_L01_001AFDB0 __attribute__((sda));
+extern u8 *D_L01_001B255C __attribute__((sda));
 extern u8 *D_L01_001B264C NOT_SDA;
-extern CollisionQueryPrefix D_L01_001BF900;
+extern u8 D_L01_001BF900[];
+#define COLLISION_QUERY ((CollisionQueryPrefix *)D_L01_001BF900)
 extern Quadword D_L01_001AC5A0;
 
 
@@ -113,7 +127,8 @@ void func_L01_003B5878(u8 *object)
     float speed,frame,angle,pitch,yaw;
     int animation,first,i;
     unsigned int phase,action;
-    Rac2Native_bf55aa2a4d0dd351_SDataCallDispatchFlags flags;
+    /* The callee returns 64 bits; this caller consumes only low-word bits 0/1. */
+    u32 flags;
 
     qcopy(&local.previous_position, object+0x10);
     state=*(u8 **)(object+0x68);
@@ -168,12 +183,12 @@ phase_wait:
         break;
     }
     if (object[0x20]!=3 && STATE_INT(0x310)!=-1 && object[0x95]==1) {
-        STATE_FLOAT(0x398)=STATE_FLOAT(0x390);
+        STATE_UINT(0x398)=STATE_UINT(0x390);
         STATE_INT(0x39C)=0;
         if (STATE_INT(0x244)==1 || STATE_INT(0x330)) {
             *(float *)(object+0x18)=STATE_FLOAT(0x34C);
             STATE_INT(0x39C)=0;
-            STATE_FLOAT(0x398)=STATE_FLOAT(0x390);
+            STATE_UINT(0x398)=STATE_UINT(0x390);
             func_002A7750(object,3,1);
         }
     }
@@ -191,7 +206,7 @@ phase_airborne:
     if (!(STATE_FLOAT(0x2F8)<0.0f)) goto phase_done;
     if (!(func_00282C48(*(float *)(object+0x18)-STATE_FLOAT(0x2E8)) < -STATE_FLOAT(0x2F8))) goto phase_done;
     *(int *)(object+0x98)=*(int *)(*(u8 **)(object+0x24)+0x10);
-    STATE_FLOAT(0x14C)=STATE_FLOAT(0x30C);
+    STATE_UINT(0x14C)=STATE_UINT(0x30C);
     qcopy(state+0x200, object+0x10);
     object[0xBC]=1;
     STATE_INT(0x330)=240;
@@ -276,7 +291,7 @@ pursuit_straight:
     }
     goto pursuit_done;
 pursuit_group:
-    STATE_FLOAT(0x398)=STATE_FLOAT(0x390);
+    STATE_UINT(0x398)=STATE_UINT(0x390);
     STATE_FLOAT(0x39C)=STATE_FLOAT(0x388);
     func_L01_003B49D8(object,state+0x200);
     func_L01_003B50C8((char *)object,1,-1.0f);
@@ -284,7 +299,7 @@ pursuit_group:
         D_L01_001B255C[STATE_INT(0x38C)*256+0xBC])) func_002A7750(object,7,-1);
     goto pursuit_done;
 pursuit_leave:
-    local.pursuit=func_00283198(func_002ABB18(func_00283CE0(D_L01_001B2088)*0.01163553074002266f))*0.8726646900177002f;
+    local.pursuit=func_00283198(func_002ABB18(func_00283CE0(frame_counter_gp)*0.01163553074002266f))*0.8726646900177002f;
     qcopy(state+0x2E0, D_L01_001B264C+STATE_INT(0x380)*128+0x30);
     func_L01_003B4AD0(object,state+0x2E0,&local.pursuit);
     func_L01_003B50C8((char *)object,1,-1.0f);
@@ -294,12 +309,11 @@ pursuit_leave:
     }
 
 pursuit_done:
-    if (object[0x95]!=3 || object[0x20]==4 || object[0x20]==7 || object[0x20]==6) {
-        if (STATE_POINTER(0x240)==D_00189E20.object)
-            qcopy(state+0x2E0, D_00189E20.position);
-        goto pursuit_distance;
-    }
-    STATE_FLOAT(0x398)=STATE_FLOAT(0x394);
+    if (object[0x95]!=3) goto mirror_hero;
+    if (object[0x20]==4) goto mirror_hero;
+    if (object[0x20]==7) goto mirror_hero;
+    if (object[0x20]==6) goto mirror_hero;
+    STATE_UINT(0x398)=STATE_UINT(0x394);
     STATE_FLOAT(0x39C)=STATE_FLOAT(0x388);
     if (STATE_INT(0x244)==1 || STATE_INT(0x330)) {
         if (object[0x21]!=255 && **(int **)(state+0x36C)!=*(short *)(object+0xB2) &&
@@ -308,11 +322,8 @@ pursuit_done:
         if (!(func_00282C48(*(float *)(object+0x18)-*(float *)(target+0x18))<1.0f)) goto cancel_pursuit;
         STATE_INT(0x330)=240;
         object[0xBC]=1;
-        STATE_FLOAT(0x14C)=STATE_FLOAT(0x30C);
-        if (object[0x20]==2) {
-            qcopy(state+0x2E0, STATE_POINTER(0x240)+0x10);
-            goto pursuit_distance;
-        }
+        STATE_UINT(0x14C)=STATE_UINT(0x30C);
+        if (object[0x20]==2) goto copy_pursuit_target;
         if (object[0x21]!=255 && **(int **)(state+0x33C)>1) goto pursuit_distance;
         if (STATE_INT(0x334)) goto pursuit_distance;
         if (!(func_00282E80(object+0x10,STATE_POINTER(0x240)+0x10)<14.0f)) goto pursuit_distance;
@@ -324,6 +335,9 @@ pursuit_done:
         func_002A7750(object,2,-1);
         goto pursuit_distance;
     }
+copy_pursuit_target:
+    qcopy(state+0x2E0, STATE_POINTER(0x240)+0x10);
+    goto pursuit_distance;
 cancel_pursuit:
     if (object[0x20]==2) {
         func_L01_003B4BD8(object);
@@ -336,6 +350,10 @@ cancel_pursuit:
         }
         func_002A7750(object,1,-1);
     }
+    goto pursuit_distance;
+mirror_hero:
+    if (STATE_POINTER(0x240)==HERO_TARGET->object)
+        qcopy(state+0x2E0, HERO_TARGET->position);
 pursuit_distance:
     if (func_00282E80(object+0x10,STATE_POINTER(0x240)+0x10)<3.5f) {
         target=STATE_POINTER(0x240);
@@ -358,42 +376,42 @@ pursuit_distance:
 
 phase_attack:
     target=STATE_POINTER(0x240);
-    if (!target) {
-        if (!func_002A77E0(7)) func_002B5258((char *)object);
-    } else if (!func_002A77E0(7)) {
-        target=STATE_POINTER(0x240);
-        angle=func_00283248(*(float *)(target+0x10)-*(float *)(object+0x10),*(float *)(target+0x14)-*(float *)(object+0x14));
-        func_002B5278(object,angle);
-    } else {
-        target=STATE_POINTER(0x240);
-        angle=func_00283248(*(float *)(target+0x10)-*(float *)(object+0x10),*(float *)(target+0x14)-*(float *)(object+0x14));
-        func_002AAA00((float *)(object+0xF8),(float *)(state+0x1C4),0,angle,STATE_FLOAT(0x124),STATE_FLOAT(0x128),STATE_FLOAT(0x12C));
-    }
+    if (target) {
+        if (!func_002A77E0(7)) {
+            target=STATE_POINTER(0x240);
+            angle=func_00283248(*(float *)(target+0x10)-*(float *)(object+0x10),*(float *)(target+0x14)-*(float *)(object+0x14));
+            func_002B5278(object,angle);
+        } else {
+            target=STATE_POINTER(0x240);
+            angle=func_00283248(*(float *)(target+0x10)-*(float *)(object+0x10),*(float *)(target+0x14)-*(float *)(object+0x14));
+            func_002AAA00((float *)(object+0xF8),(float *)(state+0x1C4),0,angle,STATE_FLOAT(0x124),STATE_FLOAT(0x128),STATE_FLOAT(0x12C));
+        }
+    } else if (!func_002A77E0(7)) func_002B5258((char *)object);
     frame=func_0029F530((char *)object);
     if (object[0x42]==10 && frame>=18.0f && frame<=25.0f) {
         for (i=0;i<5;i++) {
             if (func_002A8D70(0.5f,(float)state[0x34],1.0f,object,i,0x4000001,0,1,0) &&
-                D_L01_001BF900.object==D_00189E20.object) state[0x35C]=1;
+                COLLISION_QUERY->object==HERO_TARGET->object) state[0x35C]=1;
         }
     }
     if (!(frame>30.0f) && (object[0x42]==10 || object[0x43]==10)) goto phase_done;
-    if (!state[0x35C]) {
-        STATE_INT(0x334)=40;
-        if (object[0x43]!=8) func_002A7470(object,8,0,func_002A7820(25,30));
-    } else {
+    if (state[0x35C]) {
         STATE_INT(0x334)=100;
         if (object[0x43]!=11) func_002A7470(object,11,0,func_002A7820(25,30));
+    } else {
+        STATE_INT(0x334)=40;
+        if (object[0x43]!=8) func_002A7470(object,8,0,func_002A7820(25,30));
     }
     state[0x35C]=0;
     func_L01_003B4BD8(object);
 finish_attack:
-    STATE_FLOAT(0x398)=STATE_FLOAT(0x394);
+    STATE_UINT(0x398)=STATE_UINT(0x394);
     STATE_FLOAT(0x39C)=STATE_FLOAT(0x388);
     func_002A7750(object,1,3);
     goto phase_done;
 
 phase_dispatch:
-    flags=func_002B1C20(object,(Rac2Native_bf55aa2a4d0dd351_SDataCallDispatchContext *)(state+0x60));
+    flags=(u32)func_002B1C20(object,(Rac2Native_bf55aa2a4d0dd351_SDataCallDispatchContext *)(state+0x60));
     if (flags&1) func_002A7750(object,0,7);
     else if (flags&2) {
         *(int *)(object+0x98)=*(int *)(*(u8 **)(object+0x24)+0x10);
@@ -403,7 +421,7 @@ phase_dispatch:
             if (object[0x43]!=4) func_002A7470(object,4,0,110);
             func_002A7750(object,0,6);
         } else {
-            STATE_FLOAT(0x398)=STATE_FLOAT(0x394);
+            STATE_UINT(0x398)=STATE_UINT(0x394);
             STATE_FLOAT(0x39C)=STATE_FLOAT(0x388);
             STATE_INT(0x384)=-1;
             animation=19;
@@ -427,13 +445,13 @@ phase_done:
     if ((unsigned int)(object[0x95]-3)<2) {
         local.target=0;
         ((float *)&local.target)[2]=*(float *)(object+0xF8);
-        qcopy(&local.delta, &local.target);
+        local.delta=local.target;
         func_00283410(local.rotation,&local.delta);
         func_00283698(local.inverse,local.rotation);
         func_00283698(local.object_inverse,object+0xC0);
-        if (!STATE_POINTER(0x198) || func_L00_0031BE88((char *)STATE_POINTER(0x198)))
-            func_00282F20(&local.target,state+0x160,1.0f);
-        else qcopy(&local.target, &D_L01_001AC5A0);
+        if (STATE_POINTER(0x198) && !func_L00_0031BE88((char *)STATE_POINTER(0x198)))
+            qcopy(&local.target, &D_L01_001AC5A0);
+        else func_00282F20(&local.target,state+0x160,1.0f);
         func_00283098(&local.target,&local.target,local.inverse);
         yaw=func_00283248(((float *)&local.target)[2],((float *)&local.target)[0]);
         pitch=-func_00283248(((float *)&local.target)[2],((float *)&local.target)[1]);

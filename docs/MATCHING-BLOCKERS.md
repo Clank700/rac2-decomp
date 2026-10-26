@@ -151,6 +151,22 @@ The numbered history below is retained, with obsolete conclusions and incorrect 
 
 ## 1. Register allocation on long bodies (the dominant wall)
 
+**Qualified field and call-lifetime remedies, 25 October 2026:**
+`func_002B52A0` is now a 980-byte C implementation at 21 places in each
+USA release; PAL has no matching canonical identity. Its controller +0x90
+field has two independently observed loads, faithfully represented by a
+volatile field. Complete 16-byte vectors preserve the real helper extents.
+The 200-byte `func_L14_003D18C8` matches its one place in all three releases:
+the true float return, bank-preserving call setup and separate matrix-basis
+pointer recover its actual lifetimes. Both are accepted in all 84 strict
+linked programs, with no new compiler mechanism.
+
+The existing 72-byte `func_L09_0033E8B0` wrapper now explicitly forwards
+all five GPR arguments and the FP step to the actual deep consumer. Its
+allocated sections remain byte-identical and all nine existing places pass;
+this repairs an interface, not additional coverage. Audit the complete call
+chain before deciding that apparently unused incoming registers are dead.
+
 **Truthful return types and EE call setup, 25 October 2026:**
 `func_L16_004110D0` is a 664-byte C implementation with its real 0x90
 frame. The earlier draft already matched through its first 356 bytes.
@@ -257,6 +273,51 @@ execution counts. Typed-object and field-at-use variants and the bounded loop/
 scheduling options did not close the body; the best remains 37,280/37,268 bytes.
 The three-function address follow-up adds no C match. Keep the retained body and
 reopen with independent object/lifetime evidence, not fabricated reference counts.
+
+**Complete table topology recovered, 25 October 2026:** the previous 588-byte
+compiler-owned table had 147 relocations but only 62 destinations. It merged
+selectors `0x3C`/`0x64` with `0x60`/`0x61`, although retail keeps their two
+clear-state blocks separate. Following RAC1's
+[real tail-layout method](https://github.com/OpenRAC/rac1-decomp/blob/e7e787ed94f0d56c1ab617e7abdb83ac6db787ec/docs/DECOMP_PROGRESS.md#two-exits-that-end-the-same-way-get-cross-jumped--arm-order-decides),
+repeating the actual two final tests/stores, in order, before returning from
+the first clear-state arm restores all 63 destination equivalence classes.
+No operation is added to a runtime path. The complete table has 147 self-text
+`R_MIPS_32` relocations and 16-byte alignment. An independent object parse
+confirms the complete selector partition.
+
+This structurally faithful form is now the retained C: **37,336/37,268 bytes,
+0/1 USA v1.01 places**; the other canonical release identities are absent.
+Its table addresses and text do not match, so it is not linked or credited.
+The frame remains 0x1A0 rather than 0x1B0, with six saved FPRs rather than five,
+and the original object pointer still spills. The former 37,280-byte baseline
+and useful alternatives remain private. `-fno-thread-jumps` did not fix the
+merge; this compiler rejects `-fno-crossjumping`. Next: identify the real
+address temporaries competing for `$fp` and their phase lifetimes while
+preserving the recovered topology. A smaller size delta is not a better
+reconstruction when it loses a measured control-flow distinction.
+
+**Large Snivelak and Oozla source remedies, 25 October 2026:**
+`func_L16_0040ECC0` captures the actual yaw-field pointer before its eight
+angle calculations. This restores the observed object/state/constant register
+roles and 0x90 frame; the corrected C remains 6476/6484 bytes, 0/1 in each
+USA release, with PAL absent. `func_L16_00403900` now represents the four
+observed firing phases and two bone sites explicitly, instead of the old
+shared loop skeleton: 2816 becomes 4396/4444 bytes with the real 0x80 frame.
+It remains 0/1 USA v1.01, with the other identities absent. Seven ordered
+floating guards and three helper-return contracts were independently corrected;
+`!(x < y)` must not be silently replaced by `x >= y` on an unordered input.
+`func_L16_0040D258` remains 660/656 bytes and 0/1 in both USA releases.
+Its AAA00 declaration is unused in the body: changing that declaration is
+not a causal explanation of its generated instructions.
+
+The Oozla body `func_L01_003B5878` is 4968/4972 bytes with the real 0x150
+frame, 0/1 in both USA releases and PAL absent. It preserves measured mixed
+absolute/GP reads of one mutable frame counter, actual raw-word snapshots,
+complete matrices and the dispatcher's 64-bit return; only its low flag bits
+are consumed. The corrected AAA00 return declaration alone is object-neutral
+here. Early duration/setup, branch layout and allocation remain unresolved.
+Keep the useful alternatives private and reopen these bodies with the measured
+field/address and phase-lifetime evidence, not equivalent source permutations.
 
 The shorter retained `func_L00_003A2258` is still 420/420 bytes: its first
 pointer has 7 references over a live length of 60, versus the index's 9 over

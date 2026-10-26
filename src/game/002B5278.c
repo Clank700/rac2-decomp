@@ -13,7 +13,7 @@ void func_002B5278(QwenRecovery_84e23fd54f9f_AbiByte16 *param_1, float factor)
 }
 
 
-INCLUDE_ASM("asm/game", func_002B52A0);
+/* func_002B52A0 is defined in 002B52A0-g8.c. */
 
 /* func_002B5678 is defined in 002B5678-copy.c. */
 

@@ -55,7 +55,7 @@ extern int func_L06_00382850(char *object, char *entry, float base);
 
 extern float func_L01_003377C8(void *entry);
 
-extern int func_L01_00337888(char *object, unsigned int entry);
+extern int func_L01_00337888(char *object, unsigned int entry, void *out, int current, int direction, float step);
 
 extern void func_00282CC0(char *first, char *second, char *third);
 
@@ -234,7 +234,7 @@ float func_L09_0033E7A0(int index)
     return func_L01_003377C8((void *)entry);
 }
 
-int func_L09_0033E8B0(char *object, int index)
+int func_L09_0033E8B0(char *object, int index, void *out, int current, int direction, float step)
 {
     unsigned int entry;
 
@@ -243,7 +243,7 @@ int func_L09_0033E8B0(char *object, int index)
     entry = D_L09_001FE6C0[index];
     if (entry == 0)
         return -1;
-    return func_L01_00337888(object, entry);
+    return func_L01_00337888(object, entry, out, current, direction, step);
 }
 
 INCLUDE_ASM("asm/levels", func_L09_0037FCE8);
