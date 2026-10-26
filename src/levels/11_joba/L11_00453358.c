@@ -400,7 +400,7 @@ void func_L11_00458F58(char *p)
     func_002A7750(p, 1, -1);
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00458F90);
+/* func_L11_00458F90 is defined in L11_00458F90-qcopy-barrier-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L11_004590F0);
 

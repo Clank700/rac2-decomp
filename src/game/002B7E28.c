@@ -510,7 +510,7 @@ void func_002BC8E8(char *p)
 
 INCLUDE_ASM("asm/game", func_002BCA08);
 
-INCLUDE_ASM("asm/game", func_002BCB00);
+/* func_002BCB00 is defined in 002BCB00-zero-ti-barrier.c. */
 
 INCLUDE_ASM("asm/game", func_002BCC58);
 

@@ -146,9 +146,9 @@ extern void func_L00_00403F90(char *arg, void *p);
 /* func_L00_00403D58 is matched in L00_003FFA70-qcopy.c (built with -frac2-qcopy
    -frac2-qcopy-barrier). */
 
-INCLUDE_ASM("asm/levels", func_L00_00403F90);
+/* func_L00_00403F90 is matched in L00_00403F90.c. */
 
-INCLUDE_ASM("asm/levels", func_L00_00404168);
+/* func_L00_00404168 is matched in L00_00404168-por.c (-frac2-zero-ti-por). */
 
 INCLUDE_ASM("asm/levels", func_L00_00404368);
 

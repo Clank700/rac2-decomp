@@ -146,7 +146,7 @@ INCLUDE_ASM("asm/levels", func_L05_00442560);
 
 /* func_L05_00442720 is matched in L05_00442720.c (built with -mno-split-addresses). */
 
-INCLUDE_ASM("asm/levels", func_L05_004427A8);
+/* func_L05_004427A8 is defined in L05_004427A8-flags.c. */
 
 INCLUDE_ASM("asm/levels", func_L05_00442828);
 

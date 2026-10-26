@@ -375,7 +375,44 @@ void *func_L04_00362940(void *a0, void *a1, u32 a2, f32 f3) {
     return (u32)p;
 }
 
-INCLUDE_ASM("asm/levels", func_L04_00362A50);
+typedef int TI128 __attribute__((mode(TI)));
+typedef union { TI128 word; float values[4]; } Vec4;
+extern int func_00282978_2a50(void *);
+extern void func_002B9180(void *);
+extern void func_00282CC0(void *, void *, void *);
+extern float func_00282DF0(void *);
+extern void func_00282F20_2a50(void *, void *, float);
+extern void func_00282CF0_2a50(void *, void *, void *);
+extern float func_00283CE0(int);
+extern int func_00283CF0_2a50(float);
+
+/* Same body as func_002C7620, with this function's own callees. */
+void func_L04_00362A50(char *self) {
+    Vec4 buf, offset;
+    char *s0;
+    char *s2 = self + 0x30;
+    float t;
+    int color;
+
+    if (func_00282978_2a50(self + 0xA) != 0) {
+        func_002B9180(self);
+        return;
+    }
+    s0 = self + 0x10;
+    buf.word = *(TI128 *)s0;
+    func_00282CC0(s0, s0, s2);
+    *(float *)(s2 + 8) = *(float *)(s2 + 8) - *(float *)(s2 + 0xC);
+    t = func_00282DF0(s2);
+    func_00282F20_2a50(&offset, s2, t * 0.4f);
+    func_00282CF0_2a50(self + 0x20, s0, &offset);
+    *(float *)(self + 0x2C) = 1.0f;
+    if (*(short *)(self + 0xA) < *(unsigned char *)(self + 8)) {
+        t = func_00283CE0(*(short *)(self + 0xA)) / func_00283CE0(*(unsigned char *)(self + 8));
+        color = (func_00283CF0_2a50(t * 127.0f) << 24) | 0x00FFFFFF;
+        *(int *)(self + 0xC) = color;
+        *(int *)(self + 4) = color;
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L04_00363690);
 

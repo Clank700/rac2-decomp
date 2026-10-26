@@ -889,3 +889,9 @@ src/levels/20_yeedil/L20_00449178-state-g8.c	-O2 -G8 -ffunction-sections -frac2-
 src/levels/shared/L00_0039B288-g8.c	-O2 -G8 -ffunction-sections
 src/levels/05_feltzin_system/L05_00415958-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-zero-ti-por
 src/levels/12_todano/L12_00413108-por.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por -mno-split-addresses
+src/levels/11_joba/L11_00458F90-qcopy-barrier-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/shared/L05_004427A8-flags.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/10_hrugis_cloud/L10_00425798-flags.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/01_oozla/L01_003DBF38-qcopy-barrier.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-gcse -mno-split-addresses
+src/game/002BCB00-zero-ti-barrier.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-barrier
+src/levels/shared/L00_00404168-por.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por

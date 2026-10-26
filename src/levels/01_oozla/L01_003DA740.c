@@ -38,7 +38,7 @@ INCLUDE_ASM("asm/levels", func_L01_003DBB88);
 
 /* func_L01_003DBCB8 is defined in L01_003DBCB8-qcopy-barrier.c. */
 
-INCLUDE_ASM("asm/levels", func_L01_003DBF38);
+/* func_L01_003DBF38 is defined in L01_003DBF38-qcopy-barrier.c. */
 
 INCLUDE_ASM("asm/levels", func_L01_003DC078);
 

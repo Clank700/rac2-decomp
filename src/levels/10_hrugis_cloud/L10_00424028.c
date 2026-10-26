@@ -48,7 +48,7 @@ extern char *D_L10_001B2528;
 extern void func_32AF78(void *a0);
 
 
-INCLUDE_ASM("asm/levels", func_L10_00425798);
+/* func_L10_00425798 is defined in L10_00425798-flags.c. */
 
 INCLUDE_ASM("asm/levels", func_L10_00424028);
 
