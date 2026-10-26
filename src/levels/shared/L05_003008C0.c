@@ -121,7 +121,6 @@ extern L05Slot40 D_002A1800[];
 
 extern int func_L05_0037AAC8(int index);
 
-INCLUDE_ASM("asm/levels", func_L05_0037AA88);
 
 /* Takes a step off the stored value, never below zero. */
 void func_L05_0037AB18(int index, int step)

@@ -167,7 +167,6 @@ void func_L12_0041A530(s32 a0) {
 /* Near miss: nonmatching/levels/func_L12_0041A578.c - the scan and the returns are right,
    the index lives in $a2 here against retail's in-place `addiu $a1,$a1,1`, and this cc1
    folds the loop back into the float test (`bc1fl`) where retail keeps `bc1t` + `b`. */
-INCLUDE_ASM("asm/levels", func_L12_0041A578);
 
 
 void func_L12_0041A730(s32 a0) {

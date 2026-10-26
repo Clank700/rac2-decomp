@@ -35,7 +35,6 @@ void func_L00_002F45B8(void) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002F46C8);
 
 void func_L00_002F4720(void) {
     D_L00_0027D880[0] = 0;
@@ -75,6 +74,3 @@ int func_L00_002F7588(void) {
 int func_L00_002F9858(void) {
     return 0;
 }
-
-
-

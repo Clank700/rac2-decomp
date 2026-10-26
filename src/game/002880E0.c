@@ -149,7 +149,6 @@ INCLUDE_ASM("asm/game", func_002887B0);
 
 INCLUDE_ASM("asm/game", func_00288870);
 
-INCLUDE_ASM("asm/game", func_00288970);
 
 
 void func_002889B8(u8 *a0) {

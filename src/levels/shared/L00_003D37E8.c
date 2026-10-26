@@ -142,7 +142,6 @@ INCLUDE_ASM("asm/levels", func_L00_003DB118);
 
 INCLUDE_ASM("asm/levels", func_L00_003DBF50);
 
-INCLUDE_ASM("asm/levels", func_L00_003DC1C0);
 
 INCLUDE_ASM("asm/levels", func_L00_003DC350);
 
@@ -298,7 +297,6 @@ INCLUDE_ASM("asm/levels", func_L00_003DF338);
 
 INCLUDE_ASM("asm/levels", func_L00_003DF710);
 
-INCLUDE_ASM("asm/levels", func_L00_003DFDC0);
 
 /* resets a state record: zero words, plus/minus one float flags and two 64-bit fields in the retail store order */
 void func_L00_003DFF98(char *p)
@@ -512,4 +510,3 @@ INCLUDE_ASM("asm/levels", func_L00_003E2510);
 INCLUDE_ASM("asm/levels", func_L00_003E2BD0);
 
 INCLUDE_ASM("asm/levels", func_L00_003E2E80);
-

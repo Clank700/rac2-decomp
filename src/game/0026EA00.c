@@ -350,7 +350,6 @@ void func_0026FEB8(const char *format,...) {
 
 INCLUDE_ASM("asm/game", func_0026FEF0);
 
-INCLUDE_ASM("asm/game", func_0026FF08);
 
 INCLUDE_ASM("asm/game", func_00270018);
 
@@ -592,7 +591,6 @@ INCLUDE_ASM("asm/game", func_00271E88);
 
 INCLUDE_ASM("asm/game", func_00271FD8);
 
-INCLUDE_ASM("asm/game", func_00272198);
 
 INCLUDE_ASM("asm/game", func_002721C8);
 
@@ -639,7 +637,6 @@ INCLUDE_ASM("asm/game", func_00273730);
 
 INCLUDE_ASM("asm/game", func_00273978);
 
-INCLUDE_ASM("asm/game", func_00273B70);
 
 int func_00273D10(char *obj)
 {

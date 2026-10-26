@@ -538,9 +538,7 @@ int func_002CB7D0(int mode)
 
 /* func_002CB820 reads $gp slots: it is defined in 002C7748-g8.c. */
 
-INCLUDE_ASM("asm/game", func_002CB8A0);
 
-INCLUDE_ASM("asm/game", func_002CB950);
 
 extern short D_0018A000[];
 extern void func_0029CE80(void);
@@ -751,4 +749,3 @@ return_value:
     }
     return result;
 }
-

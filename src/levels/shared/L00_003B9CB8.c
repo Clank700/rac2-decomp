@@ -273,7 +273,6 @@ extern char D_0023F060[];
 /* Near miss: nonmatching/levels/func_L00_003BCDC0.c - every instruction present but the
    loop test is `sltu` here against retail's `slt`, and the base is derived from the end
    pointer instead of being materialised on its own. */
-INCLUDE_ASM("asm/levels", func_L00_003BCDC0);
 
 INCLUDE_ASM("asm/levels", func_L00_003BCF88);
 

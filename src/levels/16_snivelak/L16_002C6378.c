@@ -46,7 +46,6 @@ INCLUDE_ASM("asm/levels", func_L16_003AA3F0);
    as the annulling `bnel` (which repeats the pointer load) instead of retail's plain
    `bnez`, and the pointer and the base land in $s0/$s2 instead of $s2/$s1.
    Deposited in nonmatching/levels/func_L16_003D6D00.c. */
-INCLUDE_ASM("asm/levels", func_L16_003D6D00);
 
 INCLUDE_ASM("asm/levels", func_L16_003E6E08);
 

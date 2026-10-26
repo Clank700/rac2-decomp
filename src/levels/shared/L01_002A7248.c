@@ -483,7 +483,6 @@ int func_L01_00355BA0(int index, int value) {
     return 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L01_00367F78);
 
 void func_L01_00371228(int a0, int a1) {
     int i = func_003711D8(a0);

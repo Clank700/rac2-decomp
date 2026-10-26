@@ -8,7 +8,6 @@ typedef signed short s16;
 typedef signed int s32;
 typedef float f32;
 
-INCLUDE_ASM("asm/levels", func_L04_00422A00);
 
 extern u8 D_L04_001395C7;
 extern u8 D_L04_002CA518;
