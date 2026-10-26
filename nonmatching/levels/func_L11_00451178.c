@@ -1,7 +1,7 @@
 /* func_L11_00451178 (4,824 B, 1 place): finisher F3, 2026-10-26. The Joba twin of
  * func_L02_0040A4A8 (same particle loop: alpha = 127 after the 0x48 store, the template through
  * tmpl; see that unit's header). Profile -O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges.
- * 1206 of 1206 instructions, 4824 bytes; every instruction equal except 16 spill-slot offsets.
+ * 1206 of 1206 instructions, 4824 bytes; every instruction equal except 7 words in case 12.
  * What closed it:
  *  - one function-scope scratch array work[6] at sp+0x10: retail reuses sp+0x10..0x5F for the
  *    head's aim vector, case 7's bounds[2] + matrix[4], case 9's hand/shot/dir and case 12's
@@ -13,17 +13,18 @@
  *  - case 5 before case 6, each with its own movement-flag test (no fall-through);
  *  - -G8 sda floats for the gp block D_L11_001B1D04..001B1D24, D_L11_001A8F20 as MACRO_ADDR
  *    (one la insn at the call), D_L11_001C0D18 as an incomplete array, the boot pointers nosda;
- *  - case 12's row copy as qcopy() in a counted loop: a TI copy lets loop.c reverse the loop.
- * Left (16 words): the spill slots. Retail sp+0xC4 &work[1], 0xC8 &work[4], 0xCC tmpl,
- * 0xD0 state+0x2B0, 0xD4 object+0xC0, 0xD8 object+0xF0; here tmpl 0xC4, &work[4] 0xC8,
- * state+0x2B0 0xCC, object+0xC0 0xD0, object+0xF0 0xD4, &work[1] 0xD8. All six get no hard
- * register from global (-dg) and reload gives slots in pseudo order (reload1.c alter_reg loop).
- * tmpl is an expand pseudo, the five case-12 addresses are gcse PRE reaching registers created
- * in hash-bucket order (expr_hash_table_size = max_cuid / 2 | 1; max_cuid 1175 here, F1's cc1dbg
- * F1_GC=1): removing `launch` reorders them (state+0x2B0, +0xC0, +0xF0, &work[1], &work[4]).
- * Retail's order puts tmpl after two gcse pseudos, so either tmpl had a hard register from
- * global and was spilled by reload (finish_spills, a later pass) or tmpl is not an expand pseudo
- * there; passing &particle directly makes it a gcse pseudo but breaks the loop hoist (L02 note).
+ *  - case 12's row copy as qcopy() in a counted loop: a TI copy lets loop.c reverse the loop;
+ *  - the spill slots: retail's sp+0xC4 &work[1], 0xC8 &work[4], 0xCC tmpl, 0xD0 state+0x2B0,
+ *    0xD4 object+0xC0, 0xD8 object+0xF0 is pseudo-number order (none gets a hard register from
+ *    global; reload1.c gives slots in pseudo order). As gcse PRE copies the case-12 addresses
+ *    come in hash-bucket order (max_cuid 1175, 587 buckets) and always after tmpl, so they are
+ *    function-scope pointers declared out, scale, tmpl, spin, rows, axis.
+ * Left (7 words, case 12 head): retail sets the spilled pointers in the order spin, out, axis,
+ * scale, rows (stores to 0xD0, 0xC4, 0xD8, 0xC8, 0xD4); here out and scale are always adjacent
+ * (0xD0, 0xC4, 0xC8, 0xD8, 0xD4 at best; all 120 orders of the five assignments give 12
+ * sequences, none retail's; assigning them before the func_002B3868 call moves the frame ones
+ * out of the block), and the state+0x1A8 clear is scheduled after the lw $s0 reload where
+ * retail has it before.
  * PERMUTE-FLAGS: -O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges
  */
 #include "common.h"
@@ -116,6 +117,12 @@ void func_L11_00451178(u8 *object)
     ActorVector velocity;
     ActorVector particle;
     s32 count;
+    ActorVector *out;
+    ActorVector *scale;
+    ActorVector *tmpl;
+    float *spin;
+    ActorVector *rows;
+    u8 *axis;
     u8 *state;
     u8 *pos;
     float heading;
@@ -261,7 +268,6 @@ void func_L11_00451178(u8 *object)
             if (object[0x31] || func_00283DB8(work, 128.0f) > 0) {
                 s32 i;
                 s32 j;
-                ActorVector *tmpl;
                 func_0029FC20(object, 4, &work[2]);
                 qcopy(&work[1], &work[3]);
                 func_0029FCC0(object, 4, &effect);
@@ -382,31 +388,37 @@ void func_L11_00451178(u8 *object)
     }
     case 12: {
         u8 *launch = state + 0x1A0;
-        if (func_002B3868(object)) {
+        s32 started = func_002B3868(object);
+        spin = (float *)(state + 0x2B0);
+        out = &work[1];
+        axis = object + 0xF0;
+        scale = &work[4];
+        rows = (ActorVector *)(object + 0xC0);
+        if (started) {
             s32 k;
             func_00282CF0(launch, func_L11_004417E8(*(u8 **)(object + 0xB8)), pos);
             *(float *)(state + 0x1A8) = 0.0f;
             func_00282F20(launch, launch, func_002A7878(3.0f, 5.0f) * 0.016666668f);
             *(s16 *)(state + 0x2D8) = 0;
             for (k = 0; k < 3; k++) {
-                ((float *)(state + 0x2B0))[k] = func_002A7878(240.0f, 720.0f) * 0.00029088825f;
-                qcopy(&work[k], object + 0xC0 + k * 16);
+                spin[k] = func_002A7878(240.0f, 720.0f) * 0.00029088825f;
+                qcopy(&work[k], &rows[k]);
             }
-            func_002AB6D8(work, object + 0xF0);
+            func_002AB6D8(work, axis);
             if (object[0x43] != 18) func_002A7470(object, 18, 0, 30);
             *(u16 *)(object + 0x34) &= 0xEFFF;
         }
         *(float *)(state + 0x1A8) -= *(float *)(state + 0x12C);
         func_L07_00321D68(object, launch);
-        func_00282D30(state + 0x2B0, state + 0x2B0, 0.98f);
+        func_00282D30(spin, spin, 0.98f);
         {
             float f = *(float *)(object + 0x2C) * 0.0009765625f;
             count = 3;
-            func_002A3F10(object, 1, &count, &work[1]);
-            func_00282D30(&work[0], &work[4], f);
+            func_002A3F10(object, 1, &count, out);
+            func_00282D30(&work[0], scale, f);
         }
         func_002B4090(*(float *)(state + 0x2B0), *(float *)(state + 0x2B4), *(float *)(state + 0x2B8), object, work);
-        func_002833F0(object + 0xC0, object + 0xF0);
+        func_002833F0(rows, axis);
         if (*(float *)(object + 0x18) < ((float *)func_L11_004417E8(*(u8 **)(object + 0xB8)))[2] + 5.0f ||
             !func_002A77E0(450) || *(u16 *)(object + 0x96) >= 301) {
             func_L02_003FC248(object, 0, -1);
