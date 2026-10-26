@@ -1,10 +1,13 @@
 /* Plain-C texture descriptor and upload-queue reconstruction; not matched.
- * Profile: -O2 -G8 -ffunction-sections. 1356/1356 bytes, us 0/28.
+ * Profile: -O2 -G8 -ffunction-sections. 1356/1356 bytes (16 lines off), us 0/28.
  * 26 October 2026 (M10): the descriptor word as a linear or-chain over separate statements in a
  * fresh temp, and the upload stores in climbed order, take it from 45 to 18 differing lines. Left:
  * pure scheduling in the descriptor block (the height load and palette-bits pair come early) and
  * the palette constant register pair (a0/v1). Expression forms of palette_bits, the height local
  * and the sign constant compile identically. In the permuter farm.
+ * 26 October 2026 (M14): upload stores in retail order (palette at +6 right after +0, texture at
+ * +14 last) fix the store block: 16 lines left, all in the descriptor block. A statement-order
+ * climb over the descriptor block finds nothing better.
  */
 #include "include_asm.h"
 
@@ -144,12 +147,12 @@ TextureBits func_0027C878(int id)
             if (count < 64) {
                 char *upload = ref_0027C878_07 + (count << 4);
                 *(unsigned int *)(upload + 0) = (unsigned int)(ref_0027C878_06 + (entry->second_offset << 4));
+                *(short *)(upload + 6) = palette;
                 *(short *)(upload + 4) = 0;
-                *(short *)(upload + 14) = texture;
                 *(unsigned int *)(ref_0027C878_07 + (count << 4) + 8) = (unsigned int)(ref_0027C878_06 + (entry->first_offset << 4));
                 *(unsigned char *)(upload + 12) = entry->width_shift;
                 *(unsigned char *)(upload + 13) = entry->height_shift;
-                *(short *)(upload + 6) = palette;
+                *(short *)(upload + 14) = texture;
                 ref_0027C878_05 = count + 1;
             }
         }
