@@ -60,15 +60,15 @@ char *func_L00_003F4C68(char *position,char *velocity,int id,int mode)
         func_003001E0(state,velocity,position);
         frames=0.016666668f * (D_L00_00262570 + D_0013957F[0])->speed;
         state->frames=func_00283CF0(128.0f / frames);
-        frames=func_00283CE0(state->frames);
+        /* Call and division in one statement: retail has no line label between them,
+           so no division padding (docs/COMPILER-NOTES.md). */
+        state->rate=1.0f/func_00283CE0(state->frames);
         state->id=id;
-        state->rate=1.0f/frames;
         state->target=func_L00_0032A088(0xc04,id);
         state->age=0;
         state->fadeFrames=D_L00_001B0938;
-        frames=func_00283CE0(state->fadeFrames);
+        state->fadeRate=1.0f/func_00283CE0(state->fadeFrames);
         state->mode=mode;
-        state->fadeRate=1.0f/frames;
         func_002AFFD8(location,&direction,1);
         func_00282D30(&direction,&direction,-1.0f);
         func_L00_003F51A0(object,(char *)&direction);
