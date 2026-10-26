@@ -1,6 +1,5 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/levels", func_L12_002B85E0);
 
 /* func_L12_002C0008: the hero's per-frame state handler, the twin of func_L20_002CD928 (see
    src/levels/20_yeedil/L20_002CD928.c for what each flag in this unit's config/cflags.txt line is for).

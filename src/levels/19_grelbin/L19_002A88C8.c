@@ -5,7 +5,6 @@ INCLUDE_ASM("asm/levels", func_L19_002A88C8);
 
 /* func_L19_002B0148 is defined in L19_002B0148-flags.c. */
 
-INCLUDE_ASM("asm/levels", func_L19_002B5BF0);
 
 
 typedef union { u8 b[0x2600]; s16 h[0x1300]; s32 i[0x980]; f32 f[0x980]; } Hero;

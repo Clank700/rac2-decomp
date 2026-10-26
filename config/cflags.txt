@@ -1198,3 +1198,8 @@ src/levels/02_maktar_nebula/L02_004388A0.c	-O2 -G0 -ffunction-sections
 src/levels/09_dobbo/L09_003FDA38.c	-O2 -G0 -ffunction-sections
 src/levels/03_endako/L03_003C5FE8-g8.c	-O2 -G8 -ffunction-sections
 src/levels/24_ship_shack/L24_00379A48-g8.c	-O2 -G8 -ffunction-sections
+src/levels/12_todano/L12_002B85E0-contact.c	-O2 -G0 -ffunction-sections
+src/levels/20_yeedil/L20_002C5D00-contact.c	-O2 -G0 -ffunction-sections
+src/levels/18_damosel/L18_002D01B0-contact.c	-O2 -G0 -ffunction-sections
+src/levels/19_grelbin/L19_002B5BF0-contact.c	-O2 -G0 -ffunction-sections
+src/levels/03_endako/L03_002B8708-contact.c	-O2 -G0 -ffunction-sections
