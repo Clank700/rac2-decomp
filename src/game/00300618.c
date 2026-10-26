@@ -294,8 +294,6 @@ INCLUDE_ASM("asm/game", func_00300AA8);
 INCLUDE_ASM("asm/game", func_00300F58);
 
 
-INCLUDE_ASM("asm/game", func_00301D10);
-
 INCLUDE_ASM("asm/game", func_00301F18);
 
 int func_003022A0(char *obj, char *obj2, float x, float y)
@@ -360,8 +358,6 @@ INCLUDE_ASM("asm/game", func_00303568);
 
 INCLUDE_ASM("asm/game", func_00303738);
 
-
-INCLUDE_ASM("asm/game", func_00303BF8);
 
 INCLUDE_ASM("asm/game", func_00303DA8);
 

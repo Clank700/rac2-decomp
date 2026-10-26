@@ -221,8 +221,6 @@ void func_L02_003C46E0(struct Outer *p)
 
 INCLUDE_ASM("asm/levels", func_L02_003C49A0);
 
-INCLUDE_ASM("asm/levels", func_L02_003C4C80);
-
 /* Reads three angles through a helper, bends the object's own angle at +0xF8 into the same
    range, converts all four and hands them to the four-argument report, then applies the
    same bend to the local angles. */

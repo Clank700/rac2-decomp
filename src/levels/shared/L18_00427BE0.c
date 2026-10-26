@@ -76,8 +76,6 @@ INCLUDE_ASM("asm/levels", func_L18_00428F08);
 
 INCLUDE_ASM("asm/levels", func_L18_0042B008);
 
-INCLUDE_ASM("asm/levels", func_L18_0043E760);
-
 /* func_L18_0043E938 lives in the sibling small-data unit (L18_00427BE0-g8.c): its controls are read through $gp. */
 
 /* func_L18_0043E9B0 lives in the sibling small-data unit (L18_00427BE0-g8.c): its

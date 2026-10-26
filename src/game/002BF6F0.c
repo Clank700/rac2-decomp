@@ -406,8 +406,6 @@ void func_002C2170(char *p)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002C2210);
-
 INCLUDE_ASM("asm/game", func_002C23B8);
 
 extern void func_002C96F8(float, float, void *, int *, float *, void *);

@@ -334,8 +334,6 @@ void func_L05_0041CA70(char *obj)
 
 INCLUDE_ASM("asm/levels", func_L05_0041CB68);
 
-INCLUDE_ASM("asm/levels", func_L05_0041CE00);
-
 INCLUDE_ASM("asm/levels", func_L05_0041CFE8);
 
 /* shared native body of family 5a97ab89858c */

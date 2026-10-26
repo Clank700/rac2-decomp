@@ -14,7 +14,7 @@ typedef float f32;
 
 INCLUDE_ASM("asm/levels", func_L04_00417308);
 
-INCLUDE_ASM("asm/levels", func_L04_00418A58);
+/* func_L04_00418A58 is defined in L04_00418A58-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L04_00418BF0);
 
@@ -27,7 +27,7 @@ INCLUDE_ASM("asm/levels", func_L04_0041AD18);
 /* func_L04_00423178 is defined in L04_00423178-flags-g8.c. */
 
 
-INCLUDE_ASM("asm/levels", func_L04_00432258);
+/* func_L04_00432258 is defined in L04_00432258.c. */
 
 /* func_L04_004323F8 is defined in L04_004323F8.c. */
 

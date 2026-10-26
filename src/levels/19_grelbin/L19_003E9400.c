@@ -146,7 +146,7 @@ void func_L19_00422810(u8 *a0)
     func_0029F338(a0);
 }
 
-INCLUDE_ASM("asm/levels", func_L19_00422A98);
+/* func_L19_00422A98 is defined in L19_00422A98-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L19_00423270);
 
