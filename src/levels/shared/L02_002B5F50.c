@@ -275,7 +275,6 @@ int func_L02_003329C8(char *a0, char *a1, float f12, float f13) {
 
 INCLUDE_ASM("asm/levels", func_L02_00332A80);
 
-INCLUDE_ASM("asm/levels", func_L02_00332EF0);
 
 INCLUDE_ASM("asm/levels", func_L02_00333218);
 

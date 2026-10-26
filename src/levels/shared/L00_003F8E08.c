@@ -55,7 +55,6 @@ void func_L00_003FC100(void)
 }
 
 
-INCLUDE_ASM("asm/levels", func_L00_003FC228);
 
 
 extern char D_L00_001B8DC0[];
