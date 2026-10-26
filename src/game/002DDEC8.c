@@ -204,7 +204,6 @@ void func_002DE900(int value, int mode)
 
 INCLUDE_ASM("asm/game", func_002DE990);
 
-INCLUDE_ASM("asm/game", func_002DF050);
 
 void func_002DF158(s32 object, s32 amount)
 {

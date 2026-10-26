@@ -568,7 +568,6 @@ L11:
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_0029DB28);
 
 
 INCLUDE_ASM("asm/game", func_0029DC90);

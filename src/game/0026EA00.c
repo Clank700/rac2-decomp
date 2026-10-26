@@ -505,7 +505,6 @@ void func_00270A00(char *object) {
         callback(object);
 }
 
-INCLUDE_ASM("asm/game", func_00270A48);
 
 extern void func_00282CF0(float *dst, float *a, float *b);
 extern float func_00282DB0(float *a, float *b);
@@ -584,8 +583,6 @@ INCLUDE_ASM("asm/game", func_002712D8);
 INCLUDE_ASM("asm/game", func_00271958);
 
 INCLUDE_ASM("asm/game", func_00271B90);
-
-INCLUDE_ASM("asm/game", func_00271E88);
 
 INCLUDE_ASM("asm/game", func_00271FD8);
 
