@@ -1,5 +1,4 @@
-/* func_L00_00410508: M3 2026-10-26: written from retail (the old draft was a 152-byte stub): 384/392 under -O2 -G64 -Wa,-G64 -mno-split-addresses (sda table D_L00_001B12C0[4][4], D_L00_001B2D58 nosda). Only the sign-flip tail differs: cc1 cross-jumps bc1f+neg+store of the two arms, retail keeps a bc1tl with the neg in its slot and reloads 0x20 in the second arm.
- */
+#include "include_asm.h"
 typedef struct {
     int count0;
     int pad4;
@@ -65,11 +64,12 @@ void func_L00_00410508(Obj_410508 *self)
         D_L00_001B2D58 = 1;
         r->owner = self;
         p = r->node;
-        if (0.0f < p->f20) {
-            if (sign < 0.0f)
-                p->f20 = -p->f20;
-        } else if (p->f20 < 0.0f) {
-            if (0.0f < sign)
+        {
+            float f = p->f20, z = 0.0f;
+
+            if (z < f && sign < z)
+                p->f20 = -f;
+            else if (f < z && z < sign)
                 p->f20 = -p->f20;
         }
     }

@@ -438,7 +438,6 @@ void func_L00_00428EB0(char *a0)
 
 INCLUDE_ASM("asm/levels", func_L00_00428EE0);
 
-INCLUDE_ASM("asm/levels", func_L00_00428F00);
 
 /* When the global identity differs from the signed owner identity at offset 0x86 and the global mode is not 6, clear the owner byte at offset 0x7D and write signed short value 3 at offset 0x7E. */
 void func_L00_00428FE8(Rac2Native_6af85cabb56d3b41_SmallConditional52Owner *owner)
