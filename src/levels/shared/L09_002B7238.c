@@ -386,7 +386,7 @@ INCLUDE_ASM("asm/levels", func_L09_003AF9E8);
 INCLUDE_ASM("asm/levels", func_L09_003B6550);
 
 /* snapshots the object's frame and re-seeds its four steering angles from the new one */
-INCLUDE_ASM("asm/levels", func_L09_003E99E0);
+/* func_L09_003E99E0 is matched in its own unit, src/levels/shared/L09_003E99E0-qcopy.c (-frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L09_003E9AA0);
 

@@ -129,7 +129,7 @@ INCLUDE_ASM("asm/game", func_003280C8);
 
 INCLUDE_ASM("asm/game", func_003281F0);
 
-INCLUDE_ASM("asm/game", func_003285C0);
+/* func_003285C0 is matched in its own unit, src/game/003285C0-qcopy.c (-frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/game", func_003286D0);
 
