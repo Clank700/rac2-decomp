@@ -131,7 +131,6 @@ INCLUDE_ASM("asm/game", func_002E31E8);
 INCLUDE_ASM("asm/game", func_002E3360);
 
 
-INCLUDE_ASM("asm/game", func_002E3478);
 
 extern char *ref_L00_002E3548_00 __attribute__((sda));
 extern float ref_L00_002E3548_01[16] __attribute__((sda));

@@ -920,3 +920,12 @@ src/levels/shared/L00_0038B888-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy 
 src/game/002BCF18-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/002ACEC0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/shared/L00_0033E220-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_00420388-g8-dbg.c	-O2 -G8 -ffunction-sections -g
+src/game/00274A88-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_002B5A88-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/00312D58-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/game/003001E0-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy
+src/game/002ED948-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L01_002B35E8-g8.c	-O2 -G8 -ffunction-sections
+src/game/002E3478-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L00_00368F58-dbg.c	-O2 -G0 -ffunction-sections -g

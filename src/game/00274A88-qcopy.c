@@ -1,5 +1,6 @@
-/* Best plain-C trial: 208 bytes. USA v1.01 and USA v2.00 both remain 0/28,
-   with the opening prologue/copy scheduling different; PAL has no catalogue entry. */
+/* func_00274A88 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier). */
+#include "include_asm.h"
+
 typedef int TI128_00274A88 __attribute__((mode(TI)));
 
 extern float func_00282DF0(void *);

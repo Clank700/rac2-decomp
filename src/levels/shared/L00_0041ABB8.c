@@ -388,7 +388,6 @@ int func_L00_00420310(char *object)
     return 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00420388);
 
 int func_L00_004204A0(TI128 *src)
 {

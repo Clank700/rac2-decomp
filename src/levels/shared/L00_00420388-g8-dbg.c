@@ -1,7 +1,4 @@
-/* Retained C reconstruction: 280/280 bytes.
-   Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -g.
-   0/27 in us, pal and us2; first bound difference +0x1C. Complete C replaces a comment-only screen. The paired local record and debug profile reproduce size and division padding; the initial copy/call argument order and record-base registers differ. func_L00_002DB350 consumes the incoming float margin, confirmed from its retail body.
-   Reopen only with new source/type/lifetime evidence; bounded scheduling/profile variants did not close it. */
+/* func_L00_00420388 in its own unit (flags in config/cflags.txt: -O2 -G8 -ffunction-sections -g). */
 
 #include "include_asm.h"
 typedef int Quad __attribute__((mode(TI)));

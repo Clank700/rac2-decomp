@@ -1,17 +1,4 @@
-/*
- * Retained manual C reconstruction; not linked or counted.
- * Profile: -O2 -G0 -ffunction-sections
- * Retail: 304 bytes; compiled: 304 bytes.
- * Final coverage: us: 0/6; us2: 0/6; pal: 0/6.
- * Residual: 304/304 bytes; the body agrees through+0xF0. The final state/global-mode
- * block differs in branch-likely choice and scalar allocation. Canonical resident
- * addresses, typed callbacks, integer returned path IDs, pending-byte chronology and
- * actor-pointer scopes repair the earlier 312-byte draft.
- * Reopen: A measured final exclusion-branch/global-mode lifetime witness. Early-return
- * and equivalent short-circuit forms tie. Callback return-family contracts and the
- * shared integer return of0028B3D0 need independent lead qualification before any future
- * promotion.
- */
+/* func_L01_002B35E8 in its own unit (flags in config/cflags.txt: -O2 -G8 -ffunction-sections). */
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));

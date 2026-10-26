@@ -232,7 +232,6 @@ unsigned int func_00274768(OozlaAppendObject164 *object, unsigned int index, con
 
 INCLUDE_ASM("asm/game", func_00274810);
 
-INCLUDE_ASM("asm/game", func_00274A88);
 
 extern void func_002ACE78(float *, float *, float);
 void func_00274B58(OozlaAppendObject164 *a0, float *a1, const float *a2) {

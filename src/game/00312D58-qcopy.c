@@ -1,3 +1,4 @@
+/* func_00312D58 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections -frac2-qcopy). */
 #include "include_asm.h"
 
 typedef int TI128_00312D58 __attribute__((mode(TI)));
