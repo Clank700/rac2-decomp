@@ -540,4 +540,21 @@ void func_L02_003D2488(char *self, int flag1, int flag2) {
         func_L02_003D2390(self);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003D25C8);
+extern float func_00283180(float);
+extern float func_00283198(float);
+
+/* Same body as func_L02_003F1A88, with this function's own callees. */
+void func_L02_003D25C8(char *arg0, char *arg1) {
+    char *state;
+    float angle;
+    float radius;
+
+    angle = func_00283248(*(float *)(arg0 + 0x10) - *(float *)arg1,
+                          *(float *)(arg0 + 0x14) - *(float *)(arg1 + 4));
+    angle += func_002A7878(-0.78539824f, 0.78539824f);
+    radius = func_002A7878(-2.0f, 2.0f) + 8.0f;
+    state = *(char **)(arg0 + 0x68);
+    qcopy(state + 0x2D0, arg1);
+    *(float *)(state + 0x2D0) += radius * func_00283180(angle);
+    *(float *)(state + 0x2D4) += radius * func_00283198(angle);
+}

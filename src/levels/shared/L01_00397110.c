@@ -8,7 +8,7 @@ INCLUDE_ASM("asm/levels", func_L01_00397870);
 
 INCLUDE_ASM("asm/levels", func_L01_00397A28);
 
-INCLUDE_ASM("asm/levels", func_L01_00397C98);
+/* func_L01_00397C98 is defined in L01_00397C98-qcopy-qcopy-barrier.c. */
 
 extern int D_001A79F0 __attribute__((sda));
 
