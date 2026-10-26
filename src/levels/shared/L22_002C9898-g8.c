@@ -1,19 +1,7 @@
-/* func_L22_002C9898 (22_dobbo_orbit and 23_damosel_orbit): F3 hero state entry, NEAR MISS ported from the L13/L03 ports
- * of func_L19_002C44F8.  19400 vs 19404 bytes, 4850 of 4851 opcodes.  Flags: -O2 -G8 -ffunction-sections -g
- * -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por.  Adds 0x56-0x5F and the 7-group's 0x5B arms to the L13 set.
- * Still differs: one instruction in states 0x59/0x5A.  Retail (and L23's copy at 0x002D254C) clears 0xF0 through
- * a register (`addiu $a0,$v0,0xF0; sq $zero,0($a0)`), then D_00189F30 through a fresh lui/addiu, and rebuilds the
- * hero base into $s0 with a fresh `lui $v1; addiu $s0,$v1,%lo` -- the only fresh hero lui in the function.
- * - qzero() (common.h) for both clears gives retail's two `sq $zero,0(reg)` and the register addresses.
- * - 0x59 and 0x5A as separate cases, 0x59's copy ending in `goto clear_done` before 0x5A's `clear_done:
- *   HALF(0x1DC) = 60;` (cross-jumping later merges the copies): the label makes cse1 and cse2 forget the base,
- *   so the first part matches retail exactly.  Left: gcse's PRE still replaces the label block's lui with the
- *   entry's hoisted $s4 (`addiu $s0,$s4,%lo`).  Retail's lui must survive gcse, so it is a second occurrence in
- *   its gcse block, yet neither cse pass merged it: no spelling found for that (pointer locals, a function-wide
- *   or spilled hero pointer, do/while(0), if/else arms, -frac2-gcse-unsplit-edges all keep or worsen it).
- * - Plain `*(TI128 *)VEC(0xF0) = 0` stores share one por zero (4846/4851); memset and func_00282C88 add calls.
- * Symbols still carry the source ports' level prefixes: run claims/func_L19_002C44F8/opus3/tools/rename.py once
- * it matches (derive needs equal sizes).
+/* func_L22_002C9898 (22_dobbo_orbit, and 23_damosel_orbit's copy): the F3 hero state entry, ported from the
+ * L13/L03 ports of func_L19_002C44F8 with the 0x56-0x5F states and the 7-group's 0x5B arms added.
+ * States 0x59/0x5A clear their two quadwords with qzero_nc() (common.h, rac1-decomp's clobber-free qzero): the
+ * bare volatile asm makes cse flush its table, so retail's fresh `lui` rebuilds the hero base after the clears.
  */
 #include "common.h"
 
@@ -55,15 +43,15 @@ typedef struct {
 extern char D_00189F30[];
 extern s32 func_002E5CF8(s32, s32, u8 *);
 extern void func_00282A60(unsigned int *, unsigned int, int);
-extern u8 D_L13_001A7DE0[8] __attribute__((sda));
-extern u8 D_L13_001A7E00[8] __attribute__((sda));
-extern s32 D_L13_00268690[][11];
-extern s32 D_L13_001A9010;
-extern s32 D_L13_001A8FF4 __attribute__((sda));
-extern f32 D_L13_001A7CD8 __attribute__((sda));
-extern f32 D_L13_001A7CDC __attribute__((sda));
-extern f32 D_L13_00268820[][25];
-extern s32 D_L13_00268690[][11];
+extern u8 D_L22_001A7DE0[8] __attribute__((sda));
+extern u8 D_L22_001A7E00[8] __attribute__((sda));
+extern s32 D_L22_0025FA10[][11];
+extern s32 D_L22_001A9010;
+extern s32 D_L22_001A8FF4 __attribute__((sda));
+extern f32 D_L22_001A7CD8 __attribute__((sda));
+extern f32 D_L22_001A7CDC __attribute__((sda));
+extern f32 D_L22_0025FBA0[][25];
+extern s32 D_L22_0025FA10[][11];
 extern f32 func_00282C48(f32);
 extern void func_L00_00341820(s32, f32 *, s32 *, f32 *, s32, f32);
 extern f32 func_00282DB0(void *, void *);
@@ -95,7 +83,7 @@ extern void func_L00_00322A98(void *, char *);
 extern void func_L00_00322AC0(List_F66766f2b *, int, int, float);
 extern void func_L00_00322EC8(Rac2Native_5b4b17178a13f443_SmallSlotReset128Owner *);
 extern int func_L00_0035F5A0(int, int, int);
-extern void func_L00_002C8BA8(int);
+extern void func_L22_002CE468(int);
 extern s32 func_L18_004283F0(u8 *);
 extern void func_L18_004286D0(u8 *);
 extern void func_00282CF0(void *, void *, void *);
@@ -123,31 +111,31 @@ extern void func_L00_002BA508(void);
 extern int func_L00_002CAF20(void);
 extern void func_L00_002D2168(int, int, f32);
 extern void func_L00_0041E958(f32, f32, f32);
-extern s32 func_L00_002A4E48(int);
+extern s32 func_L22_002A8CE0(int);
 extern u32 D_001A7390;
 extern s32 D_001A7B90;
 extern u8 D_001A7A40[8];
 extern u8 D_L18_001A7DE0[8] __attribute__((sda));
 extern u8 D_L18_001A7E00[8] __attribute__((sda));
 extern s32 D_L18_00267110[][11];
-extern u8 *D_L13_001B30B0;
-extern s32 D_L13_001B30B8;
+extern u8 *D_L22_001B28B0;
+extern s32 D_L22_001B28B8;
 extern u8 D_L18_001A8F20[] MACRO_ADDR;
 extern u8 D_00189E20[];
 extern u32 D_001A79F0;
 typedef struct { u16 count; u16 pad; u32 maximum; u32 levels; } Statistics;
 extern Statistics D_0018C360[];
 extern Statistics D_0018C750[];
-extern s32 D_L13_001A8F00;
+extern s32 D_L22_001A8F00;
 extern s32 D_L19_001A9010;
 extern s32 D_L18_001A8FF4 __attribute__((sda));
 extern f32 D_L18_001A7CD8 __attribute__((sda));
 extern f32 D_L18_001A7CDC __attribute__((sda));
-extern s32 D_L13_001A7DD8[2] __attribute__((sda));
-extern f32 D_L13_00268820[][25];
-extern u8 D_L13_002689B0[];
+extern s32 D_L22_001A7DD8[2] __attribute__((sda));
+extern f32 D_L22_0025FBA0[][25];
+extern u8 D_L22_0025FD30[];
 typedef struct { u8 pad0[0x148]; f32 f148; u8 pad14C[0x400 - 0x14C]; s32 i400; } L19State_1B9900;
-extern L19State_1B9900 D_L13_001B9780;
+extern L19State_1B9900 D_L22_001B9B40;
 
 /* All resident fields below are views of the single player-state object. */
 typedef union { u8 b[0x2600]; s16 h[0x1300]; u16 uh[0x1300]; s32 i[0x980]; u32 u[0x980]; f32 f[0x980]; u8 *ptr[0x980]; TI128 q[0x260]; } Hero;
@@ -185,7 +173,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
     f32 angle_53;
     f32 value_18, value_21, value_22, value_37;
     if (WORD(0x229C) == 0x14 && (action != 0x61 || animate != 2)) return 0;
-    if ((D_L13_001A8F00 == 2 || D_L13_001A8F00 == 6) && animate != 2) return 0;
+    if ((D_L22_001A8F00 == 2 || D_L22_001A8F00 == 6) && animate != 2) return 0;
     if (WORD(0x24CC) == 0 && (WORD(0x229C) == 2 || WORD(0x229C) == 7)) {
         if (action != 6 && action != 0x39 && action != 0x43 && action != 0x91 &&
             action != 0x5F && action != 0x74 && action != 0x78 && action != 0x79 &&
@@ -223,22 +211,22 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         BYTE(0x24EF) = 0;
         WORD(0x11A0) = func_002A7820(50, 100);
         func_L00_002AB3E0();
-        if (BYTE(0x22B4)) { func_L00_002C8BA8(0); return 1; }
+        if (BYTE(0x22B4)) { func_L22_002CE468(0); return 1; }
         COPY_VECTOR(0x160, 0x120);
         if (BYTE(0x1492) && func_00282E20(VEC(0x160)) > 0.00833333377f) { func_L22_002C9898(0x2E, 1); return 0; }
         if (BYTE(0x149A) && SHORT(0x34C) == 0) { func_L22_002C9898(0x76, 1); return 0; }
         WORD(0x1188) = 0x68;
         if (!animate) goto finish;
-        if (func_L00_002A4E48(0) == 0x51) func_L00_002D2168(func_L00_002A4E48(0), 0, 18.0f); else func_L00_002D2168(func_L00_002A4E48(0), 0, -1.0f);
+        if (func_L22_002A8CE0(0) == 0x51) func_L00_002D2168(func_L22_002A8CE0(0), 0, 18.0f); else func_L00_002D2168(func_L22_002A8CE0(0), 0, -1.0f);
         goto finish;
     case 0x64:
         WORD(0x229C) = 0; BITS(0x24A0) = 0;
         func_00282C88((TI128 *)VEC(0x160)); WORD(0x1188) = 0x68;
         if (!animate) goto finish;
-        if (func_L00_002A4E48(0) == 0x51) func_L00_002D2168(func_L00_002A4E48(0), 0, 18.0f); else func_L00_002D2168(func_L00_002A4E48(0), 0, -1.0f);
+        if (func_L22_002A8CE0(0) == 0x51) func_L00_002D2168(func_L22_002A8CE0(0), 0, 18.0f); else func_L00_002D2168(func_L22_002A8CE0(0), 0, -1.0f);
         goto finish;
     case 0x3D:
-        func_L00_002D2168(func_L00_002A4E48(0), 0, 9.0f);
+        func_L00_002D2168(func_L22_002A8CE0(0), 0, 9.0f);
         if (PTR(0x1854)) func_002A7470(PTR(0x1854), 0, 0, 9);
         goto finish;
     case 0x39:
@@ -286,12 +274,12 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         WORD(0x229C) = 18; BYTE(0x22B7) = 1; BITS(0x24A0) = 0; HALF(0xA4A) = 0;
         if (WORD(0x22A4) == 17) {
             func_L00_002AABE0(3, 10, 0);
-            if (D_L13_001B30B0) func_002FD1B8(D_L13_001B30B0, D_L13_001B30B8, 0, REAL(0x80), REAL(0x84), 0.4f, 0.3f);
+            if (D_L22_001B28B0) func_002FD1B8(D_L22_001B28B0, D_L22_001B28B8, 0, REAL(0x80), REAL(0x84), 0.4f, 0.3f);
         } else if (REAL(0x118) < -0.00833333376795f) {
             selected_9 = func_00283CF0(func_00282C48(REAL(0x118)) * 300.0f);
             if (selected_9 > 40) selected_9 = 40;
             func_L00_002AABE0(3, selected_9, 1);
-            if (D_L13_001B30B0) func_002FD1B8(D_L13_001B30B0, D_L13_001B30B8, 0, REAL(0x80), REAL(0x84), 0.5f, -0.4f);
+            if (D_L22_001B28B0) func_002FD1B8(D_L22_001B28B0, D_L22_001B28B8, 0, REAL(0x80), REAL(0x84), 0.5f, -0.4f);
             HALF(0xA4A) = 75;
         }
         REAL(0x794) = REAL(0x118) * 0.37f; WORD(0x798) = 0;
@@ -313,7 +301,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         if (animate) {
             if (WORD(0x2294) == 0x72) func_L00_002D2168(0x69, 3, -3.0f);
             else func_L00_002D2168(0x68, 3, -3.0f);
-            *(f32 *)(PTR(0x2290) + 0x44) = D_L13_00268820[WORD(0xC30)][WORD(0xC34)++];
+            *(f32 *)(PTR(0x2290) + 0x44) = D_L22_0025FBA0[WORD(0xC30)][WORD(0xC34)++];
             goto finish;
         }
         goto finish;
@@ -351,12 +339,12 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         BITS(0x24A0) = 4;
         WORD(0x229C) = 0;
         if (BYTE(0x22BA)) goto finish;
-        animation_16 = func_L00_002A4E48(1);
+        animation_16 = func_L22_002A8CE0(1);
         if (PTR(0x2290)[0x43] == animation_16 || !animate) goto finish;
         func_L00_002D2168(animation_16, 0, 18.0f); goto finish;
     case 0x2F:
         WORD(0x229C) = 8; BITS(0x24A0) = 0; COPY_VECTOR(0x160, 0x110);
-        func_L00_002D2168(func_L00_002A4E48(0), 0, 5.0f); HALF(0x1EC) = 7;
+        func_L00_002D2168(func_L22_002A8CE0(0), 0, 5.0f); HALF(0x1EC) = 7;
         goto finish;
     case 2: case 0x2E: case 0x70:
         WORD(0x229C) = 1;
@@ -394,7 +382,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         if (WORD(0x22A0) == 0x13) selected_18 = 13;
         if (WORD(0x22AC) == 6 || WORD(0x22AC) == 0x2C) selected_18 = 18;
         if (WORD(0x22B0) == 4 && BYTE(0x49C) > 5) selected_18 = 13;
-        func_L00_002D2168(WORD(0x2298) + 3, D_L13_001A7DD8[WORD(0x2298)], (f32)selected_18); goto finish;
+        func_L00_002D2168(WORD(0x2298) + 3, D_L22_001A7DD8[WORD(0x2298)], (f32)selected_18); goto finish;
     case 0x7B: {
         s32 n = -2;
         WORD(0x229C) = 28; WORD(0x1188) = 0x68; BITS(0x24A0) = 0;
@@ -409,7 +397,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         if (!animate) goto finish;
         if (BYTE(0x22B4) == 1) { func_L00_002D2168(2, 0, 8.0f); goto finish; }
         if (BYTE(0x22B4) != 0) goto finish;
-        func_L00_002D2168(WORD(0x2298) + 3, D_L13_001A7DD8[WORD(0x2298)], 8.0f); goto finish;
+        func_L00_002D2168(WORD(0x2298) + 3, D_L22_001A7DD8[WORD(0x2298)], 8.0f); goto finish;
     case 0x30:
         WORD(0x229C) = 16; BITS(0x24A0) = 3; BYTE(0x22B7) = 1;
         func_00282A60((unsigned int *)VEC(0xB40), 0, 0x20);
@@ -422,9 +410,9 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         if (BYTE(0x1492)) { func_L22_002C9898(0x2E, 1); return 0; }
         if (BYTE(0x149A) && SHORT(0x34C) == 0) { func_L22_002C9898(0x76, 1); return 0; }
         if (func_L00_002CAF20()) return 0;
-        if (func_L00_002A4E48(0) == 0x51) {
+        if (func_L22_002A8CE0(0) == 0x51) {
             if (!animate) goto finish;
-            if (func_L22_002C9898(0, 0)) func_L00_002D2168(func_L00_002A4E48(0), 0, 18.0f);
+            if (func_L22_002C9898(0, 0)) func_L00_002D2168(func_L22_002A8CE0(0), 0, 18.0f);
             return 0;
         }
         if (!animate) goto finish;
@@ -455,7 +443,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         func_002AC9F8((float *)VEC(0x160), 0.11666667461395264f);
         if (REAL(0x178) > 0.05833333730697632f) func_L00_002B9B88(9, 0);
         if (animate) {
-            if (PTR(0x2290)[0x42] == func_L00_002A4E48(0)) func_L00_002D2168(13, 2, 9.0f);
+            if (PTR(0x2290)[0x42] == func_L22_002A8CE0(0)) func_L00_002D2168(13, 2, 9.0f);
             else func_L00_002D2168(13, 2, 14.0f);
             func_L00_002D2470(3, 18);
         }
@@ -631,7 +619,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
             func_L22_002C9898(0x81, 1); return 0;
         }
         if (WORD(0x2294) != 0x6E && SHORT(0x348) == 1 && action != 0xE &&
-            action != 0x38 && !D_L13_001A8FF4) { func_L22_002C9898(0x6E, 1); return 0; }
+            action != 0x38 && !D_L22_001A8FF4) { func_L22_002C9898(0x6E, 1); return 0; }
         if (WORD(0x22A0) == 0x11 && !BYTE(0x24DA)) BYTE(0x24DB)++;
         else BYTE(0x24DB) = 0;
         if (SHORT(0x1F2)) { func_L22_002C9898(0x82, 1); return 0; }
@@ -677,7 +665,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
 
         }
         else if (WORD(0x2294) == 0x81) {
-            SHORT(0x4AC) = 5; REAL(0x4B8) = 0.6f; REAL(0x4C8) = 18.0f; REAL(0x4CC) = 30.0f; REAL(0x4D0) = 12.0f; REAL(0x4A8) = D_L13_001A7CD8; REAL(0x50C) = D_L13_001A7CD8 + 0.5f; REAL(0x508) = D_L13_001A7CD8; HALF(0x518) = 15; HALF(0x51A) = 400; REAL(0x510) = 300.0f; REAL(0x520) = D_L13_001A7CDC * 0.0002777777845f; HALF(0x526) = 1200; HALF(0x52A) = 1200; REAL(0x4A4) = 0.11666667461395264f;
+            SHORT(0x4AC) = 5; REAL(0x4B8) = 0.6f; REAL(0x4C8) = 18.0f; REAL(0x4CC) = 30.0f; REAL(0x4D0) = 12.0f; REAL(0x4A8) = D_L22_001A7CD8; REAL(0x50C) = D_L22_001A7CD8 + 0.5f; REAL(0x508) = D_L22_001A7CD8; HALF(0x518) = 15; HALF(0x51A) = 400; REAL(0x510) = 300.0f; REAL(0x520) = D_L22_001A7CDC * 0.0002777777845f; HALF(0x526) = 1200; HALF(0x52A) = 1200; REAL(0x4A4) = 0.11666667461395264f;
             if (D_001A79F0 == 16) REAL(0x4A4) = 0.0f;
             func_L00_00322A98(PTR(0x2290), (char *)VEC(0x18E0));
             func_L00_00322AC0((List_F66766f2b *)VEC(0x18E0), 70, 2, 0.0f);
@@ -696,7 +684,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
                 func_L00_002D3B58((V4_F6a70b950 *)VEC(0xF0), (V4_F6a70b950 *)VEC(0xF0), step);
                 BYTE(0x49D) = 1; WORD(0x430) = 2;
                 WORD(0x434) = 0x25; REAL(0x438) = step; REAL(0x43C) = frames18;
-                BITS(0x440) = 0x28; PTR(0x444) = D_L13_002689B0;
+                BITS(0x440) = 0x28; PTR(0x444) = D_L22_0025FD30;
             }
             BYTE(0x49F) = 1; BYTE(0x22B7) = 1;
         }
@@ -709,7 +697,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
             if (WORD(0x22A0) == 0x38 || WORD(0x22AC) == 0x38 || WORD(0x24CC) == 0) {
                 WORD(0x18C0)++;
                 if (WORD(0x18C0) > 2 || WORD(0x24CC) == 0) {
-                    if (D_001A79F0 == 2 && D_L13_001A9010) func_L22_002C9898(0x7D, 1);
+                    if (D_001A79F0 == 2 && D_L22_001A9010) func_L22_002C9898(0x7D, 1);
                     else if (*(s32 *)(*(u8 **)(PTR(0x2290) + 0x24) + 0x1F0) != 0) func_L22_002C9898(0x79, 1);
                     else func_L22_002C9898(0x39, 1);
                     return 0;
@@ -822,7 +810,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
             REAL(0x4A4) = 0.055000003427267075f; HALF(0x526) = 85; HALF(0x1D0) = 70; BYTE(0x49D) = 1;
             if (D_001A7B90) WORD(0x430) = 34; else WORD(0x430) = 35;
             WORD(0x434) = WORD(0x430) + 36; REAL(0x438) = 29.0f;
-            REAL(0x43C) = 50.0f; BITS(0x440) = 86; PTR(0x444) = (u8 *)D_L13_001A7E00;
+            REAL(0x43C) = 50.0f; BITS(0x440) = 86; PTR(0x444) = (u8 *)D_L22_001A7E00;
             BYTE(0x52E) = 1;
 
         }
@@ -867,7 +855,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         }
         else if (WORD(0x2294) == 9) {
             animation_41 = 8; index = func_00283CF0(REAL(0xC38));
-            if (func_L00_002A4EF0(objectSnapshot[0x42]) == 4) animation_41 = D_L13_001A7DE0[index];
+            if (func_L00_002A4EF0(objectSnapshot[0x42]) == 4) animation_41 = D_L22_001A7DE0[index];
             func_L00_002D2168(animation_41, 0, 5.0f); goto finish;
         }
         else if (WORD(0x2294) == 0x5B) { func_L00_002D2168(4, 3, 7.0f); goto finish; }
@@ -960,7 +948,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         if (D_001A7390 > D_0018C360[10].maximum) D_0018C360[10].maximum = D_001A7390;
         D_0018C360[10].levels = (D_0018C360[10].levels | (1u << D_001A79F0)) | 0x80000000u;
         {
-        s32 *entry = D_L13_00268690[SHORT(0xBFC)];
+        s32 *entry = D_L22_0025FA10[SHORT(0xBFC)];
         mode = 0; WORD(0x2300) = 0;
         if ((WORD(0x22A0) == 0x13 && (f32)entry[2] > REAL(0xC38)) ||
             (WORD(0x22AC) == 0x13 && WORD(0x1B8) + WORD(0x22A8) < 27)) mode = (entry[1] + 1) % 3;
@@ -986,7 +974,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         case 0x4D: {
             s32 m4d;
             f32 rate = 5.0f;
-            s32 *row = D_L13_00268690[SHORT(0xBFC)];
+            s32 *row = D_L22_0025FA10[SHORT(0xBFC)];
             m4d = 0;
             if ((WORD(0x22A4) == 6 || (WORD(0x22B0) == 6 && (u32)(PTR(0x2290)[0x43] - 15) < 2)) &&
                 row[0] == 0 && (f32)row[2] > REAL(0xC38)) m4d = (row[1] + 1) % 2;
@@ -1007,10 +995,10 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         goto finish;
     case 0x6D:
         WORD(0x229C) = 6; HALF(0xBFE) = 0;
-        if (WORD(0x22A0) == 0x6D) SHORT(0xBFC) = D_L13_00268690[SHORT(0xBFC)][1] == 0 ? 6 : 5;
+        if (WORD(0x22A0) == 0x6D) SHORT(0xBFC) = D_L22_0025FA10[SHORT(0xBFC)][1] == 0 ? 6 : 5;
         else SHORT(0xBFC) = 5;
         {
-            s32 kind = D_L13_00268690[SHORT(0xBFC)][1];
+            s32 kind = D_L22_0025FA10[SHORT(0xBFC)][1];
             s32 still;
             u32 object;
             if (!animate) goto finish;
@@ -1046,7 +1034,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         HALF(0x1DC) = 77;
         if (!animate) goto finish;
         func_L00_002D2168(0x10, 3, -3.0f);
-        *(f32 *)(PTR(0x2290) + 0x44) = D_L13_00268820[WORD(0xC30)][WORD(0xC34)++];
+        *(f32 *)(PTR(0x2290) + 0x44) = D_L22_0025FBA0[WORD(0xC30)][WORD(0xC34)++];
         goto finish;
     case 0x8C:
         WORD(0x229C) = 7; BITS(0x24A0) = 0; func_L00_002B6118(0.5f);
@@ -1057,7 +1045,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         HALF(0x1DC) = 77;
         if (!animate) goto finish;
         func_L00_002D2168(0x96, 1, -3.0f);
-        *(f32 *)(PTR(0x2290) + 0x44) = D_L13_00268820[WORD(0xC30)][WORD(0xC34)++];
+        *(f32 *)(PTR(0x2290) + 0x44) = D_L22_0025FBA0[WORD(0xC30)][WORD(0xC34)++];
         goto finish;
     case 0x65:
         WORD(0x229C) = 25; BITS(0x24A0) = 0; WORD(0x18C0)++;
@@ -1116,7 +1104,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         HALF(0x20E) = 45; HALF(0x1DC) = 50;
         if (!animate) goto finish;
         func_L00_002D2168(6, 3, -3.0f);
-        *(f32 *)(PTR(0x2290) + 0x44) = D_L13_00268820[WORD(0xC30)][WORD(0xC34)++];
+        *(f32 *)(PTR(0x2290) + 0x44) = D_L22_0025FBA0[WORD(0xC30)][WORD(0xC34)++];
         goto finish;
     case 0x40:
         if (BYTE(0x149A) && SHORT(0x34C) == 0) { func_L22_002C9898(0x4E, 1); return 0; }
@@ -1183,17 +1171,13 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         if (!animate) goto finish;
         func_L00_002D2168(7, 0, 12.0f); goto finish;
     case 0x59:
-        WORD(0x229C) = 7; BITS(0x24A0) = 0;
-        qzero(VEC(0xF0)); qzero(D_00189F30);
-        goto clear_done;
     case 0x5A:
         WORD(0x229C) = 7; BITS(0x24A0) = 0;
-        qzero(VEC(0xF0)); qzero(D_00189F30);
-    clear_done:
+        qzero_nc(VEC(0xF0)); qzero_nc(D_00189F30);
         HALF(0x1DC) = 60;
         if (!animate) goto finish;
         func_L00_002D2168(6, 3, -3.0f);
-        *(f32 *)(PTR(0x2290) + 0x44) = D_L13_00268820[WORD(0xC30)][WORD(0xC34)++];
+        *(f32 *)(PTR(0x2290) + 0x44) = D_L22_0025FBA0[WORD(0xC30)][WORD(0xC34)++];
         goto finish;
     case 0x3E:
         WORD(0x229C) = 15; BITS(0x24A0) = 0;
@@ -1219,27 +1203,27 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         frames = -3.0f; animation_53 = 16; { func_L00_002D2168(animation_53, 2, frames); goto finish; }
     case 0x1C:
         WORD(0x229C) = 9; BYTE(0x22BC) = 1; BITS(0x24A0) = 0;
-        func_L00_002D2168(func_L00_002A4E48(0), 0, 10.0f); goto finish;
+        func_L00_002D2168(func_L22_002A8CE0(0), 0, 10.0f); goto finish;
     case 0x1D:
         BITS(0x24A0) = 0x51; WORD(0x229C) = 0;
-        if (func_L00_002A4EF0(PTR(0x2290)[0x42]) == func_L00_002A4E48(0)) goto finish;
-        func_L00_002D2168(func_L00_002A4E48(0), 0, 5.0f); goto finish;
+        if (func_L00_002A4EF0(PTR(0x2290)[0x42]) == func_L22_002A8CE0(0)) goto finish;
+        func_L00_002D2168(func_L22_002A8CE0(0), 0, 5.0f); goto finish;
     case 0x1E:
         WORD(0x229C) = 9; BITS(0x24A0) = 0;
-        func_L00_002D2168(func_L00_002A4E48(0), 0, 10.0f); goto finish;
+        func_L00_002D2168(func_L22_002A8CE0(0), 0, 10.0f); goto finish;
     case 0x6F:
         WORD(0x229C) = 9; BYTE(0x22BC) = 1; BITS(0x24A0) = 0;
         func_L00_002AF7D0();
         if (!animate) goto finish;
-        func_L00_002D2168(func_L00_002A4E48(0), 0, 10.0f); goto finish;
+        func_L00_002D2168(func_L22_002A8CE0(0), 0, 10.0f); goto finish;
     case 0x26:
         WORD(0x229C) = 8; BITS(0x24A0) = 0;
-        func_L00_002D2168(func_L00_002A4E48(0), 0, 10.0f); goto finish;
+        func_L00_002D2168(func_L22_002A8CE0(0), 0, 10.0f); goto finish;
     case 0x31:
         WORD(0x229C) = 9; BITS(0x24A0) = 0; BYTE(0x22B7) = 1;
         BYTE(0x22BD) = 1; BYTE(0x22BC) = 1; func_L00_00322EC8((Rac2Native_5b4b17178a13f443_SmallSlotReset128Owner *)VEC(0x1A30));
         if (!animate) goto finish;
-        func_L00_002D2168(func_L00_002A4E48(0), 0, -1.0f); goto finish;
+        func_L00_002D2168(func_L22_002A8CE0(0), 0, -1.0f); goto finish;
     case 0x75:
         WORD(0x229C) = 9; BITS(0x24A0) = 0; BYTE(0x22B7) = 1; BYTE(0x22BC) = 1;
         func_00282C88((TI128 *)VEC(0xF0));
@@ -1256,7 +1240,7 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
     case 0x60: case 0x61:
         WORD(0x229C) = 24; BYTE(0x22BC) = 1;
         func_L00_00322EC8((Rac2Native_5b4b17178a13f443_SmallSlotReset128Owner *)VEC(0x1A30)); func_L00_002AF7D0();
-        if (animate) func_L00_002D2168(func_L00_002A4E48(0), 0, -1.0f);
+        if (animate) func_L00_002D2168(func_L22_002A8CE0(0), 0, -1.0f);
         goto finish;
     default:
         goto finish;
@@ -1268,7 +1252,7 @@ finish:
         WORD(0x1298) == 20 && WORD(0x2304)) BITS(0x2320) = 1;
     if (WORD(0x229C) == 20) { func_L00_002AF7D0(); BYTE(0x22BC) = 1; }
     if ((!func_L00_002ADF80() || WORD(0x229C) == 18) &&
-        (REAL(0x330) < D_L13_001B9780.f148 || WORD(0x229C) == 0)) D_L13_001B9780.i400 = 0;
+        (REAL(0x330) < D_L22_001B9B40.f148 || WORD(0x229C) == 0)) D_L22_001B9B40.i400 = 0;
     if (WORD(0x229C) != WORD(0x22A4)) func_L00_002A6708();
     WORD(0x1B8) = 0;
     BITS(0x1C0) = 0;

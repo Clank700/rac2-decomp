@@ -1,28 +1,25 @@
-/* Retained complete C; not linked or counted. Updated25 October2026.
- * B04E0 receives an optional48-byte matrix pointer as its third GPR (null here).
- * Profile: -O2 -G8 -ffunction-sections -frac2-zero-ti-por.
- * 648/644 bytes. The joint producer writes64 bytes; the last row is later
- * reused as a16-byte scratch. A genuine union preserves joint[4] versus
- * rotation[3]+scratch[1], both complete48-byte rotation matrices and
- * every16-byte vector. AAA00 returns float on both calls.
- * Frame0xD0 agrees but an extra saved GPR and object/matrix address lifetimes
- * remain. A complete aggregate workspace was object-identical. Do not revert
- * the joint output to an undersized48-byte array.
+/* func_L23_003C16D8 (644 bytes): transforms the mode-dependent vectors through three-row
+ * rotation matrices. Its own unit for -G8 (the $gp stamp) and -frac2-zero-ti-por (the por
+ * zero of the second branch's vector).
+ * The last spot was the extra saved register: retail recomputes the stack addresses after
+ * each quadword clear (sp+0x40 and the second branch's sp+0x10 matrix), which is what
+ * RAC1's clobber-free qzero gives: a bare volatile asm flushes cse's table. qzero_nc is
+ * that helper; with it the matrix address is not kept in a callee-saved register across
+ * func_0031B1A8. func_002AAA00 is float (out, f12, f13, f14, f15, in, int).
  */
-
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
 
-extern int D_L23_001AFA74 __attribute__((sda));
+extern int D_L23_001AFA64 __attribute__((sda));
 extern char D_00189EA0[];
 
 extern void func_0029FCC0(void *, int, void *);
 extern void func_002AF1D0(void *, void *, int, int);
 extern void func_0029FC20(void *, int, void *);
 extern void func_00283098(void *, void *, void *);
-extern float func_002B04E0(void *, void *, void *);
-extern float func_002AAA00(void *, void *, int, float, float, float, float);
+extern float func_002B04E0(void *, void *, int);
+extern float func_002AAA00(void *, float, float, float, float, void *, int);
 extern void func_002833F0(void *, void *);
 extern void func_00283738(void *, void *, void *);
 extern void func_002A05A8(void *);
@@ -33,9 +30,7 @@ extern int func_00282978(short *);
 extern void func_00282CF0(void *, void *, void *);
 
 void func_L23_003C16D8(char *obj) {
-    TI128 v0[1];
-    union { TI128 joint[4]; struct { TI128 rows[3], scratch[1]; } rotation; } phase;
-    TI128 u[1], r3[3], r4[1];
+    TI128 v0[1], v1[3], t[1], u[1], r3[3], r4[1];
     float fz0, fz1;
     char *state = *(char **)(obj + 0x68);
     float r;
@@ -56,38 +51,38 @@ void func_L23_003C16D8(char *obj) {
         a1 = *(float *)(state + 0x64);
         c1 = *(float *)(state + 0x6C);
         fz0 = 0;
-        func_002AAA00(&fz0, state + 0x2AC, 0, r, a1, b1, c1);
-        qzero(phase.rotation.scratch);
-        ((float *)phase.rotation.scratch)[2] = *(float *)(state + 0x2AC);
-        func_002833F0(phase.rotation.rows, phase.rotation.scratch);
-        func_00283738(*(char **)(state + 0x2A0) + 0xC0, *(char **)(state + 0x2A0) + 0xC0, phase.rotation.rows);
+        func_002AAA00(&fz0, r, a1, b1, c1, state + 0x2AC, 0);
+        qzero_nc(t);
+        ((float *)t)[2] = *(float *)(state + 0x2AC);
+        func_002833F0(v1, t);
+        func_00283738(*(char **)(state + 0x2A0) + 0xC0, *(char **)(state + 0x2A0) + 0xC0, v1);
         func_002A05A8(*(char **)(state + 0x2A0));
         *(unsigned short *)(*(char **)(state + 0x2A0) + 0x34) |= 0x106;
         func_002A0F48(*(char **)(state + 0x2A0));
         func_00282D30(u, state + 0x280, -1.0f);
         func_002B0408(*(char **)(state + 0x2A0) + 0xC0, u, 0);
-        *(short *)(state + 0x2A6) = D_L23_001AFA74;
+        *(short *)(state + 0x2A6) = D_L23_001AFA64;
         return;
     }
     {
         short v = *(short *)(state + 0x2A6);
 
         if (v != 0) {
-            if (v == D_L23_001AFA74)
+            if (v == D_L23_001AFA64)
                 *(int *)(state + 0x2AC) = 0;
             *v0 = 0;
             ((float *)v0)[0] = 1.0f;
             ((float *)v0)[3] = 1.0f;
-            func_0029FC20(obj, 1, phase.joint);
-            qzero(phase.rotation.scratch);
-            func_00283098(v0, v0, phase.rotation.rows);
+            func_0029FC20(obj, 1, v1);
+            qzero_nc(t);
+            func_00283098(v0, v0, v1);
             r = func_002B04E0(*(char **)(state + 0x2A0), v0, 0);
             a1 = *(float *)(state + 0x64) + *(float *)(state + 0x64);
             c1 = *(float *)(state + 0x6C);
             b1 = *(float *)(state + 0x68) * 4.0f;
             fz1 = 0;
-            func_002AAA00(&fz1, state + 0x2AC, 0, r, a1, b1, c1);
-            qzero(u);
+            func_002AAA00(&fz1, r, a1, b1, c1, state + 0x2AC, 0);
+            qzero_nc(u);
             ((float *)u)[2] = *(float *)(state + 0x2AC);
             func_002833F0(r3, u);
             func_00283738(*(char **)(state + 0x2A0) + 0xC0, *(char **)(state + 0x2A0) + 0xC0, r3);

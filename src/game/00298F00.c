@@ -1,39 +1,28 @@
-/* Near miss / handoff (Opus big14, 2026-10-26; earlier big6, big11): func_00298F00, 7,840
- * bytes, boot + 27 level places, the memory-card state machine (rac1-decomp's
- * memcard_update_state grown to two cards and 28 states; rac1 used for reference only).
+/* func_00298F00 (7,840 bytes, boot + 27 levels): the memory-card state machine, the same
+ * engine routine as rac1-decomp's memcard_update_state grown to two cards and 28 states (rac1
+ * used for reference only). Default -G0 profile, no cflags line. Matched by Opus big6, big11,
+ * big14 and closer3.
  *
- * Profile: default -O2 -G0 -ffunction-sections in its own unit (src/game/00298F00.c), no $gp.
- * Last verdict: tools/check.py func_00298F00 --diff -> 7840 bytes, expected 7840, 0/28;
- * first difference at +0x3F8. Exactly 6 instructions differ, all in state 8/0's directory
- * loop: retail keeps entry in $s2 and filename+5 in $s5 and reads the slot digit as
- * 0x24($s2); here the two are swapped and the digit is read as -1(filename+5).
- *
- * Cause of the last six (loop.c, recombine_givs): the name[4] DEST_ADDR giv is first combined
- * with the entry giv, then "recombined" with the most recently defined DEST_REG giv, which is
- * filename+5, because that giv is not maybe_dead (its last use is the call, not another giv).
- * Retail keeps it on entry, so in retail filename+5 must be maybe_dead or defined later than
- * the digit read. Spellings tried without success: entry declared after filename, an early
- * `ext = filename + 5`, D_001C5280[i].size / .name[4] without the entry local, the digit via
- * filename[4] or (filename + 5)[-1] (these drop the entry giv: 7816 bytes).
- *
- * What fixed the rest (big14), for reuse:
- *   - Error chains: the state-25 reset block is the cross-jump target only when it emits
- *     busy, state, cur (0x154, 0x15C, 0x14C). sched1 puts the last of a run of independent
- *     zero stores first, so the source order is state, cur, busy everywhere (state 3's chain
- *     is err, state, cur, busy).
- *   - States 26/27: state 27 is if (result >= 0x2800) {...sub++} else sub = (sub/5+1)*5;
- *     then the shared state = 25; busy = 0; state 26's else is state = 25; sub = ...; busy = 0.
- *   - State 27's flags: a prev copy (prev = flags; flags = prev | 0x80; ... prev | 0x81) gives
- *     retail's daddu/ori 0x81; the record advance is p + (((p[1] + 3) / 4) * 4 + 8).
- *   - The flags word is the player-stats word at D_001A7A00 + 0x20, sda: retail's store is an
- *     unsplit macro (lui $at) that reorg keeps out of a delay slot, which is the (const (plus
- *     sym 0x20)) form of an sda symbol (simple_memory_operand rejects CONST, length 2). A bare
- *     sda D_001A7A20 goes into a beql slot as one GP instruction; a non-sda one is split.
- *     Lead: please rule on this spelling (base+offset of the real stats struct, not a second
- *     name in the same form).
- *   - func_00288970 returns int (0 / -1), which moves x340 into $v1 in 10/3 and 17.
+ * What it takes:
+ *   - The directory loop reads the slot digit as entry->name[4] from the entry pointer
+ *     (lbu 0x24(entry)); that needs a compiler without giv recombination, as retail's
+ *     (tools/compiler/transformers/no_recombine_givs.py, docs/COMPILER-NOTES.md).
+ *   - Error chains: sched1 puts the last of a run of independent zero stores first, so the
+ *     source order is state, cur, busy (state 3's chain is err, state, cur, busy), which makes
+ *     the state-25 reset block the cross-jump target.
+ *   - State 10/21 and state 23/8's func_0029B628 arm write state, then cur, so both cross-jump
+ *     onto 16/10's cur, state tail as in retail (a goto reset_state lands on the wrong one).
+ *   - State 27 is if (result >= 0x2800) {...sub++} else sub = (sub/5+1)*5, then the shared
+ *     state = 25; busy = 0; state 26's else is state = 25; sub = ...; busy = 0. Its flags go
+ *     through a prev copy (prev | 0x80, prev | 0x81); the record advance is
+ *     p + (((p[1] + 3) / 4) * 4 + 8).
+ *   - The flags word is the player-stats word D_001A7A00[8] with D_001A7A00 an sda incomplete
+ *     array: the (const (plus sym 0x20)) form keeps retail's unsplit lui $at store out of a
+ *     delay slot (lead's ruling: one real name in its base-plus-offset form, not an alias).
+ *   - func_00288970 returns int (0 / -1), which moves x340 into $v1 in 16/3 and 17.
  *   - 16/6-16/7: x28 + 8 + index * x2C, and finished_card set before the compare in 16/7.
  *   - 10/19: D_001A79F0 is an sda int (as in src/game/00298E08.c); size before buf.
+ *   - The save size in 20/1 is x28 + x2C * 0x1C + 8, as in 10/19.
  */
 #include "common.h"
 
@@ -599,8 +588,8 @@ void func_00298F00(void)
             D_001393E0.card[D_001393E0.cur].x2C = func_0029AE78(D_00256368);
             D_001393E0.card[D_001393E0.cur].status = -1;
             D_001393E0.card[D_001393E0.cur].x24 = 0;
-            D_001393E0.cur = 0;
             D_001393E0.state = 0;
+            D_001393E0.cur = 0;
             break;
         }
         break;
@@ -878,7 +867,8 @@ void func_00298F00(void)
                 } else {
                     finished_card = &D_001393E0;
                     func_0029B628();
-                    goto reset_state;
+                    finished_card->state = 0;
+                    finished_card->cur = 0;
                 }
             }
             break;
@@ -1099,7 +1089,7 @@ void func_00298F00(void)
 
                 D_001393E0.fd = D_001393E0.result;
                 n = func_0029AE78(D_00256138);
-                D_001393E0.size = n + func_0029AE78(D_00256368) * 20 + 8;
+                D_001393E0.size = n + func_0029AE78(D_00256368) * 0x1C + 8;
                 if (func_001279A0(D_001393E0.fd, D_001393E0.buf, D_001393E0.size) == 0) {
                     D_001393E0.sub = 2;
                 }

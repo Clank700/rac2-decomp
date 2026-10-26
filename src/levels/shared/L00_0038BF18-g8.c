@@ -1,18 +1,13 @@
-/* Opus handoff (big15, 2026-10-26): 4716 of 4752 bytes, 1141 of 1188 opcodes in
-   order (1036 with registers). Unit profile tried:
-   -O2 -G8 -ffunction-sections -frac2-keep-block-order (keep-block-order puts case 0
-   before the 10/11 body as retail's `b` to it requires; -frac2-qcopy loses the one
-   folded `lq 0x10(v1)` / `sq 0x70(sp)` copy, so the TImode assignment stays plain).
-   Needs the asm-word loop-padding count (compiler/asm-loop-words) like
-   func_L00_0041CB80. What is left:
-   - s5/s6 swapped for the whole body: retail keeps %hi(D_00189E20) in s6 and the
-     0x26xxxx / 0x1Cxxxx highs plus the 10/11 `dir`/`done` in s5;
-   - after each `sq $zero` (the two qzero spots) retail recomputes the hero address
-     from s6 and reloads 1.0f, as if the copy flushed CSE; this tree reuses s1/f12;
-   - the 0x17/0x18/0x19/0x2B threshold chain and the 22C3 `func_002AFD88` setup
-     schedule differ by a few instructions.
-   The stack layout is one vec[8][4] array: retail overlays the query at sp+0 (case 0)
-   and sp+0x10 (cases 10/11), which this compiler does not do for block locals. */
+/* func_L00_0038BF18 (27 places), in a unit of its own for its profile:
+   -O2 -G8 -ffunction-sections -frac2-keep-block-order -frac2-hazard-labels.
+   keep-block-order puts case 0 before the 10/11 body, as retail's `b` to it requires;
+   hazard-labels keeps the threshold chain's join label on the mtc1 hazard nop.
+   The two quadword clears are qzero_nc: retail recomputes the hero address and reloads
+   1.0f right after each `sq $zero`, which is CSE forgetting its table at a volatile asm
+   with no clobber. The stack is one vec[8][4] scratch array, since this compiler never
+   shares stack slots between block-scope locals. The arm offset `pv + 0x40` is written
+   out at each use: gcse then carries it in one register across both arms (retail's s5),
+   which is what leaves %hi(D_00189E20) in s6. */
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
@@ -66,7 +61,9 @@ extern char *D_L00_001C3280 __attribute__((nosda));
 extern int D_001A72C0;
 
 extern void func_00273318(void *, int, int, int, int, int, float, float, float);
-extern void func_L00_002E6EF8(void *, void *);
+/* The binder: func_L00_002E6EF8 in 23 programs, its twin func_L08_002F2D10 in levels 08, 09,
+   19 and 30, so the call carries a name without an address. */
+extern void ref_L00_0038BF18_00(void *, void *);
 extern void func_L00_0038B208(void *);
 extern void func_002A7470(void *, int, int, int);
 extern void func_L00_0038B6F8(char *);
@@ -119,9 +116,10 @@ void func_L00_0038BF18(char *m)
     char *pv;
     float ang;
     char *t;
+    char *t2;
+    char *t3;
     char *mode;
     char *pos;
-    char *dir;
     char *snd;
     float *r;
     float yaw;
@@ -129,7 +127,6 @@ void func_L00_0038BF18(char *m)
     float lim;
     float range;
     float k;
-    float turn;
     float sc;
     float d;
     float zf;
@@ -156,7 +153,7 @@ void func_L00_0038BF18(char *m)
             func_00273318(m, 0xFF917267, 0, 0x25, -1, 4, 1.0f, 0.0f, 90.0f);
         }
         if (pv != 0 && *(f32 *)(pv + 0x70) != 0.0f) {
-            func_L00_002E6EF8(func_L00_0038B208, m);
+            ref_L00_0038BF18_00(func_L00_0038B208, m);
         }
         if (D_001A72C0 == 0) {
             *(u16 *)(m + 0x34) &= ~0x10;
@@ -209,24 +206,24 @@ void func_L00_0038BF18(char *m)
         }
         found = 0;
         if (*(s16 *)(pv + 0x7C) != *(s16 *)(pv + 0x74)) {
-            t = ((Hero *)D_00189E20)->ptr[0x2290 / 4];
-            if (*(u8 *)(t + 0x42) == *(u8 *)(t + 0x43)) {
-                if (*(u8 *)(t + 0x42) == 0x17) {
+            t2 = ((Hero *)D_00189E20)->ptr[0x2290 / 4];
+            if (*(u8 *)(t2 + 0x42) == *(u8 *)(t2 + 0x43)) {
+                if (*(u8 *)(t2 + 0x42) == 0x17) {
                     found = 1;
                     if (!(0.0f <= ((Hero *)D_00189E20)->f[0xC38 / 4])) {
                         found = 0;
                     }
-                } else if (*(u8 *)(t + 0x42) == 0x18) {
+                } else if (*(u8 *)(t2 + 0x42) == 0x18) {
                     found = 1;
                     if (!(0.0f <= ((Hero *)D_00189E20)->f[0xC38 / 4])) {
                         found = 0;
                     }
-                } else if (*(u8 *)(t + 0x42) == 0x19) {
+                } else if (*(u8 *)(t2 + 0x42) == 0x19) {
                     found = 1;
                     if (!(12.0f <= ((Hero *)D_00189E20)->f[0xC38 / 4])) {
                         found = 0;
                     }
-                } else if (*(u8 *)(t + 0x42) == 0x2B) {
+                } else if (*(u8 *)(t2 + 0x42) == 0x2B) {
                     found = 1;
                     if (!(23.0f <= ((Hero *)D_00189E20)->f[0xC38 / 4])) {
                         found = 0;
@@ -246,11 +243,11 @@ void func_L00_0038BF18(char *m)
         func_0029FCC0(((Hero *)D_00189E20)->ptr[0x2290 / 4], 0, &((Hero *)D_00189E20)->b[0xB60]);
         if (((Hero *)D_00189E20)->i[0x2294 / 4] == 0x13 || ((Hero *)D_00189E20)->i[0x2294 / 4] == 0x6D || ((Hero *)D_00189E20)->i[0x2294 / 4] == 0x2A) {
             yaw = func_00283248(((Hero *)D_00189E20)->f[0xB70 / 4] - ((Hero *)D_00189E20)->f[0x80 / 4], ((Hero *)D_00189E20)->f[0xB74 / 4] - ((Hero *)D_00189E20)->f[0x84 / 4]);
-            turn = 1.57079649f;
             if (D_L00_0025D990[((Hero *)D_00189E20)->h[0xBFC / 2]].i4 == 1) {
-                turn = -1.57079649f;
+                yaw = func_00283B98(yaw, -1.57079649f);
+            } else {
+                yaw = func_00283B98(yaw, 1.57079649f);
             }
-            yaw = func_00283B98(yaw, turn);
         }
         {
             func_00282CF0(vec[0], &((Hero *)D_00189E20)->b[0xB70], &((Hero *)D_00189E20)->b[0xB60]);
@@ -324,7 +321,7 @@ void func_L00_0038BF18(char *m)
             ((CollQuery *)vec[0])->h1A = *(u16 *)(m + 0xAA);
             ((CollQuery *)vec[0])->b18 = 0;
             if (((Hero *)D_00189E20)->b[0x22C3] != 0) {
-                qzero(vec[3]);
+                qzero_nc(vec[3]);
                 func_002AFD88(((Hero *)D_00189E20)->ptr[0x2290 / 4], vec[3], 1.0f, 0.0f, 1.0f);
             }
             if (func_L00_0031C3D0(&((Hero *)D_00189E20)->b[0xB60], &((Hero *)D_00189E20)->b[0xB70], &((Hero *)D_00189E20)->b[0xB80], &((Hero *)D_00189E20)->b[0xB90],
@@ -396,9 +393,8 @@ void func_L00_0038BF18(char *m)
         if (*(u8 *)(m + 0x20) == 10) {
             qcopy(vec[1], &((Hero *)D_00189E20)->b[0x150]);
             func_00282D30(vec[1], vec[1], 0.98f);
-            dir = pv + 0x40;
             func_00282CC0(pos, pos, vec[1]);
-            func_00282F20(vec[1], dir, *(f32 *)(pv + 0x60));
+            func_00282F20(vec[1], pv + 0x40, *(f32 *)(pv + 0x60));
             func_00282CC0(pos, pos, vec[1]);
             *(f32 *)(pv + 0x64) = *(f32 *)(pv + 0x64) + 0.000787037017f;
             func_002AA2E8((f32 *)(pv + 0x60), 0.0f, *(f32 *)(pv + 0x64));
@@ -454,7 +450,6 @@ void func_L00_0038BF18(char *m)
                 ((Hero *)D_00189E20)->b[0x123A] = 0;
                 *(u8 *)(m + 0x20) = 0;
             }
-            dir = pv + 0x40;
         }
         hit = 0;
         if (func_002761F8(vec[0], pos, 2, 0, 0) != 0 && func_00278E78() != 0
@@ -478,11 +473,11 @@ void func_L00_0038BF18(char *m)
         if (*(u8 *)(m + 0x20) == 11) {
             k = -0.37f;
         }
-        func_00282F20(vec[4], dir, k);
-        func_002A8C00(vec[1], m, 0x10000, vec[4], D_L00_00262570[D_00139568[0xA]].f70);
+        func_00282F20(vec[4], pv + 0x40, k);
+        func_002A8C00(vec[1], m, 0x10000, vec[4], (&D_L00_00262570[D_00139568[0xA]])->f70);
         vec[1][2] = 1.0f;
         if (((Hero *)D_00189E20)->b[0x22C3] != 0) {
-            qzero(vec[1]);
+            qzero_nc(vec[1]);
             func_002AFD88(((Hero *)D_00189E20)->ptr[0x2290 / 4], vec[1], k, 0.0f, 1.0f);
         }
         vec[1][3] = 5627.9248f;
@@ -493,8 +488,8 @@ void func_L00_0038BF18(char *m)
         if ((func_00277F48(0.4f, vec[5], 0, ((Hero *)D_00189E20)->ptr[0x2290 / 4], (CollQuery *)vec[1]) != 0
              || (func_0029FCC0(m, 0, vec[5]), func_00277F48(0.4f, vec[5], 0, ((Hero *)D_00189E20)->ptr[0x2290 / 4], (CollQuery *)vec[1]) != 0))
             && ((Hero *)D_00189E20)->h[0xBFE / 2] == 0 && D_L00_001BF200.moby != 0) {
-            t = *(char **)(D_L00_001BF200.moby + 0x24);
-            if (t == 0 || *(s16 *)(t + 0x46) != 0x14) {
+            t3 = *(char **)(D_L00_001BF200.moby + 0x24);
+            if (t3 == 0 || *(s16 *)(t3 + 0x46) != 0x14) {
                 r = func_002AB1F0(D_L00_001BF200.moby);
                 if (r == 0 || *(s16 *)((char *)r + 0x1C) == 0 || *(char **)((char *)r + 0x18) != m) {
                     *(TI128 *)vec[7] = *(TI128 *)(D_L00_001BF200.moby + 0x10);
