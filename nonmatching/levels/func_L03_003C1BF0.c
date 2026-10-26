@@ -16,6 +16,12 @@
  * local-alloc tie, swapping the two statements breaks cross-jumping), and state 22's
  * allocation: retail keeps &other in $s6 and spills object+0xC0 (sp+0x30) and object+0xF0
  * (sp+0x34); here $s6 is object+0xC0 and the slots are swapped.
+ * F3 (2026-10-26): same 1391/1420 on 795143e6. State 1's pair after sched1 (lreg): insn 67
+ * reg111 = D_L03_001AFEE0, insn 71 reg112 = 0.0016666667f, stores 0x144 (111) then 0x134
+ * (112). Both lives are 2 (equal priority), so qty order (birth) gives 111 $f0. Retail needs
+ * 112 to rank first while sched2 still emits the load first and the 0x144 store first. Tried,
+ * no change: locals for either value in any order, a comma expression, MACRO_ADDR or an sda
+ * array for D_L03_001AFEE0. Swapping the stores gives retail's registers but the li.s first.
  */
 /* Opus handoff (big8, 2026-10-26): func_L03_003C1BF0, 5680 bytes, 2 places
  * (L03 0x003C1BF0, L14 0x003C5250). Built on the earlier corrected draft (5552 bytes,

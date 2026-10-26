@@ -20,6 +20,14 @@
    than c and page longer than 1.25 x upd. 13,000 orders of the seven statements, with and
    without locals for the constants and with chained assignments, never got there (sched1 places
    the high/lo pairs by priority, not source order).
+   F3 (2026-10-26) re-measure, same result. Exact local-alloc numbers (block 10, F1_LA; lives in
+   half-insn luids after sched1): page refs 5 [6,40] 2941, c refs 4 [8,36] 2857, upd refs 4
+   [10,38] 2857, init refs 5 [12,44] 3125, 0x18 refs 3 [26,34] 3750. sched1 puts the five %hi
+   at 4..12 (A40, page, c, upd, init), the %lo and 0x18 at 14..26, then the stores page->next,
+   a0 = 0, 0x18->a, 0x18->b, c, upd, page->page, init, call. One store order that satisfies
+   retail's priorities with these births: next, a0, a, init, b, upd, c, page (0x18 [26,36] 3000,
+   upd 28, c 32, page 36: init 3125 > 0x18 3000 > upd 2857 > page 2778 > c 2500). The lever is
+   sched1's store order (init's store before b, upd's before c), not the statement order.
  */
 #include "common.h"
 

@@ -30,6 +30,11 @@
  * puts moby/pvars in retail's s4/s3 and moby+0xC0 is rebuilt after it as in retail:
  * 1262/1325 opcodes and 1109 with registers (from 1248 and 845), 5304 bytes (+4).  What is
  * left then is mostly float scheduling in the input/physics block (0x3C7000-0x3C7200).
+ * F3 (2026-10-26, on 795143e6 with the block-move padding default): this draft with
+ * qzero_nc(v80) at the v80 clear in its own unit (flags above) is 5288 bytes (1322/1325
+ * instructions, 3 short) and 1073/1325 aligned counting registers. The differences start at
+ * the head: the 0x400-byte table copy's registers (a1/a2 swapped), pvars still in $s4 for
+ * the input block (retail $s3), the float block at 0x3C7000. Not a few-instruction miss.
  */
 #include "common.h"
 
