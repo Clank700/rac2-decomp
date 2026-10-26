@@ -1125,3 +1125,4 @@ src/levels/shared/L00_003C6B98-g64.c	-O2 -G64 -ffunction-sections -g
 src/game/002C00F0.c	-O2 -G0 -ffunction-sections -ffast-math
 src/levels/shared/L08_00422900.c	-O2 -G0 -ffunction-sections -ffast-math
 src/game/002E9110-g16.c	-O2 -G16 -ffunction-sections -Wa,-G16
+src/game/0032E588-g.c	-O2 -G0 -ffunction-sections -g
