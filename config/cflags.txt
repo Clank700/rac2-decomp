@@ -1161,3 +1161,5 @@ src/levels/shared/L00_0033C0D0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2
 src/levels/shared/L02_00332EF0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L00_003FC228.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/00303738.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L08_003F6018.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_0041E168.c	-O2 -G8 -ffunction-sections -frac2-qcopy

@@ -1,11 +1,3 @@
-/* Retained complete C reconstruction; not linked or counted.
- * Profile: -O2 -G0 -ffunction-sections -fno-strength-reduce -fno-gcse -mno-split-addresses
- * 808/812 bytes; 0/2 placements in us, us2 and pal.
- * Residual: The full child initialization and two-slot pool are preserved. Save/base lifetimes, vector-copy and store scheduling still differ. Metadata accessor results remain canonical 32-bit words, explicitly interpreted as pointers here.
- * Reopen: Independent loop-local format-string or pool-slot address lifetime evidence; retain complete 16-byte vectors and canonical metadata accessors.
- * Trial-only source markers and profiles are restored after checking.
- */
-
 #include "common.h"
 typedef int SpawnQuad __attribute__((mode(TI)));
 extern int func_002A8600(u8 **out, int index, int activate, int reset);
@@ -18,7 +10,7 @@ extern void func_002AB650(u8 *object);
 extern void func_002A0F48(u8 *object);
 extern char D_L08_001B0B68[];
 extern char D_L08_001B0BA8[];
-extern int D_L08_001B2508;
+extern int D_L08_001B2508 MACRO_ADDR;
 
 /* Bounded view of the owner's two pool slots and their status bytes. */
 typedef struct {
@@ -34,6 +26,8 @@ u8 *func_L08_003F6018(u8 *owner, SpawnQuad *position, float *direction)
     u8 *child;
     PoolSlotsPrefix *state;
     u8 *part;
+    u8 *c;
+    u8 *head;
     int i;
     if (owner == 0)
         return 0;
@@ -43,8 +37,11 @@ u8 *func_L08_003F6018(u8 *owner, SpawnQuad *position, float *direction)
         if (func_002A8600(&child, state->slots[i], 1, 1) != 0)
             continue;
         state->activeCount++;
-        qcopy(child + 0x10, position);
-        *(int *)(child + 0x1c) = 0;
+        {
+            u8 *fresh = child;
+            *(SpawnQuad *)(fresh + 0x10) = *position;
+            *(int *)(fresh + 0x1c) = 0;
+        }
         child[0x20] = 0;
         child[0xbc] = 0;
         *(unsigned short *)(child + 0x34) = *(unsigned short *)(*(u8 **)(child + 0x24) + 0x44);
@@ -72,9 +69,9 @@ u8 *func_L08_003F6018(u8 *owner, SpawnQuad *position, float *direction)
         *(int *)(child + 0xf0) = 0;
         *(int *)(child + 0xf4) = 0;
         *(float *)(child + 0xf8) = func_00283248(direction[0], direction[1]);
-        part = (u8 *)func_002AB220(child);
-        if (part != 0)
-            qcopy(part + 0x80, direction);
+        head = (u8 *)func_002AB220(child);
+        if (head != 0)
+            *(SpawnQuad *)(head + 0x80) = *(SpawnQuad *)direction;
         else
             func_0026FEB8(D_L08_001B0B68, *(short *)(child + 0xaa), *(short *)(child + 0xb2), D_L08_001B2508);
         if (state->smallScale)
@@ -92,13 +89,14 @@ u8 *func_L08_003F6018(u8 *owner, SpawnQuad *position, float *direction)
         *(int *)(child + 0x98) = *(int *)(*(u8 **)(child + 0x24) + 0x10);
         func_002AB650(child);
         func_002A0F48(child);
-        part = (u8 *)func_002AB1F0(child);
+        c = child;
+        part = (u8 *)func_002AB1F0(c);
         if (part != 0) {
             *(int *)(part + 0x24) = 0;
             *(int *)(part + 0x20) = 0;
             *(float *)part = *(short *)(part + 4);
         }
-        return child;
+        return c;
     }
     func_0026FEB8(D_L08_001B0BA8, *(short *)(owner + 0xb2), D_L08_001B2508);
     return 0;
