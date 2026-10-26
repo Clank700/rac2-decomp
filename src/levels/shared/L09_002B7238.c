@@ -470,7 +470,7 @@ void func_L09_003F7158(char *object)
 /* func_L09_003F72A8 is defined in L09_002B7238-g8.c (it reads the group count through $gp). */
 
 /* spawns one measured stage with the object's placement lifted by DY */
-INCLUDE_ASM("asm/levels", func_L09_003F7370);
+/* func_L09_003F7370 is matched in its own unit, src/levels/shared/L09_003F7370.c (default flags). */
 
 void func_L09_003F73E8(char *object)
 {

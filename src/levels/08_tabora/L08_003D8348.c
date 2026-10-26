@@ -339,7 +339,7 @@ INCLUDE_ASM("asm/levels", func_L08_00423010);
 
 INCLUDE_ASM("asm/levels", func_L08_004233E0);
 
-INCLUDE_ASM("asm/levels", func_L08_004237F0);
+/* func_L08_004237F0 is matched in its own unit, src/levels/08_tabora/L08_004237F0.c (default flags). */
 
 /* the driver is primed, the entry follows its mount and then its own update runs */
 void func_L08_004238A0(Ent *a0)

@@ -1103,3 +1103,8 @@ src/levels/shared/L00_0038D530-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy 
 src/levels/shared/L18_002C4000-hero.c	-O2 -G0 -ffunction-sections
 src/levels/02_maktar_nebula/L02_003D4AF0-g.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L00_0040F6A0-g16.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g
+src/game/002FF300.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L09_003F7370.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L03_003D09D0.c	-O2 -G0 -ffunction-sections -g
+src/game/002BAE50.c	-O2 -G0 -ffunction-sections
+src/levels/08_tabora/L08_004237F0.c	-O2 -G0 -ffunction-sections

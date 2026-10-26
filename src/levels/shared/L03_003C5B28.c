@@ -110,7 +110,7 @@ INCLUDE_ASM("asm/levels", func_L03_003CC238);
 
 INCLUDE_ASM("asm/levels", func_L03_003D04E0);
 
-INCLUDE_ASM("asm/levels", func_L03_003D09D0);
+/* func_L03_003D09D0 is matched in its own unit, src/levels/shared/L03_003D09D0.c (-g). */
 
 INCLUDE_ASM("asm/levels", func_L03_003D0AE0);
 

@@ -341,7 +341,7 @@ void func_002BA978(char *self)
 void func_002BAE48(void) {
 }
 
-INCLUDE_ASM("asm/game", func_002BAE50);
+/* func_002BAE50 is matched in its own unit, src/game/002BAE50.c (default flags). */
 
 void func_002BAF68(char *a0)
 {

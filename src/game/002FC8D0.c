@@ -377,7 +377,7 @@ void func_002FF290(char *object, int kind)
         func_002A0F48(object);
 }
 
-INCLUDE_ASM("asm/game", func_002FF300);
+/* func_002FF300 is matched in its own unit, src/game/002FF300.c (default flags). */
 
 extern char *D_001B2348 __attribute__((sda));
 extern void func_002FF290(char *, int);
