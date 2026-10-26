@@ -1,26 +1,13 @@
-/* Near miss: func_L08_0042FAC0, 544 bytes, 1 place (level 08 Tabora).
-   Profile: -O2 -G0 -ffunction-sections (the shipped file's flags).
+/* Spawner state machine: waits for the player, then emits while its target is alive and
+   the level counter (D_L08_001B3AA0) is below 10. */
 
-   This is the twin of func_L08_0042F440: the same body with the second
-   func_002B0A68 arm's first integer argument 1 instead of 9. It was measured
-   after the 440 draft: `0 of 1 places match`, first differing word at +0x128,
-   body size 544 = retail. The residue is identical to func_L08_0042F440's
-   (see that file): func_002B0A68's argument-setup order and case 3's counter
-   register. Both are sched2/allocator choices, not source-shape differences. */
+#include "common.h"
 
-#include "include_asm.h"
-
-typedef int s32;
-typedef unsigned int u32;
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef short s16;
-typedef float f32;
 
 extern s32 D_L08_001B29DC __attribute__((sda));
 extern f32 D_L08_001B250C __attribute__((sda));
 extern s32 D_L08_001B3AA0 __attribute__((sda));
-extern char D_L08_001A8F20[];
+extern char D_L08_001A8F20[] MACRO_ADDR;
 extern char *func_002A9640(s32 a, s32 b, s32 c);
 extern void func_002A7750(char *a0, s32 a1, s32 a2);
 extern void func_002B0A68(char *a0, f32 f12, f32 f13, s32 a1, char *a2,
@@ -31,7 +18,7 @@ extern s32 func_002B3868(char *a0);
 extern s32 func_00282948(char *a0);
 extern void func_0029F338(char *a0);
 
-void func_L08_0042FAC0(char *a0) {
+void func_L08_0042F440(char *a0) {
     char *s1 = *(char **)(a0 + 0x68);
     u8 state = *(u8 *)(a0 + 0x20);
     char *p;
@@ -67,7 +54,7 @@ void func_L08_0042FAC0(char *a0) {
             D_L08_001B3AA0 < 10) {
             func_002B0A68(a0, 3.0f, 6.0f, 15, D_L08_001A8F20, 3.0f, 6.0f, 0xFF);
         } else {
-            func_002B0A68(a0, 3.0f, 6.0f, 1, D_L08_001A8F20, 3.0f, 6.0f, 0xFF);
+            func_002B0A68(a0, 3.0f, 6.0f, 9, D_L08_001A8F20, 3.0f, 6.0f, 0xFF);
         }
         func_L00_00326110(a0, 1, 0.0f);
         func_002E5CF8(0, 0, a0);
@@ -75,10 +62,12 @@ void func_L08_0042FAC0(char *a0) {
         return;
     case 3:
         if (func_002B3868(a0) != 0) {
+            s32 c;
             *(u8 *)(a0 + 0x31) = 0;
+            c = D_L08_001B3AA0;
             *(u16 *)(a0 + 0x34) |= 1;
             *(s32 *)(a0 + 0x98) = 0;
-            D_L08_001B3AA0 = D_L08_001B3AA0 + 1;
+            D_L08_001B3AA0 = c + 1;
             *(s32 *)(s1 + 8) = 0x78;
         }
         if (func_00282948(s1 + 8) != 0) {

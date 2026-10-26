@@ -162,8 +162,6 @@ int func_L02_003D4A60(char *arg0) {
     return hit;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003D4AF0);
-
 int func_L02_003D4D00(char *arg0) {
     char *state = *(char **)(arg0 + 0x68);
     short timer = *(short *)(state + 0x32E);

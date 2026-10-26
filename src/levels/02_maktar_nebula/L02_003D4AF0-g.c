@@ -1,16 +1,12 @@
-/* Nonmatching reconstruction, checked 2026-10-23.
-   Profile: game -O2 -G0 -ffunction-sections.
-   USA v1.01 and USA v2.00: 0/1 carrying placements each.
-   PAL: this canonical function is absent from both catalogues.
-   520/524 bytes; float/int division scheduling, global-load registers and the pre-division nop remain different. Four meaningful source arrangements were tried. Reopen with a measured division scheduling or padding remedy.
-   No linked build was run for this draft.
-*/
+#include "common.h"
+
+/* Timed state step; the -g line labels give the pre-division nop. */
 
 extern void func_002A7470(char *, int, int, int);
 extern void func_002A7750(char *, int, int);
 extern int func_002A77E0(int);
 extern int D_0018C2EC;
-extern int D_001A7A00;
+extern int D_001A7A00 MACRO_ADDR;
 extern float func_002A7878(float, float);
 
 void func_L02_003D4AF0(char *self, int previous) {
