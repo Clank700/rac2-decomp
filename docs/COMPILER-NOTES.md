@@ -668,6 +668,35 @@ compiled differently. [tests/test_trap_delay_barrier.py](../tests/test_trap_dela
 checks the transformer and authored controls: an argument set above a guard stays there and the
 call keeps an empty slot, and without a division the call's slot is filled as before.
 
+### reorg: a division guard ends the redundant-insn search
+
+[trap_redundant_barrier.py](../tools/compiler/transformers/trap_redundant_barrier.py) is
+unconditional: like the barrier above, it is the real compiler's rule, not an option, and no
+file needs a switch for it. It is that barrier's companion for reorg's other backward search. When
+`fill_slots_from_thread` takes an insn from a branch's target for the slot, it first asks
+`redundant_insn` whether an identical insn on the branch's path already computed the value; if
+so it drops the insn and branches past it instead of copying it. This tree's search passes a
+division guard (`trap_if`); retail's does not, so a load above a guard is never taken as the
+earlier copy of the target's load. The transformer ends the first scan of `redundant_insn`,
+finding nothing, at a `TRAP_IF` insn.
+
+Retail evidence: `func_L00_002C2DE8` (708 bytes, 27 places) tests a frame counter as
+`clock % 3`, then `clock % 5`. The `bnez` over the first block, taken while `$a0` still holds the
+counter read above the `% 3` guard, has the target's reload `lw $a0,clock($gp)` in its slot and
+branches to the `li $v0,5` after it; this tree dropped the reload, stole the `li` and branched a
+word further (3 words). A census of the 28 programs finds 331 branches whose target starts just
+past a reload of the value the register already holds (reorg dropped it as redundant), none of
+them with a division guard between the earlier load and the branch; and the converse, a slot
+holding such a reload across a guard with no store in between, only in this function's 27
+placements. A second witness is a register restore: `func_L18_002C4000` (496 bytes, 3 places)
+ends with a `% 6` test whose `beqz` goes to the epilogue's `ld $s0` in retail; this tree took the
+restore already in an earlier `bne` slot as redundant and branched one word further. M10's draft
+(26 October 2026) differed only there and matches 3/3 in us, pal and us2 with the barrier. Of
+every matched function in `tools/build.py all --strict`, none compiled differently.
+[tests/test_trap_redundant_barrier.py](../tests/test_trap_redundant_barrier.py)
+checks the transformer and authored controls: across a guard the reload fills the slot, and
+without a division the redundant reload is still dropped.
+
 ### SDK objects: the assembler fills the slots the compiler leaves
 
 [swap_branch_slots.py](../tools/compiler/transformers/swap_branch_slots.py) adds the opt-in
@@ -1017,7 +1046,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | Zero folding/clear scheduling | [test_zero_ti_store.py](../tests/test_zero_ti_store.py) |
 | CSE edges/block order | [test_gcse_unsplit_edges.py](../tests/test_gcse_unsplit_edges.py), [test_keep_block_order.py](../tests/test_keep_block_order.py) |
 | gcse load kills | [test_gcse_store_kills_loads.py](../tests/test_gcse_store_kills_loads.py) |
-| Division-guard slot barrier | [test_trap_delay_barrier.py](../tests/test_trap_delay_barrier.py) |
+| Division-guard slot barrier | [test_trap_delay_barrier.py](../tests/test_trap_delay_barrier.py), [test_trap_redundant_barrier.py](../tests/test_trap_redundant_barrier.py) |
 | SDK assembler slot swaps | [test_swap_branch_slots.py](../tests/test_swap_branch_slots.py) |
 | No giv recombination | [test_no_recombine_givs.py](../tests/test_no_recombine_givs.py) |
 | Copies and RTL contract | [test_qcopy.py](../tests/test_qcopy.py), [test_qcopy_rtl.py](../tests/test_qcopy_rtl.py) |
