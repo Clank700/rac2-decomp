@@ -88,6 +88,15 @@ does not apply to a separately named method just because its full code is identi
 Both original and shortened identity collisions preserve existing names and kinds,
 and replay checks all corrected copies against their measured identity.
 
+A further 71 open catalogue rows (46 with an 8-byte prefix, 25 with 12 to 104 bytes) were
+corrected the same way. In every placement of each row the prefix follows a completed
+`jr $ra` and its delay slot (only filler words in between), no branch, jump or
+address pair reaches it, and a GCC `addiu $sp,$sp,-N` prologue follows it; 45 of the 71
+have a call, branch, address pair or data pointer at the shortened entry and 26 have
+no static reference. Where the prefix holds non-filler
+words (a leftover store or compare followed by a nop), these are unreachable tails of
+the preceding body and stay in assembly like the rest.
+
 Release-specific rows have their own named corrections. `tools/carry.py --entries`
 repairs established extents while retaining their existing identities and kinds,
 rather than renaming them for the new address or merging identical short methods.
