@@ -345,7 +345,21 @@ void func_002C1DB0(char *a0)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002C1E50);
+extern void func_00282CC0(char *, char *, char *);
+extern float func_00283CE0(int);
+extern float func_00282C48(float);
+extern int func_00283D38(int, int, float);
+
+void func_002C1E50(char *obj) {
+    char *tail = obj + 0x20;
+    obj[8] += tail[0x1C];
+    func_00282CC0(obj + 0x10, obj + 0x10, tail);
+    *(int *)(obj + 4) = func_00283D38(*(int *)(tail + 0x18), *(int *)(tail + 0x14),
+        func_00282C48(func_00283CE0(*(short *)(obj + 0x0A)) * *(float *)(tail + 0x10) - 1.0f));
+    if (func_00282978((short *)(obj + 0x0A)) != 0) {
+        func_002B9180(obj);
+    }
+}
 
 
 /* func_002C1FC0 is defined in 002BF6F0-g8.c. */
@@ -703,7 +717,27 @@ INCLUDE_ASM("asm/game", func_002C5D00);
 
 /* func_002C6360 is in the -G8 sibling (its two globals are read through $gp). */
 
-INCLUDE_ASM("asm/game", func_002C64D8);
+extern float func_00283198(float);
+extern int func_00283CF0(float);
+
+void func_002C64D8(char *s1)
+{
+    float f20;
+    float t;
+    char *s0;
+
+    if (s1 == 0)
+        return;
+    s0 = s1 + 0x20;
+    if (func_00282978((short *)(s1 + 0x24)) != 0) {
+        func_002B9180(s1);
+        return;
+    }
+    f20 = func_00283CE0(*(short *)(s0 + 4)) / func_00283CE0(*(short *)(s0 + 6));
+    t = func_00283198(f20 * 6.283186f);
+    *(int *)(s1 + 4) = (*(int *)(s1 + 4) & 0x00FFFFFF)
+                       + (func_00283CF0(func_00282C48(func_00283CE0(*(int *)(s0 + 0xC)) * t)) << 24);
+}
 
 INCLUDE_ASM("asm/game", func_002C65A0);
 

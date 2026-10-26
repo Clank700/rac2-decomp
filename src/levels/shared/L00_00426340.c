@@ -271,7 +271,34 @@ small:
     *(float *)(b + 0x2A8) = 0.018f;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00427620);
+extern void func_002EE0D0(void *);
+extern void func_002EE970(void *, void *);
+extern void func_002EEBD8(void *, void *);
+
+void func_L00_00427620(unsigned char *a0) {
+    unsigned char buf[0x40];
+    unsigned char *p;
+
+    *(int *)(*(unsigned char **)(a0 + 0x70) + 0xC0) = 4;
+    p = *(unsigned char **)(a0 + 0x70) + 0x30;
+    *(float *)(p + 0x20) = 0.05f;
+    *(float *)(p + 0x24) = 0.3f;
+    *(float *)(p + 0x28) = 1.0f;
+    *(unsigned short *)(p + 0x2C) = 1;
+    func_002EE0D0(p);
+    {
+        unsigned char *q = *(unsigned char **)(a0 + 0x70);
+
+        *(float *)(q + 0x10) = 0.3f;
+        *(float *)(q + 0x14) = 0.3f;
+        *(float *)(q + 0x18) = 1.0f;
+        *(unsigned short *)(q + 0x1C) = 1;
+        func_002EE0D0(q);
+    }
+    func_002EE970(buf, a0 + 0x40);
+    func_002EEBD8(a0, buf);
+    *(unsigned short *)(a0 + 0x7E) = 0;
+}
 
 INCLUDE_ASM("asm/levels", func_L00_004276E8);
 

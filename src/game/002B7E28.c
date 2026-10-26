@@ -370,7 +370,29 @@ void func_002BAF68(char *a0)
         Fe617c30b_FUN_002B9180(a0);
 }
 
-INCLUDE_ASM("asm/game", func_002BB050);
+extern void func_002B9180(char *);
+extern void func_00300190(char *, char *);
+
+void func_002BB050(u8 *a0)
+{
+    u8 *s0 = a0;
+    u8 *s1 = a0 + 0x20;
+
+    if (func_00282948((char *)s1) != 0) {
+        func_002B9180((char *)s0);
+        return;
+    }
+    {
+        u8 *p = s0 + 0x10;
+
+        func_00300190((char *)p, (char *)p);
+    }
+    *(f32 *)(s0 + 0xC) = *(f32 *)(s0 + 0xC) + *(f32 *)(s1 + 4);
+    if (*(s32 *)(s1) < 6) {
+        *(unsigned int *)(s0 + 4) = (*(unsigned int *)(s0 + 4) & 0xFFFFFF)
+            | ((unsigned int)(*(s32 *)(s1) * 127 / 6) << 24);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002BB100);
 
@@ -528,7 +550,26 @@ void func_002BD398(OBJ_F3c007b59 *o)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002BD500);
+extern void func_00282CC0(char *, char *, char *);
+extern int func_00283CF0(float);
+
+void func_002BD500(char *a)
+{
+    char *p1 = a + 16;
+    char *p2 = a + 32;
+    char *p3 = a + 48;
+    int v;
+
+    func_00282CC0(p1, p1, p3);
+    func_00282CC0(p2, p2, p3);
+    func_00300190(p1, p1);
+    func_00300190(p2, p2);
+    v = *(int *)(a + 4) - (func_00283CF0(*(float *)(p3 + 12)) << 24);
+    *(int *)(a + 4) = v;
+    *(int *)(a + 12) = v;
+    if (v < 0)
+        func_002B9180(a);
+}
 
 
 INCLUDE_ASM("asm/game", func_002BD8B0);

@@ -117,7 +117,7 @@ INCLUDE_ASM("asm/levels", func_L22_0040DE00);
 
 INCLUDE_ASM("asm/levels", func_L22_0040DF28);
 
-INCLUDE_ASM("asm/levels", func_L22_0040E098);
+/* func_L22_0040E098 uses the profile in L22_0040E098-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L22_0040F1C0);
 

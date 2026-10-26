@@ -170,7 +170,30 @@ void func_002C7D58(char *self)
 
 INCLUDE_ASM("asm/game", func_002C7F78);
 
-INCLUDE_ASM("asm/game", func_002C8348);
+extern float func_00283B98(float, float);
+extern float func_00283180(float);
+extern float func_00283198(float);
+extern float func_00283C80(float, float);
+extern float func_00282C48(float);
+extern void func_002B9180(char *);
+
+void func_002C8348(char *a0)
+{
+    char *s1 = a0;
+    char *s0 = s1 + 0x20;
+    float t;
+
+    *(u8 *)(s1 + 8) = *(u8 *)(s1 + 8) + *(u8 *)(s0 + 0x14);
+    *(float *)(s0 + 8) = func_00283B98(*(float *)(s0 + 8), *(float *)(s0 + 0xC));
+    *(float *)(s1 + 0xC) = *(float *)(s1 + 0xC) + *(float *)(s0 + 0x10);
+    *(float *)(s1 + 0x10) = *(float *)(*(char **)(s1 + 0x20)) +
+                            *(float *)(s0 + 4) * func_00283180(*(float *)(s0 + 8));
+    *(float *)(s1 + 0x18) = *(float *)(*(char **)(s1 + 0x20) + 8) +
+                            *(float *)(s0 + 4) * func_00283198(*(float *)(s0 + 8));
+    t = func_00283C80(*(float *)(s0 + 8), *(float *)(*(char **)(s1 + 0x20) + 0x10));
+    if (t < func_00282C48(*(float *)(s0 + 0xC) + *(float *)(s0 + 0xC)))
+        func_002B9180(s1);
+}
 
 extern float Fbdd4a4aa_FUN_002A89A8(char *a, int b, float f);
 
@@ -297,7 +320,41 @@ void func_002C8F40(int *obj)
         Fbdd4a4aa_FUN_002B9180((char *)obj);
 }
 
-INCLUDE_ASM("asm/game", func_002C9098);
+extern float func_00283CE0(int a);
+extern int func_00283CF0(float f);
+extern int func_00283D38(int a, int b, float f);
+extern float func_002A7878(float a, float b);
+extern void func_00282CC0(char *a, char *b, char *c);
+extern void func_00282D30(char *a, char *b, float f);
+extern void func_00300190(char *a, char *b);
+extern void func_00300248(char *a, char *b);
+extern int func_00282978(char *p);
+
+void func_002C9098(char *p)
+{
+    char *s0 = p + 32;
+    char *s3 = p + 16;
+    float r1, r2, r3, r4;
+    int x, y;
+
+    r1 = func_00283CE0(*(short *)(p + 10));
+    r2 = func_00283CE0(*(int *)(s0 + 24));
+    r1 = r1 / r2;
+    r3 = func_00283CE0(*(int *)(s0 + 16));
+    x = func_00283CF0(r3 * r1);
+    y = func_00283D38(0, *(int *)(s0 + 20), r1 * 0.5f);
+    *(char *)(p + 8) = *(unsigned char *)(p + 8) + 1;
+    r4 = func_002A7878(0.004f, 0.012f);
+    *(float *)(p + 12) = *(float *)(p + 12) + r4 * 210000.0f;
+    func_00282CC0(s3, s3, s0);
+    func_00282D30(s0, s0, 0.99f);
+    func_00300190(s3, s3);
+    func_00300248(s0, s0);
+    *(int *)(p + 4) = y | (x << 24);
+    if (func_00282978(p + 10) != 0) {
+        func_002B9180(p);
+    }
+}
 
 
 INCLUDE_ASM("asm/game", func_002C9218);

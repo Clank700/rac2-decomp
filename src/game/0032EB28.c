@@ -307,7 +307,32 @@ void func_003349E8(void *owner, int flag, float value)
 
 INCLUDE_ASM("asm/game", func_00334A88);
 
-INCLUDE_ASM("asm/game", func_003351B0);
+typedef int TI __attribute__((mode(TI)));
+extern void *D_0026E810[7];
+extern TI func_00334710(int, TI *);
+extern void func_00282CC0(void *, void *, void *);
+
+int func_003351B0(char *self, void *src, void *dst, int mode)
+{
+    static void *arms[7] = {&&transformed, &&direct, &&zero, &&zero, &&zero, &&zero, &&zero};
+    TI local;
+    int ret = 1;
+    char *vector = *(char **)(self + 0x70) + 0x60;
+    if ((unsigned int)(mode - 1) >= 7) goto direct;
+    goto *D_0026E810[mode - 1];
+zero:
+    func_00282CC0(dst, src, vector);
+    ret = 0;
+    goto done;
+transformed:
+    func_00334710((int)self, &local);
+    func_00282CC0(dst, src, &local);
+    goto done;
+direct:
+    func_00282CC0(dst, src, vector);
+done:
+    return ret;
+}
 
 INCLUDE_ASM("asm/game", func_00335270);
 
