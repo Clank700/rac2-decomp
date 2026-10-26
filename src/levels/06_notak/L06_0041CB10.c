@@ -1,13 +1,4 @@
-/* Retained complete manual C reconstruction; nonmatching, not linked.
- * Checked source: src/levels/06_notak/L06_003F4080-helpers.c
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
- * Retail US extent: 2184 bytes.
- * Actual final coverage: us: 0/1, exit1, 2184 compiled bytes; us2: 0/1, exit1, 2184 compiled bytes; pal: catalogue absent, exit1.
- * Residual: 2184/2184 bytes; first mismatch +0x50. Owner/vector/loop allocation and case-1 copy address/call scheduling remain different. Real qcopy, three-vector workspace and typed owner-state prefix retained the same measured residual.
- * Reopen only with: A new measured allocator/lifetime or copy-expansion witness for the owner, workspace and sibling loop. Do not repeat the recorded tied shapes or claim C impossibility.
- * Earlier complete variants are retained privately. No native execution or
- * complete linked-program equality is claimed by these placement measurements.
- */
+/* func_L06_0041CB10: per-frame update of a flock member (moby 0xB66): wall and sibling separation, hand-off fade. */
 #include "common.h"
 
 typedef unsigned int Quadword __attribute__((mode(TI)));
@@ -34,21 +25,21 @@ extern int func_002E5CF8(int, int, char *);
 extern float func_002ABB18(float);
 extern float func_002A89A8(void *, int, float);
 extern void func_002A9288(char *, float);
-extern char *func_L06_003F3448(char *, Vector *);
-extern void func_L06_003F4020(char *, char *);
+extern char *func_L04_003EDD40(char *, Vector *);
+extern void func_L06_0041CAB0(char *, char *);
 
 /* Known prefix only; no complete owner-state extent is inferred. */
 typedef struct { Vector velocity; char *owner; char *successor; short timeout; unsigned char handoff, cooldown; } FlockStatePrefix;
 /* Move a small flock member, separating it from walls and its live siblings. */
-void func_L06_003F4080(char *object)
+void func_L06_0041CB10(char *object)
 {
     FlockStatePrefix *state = *(FlockStatePrefix **)(object + 0x68);
     struct { Vector old_position, probe, separation; } work;
     char *other;
-    char *position;
     char **siblings;
     int i;
     float distance;
+    *(unsigned int *)(object + 0x78) = 0x80808080;
     func_002829A8((unsigned char *)state + 0x1b);
     qcopy(&work.old_position, object + 0x10);
     switch (*(unsigned char *)(object + 0x20)) {
@@ -71,7 +62,7 @@ void func_L06_003F4080(char *object)
                         *(unsigned char *)(object + 0x20) = 1;
                 }
             } else {
-                if (*(short *)(COLLISION.object + 0xaa) != 0x75e) {
+                if (*(short *)(COLLISION.object + 0xaa) != 0xb66) {
                     func_00283028(state, state, &COLLISION.normal);
                     if (func_00283248(COLLISION.normal.f[2], func_00282E20(&COLLISION.normal)) < 0.69813179969787597656f && func_00278E78() == -1)
                         func_00282D30(state, state, 1.2f);
@@ -84,11 +75,10 @@ void func_L06_003F4080(char *object)
                 state->cooldown = 12;
             }
         }
-        position = object + 0x10;
-        if (func_00277258(position, 4, object, 0.2f)) {
+        if (func_00277258((object + 0x10), 4, object, 0.2f)) {
             func_00282CF0(&work.probe, &COLLISION.point, &COLLISION.offset);
             func_00282F20(&work.probe, &work.probe, 0.015f);
-            func_00282CC0(position, &COLLISION.offset, &work.probe);
+            func_00282CC0((object + 0x10), &COLLISION.offset, &work.probe);
             if (COLLISION.object == 0) {
                 func_00283028(state, state, &COLLISION.normal);
                 if (func_00283248(COLLISION.normal.f[2], func_00282E20(&COLLISION.normal)) < 0.69813179969787597656f && func_00278E78() == -1) {
@@ -96,7 +86,7 @@ void func_L06_003F4080(char *object)
                     if (func_00282DF0(state) < 0.025f)
                         *(unsigned char *)(object + 0x20) = 1;
                 }
-            } else if (*(short *)(COLLISION.object + 0xaa) != 0x75e) {
+            } else if (*(short *)(COLLISION.object + 0xaa) != 0xb66) {
                 func_00283028(state, state, &COLLISION.normal);
                 if (func_00283248(COLLISION.normal.f[2], func_00282E20(&COLLISION.normal)) < 0.69813179969787597656f && func_00278E78() == -1)
                     func_00282D30(state, state, 1.2f);
@@ -109,15 +99,15 @@ void func_L06_003F4080(char *object)
             }
         }
         siblings = (char **)(*(char **)(state->owner + 0x68) + 0xa0);
-        for (i = 19; i >= 0; i--, siblings++) {
+        for (i = 0; i < 20; i++, siblings++) {
             other = *siblings;
-            if (other != object && other != 0 && *(short *)(other + 0xaa) == 0x75e && *(unsigned char *)(other + 0x20) != 0xfe && *(unsigned char *)(other + 0x20) != 0xfd) {
-                func_00282CF0(&work.separation, position, other + 0x10);
+            if (other != object && other != 0 && *(short *)(other + 0xaa) == 0xb66 && *(unsigned char *)(other + 0x20) != 0xfe && *(unsigned char *)(other + 0x20) != 0xfd) {
+                func_00282CF0(&work.separation, (object + 0x10), other + 0x10);
                 work.separation.f[2] = 0;
                 distance = func_00282DF0(&work.separation);
                 if (distance < 1.8f) {
                     func_00282D30(&work.separation, &work.separation, (1.8f - distance) * 0.5f);
-                    func_00282CC0(position, position, &work.separation);
+                    func_00282CC0((object + 0x10), (object + 0x10), &work.separation);
                 }
             }
         }
@@ -134,8 +124,8 @@ void func_L06_003F4080(char *object)
     case 1:
         *(float *)(object + 0x18) = func_002A89A8(object + 0x10, 0, 0.5f) + 0.2f;
         *(int *)(object + 0x1c) = 0;
-        qcopy(&work.probe, object + 0x10);
-        state->successor = func_L06_003F3448(state->owner, &work.probe);
+        work.probe.whole = ((Vector *)(object + 0x10))->whole;
+        state->successor = func_L04_003EDD40(state->owner, &work.probe);
         *(unsigned char *)(object + 0x20) = 2;
         break;
     case 2: {
@@ -148,14 +138,14 @@ void func_L06_003F4080(char *object)
             *(float *)(object + 0x2c) = 0.0001f;
             successor = state->successor;
             if (successor == 0 || *(unsigned char *)(successor + 0x20) == 0xfe || *(unsigned char *)(successor + 0x20) == 0xfd || state->handoff == 0 || *(float *)(successor + 0x2c) >= *(float *)(*(char **)(successor + 0x24) + 0x24) - 0.01f)
-                func_L06_003F4020(object, (char *)state);
+                func_L06_0041CAB0(object, (char *)state);
         }
         break;
     }
     }
     func_002A9288(object, (*(float *)(object + 0x2c) * 0.3f) / *(float *)(*(char **)(object + 0x24) + 0x24));
     if (*(float *)(object + 0x18) < 5.0f || *(float *)(object + 0x18) > 500.0f) {
-        func_L06_003F4020(object, (char *)state);
+        func_L06_0041CAB0(object, (char *)state);
     } else {
         if (*(float *)(object + 0x10) < 5.0f) *(float *)(object + 0x10) = 5.0f;
         if (*(float *)(object + 0x10) > 1018.0f) *(float *)(object + 0x10) = 1018.0f;

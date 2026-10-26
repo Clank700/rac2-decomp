@@ -1110,3 +1110,6 @@ src/game/002BAE50.c	-O2 -G0 -ffunction-sections
 src/levels/08_tabora/L08_004237F0.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L00_00392530.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/00309718.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/06_notak/L06_003F4080.c	-O2 -G0 -ffunction-sections
+src/levels/06_notak/L06_0041CB10.c	-O2 -G0 -ffunction-sections
+src/levels/02_maktar_nebula/L02_003D9728-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels
