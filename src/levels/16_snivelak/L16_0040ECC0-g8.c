@@ -1,24 +1,9 @@
-/* Complete retained C reconstruction; not linked or counted.
- * Qualified compiler profile: -O2 -G8 -ffunction-sections -frac2-qcopy
- * -frac2-qcopy-barrier -g -frac2-zero-ti-por.
- * Measured 2026-10-25 follow-up: 6464/6484 bytes, frame 0x90; nonmatching.
- * Previous corrected baseline was 6476/6484. Nearby size proves no match.
- * Three MACRO_ADDR declarations preserve the observed mixed absolute/GP loads;
- * forcing sda selected incorrect GP loads in ordinary paths. Current RAC1 uses
- * the same address-form mechanism. Real sound phases use a partial anchor view
- * with owner +0x88 and active +0x74 at index stride112, not an array-row type.
- * The projectile factory result joins one store; state4 positive-arm ordering
- * and state19 set/clear order follow the retail operations. These changes do
- * not invent accesses, padding, volatile locals or register constraints.
- * The actual yaw pointer remains captured before eight heading calls. Resident
- * views do not claim complete object extents. The complete 64-byte work union,
- * state1 no-op table arm, nineteen destinations, observed NaN predicates and
- * true helper returns remain intact. Two state3 transition CFG trials failed.
- * Remaining differences include state3 transition joins, FP call scheduling,
- * later register allocation and sound maintenance setup. All instructions and
- * linked table placement still require exact validation before promotion.
- * Assembly-only contracts are not exhaustively qualified; no native/runtime or
- * PC-port claim. Reopen only with new residue-derived lifetime/CFG evidence.
+/* Snivelak boss update, alone in its unit for -g (statement-boundary nops) and its -G8 $gp reads.
+ * The switch needs `case 1: break;` (retail's table starts at 1). func_002AAA00 returns the new
+ * heading in $f0: as a call_value, each turn call's f0 set ends the earlier f0 reads, which is
+ * what orders retail's a0 move before mov.s $f12 at the turn calls in cases 4 and 13. One local
+ * per heading, slot and sound handle; D_0013963B is D_001395B8[0x83]; plain externs for the
+ * level scalars the assembler reaches through $gp only in delay slots.
  */
 #include "common.h"
 
@@ -85,32 +70,14 @@ typedef struct {
     int field30, field34, field38, field3c, field40, field44;
 } BarlowUtilityQueueView;
 
-/* Measured partial resident state; no complete owner extent is inferred. */
-typedef struct {
-    u8 unknown00[0x80];
-    float position80[4];
-    u8 unknown90[0x40];
-    float lastPositionD0[4];
-    u8 unknownE0[0x1b8 - 0xe0];
-    int state1B8;
-    u8 unknown1BC[0x2294 - 0x1bc];
-    int mode2294;
-    u8 unknown2298[0x249c - 0x2298];
-    u8 *target249C;
-} SnivelakResidentView;
-extern SnivelakResidentView D_00189E20 NOT_SDA;
+typedef int HeroTI __attribute__((mode(TI)));
+typedef union { u8 b[0x2600]; s8 c[0x2600]; s16 h[0x1300]; u16 uh[0x1300]; s32 i[0x980]; u32 u[0x980]; f32 f[0x980]; void *ptr[0x980]; s64 d[0x4C0]; HeroTI q[0x260]; } Hero;
+extern char D_00189E20[];
 /* These resident scalars/pointer are outside the GP-relative range. */
-extern u8 D_001395B8[] NOT_SDA;
-/* Partial observation at the indexed sound anchor; not an array-row type. */
-typedef struct {
-    u8 unknown00[0x74];
-    u8 active74;
-    u8 unknown75[0x13];
-    u8 *owner88;
-} SnivelakSoundView;
+extern u8 D_001395B8[];
 extern u8 D_00188660[];
 extern BarlowUtilityQueueView D_L16_001BFD00;
-extern int D_L16_001A8F00 MACRO_ADDR;
+extern int D_L16_001A8F00;
 extern u8 *D_L16_001B16C0 __attribute__((sda));
 extern float D_L16_001B16E4 __attribute__((sda));
 extern float D_L16_001B16E8 __attribute__((sda));
@@ -118,8 +85,8 @@ extern float D_L16_001B16EC __attribute__((sda));
 extern float D_L16_001B16F0 __attribute__((sda));
 extern float D_L16_001B16F4 __attribute__((sda));
 extern float D_L16_001B16F8 __attribute__((sda));
-extern unsigned int D_L16_001B2648 MACRO_ADDR;
-extern float D_L16_001B2564 MACRO_ADDR;
+extern unsigned int D_L16_001B2648;
+extern float D_L16_001B2564;
 extern float D_L16_001B9B00[4];
 
 /* Current C interfaces and retail-observed register banks for assembly callees. */
@@ -151,7 +118,7 @@ extern void func_L16_00411B40(u8 *);
 extern float func_00283248(float, float);
 extern float func_00283C80(float, float);
 extern float func_00283BE0(float, float);
-extern float func_002AAA00(float *, float *, int, float, float, float, float);
+extern float func_002AAA00(float *, float, float, float, float, float *, int);
 extern int func_00282948(int *);
 extern void func_L16_00411ED0(u8 *);
 extern int func_L00_0035F5A0(int, int, int);
@@ -183,29 +150,33 @@ extern void func_L16_00411600(u8 *);
 /* Advances the boss's arena, animation, aiming and projectile phases. */
 void func_L16_0040ECC0(u8 *moby)
 {
+    u8 *slot1, *slot2, *slot3, *slot4, *slot5, *slot6;
     SnivelakBossState *state = *(SnivelakBossState **)(moby + 0x68);
     BossWork work;
     float velocity[4] __attribute__((aligned(16)));
-    float angle, distance, frame;
-    int next, sound;
+    float angle, distance, frame, frame2, gravity;
+    u8 *flags;
+    float *heading0, *heading1, *heading2, *heading3, *heading6, *heading7, *heading8;
+    int next, sound1, sound2, sound3, sound4;
     func_L16_00410618(moby);
     if (!moby || moby[0x20] == 254 || moby[0x20] == 253) return;
 
     switch (moby[0x95]) {
     case 0:
-        if (func_002ACBC8(D_00189E20.position80, state->entryArea) ||
-            (func_002ACBC8(D_00189E20.position80, state->exitArea) && D_001395B8[0x83] == 1)) {
-            if (!D_001395B8[0x83]) {
+        if (func_002ACBC8(&((Hero *)D_00189E20)->f[0x20], state->entryArea) ||
+            (func_002ACBC8(&((Hero *)D_00189E20)->f[0x20], state->exitArea) && D_001395B8[0x83] == 1)) {
+            flags = D_001395B8;
+            if (!flags[0x83]) {
                 if (func_00288AA0((u8 *)&D_L16_001BFD00, 132)) {
                     func_00288BE8(&D_L16_001BFD00);
                     func_002F5CB8((int)func_L16_00412D48, (int)moby);
-                    D_001395B8[0x83] = 1;
+                    flags[0x83] = 1;
                     state->introStarted = 1;
                 }
             } else if (!func_002F5D10()) {
                 func_L16_00412D48(moby);
             }
-        } else if ((*(unsigned short *)(moby + 0x34) & 1) && D_00189E20.position80[0] >= 610.0f) {
+        } else if ((*(unsigned short *)(moby + 0x34) & 1) && ((Hero *)D_00189E20)->f[0x20] >= 610.0f) {
             *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) & 0xffbe) | 0x1000;
             *(int *)(moby + 0x98) = *(int *)(*(u8 **)(moby + 0x24) + 0x10);
             if (state->body) {
@@ -244,12 +215,12 @@ void func_L16_0040ECC0(u8 *moby)
         if (func_002B3868(moby)) {
             func_L16_004116C8(moby, 10, 15, 3.0f);
             if (!func_002A77E0(1)) {
-                if (func_L02_002F21C0(moby + 0x10, D_00189E20.position80) > 1600.0f)
+                if (func_L02_002F21C0(moby + 0x10, &((Hero *)D_00189E20)->f[0x20]) > 1600.0f)
                     func_L16_00412C58(moby, 3, 6);
                 else func_L16_00412C58(moby, 7, 11);
             }
         }
-        func_L16_00410CC0(moby, D_00189E20.position80);
+        func_L16_00410CC0(moby, &((Hero *)D_00189E20)->f[0x20]);
         func_L16_004110D0(moby, D_L16_001B16E4 * 0.016666668f);
         if (func_00282E80(moby + 0x10, state->destination) < 32.0f) {
             frame = func_0029F530((char *)moby);
@@ -277,47 +248,40 @@ void func_L16_0040ECC0(u8 *moby)
             if (!func_002A77E0(1)) func_L16_00412C58(moby, 12, 15);
         }
         if (!state->taunted && !state->suppressSpeech && !func_002A77E0(2) &&
-            D_00189E20.mode2294 == 22 && D_00189E20.state1B8 == 1 && D_00189E20.target249C &&
-            *(short *)(D_00189E20.target249C + 0xaa) == 0xea7) {
+            ((Hero *)D_00189E20)->i[0x8A5] == 22 && ((Hero *)D_00189E20)->i[0x6E] == 1 && ((u8 *)((Hero *)D_00189E20)->ptr[0x927]) &&
+            *(short *)(((u8 *)((Hero *)D_00189E20)->ptr[0x927]) + 0xaa) == 0xea7) {
             state->taunted = 1;
             func_L16_00412BA8(moby, 16);
         }
         if ((D_L16_001B2648 & 15) == (((int)moby >> 8) & 15)) func_L16_00411B40(moby);
-        func_L16_00410CC0(moby, D_00189E20.position80);
-        if (D_00189E20.mode2294 == 129) next = 6;
-        else if (func_00282E80(moby + 0x10, state->destination) > 48.0f) next = 2;
-        else if (func_00282E80(moby + 0x10, D_00189E20.position80) < 12.0f &&
-                 func_00282C48(D_00189E20.position80[2] - state->floorHeight) < 10.0f) next = 5;
+        func_L16_00410CC0(moby, &((Hero *)D_00189E20)->f[0x20]);
+        if (((Hero *)D_00189E20)->i[0x8A5] == 129) func_002A7750(moby, 6, -1);
+        else if (func_00282E80(moby + 0x10, state->destination) > 48.0f) func_002A7750(moby, 2, -1);
+        else if (func_00282E80(moby + 0x10, &((Hero *)D_00189E20)->f[0x20]) < 12.0f &&
+                 func_00282C48(((Hero *)D_00189E20)->f[0x22] - state->floorHeight) < 10.0f) func_002A7750(moby, 5, -1);
         else {
-            angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
-            if (!(func_00283C80(*(float *)(moby + 0xf8), angle) > 0.26179942f)) {
-                if (*(unsigned short *)(moby + 0x96) > 900) {
-                    func_002A7750(moby, 11, -1);
-                    state->target = 0;
-                    qcopy(state->lastPlayer, D_00189E20.lastPositionD0);
-                }
-                func_L16_00410B88(moby);
-                break;
+            angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
+            if (func_00283C80(*(float *)(moby + 0xf8), angle) > 0.26179942f) func_002A7750(moby, 4, -1);
+            else if (*(unsigned short *)(moby + 0x96) > 900) {
+                func_002A7750(moby, 11, -1);
+                state->target = 0;
+                qcopy(state->lastPlayer, &((Hero *)D_00189E20)->f[0x34]);
             }
-            next = 4;
         }
-        func_002A7750(moby, next, -1);
         func_L16_00410B88(moby);
         break;
     case 4:
         if (func_002B3868(moby)) {
-            angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+            angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
             if (func_00283BE0(*(float *)(moby + 0xf8), angle) > 0.0f)
                 func_L16_004116C8(moby, 10, 30, 1.0f);
             else
                 func_L16_004116C8(moby, 10, 30, 10.0f);
         }
-        {
-        float *yaw = (float *)(moby + 0xf8);
-        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
-        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00174532947f, 0.00174532947f, 0.104719773f);
-        }
-        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+        heading0 = (float *)(moby + 0xf8);
+        angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
+        func_002AAA00(heading0, angle, 0.00174532947f, 0.00174532947f, 0.104719773f, &state->turnVelocity, 0);
+        angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
         if (func_00283C80(*(float *)(moby + 0xf8), angle) < 0.087266475f && moby[0x42] == moby[0x43]) func_002A7750(moby, 3, -1);
         break;
     case 5:
@@ -327,17 +291,15 @@ void func_L16_0040ECC0(u8 *moby)
             state->fireTimer = 30;
             func_L16_004116C8(moby, 0, 30, state->verticalSpeed);
         }
-        {
-        float *yaw = (float *)(moby + 0xf8);
-        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
-        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.000872664736f, 0.000872664736f, 0.104719773f);
-        }
+        heading1 = (float *)(moby + 0xf8);
+        angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
+        func_002AAA00(heading1, angle, 0.000872664736f, 0.000872664736f, 0.104719773f, &state->turnVelocity, 0);
         if (func_00282948(&state->fireTimer)) {
             func_L16_00411ED0(moby);
             func_L00_0035F5A0(17, 0, (int)moby);
             state->fireTimer = func_002A7820(45, 75);
         }
-        if (func_00282E80(moby + 0x10, D_00189E20.position80) > 16.0f || func_00282C48(D_00189E20.position80[2] - state->floorHeight) > 10.0f) func_002A7750(moby, 2, -1);
+        if (func_00282E80(moby + 0x10, &((Hero *)D_00189E20)->f[0x20]) > 16.0f || func_00282C48(((Hero *)D_00189E20)->f[0x22] - state->floorHeight) > 10.0f) func_002A7750(moby, 2, -1);
         break;
     case 6:
         if (func_002B3868(moby)) {
@@ -353,11 +315,9 @@ void func_L16_0040ECC0(u8 *moby)
             state->fired = 0;
             *(float *)(moby + 0x48) = 1.0f;
         }
-        {
-        float *yaw = (float *)(moby + 0xf8);
-        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
-        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
-        }
+        heading2 = (float *)(moby + 0xf8);
+        angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
+        func_002AAA00(heading2, angle, 0.00349065894f, 0.00349065894f, 0.209439546f, &state->turnVelocity, 0);
         if (!state->fired && state->body[0x42] == state->body[0x43] && func_0029F530((char *)state->body) >= 13.0f) {
             if (state->body[0x42] == 11) func_002E5CF8(7, 0, (char *)moby);
             func_L16_00411900(moby);
@@ -379,16 +339,13 @@ void func_L16_0040ECC0(u8 *moby)
         break;
     case 9:
         if (func_002B3868(moby)) func_L16_004116C8(moby, 16, 30, 6.0f);
-        {
-        float *yaw = (float *)(moby + 0xf8);
-        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
-        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
-        }
+        heading3 = (float *)(moby + 0xf8);
+        angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
+        func_002AAA00(heading3, angle, 0.00349065894f, 0.00349065894f, 0.209439546f, &state->turnVelocity, 0);
         if (state->body[0x60] & 2) {
-            if ((float)state->maximumHealth * 0.55f <= state->health) next = 10;
-            else if (!func_002A77E0(2) && state->leftUsed && state->rightUsed) next = 10;
-            else next = 13;
-            func_002A7750(moby, next, -1);
+            if ((float)state->maximumHealth * 0.55f <= state->health) func_002A7750(moby, 10, -1);
+            else if (func_002A77E0(2) || !state->leftUsed || !state->rightUsed) func_002A7750(moby, 13, -1);
+            else func_002A7750(moby, 10, -1);
         }
         break;
     case 10:
@@ -398,8 +355,8 @@ void func_L16_0040ECC0(u8 *moby)
         }
         func_L16_004110D0(moby, D_L16_001B16E8 * 0.016666668f);
         if (func_00282E80(moby + 0x10, state->destination) < 1.0f) {
-            next = func_00282C48(*(float *)(state->target + 0x18) - 120.0f) < 1.0f ? 12 : 11;
-            func_002A7750(moby, next, -1);
+            if (func_00282C48(*(float *)(state->target + 0x18) - 120.0f) < 1.0f) func_002A7750(moby, 12, -1);
+            else func_002A7750(moby, 11, -1);
         }
         break;
     case 11:
@@ -416,19 +373,22 @@ void func_L16_0040ECC0(u8 *moby)
         } else {
             angle = func_00283248(state->lastPlayer[0] - *(float *)(moby + 0x10), state->lastPlayer[1] - *(float *)(moby + 0x14));
         }
-        func_002AAA00((float *)(moby + 0xf8), &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
+        func_002AAA00((float *)(moby + 0xf8), angle, 0.00349065894f, 0.00349065894f, 0.209439546f, &state->turnVelocity, 0);
         if (func_00283C80(angle, *(float *)(moby + 0xf8)) < 0.087266475f) {
             func_002AA2E8(&state->aimTime, 0.0f, D_L16_001B16F8 * 0.016666668f);
             func_002AA2E8(&state->aimBlend, 1.0f, 0.06666667f);
-            sound = state->attackSound;
-            if (((SnivelakSoundView *)(D_00188660 + sound * 112))->owner88 != state->body || !((SnivelakSoundView *)(D_00188660 + sound * 112))->active74)
+            slot1 = D_00188660 + state->attackSound * 112;
+            if (*(u8 **)(slot1 + 0x88) != state->body || !slot1[0x74])
                 state->attackSound = func_002E5CF8(2, 4, (char *)state->body);
             func_L00_002E6CF0(func_L16_00412560, moby);
         }
         if ((state->target && (*(unsigned short *)(state->target + 0x34) & 1) && func_00282948(&state->aimTimeout)) || (!state->target && state->aimTime <= 0.0f)) {
             func_002A7750(moby, 3, 1);
-            sound = state->attackSound;
-            if (sound != -1 && ((SnivelakSoundView *)(D_00188660 + sound * 112))->owner88 == state->body && ((SnivelakSoundView *)(D_00188660 + sound * 112))->active74) func_002E59F8(sound);
+            sound1 = state->attackSound;
+            if (sound1 != -1) {
+                slot2 = D_00188660 + sound1 * 112;
+                if (*(u8 **)(slot2 + 0x88) == state->body && slot2[0x74]) func_002E59F8(sound1);
+            }
             state->attackSound = -1;
         }
         break;
@@ -437,16 +397,13 @@ void func_L16_0040ECC0(u8 *moby)
             func_L16_004116C8(moby, 1, 30, 0.0f);
             *(float *)(moby + 0x48) = 0.5f;
         }
-        {
-        float *yaw = (float *)(moby + 0xf8);
         angle = func_00283248(*(float *)(state->target + 0x10) - *(float *)(moby + 0x10), *(float *)(state->target + 0x14) - *(float *)(moby + 0x14));
-        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
-        }
-        frame = func_0029F530((char *)moby);
-        if (frame > 30.0f) func_002AA2E8((float *)(moby + 0x48), 1.0f, 0.13333334f);
-        if (frame > 40.0f && frame < 42.0f) func_002A8C28(moby, state->target + 0x10, 0x10001, 0, 1, 0, 4.0f, (float)state->power, 1.0f);
+        func_002AAA00((float *)(moby + 0xf8), angle, 0.00349065894f, 0.00349065894f, 0.209439546f, &state->turnVelocity, 0);
+        frame2 = func_0029F530((char *)moby);
+        if (frame2 > 30.0f) func_002AA2E8((float *)(moby + 0x48), 1.0f, 0.13333334f);
+        if (frame2 > 40.0f && frame2 < 42.0f) func_002A8C28(moby, state->target + 0x10, 0x10001, 0, 1, 0, 4.0f, (float)state->power, 1.0f);
         if (moby[0x60] & 2) func_002A7750(moby, 2, 1);
-        else if (D_00189E20.mode2294 == 22 && D_00189E20.state1B8 == 1 && D_00189E20.target249C == moby) func_L16_00412C58(moby, 24, 27);
+        else if (((Hero *)D_00189E20)->i[0x8A5] == 22 && ((Hero *)D_00189E20)->i[0x6E] == 1 && ((u8 *)((Hero *)D_00189E20)->ptr[0x927]) == moby) func_L16_00412C58(moby, 24, 27);
         break;
     case 13:
         if (func_002B3868(moby)) {
@@ -454,18 +411,13 @@ void func_L16_0040ECC0(u8 *moby)
             state->bodyMode = 1;
             func_L16_004116C8(moby, 0, 30, state->verticalSpeed);
             if (state->leftUsed == state->rightUsed) {
-                u8 *projectile;
-                if (func_002A77E0(2)) projectile = func_L16_004130B0(moby, 1);
-                else projectile = 0;
-                state->projectile = projectile;
+                state->projectile = !func_002A77E0(2) ? 0 : func_L16_004130B0(moby, 1);
             } else if (!state->leftUsed) state->projectile = func_L16_004130B0(moby, 1);
             else state->projectile = 0;
         }
-        {
-        float *yaw = (float *)(moby + 0xf8);
-        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
-        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
-        }
+        heading6 = (float *)(moby + 0xf8);
+        angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
+        func_002AAA00(heading6, angle, 0.00349065894f, 0.00349065894f, 0.209439546f, &state->turnVelocity, 0);
         if (*(float *)(moby + 0x18) > state->floorHeight + 20.0f) {
             if (state->projectile) { func_002A7750(moby, 14, -1);
             state->leftUsed = 1; }
@@ -475,11 +427,9 @@ void func_L16_0040ECC0(u8 *moby)
         break;
     case 15:
         if (func_002B3868(moby)) func_L16_004116C8(moby, 14, 30, 0.0f);
-        {
-        float *yaw = (float *)(moby + 0xf8);
-        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
-        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
-        }
+        heading7 = (float *)(moby + 0xf8);
+        angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
+        func_002AAA00(heading7, angle, 0.00349065894f, 0.00349065894f, 0.209439546f, &state->turnVelocity, 0);
         if (state->body[0x42] == state->body[0x43] && (D_L16_001B2648 & 15) == (((int)moby >> 8) & 15)) func_L16_00411D00(moby);
         if (*(unsigned short *)(moby + 0x96) > 180) func_002A7750(moby, 2, 1);
         break;
@@ -501,12 +451,13 @@ void func_L16_0040ECC0(u8 *moby)
             if (state->projectile) {
                 func_L16_00413690(state->projectile, (u8 *)work.bone);
                 if (state->body[0x42] == 9 && func_0029F530((char *)state->body) > 16.0f) {
+                    gravity = 0.0013888889f;
                     distance = func_00282E80(state->projectile + 0x10, state->target + 0x10) * 0.008333334f;
                     func_00282CF0(velocity, state->target + 0x10, state->projectile + 0x10);
                     velocity[2] = 0.0f;
                     func_00282F20(velocity, velocity, distance);
-                    velocity[2] = func_L00_0031CDD0(state->projectile + 0x10, state->target + 0x10, 0, distance, -0.0013888889f);
-                    func_L16_00413700(state->projectile, velocity, 0.0013888889f);
+                    velocity[2] = func_L00_0031CDD0(state->projectile + 0x10, state->target + 0x10, 0, distance, -gravity);
+                    func_L16_00413700(state->projectile, velocity, gravity);
                     state->projectile = 0;
                 }
             }
@@ -520,27 +471,31 @@ void func_L16_0040ECC0(u8 *moby)
             *(float *)(moby + 0x48) = 0.5f;
             state->bodyMode = 1;
             if (state->verticalSpeed < 0.0f) state->verticalSpeed = 0.0f;
-            sound = state->attackSound;
-            if (sound != -1 && ((SnivelakSoundView *)(D_00188660 + sound * 112))->owner88 == state->body && ((SnivelakSoundView *)(D_00188660 + sound * 112))->active74) func_002E59F8(sound);
+            sound2 = state->attackSound;
+            if (sound2 != -1) {
+                slot3 = D_00188660 + sound2 * 112;
+                if (*(u8 **)(slot3 + 0x88) == state->body && slot3[0x74]) func_002E59F8(sound2);
+            }
             state->attackSound = -1;
-            sound = state->bodySound;
-            if (sound != -1 && ((SnivelakSoundView *)(D_00188660 + sound * 112))->owner88 == moby && ((SnivelakSoundView *)(D_00188660 + sound * 112))->active74) func_002E59F8(sound);
+            sound3 = state->bodySound;
+            if (sound3 != -1) {
+                slot4 = D_00188660 + sound3 * 112;
+                if (*(u8 **)(slot4 + 0x88) == moby && slot4[0x74]) func_002E59F8(sound3);
+            }
             state->bodySound = -1;
         }
-        {
-        float *yaw = (float *)(moby + 0xf8);
-        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
-        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00174532947f, 0.00174532947f, 0.104719773f);
-        }
+        heading8 = (float *)(moby + 0xf8);
+        angle = func_00283248(((Hero *)D_00189E20)->f[0x20] - *(float *)(moby + 0x10), ((Hero *)D_00189E20)->f[0x21] - *(float *)(moby + 0x14));
+        func_002AAA00(heading8, angle, 0.00174532947f, 0.00174532947f, 0.104719773f, &state->turnVelocity, 0);
         if ((D_L16_001B2648 & 15) == (((int)moby >> 8) & 15)) {
             *(BossQuadword *)work.vectors.offset = 0;
             work.vectors.offset[0] = func_002A78D8(0.0f, 6.0f);
             work.vectors.offset[1] = func_002A78D8(0.0f, 6.0f);
-            work.vectors.position[2] = func_002A7878(5.0f, 20.0f);
-            work.vectors.position[0] = work.vectors.offset[0];
-            work.vectors.position[1] = work.vectors.offset[1];
-            work.vectors.position[3] = work.vectors.offset[3];
-            work.vectors.offset[2] = work.vectors.position[2];
+            work.vectors.offset[2] = func_002A7878(5.0f, 20.0f);
+            {
+                BossQuadword q = *(BossQuadword *)work.vectors.offset;
+                *(BossQuadword *)work.vectors.position = q;
+            }
             func_00282CC0(work.vectors.position, work.vectors.position, moby + 0x10);
             func_00282CF0(work.vectors.offset, D_L16_001B9B00, work.vectors.position);
             func_00282F20(work.vectors.offset, work.vectors.offset, 1.0f);
@@ -589,13 +544,16 @@ void func_L16_0040ECC0(u8 *moby)
     func_L16_00411480(moby);
     func_L16_00411600(moby);
     if (state->bodyMode) {
-        int bodySound = state->bodySound;
-        if (((SnivelakSoundView *)(D_00188660 + bodySound * 112))->owner88 != moby || !((SnivelakSoundView *)(D_00188660 + bodySound * 112))->active74)
+        slot5 = D_00188660 + state->bodySound * 112;
+        if (*(u8 **)(slot5 + 0x88) != moby || !slot5[0x74])
             state->bodySound = func_002E5CF8(10, 4, (char *)moby);
     } else {
-        int bodySound = state->bodySound;
-        if (bodySound != -1 && ((SnivelakSoundView *)(D_00188660 + bodySound * 112))->owner88 == moby && ((SnivelakSoundView *)(D_00188660 + bodySound * 112))->active74)
-            func_002E59F8(bodySound);
+        sound4 = state->bodySound;
+        if (sound4 != -1) {
+            slot6 = D_00188660 + sound4 * 112;
+            if (*(u8 **)(slot6 + 0x88) == moby && slot6[0x74])
+                func_002E59F8(sound4);
+        }
         state->bodySound = -1;
     }
 }

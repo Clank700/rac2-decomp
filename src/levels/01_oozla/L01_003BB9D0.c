@@ -195,8 +195,6 @@ INCLUDE_ASM("asm/levels", func_L01_003BE4D0);
 
 INCLUDE_ASM("asm/levels", func_L01_003BE628);
 
-INCLUDE_ASM("asm/levels", func_L01_003BEA08);
-
 /* func_L01_003BFDC8 */
 
 void func_L01_003BFDC8(L01_003BFDC8_OBJ *a0, int a1, int a2, int a3)

@@ -37,13 +37,16 @@
  * evaluation order can.  With the definitions' orders this function gets worse at
  * each call site (the aligned diff grows from 9 to 15, 13 and 19 lines), so the orders
  * below are the better evidence and the definitions could follow them.
+/* func_00322CC0: boot + 6 levels (00, 02, 07, 11, 14, 26).
+ * D_001A8BB0 is reached through the assembler's address macro (MACRO_ADDR): the entry read
+ * at the join expands to lui/lw in flow, and reorg's copy of it in the state-2 branch's delay
+ * slot is the $gp form.  func_0032C700 returns a pointer (void *).
  */
 #include "common.h"
 
 typedef int Quad00322CC0 __attribute__((mode(TI)));
 
-extern int D_001A8BB0 __attribute__((sda));
-extern int D_001A8BB0_2;
+extern int D_001A8BB0 MACRO_ADDR;
 extern char D_00189EA0[];
 extern char *D_0018C2BC;
 extern u8 D_00188660[];
@@ -105,23 +108,16 @@ void func_00322CC0(char *self)
     float v[4] __attribute__((aligned(16)));
     float w[4] __attribute__((aligned(16)));
     char *vars = *(char **)(self + 0x68);
-    int mode;
 
     if (func_003248A8(self) != 0) {
         func_0029F338(self);
         return;
     }
 
-    if (*(u8 *)(self + 0x20) == 0xC) {
-        mode = D_001A8BB0_2;
-    } else if (*(u8 *)(self + 0x95) != 2) {
+    if (*(u8 *)(self + 0x20) != 0xC && *(u8 *)(self + 0x95) != 2)
         func_002B5278(self, *(float *)(self + 0xF8));
-        mode = D_001A8BB0_2;
-    } else {
-        mode = D_001A8BB0;
-    }
 
-    if (mode == 2) {
+    if (D_001A8BB0 == 2) {
         *(u16 *)(self + 0x34) |= 0x41;
         *(u16 *)(self + 0x34) &= ~0x1000;
         *(int *)(self + 0x98) = 0;

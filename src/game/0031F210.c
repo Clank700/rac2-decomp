@@ -119,8 +119,6 @@ void func_00322C10(char *object)
     }
 }
 
-INCLUDE_ASM("asm/game", func_00322CC0);
-
 INCLUDE_ASM("asm/game", func_003248A8);
 
 extern void func_00325D30(char *, char *);

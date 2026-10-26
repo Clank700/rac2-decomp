@@ -419,7 +419,7 @@ INCLUDE_ASM("asm/game", func_00304D38);
 
 INCLUDE_ASM("asm/game", func_00304F28);
 
-INCLUDE_ASM("asm/game", func_00305058);
+/* func_00305058 is defined in 00305058-qcopy.c. */
 
 void func_00305228(Owner_F9e2cd219 *self)
 {

@@ -125,8 +125,8 @@ wrong profile with extra operations or knowingly false prototypes.
 | Whole GPR save area uses sq/lq | -mastra-quad-saves | func_00119BC8, func_00115F28, func_00115C90 |
 | Two-word truncation cannot fill return slot | -mastra-split-trunc-slot | func_0012E8C8 |
 | Arguments spilled and branch to common epilogue | Measured -O0 unit, not an invented varargs helper | func_001175F0 |
-| Absolute load must reuse its destination as address temporary | -mno-split-addresses and assembler symbol model | func_001339B0, func_L20_0043F460 |
-| Register addresses and grouped 16-byte transfer | -frac2-qcopy | func_L20_0039E158, func_L20_0039F210 |
+| Absolute load must reuse its destination as address temporary | -mno-split-addresses and assembler symbol model | func_001339B0, func_L20_0043F460, func_L16_00411D00 |
+| Register addresses and grouped 16-byte transfer | -frac2-qcopy | func_L20_0039E158, func_L20_0039F210, func_00305058 (with -g for the pre-div.s nop pair) |
 | Correct copy, wrong motion across it | -frac2-qcopy-barrier, with qcopy | func_002B5E48, func_002EE988 |
 | Float min/max expands into compare and branch | -ffast-math; optimization level still affects allocation | func_L01_003BD560, func_L00_002EE050 |
 

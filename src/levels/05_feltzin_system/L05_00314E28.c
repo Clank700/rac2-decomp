@@ -149,7 +149,7 @@ void func_L05_004158B0(char *object)
     *(int *)(s1 + 0x268) = 0x14;
 }
 
-INCLUDE_ASM("asm/levels", func_L05_00415958);
+/* func_L05_00415958 is defined in L05_00415958-qcopy.c. */
 
 INCLUDE_ASM("asm/levels", func_L05_00415B38);
 
