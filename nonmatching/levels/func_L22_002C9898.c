@@ -1,11 +1,19 @@
-/* func_L22_002C9898 (22_dobbo_orbit): F3 hero state entry, NEAR MISS ported from the L13/L03 ports of func_L19_002C44F8.
- * 19396 vs 19404 bytes, 4846 of 4851 opcodes. Flags: -O2 -G8 -ffunction-sections -g -frac2-qcopy -frac2-qcopy-barrier
- * -frac2-gcse-store-kills-loads -frac2-zero-ti-por. Adds 0x56-0x5F and the 7-group's 0x5B arms to the L13 set.
- * Still differs: only states 0x59/0x5A. Retail clears 0xF0 with sq $zero,0($a0) (a0 = base + 0xF0), then D_00189F30
- *   with sq $zero through a fresh lui/addiu address, and rebuilds the base pointer into $s0 afterwards. Two separate
- *   zeros, each folded (fold_zero_ti_store): CSE did not share them. Here one por zero feeds both stores. Tried pointer
- *   locals, a static inline clear, memset, func_00282C88. Symbols still carry the source ports' level prefixes: run
- *   claims/func_L19_002C44F8/opus3/tools/rename.py once it matches.
+/* func_L22_002C9898 (22_dobbo_orbit and 23_damosel_orbit): F3 hero state entry, NEAR MISS ported from the L13/L03 ports
+ * of func_L19_002C44F8.  19400 vs 19404 bytes, 4850 of 4851 opcodes.  Flags: -O2 -G8 -ffunction-sections -g
+ * -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por.  Adds 0x56-0x5F and the 7-group's 0x5B arms to the L13 set.
+ * Still differs: one instruction in states 0x59/0x5A.  Retail (and L23's copy at 0x002D254C) clears 0xF0 through
+ * a register (`addiu $a0,$v0,0xF0; sq $zero,0($a0)`), then D_00189F30 through a fresh lui/addiu, and rebuilds the
+ * hero base into $s0 with a fresh `lui $v1; addiu $s0,$v1,%lo` -- the only fresh hero lui in the function.
+ * - qzero() (common.h) for both clears gives retail's two `sq $zero,0(reg)` and the register addresses.
+ * - 0x59 and 0x5A as separate cases, 0x59's copy ending in `goto clear_done` before 0x5A's `clear_done:
+ *   HALF(0x1DC) = 60;` (cross-jumping later merges the copies): the label makes cse1 and cse2 forget the base,
+ *   so the first part matches retail exactly.  Left: gcse's PRE still replaces the label block's lui with the
+ *   entry's hoisted $s4 (`addiu $s0,$s4,%lo`).  Retail's lui must survive gcse, so it is a second occurrence in
+ *   its gcse block, yet neither cse pass merged it: no spelling found for that (pointer locals, a function-wide
+ *   or spilled hero pointer, do/while(0), if/else arms, -frac2-gcse-unsplit-edges all keep or worsen it).
+ * - Plain `*(TI128 *)VEC(0xF0) = 0` stores share one por zero (4846/4851); memset and func_00282C88 add calls.
+ * Symbols still carry the source ports' level prefixes: run claims/func_L19_002C44F8/opus3/tools/rename.py once
+ * it matches (derive needs equal sizes).
  */
 #include "common.h"
 
@@ -1174,9 +1182,14 @@ s32 func_L22_002C9898(s32 action, s32 animate) {
         COPY_VECTOR(0x160, 0x120);
         if (!animate) goto finish;
         func_L00_002D2168(7, 0, 12.0f); goto finish;
-    case 0x59: case 0x5A:
+    case 0x59:
         WORD(0x229C) = 7; BITS(0x24A0) = 0;
-        *(TI128 *)VEC(0xF0) = 0; *(TI128 *)D_00189F30 = 0;
+        qzero(VEC(0xF0)); qzero(D_00189F30);
+        goto clear_done;
+    case 0x5A:
+        WORD(0x229C) = 7; BITS(0x24A0) = 0;
+        qzero(VEC(0xF0)); qzero(D_00189F30);
+    clear_done:
         HALF(0x1DC) = 60;
         if (!animate) goto finish;
         func_L00_002D2168(6, 3, -3.0f);
