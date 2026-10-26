@@ -885,6 +885,7 @@ src/levels/shared/L18_0043E760-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -fr
 src/levels/11_joba/L11_00425F10-g-g8.c	-O2 -G8 -ffunction-sections -g
 src/levels/16_snivelak/L16_0040ECC0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g -frac2-zero-ti-por
 src/levels/01_oozla/L01_003BEA08-g8.c	-O2 -G8 -ffunction-sections
+src/levels/01_oozla/L01_003C09C0-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels
 src/game/00305058-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -g
 src/levels/16_snivelak/L16_00411D00-g8.c	-O2 -G8 -ffunction-sections -mno-split-addresses
 src/levels/20_yeedil/L20_00449178-state-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por

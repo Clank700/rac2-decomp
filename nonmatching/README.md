@@ -17,7 +17,6 @@ later dated entries record their own profiles and measurements. Neither is proof
 of semantic correctness or matching credit without a strict linked build.
 | Function | Size | Status and remaining differences |
 | --- | ---: | ---: |
-| [`func_L01_003C09C0`](levels/func_L01_003C09C0.c) | 7360 | 26 October 2026 (big26): first decompilation, 1848/1840 instructions; structure and calls line up, register allocation and scheduling left. See source. |
 | [`func_L04_00417308`](levels/func_L04_00417308.c) | 5968 | HUD draw (levels 04 and 11), first draft at -G8 as its own unit: 5,768 of 5,968 bytes, opcodes 1110/1492, with registers 741. Hero pointer lands in $fp instead of a spill, gcse hoists the four pointer locals above func_0027F5B8, and the arg order of func_0027EB88 differs; details in the source header. |
 | [`func_L06_0045A5B0`](levels/func_L06_0045A5B0.c) | 6024 | 26 October 2026 (big26): first decompilation, 1506/1506 instructions; structure and calls line up, register allocation and scheduling left. See source. |
 | [`func_L17_003E7068`](levels/func_L17_003E7068.c) | 6636 | 26 October 2026 (big26): first decompilation, 1657/1659 instructions; structure and calls line up, register allocation and scheduling left. See source. |
