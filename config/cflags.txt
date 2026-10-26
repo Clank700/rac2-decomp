@@ -1085,3 +1085,6 @@ src/levels/shared/L00_003A8E28-por.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-
 src/levels/shared/L00_003F5F90-por.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
 src/game/002D0930-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
 src/game/002DB1B0-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
+src/levels/shared/L00_003EE4C0-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/shared/L00_003A3F30-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/shared/L00_00382CE8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
