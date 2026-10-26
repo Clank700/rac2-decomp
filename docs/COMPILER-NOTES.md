@@ -313,6 +313,21 @@ matter; neither `sda` nor `nosda` is a universal opcode selector:
 - Base evaluation and pointer construction can have different orders. In
   `func_002980D0`, forming both bases first and then the pointers preserves both.
 
+An `sda` attribute on an incomplete array (`extern int D[] __attribute__((sda));`, read as
+`D[0]`) at `-G0` is the practical way to get retail's tied absolute macro form
+(`lui $r,%hi; lw $r,%lo($r)` with the destination as the address temporary, `lui $at; sw`
+for stores) without `-mno-split-addresses`; the sized `sda` spelling of the same address
+gives the GP form, and two names for one address are how retail's mixed reads (absolute)
+and writes ($gp) of `D_001B1DD4`, `D_001A7478` and `D_001B1B00` are written. The same
+incomplete-array table base in a loop keeps cc1 from hoisting its `%hi` (`func_L01_003CBCD8`).
+A macro load can be moved into a call's delay slot, where the assembler turns it into the
+$gp form; that is not a defect of the declaration. Witnesses: `func_002C8610`,
+`func_L00_003A0C00` (the callee reached through `ref_L00_003A0C00_00` in the levels where the
+catalogue splits it), `func_L00_00329520`, `func_L01_003CBCD8`. A 20-byte menu table read
+through $gp (`func_002D16C8`) needs the declared size to fit the threshold, so its unit uses
+`-G32 -Wa,-G32`; a TImode copy whose address carries an offset (`lq $v0,0x10($v0)`) is the
+default profile, not qcopy (`func_L11_00448AA8`).
+
 Odd-address byte globals are valid absolute bindings (`0x001A7B94/95`,
 `0x001A7BB2/B3`); there is no universal four-byte alignment requirement. A low half
 with bit 15 set also needs the correct signed-low-half relocation. Compare bound
