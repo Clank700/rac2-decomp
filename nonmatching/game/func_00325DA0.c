@@ -1,11 +1,14 @@
-/* func_00325DA0 (284 bytes, 7 places) - M27 near miss: 276/284 B, -G8 unit (00325DA0-g8.c).
+/* func_00325DA0 (284 bytes, 7 places) - near miss: 280/284 B in a -G8 unit (00325DA0-g8.c).
  *
- * The goto loop (jump to the test, no loop.c hoisting) gives retail's shape: the byte
+ * M27: the goto loop (jump to the test, no loop.c hoisting) gives retail's shape: the byte
  * offset computed before the loop with the sra/sll inside it, the moby base and the
- * D_001EE5A0 row re-read each pass, the $gp read of D_001B1B78. Two words are missing:
- * retail copies the slot argument to $a2 at entry (D_001B1688 is read into $a1) and
- * tests the group through `andi $v1,$a3,0xFF`, where $a3 is the group byte loaded at
- * the end of each pass (a PRE copy). A u8/int group local makes it worse (272 B).
+ * D_001EE5A0 row re-read each pass, the $gp read of D_001B1B78.
+ * M37: a group local g, set before the jump to the test and at the end of each pass, gives
+ * retail's entry copy of the slot argument to $a2 (D_001B1688 in $a1): 276 -> 280 B.
+ * Still missing: retail tests g through `andi $v1,$a3,0xFF` and reloads m->group for the
+ * <= D_001B1B78 bound and the row index (here both reuse g); retail also copies the first
+ * group load into $a3 at the top. Any s8/s16/s32/u16/u32 g, a (u8) cast, or setting g at
+ * the top instead is no closer (268-288 B).
  */
 #include "common.h"
 
@@ -32,6 +35,7 @@ void func_00325DA0(Moby_325DA0 *m, s32 *slot)
     u16 *list;
     Moby_325DA0 *o;
     s32 off;
+    u8 g;
 
     if (*slot == D_001B1688[0]) return;
     if (m->group == 0xFF) {
@@ -39,14 +43,16 @@ void func_00325DA0(Moby_325DA0 *m, s32 *slot)
     } else {
         off = (char *)slot - (char *)m->pvar;
         list = D_001EE5A0[m->group];
+        g = m->group;
         goto test;
     body:
         o = &D_001B1B5C[0][*list & 0x7FFF];
         if (o == 0) goto done;
         if (o->team == m->team) o->pvar[off >> 2] = D_001B1688[0];
+        g = m->group;
         list++;
     test:
-        if (m->group != 0xFF && m->group <= D_001B1B78 && list != 0
+        if (g != 0xFF && m->group <= D_001B1B78 && list != 0
             && ((s16)list[-1] >= 0 || list == D_001EE5A0[m->group])) goto body;
     }
 done:

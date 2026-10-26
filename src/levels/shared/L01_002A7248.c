@@ -470,7 +470,6 @@ float func_L01_003377C8(unsigned char *a0) {
 
 INCLUDE_ASM("asm/levels", func_L01_00337888);
 
-INCLUDE_ASM("asm/levels", func_L01_00337A60);
 
 
 

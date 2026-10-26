@@ -414,7 +414,6 @@ void func_L02_003CD4A8(struct L02GroupObject *arg0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003CD758);
 
 extern int D_L02_001B35B8 __attribute__((sda));
 
