@@ -254,7 +254,6 @@ void func_L00_003F0130(char *obj)
 
 INCLUDE_ASM("asm/levels", func_L00_003F0198);
 
-INCLUDE_ASM("asm/levels", func_L00_003F0680);
 
 extern char *D_L00_001B2BB8 __attribute__((sda));
 
@@ -678,7 +677,6 @@ INCLUDE_ASM("asm/levels", func_L00_003F4210);
 
 INCLUDE_ASM("asm/levels", func_L00_003F4C68);
 
-INCLUDE_ASM("asm/levels", func_L00_003F4EC8);
 
 /* Computes two sub-record addresses of a 192-byte block and hands three of its sub-records to four helpers, threading a second argument through two of them. */
 void func_L00_003F51A0(char *obj, char *arg)

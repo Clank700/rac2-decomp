@@ -1,16 +1,4 @@
-/*
- * Retained manual near miss; not linked or counted.
- * Final measured profile: -O2 -G0 -ffunction-sections.
- * Final C / retail: 724 / 724 bytes.
- * us:0/27 placements, exit1; us2:0/27 placements, exit1.
- * pal: absent from catalogue, exit1; absence is not a match.
- * 3 bounded source/profile trials; three natural source forms tie.
- * Equal724-byte size and0x70 frame; first difference+0x54. The compiler merges the two identical closing calls that retail keeps separate; loop increment/branch scheduling also differs. Three natural if/switch forms tie.
- * Reopen only with: An independently qualified tail-merge rule or real original control-flow witness; no artificial source block barrier.
- * Measured in the dedicated src unit before its marker/profile were restored; this body is retained unchanged modulo this comment.
- * Historical draft and trial variants remain private. Behavior and strict linked equality remain unverified.
- */
-
+#include "include_asm.h"
 #include "common.h"
 
 typedef int MovingEffectWord128 __attribute__((mode(TI)));
@@ -65,14 +53,18 @@ void func_L00_003F4EC8(unsigned char *object) {
         if (*(float *)(object + 0x10) < 5.0f) *(float *)(object + 0x10) = 5.0f;
         if (*(float *)(object + 0x14) < 5.0f) *(float *)(object + 0x14) = 5.0f;
         if (*(float *)(object + 0x18) < 5.0f) *(float *)(object + 0x18) = 5.0f;
-        if (*(float *)(object + 0x10) > 1016.0f) *(float *)(object + 0x10) = 1016.0f;
-        if (*(float *)(object + 0x14) > 1016.0f) *(float *)(object + 0x14) = 1016.0f;
-        if (*(float *)(object + 0x18) > 1016.0f) *(float *)(object + 0x18) = 1016.0f;
-    } else if (!func_L00_003F5238(object, &previous) && !func_00282948(state + 0x10)) {
+        {
+            float hi = 1016.0f;
+            if (*(float *)(object + 0x10) > hi) *(float *)(object + 0x10) = hi;
+            if (*(float *)(object + 0x14) > hi) *(float *)(object + 0x14) = hi;
+            if (*(float *)(object + 0x18) > hi) *(float *)(object + 0x18) = hi;
+        }
+        object[0x20] = 2;
+    } else if (func_L00_003F5238(object, &previous) || func_00282948(state + 0x10)) {
+        object[0x20] = 2;
+    } else {
         func_L00_003F5660(object);
-        return;
     }
-    object[0x20] = 2;
     break;
     }
 }

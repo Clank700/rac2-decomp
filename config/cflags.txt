@@ -1071,3 +1071,6 @@ src/game/002D84B0.c	-O2 -G0 -ffunction-sections
 src/game/00338AD8.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L02_002EF388.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L00_002A6DD0.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_003F4EC8.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_003F0680.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_002A61C8.c	-O2 -G0 -ffunction-sections

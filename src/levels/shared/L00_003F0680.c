@@ -1,3 +1,6 @@
+#include "include_asm.h"
+#include "common.h"
+
 typedef struct { float x, y, z, w; } Vector;
 typedef struct {
     Vector position, direction;
@@ -7,7 +10,7 @@ typedef struct {
     int colorStart, color, colorEnd, unused70, state, kind;
     char *owner;
 } Effect;
-extern Effect *D_L00_001B2BB8 __attribute__((sda));
+extern Effect *D_L00_001B2BB8 MACRO_ADDR;
 extern void func_00282C88(void *);
 extern float func_00283CE0(int);
 extern int func_00283CF0(float);
@@ -31,7 +34,7 @@ void func_L00_003F0680(char *owner)
     i = 0;
     func_00282C88(&displacement);
     for (; i < 320; i++) {
-        record = &D_L00_001B2BB8[i];
+        record = (Effect *)(i * sizeof(Effect) + (unsigned int)D_L00_001B2BB8);
         if (record->owner == owner) {
             numerator = func_00283CE0(record->remaining);
             denominator = func_00283CE0(record->duration);
@@ -49,8 +52,7 @@ interpolate:
                     record->spin = record->spinStart + (record->spinEnd - record->spinStart) * fraction;
                     record->offset = record->offsetStart + (record->offsetEnd - record->offsetStart) * fraction;
                     record->size = record->sizeStart + (record->sizeEnd - record->sizeStart) * fraction;
-                    curve = func_002A7798(fraction);
-                    func_00282F20(&displacement, &record->direction, record->scale * curve);
+                    func_00282F20(&displacement, &record->direction, record->scale * func_002A7798(fraction));
                 } else {
                     func_00282F20(&displacement, &record->direction, record->scale);
                 }
@@ -64,34 +66,37 @@ interpolate:
             record->phase = func_00283B98(record->phase, record->spin);
             if (*(unsigned char *)(object + 0x20) == 2 && *(int *)(data + 0x14) < 38 && record->kind != 2) {
                 record->state = 1;
-                record->duration = func_002A7820(30, 45);
+                record->duration = record->remaining = func_002A7820(30, 45);
                 record->sizeStart = record->size;
                 record->colorStart = record->color;
                 record->offsetStart = record->offset;
                 record->initialCount = record->count;
                 record->spinStart = record->spin;
-                record->remaining = record->duration;
             }
             if (func_00282948(&record->remaining) != 0) {
                 if (record->state == 0) {
                     record->state = 1;
-                    record->remaining = record->kind == 1 ? 30 : 55;
-                    record->duration = record->remaining;
-                } else if (record->count < 1) {
-                    (*(int *)(record->owner + 0x38))--;
-                    if (record->kind == 0)
-                        (*(int *)(record->owner + 0x40))--;
-                    else {
-                        if (record->kind != 1) {
-                            record->owner = 0;
-                            goto next;
-                        }
-                        (*(int *)(record->owner + 0x44))--;
+                    if (record->kind == 1) {
+                        record->duration = 30;
+                        record->remaining = 30;
+                    } else {
+                        record->duration = 55;
+                        record->remaining = 55;
                     }
-                    record->owner = 0;
-                } else {
+                } else if (record->count > 0) {
                     record->state = 2;
                     record->count--;
+                } else {
+                    (*(int *)(record->owner + 0x38))--;
+                    switch (record->kind) {
+                    case 0:
+                        (*(int *)(record->owner + 0x40))--;
+                        break;
+                    case 1:
+                        (*(int *)(record->owner + 0x44))--;
+                        break;
+                    }
+                    record->owner = 0;
                 }
             }
         }
