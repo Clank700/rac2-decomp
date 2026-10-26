@@ -3,7 +3,7 @@ typedef unsigned char u8;
 typedef unsigned int u32;
 typedef unsigned long long u64;
 typedef struct { float vertex[4][4]; u32 color[4]; float uv[8]; u64 reserved,texture,setup,state; } QuadPacket;
-extern void ref_L02_00422BB8_00(char *);
+extern void ref_L11_0045A3C8_00(char *);
 extern u64 func_0027C878(int);
 extern int func_002A7820(int,int);
 extern float func_00283248(float,float);
@@ -28,7 +28,7 @@ void func_L11_0045A3C8(u8 *object)
     u8 *state=*(u8 **)(object+0x68);
     float size;
     u32 color;
-    ref_L02_00422BB8_00((char *)&packet);
+    ref_L11_0045A3C8_00((char *)&packet);
     packet.texture=func_0027C878(11);
     packet.setup=0xFF9000000260ULL;
     packet.state=0x8000000048ULL;

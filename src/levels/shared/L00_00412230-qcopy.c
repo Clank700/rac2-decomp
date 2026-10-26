@@ -63,6 +63,9 @@ void func_L00_00417868(char *object, char *state) {
 }
 
 
+extern void ref_L05_00430318_00(void *, void *, void *, void *, void *, float);
+extern void ref_L05_00430318_01(void *, int, void *, int);
+
 void func_L05_00430318(char *object, char *state) {
     CurveVector points[25];
     CurveVector start, end, jitter;
@@ -74,7 +77,7 @@ void func_L05_00430318(char *object, char *state) {
         end.word = *(CurveWord128 *)(state + 0x10);
         func_00282CC0(&start, &start, state + 0x20);
         func_00282CC0(&end, &end, state + 0x30);
-        ref_L00_00417868_00(&points[i], state + 0x20, state + 0x30, &start, &end, t);
+        ref_L05_00430318_00(&points[i], state + 0x20, state + 0x30, &start, &end, t);
         jitter.values[3] = 0;
         jitter.values[0] = func_002A7878(-1.0f, 1.0f);
         jitter.values[1] = func_002A7878(-1.0f, 1.0f);
@@ -83,7 +86,7 @@ void func_L05_00430318(char *object, char *state) {
         func_00282CC0(&points[i], &points[i], &jitter);
     }
     if (*(int *)(state + 0x98) >= 10)
-        ref_L00_00417868_01(object, func_002A7820(0x40, 0x80), points, 25);
+        ref_L05_00430318_01(object, func_002A7820(0x40, 0x80), points, 25);
     else
-        ref_L00_00417868_01(object, func_002A7820(0, 0x40), points, 25);
+        ref_L05_00430318_01(object, func_002A7820(0, 0x40), points, 25);
 }

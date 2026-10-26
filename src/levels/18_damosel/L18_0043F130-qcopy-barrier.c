@@ -11,7 +11,7 @@ typedef union { TI128 q; float f[4]; } CurveVector;
 extern void func_00282CC0(void *, void *, void *);
 extern float func_00283CE0(int);
 /* The five-pointer/one-FP interpolation leaf differs between programs. */
-extern void ref_L11_00397C08_00(void *, void *, void *, void *, void *, float);
+extern void ref_L18_0043F130_00(void *, void *, void *, void *, void *, float);
 extern float func_002A7878(float, float);
 extern void func_00282F20(void *, void *, float);
 extern void func_00282CF0(void *, void *, void *);
@@ -27,7 +27,7 @@ void func_L18_0043F130(CurveVector *points, int count, CurveVector *control, flo
     func_00282CC0(&second, &second, &control[1]);
     inverse = 1.0f / func_00283CE0(count - 2);
     for (i = 0; i < count - 1; i++) {
-        ref_L11_00397C08_00(&points[i], &control[0], &control[1], &first, &second, func_00283CE0(i) * inverse);
+        ref_L18_0043F130_00(&points[i], &control[0], &control[1], &first, &second, func_00283CE0(i) * inverse);
         if (i > 0 && i < count - 2) {
             jitter.f[3] = 0.0f;
             jitter.f[0] = func_002A7878(-1.0f, 1.0f);

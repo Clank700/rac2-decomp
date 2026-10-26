@@ -287,7 +287,7 @@ INCLUDE_ASM("asm/levels", func_L00_003E6778);
 INCLUDE_ASM("asm/levels", func_L00_003E6C10);
 
 extern char *D_L00_001B2BB8 __attribute__((sda));
-extern void ref_L00_003F09A0_00(char *rec, float f1, int a1, int a2, int a3,
+extern void ref_L00_003E6F48_01(char *rec, float f1, int a1, int a2, int a3,
                                 float f2, int a4, float f3);
 
 /* Same body as func_L00_003F09A0, with this function's own callees. */
@@ -300,7 +300,7 @@ void func_L00_003E6F48(char *obj)
     for (i = 0; i < 320; i++) {
         rec = (char *)(i * 128 + (int)ref_L00_003E6F48_00);
         if (*(int *)(rec + 0x7C) == (int)obj)
-            ref_L00_003F09A0_00(rec, *(float *)(rec + 0x48), *(int *)(rec + 0x68),
+            ref_L00_003E6F48_01(rec, *(float *)(rec + 0x48), *(int *)(rec + 0x68),
                                 *(int *)(rec + 0x60), 46, *(float *)(rec + 0x34),
                                 *(int *)(rec + 0x70), 0.25f);
     }

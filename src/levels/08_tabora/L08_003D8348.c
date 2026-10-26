@@ -229,7 +229,7 @@ typedef int TQ_003F79E0 __attribute__((mode(TI)));
 
 /* func_L08_003F79E0: 124 bytes against retail's 104; the four bound constants take
    different FPRs and the frame grows. Deposited in nonmatching/levels/. */
-INCLUDE_ASM("asm/levels", func_L08_003F79E0);
+/* func_L08_003F79E0 is defined in L08_003F79E0-qcopy-barrier.c. */
 
 INCLUDE_ASM("asm/levels", func_L08_003F7A48);
 
