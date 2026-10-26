@@ -119,7 +119,7 @@ void func_L00_0040DF00(char *object)
 
 INCLUDE_ASM("asm/levels", func_L00_0040DF58);
 
-INCLUDE_ASM("asm/levels", func_L00_0040F6A0);
+/* func_L00_0040F6A0 is in L00_0040F6A0-g16.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_00410178);
 
