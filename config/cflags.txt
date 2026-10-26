@@ -897,3 +897,5 @@ src/game/002BCB00-zero-ti-barrier.c	-O2 -G0 -ffunction-sections -frac2-qcopy -fr
 src/levels/shared/L00_00404168-por.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
 src/levels/11_joba/L11_0042F018-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels
 src/levels/04_barlow/L04_003E2438-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels
+src/levels/02_maktar_nebula/L02_003CB0F0.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/15_gorn/L15_003DBB08.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

@@ -298,7 +298,6 @@ INCLUDE_ASM("asm/levels", func_L02_003CA4A8);
 
 /* func_L02_003CB090 is matched in L02_003CB090.c (built with -mno-split-addresses). */
 
-INCLUDE_ASM("asm/levels", func_L02_003CB0F0);
 
 extern u16 *D_L02_001FC060[];
 

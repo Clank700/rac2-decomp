@@ -1,17 +1,14 @@
-/* Nonmatching (Opus big13, 2026-10-26): 5824/5824 bytes, 1456/1456 opcodes aligned, frame 0xB0.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier (US, 1 place).
- * What moved it from 5532 bytes: case bodies of the second switch in jump-table address order;
+/* func_L15_003DBB08 (5,824 bytes), ported from its twin func_L02_003CB0F0. The last spot, in case 11, was
+ * D_L15_001B2148's absolute macro read (lui $v1; lw $v1 in one register, before the sra of
+ * self): the sda incomplete-array declaration at -G0 gives it (docs/COMPILER-NOTES.md), and
+ * retail compares the table value first.
+ * The shape (big13): case bodies of the second switch in jump-table address order;
  * every state change written out per arm (retail cross-jumps the func_002A7750 tails); hero
  * fields through D_00189E20 directly (no resident pointer, which cost $s5 and the 0xC0 frame);
  * switch statements for the func_002A77E0 choices; retail's compare senses and arm orders;
  * case 10's own contact local and the collision record through L02Collision *col;
  * func_002B1C20 returns int; func_L02_00401530 is (p, p, p, float, float, float, int, int, int);
  * one frame area with two views (union work) for case 21's matrix, as func_L16_0040ECC0 does.
- * Still different (one spot, case 11): retail reads D_L02_001B30C8 with lui/lw in one register
- * before the sra of self (lui v1; lw v1; sra v0); this build schedules lui a0; sra v1; lw v0.
- * sched1 issues the lui and the sra in the same cycle after the call; tried: operand order,
- * an incomplete-array declaration, -mno-split-addresses (worse elsewhere).
- * Twin: func_L15_003DBB08 (F21, same size) once this matches.
  */
 #include "common.h"
 typedef int Quad __attribute__((mode(TI)));
@@ -20,9 +17,9 @@ struct L02NearObject;
 struct L02GroupObject;
 extern char D_00189E20[] NOT_SDA;
 typedef struct { char pad[0x18]; char *hit; int count; } L02Collision;
-extern L02Collision D_L02_001C0940;
-extern char *D_L02_001FF1C0[];
-extern int D_L02_001B30C8[];
+extern L02Collision D_L15_001BFC00;
+extern char *D_L15_001FE480[];
+extern int D_L15_001B2148[] __attribute__((sda));
 extern int func_L02_003CC7B0(char *), func_L02_003CCFE8(char *, void *);
 extern void func_L02_003CCCC8(char *), func_L02_003CCEA0(char *), func_L02_003CD1E8(char *, void *), func_L02_003CD758(char *);
 extern void func_L02_003CD298(struct L02NearObject *), func_L02_003CD4A8(struct L02GroupObject *), func_L02_003CED70(char *, void *, void *);
@@ -46,7 +43,7 @@ typedef struct {
     u8 gap_e0[0x21B0]; char *pointer_2290; u8 gap_2294[8]; int mode_229c;
     u8 gap_22a0[0x1FC]; char *pointer_249c;
 } L02_ResidentCombatPrefix;
-void func_L02_003CB0F0(char *self) {
+void func_L15_003DBB08(char *self) {
     /* One frame area, two layouts: the aiming states and the case-21 hand-off. */
     union {
         struct { Vector muzzle, velocity, acceleration, transform[4]; } aim;
@@ -193,8 +190,8 @@ void func_L02_003CB0F0(char *self) {
         if (!*(short *)(state + 0x378) && *(u16 *)(self + 0x96) > 15) {
             func_0029FCC0(*(char **)(state + 0x370), 0, (char *)&work.aim.muzzle);
             contact = func_002761F8(&work.aim.muzzle, &((L02_ResidentCombatPrefix *)D_00189E20)->target_d0, 16, self, 0);
-            if (contact && D_L02_001C0940.hit && *(short *)(D_L02_001C0940.hit + 0xAA) == 0xC1B) { { func_002A7750((u8 *)self, 13, -1); break; } break; }
-            if (contact && (col = &D_L02_001C0940)->hit != ((L02_ResidentCombatPrefix *)D_00189E20)->pointer_2290 && !*(short *)(state + 0x386)) {
+            if (contact && D_L15_001BFC00.hit && *(short *)(D_L15_001BFC00.hit + 0xAA) == 0xC1B) { { func_002A7750((u8 *)self, 13, -1); break; } break; }
+            if (contact && (col = &D_L15_001BFC00)->hit != ((L02_ResidentCombatPrefix *)D_00189E20)->pointer_2290 && !*(short *)(state + 0x386)) {
                 if (!col->hit || (!func_002ABB78(col->hit) && (!*(char **)(col->hit + 0x24) || *(short *)(*(char **)(col->hit + 0x24) + 0x46) != 22))) break;
             }
             { func_002A7750((u8 *)self, 11, -1); break; }
@@ -219,7 +216,7 @@ void func_L02_003CB0F0(char *self) {
             qcopy(state + 0x360,state + 0x1F0); *(float *)(state + 0x368) += 0.5f;
         }
         func_L02_003CCEA0(self);
-        if ((((int)self >> 8) & 15) == (D_L02_001B30C8[0] & 15))
+        if ((D_L15_001B2148[0] & 15) == (((int)self >> 8) & 15))
  func_L02_003CD4A8((struct L02GroupObject *)self);
         if (func_002AEB60(self, 5)) {
             func_0029FCC0(*(char **)(state + 0x370), 0, (char *)&work.aim.muzzle);
@@ -235,7 +232,7 @@ void func_L02_003CB0F0(char *self) {
         if (!(((u8 *)self)[0x60] & 2)) break;
         func_0029FCC0(*(char **)(state + 0x370), 0, (char *)&work.aim.muzzle);
         collision = func_002761F8(&work.aim.muzzle, &((L02_ResidentCombatPrefix *)D_00189E20)->target_d0, 0, self, 0);
-        if (func_00282978((short *)(state + 0x380)) || (collision && D_L02_001C0940.hit != ((L02_ResidentCombatPrefix *)D_00189E20)->pointer_2290)) {
+        if (func_00282978((short *)(state + 0x380)) || (collision && D_L15_001BFC00.hit != ((L02_ResidentCombatPrefix *)D_00189E20)->pointer_2290)) {
             *(short *)(state + 0x378) += 15; { if (!func_002A77E0(3)) func_002A7750((u8 *)self, 12, -1); else func_002A7750((u8 *)self, 13, -1); break; }
         } else {
             angle = func_00283248(*(float *)(state + 0x1F0) - *(float *)(self + 0x10), *(float *)(state + 0x1F4) - *(float *)(self + 0x14));
@@ -284,7 +281,7 @@ void func_L02_003CB0F0(char *self) {
         if (func_002ACBC8(&((L02_ResidentCombatPrefix *)D_00189E20)->position_80, *(int *)(state + 0x324)) || *(int *)(state + 0x204) == 1) { func_002A7750((u8 *)self, 18, -1); break; }
         break;
     case 18:
-        path = D_L02_001FF1C0[*(int *)(state + 0x320)];
+        path = D_L15_001FE480[*(int *)(state + 0x320)];
         if (func_002B3868((u8 *)self)) { if (((u8 *)self)[0x43] != 6) func_002A7470(self, 6, 0, 20); func_002B6318((u8 *)self); }
         if (!(func_00282E80(self + 0x10, path + *(int *)path * 16) < *(float *)(state + 0x134)) && !func_002B6120(self, path)) break;
 
