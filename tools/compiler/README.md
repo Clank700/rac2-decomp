@@ -160,6 +160,15 @@ string and assembler binary remain part of the object-cache key. Empty options
 are rejected, and the tests exercise actual argument transport for both
 frontends, default/explicit profiles, invalid values and unchanged controls.
 
+`no_null_pointer_checks.py` adds `-frac2-no-null-pointer-checks`: the two Cygnus
+`delete_null_pointer_checks` calls in rest_of_compilation are skipped, as GCC 2.95 has neither.
+With `-frac2-keep-block-order` no block count runs before cse, so a call that ends a block whose
+label cse later threads away leaves no `(use (const_int 0))` behind to move through the merged
+block (func_L20_002CD928 case 0x7C). It is off by default, enabled per unit in
+`config/cflags.txt`, and `-fno-rac2-no-null-pointer-checks` disables it;
+`tests/test_no_null_pointer_checks.py` covers the anchors, the default/disabled equality and an
+authored check the pass deletes.
+
 `build.sh` stops unless `mips.c`, `mips.h`, `mips.md`, `toplev.c`, `flags.h`,
 `haifa-sched.c`, `gcse.c`, `flow.c`, `reorg.c` and `tc-mips.c` hash as it
 lists. The binaries' own hashes depend on the build host and path, so check a compiler by its

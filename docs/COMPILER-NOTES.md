@@ -549,11 +549,22 @@ input load. The rule follows GCC fixes from April/August 1999; witnesses include
 | -frac2-gcse-unsplit-edges | Build predecessor/successor lists without Cygnus critical-edge splitting; PRE inserts at the preceding block | func_L02_003E79F8, 352 bytes/1 place; func_002CD720, 340/28 |
 | -frac2-keep-block-order | Skip cygnus_merge_blocks; keep default-last switch body and its branch | func_L18_004283F0, 56 bytes/3 places |
 | Both | Compose the two independent changes | func_L02_003FCCA0 |
+| -frac2-no-null-pointer-checks | Skip the Cygnus delete_null_pointer_checks calls (after jump1 and after the jump pass behind cse); with keep-block-order no block count runs before cse | func_L20_002CD928 case 0x7C, 34,964 bytes/1 place |
 
 Implementations: [gcse_unsplit_edges.py](../tools/compiler/transformers/gcse_unsplit_edges.py),
-[keep_block_order.py](../tools/compiler/transformers/keep_block_order.py). These are
+[keep_block_order.py](../tools/compiler/transformers/keep_block_order.py),
+[no_null_pointer_checks.py](../tools/compiler/transformers/no_null_pointer_checks.py). These are
 inferences from retail and comparison with GCC 2.95, not the recovered original
 patches. A lone lui at a branch target is not a unique signature of edge splitting.
+
+Both Cygnus passes that run before cse (delete_null_pointer_checks and cygnus_merge_blocks,
+one "CYGNUS LOCAL law" block) start with find_basic_blocks, which puts a
+`(use (const_int 0))` after a call that ends a block. When cse then threads a branch past the
+label behind that call, the blocks merge with the no-op still in them; sched1 moves it, and
+local-alloc counts it, so two back-to-back address pseudos stop sharing a register. A
+spawn-and-initialise block ending in a call before a re-test of the new pointer shows it:
+retail has the re-test in the call's block and no no-op effect. Skipping only one of the two
+passes leaves the other's count, so such a unit needs both options.
 
 ### Wide stores and annulled slots
 
@@ -765,6 +776,8 @@ oracle, and a same-size draft screen is not a match or current progress.
 | Copy scheduling | [test_qcopy_barrier.py](../tests/test_qcopy_barrier.py) |
 | Annulled wide stores | [test_no_annulled_wide_stores.py](../tests/test_no_annulled_wide_stores.py) |
 | Stack por form | [test_zero_ti_por.py](../tests/test_zero_ti_por.py) |
+| TImode reload count | [test_ti_one_gpr.py](../tests/test_ti_one_gpr.py) |
+| Null-pointer-check pass | [test_no_null_pointer_checks.py](../tests/test_no_null_pointer_checks.py) |
 | Masks/sign seed | [test_dli_masks.py](../tests/test_dli_masks.py) |
 | Hazard labels | [test_hazard_labels.py](../tests/test_hazard_labels.py), [hazard_labels.s](../tests/fixtures/hazard_labels.s) |
 
