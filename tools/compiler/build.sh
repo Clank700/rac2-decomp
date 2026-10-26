@@ -75,6 +75,7 @@ python3 $T/gcse_store_kills_loads.py gcc/gcse.c
 python3 $T/reload_reg_used_guard.py gcc/reload1.c
 python3 $T/trap_delay_barrier.py gcc/reorg.c
 python3 $T/count_asm_words.py gcc/config/mips/mips.c
+python3 $T/no_recombine_givs.py gcc/loop.c
 sha256sum --check --quiet <<'SUMS'
 f8563063b5311e7ab2b2b29e9959afd6d8d79d017e896724483a3b073837d2da  gcc/config/mips/mips.c
 e25f1a54bfdcc6c96e1c8ba9c9b977f15738ca8554393920e6af33c2d3a3f7bc  gcc/config/mips/mips.h
@@ -87,6 +88,7 @@ feb3bd29dd08e1d1b1db78861d580c55f161a55e63cedd368e873c48bc36982d  gcc/gcse.c
 ba947e44256e3d5144e353a4976aac931a4941acc8dcb1dc0fda99fa8b7b504a  gcc/flow.c
 db9bada977cd0382fb020a845e2e2487c9fdc13dd840fc6e75c3c03021fe8112  gas/config/tc-mips.c
 a790ca0e7cc378af98fa3f942734c7217cc91f2d2db2f6c2d62d69de8780e1e6  gcc/reload1.c
+2f6ffa23d379d620ec38db4e527b2cbd5583865195cd8b364aa2c1ce07433faf  gcc/loop.c
 SUMS
 
 # bison 1.28: the 1999 grammars need its skeleton.
@@ -124,6 +126,7 @@ RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_gcse_store_kills_loads.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_trap_delay_barrier.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_swap_branch_slots.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_count_asm_words.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_no_recombine_givs.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy_barrier.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_no_annulled_wide_stores.py"

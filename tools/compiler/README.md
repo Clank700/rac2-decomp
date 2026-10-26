@@ -30,6 +30,9 @@ The retail code was built with GNU EE-GCC 2.9-ee-991111b. `build.sh` rebuilds it
   fills a reorder-mode delay slot from the previous instruction, as the GNU as that built the
   SDK libraries does (this tree's swap guard reads `&&` for `&` and never swaps). SDK units
   pass it as `-Wa,--r5900-swap-branch-slots` (docs/COMPILER-NOTES.md).
+  `no_recombine_givs.py` drops strength_reduce's call to `recombine_givs` (loop.c), as the
+  gcc-2.95 release branch did, so address givs stay on the giv combine_givs chose, as in
+  retail; it is unconditional too.
   `gcse_unsplit_edges.py` and `keep_block_order.py` add the opt-in
   `-frac2-gcse-unsplit-edges` and `-frac2-keep-block-order`, which leave out two
   Cygnus-local pieces of this tree that GCC 2.95 does not have.

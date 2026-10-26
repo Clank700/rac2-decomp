@@ -711,6 +711,33 @@ and authored controls: without the option every slot gets a `nop`; with it a sto
 a sign extension move into the slot, and a branch that reads the previous result or carries a
 label still gets a `nop`.
 
+### loop: no giv recombination
+
+[no_recombine_givs.py](../tools/compiler/transformers/no_recombine_givs.py) is unconditional:
+it is the real compiler's strength reduction, not an option. After `combine_givs` has chosen the
+reduced giv each address giv is expressed from, this tree's `strength_reduce` (loop.c) calls
+`recombine_givs`, which moves every combined giv onto the most recently set DEST_REG giv it can
+be expressed from and then derives DEST_REG givs from earlier ones. The FSF disabled that call
+for the gcc-2.95 release (`#if 0`, "There are still some problems with giv recombination",
+gcc-patches, June 1999); the development tree this Cygnus snapshot comes from kept it. Retail's
+compiler behaves like the release branch, and the transformer removes the call (the function
+stays, unused).
+
+Retail evidence: `func_00298F00` (7,840 bytes, boot + 27 levels, the memory-card state machine)
+walks the card directory with three reduced pointers, the entry, its name and name + 5, and
+reads the slot digit `entry->name[4]` after the second name compare. Retail reads it as
+`lbu $v0,0x24($s2)` from the entry pointer; this tree recombined the read onto name + 5, the
+pointer set for the call just before it (`lbu $v0,-1($s2)`), and the two pointers swapped
+registers: six instructions at every place, and no spelling moves them, because the name + 5
+giv's last use is the call. Without the call the function matches at all 28 places. Of every
+matched function in `tools/build.py all --strict`, none compiled differently; of the 922
+compilable near-miss drafts in nonmatching/, 9 compile differently, none close to a match.
+The same release-branch change also turned off the biv-to-giv conversion of extra biv
+increments (`n_extra_increment`); that has no retail witness yet and stays on (turning it off
+also changes no matched function). [tests/test_no_recombine_givs.py](../tests/test_no_recombine_givs.py)
+checks the transformer and an authored loop: the digit read stays on the entry pointer
+(`lbu 36(entry)`, not `-1(name + 5)`), and a one-pointer loop is unchanged.
+
 ### Compiler control-flow passes
 
 [tidy_condjump_fallthru.py](../tools/compiler/transformers/tidy_condjump_fallthru.py)
@@ -961,6 +988,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | gcse load kills | [test_gcse_store_kills_loads.py](../tests/test_gcse_store_kills_loads.py) |
 | Division-guard slot barrier | [test_trap_delay_barrier.py](../tests/test_trap_delay_barrier.py) |
 | SDK assembler slot swaps | [test_swap_branch_slots.py](../tests/test_swap_branch_slots.py) |
+| No giv recombination | [test_no_recombine_givs.py](../tests/test_no_recombine_givs.py) |
 | Copies and RTL contract | [test_qcopy.py](../tests/test_qcopy.py), [test_qcopy_rtl.py](../tests/test_qcopy_rtl.py) |
 | Copy scheduling | [test_qcopy_barrier.py](../tests/test_qcopy_barrier.py) |
 | Annulled wide stores | [test_no_annulled_wide_stores.py](../tests/test_no_annulled_wide_stores.py) |
