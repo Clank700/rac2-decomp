@@ -51,7 +51,6 @@ extern int func_002B3BA8(void *, u32, float, float, int, int);
 
 typedef int TI128 __attribute__((mode(TI)));
 
-INCLUDE_ASM("asm/levels", func_L02_0040A4A8);
 
 extern int func_00283CF0(float);
 extern int func_002A77E0(int);

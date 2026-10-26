@@ -88,7 +88,6 @@ void func_L20_004427C8(char *arg0, char *arg1, float f) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L20_00442890);
 
 INCLUDE_ASM("asm/levels", func_L20_004429F0);
 

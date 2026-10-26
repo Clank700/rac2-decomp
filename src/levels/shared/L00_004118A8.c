@@ -1,5 +1,9 @@
-/* near miss (2 instructions): func_L00_004118A8; needs a qcopy unit with the barrier (-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier), which fixes the front. Remaining: the break jump's delay slot holds the 0xBC store here and retail's 0xC0 zero store; no order of the nine tail stores (all 720 of the last six, 2,500 of all nine) or zero-store type moves it. */
 #include "common.h"
+
+/* func_L00_004118A8: own unit for -frac2-qcopy -frac2-qcopy-barrier.
+ * The tail store order follows sched1 register weight: the stk store is the last use of slot,
+ * so it carries the pointer death and goes first; the two t2 stores and the zero store keep
+ * source order otherwise, which leaves the 0xC0 zero store for the break jump delay slot. */
 
 /* A -frac2-qcopy unit: the two 16-byte vectors copied into the record are lq/sq pairs. */
 
@@ -47,7 +51,6 @@ void func_L00_004118A8(char *owner, int a1, int a2, char *pos, char *vel, int t1
         *(float *)(slot + 0xA4) = func_002A7878_2(3.25f, 4.75f);
         func_00282C88_1(slot);
         func_00282C88_1(slot + 0x10);
-        *(int *)(slot + 0xCC) = stk;
         *(int *)(slot + 0xB0) = a2;
         *(int *)(slot + 0xB4) = a1;
         *(int *)(slot + 0xC4) = t1;
@@ -56,6 +59,7 @@ void func_L00_004118A8(char *owner, int a1, int a2, char *pos, char *vel, int t1
         *(int *)(slot + 0xB8) = t2;
         *(int *)(slot + 0xA8) = t3;
         *(int *)(slot + 0xC0) = 0;
+        *(int *)(slot + 0xCC) = stk;
         break;
     }
 }
