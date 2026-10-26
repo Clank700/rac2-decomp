@@ -213,7 +213,6 @@ void func_L00_004117B8(char *a0)
 
 INCLUDE_ASM("asm/levels", func_L00_00411B30);
 
-INCLUDE_ASM("asm/levels", func_L00_00411F48);
 
 /* resets a state record: zero words, plus/minus one float flags and two 64-bit fields in the retail store order */
 void func_L00_00412088(char *p)

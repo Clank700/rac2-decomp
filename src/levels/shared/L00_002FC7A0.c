@@ -218,7 +218,6 @@ void func_L00_002FC7A0(void)
 
 INCLUDE_ASM("asm/levels", func_L00_002FC980);
 
-INCLUDE_ASM("asm/levels", func_L00_002FCF18);
 
 void func_L00_002FD308(unsigned long long argument)
 {
@@ -988,7 +987,6 @@ void func_L00_00310048(void)
 }
 
 
-INCLUDE_ASM("asm/levels", func_L00_00310748);
 
 /* rac1-decomp src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8 */
 void func_L00_00310838(unsigned char *a, int dx, int dy) {

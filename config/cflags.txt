@@ -1000,3 +1000,7 @@ src/levels/shared/L00_003FC468-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy 
 src/levels/shared/L00_002B4208.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L00_002A75D8.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
 src/levels/shared/L00_0042A520-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/shared/L00_003FC108.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/shared/L00_003A9798.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_00310748.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/shared/L00_002FCF18.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
