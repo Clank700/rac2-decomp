@@ -19,9 +19,8 @@ extern void func_324560(char *a0);
 extern void func_L11_00441978(s32 a0, int a1);
 extern void func_323688(char *a0, char *a1);
 extern void func_00282A60(char *a0, int a1, int a2);
-extern void func_L11_00449330();
-
 typedef int TI128 __attribute__((mode(TI)));
+extern void func_L11_00449330(char *self, TI128 *pos);
 extern char *func_3224B0(int a0);
 extern void func_324F00(char *a0);
 extern void func_3362A8(char *a0, s32 a1, int a2, int a3);
@@ -36,11 +35,6 @@ extern void func_32EB98(void *a0, void *a1);
 extern s32 func_441868(s32 a0, s32 a1);
 extern s32 func_33C800(char *a0, s32 a1, s32 a2, s32 a3, float f12, float f13);
 
-extern void func_31EA58(char *, float, float);
-extern void func_002F1F70(void *, void *, void *);
-extern void func_0032B468(char *, int, char *, char *, int, int, float *, void *, void *, float);
-extern void func_003144D8(char *);
-extern char D_L02_001A8F20[] __attribute__((sda));
 
 INCLUDE_ASM("asm/levels", func_L11_004465F8);
 
@@ -267,23 +261,8 @@ void func_L11_004492A0(char *a0)
     *(s32 *)(*(char **)((char *)(long)*(s32 *)(s0 + 0x354) + 0x68) + 0x3C) = 1;
 }
 
-void func_L11_00449330(char *self, TI128 *pos) {
-    char *state = *(char **)(self + 0x68);
-    float copy[4];
-    float vec[4];
-
-    *(TI128 *)copy = *pos;
-    if (*(unsigned char *)(self + 0x31) != 0) {
-        func_31EA58((char *)vec, 0.10000000894069672f, 0.16666667163372040f);
-        func_002F1F70(vec, vec, D_L02_001A8F20);
-        func_0032B468(self, 0x9D8, *(char **)(state + 0x354) + 0x10, *(char **)(state + 0x354) + 0xF0,
-                    0, 0, vec, D_L02_001A8F20, D_L02_001A8F20, 0.0027777778450399637f);
-    }
-    func_003144D8(*(char **)(state + 0x354));
-    *(char **)(state + 0x354) = 0;
-}
-
-
+/* func_L11_00449330 is in L11_00449330.c: PAL's level 11 has other code at its place,
+   so the calls to it from this unit go through its symbol. */
 
 void func_L11_004496A0(char *object, int mode, int active) {
     char *state = *(char **)(object + 0x68);
