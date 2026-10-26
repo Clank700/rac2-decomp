@@ -851,5 +851,3 @@ void func_002C7538(char *a0)
     if (Fc3cb9262_FUN_00282978(a0 + 10) != 0)
         Fc3cb9262_FUN_002B9180(a0);
 }
-
-INCLUDE_ASM("asm/game", func_002C7620);

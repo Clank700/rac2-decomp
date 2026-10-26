@@ -58,7 +58,6 @@ INCLUDE_ASM("asm/levels", func_L00_002F59A8);
 
 INCLUDE_ASM("asm/levels", func_L00_002F7298);
 
-INCLUDE_ASM("asm/levels", func_L00_002F74F0);
 
 /* rac1-decomp src/core/00119D88.c: func_0011CCB0 */
 /* Returns its callee's value: retail keeps the frame and calls, and

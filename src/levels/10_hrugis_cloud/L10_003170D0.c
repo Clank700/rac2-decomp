@@ -150,7 +150,6 @@ void func_L10_004175C8(u8 *arg0) {
 }
 
 
-INCLUDE_ASM("asm/levels", func_L10_004177E8);
 
 /* func_L10_00417A38 uses the profile in L10_003170D0-qcopy.c. */
 
