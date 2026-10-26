@@ -121,7 +121,6 @@ void func_L09_003C8CD8(unsigned char *a0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L09_003CBB18);
 
 /* Two-state step of a scripted record: while the state byte is clear a random
    duration in 150..200 is drawn and the record is marked active; in the active

@@ -82,7 +82,6 @@ INCLUDE_ASM("asm/levels", func_L04_003EE090);
 
 INCLUDE_ASM("asm/levels", func_L04_003EE7C0);
 
-INCLUDE_ASM("asm/levels", func_L04_003F1388);
 
 void func_L04_003F5F30(unsigned char *a0) {
     unsigned char *obj = *(unsigned char **)(a0 + 0x68);

@@ -31,7 +31,6 @@ INCLUDE_ASM("asm/levels", func_L07_003844C0);
 
 INCLUDE_ASM("asm/levels", func_L07_003848D8);
 
-INCLUDE_ASM("asm/levels", func_L07_003BA4D0);
 
 extern unsigned short *D_L07_001FAD60[];
 

@@ -60,7 +60,6 @@ extern void func_L11_003F3CB8(u8 *arg0);
 
 INCLUDE_ASM("asm/levels", func_L11_003D6270);
 
-INCLUDE_ASM("asm/levels", func_L11_003D90C0);
 
 INCLUDE_ASM("asm/levels", func_L11_003DCEB0);
 

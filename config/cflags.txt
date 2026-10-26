@@ -810,3 +810,15 @@ src/levels/13_boldan/L13_002CEF00-state-g8.c	-O2 -G8 -ffunction-sections -g -fra
 src/levels/00_aranos_tutorial/L00_002C42E0-state-g8.c	-O2 -G8 -ffunction-sections -g -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
 src/levels/12_todano/L12_002C8BD0-state-g8.c	-O2 -G8 -ffunction-sections -g -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
 src/levels/20_yeedil/L20_002D7730-state-g8.c	-O2 -G8 -ffunction-sections -g -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/00_aranos_tutorial/L00_003C5B88-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/01_oozla/L01_003C53D8-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/02_maktar_nebula/L02_003DEDA0-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/03_endako/L03_003D5788-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/shared/L04_003F1388-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/05_feltzin_system/L05_003D8E98-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/06_notak/L06_0040C270-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/shared/L07_003BA4D0-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/shared/L08_003DE5E8-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/09_dobbo/L09_003CBB18-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/11_joba/L11_003D90C0-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
+src/levels/12_todano/L12_003CC140-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard-labels
