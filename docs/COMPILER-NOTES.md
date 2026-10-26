@@ -725,6 +725,7 @@ Patch 0052 selects bounded R5900 dli value classes:
 | Sign bit plus contiguous low run of at least 32 ones | Existing sign-extending lui path |
 | Positive contiguous run wider than 32 bits, zero at both ends | Shift construction: three instructions for 0x0FFFFFFFFFFFFFFE instead of seven |
 | Runs at most 32 bits, holes, neighbouring masks | Preserve previous paths; 20-bit 0x00FFFFF000000000 must stay unchanged |
+| Top 16 bits all ones, hi32 not 0xFFFFFFFF, not -1 << k (patch 0060) | First field is a sign-extending lui of the 16 bits ending at the lowest bit of the leading run of ones; the next shift is 16 shorter. 0xFFFF0000FFFF0000 becomes lui 0x8000; dsll 1; ori 0xFFFF; dsll 16 (was ori 0xFFFF; dsll32 0; ori 0xFFFF; dsll 16) |
 
 The selector uses unsigned arithmetic without division/undefined shifts and is
 keyed to a value class, never a game address or function. SDK-profile witnesses:
@@ -743,6 +744,16 @@ creates the real store dependence for rounding and the bnel fraction-store slot.
 The scalar simplification lost that dependence; barriers/pins are not a remedy.
 Four existing users retained identical object sections. Disabling sched1 fixed
 only the tail and grew it to 688 bytes; disabling sched2 changed the prologue.
+
+Patch 0060's evidence is one compiled constant: the lockB mask 0xFFFF0000FFFF0000 in
+`func_0030A348` (boot) and its 27 level copies (family F4, 28 occurrences), GCC output by
+its frame, delay-slot filling and $gp loads, next to the lockA mask 0x0000FFFF0000FFFF that
+already matched. A scan of every boot and level text for 64-bit ori/lui/dsll chains finds no
+other compiled constant in the class, so nothing else changes (`build.py all --strict` 28/28).
+The only other lui-led chains are hand-written (`ASM_FUNC`) or the SDK's `__pack_d`, outside
+the class. The rule is the one rac1's ps2eeas model (tools/ps2eeas_dli.py, checked against
+871 assembler outputs) uses for the same class. Values with hi32 0xFFFFFFFF keep the old
+path: retail's 0xFFFFFFFF00FFFFFF is addiu -1; dsll 16; ori 0xFF; dsll 16; ori 0xFFFF.
 
 Two sign-bit loads need a zero-extending seed. Patch 0059 exposes per-object
 `--r5900-sign-bit=unsigned`; pass it with `-Wa,--r5900-sign-bit=unsigned` in the
@@ -816,7 +827,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 Copy controls cover volatile/unaligned/scalar/quadword memory, calls, integer/FP
 branches, loop placement and complete pairs outside slots. Clear controls cover
 shared/live/returned zeros and signed displacements. The mask test covers 465
-positive long-run intervals in four registers plus 30 boundary controls: 1,980
+positive long-run intervals in four registers plus 32 boundary controls: 1,988
 outputs in each default/signed/unsigned profile.
 
 Historical same-source scopes measured on 21 October 2026, not current totals:
