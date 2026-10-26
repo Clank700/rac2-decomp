@@ -679,7 +679,7 @@ void func_L02_0042E2F8(u8 *a0) {
 
 /* func_L02_0042E680 is matched in L02_0042E680.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
-INCLUDE_ASM("asm/levels", func_L02_0042E988);
+/* func_L02_0042E988 is defined in L02_0042E988-flags-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L02_004388A0);
 

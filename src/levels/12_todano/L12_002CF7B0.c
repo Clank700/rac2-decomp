@@ -21,7 +21,7 @@ INCLUDE_ASM("asm/levels", func_L12_0035A838);
 /* func_L12_00388038 is in the sibling file L12_002CF7B0-g8.c: its body
    reads a small-data global through $gp. */
 
-INCLUDE_ASM("asm/levels", func_L12_00388090);
+/* func_L12_00388090 is defined in L12_00388090-flags-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L12_00389988);
 

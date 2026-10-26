@@ -1,6 +1,6 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/levels", func_L01_002ADDC8);
+/* func_L01_002ADDC8 is defined in L01_002ADDC8-flags.c. */
 
 INCLUDE_ASM("asm/levels", func_L01_002B5218);
 

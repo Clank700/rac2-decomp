@@ -3,7 +3,7 @@
 
 INCLUDE_ASM("asm/levels", func_L19_002A88C8);
 
-INCLUDE_ASM("asm/levels", func_L19_002B0148);
+/* func_L19_002B0148 is defined in L19_002B0148-flags.c. */
 
 INCLUDE_ASM("asm/levels", func_L19_002B5BF0);
 

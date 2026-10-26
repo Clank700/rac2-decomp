@@ -211,7 +211,7 @@ void func_L01_002C1988(unsigned long x) {
         func_002BEB90(0, mode);
 }
 
-INCLUDE_ASM("asm/levels", func_L01_002C2CF0);
+/* func_L01_002C2CF0 is defined in L01_002C2CF0-keep-block-order.c. */
 
 INCLUDE_ASM("asm/levels", func_L01_002C81D0);
 
@@ -310,7 +310,7 @@ void func_L01_00316C48(void *a0, void *a1, void *a2, void *a3, void *t0) {
     func_002E3470(a1, v, a2);
 }
 
-INCLUDE_ASM("asm/levels", func_L01_00318638);
+/* func_L01_00318638 is defined in L01_00318638-qcopy-barrier.c. */
 
 void func_L01_0031A278(char *a0, float *a1, float f12, float f13, float f14) {
     a1[0] = f12;

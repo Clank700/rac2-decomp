@@ -837,3 +837,17 @@ src/levels/shared/L00_004051C8-g8.c	-O2 -G8 -ffunction-sections -g -frac2-hazard
 src/levels/08_tabora/L08_003D7FB8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/08_tabora/L08_00422578.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/0034E2E0-g8.c	-O2 -G8 -ffunction-sections
+src/levels/03_endako/L03_00384340-g8.c	-O2 -G8 -ffunction-sections -ffast-math
+src/game/002D1E70-g8.c	-O2 -G8 -fno-expensive-optimizations -ffunction-sections -fno-builtin
+src/levels/02_maktar_nebula/L02_0042E988-flags-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L01_00318638-qcopy-barrier.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
+src/levels/shared/L01_002C2CF0-keep-block-order.c	-O2 -G0 -ffunction-sections -frac2-keep-block-order
+src/levels/shared/L05_003CD280-flags-g8.c	-O2 -G8 -ffunction-sections
+src/levels/01_oozla/L01_002ADDC8-flags.c	-O2 -G0 -ffunction-sections
+src/levels/09_dobbo/L09_002AFC90-flags.c	-O2 -G0 -ffunction-sections
+src/levels/07_siberius/L07_002AC078-flags.c	-O2 -G0 -ffunction-sections
+src/levels/19_grelbin/L19_002B0148-flags.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_002ACA08-flags.c	-O2 -G0 -ffunction-sections
+src/levels/12_todano/L12_00388090-flags-g8.c	-O2 -G8 -ffunction-sections
+src/levels/12_todano/L12_00420838-flags-g8.c	-O2 -G8 -ffunction-sections
+src/levels/01_oozla/L01_00412E00-flags-g8.c	-O2 -G8 -ffunction-sections
