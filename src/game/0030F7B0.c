@@ -33,7 +33,6 @@ typedef struct {
 } Vec16_Fc936841d;
 #endif
 
-INCLUDE_ASM("asm/game", func_0030F7B0);
 
 
 extern unsigned char D_0018C0DF;
