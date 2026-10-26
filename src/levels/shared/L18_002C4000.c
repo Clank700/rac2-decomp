@@ -46,7 +46,7 @@ void func_L18_002E4090(BatchA_A18_s32 a0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L18_002E42F8);
+/* func_L18_002E42F8 is defined in L18_002E42F8-flags-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L18_002F1098);
 

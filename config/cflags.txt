@@ -791,3 +791,6 @@ src/levels/01_oozla/L01_002C37C8.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -fra
 src/levels/08_tabora/L08_002D90C8-fn.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -frac2-zero-ti-por -frac2-qcopy -frac2-qcopy-barrier -frac2-hazard-labels
 src/levels/19_grelbin/L19_002CAAB0-fn.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -frac2-zero-ti-por -frac2-qcopy -frac2-qcopy-barrier -frac2-hazard-labels
 src/levels/09_dobbo/L09_002C9738.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -frac2-zero-ti-por -frac2-qcopy -frac2-qcopy-barrier -frac2-hazard-labels
+src/levels/shared/L00_003A2258-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003E9780-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L18_002E42F8-flags-g8.c	-O2 -G8 -ffunction-sections

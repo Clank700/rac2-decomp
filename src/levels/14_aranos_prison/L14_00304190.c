@@ -30,7 +30,53 @@ INCLUDE_ASM("asm/levels", func_L14_00304190);
 
 /* func_L14_00304280 lives in the -g8 sibling file (it reaches a global through $gp). */
 
-INCLUDE_ASM("asm/levels", func_L14_00304588);
+typedef struct {
+    unsigned char pad00[0x34];
+    unsigned short flags;
+    unsigned char pad36[0x68 - 0x36];
+    unsigned int p68;
+    unsigned char pad6C[0xAA - 0x6C];
+    short type;
+} Mob_L14_00304588;
+
+typedef struct {
+    unsigned char pad00[0x30];
+    int mode;
+    unsigned char pad34[0x44 - 0x34];
+    short count;
+    unsigned char pad46[0x18C - 0x46];
+    Mob_L14_00304588 *mobs[1];
+} MobList_L14_00304588;
+
+extern MobList_L14_00304588 ref_L14_00304588_00;
+extern int D_001A79F0 __attribute__((sda));
+extern void func_L00_002FC980(void);
+extern void func_002E64A0(void *);
+extern void func_L00_00326048(void *, void *, int, int, float);
+extern void func_L08_0037E6D8(void);
+extern void func_L03_00326458(int);
+
+/* Walks the level's list of mobs like func_L02_00300CE8; when the game state is 0xE and the
+   list's word at +0x30 is zero it then runs two more calls, the second with the list's word at +0x194. */
+void func_L14_00304588(void) {
+    int i;
+
+    func_L00_002FC980();
+    for (i = 0; i < ref_L14_00304588_00.count; i++) {
+        Mob_L14_00304588 *mob = ref_L14_00304588_00.mobs[i];
+
+        if (mob != 0 && mob->type == 0xE29)
+            mob->flags |= 0x800;
+        if (mob->type == 0xD54)
+            func_002E64A0(mob);
+        if (mob != 0 && mob->type == 0xFA0 && mob->p68 != 0)
+            func_L00_00326048(mob, (unsigned char *)mob->p68 + 0xC, 0x80AAAAD2, 0x80396464, 0.0610865355f);
+    }
+    if (D_001A79F0 == 0xE && ref_L14_00304588_00.mode == 0) {
+        func_L08_0037E6D8();
+        func_L03_00326458(*(int *)((char *)&ref_L14_00304588_00 + 0x194));
+    }
+}
 
 INCLUDE_ASM("asm/levels", func_L14_00328E70);
 

@@ -30,7 +30,51 @@ extern short *D_L09_001FB560[];
 
 INCLUDE_ASM("asm/levels", func_L09_002F8BA0);
 
-INCLUDE_ASM("asm/levels", func_L09_002F8FD8);
+typedef struct {
+    unsigned char pad00[0x34];
+    unsigned short flags;
+    unsigned char pad36[0x68 - 0x36];
+    unsigned int p68;
+    unsigned char pad6C[0xAA - 0x6C];
+    short type;
+} Mob_L09_002F8FD8;
+
+typedef struct {
+    unsigned char pad00[0x30];
+    int mode;
+    unsigned char pad34[0x44 - 0x34];
+    short count;
+    unsigned char pad46[0x18C - 0x46];
+    Mob_L09_002F8FD8 *mobs[1];
+} MobList_L09_002F8FD8;
+
+extern MobList_L09_002F8FD8 ref_L09_002F8FD8_00;
+extern int D_001A79F0 __attribute__((sda));
+extern void func_L00_002FC980(void);
+extern void func_002E64A0(void *);
+extern void func_L00_00326048(void *, void *, int, int, float);
+extern void func_L00_002E6CF0(void *, void *);
+extern void func_L09_002F8BA0(void *);
+
+/* Walks the level's list of mobs like func_L02_00300CE8; when the game state is 9 and the
+   list's word at +0x30 is 1 it queues a callback. */
+void func_L09_002F8FD8(void) {
+    int i;
+
+    func_L00_002FC980();
+    for (i = 0; i < ref_L09_002F8FD8_00.count; i++) {
+        Mob_L09_002F8FD8 *mob = ref_L09_002F8FD8_00.mobs[i];
+
+        if (mob != 0 && mob->type == 0xE29)
+            mob->flags |= 0x800;
+        if (mob->type == 0xD54)
+            func_002E64A0(mob);
+        if (mob != 0 && mob->type == 0xFA0 && mob->p68 != 0)
+            func_L00_00326048(mob, (unsigned char *)mob->p68 + 0xC, 0x80AAAAD2, 0x80396464, 0.0610865355f);
+    }
+    if (D_001A79F0 == 9 && ref_L09_002F8FD8_00.mode == 1)
+        func_L00_002E6CF0(func_L09_002F8BA0, *(void **)((char *)&ref_L09_002F8FD8_00 + 0x194));
+}
 
 
 
