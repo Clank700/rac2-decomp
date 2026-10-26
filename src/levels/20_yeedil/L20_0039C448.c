@@ -36,7 +36,7 @@ INCLUDE_ASM("asm/levels", func_L20_0039C540);
 
 INCLUDE_ASM("asm/levels", func_L20_0039C5D0);
 
-INCLUDE_ASM("asm/levels", func_L20_0039C8C8);
+/* func_L20_0039C8C8 is defined in L20_0039C8C8.c. */
 
 INCLUDE_ASM("asm/levels", func_L20_0039CC10);
 

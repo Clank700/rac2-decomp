@@ -655,7 +655,7 @@ INCLUDE_ASM("asm/levels", func_L11_00444400);
 
 INCLUDE_ASM("asm/levels", func_L11_004456A0);
 
-INCLUDE_ASM("asm/levels", func_L11_00445990);
+/* func_L11_00445990 is defined in L11_00445990-g8.c ($gp accesses). */
 
 /* func_L11_00445B30 is defined in L11_00445B30-g-g8.c. */
 
@@ -707,7 +707,7 @@ s32 func_L11_00445D28(u8 *obj, s32 idx) {
 fail:
     return 0;
 }
-INCLUDE_ASM("asm/levels", func_L11_00445DF8);
+/* func_L11_00445DF8 is defined in L11_00445DF8-g8.c ($gp accesses). */
 
 INCLUDE_ASM("asm/levels", func_L11_00446020);
 

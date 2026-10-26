@@ -776,3 +776,11 @@ src/game/003173B0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-
 src/levels/shared/L22_003A42E8-g8.c	-O2 -G8 -ffunction-sections -fno-gcse
 src/levels/10_hrugis_cloud/L10_003170D0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/22_dobbo_orbit/L22_0040E098-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/11_joba/L11_00445DF8-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges -frac2-keep-block-order
+src/levels/11_joba/L11_00445990-g8.c	-O2 -G8 -ffunction-sections -frac2-gcse-unsplit-edges -frac2-keep-block-order
+src/levels/16_snivelak/L16_00435CE8-g-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/22_dobbo_orbit/L22_0042ACA0-g-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/26_jamming_array/L26_0041C598-g-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/shared/L12_00408368-flags-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L16_00405818-flags-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L16_00414038-flags-g8.c	-O2 -G8 -ffunction-sections
