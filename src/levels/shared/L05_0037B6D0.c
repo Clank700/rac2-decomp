@@ -316,7 +316,7 @@ void func_L05_003D0320(char *obj)
 
 INCLUDE_ASM("asm/levels", func_L05_003D0538);
 
-INCLUDE_ASM("asm/levels", func_L05_003D0728);
+/* func_L05_003D0728 is in the sibling unit L05_003D0728-g8.c. */
 
 void func_L05_003D08C0(float *a0, char *a1)
 {

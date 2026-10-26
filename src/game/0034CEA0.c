@@ -384,7 +384,6 @@ INCLUDE_ASM("asm/game", func_00350240);
 
 INCLUDE_ASM("asm/game", func_00350378);
 
-INCLUDE_ASM("asm/game", func_00350460);
 
 void func_00350590(u8 *a0) {
  a0+=0x50000;

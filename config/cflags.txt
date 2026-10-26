@@ -851,3 +851,5 @@ src/levels/shared/L00_002ACA08-flags.c	-O2 -G0 -ffunction-sections
 src/levels/12_todano/L12_00388090-flags-g8.c	-O2 -G8 -ffunction-sections
 src/levels/12_todano/L12_00420838-flags-g8.c	-O2 -G8 -ffunction-sections
 src/levels/01_oozla/L01_00412E00-flags-g8.c	-O2 -G8 -ffunction-sections
+src/game/002AD0E0-rc2.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/game/00350460-x.c	-O2 -G0 -ffunction-sections
