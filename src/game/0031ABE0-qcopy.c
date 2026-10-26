@@ -1,29 +1,11 @@
-/*
- * Opus near miss (big32), func_0031ABE0 (4,328 B, boot, 1 place).
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
- * 1080/1082 instructions equal (relocation addends aside). The only
- * difference is one swapped pair at the head of case 13 of the state
- * switch: retail schedules `lui $s1,%hi(D_00189E20)` before the flag
- * test and leaves `addiu $s0,$s2,0x10` (the position) in the beqz delay
- * slot; this source gives the reverse. Both are gcse PRE insertions on
- * that block, and sched1 breaks the tie by luid, i.e. by gcse's
- * expression index (first occurrence in the function). Here self+0x10
- * is first recorded in case 5 (index 66) and high(D_00189E20) first
- * appears in case 13 (index 124); retail needs the high part first.
- * Tried without effect: pos/hero locals at the case head, &pos[0],
- * a pointer for the target read, block-scoped locals elsewhere,
- * dropping `case 2`. D_0018C0B0 must be an incomplete array (the scalar
- * form lets its load move over the ticks store). Reopen with a source
- * shape that records the hero high part before the position, or a
- * gcse insertion-order fact from the real compiler.
- */
-typedef unsigned char u8;
-typedef signed char s8;
-typedef short s16;
-typedef unsigned short u16;
-typedef int s32;
-typedef unsigned int u32;
-typedef float f32;
+/* func_0031ABE0 in its own unit: the state routine of a hovering enemy.
+   The steering target the turn calls read is the hero field at 0x2290 (a
+   struct field of D_00189E20, not a separate symbol): its first read, in
+   state 5, records the hero's split high part in gcse's expression table
+   before the position self+0x10, which gives retail's insertion order at
+   the head of state 13. */
+#include "common.h"
+
 typedef unsigned int Quadword __attribute__((mode(TI)));
 typedef union { Quadword q; float v[4]; } Vector;
 
@@ -77,12 +59,13 @@ typedef struct {
 typedef struct {
     u8 pad0000[0x80];
     float pos[4];       /* 0x80 */
-    u8 pad0090[0x240C];
+    u8 pad0090[0x2200];
+    void *f2290;        /* 0x2290 */
+    u8 pad2294[0x208];
     Object *target;     /* 0x249C */
 } HeroView;
 
 extern HeroView D_00189E20;
-extern void *D_0018C0B0[];
 extern char D_001AFAE0[];
 
 extern void func_0026FEB8(const char *, ...);
@@ -210,7 +193,7 @@ void func_0031ABE0(Object *self)
         break;
     case 5:
         vars->ticks++;
-        func_002A7E08(self, D_0018C0B0[0], vars->turn, 0.001f, 0.01f, 0.1f);
+        func_002A7E08(self, D_00189E20.f2290, vars->turn, 0.001f, 0.01f, 0.1f);
         func_002AA3A8((s32)&self->rot[1], 0.0f, (s32)vars->pitch, 0.016666668f, 0.0f, 0.06666667f);
         func_002AA3A8((s32)&self->rot[0], 0.0f, (s32)vars->pitch, 0.016666668f, 0.0f, 0.06666667f);
         {
@@ -229,7 +212,7 @@ void func_0031ABE0(Object *self)
         break;
     case 4:
         vars->ticks++;
-        func_002A7E08(self, D_0018C0B0[0], vars->turn, 0.001f, 0.01f, 0.1f);
+        func_002A7E08(self, D_00189E20.f2290, vars->turn, 0.001f, 0.01f, 0.1f);
         func_002AA3A8((s32)&self->rot[1], 0.0f, (s32)vars->pitch, 0.016666668f, 0.0f, 0.06666667f);
         func_002AA3A8((s32)&self->rot[0], 0.0f, (s32)vars->pitch, 0.016666668f, 0.0f, 0.06666667f);
         ground = func_002A89A8(self->pos, 0, 0.5f);
@@ -251,7 +234,7 @@ void func_0031ABE0(Object *self)
     case 7:
         func_002AA3A8((s32)&self->rot[1], 0.0f, (s32)vars->pitch, 0.016666668f, 0.0f, 0.06666667f);
         func_002833F0(self->basis, self->rot);
-        func_002A7E08(self, D_0018C0B0[0], vars->turn, 0.001f, 0.01f, 0.1f);
+        func_002A7E08(self, D_00189E20.f2290, vars->turn, 0.001f, 0.01f, 0.1f);
         ground = func_002A89A8(self->pos, 0, 0.5f);
         drop = ground - 3.0f;
         if (self->pos[2] - ground > 0.05f) {
