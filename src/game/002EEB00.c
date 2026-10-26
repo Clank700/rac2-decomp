@@ -154,7 +154,6 @@ int func_002EEE50(int tag, unsigned int index, int start, int count)
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002EEED0);
 
 typedef struct StashBlock_r002EEFE0 {
     /* 0x00 */ int   ram;      /* IOP stash RAM address */

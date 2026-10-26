@@ -449,7 +449,6 @@ void func_00335B80(s32 *unused, s32 *dst, s32 *left, s32 *right, f32 scale) {
     dst[3] = func_00283D38(left[3], right[3], scale);
 }
 
-INCLUDE_ASM("asm/game", func_00335C10);
 
 INCLUDE_ASM("asm/game", func_00335C60);
 

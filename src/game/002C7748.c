@@ -453,13 +453,11 @@ int func_002C9C20(void)
 
 /* func_002C9C60 is matched in 002C9C60.c (built with -g). */
 
-INCLUDE_ASM("asm/game", func_002C9C90);
 
 INCLUDE_ASM("asm/game", func_002C9CF8);
 
 INCLUDE_ASM("asm/game", func_002C9E60);
 
-INCLUDE_ASM("asm/game", func_002C9F68);
 
 INCLUDE_ASM("asm/game", func_002CA070);
 

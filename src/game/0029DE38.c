@@ -316,7 +316,6 @@ void func_0029FAE0(void)
     }
 }
 
-INCLUDE_ASM("asm/game", func_0029FB20);
 
 /* Copies an int argument into a 64-byte stack local, scales the float at offset 44 of the first pointer by 1/1024, and runs five helpers over the two pointers and that local buffer. */
 void func_0029FC20(char *p1, int p2, char *p3)

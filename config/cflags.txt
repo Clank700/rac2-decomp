@@ -1135,3 +1135,5 @@ src/game/002CFBE8-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
 src/game/002DCFE8-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
 src/game/002DCB58-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
 src/game/002D6970-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
+src/game/0028AFE8.c	-O2 -G0 -mno-split-addresses -ffunction-sections
+src/game/0028AE88.c	-O2 -G0 -mno-split-addresses -ffunction-sections

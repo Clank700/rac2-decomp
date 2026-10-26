@@ -111,7 +111,6 @@ void func_002923C0(void *param)
 INCLUDE_ASM("asm/game", func_00292408);
 
 
-INCLUDE_ASM("asm/game", func_002925F0);
 
 INCLUDE_ASM("asm/game", func_002926B8);
 
@@ -190,7 +189,6 @@ void func_00293260(int *a0, int a1){
   for (i = 0; i < r->n; i++) r->ent[i] = (int)r + r->ent[i];
 }
 
-INCLUDE_ASM("asm/game", func_002932B8);
 
 INCLUDE_ASM("asm/game", func_002933D0);
 
@@ -274,7 +272,6 @@ void func_002940C0(void)
 
 INCLUDE_ASM("asm/game", func_00294180);
 
-INCLUDE_ASM("asm/game", func_002942A0);
 
 extern void func_002942A0(int, int, int, int);
 
