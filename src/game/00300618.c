@@ -880,4 +880,3 @@ void func_00307CC0(void *owner, float *position)
 
 INCLUDE_ASM("asm/game", func_00307FC0);
 
-INCLUDE_ASM("asm/game", func_00308408);

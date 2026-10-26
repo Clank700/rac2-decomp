@@ -614,7 +614,6 @@ int func_L00_0038B848(void)
 }
 
 
-INCLUDE_ASM("asm/levels", func_L00_0038BA80);
 
 extern unsigned char D_001A7B2A __attribute__((sda));
 

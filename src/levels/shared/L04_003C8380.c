@@ -147,7 +147,6 @@ void func_L04_003F8FA0(unsigned char *a0) {
     *(float *)(obj + 0x4C) = 2.0f;
 }
 
-INCLUDE_ASM("asm/levels", func_L04_003F9078);
 
 INCLUDE_ASM("asm/levels", func_L04_003F9320);
 

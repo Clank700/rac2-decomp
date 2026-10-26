@@ -1,15 +1,3 @@
-/* Retained manual C reconstruction, 25 October 2026; not matching.
- * Profile: -O2 -G0 -ffunction-sections.
- * 572/572 bytes, first mismatch +0x58 in initialization temporaries/store scheduling. A partial
- * state view and saved-configuration lifetime did not resolve the allocation. A rejected field-
- * order probe omitted one store and is not evidence. Reopen with independent source-layout or
- * scheduler evidence.
- * Checks: us: func_L18_003F5198: 0 of 3 places match; us2: func_L18_003F5198: 0 of 3 places
- * match; pal: func_L18_003F5198 is in neither catalogue of pal.
- * No linked build or runtime validation. This header was added after candidate checks; the
- * copied standalone file was not recompiled after retention.
- */
-
 #include "common.h"
 extern s32 func_00283CF0(float);
 extern void *func_002B60B0(u8 *, float, float, float, float);
@@ -51,11 +39,11 @@ void func_L18_003F5198(u8 *object)
     settings->speed = func_00283CF0(6.0f);
     configuration = *(s32 *)(state + 0x260);
     settings->type = 17;
-    settings->secondary = 0.49000000953674316f;
-    settings->configuration = configuration;
     settings->ready = 1;
     settings->count = 3;
     settings->strength = 0.49000000953674316f;
+    settings->secondary = 0.49000000953674316f;
+    settings->configuration = configuration;
     settings->decay = 0.4f;
     if (settings->mode == 0) {
         settings->mode = 16;

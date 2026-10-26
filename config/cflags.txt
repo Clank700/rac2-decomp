@@ -1032,3 +1032,11 @@ src/game/002B5D38.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
 src/game/00325C50.c	-O2 -G0 -ffunction-sections
 src/game/0028CC98-g8.c	-O2 -G8 -ffunction-sections
 src/game/0028AB20.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_003914E0.c	-O2 -G0 -ffunction-sections
+src/game/00308408.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L18_003F5198.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_0038BA80.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L00_0041DEF0.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L04_003F9078.c	-O2 -G0 -ffunction-sections
+src/game/002BAA28.c	-O2 -G0 -ffunction-sections
+src/game/002C14D8.c	-O2 -G0 -ffunction-sections

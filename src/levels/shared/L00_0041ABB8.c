@@ -222,7 +222,6 @@ void func_L00_0041C160(void *unused, float *b, float *a, int k, float f)
 
 INCLUDE_ASM("asm/levels", func_L00_0041C2D0);
 
-INCLUDE_ASM("asm/levels", func_L00_0041DEF0);
 
 INCLUDE_ASM("asm/levels", func_L00_0041E168);
 

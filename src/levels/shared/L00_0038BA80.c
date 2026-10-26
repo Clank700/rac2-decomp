@@ -1,29 +1,3 @@
-/*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Reported final C / retail: 644 / 640 bytes; size equality is not a match.
- * us: 0/27 placements; 644/640 bytes.
- * us2: 0/27 placements; 644/640 bytes.
- * pal: absent from catalogue (not a match).
- * Residual: 00_aranos_tutorial: 644 bytes, expected 640
- * Reopening condition: A faithful field/lifetime model explaining remaining stack, register or scheduling differences; no arbitrary padding/barriers.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
- */
-
-/* Historical manual summary: The earlier automatic screen is superseded by the current manual reconstruction. Object-update allocation and addressing remain experimental. The original map is retained privately; no extracted instruction, opcode, address or generated table is reproduced here. */
-
-/*
- * Nonmatching manual reconstruction; retail size 640 bytes.
- * Final US check: 00_aranos_tutorial: 644 bytes, expected 640.
- * Reproduce at src/levels/shared/L00_0038BA80.c with:
- * -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
- * Full body retained after bounded source/API/layout trials; no matching bytes
- * are claimed. Reopen when a truthful field or lifetime model explains the
- * remaining stack, register and scheduling differences.
- * US/US2/PAL coverage and catalogue absence are recorded in the private result.
- */
 #include "common.h"
 typedef int Quadword __attribute__((mode(TI)));
 typedef union { Quadword bits; float f[4]; } Vector4;
@@ -73,30 +47,31 @@ extern void func_00280B90(void *,void *,int);
 extern unsigned char D_001B8C80[];
 extern void func_L00_003883B8(char *);
 extern void func_L00_0038AA40(char *);
-extern Vector4 D_001BF220;
-extern Vector4 D_001B8DC0;
+typedef struct { char pad[0x20]; Vector4 position; } CollisionResult;
+extern CollisionResult D_L00_001BF200;
+extern Vector4 D_L00_001B8DC0;
 void func_L00_0038BA80(char *owner)
 {
     Vector4 velocity,position;
     float tilt,unusedHeading,angle;
     int i;
-    func_00282CF0(&velocity,&D_001B8DC0,&D_001BF220);
+    func_00282CF0(&velocity,&D_L00_001B8DC0,&D_L00_001BF200.position);
     tilt=-func_00283248(func_00282E20(&velocity),velocity.f[2]);
     unusedHeading=func_00283248(velocity.f[0],velocity.f[1]);
     for(i=19;i>=0;--i) {
         angle=func_00283B98(func_002A78D8(0,3.1415927f),tilt);
         func_002AF000(velocity.f,0.2f,func_00283B98(func_002A78D8(0,3.1415927f),tilt),angle);
         func_00282D30(&position,&velocity,func_002A7878(1,3));
-        func_00282CC0(&position,&position,&D_001BF220);
+        func_00282CC0(&position,&position,&D_L00_001BF200.position);
         func_L00_00333F90(&position,&velocity);
     }
     for(i=9;i>=0;--i) {
-        position.f[0]=D_001BF220.f[0]+func_002A78D8(0,0.1f);
-        position.f[1]=D_001BF220.f[1]+func_002A78D8(0,0.1f);
-        position.f[2]=D_001BF220.f[2]+func_002A78D8(0,0.1f);
+        position.f[0]=D_L00_001BF200.position.f[0]+func_002A78D8(0,0.1f);
+        position.f[1]=D_L00_001BF200.position.f[1]+func_002A78D8(0,0.1f);
+        position.f[2]=D_L00_001BF200.position.f[2]+func_002A78D8(0,0.1f);
         angle=func_00283B98(func_002A78D8(0,3.1415927f),tilt);
         func_002AF000(velocity.f,0.05f,func_00283B98(func_002A78D8(0,3.1415927f),tilt),angle);
         func_002BD8B0(&position,&velocity,0x4F007FFF,0x1FFFFFFF,func_002A7820(10,20),1,20000);
     }
-    if(FIELD(short,FIELD(char *,owner,0x68),0x78)==43) func_L00_0038B888(&D_001BF220,10);
+    if(FIELD(short,FIELD(char *,owner,0x68),0x78)==43) func_L00_0038B888(&D_L00_001BF200.position,10);
 }
