@@ -1,3 +1,6 @@
+/* func_00288308: the two per-class flag tables are sda arrays, which -G0 addresses with
+ * the la macro (lui/addiu together) as retail does; func_00287FF8 returns a value (it
+ * ends with daddu $v0,$s2), which keeps the final store's high half out of $v0. */
 /* func_00288308 (near miss, boot 0x00288308, 220 bytes, 28 places).
  *
  * The activate arm of the class-record updaters in game/002880E0.c.  Retail:
@@ -46,9 +49,9 @@ extern ClassRecord D_00239BA0[];
 
 extern unsigned char D_00139568[];
 
-extern unsigned char D_001A7AF8[];
+extern unsigned char D_001A7AF8[] __attribute__((sda));
 
-extern unsigned char D_001A7B30[];
+extern unsigned char D_001A7B30[] __attribute__((sda));
 
 extern int D_00139688[];
 

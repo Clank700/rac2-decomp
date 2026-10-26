@@ -279,7 +279,6 @@ void func_002B8518(void) {
 
 INCLUDE_ASM("asm/game", func_002B8530);
 
-INCLUDE_ASM("asm/game", func_002B8548);
 
 INCLUDE_ASM("asm/game", func_002B85F8);
 
@@ -321,7 +320,6 @@ INCLUDE_ASM("asm/game", func_002BA0E0);
 
 INCLUDE_ASM("asm/game", func_002BA6A0);
 
-INCLUDE_ASM("asm/game", func_002BA8A0);
 
 extern unsigned char *D_001F2544;
 
@@ -580,7 +578,6 @@ INCLUDE_ASM("asm/game", func_002BDCE8);
 
 INCLUDE_ASM("asm/game", func_002BDEB0);
 
-INCLUDE_ASM("asm/game", func_002BE150);
 
 INCLUDE_ASM("asm/game", func_002BE278);
 

@@ -1,3 +1,7 @@
+/* func_002887B0: the switch only sets a flag (retail's jump table lands on one shared
+ * a1 = 1), one call per arm is cross-jumped into retail's single call, and the per-class
+ * word is cleared when the call succeeds. The table it clears is D_00139868 (lui 0x14 /
+ * -0x6798), not the one at 0x139688. */
 /* func_002887B0 (near miss, boot 0x002887B0, 188 bytes, 28 places).
  *
  * The dispatch arm of the class-record updaters in game/002880E0.c.  Retail:
@@ -48,7 +52,7 @@ extern ClassRecord D_00239BA0[];
 
 extern unsigned char D_00139568[];
 
-extern int D_00139688[];
+extern int D_00139868[];
 
 extern int func_00287FF8(int, int);
 
@@ -58,16 +62,19 @@ int func_002887B0(int a0)
     int result = 0;
 
     if (record->word00 != 0) {
+        int small = 0;
+
         switch (a0) {
         case 0xC: case 0xE: case 0x11: case 0x12: case 0x35:
-            result = func_00287FF8(a0, 1);
-            break;
-        default:
-            result = func_00287FF8(a0, 2);
+            small = 1;
             break;
         }
-        if (result == 0)
-            D_00139688[a0] = 0;
+        if (small)
+            result = func_00287FF8(a0, 1);
+        else
+            result = func_00287FF8(a0, 2);
+        if (result != 0)
+            D_00139868[a0] = 0;
     }
     return result;
 }

@@ -685,7 +685,6 @@ int func_002AE730(float *v, int *out)
     return r;
 }
 
-INCLUDE_ASM("asm/game", func_002AE838);
 
 /* func_002AE8C0 uses the quadword-copy profile in 002AE8C0-qcopy.c. */
 

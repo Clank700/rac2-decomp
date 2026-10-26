@@ -219,7 +219,6 @@ void func_00325B70(char *self, char **children, int first, int second)
     }
 }
 
-INCLUDE_ASM("asm/game", func_00325C50);
 
 void func_00325D30(char *object, char *entries)
 {

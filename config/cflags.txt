@@ -1020,3 +1020,15 @@ src/game/003309A0-g8.c	-O2 -G8 -ffunction-sections
 src/game/0028DF80.c	-O2 -G0 -ffunction-sections
 src/game/002BD8B0.c	-O2 -G0 -ffunction-sections
 src/game/00313600-g8.c	-O2 -G8 -ffunction-sections
+src/game/002AE838.c	-O2 -G0 -ffunction-sections
+src/game/002A89A8.c	-O2 -G0 -ffunction-sections
+src/game/00288308.c	-O2 -G0 -ffunction-sections
+src/game/002887B0.c	-O2 -G0 -ffunction-sections
+src/game/002B8548.c	-O2 -G0 -ffunction-sections
+src/game/00279FF0.c	-O2 -G0 -ffunction-sections
+src/game/002BE150.c	-O2 -G0 -ffunction-sections
+src/game/002BA8A0.c	-O2 -G0 -ffunction-sections
+src/game/002B5D38.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/game/00325C50.c	-O2 -G0 -ffunction-sections
+src/game/0028CC98-g8.c	-O2 -G8 -ffunction-sections
+src/game/0028AB20.c	-O2 -G0 -ffunction-sections

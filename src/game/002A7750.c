@@ -341,7 +341,6 @@ int func_002A8860(int *p, int b) {
 
 
 
-INCLUDE_ASM("asm/game", func_002A89A8);
 
 extern float func_002A89A8(void *, int, float);
 

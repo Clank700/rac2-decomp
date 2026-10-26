@@ -31,7 +31,6 @@ void func_002B5CD8(char *first, char *second) {
 
 void *func_002B5D28(u8 *a0) { return *(void **)(*(u8 **)(a0 + 0x68) + 0x18); }
 
-INCLUDE_ASM("asm/game", func_002B5D38);
 
 /* func_002B5E48 is matched in 002B5E48.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
