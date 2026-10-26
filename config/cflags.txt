@@ -623,7 +623,6 @@ src/game/00272198-rc2.c	-O2 -ffunction-sections -fno-builtin -g -G0
 src/game/00273B70-rc2.c	-O2 -G4 -ffunction-sections -fno-builtin
 src/game/00288970-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
 src/game/00292B20-rc2.c	-O2 -G0 -ffunction-sections -fno-builtin
-src/game/002A04B8-rc2.c	-fno-builtin -O2 -G0 -ffunction-sections
 src/game/002A88A0-rc2.c	-O2 -G0 -g -ffunction-sections -fno-builtin
 src/game/002AAA00-rc2.c	-O2 -G0 -g -ffunction-sections -fno-builtin
 src/game/002AB378-rc2.c	-O2 -G0 -g -ffunction-sections -fno-builtin
