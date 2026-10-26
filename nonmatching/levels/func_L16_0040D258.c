@@ -1,19 +1,19 @@
-/*
- * Complete manual reconstruction retained as nonmatching; no coverage credit.
- * Fresh qualified-compiler checks, 2026-10-25.
- * Profile: -O2 -G8 -ffunction-sections -frac2-zero-ti-por
- * Coverage: US: 0/1; US2: 0/1; PAL: absent from catalogue.
- * Compiled text: 660 bytes; retail: 656 bytes.
- * Remaining difference: The materialized POR-zero, Z assignment and full clear-to-velocity
- * transfer are preserved. The latter intentionally remains ordinary TI: retail separates its LQ
- * and SQ around the bone-query JAL with SQ in the delay slot; opaque qcopy cannot preserve that
- * event and gave668 bytes. Ordinary transfer gives660/656 with correct frame0x60; bone increment
- * phase and call-argument scheduling remain different. All8 spark GPR inputs remain, and BAE50 is
- * correctly a pointer/null factory with ignored result.
- * Reopen when: Independent integer-loop/argument lifetime evidence; do not force registers or use
- * an opaque helper where the observed load/store straddles a call.
+/* Complete retained C reconstruction; not linked or counted.
+ * Qualified compiler profile: -O2 -G8 -ffunction-sections -frac2-zero-ti-por.
+ * Measured 2026-10-25: 660/656 bytes, frame 0x60. US and US2 contain the
+ * function; PAL has no matching catalogue identity.
+ * The complete clear, velocity and position vectors are retained. The ordinary
+ * TI copy intentionally spans a bone-query call: retail loads before JAL and
+ * stores in its delay slot, so the opaque qcopy helper cannot model this event.
+ * Moving the real bone increment after the lifetime draw, directly passing the
+ * first size draw, and giving both phases separate counters all produced the
+ * identical full object. These tied directions are closed pending new evidence.
+ * All eight particle GPR inputs and the pointer/null factory result contract
+ * remain intact. An unused AAA00 declaration now has its true float return;
+ * this does not change the function's object. No coverage or native credit.
+ * Reopen with an independently justified loop/call-setup lifetime rather than
+ * another equivalent spelling, a register pin or an artificial memory access.
  */
-
 #include "common.h"
 typedef int BossQuadword __attribute__((mode(TI)));
 extern unsigned int D_L16_001B2648;
@@ -35,7 +35,7 @@ extern void func_00282CC0(void *, void *, void *);
 extern float func_00282DF0(void *);
 extern void func_002AAC80(float *, float, float, float, float);
 extern float func_00283248(float, float);
-extern void func_002AAA00(float *, float *, int, float, float, float, float);
+extern float func_002AAA00(float *, float *, int, float, float, float, float);
 extern int func_002A8D70(float, float, float, void *, int, int, int, int, int);
 extern void func_L16_00410FA8(u8 *);
 extern u8 *func_0029EFD0(int);

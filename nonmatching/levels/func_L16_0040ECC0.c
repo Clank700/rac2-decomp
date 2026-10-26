@@ -1,17 +1,23 @@
-/* Bounded manual reconstruction, 2026-10-25; not linked.
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g -frac2-zero-ti-por.
- * 6456/6484 bytes; us: 0/1 placements; us2: 0/1 placements; pal: absent from catalogue.
- * The complete boss update, 64-byte matrix/vector union, full last-player snapshot and previously
- * qualified input banks are retained. Actual initial ELF R_MIPS_GPREL16 references to resident
- * globals 0013963B, 00189FD8 and 0018C2BC were outside signed 16 range; NOT_SDA repairs now remove
- * them. Frame 0x90 agrees, but saved-register allocation, scalar/control-flow scheduling and mixed
- * global address forms still differ. Discarded ASM-only helper result contracts remain explicitly
- * unqualified.
- * Reopen with original state-variable and shared-global storage lifetimes. Keep the proved
- * absolute-address repairs even when the generated body grows.
- * The damage helper return is the verified 32-bit query count; its six GPR and three FP inputs are unchanged.
- * Original variants, retail context and allocator diagnostics remain private.
- * No exact-C, linked-build or runtime credit is claimed.
+/* Complete retained C reconstruction; not linked or counted.
+ * Qualified compiler profile: -O2 -G8 -ffunction-sections -frac2-qcopy
+ * -frac2-qcopy-barrier -g -frac2-zero-ti-por.
+ * Measured 2026-10-25: 6476/6484 bytes, frame 0x90. The original retained
+ * screening was 6456 bytes with incorrectly declared void AAA00; correcting its
+ * real float return changes call setup but does not alone change that size.
+ * The actual yaw-field pointer is captured before eight heading calls. This
+ * restores the retail saved-register roles and prologue. Resident fields use
+ * measured partial owner views; no whole object extent is inferred. State 1 is
+ * a real no-op table arm, and the physical case order comes from the table.
+ * Strict floating predicates preserve the observed unordered branches; signed
+ * pointer-word shifts retain the actual masked address hash.
+ * Remaining: mixed GP/absolute data accesses, branch/call/store scheduling and
+ * later allocation still differ. Equal or nearby size is not an exact match.
+ * A broad no-GCSE control and a phase-long player pointer were negative; no
+ * diagnostic profile is retained. The work area keeps its complete 64-byte
+ * matrix/vector union. Existing assembly-only result contracts and native
+ * semantics remain unqualified; no runtime or PC-port claim is made.
+ * Reopen with independent data-access and phase-lifetime evidence for the
+ * remaining operations, not fabricated fields, padding or register constraints.
  */
 #include "common.h"
 
@@ -78,12 +84,22 @@ typedef struct {
     int field30, field34, field38, field3c, field40, field44;
 } BarlowUtilityQueueView;
 
-extern float D_00189EA0[4], D_00189EF0[4];
+/* Measured partial resident state; no complete owner extent is inferred. */
+typedef struct {
+    u8 unknown00[0x80];
+    float position80[4];
+    u8 unknown90[0x40];
+    float lastPositionD0[4];
+    u8 unknownE0[0x1b8 - 0xe0];
+    int state1B8;
+    u8 unknown1BC[0x2294 - 0x1bc];
+    int mode2294;
+    u8 unknown2298[0x249c - 0x2298];
+    u8 *target249C;
+} SnivelakResidentView;
+extern SnivelakResidentView D_00189E20 NOT_SDA;
 /* These resident scalars/pointer are outside the GP-relative range. */
-extern u8 D_0013963B NOT_SDA;
-extern int D_0018C0B4;
-extern int D_00189FD8 NOT_SDA;
-extern u8 *D_0018C2BC NOT_SDA;
+extern u8 D_001395B8[] NOT_SDA;
 extern u8 D_00188660[];
 extern BarlowUtilityQueueView D_L16_001BFD00;
 extern int D_L16_001A8F00 __attribute__((sda));
@@ -127,7 +143,7 @@ extern void func_L16_00411B40(u8 *);
 extern float func_00283248(float, float);
 extern float func_00283C80(float, float);
 extern float func_00283BE0(float, float);
-extern void func_002AAA00(float *, float *, int, float, float, float, float);
+extern float func_002AAA00(float *, float *, int, float, float, float, float);
 extern int func_00282948(int *);
 extern void func_L16_00411ED0(u8 *);
 extern int func_L00_0035F5A0(int, int, int);
@@ -169,19 +185,19 @@ void func_L16_0040ECC0(u8 *moby)
 
     switch (moby[0x95]) {
     case 0:
-        if (func_002ACBC8(D_00189EA0, state->entryArea) ||
-            (func_002ACBC8(D_00189EA0, state->exitArea) && D_0013963B == 1)) {
-            if (!D_0013963B) {
+        if (func_002ACBC8(D_00189E20.position80, state->entryArea) ||
+            (func_002ACBC8(D_00189E20.position80, state->exitArea) && D_001395B8[0x83] == 1)) {
+            if (!D_001395B8[0x83]) {
                 if (func_00288AA0((u8 *)&D_L16_001BFD00, 132)) {
                     func_00288BE8(&D_L16_001BFD00);
                     func_002F5CB8((int)func_L16_00412D48, (int)moby);
-                    D_0013963B = 1;
+                    D_001395B8[0x83] = 1;
                     state->introStarted = 1;
                 }
             } else if (!func_002F5D10()) {
                 func_L16_00412D48(moby);
             }
-        } else if ((*(unsigned short *)(moby + 0x34) & 1) && D_00189EA0[0] >= 610.0f) {
+        } else if ((*(unsigned short *)(moby + 0x34) & 1) && D_00189E20.position80[0] >= 610.0f) {
             *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) & 0xffbe) | 0x1000;
             *(int *)(moby + 0x98) = *(int *)(*(u8 **)(moby + 0x24) + 0x10);
             if (state->body) {
@@ -214,16 +230,18 @@ void func_L16_0040ECC0(u8 *moby)
     if (D_L16_001A8F00 == 2) return;
 
     switch (moby[0x20]) {
+    case 1:
+        break;
     case 2:
         if (func_002B3868(moby)) {
             func_L16_004116C8(moby, 10, 15, 3.0f);
             if (!func_002A77E0(1)) {
-                if (func_L02_002F21C0(moby + 0x10, D_00189EA0) <= 1600.0f)
-                    func_L16_00412C58(moby, 7, 11);
-                else func_L16_00412C58(moby, 3, 6);
+                if (func_L02_002F21C0(moby + 0x10, D_00189E20.position80) > 1600.0f)
+                    func_L16_00412C58(moby, 3, 6);
+                else func_L16_00412C58(moby, 7, 11);
             }
         }
-        func_L16_00410CC0(moby, D_00189EA0);
+        func_L16_00410CC0(moby, D_00189E20.position80);
         func_L16_004110D0(moby, D_L16_001B16E4 * 0.016666668f);
         if (func_00282E80(moby + 0x10, state->destination) < 32.0f) {
             frame = func_0029F530((char *)moby);
@@ -234,6 +252,16 @@ void func_L16_0040ECC0(u8 *moby)
         }
         func_L16_00410B88(moby);
         break;
+    case 16:
+        if (func_002B3868(moby)) state->verticalSpeed = 0.0f;
+        state->verticalSpeed -= 0.008333334f;
+        *(float *)(moby + 0x18) += state->verticalSpeed;
+        if (*(float *)(moby + 0x18) <= state->floorHeight) {
+            *(float *)(moby + 0x18) = state->floorHeight;
+            func_002E5CF8(9, 0, (char *)moby);
+            func_002A7750(moby, state->resumeState, state->resumeArgument);
+        }
+        break;
     case 3:
         if (func_002B3868(moby)) {
             func_002E5CF8(9, 0, (char *)moby);
@@ -241,24 +269,24 @@ void func_L16_0040ECC0(u8 *moby)
             if (!func_002A77E0(1)) func_L16_00412C58(moby, 12, 15);
         }
         if (!state->taunted && !state->suppressSpeech && !func_002A77E0(2) &&
-            D_0018C0B4 == 22 && D_00189FD8 == 1 && D_0018C2BC &&
-            *(short *)(D_0018C2BC + 0xaa) == 0xea7) {
+            D_00189E20.mode2294 == 22 && D_00189E20.state1B8 == 1 && D_00189E20.target249C &&
+            *(short *)(D_00189E20.target249C + 0xaa) == 0xea7) {
             state->taunted = 1;
             func_L16_00412BA8(moby, 16);
         }
-        if ((D_L16_001B2648 & 15) == (((unsigned int)moby >> 8) & 15)) func_L16_00411B40(moby);
-        func_L16_00410CC0(moby, D_00189EA0);
-        if (D_0018C0B4 == 129) next = 6;
+        if ((D_L16_001B2648 & 15) == (((int)moby >> 8) & 15)) func_L16_00411B40(moby);
+        func_L16_00410CC0(moby, D_00189E20.position80);
+        if (D_00189E20.mode2294 == 129) next = 6;
         else if (func_00282E80(moby + 0x10, state->destination) > 48.0f) next = 2;
-        else if (!(func_00282E80(moby + 0x10, D_00189EA0) >= 12.0f ||
-                   func_00282C48(D_00189EA0[2] - state->floorHeight) >= 10.0f)) next = 5;
+        else if (func_00282E80(moby + 0x10, D_00189E20.position80) < 12.0f &&
+                 func_00282C48(D_00189E20.position80[2] - state->floorHeight) < 10.0f) next = 5;
         else {
-            angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-            if (func_00283C80(*(float *)(moby + 0xf8), angle) <= 0.26179942f) {
+            angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+            if (!(func_00283C80(*(float *)(moby + 0xf8), angle) > 0.26179942f)) {
                 if (*(unsigned short *)(moby + 0x96) > 900) {
                     func_002A7750(moby, 11, -1);
                     state->target = 0;
-                    qcopy(state->lastPlayer, D_00189EF0);
+                    qcopy(state->lastPlayer, D_00189E20.lastPositionD0);
                 }
                 func_L16_00410B88(moby);
                 break;
@@ -270,16 +298,19 @@ void func_L16_0040ECC0(u8 *moby)
         break;
     case 4:
         if (func_002B3868(moby)) {
-            angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-            if (func_00283BE0(*(float *)(moby + 0xf8), angle) <= 0.0f)
+            angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+            if (!(func_00283BE0(*(float *)(moby + 0xf8), angle) > 0.0f))
                 func_L16_004116C8(moby, 10, 30, 10.0f);
             else
                 func_L16_004116C8(moby, 10, 30, 1.0f);
         }
-        angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-        func_002AAA00((float *)(moby + 0xf8), &state->turnVelocity, 0, angle, 0.00174532947f, 0.00174532947f, 0.104719773f);
-        angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-        if (!(func_00283C80(*(float *)(moby + 0xf8), angle) >= 0.087266475f) && moby[0x42] == moby[0x43]) func_002A7750(moby, 3, -1);
+        {
+        float *yaw = (float *)(moby + 0xf8);
+        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00174532947f, 0.00174532947f, 0.104719773f);
+        }
+        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+        if (func_00283C80(*(float *)(moby + 0xf8), angle) < 0.087266475f && moby[0x42] == moby[0x43]) func_002A7750(moby, 3, -1);
         break;
     case 5:
         if (func_002B3868(moby)) {
@@ -288,14 +319,17 @@ void func_L16_0040ECC0(u8 *moby)
             state->fireTimer = 30;
             func_L16_004116C8(moby, 0, 30, state->verticalSpeed);
         }
-        angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-        func_002AAA00((float *)(moby + 0xf8), &state->turnVelocity, 0, angle, 0.000872664736f, 0.000872664736f, 0.104719773f);
+        {
+        float *yaw = (float *)(moby + 0xf8);
+        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.000872664736f, 0.000872664736f, 0.104719773f);
+        }
         if (func_00282948(&state->fireTimer)) {
             func_L16_00411ED0(moby);
             func_L00_0035F5A0(17, 0, (int)moby);
             state->fireTimer = func_002A7820(45, 75);
         }
-        if (!(func_00282E80(moby + 0x10, D_00189EA0) <= 16.0f && func_00282C48(D_00189EA0[2] - state->floorHeight) <= 10.0f)) func_002A7750(moby, 2, -1);
+        if (func_00282E80(moby + 0x10, D_00189E20.position80) > 16.0f || func_00282C48(D_00189E20.position80[2] - state->floorHeight) > 10.0f) func_002A7750(moby, 2, -1);
         break;
     case 6:
         if (func_002B3868(moby)) {
@@ -303,6 +337,28 @@ void func_L16_0040ECC0(u8 *moby)
             *(float *)(moby + 0x48) = 0.666f;
         }
         if (state->body[0x60] & 2) func_002A7750(moby, 2, -1);
+        break;
+    case 8:
+        if (func_002B3868(moby)) {
+            func_L16_004116C8(moby, state->activeArm + 11, 20, 0.0f);
+            if (!state->suppressSpeech) func_L16_00412C58(moby, 17, 23);
+            state->fired = 0;
+            *(float *)(moby + 0x48) = 1.0f;
+        }
+        {
+        float *yaw = (float *)(moby + 0xf8);
+        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
+        }
+        if (!state->fired && state->body[0x42] == state->body[0x43] && func_0029F530((char *)state->body) >= 13.0f) {
+            if (state->body[0x42] == 11) func_002E5CF8(7, 0, (char *)moby);
+            func_L16_00411900(moby);
+            state->fired = 1;
+        } else if (func_0029F530((char *)state->body) > 20.0f) {
+            func_L16_004116C8(moby, state->activeArm + 11, 20, 0.0f);
+            state->fired = 0;
+        }
+        if (*(unsigned short *)(moby + 0x96) > 300) func_002A7750(moby, 7, -1);
         break;
     case 7:
         if (func_002B3868(moby)) {
@@ -313,29 +369,13 @@ void func_L16_0040ECC0(u8 *moby)
         if (func_00282E80(moby + 0x10, state->destination) < 1.0f) func_002A7750(moby, 8, -1);
         func_L16_00410B88(moby);
         break;
-    case 8:
-        if (func_002B3868(moby)) {
-            func_L16_004116C8(moby, state->activeArm + 11, 20, 0.0f);
-            if (!state->suppressSpeech) func_L16_00412C58(moby, 17, 23);
-            state->fired = 0;
-            *(float *)(moby + 0x48) = 1.0f;
-        }
-        angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-        func_002AAA00((float *)(moby + 0xf8), &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
-        if (!state->fired && state->body[0x42] == state->body[0x43] && !(func_0029F530((char *)state->body) < 13.0f)) {
-            if (state->body[0x42] == 11) func_002E5CF8(7, 0, (char *)moby);
-            func_L16_00411900(moby);
-            state->fired = 1;
-        } else if (func_0029F530((char *)state->body) > 20.0f) {
-            func_L16_004116C8(moby, state->activeArm + 11, 20, 0.0f);
-            state->fired = 0;
-        }
-        if (*(unsigned short *)(moby + 0x96) > 300) func_002A7750(moby, 7, -1);
-        break;
     case 9:
         if (func_002B3868(moby)) func_L16_004116C8(moby, 16, 30, 6.0f);
-        angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-        func_002AAA00((float *)(moby + 0xf8), &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
+        {
+        float *yaw = (float *)(moby + 0xf8);
+        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
+        }
         if (state->body[0x60] & 2) {
             if ((float)state->maximumHealth * 0.55f <= state->health) next = 10;
             else if (!func_002A77E0(2) && state->leftUsed && state->rightUsed) next = 10;
@@ -349,7 +389,7 @@ void func_L16_0040ECC0(u8 *moby)
             func_L16_00410CC0(moby, state->target + 0x10);
         }
         func_L16_004110D0(moby, D_L16_001B16E8 * 0.016666668f);
-        if (!(func_00282E80(moby + 0x10, state->destination) >= 1.0f)) {
+        if (func_00282E80(moby + 0x10, state->destination) < 1.0f) {
             next = func_00282C48(*(float *)(state->target + 0x18) - 120.0f) < 1.0f ? 12 : 11;
             func_002A7750(moby, next, -1);
         }
@@ -389,13 +429,16 @@ void func_L16_0040ECC0(u8 *moby)
             func_L16_004116C8(moby, 1, 30, 0.0f);
             *(float *)(moby + 0x48) = 0.5f;
         }
+        {
+        float *yaw = (float *)(moby + 0xf8);
         angle = func_00283248(*(float *)(state->target + 0x10) - *(float *)(moby + 0x10), *(float *)(state->target + 0x14) - *(float *)(moby + 0x14));
-        func_002AAA00((float *)(moby + 0xf8), &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
+        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
+        }
         frame = func_0029F530((char *)moby);
         if (frame > 30.0f) func_002AA2E8((float *)(moby + 0x48), 1.0f, 0.13333334f);
         if (frame > 40.0f && frame < 42.0f) func_002A8C28(moby, state->target + 0x10, 0x10001, 0, 1, 0, 4.0f, (float)state->power, 1.0f);
         if (moby[0x60] & 2) func_002A7750(moby, 2, 1);
-        else if (D_0018C0B4 == 22 && D_00189FD8 == 1 && D_0018C2BC == moby) func_L16_00412C58(moby, 24, 27);
+        else if (D_00189E20.mode2294 == 22 && D_00189E20.state1B8 == 1 && D_00189E20.target249C == moby) func_L16_00412C58(moby, 24, 27);
         break;
     case 13:
         if (func_002B3868(moby)) {
@@ -408,14 +451,27 @@ void func_L16_0040ECC0(u8 *moby)
             } else if (!state->leftUsed) state->projectile = func_L16_004130B0(moby, 1);
             else state->projectile = 0;
         }
-        angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-        func_002AAA00((float *)(moby + 0xf8), &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
+        {
+        float *yaw = (float *)(moby + 0xf8);
+        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
+        }
         if (*(float *)(moby + 0x18) > state->floorHeight + 20.0f) {
             if (state->projectile) { func_002A7750(moby, 14, -1);
             state->leftUsed = 1; }
             else { func_002A7750(moby, 15, -1);
             state->rightUsed = 1; }
         }
+        break;
+    case 15:
+        if (func_002B3868(moby)) func_L16_004116C8(moby, 14, 30, 0.0f);
+        {
+        float *yaw = (float *)(moby + 0xf8);
+        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
+        }
+        if (state->body[0x42] == state->body[0x43] && (D_L16_001B2648 & 15) == (((int)moby >> 8) & 15)) func_L16_00411D00(moby);
+        if (*(unsigned short *)(moby + 0x96) > 180) func_002A7750(moby, 2, 1);
         break;
     case 14:
         if (func_002B3868(moby)) func_L16_004116C8(moby, 6, 30, 0.0f);
@@ -448,23 +504,6 @@ void func_L16_0040ECC0(u8 *moby)
             break;
         }
         break;
-    case 15:
-        if (func_002B3868(moby)) func_L16_004116C8(moby, 14, 30, 0.0f);
-        angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-        func_002AAA00((float *)(moby + 0xf8), &state->turnVelocity, 0, angle, 0.00349065894f, 0.00349065894f, 0.209439546f);
-        if (state->body[0x42] == state->body[0x43] && (D_L16_001B2648 & 15) == (((unsigned int)moby >> 8) & 15)) func_L16_00411D00(moby);
-        if (*(unsigned short *)(moby + 0x96) > 180) func_002A7750(moby, 2, 1);
-        break;
-    case 16:
-        if (func_002B3868(moby)) state->verticalSpeed = 0.0f;
-        state->verticalSpeed -= 0.008333334f;
-        *(float *)(moby + 0x18) += state->verticalSpeed;
-        if (*(float *)(moby + 0x18) <= state->floorHeight) {
-            *(float *)(moby + 0x18) = state->floorHeight;
-            func_002E5CF8(9, 0, (char *)moby);
-            func_002A7750(moby, state->resumeState, state->resumeArgument);
-        }
-        break;
     case 17:
         if (func_002B3868(moby)) {
             func_L16_004116C8(moby, 16, 30, 0.0f);
@@ -478,9 +517,12 @@ void func_L16_0040ECC0(u8 *moby)
             if (sound != -1 && *(u8 **)(D_00188660 + (sound * 112 + 0x88)) == moby && D_00188660[sound * 112 + 0x74]) func_002E59F8(sound);
             state->bodySound = -1;
         }
-        angle = func_00283248(D_00189EA0[0] - *(float *)(moby + 0x10), D_00189EA0[1] - *(float *)(moby + 0x14));
-        func_002AAA00((float *)(moby + 0xf8), &state->turnVelocity, 0, angle, 0.00174532947f, 0.00174532947f, 0.104719773f);
-        if ((D_L16_001B2648 & 15) == (((unsigned int)moby >> 8) & 15)) {
+        {
+        float *yaw = (float *)(moby + 0xf8);
+        angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
+        func_002AAA00(yaw, &state->turnVelocity, 0, angle, 0.00174532947f, 0.00174532947f, 0.104719773f);
+        }
+        if ((D_L16_001B2648 & 15) == (((int)moby >> 8) & 15)) {
             *(BossQuadword *)work.vectors.offset = 0;
             work.vectors.offset[0] = func_002A78D8(0.0f, 6.0f);
             work.vectors.offset[1] = func_002A78D8(0.0f, 6.0f);
@@ -509,7 +551,7 @@ void func_L16_0040ECC0(u8 *moby)
         state->bodyMode = 0;
         state->verticalSpeed -= 0.0055555557f;
         *(float *)(moby + 0x18) += state->verticalSpeed;
-        if (*(unsigned short *)(moby + 0x96) > 90 && D_0013963B != 2 && func_00288AA0((u8 *)&D_L16_001BFD00, 133)) {
+        if (*(unsigned short *)(moby + 0x96) > 90 && D_001395B8[0x83] != 2 && func_00288AA0((u8 *)&D_L16_001BFD00, 133)) {
             func_002A7750(moby, 19, -1);
             func_00288AA0((u8 *)&D_L16_001BFD00, 17);
             func_00288AA0((u8 *)&D_L16_001BFD00, 134);

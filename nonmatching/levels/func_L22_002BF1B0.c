@@ -1,3 +1,21 @@
+/* Current complete-table follow-up, 2026-10-25; nonmatching and not linked.
+ * Profile: -O2 -G8 -ffunction-sections -Wall -Werror.
+ * Current text: 37336/37268 bytes; frame 0x1A0 versus retail 0x1B0.
+ * US: 0/1 placement; US2 and PAL: canonical identity absent from both catalogues.
+ * The real final substate and animation tests/stores are repeated, in their
+ * original order, in the 0x3C/0x64 clear-state arm before returning. Every path
+ * performs the same bookkeeping. Following RAC1's genuine tail-layout method,
+ * this restores the separate destination from the 0x60/0x61 clear-state arm.
+ * All 147 table slots now have the retail's 63 destination equivalence classes.
+ * The complete 588-byte .rodata has 147 self-text R_MIPS_32 relocations and
+ * sixteen-byte alignment. Its destination addresses and the text still differ.
+ * The entry object still spills; six FPRs are saved instead of retail's five.
+ * The former 37280-byte baseline has only 62 destinations and is kept privately,
+ * alongside the bounded reload, call-bank and source-control variants.
+ * Reopen with independent entry-object/FP live-range evidence while preserving
+ * the recovered table topology, real storage extents and physical call banks.
+ * The earlier baseline measurements below are historical, not current results.
+ */
 /* 2026-10-25 ADDRESS follow-up: retained best prior C, not matching.
  * Baseline reproduced 37280/37268 bytes, 0/1 US placement, frame 0x1A0
  * versus 0x1B0. A truthful typed entry-object/header view measured 37416;
@@ -2180,7 +2198,10 @@ case 0x63:
 
 
 case 0x3C: case 100:
-    func_00282C88(HP(0xF0));goto finish;
+    func_00282C88(HP(0xF0));
+    if (entry_substate != H(int, 0x2298)) H(int, 0x1C0) = 0;
+    if (entry_animation != entry_object[0x43]) H(int, 0x1C4) = 0;
+    return;
 
 
 case 0x65:

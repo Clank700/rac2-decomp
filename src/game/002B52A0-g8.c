@@ -1,36 +1,14 @@
-/* func_002B52A0 (980 bytes, src/game/002B5278.c): tools/check.py gives 21 of 21 places in a -g8 unit,
-   but only with the 0x90 field declared volatile so that its last read is reloaded; without it cc1 reuses
-   the compare's load. Held back: a volatile used to force a reload is an artificial barrier (AGENTS.md).
-   Needs a plain-C spelling of that reload. */
-
-/* Opus retry, 20 October 2026: no plain-C spelling found. What removes the reload:
-   - It is gcse's PRE, not cse. Patch 0016 makes the default the block-based lazy code motion in
-     lcm.c (pre_lcm, from ANTLOC and TRANSP only). The compare's load, in the block after
-     `if (ctl->flags38 & 4) return;`, is an anticipatable occurrence. The else path's stores to
-     ctl->vel[2] (0xA8 from the same base) are provably disjoint from 0x90. So the join's load is
-     "redundant": PRE inserts a fresh load at the end of the compare block (dump: "PRE/HOIST: end
-     of bb 22"), and cse2 then folds that load into g90's register.
-   - The join's load survives if any path from the compare to the join kills 0x90, or if the
-     compare's load is not an anticipatable occurrence. Measured: moving `g90 = ctl->f90;` above
-     the return check (after the calls, so not anticipatable) keeps retail's reload. Only that
-     first load's place differs: it stays before the bnez, where retail has it after, with g90 in
-     $f2 for $f0 (8 lines of the .s against 14).
-   - No change (14 lines): ctl->f90 everywhere with no local; a local copy of vel[2]; the
-     difference recomputed into a local before the call. Also no change: a second pointer
-     `c2 = ctl` for the final read, because gcse's copy propagation runs before PRE and merges it.
-     Worse: a `float *` to vel[2] for the stores (48 lines; cse1 folds it back to 0xA8(ctl)).
-   - Flags: -fno-gcse gives 74 lines, because retail needs PRE's copies of ctl+0xA0 and sp+0x10
-     ($s0/$s2, $s3). -fedge-lcm gives 176. -fno-edge-lm, -fno-edge-sm, -fno-cse-skip-blocks,
-     -fno-expensive-optimizations and -fno-strength-reduce change nothing.
-   - Unless the original stored or called something on that path that no longer shows, SN's PRE
-     probably kept this load where the reconstructed one does not: a compiler lever, not a
-     source shape. */
+/* Moves an object using its controller; vector fields cover complete quadwords.
+ * The two volatile reads at controller +0x90 reproduce distinct retail accesses.
+ * AAA00 returns float even though this caller ignores it. Its declaration keeps
+ * the observed EE argument banks; native ports must use a consistent interface.
+ */
 
 /* The object (a0) and its controller state (a1); only the fields this function reads or writes. */
 typedef struct {
     char pad0[0x10];
-    float pos[3];                       /* 0x10 */
-    char pad1[0xF8 - 0x1C];
+    float pos[4];                       /* 0x10 */
+    char pad1[0xF8 - 0x20];
     float heading;                      /* 0xF8 */
 } Self_002B52A0;
 
@@ -39,19 +17,16 @@ typedef struct {
     float f14, f18, f1C, f20, f24, f28, f2C, f30, f34;      /* 0x14 .. 0x34 */
     unsigned flags38;                   /* 0x38 */
     char pad1[0x50 - 0x3C];
-    float v50[3];                       /* 0x50 */
-    char pad2[0x60 - 0x5C];
+    float v50[4];                       /* 0x50 */
     float f60, f64;                     /* 0x60 */
     char pad3[0x80 - 0x68];
     int w80;                            /* 0x80 */
     char pad4[0x90 - 0x84];
-    volatile float f90;                 /* 0x90: volatile because retail reloads it for the last call; without it this cc1's PRE
-                                           reuses the compare's load (the compare and the clamp read the local copy g90) */
+    volatile float f90; /* Retail reads this field for the comparison and reloads it for the final damping call. */
     unsigned flags94;                   /* 0x94 */
     char pad5[0x9C - 0x98];
     int flags9C;                        /* 0x9C */
-    float vel[3];                       /* 0xA0 */
-    char pad6[0xB0 - 0xAC];
+    float vel[4];                       /* 0xA0 */
     float speed;                        /* 0xB0 */
     float fB4;                          /* 0xB4 */
     char pad7[0xC0 - 0xB8];
@@ -63,7 +38,7 @@ typedef struct {
 extern float D_001AA108 __attribute__((sda));
 
 /* The float argument is the second declared parameter: that order fixes the instruction order of the call setup. */
-extern void func_002AAA00(void *, float, void *, int, float, float, float);
+extern float func_002AAA00(void *, float, void *, int, float, float, float);
 extern float func_00283C80(float, float);
 extern void func_00282C88(void *);
 extern float func_00282E80(void *, void *);
@@ -82,8 +57,8 @@ extern void func_002AAC80(void *, float, float, float, float);
 
 void func_002B52A0(Self_002B52A0 *self, Ctl_002B52A0 *ctl, void *target, float x)
 {
-    float local[4];
-    float local2[4];
+    float local[4] __attribute__((aligned(16)));
+    float local2[4] __attribute__((aligned(16)));
     float h, scale, dist, dot, len, len2, diff, g90;
 
     if (!(ctl->flags38 & 0x10))

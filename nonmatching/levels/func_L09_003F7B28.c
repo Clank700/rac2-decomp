@@ -1,37 +1,28 @@
-/* func_L09_003F7B28, 292 bytes, 3 places (09_dobbo, 12_todano, 20_yeedil).
- * NEAR MISS - the candidate is 280 bytes against retail's 292: the whole body is right
- * (the call to func_L09_0033E8B0 with the run's index, the level's table lookup, the two
- * distance calls and the stage call), but three words are missing: retail keeps a
- * direction word that starts at -1 and is set to 1 when the run's index is below the
- * frame's end, and it spends it in `addiu $t0,$zero,-1` and `movn $t0,$s4,$v0` in the
- * first call's delay slot.  This cc1 drops the word as dead: nothing reads it, and this
- * compiler removes the assignment before the conditional move is formed.
- *
- * What is needed: a source shape that keeps the direction word alive in the tree while
- * its value stays dead in the code - the retail's own source must have read it somewhere
- * this shape does not.  Twelve spellings were measured (a plain `if`, a ternary, a
- * `register` word, a self-comparison to keep the read, a word initialised in each arm,
- * and a word compared against the -1 sentinel): all of them drop the word, so the
- * remaining difference is the -1 sentinel the retail keeps in $s0 as well.
- *
- * The rest of the function is exact, including the table's 32-bit addresses
- * (D_L09_001FE6C0 holds 32-bit record pointers, indexed with the run's index) and the
- * four floats the stage call takes.
+/* Retained complete C; not linked or counted. Updated25 October2026.
+ * Profile: -O2 -G0 -ffunction-sections.
+ * 292/292 bytes with the actual five GPRs plus F12 forwarded through the
+ * wrapper to its deep consumer. Direction is passed in T0, end is genuinely
+ * reloaded after the call, and the record table contains pointers. AAA00 has
+ * its real ignored float return.
+ * Frame0x30 agrees but first mismatch+0x4 remains allocation of
+ * frame/object/index/sentinel registers. The real pointer-table spelling and
+ * bank-order control tied. The canonical wrapper forwarding repair is
+ * independently object-neutral; native interfaces must remain consistent.
  */
 
 #include "include_asm.h"
 
 typedef unsigned int u32;
 
-extern u32 D_L09_001FE6C0[];
+extern char *D_L09_001FE6C0[];
 
-extern int func_L09_0033E8B0_2(char *object, int index, void *out, int a, float f);
+extern int func_L09_0033E8B0(char *object, int index, void *out, int current, int direction, float step);
 
 extern int func_L09_0033E658(int index);
 
 extern float func_00283248(float x, float y);
 
-extern void func_002AAA00(char *a, char *b, int c, float d, float e, float f, float g);
+extern float func_002AAA00(char *a, char *b, int c, float d, float e, float f, float g);
 
 /* Steps the run's frame to the next entry of the level's table and hands the
    distance from the object to that entry's point to the stage. */
@@ -48,13 +39,13 @@ int func_L09_003F7B28(char *object, int index)
     int r;
     float dist;
 
-    next = func_L09_0033E8B0_2(object, index, object + 0x10, cur,
+    dir = (cur < end) ? ret : dir;
+    next = func_L09_0033E8B0(object, index, object + 0x10, cur, dir,
                                *(float *)(frame + 0x128));
     idx = (short)next;
-    dir = (cur < end) ? ret : dir;
     *(short *)(frame + 0x1C8) = next;
     if (idx != step) {
-        if (idx != end)
+        if (idx != *(short *)(frame + 0x1CA))
             ret = 0;
     }
     step = idx + 1;
