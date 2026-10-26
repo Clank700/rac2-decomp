@@ -1128,3 +1128,4 @@ src/game/002E9110-g16.c	-O2 -G16 -ffunction-sections -Wa,-G16
 src/game/0032E588-g.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L13_003ECEA8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L00_003B6158.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/shared/L00_003FDE48-g8.c	-O2 -G8 -ffunction-sections -g

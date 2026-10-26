@@ -201,7 +201,6 @@ void func_L00_003FDB20(unsigned char *self)
     *(unsigned short *)(self + 0x96) += 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003FDE48);
 
 extern int func_L00_003FED60(int, int, int);
 

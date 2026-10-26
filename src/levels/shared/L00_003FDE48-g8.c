@@ -1,35 +1,28 @@
-/*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G8 -ffunction-sections (suffix profile).
- * Reported final C / retail: 1044 / 1080 bytes; size equality is not a match.
- * us: 0/27 placements; 1044/1080 bytes.
- * us2: absent from catalogue (not a match).
- * pal: absent from catalogue (not a match).
- * Residual: Complete1044/1080-byte aimed controller, frame0x70correct. Seven-GPR FE5A0 plus f12 and its32-bit explicit boolean return were audited; both optional word-output pointers are retained. Current canonical AB1F0 returns pointer bits as s32, explicitly cast at the observed dereference. Control-flow/global-base allocation remains different.
- * Reopening condition: New ABI/CFG/allocator evidence or a measured compiler-model improvement; do not repeat tied forms.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
- */
-
-/* Retained complete manual reconstruction; not an exact match.
- * Source profile: -O2 -G8 -ffunction-sections (suffix profile).
- * Complete1044/1080-byte aimed controller, frame0x70correct. Seven-GPR FE5A0 plus f12 and its32-bit explicit boolean return were audited; both optional word-output pointers are retained. Current canonical AB1F0 returns pointer bits as s32, explicitly cast at the observed dereference. Control-flow/global-base allocation remains different.
- */
 #include "common.h"
-extern int D_0018C0B4;
-extern char *D_0018B270;
-extern char *D_0018AA18;
-extern s8 D_0018C0DC;
-extern s8 D_0018C0D8;
-extern int D_0018C354;
-extern u32 D_00138320;
-extern u32 D_00138324;
-extern u32 D_0018B050;
-extern int D_0018B060;
+typedef struct {
+    char pad0000[0xBF8];
+    char *f0BF8;
+    char pad0BFC[0x1230 - 0xBFC];
+    u32 buttons;
+    char pad1234[0xC];
+    int resource;
+    char pad1244[0x1450 - 0x1244];
+    char *target;
+    char pad1454[0x2294 - 0x1454];
+    int level;
+    char pad2298[0x22B8 - 0x2298];
+    u8 f22B8;
+    char pad22B9[3];
+    u8 busy;
+    char pad22BD[0x2534 - 0x22BD];
+    int cooldown;
+} AimHero;
+extern AimHero D_00189E20;
+typedef struct { char pad000[0x1A0]; u32 held; u32 pressed; } AimPad;
+extern AimPad D_00138180;
 extern u8 D_00139581;
-extern u8 D_0013958D;
-extern int D_L00_001A8F00 __attribute__((sda));
+extern u8 D_0013958D[];
+extern int D_L00_001A8F00;
 extern int D_L00_001B2BE4;
 extern int D_L00_001B2BE8 __attribute__((sda));
 extern char D_L00_001B0BF0[] __attribute__((sda));
@@ -37,9 +30,10 @@ extern u16 D_L00_001B0C00 __attribute__((sda));
 extern u16 D_L00_001B0C04 __attribute__((sda));
 extern u16 D_L00_001B0C08 __attribute__((sda));
 extern int D_L00_001B0C0C __attribute__((sda));
-extern char D_L00_00262570[];
+typedef struct { char pad00[0x54]; float rate; char pad58[0xE0 - 0x58]; } AimEntry;
+extern AimEntry D_L00_00262570[];
 extern void func_L00_003FE8D0(char *);
-extern void func_L00_002C42E0(int, int);
+extern void func_L00_002C42E0(int a0, int a1);
 extern void func_002A75E0(void *, int, int, int, int);
 extern int func_00282978(s16 *);
 extern int func_00282948(int *);
@@ -66,21 +60,21 @@ extern int func_L00_003FE2D0(int, int, int);
 struct Rac2Native_5f824a0e369ccf7b_src_record;
 extern struct Rac2Native_5f824a0e369ccf7b_src_record D_L00_0029F210;
 extern int func_L00_002D6998(struct Rac2Native_5f824a0e369ccf7b_src_record *);
-extern void func_L00_002D6B70(void);
-extern void func_L00_002E6EF8(void (*)(void *), void *);
+extern void func_L00_002D6B70(int);
+extern void ref_L00_003FDE48_00(void *, void *);
 extern void func_L00_003FE490(void *);
 
 /* Coordinate the multi-object interaction and its repeat/cooldown timers. */
 
-void func_L00_003FDE48(char *object) {
+void func_L00_003FDE48(unsigned char *object) {
     float origin[4];
     float aim[4];
+    AimEntry *entry;
     char *state = *(char **)(object + 0x68);
-    char *target = 0;
+    char *target;
     s32 target_data;
-    int allowed = 1;
+    int allowed;
     int was_running;
-    int mode;
     int handle;
 
     if (object[0x20] == 0) {
@@ -90,29 +84,31 @@ void func_L00_003FDE48(char *object) {
         *(int *)(state + 0x2C) = 0;
         D_L00_001B2BE4 = 20;
     }
-    if (D_0018C0B4 == 1) func_L00_002C42E0(29, 1);
+    if (D_00189E20.level == 1) func_L00_002C42E0(29, 1);
     if (object[0x42] == object[0x43] && (object[0x60] & 2)) func_002A75E0(object, 1, 0, 2, 0);
     func_L00_003FE280(object, (char *)origin);
-    if (D_0018B270 != 0 && (u8)D_0018B270[0x20] != 0xFE && (u8)D_0018B270[0x20] != 0xFD) {
-        target_data = func_002AB1F0((u8 *)D_0018B270);
-        if (target_data != 0 && *(float *)target_data > 0.0f) target = D_0018B270;
+    target = 0;
+    if (D_00189E20.target != 0 && (u8)D_00189E20.target[0x20] != 0xFE && (u8)D_00189E20.target[0x20] != 0xFD) {
+        target_data = func_002AB1F0((u8 *)D_00189E20.target);
+        if (target_data != 0 && *(float *)target_data > 0.0f) target = D_00189E20.target;
     }
-    if (D_0018C0B4 == 29) allowed = func_00282948(&D_0018C354) != 0;
-    else D_0018C354 = 40;
+    allowed = 1;
+    if (D_00189E20.level == 29) {
+        if (!func_00282948(&D_00189E20.cooldown)) allowed = 0;
+    }
+    else D_00189E20.cooldown = 40;
     func_002FDF40(1.6f, 10.0f, 0.25f, 0.004055555909872055f, aim, origin, target, 0);
     *(int *)(state + 0x24) = func_002FE5A0(0.004055555909872055f, origin, aim, state, state + 0x10, object, 0, 0);
     was_running = *(float *)(state + 0x20) > 0.0f;
     func_002829D8((float *)(state + 0x20));
     if (was_running && *(float *)(state + 0x20) <= 0.0f && func_L00_002D4040(-1)) func_002E5CF8(3, 0, object);
     if (*(int *)(state + 0x2C) != 0 && func_00282948((int *)(state + 0x2C))) func_L00_002AF7D0();
-    mode = D_L00_001A8F00;
-    if ((D_00138324 & D_0018B050) && !func_L00_002D4040(-1)) {
+    if ((D_00138180.pressed & D_00189E20.buttons) && !func_L00_002D4040(-1)) {
         func_002E5CF8(1, 0, object);
         D_L00_001B2BE4 = 20;
-        mode = D_L00_001A8F00;
     }
-    if (mode == 0 && *(float *)(state + 0x20) == 0.0f && D_0018C0DC == 0 &&
-        (u8)object[0x42] <= 1 && (D_00138320 & D_0018B050) && D_0018B060 >= 23 && allowed) {
+    if (D_L00_001A8F00 == 0 && *(float *)(state + 0x20) == 0.0f && D_00189E20.busy == 0 &&
+        (u8)object[0x42] <= 1 && (D_00138180.held & D_00189E20.buttons) && D_00189E20.resource >= 23 && allowed) {
         if (func_L00_002D4040(-1)) {
             func_002E5CF8(0, 0, object);
             func_L00_002D3F30(-1, 1);
@@ -123,14 +119,15 @@ void func_L00_003FDE48(char *object) {
             *(int *)(state + 0x2C) = 16;
             *(int *)(state + 0x28) = func_L00_002D6998(&D_L00_0029F210);
         }
-        if (!(D_00138320 & D_0018B050) || !func_L00_002D4040(-1) || D_0018C0D8 == 0) {
+        if (!(D_00138180.held & D_00189E20.buttons) || !func_L00_002D4040(-1) || D_00189E20.f22B8 == 0) {
             handle = *(int *)(state + 0x28);
             if (handle >= 0) {
-                func_L00_002D6B70();
+                func_L00_002D6B70(handle);
                 *(int *)(state + 0x28) = -1;
             }
         }
-        *(float *)(state + 0x20) = 1.0f / *(float *)(D_L00_00262570 + D_0013958D * 0xE0 + 0x54);
+        entry = D_L00_00262570 + D_0013958D[0];
+        *(float *)(state + 0x20) = 1.0f / entry->rate;
     }
-    func_L00_002E6EF8(func_L00_003FE490, object);
+    ref_L00_003FDE48_00(func_L00_003FE490, object);
 }
