@@ -1,4 +1,4 @@
-/* func_L05_00432080: M3 2026-10-26: -frac2-qcopy unit: 208/208, 17 lines. Retail keeps the three-quadword copy loop counting up (slti 3); cc1 reverses it (int, unsigned, long, short, char counters tried).
+/* func_L05_00432080: M15 2026-10-26: with -fno-strength-reduce (as func_L05_00432158) the three-quadword copy loop counts up like retail (slti 3): 208/208 under -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-strength-reduce, 18 lines, all register choice and store schedule (best of 24 store orders x 2 loop forms). Earlier (M3): cc1 reversed the loop under every counter type.
  */
 extern char * func_0029EFD0(int);
 
@@ -13,10 +13,10 @@ char *func_L05_00432080(char *a0, float f12)
     if (obj != 0) {
         int i;
 
-        *(unsigned char *)(obj + 0x30) = 0xFF;
         *(unsigned short *)(obj + 0x32) = 0xFF;
-        *(unsigned char *)(obj + 0x31) = 1;
         *(unsigned char *)(obj + 0x23) = 0x60;
+        *(unsigned char *)(obj + 0x30) = 0xFF;
+        *(unsigned char *)(obj + 0x31) = 1;
         *(unsigned short *)(obj + 0x34) = *(unsigned short *)(obj + 0x34) | 0x108;
         *(unsigned char *)(obj + 0x20) = 0;
         *(char **)(*(char **)(obj + 0x68)) = a0;
