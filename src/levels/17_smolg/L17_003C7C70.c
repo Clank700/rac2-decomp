@@ -138,7 +138,7 @@ void func_L17_003E47E8(s32 a0) {
 }
 
 /* func_L17_003E4860 is a near miss: nonmatching/levels/func_L17_003E4860.c */
-INCLUDE_ASM("asm/levels", func_L17_003E4860);
+/* func_L17_003E4860 is defined in L02_003CE9A8-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L17_003E48E0);
 

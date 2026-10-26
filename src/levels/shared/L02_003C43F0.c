@@ -484,7 +484,7 @@ void func_L02_003CE908(char *a0) {
    compiler gives the kind byte the other register. 116 bytes against 124.
    wave5-09: same wall from a -G8 unit (needs the .extern for the one-instruction $gp load);
    candidate 128 bytes, the same two register copies plus a `nop` the retail loop does not have. */
-INCLUDE_ASM("asm/levels", func_L02_003CE9A8);
+/* func_L02_003CE9A8 is defined in L02_003CE9A8-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L02_003CEA28);
 

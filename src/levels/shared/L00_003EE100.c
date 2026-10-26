@@ -176,7 +176,7 @@ INCLUDE_ASM("asm/levels", func_L00_003EE920);
 
 /* func_L00_003EED10 uses its dedicated quadword-copy profile. */
 
-INCLUDE_ASM("asm/levels", func_L00_003EEE20);
+/* func_L00_003EEE20 is defined in L00_003EEE20-g.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_003EEE90);
 

@@ -22,7 +22,7 @@ typedef struct L04_003E5318_BUF {
     int z;
 } L04_003E5318_BUF;
 
-INCLUDE_ASM("asm/levels", func_L04_003E5298);
+/* func_L04_003E5298 is defined in L02_003CE9A8-g8.c. */
 
 void func_L04_003E5318(char *a0)
 {

@@ -279,7 +279,7 @@ unsigned int func_0031AB08(unsigned int param_1)
     return result;
 }
 
-INCLUDE_ASM("asm/game", func_0031AB18);
+/* func_0031AB18 is defined in 0031AB18-zero-ti.c. */
 
 INCLUDE_ASM("asm/game", func_0031ABE0);
 

@@ -292,7 +292,7 @@ void func_00328D98(char *pos, int a1, int a2, char *a3, int t0,
     F8411efa9_FUN_00280B90(pkt, m, 0);
 }
 
-INCLUDE_ASM("asm/game", func_00328F18);
+/* func_00328F18 follows func_0032B3E0 below, after the helpers it declares. */
 
 INCLUDE_ASM("asm/game", func_003290D0);
 
@@ -489,6 +489,47 @@ void func_0032B3E0(char *pos, int a1, int a2, char *a3, int t0,
     m[15] = 1.0f;
 
     func_0032B378(pkt, f12);
+    func_00280B90(pkt, m, 0);
+}
+
+void func_00328F18(char *pos, int a1, int a2, char *a3, int t0,
+                   float f12, float f13, float f14)
+{
+    char pkt[144];
+    float m[16];
+    float quat[4];
+    float off[4];
+    long long r;
+
+    func_00328CA8(pkt);
+    r = func_0027C878(a3);
+
+    *(long long *)(pkt + 136) = ((long long)t0 << 2) | 0x8000000040LL;
+    *(long long *)(pkt + 128) = 280993940374112LL;
+    *(int *)(pkt + 76) = a1 + (a2 << 24);
+    *(int *)(pkt + 72) = a1 + (a2 << 24);
+    *(int *)(pkt + 68) = a1 + (a2 << 24);
+    *(int *)(pkt + 64) = a1 + (a2 << 24);
+    *(long long *)(pkt + 112) = 0LL;
+    *(long long *)(pkt + 120) = r;
+
+    quat[3] = 0.0f;
+    quat[2] = func_00283248(D_001B5200.x_140 - *(float *)(pos + 0),
+                            D_001B5200.y_144 - *(float *)(pos + 4));
+    quat[1] = -func_00283248(func_00282E80(pos, &D_001B5200.x_140),
+                             D_001B5200.z_148 - *(float *)(pos + 8));
+    quat[0] = f13;
+
+    func_00283410(m, quat);
+    func_00282CF0(off, &D_001B5200.x_140, pos);
+    func_00282F20(off, off, f14);
+
+    m[12] = *(float *)(pos + 0) + off[0];
+    m[13] = *(float *)(pos + 4) + off[1];
+    m[14] = *(float *)(pos + 8) + off[2];
+    m[15] = 1.0f;
+
+    func_00328D30(pkt, f12);
     func_00280B90(pkt, m, 0);
 }
 

@@ -194,7 +194,7 @@ INCLUDE_ASM("asm/levels", func_L00_004195C8);
 
 INCLUDE_ASM("asm/levels", func_L00_00419668);
 
-INCLUDE_ASM("asm/levels", func_L00_00419A80);
+/* func_L00_00419A80 is defined in L00_00419A80-flags-g8.c. */
 
 /* Marks the object as started and raises the high bit of its flag word, once. */
 void func_L00_00419B58(char *object)
