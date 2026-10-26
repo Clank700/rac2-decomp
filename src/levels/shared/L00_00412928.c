@@ -92,7 +92,6 @@ void func_L00_00414350(char *object)
 
 INCLUDE_ASM("asm/levels", func_L00_004143D0);
 
-INCLUDE_ASM("asm/levels", func_L00_00414540);
 
 INCLUDE_ASM("asm/levels", func_L00_00415210);
 
@@ -112,7 +111,6 @@ void func_L00_00415A38(char *object)
 }
 
 
-INCLUDE_ASM("asm/levels", func_L00_00415DE8);
 
 INCLUDE_ASM("asm/levels", func_L00_00416A38);
 

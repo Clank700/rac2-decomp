@@ -1,16 +1,6 @@
-/* func_L00_00414540 (27 levels, 3,276 bytes): explosion burst with a drift velocity (family F6, the
- * drift-carrying sibling of func_L16_00406550). Opus draft (big35), 2026-10-26; not linked.
- * Profile: -O2 -G8 -ffunction-sections -frac2-zero-ti-por as its own unit (-g8.c). The one quadword copy is
- * retail's sp-relative lq/sq, so no -frac2-qcopy. 819/819 words, all opcodes equal; 18 words differ,
- * check.py 0/27 US (first difference +0x140 at every place; not in the PAL catalogue).
- * Levers: interleaved float parameters (func_002C65A0/func_002C7970: 7 ints, 3 floats, then the last int;
- * func_002BDCE8: pos, 2 floats, sign, vel, color, 0, 2 floats; func_002ABBB8: 3 ptrs, 2 floats, 3 ints,
- * 4 floats, 6 ints, float); one effect pointer, loop counter and set of loop temporaries per loop;
- * the heading (atan2) and the turned angle are separate locals; vz goes through speed.
- * Left: in the two 2-iteration emitter loops retail loads a1 (drift) before a0 (object + 0x10) and keeps
- * the result in a1; ours a0 first and the result in a0. In sched1 both moves are ready with equal
- * priority and weight (a0 from gcse's reaching reg of object + 0x10, a1 from the parameter), so luid
- * order decides: retail's RTL had the a1 move first or a dependence on a0's source. In the permuter farm.
+/* func_L00_00414540: explosion burst with a drift velocity (family F6, the drift-carrying sibling
+ * of func_L16_00406550 and func_L00_00415DE8). The emitters take their float parameters interleaved
+ * with the ints; one effect pointer serves the four leading fire emitters.
  */
 #include "common.h"
 
@@ -57,30 +47,31 @@ void func_L00_00414540(u8 *object, void *unused, float *drift)
     Vec4 rotation;
     u8 *state = *(u8 **)(object + 0x68);
     float inner, outer, angle, speed;
+    u8 *effect;
     int na, nb, nc, ne, ng, nh, nk, sign;
 
     inner = D_L00_001B13E0 * F(state, 0x14) * 210000.0f;
     outer = D_L00_001B13E4 * F(state, 0x14) * 210000.0f;
     {
-        u8 *effect = func_002C65A0(object + 0x10, drift, D_L00_001B13E8, 0xF78E38, 0, 100, 0, inner, outer, 0.0f, 0);
+        effect = func_002C65A0(object + 0x10, drift, D_L00_001B13E8, 0xF78E38, 0, 100, 0, inner, outer, 0.0f, 0);
         if (effect)
             effect[2] = D_L00_001FE940.fireColors[0];
     }
     {
-        u8 *effect = func_002C65A0(object + 0x10, drift, D_L00_001B13E8, 0xF76300, 0, 100, 0, inner, outer, 0.0f, 0);
+        effect = func_002C65A0(object + 0x10, drift, D_L00_001B13E8, 0xF76300, 0, 100, 0, inner, outer, 0.0f, 0);
         if (effect)
             effect[2] = D_L00_001FE940.fireColors[0];
     }
     for (na = 1; na >= 0; na--) {
         {
-            u8 *effect = func_002C65A0(object + 0x10, drift, D_L00_001B13E8, 0xF78E38, 0, 127, 0, inner, outer, 0.0f, 0);
+            effect = func_002C65A0(object + 0x10, drift, D_L00_001B13E8, 0xF78E38, 0, 127, 0, inner, outer, 0.0f, 0);
             if (effect)
                 effect[2] = D_L00_001FE940.fireColors[5];
         }
     }
     for (nb = 1; nb >= 0; nb--) {
         {
-            u8 *effect = func_002C65A0(object + 0x10, drift, D_L00_001B13E8, 0xF78E38, 0, 127, 0, inner, outer, 0.0f, 0);
+            effect = func_002C65A0(object + 0x10, drift, D_L00_001B13E8, 0xF78E38, 0, 127, 0, inner, outer, 0.0f, 0);
             if (effect)
                 effect[2] = D_L00_001FE940.fireColors[6];
         }

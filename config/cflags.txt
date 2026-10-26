@@ -1116,3 +1116,7 @@ src/levels/02_maktar_nebula/L02_003D9728-g8.c	-O2 -G8 -ffunction-sections -frac2
 src/game/002FFB68-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/shared/L09_003F8960-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels
 src/levels/shared/L00_00385370.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L00_00414540-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L00_00415DE8-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L16_00406550-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L00_003A6C30-g8.c	-O2 -G8 -ffunction-sections -g
