@@ -119,7 +119,6 @@ void func_L00_002B91C0(void)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002B9380);
 
 /* reads a scalar through DATA0 and, when it exceeds 0.001f, re-normalises the vector at DATA0 (and DATA0-112) from the elapsed float, clamping the amount at zero; otherwise it runs the plain refresh entry point. */
 void func_L00_002B94D8(float a0)
