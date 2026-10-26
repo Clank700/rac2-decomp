@@ -1,32 +1,26 @@
-/*
- * Complete manual reconstruction retained as nonmatching; no coverage credit.
- * Fresh qualified-compiler checks, 2026-10-25.
- * Profile: -O2 -G0 -ffunction-sections
- * Coverage: US: 0/1; US2: absent from catalogue; PAL: absent from catalogue.
- * Compiled text: 1560 bytes; retail: 1576 bytes.
- * Remaining difference: The 1560/1576 body uses an actual compiler-owned five-destination constant
- * label table. Its computed goto reads that local table; the old external retail table and unused
- * label-table workaround are gone. A normal switch collapsed the empty fifth state into its
- * default and selected branches. Entry/global/controller lifetimes and later scheduling remain
- * different. 88FB8 and85828 use their canonical 32-bit word contracts, and B49E0 has its pointer
- * fifth argument and integer return.
- * Reopen when: Recover actual branch-local vector and owner/global lifetimes; any future exact
- * text must additionally qualify the complete compiler-owned table placement in a strict linked
- * build.
+/* func_L04_00439950 (1 place, 1,576 bytes): Barlow NPC controller (state switch, then head look).
+ * Opus draft (big38), 2026-10-26; not linked. Profile: -O2 -G0 -ffunction-sections.
+ * 393/394 words; everything matches up to the two closing func_002AEC48 calls. Retail
+ * rematerialises the 0.3f argument (lui/ori/mtc1 $f13) before each call; this cc1 keeps it in
+ * $f20 across the first call (one word short). In the permuter farm.
+ * Found: a plain switch with an empty case 4 gives retail's 5-entry table (no computed goto);
+ * hero fields through the Hero union view (retail derives the base as s0 - 0x80);
+ * D_001395B8 through a union view (base address in a register); MACRO_ADDR for
+ * D_L04_001A8F00, D_L04_001B24DC and D_001A7A40; the 0x1B2228 store is sda D_L04_001B2224[1].
  */
-
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
 typedef union { TI128 q; f32 f[4]; } BarlowVector;
-extern u8 *D_L04_001B24DC;
+extern u8 *D_L04_001B24DC MACRO_ADDR;
 extern u8 D_L04_001BF880[];
-extern int D_L04_001A8F00;
-extern int D_L04_001B2228;
-extern u8 D_00189EA0[], D_00189EB0[];
+extern int D_L04_001A8F00 MACRO_ADDR;
+extern int D_L04_001B2224[] __attribute__((sda));
+typedef union { u8 b[0x2600]; s32 i[0x980]; f32 f[0x980]; TI128 q[0x260]; } Hero;
+extern u8 D_00189E20[];
 extern BarlowVector D_00189F00;
 extern f32 D_00189F30[4];
-extern u8 D_001A7A40;
+extern u8 D_001A7A40 MACRO_ADDR;
 extern void func_L01_003128C0(void *);
 extern int func_L01_003245E0(void *, int, f32);
 /* Interface assumption: retain the incoming owner/key in a0. The current
@@ -53,7 +47,8 @@ extern f32 func_00283BE0(f32, f32);
 extern f32 func_00282E20(void *);
 extern void func_002AEC48(void *, void *, int, f32, f32);
 extern u32 D_001397A4;
-extern u8 D_0013965C;
+typedef union { u8 b[0x200]; u32 w[0x80]; } GameFlags;
+extern u8 D_001395B8[];
 extern void func_L04_00439870(void *);
 extern void func_00282F20(void *, void *, f32);
 extern void func_00282CD8(void *, void *, void *);
@@ -64,8 +59,6 @@ extern void func_00285788(int, int);
 extern int func_002B49E0(int, int, int, int, unsigned char *);
 
 void func_L04_00439950(u8 *object) {
-    static void *const cases[5] = {&&state0, &&state1, &&state2, &&state3, &&stateDone};
-    unsigned int state;
     BarlowVector target, origin, delta;
     u8 *data = *(u8 **)(object + 0x68);
     u8 *linked;
@@ -74,10 +67,8 @@ void func_L04_00439950(u8 *object) {
     f32 heading, yaw, pitch;
     int look;
     func_L04_00439870(object);
-    state = object[0x20];
-    if (state < 5) goto *cases[state];
-    goto stateDone;
-state0:
+    switch (object[0x20]) {
+    case 0:
         linked = D_L04_001B24DC + *(int *)(data + 0x120) * 256;
         *(int *)(linked + 0x98) = 0;
         linked[0x31] = 0;
@@ -85,42 +76,44 @@ state0:
         func_L01_003128C0(object);
         if (D_001397A4 & 0x20000000) func_002A7750(object, 4, -1);
         else func_002A7750(object, 1, -1);
-        goto stateDone;
-state1:
+        break;
+    case 1:
         if (func_L01_003245E0(object, 10, 6.5f)) {
             func_L01_003246D0((int)object);
             func_00288AA0(D_L04_001BF880, 0x3D);
             func_00288BE8(D_L04_001BF880);
             func_002A7750(object, 2, -1);
         }
-        goto stateDone;
-state2:
+        break;
+    case 2:
         if (D_L04_001A8F00 == 2) {
             object[0x31] = 0;
             *(u16 *)(object + 0x34) |= 1;
         }
-        D_L04_001B2228 = 1;
+        D_L04_001B2224[1] = 1;
         if (!func_002F5D10()) {
-            D_L04_001B2228 = 0;
+            D_L04_001B2224[1] = 0;
             object[0x31] = 1;
             *(u16 *)(object + 0x34) &= ~1;
             func_00282F20(&target, object + 0xC0, 4.0f);
             func_00282CD8(&origin, &target, object + 0x10);
-            func_L00_002B9D60(&target, D_00189EB0, 0, 1);
+            func_L00_002B9D60(&target, &((Hero *)D_00189E20)->q[0x90 / 16], 0, 1);
             func_002A7750(object, 3, -1);
         }
-        goto stateDone;
-state3:
-        if (!D_0013965C) {
-            D_0013965C = 1;
+        break;
+    case 3:
+        if (!((GameFlags *)D_001395B8)->b[0xA4]) {
+            ((GameFlags *)D_001395B8)->b[0xA4] = 1;
             message = func_00288FB8(0x1137);
             func_00285828(message, 0, func_00288FB8(0x3296), 1);
             func_00285788(0x40, 0);
             func_002B49E0(4, 1, 10, 0, 0);
             func_002A7750(object, 4, -1);
         }
-        goto stateDone;
-stateDone:
+        break;
+    case 4:
+        break;
+    }
     if (object[0x20] != 0) {
         if (object[0x43] == 0 && func_00282948((int *)(data + 0x11C))) {
             *(int *)(data + 0x11C) = func_00283CF0(func_002A7878(1200.0f, 2400.0f));
@@ -134,15 +127,15 @@ stateDone:
     look = 0;
     if (object[0x43] == 0) {
         look = 1;
-        if (func_00282E80(object + 0x10, D_00189EA0) < 8.0f &&
-            func_00283C80(*(f32 *)(object + 0xF8), func_00283248(D_00189F00.f[0] - *(f32 *)(object + 0x10), D_00189F00.f[1] - *(f32 *)(object + 0x14))) < 1.5707964897155762f) {
-            if (func_00282DF0(D_00189F30) > 0.01f)
+        if (func_00282E80(object + 0x10, &((Hero *)D_00189E20)->q[0x80 / 16]) < 8.0f &&
+            func_00283C80(*(f32 *)(object + 0xF8), func_00283248(((Hero *)D_00189E20)->f[0xE0 / 4] - *(f32 *)(object + 0x10), ((Hero *)D_00189E20)->f[0xE4 / 4] - *(f32 *)(object + 0x14))) < 1.5707964897155762f) {
+            if (func_00282DF0(&((Hero *)D_00189E20)->q[0x110 / 16]) > 0.01f)
                 *(int *)(data + 0x114) = 120;
             else
                 func_00282948((int *)(data + 0x114));
         } else if (*(int *)(data + 0x114)) {
             *(int *)(data + 0x114) = 0;
-            qcopy((data + 0x100), &D_00189F00);
+            qcopy((data + 0x100), &((Hero *)D_00189E20)->q[0xE0 / 16]);
         }
         if (func_00282948((int *)(data + 0x118))) {
             *(int *)(data + 0x118) = func_00283CF0(func_002A7878(180.0f, 300.0f));
@@ -152,7 +145,7 @@ stateDone:
             func_00282CC0(data + 0x100, data + 0x100, object + 0x10);
         }
         if (*(int *)(data + 0x114)) {
-            qcopy(&target, &D_00189F00);
+            qcopy(&target, &((Hero *)D_00189E20)->q[0xE0 / 16]);
             rate = 0.04f;
         } else {
             qcopy(&target, (data + 0x100));
