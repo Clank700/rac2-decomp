@@ -38,6 +38,16 @@ class RelocationValidation(unittest.TestCase):
             self.assertIn(part, self.derive([0x3C020000, 0x8C440000], retail,
                                            relocations, "D_00139568")[1])
 
+    def test_hi_pairs_with_the_lo_after_it_in_the_object_even_at_a_lower_address(self):
+        # A %hi in a loop's last delay slot, paired by the assembler with the %lo at the top.
+        relocations = [(4, build.elf.R_MIPS_HI16), (0, build.elf.R_MIPS_LO16)]
+        values, error = self.derive([0x8C440000, 0x3C020000], [0x8C449568, 0x3C020014],
+                                    relocations, "D_00139568")
+        self.assertIsNone(error)
+        self.assertEqual(values["D_00139568"], 0x139568)
+        self.assertIn("%hi", self.derive([0x8C440000, 0x3C020000], [0x8C449568, 0x3C030014],
+                                         relocations, "D_00139568")[1])
+
     def test_gp_and_jump_relocations_do_not_hide_changed_instructions(self):
         self.assertIn("gp access", self.derive([0x8F820000], [0x8F830000],
             [(0, build.elf.R_MIPS_GPREL16)], "D_001AEFF0")[1])

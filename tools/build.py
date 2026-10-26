@@ -372,8 +372,17 @@ class Placement:
         data, ref = sec["data"], self.retail(address, len(sec["data"]))
         if len(ref) != len(data):
             return {}, "outside the program"
-        relocs = sorted(obj["relocations"].get(index, []))
+        in_order = obj["relocations"].get(index, [])
+        relocs = sorted(in_order)
         touched = {o for o, _, _ in relocs}
+        # The assembler lists each %hi just before the %lo it pairs with (mips_frob_file),
+        # which can lie at a lower address: a %hi in a loop's last delay slot pairs with the
+        # %lo at the loop's top. Pair them in the object's order, as the linker does.
+        pair = {}
+        for k, (at, kind, sym) in enumerate(in_order):
+            if kind == elf.R_MIPS_HI16:
+                pair[at] = next((o for o, t, s in in_order[k + 1:]
+                                 if t == elf.R_MIPS_LO16 and s == sym), None)
         for at in range(0, len(data), 4):
             if at not in touched and data[at:at + 4] != ref[at:at + 4]:
                 return {}, f"instruction at +{at:#x} differs"
@@ -402,12 +411,10 @@ class Placement:
                 err = agree(symbol, ((address & 0xF0000000) | ((theirs & 0x3FFFFFF) << 2))
                             - ((mine & 0x3FFFFFF) << 2))
             elif kind == elf.R_MIPS_HI16:
-                # value = retail address - addend, both from the %hi and its first %lo
-                j = next((k for k in range(i + 1, len(relocs)) if relocs[k][1] == elf.R_MIPS_LO16
-                          and relocs[k][2] == sym), None)
-                if j is None:
+                # value = retail address - addend, both from the %hi and its paired %lo
+                lo_at = pair.get(at)
+                if lo_at is None:
                     return {}, f"%hi at +{at:#x} has no %lo"
-                lo_at = relocs[j][0]
                 if (mine ^ theirs) & 0xFFFF0000:
                     return {}, f"%hi at +{at:#x} differs"
                 target = ((theirs & 0xFFFF) << 16) + sext(word(ref, lo_at) & 0xFFFF)
