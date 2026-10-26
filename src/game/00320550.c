@@ -1,19 +1,9 @@
-/* func_00320550 (boot; 4,424 bytes): Opus big27 near miss, 2026-10-26.
- * Family F28 with func_00322CC0 (src/game/00322CC0.c, written from it) and its twin
- * func_L00_003D54B0 (L00, L07), which is the same body with its program's data names.
- * Profile: default -O2 -G0 -ffunction-sections in its own unit. 1,106/1,106 instructions,
- * exactly two off at every place: before the func_0032C700 call retail emits
- * `li.s $f12,0.5; li $v0,1; li.s $f13,20.0`, this cc1 puts `li $v0,1` first.
- * This is func_00322CC0's open residue too (there `li.s $f13; li $v0,1; li.s $f12`).
- * Cause (sched2 -dR): sched1 already gives retail's order; in sched2 the li.s and the
- * stack-argument `li` tie on priority (load latency 2 = li 1 + anti-dependent store 1)
- * and rank_for_schedule's depend_count breaks the tie for the `li` (its store plus the
- * call's anti dependence). Neither removing that tie-break, a load latency of 3, nor
- * zero-cost anti links reproduces retail without breaking the rest of both functions;
- * a float local for 0.5f between the calls changes nothing.
- * Declarations that mattered: D_001A8BB0 as MACRO_ADDR (lui/lw in flow, $gp in delay
- * slots) and the func_00322690 table as an `sda` incomplete array (keeps its `la` out of
- * the delay slot).
+/* func_00320550 (boot; 4,424 bytes, entry 0x3205A0): family F28, the same body as func_L00_003D54B0 (L00, L07),
+ * written from func_00322CC0 (src/game/00322CC0.c).
+ * D_001A8BB0's slot is reached through the address macro (MACRO_ADDR): lui/lw in flow,
+ * $gp in delay slots.  The func_00322690 table is an sda incomplete array.
+ * func_0032C700 returns a pointer: a value-returning call sets $v0, which gives sched2
+ * retail's `li.s $f12; li $v0,1; li.s $f13` before it.
  */
 #include "common.h"
 
@@ -38,7 +28,7 @@ extern int func_002B1C20(char *, char *);
 extern int func_002E5CF8(int, int, char *);
 extern void func_00283098(void *, void *, void *);
 extern void func_00282CC0(void *, void *, void *);
-extern void func_0032C700(void *, int, int, int, int, int, int, int, float, float, int, int, int, int);
+extern void *func_0032C700(void *, int, int, int, int, int, int, int, float, float, int, int, int, int);
 extern void func_00322A30(void *);
 extern void func_002A6C58(char *, int, int);
 extern int func_002B5258(char *);
