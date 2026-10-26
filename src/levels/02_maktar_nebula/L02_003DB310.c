@@ -342,7 +342,6 @@ void func_L02_003EA488(char *arg0) {
         (*(unsigned short *)(arg0 + 0x34) & 0xEFFF) | 0x43;
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003EA4E0);
 
 /* func_L02_003EAA68 is matched in L02_003EAA68.c (built with -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-barrier). */
 
