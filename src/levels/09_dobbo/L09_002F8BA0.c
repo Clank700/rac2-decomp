@@ -297,7 +297,6 @@ void func_L09_003FDC58(unsigned char *a0) {
    the object's 0x38C and 0x3B0, and hands it to the shared record starter
    together with a zero pair it fills in; the three floats it wrote then ramp
    the object's 0x10/0x14/0x18 channels at 0.02 per frame. */
-INCLUDE_ASM("asm/levels", func_L09_003FDD80);
 
 
 /* Feeds the sub-object two measured channel ramps, then, only in state 1 and

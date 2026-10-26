@@ -228,7 +228,6 @@ void func_002BF8F0(char *self)
     func_00282CC0(self + 0x10, self + 0x10, (char *)vec);
 }
 
-INCLUDE_ASM("asm/game", func_002BFB38);
 
 INCLUDE_ASM("asm/game", func_002BFC50);
 
@@ -609,7 +608,6 @@ void func_002C3EE8(char *p)
 
 INCLUDE_ASM("asm/game", func_002C4100);
 
-INCLUDE_ASM("asm/game", func_002C43C8);
 
 INCLUDE_ASM("asm/game", func_002C4500);
 
@@ -922,7 +920,6 @@ INCLUDE_ASM("asm/game", func_002C6B68);
 
 INCLUDE_ASM("asm/game", func_002C6DD8);
 
-INCLUDE_ASM("asm/game", func_002C6EF0);
 
 INCLUDE_ASM("asm/game", func_002C7050);
 

@@ -1184,3 +1184,8 @@ src/game/00279BD8-g.c	-O2 -G0 -ffunction-sections -g
 src/game/002EF080-g.c	-O2 -G0 -ffunction-sections -g
 src/game/002C96F8-g.c	-O2 -G0 -ffunction-sections -g
 src/game/0030D430-g8.c	-O2 -G8 -ffunction-sections
+src/game/002BFB38.c	-O2 -G0 -ffunction-sections -g
+src/game/002BDBC0.c	-O2 -G0 -ffunction-sections -g
+src/game/003348A8.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
+src/game/002B0520.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L09_003FDD80.c	-O2 -G0 -ffunction-sections -g

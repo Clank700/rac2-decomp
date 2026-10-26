@@ -309,7 +309,6 @@ INCLUDE_ASM("asm/game", func_00334550);
 INCLUDE_ASM("asm/game", func_00334730);
 
 
-INCLUDE_ASM("asm/game", func_003348A8);
 
 void func_003349E8(void *owner, int flag, float value)
 {

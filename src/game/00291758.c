@@ -270,7 +270,6 @@ void func_002940C0(void)
 
 /* func_00294130 is matched in 00291758-g8.c (-G8 small data). */
 
-INCLUDE_ASM("asm/game", func_00294180);
 
 
 extern void func_002942A0(int, int, int, int);

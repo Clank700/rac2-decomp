@@ -277,7 +277,6 @@ INCLUDE_ASM("asm/levels", func_L03_00409248);
 
 INCLUDE_ASM("asm/levels", func_L03_00409AB0);
 
-INCLUDE_ASM("asm/levels", func_L03_00409C38);
 
 extern f32 func_00282C48(f32);
 

@@ -240,7 +240,6 @@ int func_0031A708(unsigned char *object) {
 
 INCLUDE_ASM("asm/game", func_0031A718);
 
-INCLUDE_ASM("asm/game", func_0031A848);
 
 void func_0031A998(char *self, char *p1, int p2)
 {
