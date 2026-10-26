@@ -97,6 +97,12 @@ no static reference. Where the prefix holds non-filler
 words (a leftover store or compare followed by a nop), these are unreachable tails of
 the preceding body and stay in assembly like the rest.
 
+Seven core functions (`func_0011F9E4`, `func_00125D94`, `func_00126104`, `func_00126DBC`
+skip 4 bytes; `func_00127340` and `func_00128F48` skip 8; `func_001246D0` skips 16) were corrected
+the same way. Each prefix follows a completed `jr $ra` and its delay slot, holds only linker
+filler (0xCDCDCDCD) or unreachable leftovers, and every jump, address pair or data pointer that
+reaches the function already targets the shortened entry.
+
 Release-specific rows have their own named corrections. `tools/carry.py --entries`
 repairs established extents while retaining their existing identities and kinds,
 rather than renaming them for the new address or merging identical short methods.
