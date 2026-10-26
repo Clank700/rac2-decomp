@@ -64,7 +64,6 @@ void func_L22_003FA2A8(s32 a0) {
     *(u8 *)(a0 + 0x30) = 0xFF;
 }
 
-INCLUDE_ASM("asm/levels", func_L22_003FD140);
 
 INCLUDE_ASM("asm/levels", func_L22_0040C888);
 

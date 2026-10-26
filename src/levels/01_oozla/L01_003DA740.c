@@ -34,7 +34,6 @@ INCLUDE_ASM("asm/levels", func_L01_003DAB98);
 INCLUDE_ASM("asm/levels", func_L01_003DAE58);
 
 /* Scatters the measured primitive around the object, a1 times. */
-INCLUDE_ASM("asm/levels", func_L01_003DBB88);
 
 /* func_L01_003DBCB8 is defined in L01_003DBCB8-qcopy-barrier.c. */
 
@@ -81,9 +80,7 @@ void func_L01_003DC9A8(void **a0, s32 *a1) {
 
 INCLUDE_ASM("asm/levels", func_L01_003DC9E0);
 
-INCLUDE_ASM("asm/levels", func_L01_003DCD40);
 
-INCLUDE_ASM("asm/levels", func_L01_003DCDD8);
 
 INCLUDE_ASM("asm/levels", func_L01_003DCE70);
 

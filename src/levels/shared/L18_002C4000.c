@@ -529,7 +529,6 @@ INCLUDE_ASM("asm/levels", func_L18_003FCA38);
 
 INCLUDE_ASM("asm/levels", func_L18_003FD630);
 
-INCLUDE_ASM("asm/levels", func_L18_003FD730);
 
 /* store -1 into field 0x74 of the object at s[0x68] */
 void func_L18_003FE010(BatchA_A18_u8 *s) {

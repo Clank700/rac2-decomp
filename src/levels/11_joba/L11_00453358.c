@@ -261,7 +261,6 @@ done:
     *(short *)(state + 0x256) = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00456438);
 
 /* Retires the state's counter and drops the object to its idle flag block. */
 void func_L11_00456540(char *p)
@@ -455,7 +454,6 @@ INCLUDE_ASM("asm/levels", func_L11_00459F30);
 
 /* func_L11_0045A578 lives in the sibling small-data unit (L11_00453358-g8.c). */
 
-INCLUDE_ASM("asm/levels", func_L11_0045A8C0);
 
 INCLUDE_ASM("asm/levels", func_L11_0045B5C8);
 

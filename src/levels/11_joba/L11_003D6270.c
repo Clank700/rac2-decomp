@@ -136,7 +136,6 @@ f32 func_L11_003F2F00(f32 *arg0, f32 *arg1, f32 *arg2) {
          - (arg0[1] - arg2[1]) * (arg1[0] - arg2[0]);
 }
 
-INCLUDE_ASM("asm/levels", func_L11_003F2E38);
 
 void func_L11_003F3098(u8 *arg0) {
     func_L11_003F31C0(arg0);

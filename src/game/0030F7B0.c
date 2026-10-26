@@ -205,7 +205,6 @@ int func_00312B58(Level16VendorMoby *moby) {
 
 int func_00312E10(unsigned char *p) { return p[0x20] == 1; }
 
-INCLUDE_ASM("asm/game", func_00312E20);
 
 
 INCLUDE_ASM("asm/game", func_00312EB0);

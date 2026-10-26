@@ -98,7 +98,6 @@ INCLUDE_ASM("asm/levels", func_L02_00422720);
 
 /* func_L02_00422D68 is defined in L02_00422D68-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L02_004230B0);
 
 /* Restarts the record's resident effect once it has settled, picking the
    variant by the resident query and the record's own byte 0x43. */

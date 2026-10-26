@@ -386,7 +386,6 @@ void func_002A8C00(char *a, int b, int c, float d, Quad16 *q) {
     *(volatile TI128 *)a = *(TI128 *)q;
 }
 
-INCLUDE_ASM("asm/game", func_002A8C28);
 
 extern void func_0029FCC0(void *, int, float *);
 extern int func_002A8C28(void *, float, float *, int, float, float, int, int, int);
