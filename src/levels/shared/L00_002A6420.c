@@ -279,7 +279,7 @@ INCLUDE_ASM("asm/levels", func_L00_002A7A50);
 
 INCLUDE_ASM("asm/levels", func_L00_002A9460);
 
-INCLUDE_ASM("asm/levels", func_L00_002A9600);
+/* func_L00_002A9600 uses the quadword-copy profile in L00_002A9600-qcopy.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_002A9760);
 

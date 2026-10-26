@@ -19,6 +19,7 @@ of semantic correctness or matching credit without a strict linked build.
 | --- | ---: | ---: |
 | [`func_00285030`](game/func_00285030.c) | 680 | 26 October 2026 (xcarry): carried from rac3-decomp func_00392820, whose match uses an empty asm register fence (not allowed here). Without it, as a -g8 unit, the TEX0 build order and the second packet's registers differ (about 25 lines). See source. |
 | [`func_002A86E8`](game/func_002A86E8.c) | 356 | 26 October 2026 (xcarry): carried from rac3-decomp func_L01_00445D30 (same instructions there); 348 of 356 bytes. cc1 hoists the p[1] load above the cursor store and reuses it for the sign test where retail reloads it with lh. See source. |
+| [`func_002DC900`](game/func_002DC900.c) | 428 | 26 October 2026 (M32): 420/428 at -G8; address-sum order and the half-offset branch left. See source. |
 | [`func_002BC768`](game/func_002BC768.c) | 380 | 26 October 2026 (M32): 380/380, one store scheduled two slots late (as func_002BDCE8); in the permuter. See source. |
 | [`func_002C7748`](game/func_002C7748.c) | 320 | 26 October 2026 (M32): 320/320 at -G8 with qcopy; $s0/$s1 swapped only; in the permuter. See source. |
 | [`func_002C36D0`](game/func_002C36D0.c) | 268 | 26 October 2026 (M32): 268/268, callee-saved register assignment only; in the permuter. See source. |
