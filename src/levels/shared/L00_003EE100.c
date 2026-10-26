@@ -739,7 +739,6 @@ INCLUDE_ASM("asm/levels", func_L00_003F5870);
 
 INCLUDE_ASM("asm/levels", func_L00_003F5B10);
 
-INCLUDE_ASM("asm/levels", func_L00_003F5F90);
 
 /* func_L00_003F6168 is in L00_003F6168-helpers-g8.c. */
 

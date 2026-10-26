@@ -28,7 +28,6 @@ typedef struct {
 } Vec16_Fc936841d;
 #endif
 
-INCLUDE_ASM("asm/levels", func_L00_003A8E28);
 
 INCLUDE_ASM("asm/levels", func_L00_003A9000);
 
