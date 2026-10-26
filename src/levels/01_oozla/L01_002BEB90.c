@@ -4,8 +4,6 @@ INCLUDE_ASM("asm/levels", func_L01_002BEB90);
 
 INCLUDE_ASM("asm/levels", func_L01_002C1A70);
 
-INCLUDE_ASM("asm/levels", func_L01_002C37C8);
-
 typedef int TI128 __attribute__((mode(TI)));
 
 extern int D_L01_001A79F0;

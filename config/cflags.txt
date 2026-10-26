@@ -784,3 +784,10 @@ src/levels/26_jamming_array/L26_0041C598-g-g8.c	-O2 -G8 -ffunction-sections -g
 src/levels/shared/L12_00408368-flags-g8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L16_00405818-flags-g8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L16_00414038-flags-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L00_004170A8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/04_barlow/L04_002EDBC8.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -frac2-zero-ti-por -frac2-qcopy -frac2-qcopy-barrier -frac2-hazard-labels
+src/levels/07_siberius/L07_002C3CC0.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -frac2-zero-ti-por -frac2-qcopy -frac2-qcopy-barrier -frac2-hazard-labels
+src/levels/01_oozla/L01_002C37C8.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -frac2-zero-ti-por -frac2-qcopy -frac2-qcopy-barrier -frac2-hazard-labels
+src/levels/08_tabora/L08_002D90C8-fn.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -frac2-zero-ti-por -frac2-qcopy -frac2-qcopy-barrier -frac2-hazard-labels
+src/levels/19_grelbin/L19_002CAAB0-fn.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -frac2-zero-ti-por -frac2-qcopy -frac2-qcopy-barrier -frac2-hazard-labels
+src/levels/09_dobbo/L09_002C9738.c	-O2 -G16 -Wa,-G16 -ffunction-sections -g -frac2-zero-ti-por -frac2-qcopy -frac2-qcopy-barrier -frac2-hazard-labels

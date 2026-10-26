@@ -560,6 +560,9 @@ instructions with registers. `-dG` dumps and an instrumented cc1 place the survi
 gcse's availability decisions. Of every matched function in the 28 programs only
 `func_L00_00310048` (27 places) compiled differently; its C had been shaped around alias
 analysis and matches as a plain `for (p = start; p < end; p += 256)` loop.
+The decider family (`func_L04_002EDBC8`, `func_L08_002D90C8`, `func_L09_002C9738`,
+`func_L19_002CAAB0`) had read case 0x32's 0x1B4 through a `char *hb` copy of the hero
+pointer to force retail's reload; under this model it reads the field directly and matches.
 [tests/test_gcse_store_kills_loads.py](../tests/test_gcse_store_kills_loads.py) checks the
 transformer and authored controls: a global is loaded again after stores to another record,
 reused when no store intervenes, and loaded again after a call.
