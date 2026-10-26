@@ -141,5 +141,24 @@ void func_00125A20(GsDispEnv *disp, short psm, short w, short h, short dx, short
     disp->bgcolor = 0;
 }
 
-INCLUDE_ASM("asm/core", func_00125D94);
+/* rac1-decomp src/core/00122140.c: func_00122140 */
+/* Push a GS display-environment struct's quadword fields to the GS
+ * privileged registers, picking the register set by the mode flag at
+ * offset 6 of the GParam block (r1_func_00121D08's return). */
+void func_00125D94(GsDispEnv *env) {
+    GsGParam *info = r1_func_00121D08();
+
+    if (info->version == 1) {
+        *(volatile unsigned long *)0x12000000 = env->pmode;
+        *(volatile unsigned long *)0x12000070 = env->dispfb;
+        *(volatile unsigned long *)0x12000080 = env->display;
+        *(volatile unsigned long *)0x120000C0 = env->bgcolor;
+    } else {
+        *(volatile unsigned long *)0x12000000 = env->pmode;
+        *(volatile unsigned long *)0x12000020 = env->smode2;
+        *(volatile unsigned long *)0x12000090 = env->dispfb;
+        *(volatile unsigned long *)0x120000A0 = env->display;
+        *(volatile unsigned long *)0x120000E0 = env->bgcolor;
+    }
+}
 

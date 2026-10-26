@@ -170,7 +170,31 @@ void func_00124630(int *arg0) {
     r1_D_00131414_v = 0;
 }
 
-INCLUDE_ASM("asm/core", func_001246D0);
+typedef struct {
+    int n0;
+    int n1;
+    char *dst0;
+    char *dst1;
+    char buf0[0x40];
+    char buf1[0x40];
+} CdRecv;
+extern void r1_func_001209D8(int *arg0);
+
+/* rac1-decomp src/core/001208E8.c: func_001246D0 */
+void func_001246D0(int arg0) {
+    CdRecv *p = (CdRecv *)(arg0 | 0x20000000);
+    int i;
+
+    if (p->n0 > 0) {
+        char *d0 = p->dst0;
+        for (i = 0; i < p->n0; i++) d0[i] = p->buf0[i];
+    }
+    if (p->n1 > 0) {
+        char *d1 = p->dst1;
+        for (i = 0; i < p->n1; i++) d1[i] = p->buf1[i];
+    }
+    r1_func_001209D8((int *)&r1_D_00131414_v);
+}
 
 extern int r1_func_00118C70(void *);
 extern int r1_D_001313E0;
