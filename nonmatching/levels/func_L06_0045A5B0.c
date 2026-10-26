@@ -1,14 +1,26 @@
-/* Opus big26 handoff, 2026-10-26: func_L06_0045A5B0 (6,024 bytes), first decompilation.
- * Step 0: one function (one prologue, one return); no matched twin (lead's slate).
- * Draft: m2c (mipsee target) with callee prototypes from src/, then a Sonnet first pass.
- * Profile: -O2 -G8 -ffunction-sections -ffast-math. Measured: 1506/1506 instructions, 1408 difflib-aligned, 930 same-address (about 25 more equal once linked).
- * Control flow, jump tables and call sequences line up with retail.
- * Left: the two flags in s2/s3 swapped; retail keeps &v70, s0 and fp apart; argument-setup delay slots before func_00410D18-family and 2AB8C0 calls; case 5 hero base (retail one D_00189E20 base, plain offsets); case 12/13/14/17 shared beqz + 459C38 tail. CHECK: the two $gp tables at gp+0x2980/0x2990 are declared as 8-byte sda arrays to get the addiu $gp form; their real size is likely 9 (3x3), so that declaration must be justified or replaced before landing.
+/* Opus big29 handoff, 2026-10-26: func_L06_0045A5B0 (6,024 bytes, level 06, one place).
+ * Profile: -O2 -G16 -Wa,-G16 -ffunction-sections -ffast-math, in its own unit (L06_0045A5B0-g16.c).
+ * The two $gp tables are the 3x3 state-transition table pair indexed nw + old * 3, declared at
+ * their real 9 bytes; -G16 -Wa,-G16 lets that size take retail's addiu $gp form (the -G32/-G64
+ * precedent in docs/COMPILER-NOTES.md), replacing big26's fabricated 8-byte sizes.
+ * Status: 1506/1506 instructions; tools/check.py in a trial unit reports the first difference at
+ * +0x1518; 1499 instructions are equal at the same address. Only the func_002ABBB8 argument setup
+ * in case 14 differs (7 words):
+ *   - a1 = s6 + 0xC0 is scheduled before a0 = self. Instrumented sched1 (ready-list priorities):
+ *     both have priority 3 and one dependent; the tie goes to INSN_REG_WEIGHT, and s6 dies at the
+ *     a1 add while self stays live for func_0029F338, so the add wins. Retail has a0 first.
+ *   - lui 0x81/ori (stack word 0x810001) issues before the 1.0f f15 constant; retail the reverse.
+ * What closed the rest: one hp load per arm (gives the 2AB8C0/2A8AF0 argument order), a three-step
+ * f20 computation, the Hero union for case 5, the known func_002ABBB8 prototype, a float-first
+ * func_002A7CA0 prototype (callers' setup order; same registers as the definition), (u8) of the
+ * int return for the 0xBC compare, &v70 written at each use, and the nested call in case 4 split.
+ * qzero_nc changes nothing here.
  */
 #include "common.h"
 #define NULL ((void *)0)
 typedef int Quad __attribute__((mode(TI)));
 typedef union { Quad quad; float f[4]; } Vector;
+typedef union { u8 b[0x2600]; s8 c[0x2600]; s16 h[0x1300]; u16 uh[0x1300]; s32 i[0x980]; u32 u[0x980]; f32 f[0x980]; void *ptr[0x980]; s64 d[0x4C0]; Quad q[0x260]; } Hero;
 typedef struct { Vector pos, v30, v40, v50; void *obj; int kind; } Hit;
 extern char D_00189E20[];
 extern char D_00189EA0[];
@@ -17,11 +29,11 @@ extern s16 D_0018A16C __attribute__((nosda));
 extern int D_001B2348[] __attribute__((sda));
 extern int D_001B2FB8[] __attribute__((sda));
 extern u8 D_001BFCA0[];
-extern char d_001B1A68[], d_001B1AA0[];
+extern char D_L06_001B1A68[], D_L06_001B1AA0[];
 extern u8 *D_L06_001B281C __attribute__((sda));
 extern int D_L06_001B2FB0 __attribute__((sda));
-extern u8 D_L06_001B1970[8] __attribute__((sda));
-extern u8 D_L06_001B1980[8] __attribute__((sda));
+extern u8 D_L06_001B1970[9] __attribute__((sda));
+extern u8 D_L06_001B1980[9] __attribute__((sda));
 extern void func_0026FEB8(const char *, ...);
 extern int func_00277258(void *, int, void *, float);
 extern int func_00278E78(void);
@@ -39,12 +51,12 @@ extern void func_002A7470(void *, int, int, int);
 extern int func_002A77E0(int);
 extern float func_002A7878(float, float);
 extern float func_002A7940(void);
-extern void func_002A7CA0(void *, void *, float, float, float, float);
+extern void func_002A7CA0(void *, float, void *, float, float, float);
 extern int func_002A7EA0(void *, void *, void *, float, float, float, float, int);
 extern int func_002A8AF0(void *, void *, int);
 extern float func_002A90F8(void *, void *);
 extern void func_002AB8C0(void *, void *);
-extern void func_002ABBB8(void *, void *, int, int, int, int, int, int, int, int, int, int, float, float, float, float, float, float, float);
+extern void func_002ABBB8(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int, int);
 extern int func_002ACBC8(void *, int);
 extern void func_002C19D8(void *, void *, int, float, float);
 extern int func_002E5CF8(int, int, void *);
@@ -84,14 +96,14 @@ void func_L06_0045A5B0(u8 *self) {
     u8 s4, s7;
     u8 old;
     int cur;
-    u8 nw;
+    int nw;
     float f20, f21, f22;
 
     if (self != NULL && (s6 = *(u8 **)(self + 0x68)) != NULL) {
         func_L06_003660F0(self, 0, s6 + 0x140, 2.20000005f);
         if (B(self, 0x20) == 0) {
             if (func_L06_00459D08(self, s6) != 0) {
-                func_0026FEB8(d_001B1A68, H(self, 0xB2));
+                func_0026FEB8(D_L06_001B1A68, H(self, 0xB2));
                 goto kill;
             }
             goto check;
@@ -100,10 +112,11 @@ void func_L06_0045A5B0(u8 *self) {
         func_L00_00410D18(self, s6, s6 + 0x20);
         func_002AB8C0(self, s6 + 0x50);
         s3 = func_00282948(s6 + 0x124) != 0;
-        hp = *(u8 **)(s6 + 0x138);
         if (W(s6, 0x100) != 0 && B(self, 0x20) >= 7) {
+            hp = *(u8 **)(s6 + 0x138);
             s2 = func_002A8AF0(&hit, hp + 0x10, *(int *)hp) != 0;
         } else {
+            hp = *(u8 **)(s6 + 0x138);
             s2 = func_002A8AF0(D_00189EA0, hp + 0x10, *(int *)hp) != 0;
             if (func_00282E80(self + 0x10, D_00189EA0) < 30.0f) {
                 hit.obj = *(void **)(D_00189EA0 + 0x2210);
@@ -114,10 +127,10 @@ void func_L06_0045A5B0(u8 *self) {
                 hit.kind = 0;
             } else {
                 hit.obj = NULL;
-                qzero_nc(&hit.pos);
-                qzero_nc(&hit.v30);
-                qzero_nc(&hit.v50);
-                qzero_nc(&hit.v40);
+                qzero(&hit.pos);
+                qzero(&hit.v30);
+                qzero(&hit.v50);
+                qzero(&hit.v40);
                 hit.kind = 2;
             }
         }
@@ -130,15 +143,16 @@ void func_L06_0045A5B0(u8 *self) {
         nw = func_L06_00459BA8(self, s6);
         s4 = 0xFF;
         B(self, 0xBC) = nw;
-        if (old != nw) {
-            st = nw + old * 3;
-            s4 = D_L06_001B1980[st];
+        if (old != (u8)nw) {
+            st = (u8)nw + old * 3;
             s7 = D_L06_001B1970[st];
+            s4 = D_L06_001B1980[st];
         }
-        wp = v70.f;
-        func_0029FCC0(self, 0, wp);
-        if (func_00277258(wp, 1, self, 0.800000012f) != 0 && func_00278E78() == 0) {
-            f20 = (**(float **)(s6 + 0x11C) - F(s6, 0x120)) * 0.5f;
+        func_0029FCC0(self, 0, v70.f);
+        if (func_00277258(v70.f, 1, self, 0.800000012f) != 0 && func_00278E78() == 0) {
+            f20 = **(float **)(s6 + 0x11C);
+            f20 -= F(s6, 0x120);
+            f20 *= 0.5f;
             if (f20 < func_00282C48(F(self, 0x18) - v70.f[2])) {
                 f20 = (**(float **)(s6 + 0x11C) - F(s6, 0x120)) * 0.5f;
             } else {
@@ -164,7 +178,7 @@ void func_L06_0045A5B0(u8 *self) {
                 v70.f[0] += func_002A7878(-0.150000006f, 0.150000006f);
                 v70.f[1] += func_002A7878(-0.150000006f, 0.150000006f);
                 v70.f[2] = func_002A90F8(D_001BFCA0, NULL);
-                func_002C19D8(wp, NULL, -1, f22, 5250.0f);
+                func_002C19D8(v70.f, NULL, -1, f22, 5250.0f);
             }
         }
         if (F(s6, 0x13C) >= 1.0f) {
@@ -179,7 +193,7 @@ void func_L06_0045A5B0(u8 *self) {
         }
         switch (B(self, 0x20)) {
         case 0:
-            func_0026FEB8(d_001B1AA0);
+            func_0026FEB8(D_L06_001B1AA0);
             break;
         case 20:
             cur = W(s6, 0x108);
@@ -244,7 +258,7 @@ void func_L06_0045A5B0(u8 *self) {
                     B(self, 0x20) = 4;
                 }
             } else {
-                func_002A7CA0(self, s6 + 0x110, F(s6, 0x12C), 0.000484813732f, 0.00126051577f, 0.029088825f);
+                func_002A7CA0(self, F(s6, 0x12C), s6 + 0x110, 0.000484813732f, 0.00126051577f, 0.029088825f);
                 F(self, 0xF4) = func_L01_00310BC0(s6 + 0x114, F(self, 0xF4), 0.0f, 0.000484813732f, 0.00126051577f, 0.029088825f);
                 if (s3 != 0 && func_002ACBC8(self + 0x10, W(s6, 0x104)) != 0) {
                     if (B(self, 0x43) != 0) {
@@ -281,8 +295,9 @@ void func_L06_0045A5B0(u8 *self) {
             p4 = self + 0x10;
             s1 = 1;
             f22 = func_00283248(hit.pos.f[0] - F(self, 0x10), hit.pos.f[1] - F(self, 0x14));
-            func_002A7CA0(self, s6 + 0x110, f22, 0.00349065894f, 0.0f, 0.209439546f);
-            F(self, 0xF4) = func_L01_00310BC0(s6 + 0x114, F(self, 0xF4), -func_00283248(func_00282E80(p4, &hit), hit.pos.f[2] - F(self, 0x18)), 0.00349065894f, 0.0f, 0.209439546f);
+            func_002A7CA0(self, f22, s6 + 0x110, 0.00349065894f, 0.0f, 0.209439546f);
+            { float t = -func_00283248(func_00282E80(p4, &hit), hit.pos.f[2] - F(self, 0x18));
+            F(self, 0xF4) = func_L01_00310BC0(s6 + 0x114, F(self, 0xF4), t, 0.00349065894f, 0.0f, 0.209439546f); }
             if (func_00282E80(p4, D_00189EA0) < 3.0f) {
             } else {
                 s1 = 0;
@@ -317,10 +332,10 @@ void func_L06_0045A5B0(u8 *self) {
             break;
         case 5:
             p5 = self + 0x10;
-            func_0029FCC0(self, 0, wp);
-            func_00282CF0(&v80, wp, p5);
+            func_0029FCC0(self, 0, v70.f);
+            func_00282CF0(&v80, v70.f, p5);
             f21 = func_00283248(hit.pos.f[0] - v70.f[0], hit.pos.f[1] - v70.f[1]);
-            func_002A7CA0(self, s6 + 0x110, f21, 0.00349065894f, 0.0f, 0.209439546f);
+            func_002A7CA0(self, f21, s6 + 0x110, 0.00349065894f, 0.0f, 0.209439546f);
             F(self, 0xF4) = F(self, 0xF4) * 0.699999988f;
             F(s6, 0x13C) = F(s6, 0x13C) + 0.0280000009f;
             qcopy(&vB0, p5);
@@ -331,10 +346,10 @@ void func_L06_0045A5B0(u8 *self) {
             func_002A7EA0(self, p5, &vC0, 0.75f, 0.75f, 40.0f, 6.28318596f, 3);
             func_00282CF0(s6 + 0xC0, p5, &vB0);
             if (F(s6, 0x13C) >= 1.0f) {
-                W(D_00189E20, 0x24CC) = 0;
+                ((Hero *)D_00189E20)->i[0x24CC / 4] = 0;
                 func_L00_002C42E0(0x39, 1);
-                W(*(u8 **)(D_00189E20 + 0x2290), 0x9C) = -1;
-                B(D_00189E20, 0x22B5) = 1;
+                W(((Hero *)D_00189E20)->ptr[0x2290 / 4], 0x9C) = -1;
+                ((Hero *)D_00189E20)->b[0x22B5] = 1;
                 B(self, 0x20) = 6;
             } else {
                 F(s6, 0x12C) = f21;
@@ -344,7 +359,7 @@ void func_L06_0045A5B0(u8 *self) {
             func_L06_00459EC0(self, s6);
             func_L06_0045A1B0(self, s6, F(s6, 0x12C), 0.209439531f, 0.00166666671f, 0.52359885f, 0.00111111114f, 0.116666675f, 0.0500000045f);
             func_L06_0045A0D0(self, s6, 0.00333333341f, 0.013888889f, 0.116666675f);
-            func_002A7CA0(self, s6 + 0x110, F(s6, 0x12C), 0.000436332368f, 0.000872664736f, 0.0523598865f);
+            func_002A7CA0(self, F(s6, 0x12C), s6 + 0x110, 0.000436332368f, 0.000872664736f, 0.0523598865f);
             F(self, 0xF4) = func_L01_00310BC0(s6 + 0x114, F(self, 0xF4), 0.0f, 0.000436332368f, 0.000872664736f, 0.0523598865f);
             if ((B(self, 0x60) & 2) && B(self, 0x43) != 1) {
                 func_002A7470(self, 1, 0, 0xA);
@@ -390,7 +405,7 @@ void func_L06_0045A5B0(u8 *self) {
                 }
                 B(self, 0x20) = 9;
             } else {
-                func_002A7CA0(self, s6 + 0x110, F(s6, 0x12C), 0.000218166184f, 0.000436332368f, 0.0130899716f);
+                func_002A7CA0(self, F(s6, 0x12C), s6 + 0x110, 0.000218166184f, 0.000436332368f, 0.0130899716f);
                 F(self, 0xF4) = func_L01_00310BC0(s6 + 0x114, F(self, 0xF4), 0.0f, 0.000218166184f, 0.000436332368f, 0.0130899716f);
                 if (s3 != 0 && func_002ACBC8(self + 0x10, W(s6, 0x104)) != 0) {
                     if (B(self, 0x43) != 3) {
@@ -423,7 +438,7 @@ void func_L06_0045A5B0(u8 *self) {
         case 9:
         case 10:
             f20 = func_00283248(hit.pos.f[0] - F(self, 0x10), hit.pos.f[1] - F(self, 0x14));
-            func_002A7CA0(self, s6 + 0x110, f20, 0.000218166184f, 0.000436332368f, 0.0130899716f);
+            func_002A7CA0(self, f20, s6 + 0x110, 0.000218166184f, 0.000436332368f, 0.0130899716f);
             if (func_L06_0045A1B0(self, s6, f20, 0.52359885f, 0.00111111114f, 1.57079649f, 0.00249999994f, 0.0250000022f, 0.0166666675f) != 0 && func_00282E80(self + 0x10, &hit) < 1.89999998f && B(self, 0x20) != 0xA) {
                 if (B(self, 0x43) != 5) {
                     func_002A7470(self, 5, 0, 2);
@@ -475,7 +490,7 @@ void func_L06_0045A5B0(u8 *self) {
             break;
         case 14:
             if (func_L06_0035EA68(self, s6 + 0x60) & (B(self, 0x60) & 2)) {
-                func_002ABBB8(self, s6 + 0xC0, 0, 3, 3, 5, -1, 0, 1, -1, 0, 0x810001, 0.0f, 0.0f, 2.0f, 1.0f, 4.0f, 1.0f, 7.0f);
+                func_002ABBB8(self, s6 + 0xC0, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, -1, 7.0f, 0, 1, -1, 0, 0x810001);
             kill:
                 func_0029F338(self);
                 return;
