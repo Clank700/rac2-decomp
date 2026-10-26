@@ -24,6 +24,8 @@ The retail code was built with GNU EE-GCC 2.9-ee-991111b. `build.sh` rebuilds it
   unconditional (docs/COMPILER-NOTES.md).
   `gcse_store_kills_loads.py` gives gcse GCC 2.95.3's memory model, where every store kills
   every load, in place of this tree's alias-analysis queries; it is unconditional too.
+  `trap_delay_barrier.py` ends reorg's backward delay-slot search at a division guard
+  (`trap_if`), as at a jump, as retail's compiler does; it is unconditional too.
   `gcse_unsplit_edges.py` and `keep_block_order.py` add the opt-in
   `-frac2-gcse-unsplit-edges` and `-frac2-keep-block-order`, which leave out two
   Cygnus-local pieces of this tree that GCC 2.95 does not have.

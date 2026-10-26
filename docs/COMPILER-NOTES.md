@@ -593,6 +593,35 @@ pointer to force retail's reload; under this model it reads the field directly a
 transformer and authored controls: a global is loaded again after stores to another record,
 reused when no store intervenes, and loaded again after a call.
 
+### reorg: a division guard ends the delay-slot search
+
+[trap_delay_barrier.py](../tools/compiler/transformers/trap_delay_barrier.py) is
+unconditional: it is the real compiler's delay-slot rule, not an option. `fill_simple_delay_slots`
+(reorg.c) fills a call's slot by scanning backward from the call for an independent insn, and
+stops at a label, a jump or an insn that already holds a slot (`stop_search_p`). On the R5900 an
+integer division is preceded by its divide-by-zero guard, a `trap_if` insn
+(`beql $rN,$zero,1f; break 7`), and this Cygnus tree lets the scan pass it, so an argument setup
+above the guard moves into the call's slot. Retail's compiler stops there, as at a jump; the
+transformer makes the scan end at a `TRAP_IF` insn.
+
+Retail evidence: 68 calls in the 28 programs keep a `nop` slot although an independent argument
+setup (`li`/`move`/`addiu` into `$a0`-`$t3`, its register untouched up to the call) stands above
+a division guard in the call's block; this tree's search would have moved it into the slot. To
+see one, open the disassembly of level 0 (`build/00_aranos_tutorial/asm/52830.s`) at
+0x002A4448: `addiu $a0,$zero,0x755D` sits at 0x002A4424, just above the `beql $s0,$zero` /
+`break 0,7` guard, and `jal f_002F9E78` keeps its `nop` (0x00354924's `li $a0,0x2E0C` is the
+same; the code repeats in every level). The census looks for that shape: a `jal` with a `nop`
+slot, a `break 7` earlier in its block, and above the guard an argument-register setup that
+nothing after it reads or writes. `func_L00_002CB3A8` (26,432 bytes/11 places) shows the
+effect on a whole block: case 0x40 calls `func_L00_002D2168` twice after `(n * k / m + c) % n`;
+retail sets `li $a0,2`/`li $a0,3` in the preceding `beq` slot (fill_eager_delay_slots) and
+leaves both `jal` slots empty, where this tree filled the `jal` slots first and the `beq` took
+an insn from its target (12 instructions). `func_L12_002CF7B0` and `func_L11_002DE9E0`, members
+of that family, match with the barrier; of every other matched function in the 28 programs none
+compiled differently. [tests/test_trap_delay_barrier.py](../tests/test_trap_delay_barrier.py)
+checks the transformer and authored controls: an argument set above a guard stays there and the
+call keeps an empty slot, and without a division the call's slot is filled as before.
+
 ### Compiler control-flow passes
 
 [tidy_condjump_fallthru.py](../tools/compiler/transformers/tidy_condjump_fallthru.py)
@@ -841,6 +870,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | Zero folding/clear scheduling | [test_zero_ti_store.py](../tests/test_zero_ti_store.py) |
 | CSE edges/block order | [test_gcse_unsplit_edges.py](../tests/test_gcse_unsplit_edges.py), [test_keep_block_order.py](../tests/test_keep_block_order.py) |
 | gcse load kills | [test_gcse_store_kills_loads.py](../tests/test_gcse_store_kills_loads.py) |
+| Division-guard slot barrier | [test_trap_delay_barrier.py](../tests/test_trap_delay_barrier.py) |
 | Copies and RTL contract | [test_qcopy.py](../tests/test_qcopy.py), [test_qcopy_rtl.py](../tests/test_qcopy_rtl.py) |
 | Copy scheduling | [test_qcopy_barrier.py](../tests/test_qcopy_barrier.py) |
 | Annulled wide stores | [test_no_annulled_wide_stores.py](../tests/test_no_annulled_wide_stores.py) |
