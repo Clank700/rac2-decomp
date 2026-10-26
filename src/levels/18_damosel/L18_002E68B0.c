@@ -21,7 +21,7 @@ extern float func_00283180(float);
 extern float func_00283198(float);
 extern u8 *D_L18_001FF4D4;
 
-INCLUDE_ASM("asm/levels", func_L18_002E68B0);
+/* func_L18_002E68B0 is in the sibling file L18_002E68B0-decider.c (its own profile). */
 
 INCLUDE_ASM("asm/levels", func_L18_003170F8);
 

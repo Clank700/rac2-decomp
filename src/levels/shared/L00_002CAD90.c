@@ -16,7 +16,7 @@ INCLUDE_ASM("asm/levels", func_L00_002CB218);
 
 INCLUDE_ASM("asm/levels", func_L00_002CB2D8);
 
-INCLUDE_ASM("asm/levels", func_L00_002CB3A8);
+/* func_L00_002CB3A8 is in the sibling file L00_002CB3A8-decider.c (its own profile). */
 
 /* loads two object pointers from fixed data, bails out when either is null or when the first object's byte 67 differs from 1, fills two stack ints through a helper, then applies a four-argument operation to each object with those ints */
 void func_L00_002D1AE8(void)

@@ -1,6 +1,6 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/levels", func_L11_002DE9E0);
+/* func_L11_002DE9E0 is in the sibling file L11_002DE9E0-decider.c (its own profile). */
 
 
 

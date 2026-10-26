@@ -18,7 +18,7 @@ extern T_001B99C0 D_L16_001B99C0;
 
 extern void func_002A7470(void *, s32, s32, s32);
 
-INCLUDE_ASM("asm/levels", func_L16_002C6378);
+/* func_L16_002C6378 is in the sibling file L16_002C6378-decider.c (its own profile). */
 
 /* func_L16_002D2D10: 76 bytes against retail's 88 - the divisions and the stores
    are now in retail's order, but retail's pair of `nop`s before each `div.s` is

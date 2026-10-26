@@ -6,7 +6,7 @@ extern float D_L12_001AD230;
 
 extern float D_L12_001AD234;
 
-INCLUDE_ASM("asm/levels", func_L12_002CF7B0);
+/* func_L12_002CF7B0 is in the sibling file L12_002CF7B0-decider.c (its own profile). */
 
 /* func_L12_002FFF88 is in the sibling file L12_002CF7B0-g8.c: it reads a
    small-data global through $gp. */

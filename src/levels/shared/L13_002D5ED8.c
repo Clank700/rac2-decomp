@@ -1,6 +1,6 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/levels", func_L13_002D5ED8);
+/* func_L13_002D5ED8 is in the sibling file L13_002D5ED8-decider.c (its own profile). */
 
 #ifndef RAC2_T_TABLE_389848
 #define RAC2_T_TABLE_389848
