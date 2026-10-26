@@ -16,7 +16,7 @@ extern void func_00280B90(void *,void *,int);
 /* Observed target prefix: retail addresses its position at base + 0x140. */
 typedef struct { u8 reserved[0x140]; float position[4]; } FlareTargetView;
 extern FlareTargetView D_L02_001BA3C0 __attribute__((nosda));
-extern u32 D_L02_001B1FDC __attribute__((sda));
+extern u32 D_L11_001B2014 __attribute__((sda));
 
 /* Submit one billboarding flare at the object's current endpoint. */
 /* Same body as func_L02_00422BB8, with this function's own callees. */
@@ -33,7 +33,7 @@ void func_L11_0045A3C8(u8 *object)
     packet.setup=0xFF9000000260ULL;
     packet.state=0x8000000048ULL;
     packet.reserved=0;
-    color=(D_L02_001B1FDC&0xFFFFFF)+(func_002A7820(32,48)<<24);
+    color=(D_L11_001B2014&0xFFFFFF)+(func_002A7820(32,48)<<24);
     packet.color[3]=color; packet.color[2]=color; packet.color[1]=color; packet.color[0]=color;
     rotation[3]=0;
     rotation[2]=func_00283248(D_L02_001BA3C0.position[0]-*(float *)(object+0x10),D_L02_001BA3C0.position[1]-*(float *)(object+0x14));
