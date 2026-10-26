@@ -1,42 +1,3 @@
-/* Near miss (Opus, big6 + big11, 2026-10-26): func_00322CC0, 7,140 bytes, boot + 6 level places
- * (00, 02, 07, 11, 14, 26), all the same body.
- *
- * Profile: default -O2 -G0 -ffunction-sections in its own unit (src/game/00322CC0.c);
- * the $gp read of D_001A8BB0 uses __attribute__((sda)), the lui/lw read of the same
- * word a second name (D_001A8BB0_2).
- * Last verdict (big11): tools/check.py func_00322CC0 --diff -> 7140 bytes, same size as
- * retail, 0 of 7 places; two spots left:
- *   1. entry: retail `lui $v1,%hi(D_001A8BB0); lw $v1,%lo($v1)`, this cc1 uses $v0
- *      for the %hi (mode = lui-read word).  The %hi pseudo is block-local here, so
- *      local-alloc takes the first free register; retail's choice of the destination
- *      register looks like a global-alloc copy preference (set_preference strips
- *      mem/lo_sum to the %hi register), i.e. a different source shape for `mode`.
- *      Tried: one shared `mode = D_001A8BB0_2` arm (same), the gp read hoisted first
- *      (+4 bytes), the gp read in an else (puts mode in $a0), a goto form (+4 bytes);
- *   2. state-5 removal path: func_0032C700's stack argument `li $v0,1` is scheduled
- *      before the `li.s $f13,20.0` (retail after); no prototype order moves it
- *      (all 78 float positions in the prototype: no change), nor a local for the 1
- *      or the 20.0f, nor a double literal.
- * Case 9 (fixed by big11): retail's `anim == 6 || anim == 7` keeps `andi 0xFF` before
- * the `sltiu`.  It comes back when the second test reads the field directly,
- * `if (*(u8 *)(self + 0x43) == 0xB) ... else if (*(u8 *)(self + 0x43) == 6 || ... == 7)`:
- * with a local, combine's stock range fold (simplify_comparison, SUBREG case) sees
- * nonzero_bits 0xFF and drops the mask; with the re-read the mask stays (the read's
- * known bits are probably lost through a copy before combine; not traced).  The same join-read idiom keeps the andi in
- * func_L04_003E2438, func_L04_0044C598, func_L11_0042F018 and func_L17_003E31E8.
- * Spellings that moved it here: per-call-site prototype order (func_002AA3A8 with
- * the float before the second pointer, func_002A8D70 (obj, bone, x, y, mode, z, ...),
- * func_002B0A68 with the colour byte last), func_002B5258 returning int (it tail-calls
- * func_002B50E0), `height -= 3.0f` reusing one local, separate `slot`/`other`
- * pointers in state 5, the `||` form in state 12, nested ifs in switch-1 case 4.
- * Prototype review (big11): the matched definitions declare func_002AA3A8(float *,
- * float *, f, f, f, f) (src/game/002A7750.c), func_002B0A68(char *, int, float *, u8,
- * f, f, f, f) (src/game/002B00B0.c) and func_002A8D70(f, f, f, void *, int, ...)
- * (src/game/002A7750.c).  The EE ABI fills int and float registers independently, so
- * a callee cannot show how its int and float parameters interleave; only a caller's
- * evaluation order can.  With the definitions' orders this function gets worse at
- * each call site (the aligned diff grows from 9 to 15, 13 and 19 lines), so the orders
- * below are the better evidence and the definitions could follow them.
 /* func_00322CC0: boot + 6 levels (00, 02, 07, 11, 14, 26).
  * D_001A8BB0 is reached through the assembler's address macro (MACRO_ADDR): the entry read
  * at the join expands to lui/lw in flow, and reorg's copy of it in the state-2 branch's delay
@@ -70,7 +31,7 @@ extern int func_002E5CF8(int, int, char *);
 extern void func_00325D30(char *, char *);
 extern void func_00283098(void *, void *, void *);
 extern void func_00282CC0(void *, void *, void *);
-extern void func_0032C700(void *, int, int, int, int, int, int, int, float, float, int, int, int, int);
+extern void *func_0032C700(void *, int, int, int, int, int, int, int, float, float, int, int, int, int);
 extern void func_00282F20(void *, void *, float);
 extern void func_002B0A68(char *, int, float *, float, float, float, float, unsigned char);
 extern void func_002A6C58(char *, int, int);
