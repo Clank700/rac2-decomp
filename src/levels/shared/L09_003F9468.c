@@ -81,7 +81,6 @@ void func_L09_003F9468(DobboPartsObject252 *object)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L09_003F9568);
 
 INCLUDE_ASM("asm/levels", func_L09_003F9708);
 

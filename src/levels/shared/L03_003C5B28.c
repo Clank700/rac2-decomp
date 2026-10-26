@@ -422,7 +422,6 @@ void func_L03_00425030(u8 *a0) {
     *(f32 *)(rec + 0x48) = 2.46f;
 }
 
-INCLUDE_ASM("asm/levels", func_L03_00425108);
 
 /* The resident word at 0x001A79F0, below the level base, so its value is the same in every
    program.  The retail reads it absolutely in ordinary flow and through $gp in a delay slot,

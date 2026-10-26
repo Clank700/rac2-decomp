@@ -581,7 +581,6 @@ void func_L09_003F77D0(char *object)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L09_003F7840);
 
 /* reports whether the index still names a reachable entry, or whether the frame moved close enough */
 int func_L09_003F7A88(char *object, int index) {

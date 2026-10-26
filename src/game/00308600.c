@@ -34,7 +34,6 @@ INCLUDE_ASM("asm/game", func_0030DB88);
 
 INCLUDE_ASM("asm/game", func_0030DE88);
 
-INCLUDE_ASM("asm/game", func_0030E030);
 
 
 extern char *func_002A9640(char *, int, int);

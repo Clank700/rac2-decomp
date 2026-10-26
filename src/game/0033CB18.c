@@ -188,7 +188,6 @@ int func_0033D868(char *a0, int a1)
     return (a1 >> 6) & 1;
 }
 
-INCLUDE_ASM("asm/game", func_0033D970);
 
 char *func_0033DAD0(char *object)
 {

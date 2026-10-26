@@ -251,7 +251,6 @@ void func_L05_003CD4C0(char *object)
     *(float *)(state + 0x38) = 3.5f;
 }
 
-INCLUDE_ASM("asm/levels", func_L05_003CD598);
 
 INCLUDE_ASM("asm/levels", func_L05_003CEFA0);
 

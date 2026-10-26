@@ -223,7 +223,6 @@ void func_L05_0041C410(char *object)
     *(float *)(state + 0x38) = 3.7f;
 }
 
-INCLUDE_ASM("asm/levels", func_L05_0041C4E8);
 
 INCLUDE_ASM("asm/levels", func_L05_0041C708);
 
@@ -262,7 +261,6 @@ void func_L05_0041D728(char *object)
     *(float *)(state + 0x38) = 3.5f;
 }
 
-INCLUDE_ASM("asm/levels", func_L05_0041D800);
 
 INCLUDE_ASM("asm/levels", func_L05_0041ED18);
 
@@ -415,7 +413,6 @@ void func_L05_00426D98(char *object)
     *(float *)(state + 0x38) = 3.2f;
 }
 
-INCLUDE_ASM("asm/levels", func_L05_00426E70);
 
 INCLUDE_ASM("asm/levels", func_L05_00427090);
 

@@ -322,4 +322,3 @@ void func_L00_003FF7B8(char *self)
     p[14] = 3.0000000000000000000000e+00f;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003FF890);

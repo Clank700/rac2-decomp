@@ -113,7 +113,6 @@ void func_L04_003F5F30(unsigned char *a0) {
     *(float *)(obj + 0x50) = 2.0f;
 }
 
-INCLUDE_ASM("asm/levels", func_L04_003F6008);
 
 INCLUDE_ASM("asm/levels", func_L04_003F6200);
 
