@@ -181,7 +181,6 @@ int func_002CFBE0(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002CFBE8);
 
 INCLUDE_ASM("asm/game", func_002CFDA8);
 
@@ -210,14 +209,12 @@ INCLUDE_ASM("asm/game", func_002D1970);
 
 /* func_002D1CB0 is built from 002CD8C0-g8.c for small-data accesses. */
 
-INCLUDE_ASM("asm/game", func_002D1D20);
 
 
 int func_002D2010(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002D2018);
 
 INCLUDE_ASM("asm/game", func_002D2188);
 

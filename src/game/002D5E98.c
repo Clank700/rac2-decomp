@@ -81,7 +81,6 @@ INCLUDE_ASM("asm/game", func_002D6230);
 
 /* func_002D68D8 is in 002D5E98-g8.c. */
 
-INCLUDE_ASM("asm/game", func_002D6970);
 
 typedef struct { char pad[4]; short mode; } Mode2D6E78;
 typedef struct { char pad[0x29C]; int flags[5]; int selected; } Map2D6E78;
@@ -694,9 +693,7 @@ int func_002DCB28(Handles_2DCB28 *object) {
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002DCB58);
 
-INCLUDE_ASM("asm/game", func_002DCFE8);
 
 INCLUDE_ASM("asm/game", func_002DD400);
 

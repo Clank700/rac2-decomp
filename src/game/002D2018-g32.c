@@ -1,9 +1,8 @@
-/*
- * Near miss (M19, 2026-10-26): 364/364 bytes, 4 differing instructions, tail scheduling only.
- * Profile: -O2 -G32 -Wa,-G32 -ffunction-sections (as its matched sibling 002D01D0-g32.c). us: 0/28.
- * Residual: retail builds the %hi of D_0025CB50 before the text table address; no statement
- * order moves it. Queued on the permuter.
- */
+/* func_002D2018 in its own unit, a sibling of func_002D01D0: the cursor goes through $gp, so the
+   file is compiled at -G32 (config/cflags.txt). The text table's address is built by one lui/addiu
+   pair in one register, the assembler's la macro, so it is declared MACRO_ADDR. */
+#include "common.h"
+
 typedef struct { char prefix[0x14]; char *source; int value; char gap[0x118]; int fallback; } SelectionCallback;
 typedef struct { char reserved[0x1C4]; int flags; } CallbackMenuState;
 typedef struct { char reserved00[0x34]; int text; int f38; int timer; } MenuPanel;
@@ -15,7 +14,7 @@ extern int func_002E5E58(int, unsigned int, void *);
 extern int D_001ABA60 __attribute__((sda));
 extern MenuPanel D_0025CAA0[];
 extern int D_0025CB50[];
-extern MenuText D_001ABD6A[];
+extern MenuText D_001ABD6A[] MACRO_ADDR;
 
 int func_002D2018(void)
 {
