@@ -439,7 +439,6 @@ INCLUDE_ASM("asm/levels", func_L18_003F9DA0);
 
 INCLUDE_ASM("asm/levels", func_L18_003F9E50);
 
-INCLUDE_ASM("asm/levels", func_L18_003F9EF0);
 
 extern void func_L18_003FC9B8(unsigned char *a0);
 extern void func_L18_003F7988(unsigned char *a0);
@@ -561,7 +560,6 @@ void func_L18_00426D98(BatchA_A18_u8 *a0) {
     func_0032D118(a0, 0x80, 0x80, 0x80);
 }
 
-INCLUDE_ASM("asm/levels", func_L18_00426E00);
 
 /* func_L18_00426E48 lives in L18_00426E48-g8.c. */
 
@@ -661,4 +659,3 @@ INCLUDE_ASM("asm/levels", func_L18_00427688);
 
 /* func_L18_00427B48: 144 bytes against retail's 148; the chain pointer and the
    stored 1 take each other's register. Deposited in nonmatching/levels/. */
-INCLUDE_ASM("asm/levels", func_L18_00427B48);

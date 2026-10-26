@@ -215,7 +215,6 @@ INCLUDE_ASM("asm/game", func_002D1970);
 
 INCLUDE_ASM("asm/game", func_002D1D20);
 
-INCLUDE_ASM("asm/game", func_002D1E70);
 
 int func_002D2010(void) {
     return 0;

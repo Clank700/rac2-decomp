@@ -255,7 +255,6 @@ int func_L02_00332668(char *arg0, char *arg1) {
 }
 
 
-INCLUDE_ASM("asm/levels", func_L02_00332900);
 
 extern void func_00282F20(float *out, const float *in, float s);
 extern void *func_L00_0032C638(char *a0);

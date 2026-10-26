@@ -600,7 +600,6 @@ int func_L09_003F7A88(char *object, int index) {
 
 INCLUDE_ASM("asm/levels", func_L09_003F7B28);
 
-INCLUDE_ASM("asm/levels", func_L09_003F7C50);
 
 INCLUDE_ASM("asm/levels", func_L09_003F7CE0);
 
@@ -639,6 +638,5 @@ INCLUDE_ASM("asm/levels", func_L09_003F8960);
 
 INCLUDE_ASM("asm/levels", func_L09_003F8AE0);
 
-INCLUDE_ASM("asm/levels", func_L09_003F9040);
 
 INCLUDE_ASM("asm/levels", func_L09_003F9108);

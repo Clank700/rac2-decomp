@@ -70,7 +70,6 @@ extern float func_00283C80(float, float);
 extern int func_L02_0032E998(char *, int, float *, char *, int, char *, char *, float,
                              float);
 
-INCLUDE_ASM("asm/levels", func_L06_00457920);
 
 INCLUDE_ASM("asm/levels", func_L06_0041FAF8);
 
@@ -444,7 +443,6 @@ INCLUDE_ASM("asm/levels", func_L06_00457270);
 
 INCLUDE_ASM("asm/levels", func_L06_004573E8);
 
-INCLUDE_ASM("asm/levels", func_L06_004576C8);
 
 /* func_L06_004577B0 lives in L06_0041DED8-g8.c: it reads its first angle through $gp. */
 

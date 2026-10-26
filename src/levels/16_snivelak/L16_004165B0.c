@@ -92,7 +92,6 @@ INCLUDE_ASM("asm/levels", func_L16_0041CF80);
 
 /* func_L16_0041E370 lives in L16_0041E370.c. */
 
-INCLUDE_ASM("asm/levels", func_L16_0041EBE8);
 
 /* func_L16_0041ECF8 lives in L16_004165B0-g8.c (it takes the address of a $gp global). */
 
@@ -125,6 +124,5 @@ void func_L16_0041F150(char *arg0) {
 
 INCLUDE_ASM("asm/levels", func_L16_0041F360);
 
-INCLUDE_ASM("asm/levels", func_L16_00424B48);
 
 INCLUDE_ASM("asm/levels", func_L16_00435CE8);

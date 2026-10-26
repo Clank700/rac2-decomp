@@ -272,7 +272,6 @@ void func_L03_003E5218(u8 *a0) {
     *(u32 *)(*(u8 **)(a0 + 0x68) + 0x60) = 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L03_00408068);
 
 INCLUDE_ASM("asm/levels", func_L03_00409248);
 

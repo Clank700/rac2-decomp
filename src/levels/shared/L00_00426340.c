@@ -112,7 +112,6 @@ void func_L00_00426340(int object)
     func_L00_00425560(object);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_004263A8);
 
 void func_L00_00426478(void)
 {
@@ -622,4 +621,3 @@ unsigned long func_L00_0042C6D8(unsigned long param_1)
 {
   return param_1;
 }
-

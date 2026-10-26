@@ -214,7 +214,6 @@ INCLUDE_ASM("asm/levels", func_L09_00404C50);
 INCLUDE_ASM("asm/levels", func_L09_00405610);
 /* func_L09_00406BF8: 112 bytes against retail's 108, one saved register too many.
    Deposited in nonmatching/levels/func_L09_00406BF8.c. */
-INCLUDE_ASM("asm/levels", func_L09_00406BF8);
 
 void func_L09_00406C90(char *a0) {
     char *a1 = *(char **)(a0 + 0x68);
@@ -231,7 +230,6 @@ INCLUDE_ASM("asm/levels", func_L09_00406CC0);
 INCLUDE_ASM("asm/levels", func_L09_00406E78);
 
 INCLUDE_ASM("asm/levels", func_L09_00406FC8);
-INCLUDE_ASM("asm/levels", func_L09_00408058);
 
 /* Sets an entity's colour key, or hands an off-kind entity to the shared body. */
 void func_L09_00408138(char *a0, char *a1, s32 a2, s32 a3, s32 a4)
