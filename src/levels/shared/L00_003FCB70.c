@@ -1,21 +1,3 @@
-/*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Reported final C / retail: 552 / 572 bytes; size equality is not a match.
- * us: 0/27 placements; 552/572 bytes.
- * us2: 0/27 placements; 552/572 bytes.
- * pal: 0/27 placements; 552/572 bytes.
- * Residual: Complete second emitter reconstructed;552/572 bytes. Same independently measured dead-snapshot copy issue as C228. Its colour, magnitude and callback remain distinct.
- * Reopening condition: New ABI/CFG/allocator evidence or a measured compiler-model improvement; do not repeat tied forms.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
- */
-
-/* Retained complete manual reconstruction; not an exact match.
- * Source profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Complete second emitter reconstructed;552/572 bytes. Same independently measured dead-snapshot copy issue as C228. Its colour, magnitude and callback remain distinct.
- */
 #include "common.h"
 typedef int EffectQuadword __attribute__((mode(TI)));
 extern void func_002AFFD8(char *, char *, int);
@@ -25,8 +7,8 @@ extern int func_00282948(int *);
 extern void func_0029F338(void *);
 extern int func_002A77E0(int);
 extern void *func_002C65A0(void *, void *, int, unsigned int, int, int, int, float, float, float, int);
-extern void func_L00_002E6EF8(void (*)(void *), void *);
-extern char D_L00_001A8F20[];
+extern void ref_L00_003FCB70_00(void *, void *);
+extern char D_L00_001A8F20[] MACRO_ADDR;
 extern unsigned char *D_L00_001FEA14;
 extern void func_L00_003FC468(char *);
 extern void func_L00_003FCDB0(char *);
@@ -41,9 +23,9 @@ void func_L00_003FCB70(char *object) {
     char *position = object + 0x10;
     unsigned char *particle;
     int phase;
-    before = *(EffectQuadword *)position;
+    qcopy(&before, position);
     func_002AFFD8(position, (char *)&scratch, 1);
-    after = *(EffectQuadword *)position;
+    qcopy(&after, position);
     func_00300190(position, position);
     func_00300190(state + 0x50, state + 0x50);
     if (*(unsigned char *)(object + 0x20) == 0) {
@@ -59,7 +41,7 @@ void func_L00_003FCB70(char *object) {
         particle = func_002C65A0(position, D_L00_001A8F20, 2, 0x00802020,
                                (phase + 128) % 255, 64, 16, 630000.0f, 630000.0f, 0.0f, 0);
         if (particle != 0) particle[2] = *D_L00_001FEA14;
-        func_L00_002E6EF8((void (*)(void *))func_L00_003FCDB0, object);
+        ref_L00_003FCB70_00(func_L00_003FCDB0, object);
     }
     if (*(float *)(object + 0x10) < 2.0f || *(float *)(object + 0x10) > 1021.0f ||
         *(float *)(object + 0x14) < 2.0f || *(float *)(object + 0x14) > 1021.0f ||

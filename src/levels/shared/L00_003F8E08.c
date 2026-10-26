@@ -108,7 +108,6 @@ void func_L00_003FC820(float *pos)
 
 INCLUDE_ASM("asm/levels", func_L00_003FCA40);
 
-INCLUDE_ASM("asm/levels", func_L00_003FCB70);
 
 
 INCLUDE_ASM("asm/levels", func_L00_003FD178);
@@ -285,7 +284,6 @@ INCLUDE_ASM("asm/levels", func_L00_003FEBA0);
 
 INCLUDE_ASM("asm/levels", func_L00_003FEEA0);
 
-INCLUDE_ASM("asm/levels", func_L00_003FF530);
 
 /* takes the float array at +104 and writes four values returned by a call with argument 255, then four float constants (-1.0, -2.25, 1.25, 2.5) at +16..+28, a descending count 255/191/127/63 into the ints at +44..+32 and 2.5/3.0 pairs at +48..+60 */
 void func_L00_003FF7B8(char *self)
