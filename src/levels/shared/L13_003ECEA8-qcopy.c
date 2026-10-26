@@ -1,20 +1,4 @@
-/* Two-state actor update reconstruction, 2026-10-25 (wave 10).
- * -O2 -G0 -ffunction-sections: 556/564 bytes, 0/3 US placements
- * (13_boldan, 14_aranos_prison, 16_...). Body, branch layout, both child
- * rescale paths, the timer drain, the two orientation-vector helpers, the
- * 14-argument effect spawn and the removal all line up. Two differences
- * remain, both pure allocation:
- *  - retail keeps the actor in $s2 and the controller in $s1 (then reuses
- *    $s1 for the placement vector's address), this cc1 keeps the actor in
- *    $s1 and the controller in $s2; the freed pair is why retail fits the
- *    vector address in a register and this draft materialises sp+0x20 three
- *    times (the two missing words).
- *  - retail keeps ctl+0xF8 in $f1 and the child scale in $f2; this draft
- *    swaps those two, so mul.s writes its operands the other way round.
- * Tried: parameter used directly, an explicit self copy, ctl assigned before
- * or after the state load, block-scoped state; none moved the $s1/$s2 pair.
- * The wrapper types/declarations are in src/levels/shared/L13_002D5ED8.c.
- */
+#include "include_asm.h"
 typedef unsigned char u8;
 typedef float f32;
 typedef int TI128 __attribute__((mode(TI)));
@@ -65,7 +49,7 @@ void func_L13_003ECEA8(char *a0)
         *(unsigned char *)(self + 0x20) = 1;
     case 1:
         func_002AB8C0(self, ctl + 0x50);
-        child = (char *)func_002A9640(self, 0, 0);
+        child = (char *)func_002A9640(self, 1, 0);
         if (func_00282978(ctl + 0x26) == 0)
             child = 0;
         if (child != 0) {
@@ -78,7 +62,8 @@ void func_L13_003ECEA8(char *a0)
         } else {
             child = (char *)func_002A9640(self, 0x10000, 0);
             if (child != 0) {
-                scale = *(f32 *)(child + 0x2C) * 0.5f;
+                scale = *(f32 *)(child + 0x2C);
+                scale *= 0.5f;
                 *(f32 *)(child + 0x2C) = scale;
                 if (*(f32 *)(ctl + 0xF8) != 0.0f) {
                     obj = *(char **)(child + 0x20);
@@ -87,11 +72,15 @@ void func_L13_003ECEA8(char *a0)
                 }
             }
         }
-        *(f32 *)(ctl + 0x20) -= func_002A96A0(self, child);
+        scale = func_002A96A0(self, child);
         *(unsigned char *)(self + 0xA8) = 0xFF;
+        *(f32 *)(ctl + 0x20) -= scale;
         func_002B3380(self, ctl + 0x100, ctl + 0x20);
         if (*(f32 *)(ctl + 0x20) <= 0.0f) {
-            *(TI128 *)vec = *(TI128 *)(self + 0x10);
+            {
+            f32 *v = vec;
+            *(TI128 *)v = *(TI128 *)(self + 0x10);
+            }
             func_00282F20(tmp2, self + 0xD0, -2.0f);
             func_00282CC0(vec, tmp2, vec);
             func_00282F20(tmp1, self + 0xC0, 1.5f);

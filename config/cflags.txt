@@ -1126,3 +1126,5 @@ src/game/002C00F0.c	-O2 -G0 -ffunction-sections -ffast-math
 src/levels/shared/L08_00422900.c	-O2 -G0 -ffunction-sections -ffast-math
 src/game/002E9110-g16.c	-O2 -G16 -ffunction-sections -Wa,-G16
 src/game/0032E588-g.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L13_003ECEA8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003B6158.c	-O2 -G0 -ffunction-sections -frac2-qcopy
