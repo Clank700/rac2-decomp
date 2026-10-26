@@ -974,19 +974,16 @@ int func_L00_0030E010(int argument)
 /* shared native body of family e7046bc951256c7e */
 void func_L00_00310048(void)
 {
-    unsigned char *p = D_L05_001B2520;
+    unsigned char *p;
     int seen = 0;
-    unsigned int limit;
+
     D_L05_001B2440 = 0;
-    while (p < D_L05_001B2524) {
-        limit = D_L05_001B2048;
-        do {
-            if ((p[32] >= 254 && *(unsigned int *)(p + 160) <= limit) || seen) {
-                D_L05_001B2440 = D_L05_001B2440 + 1;
-                seen = (p[32] == 0xff) ? 1 : seen;
-            }
-            p += 256;
-        } while (p < D_L05_001B2524);
+    for (p = D_L05_001B2520; p < D_L05_001B2524; p += 256) {
+        if ((p[32] >= 254 && *(unsigned int *)(p + 160) <= D_L05_001B2048) || seen) {
+            D_L05_001B2440++;
+            if (p[32] == 0xff)
+                seen = 1;
+        }
     }
 }
 
