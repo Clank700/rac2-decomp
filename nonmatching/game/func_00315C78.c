@@ -5,7 +5,11 @@
  * is left: retail builds the player base's high half in $v1 (lui $v1 / addiu $s5,$v1),
  * this cc1 in $v0. Measured without effect: the base local outside the loop, before or
  * after the float, assigned separately, read inline (worse), sda, and the declaration
- * order of best/cursor. */
+ * order of best/cursor.
+ * M16: the 0x12EA override sits inside the func_002761F8 block (retail's beqz skips it;
+ * the old draft fell through to it). Statement/declaration orders of best, cursor, nearest
+ * and the resident pointer, a do/while loop and a HERO view leave the one register. In the
+ * permuter queue. */
 typedef int TI128 __attribute__((mode(TI)));
 
 extern char *D_001B1B68 __attribute__((sda));
@@ -48,10 +52,10 @@ char *func_00315C78(char *object)
                         (*(short *)(state + 0xAA) != 0xCB5 &&
                          *(char **)(resident + 0x2290) != state))
                         accept = 0;
+                    if (*(short *)(cursor + 0xAA) == 0x12EA &&
+                        func_00282E80(D_001BAFA0, cursor + 0x10) < 1.0f)
+                        accept = 1;
                 }
-                if (*(short *)(cursor + 0xAA) == 0x12EA &&
-                    func_00282E80(D_001BAFA0, cursor + 0x10) < 1.0f)
-                    accept = 1;
                 if (accept) {
                     float dist = func_00282E48(cursor + 0x10,
                                                *(char **)(resident + 0x2290) + 0x10);

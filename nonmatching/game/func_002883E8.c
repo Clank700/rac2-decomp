@@ -29,11 +29,15 @@
  * neither the size nor the rotation.  A fourth wording will not: this is the
  * documented "three wordings, same bytes" tie and needs a register-allocation
  * lever, not another spelling.
+ *
+ * M16: D_001A7AF8, D_001A7B68 and D_001A7B88 declared MACRO_ADDR (retail's lui/addiu in one
+ * register, never in a slot) fix the forms and slots: 21 -> 10 lines. Left: result in $t2
+ * where retail has $t0 (the 0xFF/0x40 constants take $t0/$t1), and the preheader order of
+ * the 0xFF/0x40 constants against the D_001A7B68 address. Declaration and statement orders,
+ * a byte local, int mask, 255 and a for loop leave it. In the permuter queue.
  */
 
-typedef int s32;
-
-typedef unsigned char u8;
+#include "common.h"
 
 typedef struct {
     int word00;
@@ -53,11 +57,11 @@ extern ClassRecord D_00239BA0[];
 
 extern unsigned char D_00139568[];
 
-extern unsigned char D_001A7AF8[];
+extern unsigned char D_001A7AF8[] MACRO_ADDR;
 
-extern unsigned char D_001A7B68[];
+extern unsigned char D_001A7B68[] MACRO_ADDR;
 
-extern unsigned char D_001A7B88[];
+extern unsigned char D_001A7B88[] MACRO_ADDR;
 
 int func_002883E8(int a0)
 {

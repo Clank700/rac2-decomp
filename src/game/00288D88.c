@@ -129,7 +129,6 @@ void func_00288EA0(void)
     D_00254E78.timer = 0;
 }
 
-INCLUDE_ASM("asm/game", func_00288F48);
 
 
 

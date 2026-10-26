@@ -1,11 +1,6 @@
-/* func_002B3BA8 (1152 bytes, 28 places), closer M2: 1136 bytes under -O2 -G0.
- * The four position copies into the aim record are qcopy() (retail keeps both addresses
- * in registers: addiu $a1,$a2,0xD0 / lq $v0,0($a1)), while the origin copy stays a plain
- * TImode move, whose two loads share one store as in retail; this fixes the head.
- * Left: retail keeps the search result (best) in $s5 apart from the indexed target
- * (mob, $s0), so its two func_002AFD88 calls stay separate and each path returns
- * aim->found by itself; here best and mob share a register, the calls are cross-jumped
- * (16 bytes short), and the four candidate loops differ in the same allocation. */
+#include "include_asm.h"
+/* Picks the aim target: the indexed one, or the nearest candidate of four kinds (player,
+ * two moby lists and a table) within range, and records it in the aim block. */
 #include "common.h"
 
 extern int D_001A8CA0 __attribute__((sda));
@@ -39,7 +34,7 @@ extern int D_001A8CD4 __attribute__((sda));
 extern char *D_001C13E8[];
 extern char *func_002B39A0(char *, int, int *);
 extern float *func_002AB1F0(char *);
-extern void func_002AFD88(float, float, float, char *, char *);
+extern void func_002AFD88(char *, char *, float, float, float);
 
 int func_002B3BA8(char *self, int index, Vec128_2B3BA8 *point, int force, float range, float height)
 {
@@ -80,10 +75,10 @@ int func_002B3BA8(char *self, int index, Vec128_2B3BA8 *point, int force, float 
                 qcopy(&aim->position, mob + 0x10);
                 info = func_002AB1F0(mob);
                 if (info != 0) {
-                    if (D_001A8CA0 != 0)
-                        func_002AFD88(0.0f, 0.0f, info[4], mob, (char *)aim);
-                    else
+                    if (D_001A8CA0 == 0)
                         *(float *)((char *)aim + 8) += info[4];
+                    else
+                        func_002AFD88(mob, (char *)aim, 0.0f, 0.0f, info[4]);
                 }
             }
         }
@@ -153,7 +148,7 @@ int func_002B3BA8(char *self, int index, Vec128_2B3BA8 *point, int force, float 
                 info = func_002AB1F0(best);
                 if (info != 0) {
                     if (D_001A8CA0 != 0)
-                        func_002AFD88(0.0f, 0.0f, info[4], best, (char *)aim);
+                        func_002AFD88(best, (char *)aim, 0.0f, 0.0f, info[4]);
                     else
                         *(float *)((char *)aim + 8) += info[4];
                 }

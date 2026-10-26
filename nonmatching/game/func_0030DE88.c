@@ -4,7 +4,13 @@
  * func_002C2210 takes (void *, float, float, s32, s32, float, s32, s32, void *, s32), the
  * order found by search on func_00302848). Left: loop.c hoists the 0.15f constant of the
  * second spawn into $f23 (one more saved FPR) where retail rematerialises it in the loop;
- * the 0.3f is hoisted in both. A goto loop hoists nothing (worse). */
+ * the 0.3f is hoisted in both. A goto loop hoists nothing (worse).
+ * M16 (-dL): loop2 sees 55 real insns, threshold 61 (call in loop), life-1 movables in
+ * order 0.3f, 0x7F000000, 0.15f, 0.5f: 61, 58, 55 >= 55 move, 52 does not. Retail's set
+ * needs 56-58 loop2 insns with the same movables. The for/while forms instead leave
+ * high(D_0018A550) to loop2 (life 4, moved first) at 56-57 insns, so 0x7F000000 stays in
+ * the loop; they would need 53-55. 48 loop-form x call-spelling x decrement-position
+ * variants and ten local/copy spellings hit neither window. */
 #include "common.h"
 
 typedef int Quadword_0030DE88 __attribute__((mode(TI)));
