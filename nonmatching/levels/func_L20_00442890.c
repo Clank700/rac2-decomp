@@ -1,53 +1,12 @@
-/* Opus big19, 2026-10-26: 348/352 bytes (was 340), 86/88 opcodes aligned, profile -O2 -G8
- * -ffunction-sections. What moved it: func_002AAA00's float (out, f12..f15, in, int) prototype;
- * one name for D_L20_001B9E80 used twice (retail keeps the base in $s1, %hi in a scratch: the
- * split form, so no second name is needed); the object and the state's +0x70 pointer read
- * before the first distance call, the pointer reusing the object's variable, and the 0x160 pair
- * relative to it (+0x1C0 only for the two final stores); the hero position through a struct.
- * Left: retail keeps the pair's address (addiu $v0,$s0,0x160) and reads the second float as
- * 0x4($v0), where cse/combine here fold it to 0x164($s0) whatever the spelling (p[1],
- * *(float *)((char *)p + 4), p[0] through p), which is the 4 missing bytes; and the $f0/$f1
- * choice of the object's 0x10/0x14 loads. */
-/* Wave 4 (worker 04): the candidate below is the wave-4 one - 348 bytes against
-   the retail's 352, one instruction short.  See the wave-4 note at the end. */
-/* func_L20_00442890 (352 bytes, level 20): near miss, 86 of 88 words differ.
- *
- * The whole structure is recovered and every call is retail's; the residues are the
- * register allocation and the instruction order.
- *
- * What the retail body does (from build/20_yeedil/asm/5B0B0.s):
- *  - the base D_L20_001B9E80 is materialised into $s1 (`lui $v0,%hi(D_1B9E80);
- *    addiu $s1,$v0,%lo(D_1B9E80)` - the high part in a scratch, the low part in $s1);
- *  - `lw $v1,0x190($s1)` is the parent pointer, `lh $v0,0x86($v1)` its flag: if it is set
- *    the function returns;
- *  - three calls into the shared level unit with the $gp floats D_L20_001B2158 (gp+0x3168),
- *    D_L20_001B215C (gp+0x316C), D_L20_001B2160 (gp+0x3170) and the constants 0.003f and
- *    0.005f: func_L00_00424A08(0, D_001B2158, 0.003f), func_L00_00424A50(D_001B215C,
- *    0.003f) (that one takes no int argument), func_L00_00424A88(0, D_001B2160, 0.005f);
- *  - if arg0[0x95] is 4 or 2 the function returns;
- *  - `func_00283248(arg0[0x10] - D_189E20[0x20], arg0[0x14] - D_189E20[0x21])` (the boot
- *    table read through a pointer in a register, the two floats at +0x80 and +0x84);
- *  - the state (arg0[0x68]) is loaded, the parent becomes arg0 = parent[0x70] + 0x1C0, and
- *    `func_00283248(*(float *)(arg0+0x160), *(float *)(arg0+0x164))` follows;
- *  - `func_00283B98(that, 3.1415927f)` then `func_00283BE0(first, that)`;
- *  - `func_002AAA00` is called with (the result of the blend, state+0x17F0, 0, 0.0f,
- *    D_L20_001B2150 * 4.84813745e-06f, the same, D_L20_001B2154 * 0.000290888245f);
- *  - arg0[0x1C] = 1.0f and arg0[0x14] = -state[0x17F0].
- *
- * The residues:
- *  1. the base address: retail puts the high part in a scratch ($v0) and the low part in
- *     $s1, this cc1 puts both in $s1 (`lui $s1,%hi(D); addiu $s1,$s1,%lo(D)`), and it
- *     emits the pair after the first save where retail interleaves it with the saves;
- *  2. the state pointer reuses $s1 in retail (the base dies, the state takes its register)
- *     and $s0 in this cc1;
- *  3. the second float pair: retail computes `addiu $v0,$s0,0x160` and reads the second
- *     float at 0x4($v0), this cc1 reads it at 0x164($s0) (a float* local does not force
- *     the address into a register here);
- *  4. the order of the constant materialisations (3.1415927f, 4.84813745e-06f,
- *     0.000290888245f) and of the last five instructions.
- *
- * The unit has to be the -G8 sibling (five $gp floats). With -mno-split-addresses the body
- * is 344 bytes, with the default flags 340 against retail's 352.
+/* Opus big26, 2026-10-26: 352/352 bytes, 82/88 instructions equal at the same address,
+ * profile -O2 -G8 -ffunction-sections. The 0x160 pair is solved: read the first float into a
+ * local through p = s0 + 0x160, THEN step s0 by 0x1C0, then read p[1] (cse folds the first read
+ * to 0x160($s0) while s0 is unchanged; after the step it can no longer fold p + 4, so retail's
+ * addiu $v0,$s0,0x160 / lwc1 0x4($v0) comes out). Left (6 insns, one cause): the parent load
+ * (lw 0x190($s1)) is scheduled by sched1 after the hero-pos loads here, so the parent takes $v0
+ * (retail $v1, the base still live) and the arg0 0x10/0x14 loads get f1/f0 swapped. ~120
+ * statement-order permutations (separate parent local, s1 reused for base and state, arg0 vs
+ * s0 reads, temps for the two differences) never moved it; it is a sched1 priority question.
  */
 typedef int s32;
 typedef float f32;
@@ -77,7 +36,7 @@ void func_L20_00442890(char *arg0)
     char *base = D_L20_001B9E80;
     char *s1;
     float *p;
-    float r, q, w;
+    float r, q, w, x;
 
     if (*(short *)(*(char **)(base + 0x190) + 0x86) != 0) {
         return;
@@ -94,9 +53,10 @@ void func_L20_00442890(char *arg0)
     r = func_00283248(*(float *)(arg0 + 0x10) - D_00189E20.pos[0],
                       *(float *)(arg0 + 0x14) - D_00189E20.pos[1]);
     p = (float *)(s0 + 0x160);
-    q = func_00283248(*(float *)(s0 + 0x160), *(float *)((char *)p + 4));
-    q = func_00283B98(q, 3.1415927f);
+    x = p[0];
     s0 += 0x1C0;
+    q = func_00283248(x, p[1]);
+    q = func_00283B98(q, 3.1415927f);
     w = func_00283BE0(r, q);
     func_002AAA00((char *)&w, 0.0f,
                    D_L20_001B2150 * 4.84813745e-06f,
@@ -105,6 +65,7 @@ void func_L20_00442890(char *arg0)
     *(float *)(s0 + 0x1C) = 1.0f;
     *(float *)(s0 + 0x14) = -*(float *)(s1 + 0x17F0);
 }
+
 
 /* ---- wave 3 (20_yeedil, 2026-10-20, worker 02): the base address, measured -------
  *
