@@ -1,24 +1,12 @@
-/* func_002B3BA8 (1152 bytes) - near miss: this C compiles to 1108 bytes.
-
-   Everything else matches retail instruction for instruction (prologue, the four
-   candidate searches over the player, the D_001B1CB0 / D_001C13E8 / D_001B1CF0 lists,
-   the gp-relative loads in the delay slots, the frame and stack slots). Two things differ:
-
-   1. Wall (docs/COMPILER-NOTES.md, "Quadword copy source shapes"): retail materialises the
-      source pointer of three of the 128-bit copies into aim->position
-      (`addiu $a1,$a2,0xD0; lq $v0,0($a1)`, `addiu $v1,$s0,0x10; lq $v0,0($v1)`, and both
-      arms of the final player/target choice), while this cc1's CSE folds the offset into
-      the lq (`lq $v0,0xD0($a0)`). Retail looks like an inline-asm qcopy helper. Because
-      retail needs $a1 for that pointer, it keeps `index` in $t0 (`daddu $t0,$a1,$zero` at
-      +0x4); here `index` stays in $a1. A plain TI copy, an inline helper, a separate
-      pointer variable and volatile all fold the same way (measured).
-   2. Path A's func_002AFD88 call is cross-jumped (jump2) into path B's identical call
-      sequence here; retail keeps both sequences. Calling path A through an alias
-      (`extern void func_002AFD88_1(...)` with the same prototype) stops the cross-jump:
-      the body is then 1124 bytes and the only remaining differences are those of item 1.
-   The origin copy (`lq $v0,0($a2)` / `lq $v0,0x10($s4)`) does fold in retail, as here. */
-
-#include "include_asm.h"
+/* func_002B3BA8 (1152 bytes, 28 places), closer M2: 1136 bytes under -O2 -G0.
+ * The four position copies into the aim record are qcopy() (retail keeps both addresses
+ * in registers: addiu $a1,$a2,0xD0 / lq $v0,0($a1)), while the origin copy stays a plain
+ * TImode move, whose two loads share one store as in retail; this fixes the head.
+ * Left: retail keeps the search result (best) in $s5 apart from the indexed target
+ * (mob, $s0), so its two func_002AFD88 calls stay separate and each path returns
+ * aim->found by itself; here best and mob share a register, the calls are cross-jumped
+ * (16 bytes short), and the four candidate loops differ in the same allocation. */
+#include "common.h"
 
 extern int D_001A8CA0 __attribute__((sda));
 extern int func_002B3B20(char *p, char *q, float f12, float f13);
@@ -55,7 +43,7 @@ extern void func_002AFD88(float, float, float, char *, char *);
 
 int func_002B3BA8(char *self, int index, Vec128_2B3BA8 *point, int force, float range, float height)
 {
-    float origin[4];
+    float origin[4] __attribute__((aligned(16)));
     int kind;
     Aim_2B3BA8 *aim;
     char *best;
@@ -72,7 +60,7 @@ int func_002B3BA8(char *self, int index, Vec128_2B3BA8 *point, int force, float 
     else
         *(Vec128_2B3BA8 *)origin = *(Vec128_2B3BA8 *)(self + 0x10);
     aim->target = D_00189E20.moby;
-    aim->position = D_00189E20.position;
+    qcopy(&aim->position, &D_00189E20.position);
     aim->kind = 0;
     aim->found = 0;
     if (force == 0) {
@@ -89,7 +77,7 @@ int func_002B3BA8(char *self, int index, Vec128_2B3BA8 *point, int force, float 
             aim->kind = kind;
             if (mob != D_00189E20.moby) {
                 float *info;
-                aim->position = *(Vec128_2B3BA8 *)(mob + 0x10);
+                qcopy(&aim->position, mob + 0x10);
                 info = func_002AB1F0(mob);
                 if (info != 0) {
                     if (D_001A8CA0 != 0)
@@ -99,6 +87,7 @@ int func_002B3BA8(char *self, int index, Vec128_2B3BA8 *point, int force, float 
                 }
             }
         }
+        return aim->found;
     } else {
         best_distance = 9999999.0f;
         best = 0;
@@ -157,10 +146,10 @@ int func_002B3BA8(char *self, int index, Vec128_2B3BA8 *point, int force, float 
             aim->found = 1;
             aim->target = best;
             if (best == D_00189E20.moby) {
-                aim->position = D_00189E20.position;
+                qcopy(&aim->position, &D_00189E20.position);
             } else {
                 float *info;
-                aim->position = *(Vec128_2B3BA8 *)(best + 0x10);
+                qcopy(&aim->position, best + 0x10);
                 info = func_002AB1F0(best);
                 if (info != 0) {
                     if (D_001A8CA0 != 0)

@@ -1,4 +1,10 @@
-#include "include_asm.h"
+/* func_0030DE88 (420 bytes, 28 places), closer M2: best under
+ *     -O2 -G8 -ffunction-sections -frac2-zero-ti-por
+ * (-G8 gives retail's $gp reads of D_001AF044, -frac2-zero-ti-por its por zero vector;
+ * func_002C2210 takes (void *, float, float, s32, s32, float, s32, s32, void *, s32), the
+ * order found by search on func_00302848). Left: loop.c hoists the 0.15f constant of the
+ * second spawn into $f23 (one more saved FPR) where retail rematerialises it in the loop;
+ * the 0.3f is hoisted in both. A goto loop hoists nothing (worse). */
 #include "common.h"
 
 typedef int Quadword_0030DE88 __attribute__((mode(TI)));
@@ -17,7 +23,7 @@ extern float func_00282C48(float);
 extern int func_002A7820(int, int);
 extern float func_002A7878(float, float);
 extern int func_0030CAA0(void);
-extern void func_002C2210(void *, u32, u32, u32, s32, s32, s32, f32, f32, f32);
+extern void func_002C2210(void *, float, float, s32, s32, float, s32, s32, void *, s32);
 
 void func_0030DE88(u8 *obj, int count)
 {
@@ -42,8 +48,8 @@ void func_0030DE88(u8 *obj, int count)
             r = func_002A7820(-8, 8);
             s = func_002A7878(0.2f, 0.6f);
             t = s * 0.3f;
-            func_002C2210(&v, 0xF, func_0030CAA0() | 0x7F000000, 0, r, (s32)&w, 0, t, s, 0.0f);
-            func_002C2210(&v, 0xF, 0x307F7F7F, 0, -r, (s32)&w, 0, s * 0.15f, s * 0.5f, 0.0f);
+            func_002C2210(&v, t, s, 0xF, func_0030CAA0() | 0x7F000000, 0.0f, 0, r, &w, 0);
+            func_002C2210(&v, s * 0.15f, s * 0.5f, 0xF, 0x307F7F7F, 0.0f, 0, -r, &w, 0);
         } while (n != 0);
     }
 }
