@@ -533,7 +533,7 @@ void func_00328F18(char *pos, int a1, int a2, char *a3, int t0,
     func_00280B90(pkt, m, 0);
 }
 
-INCLUDE_ASM("asm/game", func_0032B598);
+/* func_0032B598 is in 0032B598-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_0032B7D0);
 

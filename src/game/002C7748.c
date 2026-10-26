@@ -256,7 +256,7 @@ void func_002C85D8(char *p)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002C8610);
+/* func_002C8610 is in 002C8610.c. */
 
 void func_002C87B0(char *a0)
 {

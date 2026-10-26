@@ -42,7 +42,7 @@ INCLUDE_ASM("asm/levels", func_L01_003CB540);
 
 INCLUDE_ASM("asm/levels", func_L01_003CB668);
 
-INCLUDE_ASM("asm/levels", func_L01_003CBCD8);
+/* func_L01_003CBCD8 is in L01_003CBCD8-qcopy.c. */
 
 /* Frees the object at 0xD8 of the object at 0x68 and clears its 0xDC flag. */
 void func_L01_003CBFA8(u8 *a0)

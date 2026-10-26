@@ -85,7 +85,7 @@ void func_L11_00448908(char *a0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00448AA8);
+/* func_L11_00448AA8 is in L11_00448AA8.c. */
 
 s32 func_L11_00448CE0(char *a0)
 {

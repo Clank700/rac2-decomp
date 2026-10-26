@@ -869,3 +869,7 @@ src/levels/11_joba/L11_00332EE0.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L00_003B3E78.c	-O2 -G32 -Wa,-G32 -ffunction-sections -g -frac2-zero-ti-por
 src/game/00271130-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/12_todano/L12_00414AB8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/04_barlow/L04_0044DB18.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/002D16C8-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections -frac2-qcopy
+src/game/0032B598-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/01_oozla/L01_003CBCD8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-gcse

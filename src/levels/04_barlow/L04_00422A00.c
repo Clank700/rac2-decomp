@@ -257,7 +257,6 @@ int func_L04_0044DAC8(char *a0) {
     }
     return 0;
 }
-INCLUDE_ASM("asm/levels", func_L04_0044DB18);
 
 void func_L04_00450268(char *a0) {
     char *s0 = *(char **)(a0 + 0x68);
