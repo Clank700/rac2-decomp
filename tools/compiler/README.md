@@ -19,6 +19,8 @@ The retail code was built with GNU EE-GCC 2.9-ee-991111b. `build.sh` rebuilds it
   `ti_one_gpr.py` makes reload count a TImode value as one general register on the R5900,
   as `HARD_REGNO_NREGS` already does, so quadword reloads (a `por` zero for `sq`) take
   single spill registers as retail's do; it is unconditional (docs/COMPILER-NOTES.md).
+  `gcse_store_kills_loads.py` gives gcse GCC 2.95.3's memory model, where every store kills
+  every load, in place of this tree's alias-analysis queries; it is unconditional too.
   `gcse_unsplit_edges.py` and `keep_block_order.py` add the opt-in
   `-frac2-gcse-unsplit-edges` and `-frac2-keep-block-order`, which leave out two
   Cygnus-local pieces of this tree that GCC 2.95 does not have.

@@ -68,6 +68,7 @@ python3 $T/qcopy_barrier.py gcc
 python3 $T/no_annulled_wide_stores.py gcc/reorg.c
 python3 $T/zero_ti_por.py gcc
 python3 $T/no_null_pointer_checks.py gcc
+python3 $T/gcse_store_kills_loads.py gcc/gcse.c
 sha256sum --check --quiet <<'SUMS'
 78eba27106cd3a183125df8380d4ee19e38de6506d8fd416b34fb3460d142704  gcc/config/mips/mips.c
 e25f1a54bfdcc6c96e1c8ba9c9b977f15738ca8554393920e6af33c2d3a3f7bc  gcc/config/mips/mips.h
@@ -76,7 +77,7 @@ d75635500f55f4c7c626e925f6e8146c4e33d3865314eca4ae9bb3860fe7eeab  gcc/toplev.c
 3098888cc26ac83c936a8d505662b6ba1aa9039811e89c534f4ea8f1a851e7d6  gcc/haifa-sched.c
 57ed3b11b677ad163a189adf26b0c32b1c856123403de158a08859644bc1b637  gcc/reorg.c
 5bc40b011473cd756c2a6128b6106fd2e96569c8e92bba1a8f9bc00f166feac2  gcc/flags.h
-02f386e5e25a90684b912fbb11ce1a634a40a80dbefc93b20b0546259e1f8bfc  gcc/gcse.c
+feb3bd29dd08e1d1b1db78861d580c55f161a55e63cedd368e873c48bc36982d  gcc/gcse.c
 ba947e44256e3d5144e353a4976aac931a4941acc8dcb1dc0fda99fa8b7b504a  gcc/flow.c
 89227b294163fdd860f559d67c1e4bce6ea2b3b1c86f16a3812401f7b187e1ff  gas/config/tc-mips.c
 SUMS
@@ -112,6 +113,7 @@ mkdir -p "$OUT/include" && cp "$W/src/gcc/ginclude/"*.h "$OUT/include/"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_zero_ti_store.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_gcse_unsplit_edges.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_keep_block_order.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_gcse_store_kills_loads.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy_barrier.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_no_annulled_wide_stores.py"

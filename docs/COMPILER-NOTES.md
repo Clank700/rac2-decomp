@@ -536,6 +536,34 @@ The observations on `func_L20_0039E0A0`, `func_L20_0039DBC8`,
 `func_L20_00440398` and `func_L20_0044AC38` describe pass ordering, not permission
 to add a fictitious guard just to prevent optimization.
 
+### gcse: every store kills every load
+
+[gcse_store_kills_loads.py](../tools/compiler/transformers/gcse_store_kills_loads.py) is
+unconditional: it is the real compiler's memory model, not an option. This Cygnus tree's gcse
+keeps a list of each block's stores and asks alias analysis (`mems_conflict_for_gcse_p`,
+`true_dependence`) whether a store kills a load, so a load of a global survives stores to other
+globals and to other offsets of the same record and is reused from a register. GCC 2.95.3's
+gcse only records that a block stores to memory (`mem_set_in_block`, `mem_first_set`,
+`mem_last_set`), so any store kills every load, and retail reloads after every store. The
+transformer makes `mems_conflict_for_gcse_p` report a conflict for every memory destination,
+which is what `mem_set_in_block` amounts to; it is the one place where gcse's availability,
+anticipation, transparency and store motion decide whether a store kills a load. Calls
+already killed every load.
+
+Retail evidence: `func_L19_002C44F8`'s inlined statistics updates load `D_001A7390` and
+`D_001A79F0` again after every store to a record (3,879 to 3,901 of 3,956 opcodes in place
+under 2.95's model). `func_L00_002CB3A8` (26,432 bytes/11 places) reloads the hero fields
+0x2294 after the 0x1239 byte store (on the store's path only, PRE's insertion), 0x31C after
+0x1D0, 0x34E after 0x1EE and 0x1B4 after 0xC20, which no access spelling gets from alias
+analysis (26,404 to 26,428 bytes). `func_L19_002CAAB0` (19,192 bytes) reaches 4,798 of 4,798
+instructions with registers. `-dG` dumps and an instrumented cc1 place the surviving loads in
+gcse's availability decisions. Of every matched function in the 28 programs only
+`func_L00_00310048` (27 places) compiled differently; its C had been shaped around alias
+analysis and matches as a plain `for (p = start; p < end; p += 256)` loop.
+[tests/test_gcse_store_kills_loads.py](../tests/test_gcse_store_kills_loads.py) checks the
+transformer and authored controls: a global is loaded again after stores to another record,
+reused when no store intervenes, and loaded again after a call.
+
 ### Compiler control-flow passes
 
 [tidy_condjump_fallthru.py](../tools/compiler/transformers/tidy_condjump_fallthru.py)
@@ -772,6 +800,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | --- | --- |
 | Zero folding/clear scheduling | [test_zero_ti_store.py](../tests/test_zero_ti_store.py) |
 | CSE edges/block order | [test_gcse_unsplit_edges.py](../tests/test_gcse_unsplit_edges.py), [test_keep_block_order.py](../tests/test_keep_block_order.py) |
+| gcse load kills | [test_gcse_store_kills_loads.py](../tests/test_gcse_store_kills_loads.py) |
 | Copies and RTL contract | [test_qcopy.py](../tests/test_qcopy.py), [test_qcopy_rtl.py](../tests/test_qcopy_rtl.py) |
 | Copy scheduling | [test_qcopy_barrier.py](../tests/test_qcopy_barrier.py) |
 | Annulled wide stores | [test_no_annulled_wide_stores.py](../tests/test_no_annulled_wide_stores.py) |
