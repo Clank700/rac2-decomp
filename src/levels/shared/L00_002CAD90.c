@@ -8,11 +8,9 @@ extern char D_00189E20_36[];
 
 
 
-INCLUDE_ASM("asm/levels", func_L00_002CAF20);
 
 INCLUDE_ASM("asm/levels", func_L00_002CB038);
 
-INCLUDE_ASM("asm/levels", func_L00_002CB218);
 
 INCLUDE_ASM("asm/levels", func_L00_002CB2D8);
 

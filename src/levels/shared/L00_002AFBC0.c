@@ -398,7 +398,6 @@ void func_L00_002B41B8(float x, float y) {
         func_002AA2E8(&D_00189E20.f1B4, D_00189E20.f1B0, y);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002B4208);
 
 extern char D_00189F10[];
 

@@ -173,7 +173,6 @@ int func_L00_002B9B88(int index, int flags)
     return func_002E5CF8(index, flags, (char *)D_0018C0B0);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002B9BB0);
 
 /* Claims the first free slot of the eight 8-byte entries at resident +0x23EC: a slot whose
    leading short is clear takes the three arguments, a pending marker and its two extra

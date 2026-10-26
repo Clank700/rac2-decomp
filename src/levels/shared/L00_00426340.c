@@ -552,7 +552,6 @@ void func_L00_0042A500(int i)
     *(int *)(q + 0x20) = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0042A520);
 
 INCLUDE_ASM("asm/levels", func_L00_0042A698);
 

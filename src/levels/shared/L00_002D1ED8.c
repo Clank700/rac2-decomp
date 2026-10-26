@@ -144,7 +144,6 @@ INCLUDE_ASM("asm/levels", func_L00_002D20D0);
 
 INCLUDE_ASM("asm/levels", func_L00_002D2168);
 
-INCLUDE_ASM("asm/levels", func_L00_002D23C0);
 
 /* updates the resident selection and index after validating the selected table entry */
 void func_L00_002D2470(Rac2Native_28c929cadd7aca24_s32 selected, Rac2Native_28c929cadd7aca24_s32 index) {

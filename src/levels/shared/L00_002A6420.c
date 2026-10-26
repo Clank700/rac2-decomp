@@ -244,7 +244,6 @@ INCLUDE_ASM("asm/levels", func_L00_002A70F8);
 
 INCLUDE_ASM("asm/levels", func_L00_002A74A8);
 
-INCLUDE_ASM("asm/levels", func_L00_002A75D8);
 
 /* runs a three-float setup over two resident blocks when the mode is 124, then publishes a
    height once two resident flags are clear */
