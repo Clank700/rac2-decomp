@@ -282,7 +282,6 @@ void func_L23_003C0F88(char *arg0, unsigned long long mask, int mode, int check)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L23_003C1420);
 
 
 void func_L23_003C1960(char *arg0) {

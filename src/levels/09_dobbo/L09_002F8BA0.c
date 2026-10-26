@@ -263,7 +263,6 @@ INCLUDE_ASM("asm/levels", func_L09_003FD460);
 
 INCLUDE_ASM("asm/levels", func_L09_003FD7D0);
 
-INCLUDE_ASM("asm/levels", func_L09_003FDA38);
 
 /* Samples the sub-object through the shared record starter and ramps the
    three floats it wrote into the object's 0x390/0x394/0x398 channels at 0.02

@@ -1,10 +1,4 @@
-/* Nonmatching C: Choose the nearest path record during two timed windows and draw its four transformed corners.
- * Tested profile: -O2 -G0 -ffunction-sections.
- * Measured US size: 644 bytes; retail: 644 bytes.
- * Placement checks: US: 0/1; US2 and PAL: absent from their catalogues.
- * Remaining: The first instruction difference is at +0xb4. Sentinel reloads choose a different register after the full-vector zero clears.
- * Reopen with evidence for a natural zero-clear and sentinel lifetime that removes the reload-register conflict without partial clears or artificial dependencies.
- */
+/* Picks the nearest path record during two timed windows and draws its four transformed corners. */
 #include "common.h"
 
 
@@ -17,7 +11,7 @@ extern void func_00282CC0(void *, void *, void *);
 
 extern unsigned short **D_L02_001A9014 __attribute__((sda));
 extern u8 *D_L02_001B3C1C __attribute__((sda));
-extern float D_L02_001B2640[];
+extern float D_L02_001B2640[] MACRO_ADDR;
 extern float func_00282E80(void *, void *);
 extern void func_00283098(void *, void *, void *);
 extern void func_L01_002E2608(void *, int, int, int, int);

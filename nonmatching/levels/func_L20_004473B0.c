@@ -1,3 +1,4 @@
+/* M33 2026-10-26: re-measured 656/656 B, 8 lines, float registers only: in the c1/c3 accel computation retail keeps speed*4 in $f1 (div.s $f13,$f1,$f0), here it is tied to $f13. Tried float return, 4*speed, inline args, split statements, a temp. In the permuter. */
 /* Nonmatching: 656/656 bytes.
  * Profile: -O2 -G0 -ffunction-sections.
  * Placement checks: US: 0/1; US2: 0/1; PAL absent from catalogue.

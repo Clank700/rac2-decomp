@@ -1190,3 +1190,11 @@ src/game/003348A8.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/game/002B0520.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L09_003FDD80.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L18_0043FB08-zp.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/11_joba/L11_002CB130.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-barrier
+src/levels/02_maktar_nebula/L02_0043E150.c	-O2 -G0 -ffunction-sections
+src/levels/01_oozla/L01_003B4700-g8.c	-O2 -G8 -ffunction-sections
+src/levels/23_damosel_orbit/L23_003C1420-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/02_maktar_nebula/L02_004388A0.c	-O2 -G0 -ffunction-sections
+src/levels/09_dobbo/L09_003FDA38.c	-O2 -G0 -ffunction-sections
+src/levels/03_endako/L03_003C5FE8-g8.c	-O2 -G8 -ffunction-sections
+src/levels/24_ship_shack/L24_00379A48-g8.c	-O2 -G8 -ffunction-sections

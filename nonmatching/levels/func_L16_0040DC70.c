@@ -1,3 +1,4 @@
+/* M33 2026-10-26: profile -O2 -G8 -ffunction-sections -mno-split-addresses; 436/432 B. Retail computes origin (arg+0x10) into $s1 in the first jal slot and reuses $s1 for the loop's &pos; here origin gets its own register and arg moves to $s4 (one more save). Writing arg+0x10 inline gives retail's other registers but loses the early origin (424 B). In the permuter. */
 /* -O2 -G8 -mno-split-addresses; US and US2: 16_snivelak: 436 bytes, expected 432; 0/1 each.
    PAL: absent from catalogue. Mixed absolute/small-data declarations and named origin tried; default G8 was 416 bytes, final nosda/mno-split profile is 436. Origin liveness changes saved registers. Reopen with a measured mixed-load profile and shorter origin lifetime. */
 #include "common.h"

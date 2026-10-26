@@ -680,7 +680,6 @@ void func_L02_0042E2F8(u8 *a0) {
 
 /* func_L02_0042E988 is defined in L02_0042E988-flags-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L02_004388A0);
 
 /* restarts the shared effect object the level keeps at 0x1BE200 */
 void func_L02_00438B28(void) {
@@ -798,7 +797,6 @@ void func_L02_00438B90(u8 *a0) {
 
 INCLUDE_ASM("asm/levels", func_L02_00439CD8);
 
-INCLUDE_ASM("asm/levels", func_L02_0043E150);
 
 typedef struct { u8 pad[0x464]; u8 spent[1]; } L02_CellFlags;
 extern L02_CellFlags D_L02_0021F4F0;

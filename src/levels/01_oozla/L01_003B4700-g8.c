@@ -1,19 +1,8 @@
-/* Retained C reconstruction; not linked or counted.
- * Profile: -O2 -G8 -ffunction-sections.
- * 728/728 bytes; 0/1 USA v1.01 and USA v2.00 places.
- * The canonical function is absent from the PAL catalogue.
- * Remaining: The measured early GP and final absolute reads of the one object-table pointer
- * now use honest same-symbol extern views. All preceding code agrees; at +0x27C
- * the attached pointer and subsequent LUI temporary exchange registers.
- * Reopen with: Independent tail-pointer lifetime evidence. No-split-addresses falls back
- * to GP access; a pointer-to-256-byte-slot difference gives identical bytes.
- */
-
+/* Follows the attached target (two target kinds) and eases the object toward the computed position. */
 #include "common.h"
 typedef int OozlaQuad __attribute__((mode(TI)));
-extern char *D_L01_001B255C __attribute__((sda));
-/* Retail uses both GP-relative and absolute accesses to this one pointer. */
-extern char *oozla_objects_absolute __asm__("D_L01_001B255C") NOT_SDA;
+/* The object table pointer: $gp-relative in delay slots, lui/lw in ordinary flow. */
+extern char *D_L01_001B255C MACRO_ADDR;
 extern float func_00282E80(void *, void *);
 extern void func_00282CF0(void *, void *, void *);
 extern void func_00282CC0(void *, void *, void *);
@@ -61,6 +50,6 @@ void func_L01_003B4700(char *object)
     } else {
         char *attached = *(char **)(state + 0x198);
         if (attached && (*(short *)(attached + 0xAA) == 0xA56 || *(short *)(attached + 0xAA) == 0xA53))
-            *(int *)(state + 0x384) = (attached - oozla_objects_absolute) >> 8;
+            *(int *)(state + 0x384) = (attached - D_L01_001B255C) >> 8;
     }
 }

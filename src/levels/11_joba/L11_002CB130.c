@@ -1,35 +1,6 @@
-/*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-barrier.
- * Reported final C / retail: 976 / 980 bytes; size equality is not a match.
- * us: 0/1 placements; 976/980 bytes.
- * us2: absent from catalogue (not a match).
- * pal: absent from catalogue (not a match).
- * Residual: Correct0x50 frame. Zero store occupies unconditional branch delay slot; retail uses separate clear, branch and delay load. One instruction missing. Plain TImode local, union/cast stores, qualified no-annulled-wide-store and debug forms did not recover it. Marker restored and failed profile removed.
- * Reopening condition: Measured quadword-clear scheduling/source evidence; no artificial barrier.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
- */
+/* Contact response: reads the hero's contact entry and pushes the hero along the contact direction. */
+#include "common.h"
 
-/* Nonmatching contact response, 2026-10-23. Six bounded meaningful trials.
- * US Joba: 976 bytes versus retail 980, 0/1, check.py exit 1. The function
- * is absent from the US2 and PAL catalogues (absence is not a match).
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
- * -frac2-zero-ti-barrier. The 0x50 frame and contact entry stride 0x40 agree.
- * The clear of the local direction is scheduled in an unconditional branch's
- * delay slot, one word before retail's separate clear and branch. Raw TImode
- * locals lost the copy barrier; union/cast forms and the qualified debug and
- * no-annulled-wide-store profiles did not recover that word. Reopen only with
- * a measured clear-scheduling remedy or an independently recovered source form.
- * Current canonical helper types are preserved, including A9640's pointer
- * return and B2C58's two integer and two FP inputs. Ignored marker-helper
- * scalar returns remain unqualified; no return value is manufactured here.
- */
-
-#include "include_asm.h"
-
-typedef unsigned char u8;
 typedef int Quadword __attribute__((mode(TI)));
 typedef union { Quadword word; float f[4]; } Vector;
 /* Partial resident view. Field offsets and widths follow the retail accesses. */
@@ -161,7 +132,7 @@ int func_L11_002CB130(long apply)
         }
         if (entry->flags & 8) func_L11_002D8EF8(0x8c, 1);
         else func_L11_002D8EF8(0x16, 1);
-        if (D_00189E20.state == 0x8c) *(Quadword *)&direction = 0;
+        if (D_00189E20.state == 0x8c) qzero(&direction);
         else {
             func_L00_002B2C58((int)&direction, special, D_00189E20.jumpPressed ? 0.0f : 0.055000003f, 0.028333336f);
             if (special && entry->kind == 4) func_L00_002D3C68((char *)&direction, (char *)&direction, 2.0f);

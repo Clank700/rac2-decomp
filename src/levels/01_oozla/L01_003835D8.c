@@ -93,7 +93,6 @@ void func_L01_003B46C8(char **arg0, int *arg1) {
     } while (i < *arg1);
 }
 
-INCLUDE_ASM("asm/levels", func_L01_003B4700);
 
 /* func_L01_003B49D8 and func_L01_003B4AD0 live in L01_003B49D8.c: their clamp needs
    -ffast-math (the retail's min.s), which is a per-file flag. */

@@ -1,10 +1,4 @@
-/* Nonmatching C: Run the timed effect state machine and emit the initial and debris bursts.
- * Tested profile: -O2 -G0 -ffunction-sections.
- * Measured US size: 848 bytes; retail: 848 bytes.
- * Placement checks: US and US2: 0/1 each; PAL: absent from the catalogue.
- * Remaining: The first instruction difference is at +0x84. The two full-vector zero registers and debris-call scheduling differ.
- * Reopen with genuine lifetime or helper evidence for the zero registers; preserve the canonical five GPR and five FP inputs to the debris helper.
- */
+/* Runs the timed effect state machine and emits the initial and debris bursts. The debris helper's float parameters interleave with the pointers: this caller's argument setup is the evidence. */
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
@@ -26,7 +20,7 @@ extern void func_L00_00324F18(char *, char *, float, float, float);
 extern int func_00282948(void *);
 extern void func_00283098(void *, void *, void *);
 extern int func_002A7820(int, int);
-extern void func_L00_002EC248(void *,void *,void *,int,unsigned char,float,float,float,float,float);
+extern void func_L00_002EC248(void *,void *,float,void *,float,int,unsigned char,float,float,float);
 
 
 void func_L02_0043E150(u8 *a0) {
@@ -67,8 +61,8 @@ void func_L02_0043E150(u8 *a0) {
             e[1] = -0.016666668f;
             e[2] = 0.050000004f;
             func_00283098(e, e, a0 + 0xC0);
-            func_L00_002EC248(a0,d,e,func_002A7820(3,6),0,0.0f,0.033333335f,0.5f,15.0f,2.0f);
-            func_L00_002EC248(a0,d,e,func_002A7820(3,6),1,0.0f,0.033333335f,0.5f,15.0f,2.0f);
+            func_L00_002EC248(a0,d,0.0f,e,0.033333335f,func_002A7820(3,6),0,0.5f,15.0f,2.0f);
+            func_L00_002EC248(a0,d,0.0f,e,0.033333335f,func_002A7820(3,6),1,0.5f,15.0f,2.0f);
             *(s32 *)(state + 4) = func_002A7820(0x2D, 0x5A);
         }
         break;

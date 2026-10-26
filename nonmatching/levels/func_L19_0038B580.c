@@ -1,3 +1,4 @@
+/* M33 2026-10-26: 1036 -> 1044/1044 B, 90 -> 16 lines. contact->hit is re-read at each use (not a local), D_L19_001AC790 is NOT_SDA (retail lui/lw), and the contact pointer is set again before the second hit test: retail rebuilds &D_L19_001BFE80 from the kept %hi on each path (addiu s1,a0,-0x180 in two slots). That second assignment may stand for an inlined helper; judge before landing. Left: registers in the D_00139574 weapon-record read, the i/&spread setup order before the spread loop, and a0/a1 for the hit vs the %hi in the contact tests. In the permuter. The twin func_L26_0038BB28 (same size) should take the same spellings. */
 /* Retained C reconstruction; not linked or counted.
  * Profile: -O2 -G8 -ffunction-sections.
  * 1036/1044 bytes. us: 0/1 places; us2: 0/1 places; pal: absent.
@@ -18,7 +19,7 @@ typedef unsigned int Quad __attribute__((mode(TI)));
 typedef union { Quad q; float f[4]; } Vec;
 extern unsigned char D_00139574;
 extern char *D_0018C0B0 NOT_SDA;
-extern void *D_L19_001AC790;
+extern void *D_L19_001AC790 NOT_SDA;
 typedef struct { char pad[0x18]; char *hit; int count; Vec point; char gap[0x10]; Vec normal; } Collision;
 extern Collision D_L19_001BFE80;
 typedef struct { char prefix[0x70]; float material; char tail[0x6c]; } WeaponRecord;
@@ -99,10 +100,10 @@ void func_L19_0038B580(unsigned char *obj) {
             } while(i>=0);
         } else {
             Collision *contact = &D_L19_001BFE80;
-            char *hit = contact->hit;
-            if(hit) {
-                if((hit==D_0018C0B0 || *(short *)(hit+0xAA)==0xC0) && *(int *)(ctx+0x18)>0x121) goto finish;
-                if(*(void **)(hit+0x64)==D_L19_001AC790 && *(short *)(hit+0xAA)!=0x336) goto finish;
+            if(contact->hit) {
+                if((contact->hit==D_0018C0B0 || *(short *)(contact->hit+0xAA)==0xC0) && *(int *)(ctx+0x18)>0x121) goto finish;
+                contact = &D_L19_001BFE80;
+                if(*(void **)(contact->hit+0x64)==D_L19_001AC790 && *(short *)(contact->hit+0xAA)!=0x336) goto finish;
             } else if(contact->count<1) goto finish;
             obj[0xBC]=1;
             qcopy((obj+0x10), &contact->point);
