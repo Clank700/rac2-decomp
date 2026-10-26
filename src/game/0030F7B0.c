@@ -296,7 +296,7 @@ void func_00316B40(char *p)
     *(float *)(p + 60) = 1.0f;
 }
 
-INCLUDE_ASM("asm/game", func_00316BC8);
+/* func_00316BC8 is defined in 00316BC8-qcopy.c. */
 
 void func_00316DA0(Vec16_Fc936841d *object, int index)
 {

@@ -164,7 +164,7 @@ void func_L00_003BC080(char *p)
 
 INCLUDE_ASM("asm/levels", func_L00_003BC108);
 
-INCLUDE_ASM("asm/levels", func_L00_003BC228);
+/* func_L00_003BC228 is defined in x-qcopy.c. */
 
 /* Derives a 16-byte element at index-1 from its index-2 and index-3 neighbours through two bound helpers; original game role is unknown. */
 void func_L00_003BC400(Vec16_Fc936841d *object, int index)

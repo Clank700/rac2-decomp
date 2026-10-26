@@ -747,3 +747,8 @@ src/levels/01_oozla/L01_002ADDC8.c	-O2 -G0 -ffunction-sections -g -ffast-math -f
 src/levels/18_damosel/L18_00437AA0.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/11_joba/L11_00397A30.c	-O2 -G32 -Wa,-G32 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L22_003A2B90.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/game/002C7E28-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_00389E18-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/00316BC8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003BC228-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_00412230-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

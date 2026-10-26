@@ -497,7 +497,7 @@ INCLUDE_ASM("asm/game", func_0032B598);
 INCLUDE_ASM("asm/game", func_0032B7D0);
 
 
-INCLUDE_ASM("asm/game", func_0032BBF0);
+/* func_0032BBF0 is defined in 00316BC8-qcopy.c. */
 
 void func_0032BDC8(Vec16_Fc936841d *object, int index)
 {

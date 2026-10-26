@@ -166,7 +166,7 @@ void func_002C7D58(char *self)
     *(float *)(p + 8) -= *(float *)(p + 12);
 }
 
-INCLUDE_ASM("asm/game", func_002C7E28);
+/* func_002C7E28 is defined in 002C7E28-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002C7F78);
 

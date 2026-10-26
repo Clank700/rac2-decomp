@@ -327,7 +327,7 @@ int func_L00_003046D0(int index)
     return 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00304AE8);
+/* func_L00_00304AE8 is defined in L00_002FC7A0-g8.c (-G8 small data). */
 
 INCLUDE_ASM("asm/levels", func_L00_00305600);
 

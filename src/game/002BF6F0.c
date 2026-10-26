@@ -326,7 +326,24 @@ void func_002C1C88(char *self)
         func_002B9180(self);
 }
 
-INCLUDE_ASM("asm/game", func_002C1DB0);
+extern void func_00282D30_fa(void *, void *, float);
+
+void func_002C1DB0(char *a0)
+{
+    char *p = a0;
+    char *q = p + 32;
+    int v;
+
+    func_00282D30_fa(q, q, 0.975f);
+    func_00282CC0(p + 16, p + 16, q);
+    *(float *)(p + 12) = *(float *)(p + 12) + 14700.0f;
+    *(u8 *)(p + 8) = *(u8 *)(p + 8) + *(u8 *)(q + 16);
+    v = *(int *)(p + 4) + 0xFE000000;
+    *(int *)(p + 4) = v;
+    if (v < 0) {
+        func_002B9180(p);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002C1E50);
 
