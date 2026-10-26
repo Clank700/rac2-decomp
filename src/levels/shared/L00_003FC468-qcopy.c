@@ -1,21 +1,5 @@
-/*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Reported final C / retail: 952 / 952 bytes; size equality is not a match.
- * us: 0/27 placements.
- * us2: 0/27 placements.
- * pal: 0/27 placements.
- * Residual: Complete952/952-byte three-band renderer with the real0x90packet and0x130frame. Ten bounded forms advanced the first US difference from+0x88to+0x100. Two independent UV stores and later packet-store scheduling remain different; indexed UV walking fixed the pointer/counter register tie. Further unchanged cosmetic trials should not be repeated.
- * Reopening condition: New ABI/CFG/allocator evidence or a measured compiler-model improvement; do not repeat tied forms.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
- */
-
-/* Retained complete manual reconstruction; not an exact match.
- * Source profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Complete952/952-byte three-band renderer with the real0x90packet and0x130frame. Ten bounded forms advanced the first US difference from+0x88to+0x100. Two independent UV stores and later packet-store scheduling remain different; indexed UV walking fixed the pointer/counter register tie. Further unchanged cosmetic trials should not be repeated.
- */
+/* func_L00_003FC468 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier).
+ * UV and colour stores written in the order sched1 needs: ascending UVs, the colour pair high first. */
 #include "common.h"
 typedef int EffectVectorWord __attribute__((mode(TI)));
 typedef union { float v[4]; EffectVectorWord word; } EffectVector;
@@ -82,9 +66,14 @@ void func_L00_003FC468(char *object) {
         ((u32)func_00283CF0(alpha) << 24) | 0x00108080;
     COLORS(packet)[2] = COLORS(packet)[3] =
         ((u32)func_00283CF0(alpha) << 24) | 0x00101080;
-    UV(packet)[0] = 0.0f; UV(packet)[1] = 0.0f; UV(packet)[2] = 0.0f;
-    UV(packet)[7] = UV(packet)[6] = UV(packet)[4] = UV(packet)[3] = 1.0f;
+    UV(packet)[0] = 0.0f;
+    UV(packet)[1] = 0.0f;
+    UV(packet)[2] = 0.0f;
+    UV(packet)[3] = 1.0f;
+    UV(packet)[4] = 1.0f;
     UV(packet)[5] = 0.0f;
+    UV(packet)[6] = 1.0f;
+    UV(packet)[7] = 1.0f;
     for (i = 0; i < 4; i++) {
         UV(packet)[i * 2] -= *(float *)(state + 0x30);
         if (UV(packet)[i * 2] <= 7.0f) UV(packet)[i * 2] += 7.0f;
@@ -105,8 +94,8 @@ void func_L00_003FC468(char *object) {
     func_00280B90(&packet, 0, 0);
     COLORS(packet)[0] = COLORS(packet)[2];
     COLORS(packet)[1] = COLORS(packet)[3];
-    COLORS(packet)[2] = 0x00108080;
     COLORS(packet)[3] = 0x00108080;
+    COLORS(packet)[2] = 0x00108080;
     *(EffectVectorWord *)VERTEX(packet,0) = *(EffectVectorWord *)VERTEX(packet,2);
     *(EffectVectorWord *)VERTEX(packet,1) = *(EffectVectorWord *)VERTEX(packet,3);
     func_00282CC0(VERTEX(packet,2), VERTEX(packet,2), &segment);
@@ -114,14 +103,18 @@ void func_L00_003FC468(char *object) {
     func_00280B90(&packet, 0, 0);
     func_00281DE8(&packet.header, 14, 1, 0x80);
     color = ((u32)func_00283CF0(life * 64.0f) << 24) | 0x000040FF;
-    COLORS(packet)[0] = color;
-    COLORS(packet)[2] = 0x000040FF;
+    COLORS(packet)[1] = color;
+    UV(packet)[0] = 0.0f;
+    UV(packet)[1] = 0.0f;
+    UV(packet)[2] = 0.0f;
+    UV(packet)[3] = 1.0f;
+    UV(packet)[4] = 1.0f;
+    UV(packet)[5] = 0.0f;
+    UV(packet)[6] = 1.0f;
     COLORS(packet)[3] = 0x000040FF;
-    UV(packet)[7] = 1.0f; UV(packet)[0] = 0.0f;
-    UV(packet)[1] = 0.0f; UV(packet)[2] = 0.0f;
-    UV(packet)[3] = 1.0f; UV(packet)[4] = 1.0f;
-    UV(packet)[5] = 0.0f; UV(packet)[6] = 1.0f;
-    COLORS(packet)[1] = COLORS(packet)[0];
+    COLORS(packet)[0] = color;
+    UV(packet)[7] = 1.0f;
+    COLORS(packet)[2] = 0x000040FF;
     func_00282F20(&normal, &normal, 0.6f);
     func_00282CC0(VERTEX(packet,0), position, &normal);
     func_00282CF0(VERTEX(packet,1), position, &normal);
