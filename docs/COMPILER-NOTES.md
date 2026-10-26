@@ -443,6 +443,30 @@ stores by letting CSE substitute zero everywhere. The retired
 `allow_zero_ti_store.patch` must not be restored. These are correctness conditions,
 not harmless one-word differences.
 
+### Reload registers for quadword values
+
+[ti_one_gpr.py](../tools/compiler/transformers/ti_one_gpr.py) is unconditional. The
+sce-991111b stack makes `HARD_REGNO_NREGS` 1 for TImode in a general register, but
+`CLASS_MAX_NREGS` still answered 16/`UNITS_PER_WORD` = 2 for every non-FP class.
+Reload sizes its needs and its reload registers by the latter, so each TImode reload
+was a two-register group: a reloaded zero for `sq` (`por $rX,$0,$0`) made reload
+spill pairs, and `allocate_reload_reg`'s round-robin from `last_spill_reg + 1` then
+skipped the second register of each pair or landed on it. The transformer answers 1
+for TImode in `GR_REGS` and the MIPS16 subsets before it, so the two macros agree;
+FP_REGS and the hi/lo classes keep their counts.
+
+Witnesses: `func_L23_002C38B0`'s four reloaded quadword zeros are `$a0`, `$v0`,
+`$a0`, `$v0` in retail and come out so with the fix, while the pair model gave `$v1`
+where retail has `$a0`. Ten more unmatched retail functions clear with
+`por $a0,$0,$0`, among them `func_002ABBB8` and `func_L00_0038ADD0` (where `$v0`
+holds a call's value and `$v1` a constant across the clear). Every matched function
+of the 28 programs compiles to the same bytes with and without it, so it changes only
+code that had no matching C yet. A non-quadword pseudo can move too, since regclass
+and local-alloc read the same macro. [tests/test_ti_one_gpr.py](../tests/test_ti_one_gpr.py)
+checks authored controls: five reloaded zeros between calls rotate `$v1`, `$v0`,
+`$v1`, `$v0`, `$v1` (the pair model: `$a1`, `$v0`, ...), a shared stack zero beside a
+live call value takes `$v1` (pair model: `$a1`), and a lone zero keeps `$v0`.
+
 ### Clear scheduling and materialized stack zeros
 
 | Option | Effect | Limit |

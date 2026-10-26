@@ -44,6 +44,7 @@ git apply --whitespace=nowarn "$HERE"/patches/0059-*.patch       # per-object si
 T=$HERE/transformers
 python3 $T/neutralise_timode_anchor.py gcc/config/mips/mips.c
 python3 $T/enable_loop_padding.py gcc/config/mips/mips.h
+python3 $T/ti_one_gpr.py gcc/config/mips/mips.h
 python3 $T/count_trap_length.py gcc/config/mips/mips.c
 python3 $T/ascending_save_order.py gcc/config/mips/mips.c
 python3 $T/reorder_save_blocks.py gcc/config/mips/mips.c
@@ -68,7 +69,7 @@ python3 $T/no_annulled_wide_stores.py gcc/reorg.c
 python3 $T/zero_ti_por.py gcc
 sha256sum --check --quiet <<'SUMS'
 78eba27106cd3a183125df8380d4ee19e38de6506d8fd416b34fb3460d142704  gcc/config/mips/mips.c
-d43a3f2274e1ca640c1f877b9aa2a82b2e337298d7d0ebf7e5498fe91b3523f4  gcc/config/mips/mips.h
+e25f1a54bfdcc6c96e1c8ba9c9b977f15738ca8554393920e6af33c2d3a3f7bc  gcc/config/mips/mips.h
 790a54f4772853284ab43a7afc9f592913da8f012b46d43abf5f2a3660467eef  gcc/config/mips/mips.md
 a12ae81a7e222259d50148ae8e27592cd88ba32715077172a5984804245ea840  gcc/toplev.c
 3098888cc26ac83c936a8d505662b6ba1aa9039811e89c534f4ea8f1a851e7d6  gcc/haifa-sched.c
@@ -114,6 +115,7 @@ RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy_barrier.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_no_annulled_wide_stores.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_zero_ti_por.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_ti_one_gpr.py"
 python3 "$ROOT/tests/test_qcopy_rtl.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_dli_masks.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_hazard_labels.py"
