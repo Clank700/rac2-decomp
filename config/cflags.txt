@@ -1207,3 +1207,15 @@ src/levels/20_yeedil/L20_002C5D00-contact.c	-O2 -G0 -ffunction-sections
 src/levels/18_damosel/L18_002D01B0-contact.c	-O2 -G0 -ffunction-sections
 src/levels/19_grelbin/L19_002B5BF0-contact.c	-O2 -G0 -ffunction-sections
 src/levels/03_endako/L03_002B8708-contact.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L22_003A4CA8-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L00_003E2BD0-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_003E6C10.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_003C2FC8-g8.c	-O2 -G8 -ffunction-sections -g
+src/levels/shared/L04_003EE7C0-g8.c	-O2 -G8 -ffunction-sections -g
+src/game/00307FC0-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/00305C10-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/0030C440-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L08_003F77C0-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L06_00443F30.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L14_00429A18-por.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L06_0037E6B0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

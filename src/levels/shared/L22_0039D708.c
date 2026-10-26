@@ -139,8 +139,6 @@ void func_L22_003A47E8(char *a0, int flags, int a2, int a3, int a4) {
 
 INCLUDE_ASM("asm/levels", func_L22_003A4938);
 
-INCLUDE_ASM("asm/levels", func_L22_003A4CA8);
-
 extern float D_L22_001B2AA4 __attribute__((sda));
 extern char *D_0018C0B0;
 extern void func_002F3AB0(void *, void *, void *);

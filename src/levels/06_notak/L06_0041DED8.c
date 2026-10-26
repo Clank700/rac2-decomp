@@ -348,7 +348,6 @@ void func_L06_00443E18(char *a0)
     func_366160(a0, s1 + 0x260, 2.5f, 0, 1);
 }
 
-INCLUDE_ASM("asm/levels", func_L06_00443F30);
 
 /* func_L06_00444168 and func_L06_00444300 live in L06_0041DED8-g8.c (func_L06_00444300 reaches
  * its constants through $gp; the pair is the level 6 twin of func_L14_00428A08/func_L14_00428BA0). */

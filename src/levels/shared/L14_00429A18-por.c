@@ -1,4 +1,6 @@
-/* func_L14_00429A18 - 292 bytes, 1 place. Opus near miss (M18): the func_L07_003E7240 burst without the flag/timer reset (state at +0x300, last argument 0); -frac2-zero-ti-por. 292/292 B, 3 lines: retail loads 20.0f into $f13 before the stack constant 1, this cc1 the other way. Permuter queued. */
+/* func_L14_00429A18: the func_L07_003E7240 launch burst without the flag and timer reset
+ * (state block at +0x300). func_0032C700 returns a pointer: with a void prototype the
+ * constant 1 for the stack argument is scheduled ahead of the 20.0f. */
 #include "include_asm.h"
 #include "common.h"
 
@@ -12,8 +14,8 @@ extern void func_00283098(TI128 *, TI128 *, char *);
 
 extern void func_00282CC0(TI128 *, TI128 *, char *);
 
-extern void func_0032C700(TI128 *, int, int, int, int, int, int, int, float, float, int, int, int,
-                          int);
+extern unsigned char *func_0032C700(void *, int, int, int, int, int, int, int, float, float, int,
+                                    int, int, void *);
 
 extern void func_002E5CF8(int, int, char *);
 
@@ -22,7 +24,6 @@ extern void func_00282F20(TI128 *, TI128 *, float);
 extern void func_002B0A68(char *, int, TI128 *, float, float, float, float, int);
 
 
-/* The func_L07_003E7240 launch burst without the flag and timer reset, state block at +0x300. */
 void func_L14_00429A18(char *arg)
 {
     char *o;

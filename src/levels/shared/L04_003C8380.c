@@ -80,7 +80,6 @@ int func_L04_003EDFF0(unsigned char *a0, char *a1)
 
 INCLUDE_ASM("asm/levels", func_L04_003EE090);
 
-INCLUDE_ASM("asm/levels", func_L04_003EE7C0);
 
 
 void func_L04_003F5F30(unsigned char *a0) {

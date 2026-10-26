@@ -328,7 +328,6 @@ void func_L00_003E6710(char *object)
 
 INCLUDE_ASM("asm/levels", func_L00_003E6778);
 
-INCLUDE_ASM("asm/levels", func_L00_003E6C10);
 
 extern char *D_L00_001B2BB8 __attribute__((sda));
 extern void ref_L00_003E6F48_01(char *rec, float f1, int a1, int a2, int a3,

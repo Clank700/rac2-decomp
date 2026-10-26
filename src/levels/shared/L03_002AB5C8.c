@@ -36,7 +36,6 @@ extern void func_32D0F0(void *, int, float);
 
 extern float func_2EF670(float, float);
 
-INCLUDE_ASM("asm/levels", func_L03_002AB5C8);
 
 
 /* func_L03_002ADC00 is in its dedicated zero-vector profile unit. */

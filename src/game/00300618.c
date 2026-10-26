@@ -648,7 +648,6 @@ void func_00305910(void *owner, float *position)
 
 
 
-INCLUDE_ASM("asm/game", func_00305C10);
 
 extern EffectCameraView ref_00306040_00;
 /* Packet initialization has distinct boot and level catalogue identities. */
@@ -876,5 +875,4 @@ void func_00307CC0(void *owner, float *position)
 
 
 
-INCLUDE_ASM("asm/game", func_00307FC0);
 

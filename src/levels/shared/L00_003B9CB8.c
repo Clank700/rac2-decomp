@@ -437,7 +437,6 @@ void func_L00_003C2F10(unsigned char *a0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003C2FC8);
 
 /* When the context flag at offset 0x24 is nonzero, pass scale 1.0, the context, its vector at offset 0x10 and mode zero to the bound helper; original game role is unknown. */
 void func_L00_003C33E0(Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner *owner)

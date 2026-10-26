@@ -220,7 +220,6 @@ INCLUDE_ASM("asm/levels", func_L08_003F6E18);
 
 INCLUDE_ASM("asm/levels", func_L08_003F76C0);
 
-INCLUDE_ASM("asm/levels", func_L08_003F77C0);
 
 extern u32 D_L08_001B9E04;
 
