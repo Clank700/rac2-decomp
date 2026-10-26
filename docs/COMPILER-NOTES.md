@@ -188,6 +188,19 @@ restores the hook.
 not one word. Counting one overpads `func_0028B950`; `func_0034FB20` is the 168-byte
 polling-loop witness.
 
+[count_block_move_length.py](../tools/compiler/transformers/count_block_move_length.py)
+does the same for block moves. A structure copy of 0x40 bytes or more becomes a loop
+of one `movstrsi_internal2` insn (its loads) and one `movstrsi_internal3` insn (its
+stores); counted as one word each, every such loop looked five words long and got two
+NOPs before its branch. Retail never pads them: the unaligned `ldl`/`ldr`/`sdl`/`sdr`
+loop is 19 words and the aligned `ld`/`sd` loop 11. Counting the two insns by their MD
+length (20 and 1) keeps both above the seven-word threshold. Retail witnesses, all
+unpadded: `func_L08_003C6AB0` (both loops, three places), `func_002F7738` (seven
+loops), `func_L00_002FC980` (27 places), `func_L30_0040B9D8`, `func_002AF0A8`. No
+matched function changes: `build.py all --strict` is OK with and without the patch.
+Control: [test_block_move_loop.py](../tests/test_block_move_loop.py), where a
+four-word store loop keeps its three NOPs.
+
 ### Quadword saves and return slots
 
 Patch 0058 enables `-mastra-quad-saves` per file: all GPR slots widen to TImode and
@@ -945,6 +958,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | Null-pointer-check pass | [test_no_null_pointer_checks.py](../tests/test_no_null_pointer_checks.py) |
 | Masks/sign seed | [test_dli_masks.py](../tests/test_dli_masks.py) |
 | Hazard labels | [test_hazard_labels.py](../tests/test_hazard_labels.py), [hazard_labels.s](../tests/fixtures/hazard_labels.s) |
+| Block-move loop padding | [test_block_move_loop.py](../tests/test_block_move_loop.py) |
 
 Copy controls cover volatile/unaligned/scalar/quadword memory, calls, integer/FP
 branches, loop placement and complete pairs outside slots. Clear controls cover
