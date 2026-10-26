@@ -38,6 +38,17 @@
  *    before the target label or a LOOP_VTOP just after it. do/while and while wrappers did not
  *    produce it.
  *  - 0x3C2AF0 (addu operand order) is unaffected by index spellings.
+ 
+ * Opus big16 (2026-10-26): the case 0 matrix block now matches retail exactly. The rows are
+ * written on the real symbol (D_L02_001C8280.transform.row[...]; the overlapping
+ * D_L02_001C8600 name is gone) and both clears use qzero_nc (common.h, rac1-decomp's
+ * clobber-free qzero): its bare volatile asm flushes cse's table, so row 2's address and the
+ * w store's base are rebuilt as in retail ($fp = HIGH(D_L02_001C8280), gp+0xD30
+ * rematerialised, fresh lui for row 2). The case-0 notes above about this block are history.
+ * Now 6508/6516 bytes, 1624/1629 opcodes, 1605 with registers. Left: the else arm's block
+ * before the first func_002A7940 call (retail &position/&target/&rotation and the $fp lui
+ * before randomAngle/i; here after), case 1's delay slot, case 4's andi, 0x3C2DD0 and the
+ * small v0/v1 choices listed above.
  */
 #include "common.h"
 typedef int Quad __attribute__((mode(TI)));
@@ -104,7 +115,6 @@ extern float D_L02_001AFD40 __attribute__((sda));
 extern float D_L02_001C0968 __attribute__((nosda));
 typedef struct { u8 unknown00[0x380]; Matrix transform; } ChallengeGlobals;
 extern ChallengeGlobals D_L02_001C8280;
-extern Matrix D_L02_001C8600;
 typedef struct { Vector from, to; u8 unknown20[0x30]; char *view; } CameraPath;
 extern CameraPath D_L02_001BA500;
 extern float D_L02_001B308C, D_L02_001B3090;
@@ -213,10 +223,10 @@ void func_L02_003C26F0(u8 *object)
         state->decoration = 0;
         records = D_L02_001B368C;
         *(float *)(records + state->record * 0x80 + 0x38) += 2.0f;
-        qcopy(&D_L02_001C8600.row[1], records + state->record * 0x80 + 0x30);
-        qcopy(&D_L02_001C8600.row[0], &D_L02_001AFD20);
-        qzero(&D_L02_001C8600.row[3]);
-        qzero(&D_L02_001C8600.row[2]);
+        qcopy(&D_L02_001C8280.transform.row[1], records + state->record * 0x80 + 0x30);
+        qcopy(&D_L02_001C8280.transform.row[0], &D_L02_001AFD20);
+        qzero_nc(&D_L02_001C8280.transform.row[3]);
+        qzero_nc(&D_L02_001C8280.transform.row[2]);
         D_L02_001C8280.transform.row[1].f[3] = 0.0f;
         if (func_002A8508((u8)object[0x21], -1) >= 2) {
             list = D_L02_001FC060[(u8)object[0x21]];
