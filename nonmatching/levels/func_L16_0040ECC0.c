@@ -1,23 +1,24 @@
 /* Complete retained C reconstruction; not linked or counted.
  * Qualified compiler profile: -O2 -G8 -ffunction-sections -frac2-qcopy
  * -frac2-qcopy-barrier -g -frac2-zero-ti-por.
- * Measured 2026-10-25: 6476/6484 bytes, frame 0x90. The original retained
- * screening was 6456 bytes with incorrectly declared void AAA00; correcting its
- * real float return changes call setup but does not alone change that size.
- * The actual yaw-field pointer is captured before eight heading calls. This
- * restores the retail saved-register roles and prologue. Resident fields use
- * measured partial owner views; no whole object extent is inferred. State 1 is
- * a real no-op table arm, and the physical case order comes from the table.
- * Strict floating predicates preserve the observed unordered branches; signed
- * pointer-word shifts retain the actual masked address hash.
- * Remaining: mixed GP/absolute data accesses, branch/call/store scheduling and
- * later allocation still differ. Equal or nearby size is not an exact match.
- * A broad no-GCSE control and a phase-long player pointer were negative; no
- * diagnostic profile is retained. The work area keeps its complete 64-byte
- * matrix/vector union. Existing assembly-only result contracts and native
- * semantics remain unqualified; no runtime or PC-port claim is made.
- * Reopen with independent data-access and phase-lifetime evidence for the
- * remaining operations, not fabricated fields, padding or register constraints.
+ * Measured 2026-10-25 follow-up: 6464/6484 bytes, frame 0x90; nonmatching.
+ * Previous corrected baseline was 6476/6484. Nearby size proves no match.
+ * Three MACRO_ADDR declarations preserve the observed mixed absolute/GP loads;
+ * forcing sda selected incorrect GP loads in ordinary paths. Current RAC1 uses
+ * the same address-form mechanism. Real sound phases use a partial anchor view
+ * with owner +0x88 and active +0x74 at index stride112, not an array-row type.
+ * The projectile factory result joins one store; state4 positive-arm ordering
+ * and state19 set/clear order follow the retail operations. These changes do
+ * not invent accesses, padding, volatile locals or register constraints.
+ * The actual yaw pointer remains captured before eight heading calls. Resident
+ * views do not claim complete object extents. The complete 64-byte work union,
+ * state1 no-op table arm, nineteen destinations, observed NaN predicates and
+ * true helper returns remain intact. Two state3 transition CFG trials failed.
+ * Remaining differences include state3 transition joins, FP call scheduling,
+ * later register allocation and sound maintenance setup. All instructions and
+ * linked table placement still require exact validation before promotion.
+ * Assembly-only contracts are not exhaustively qualified; no native/runtime or
+ * PC-port claim. Reopen only with new residue-derived lifetime/CFG evidence.
  */
 #include "common.h"
 
@@ -100,9 +101,16 @@ typedef struct {
 extern SnivelakResidentView D_00189E20 NOT_SDA;
 /* These resident scalars/pointer are outside the GP-relative range. */
 extern u8 D_001395B8[] NOT_SDA;
+/* Partial observation at the indexed sound anchor; not an array-row type. */
+typedef struct {
+    u8 unknown00[0x74];
+    u8 active74;
+    u8 unknown75[0x13];
+    u8 *owner88;
+} SnivelakSoundView;
 extern u8 D_00188660[];
 extern BarlowUtilityQueueView D_L16_001BFD00;
-extern int D_L16_001A8F00 __attribute__((sda));
+extern int D_L16_001A8F00 MACRO_ADDR;
 extern u8 *D_L16_001B16C0 __attribute__((sda));
 extern float D_L16_001B16E4 __attribute__((sda));
 extern float D_L16_001B16E8 __attribute__((sda));
@@ -110,8 +118,8 @@ extern float D_L16_001B16EC __attribute__((sda));
 extern float D_L16_001B16F0 __attribute__((sda));
 extern float D_L16_001B16F4 __attribute__((sda));
 extern float D_L16_001B16F8 __attribute__((sda));
-extern unsigned int D_L16_001B2648 __attribute__((sda));
-extern float D_L16_001B2564 __attribute__((sda));
+extern unsigned int D_L16_001B2648 MACRO_ADDR;
+extern float D_L16_001B2564 MACRO_ADDR;
 extern float D_L16_001B9B00[4];
 
 /* Current C interfaces and retail-observed register banks for assembly callees. */
@@ -299,10 +307,10 @@ void func_L16_0040ECC0(u8 *moby)
     case 4:
         if (func_002B3868(moby)) {
             angle = func_00283248(D_00189E20.position80[0] - *(float *)(moby + 0x10), D_00189E20.position80[1] - *(float *)(moby + 0x14));
-            if (!(func_00283BE0(*(float *)(moby + 0xf8), angle) > 0.0f))
-                func_L16_004116C8(moby, 10, 30, 10.0f);
-            else
+            if (func_00283BE0(*(float *)(moby + 0xf8), angle) > 0.0f)
                 func_L16_004116C8(moby, 10, 30, 1.0f);
+            else
+                func_L16_004116C8(moby, 10, 30, 10.0f);
         }
         {
         float *yaw = (float *)(moby + 0xf8);
@@ -413,14 +421,14 @@ void func_L16_0040ECC0(u8 *moby)
             func_002AA2E8(&state->aimTime, 0.0f, D_L16_001B16F8 * 0.016666668f);
             func_002AA2E8(&state->aimBlend, 1.0f, 0.06666667f);
             sound = state->attackSound;
-            if (*(u8 **)(D_00188660 + (sound * 112 + 0x88)) != state->body || !D_00188660[sound * 112 + 0x74])
+            if (((SnivelakSoundView *)(D_00188660 + sound * 112))->owner88 != state->body || !((SnivelakSoundView *)(D_00188660 + sound * 112))->active74)
                 state->attackSound = func_002E5CF8(2, 4, (char *)state->body);
             func_L00_002E6CF0(func_L16_00412560, moby);
         }
         if ((state->target && (*(unsigned short *)(state->target + 0x34) & 1) && func_00282948(&state->aimTimeout)) || (!state->target && state->aimTime <= 0.0f)) {
             func_002A7750(moby, 3, 1);
             sound = state->attackSound;
-            if (sound != -1 && *(u8 **)(D_00188660 + (sound * 112 + 0x88)) == state->body && D_00188660[sound * 112 + 0x74]) func_002E59F8(sound);
+            if (sound != -1 && ((SnivelakSoundView *)(D_00188660 + sound * 112))->owner88 == state->body && ((SnivelakSoundView *)(D_00188660 + sound * 112))->active74) func_002E59F8(sound);
             state->attackSound = -1;
         }
         break;
@@ -446,8 +454,10 @@ void func_L16_0040ECC0(u8 *moby)
             state->bodyMode = 1;
             func_L16_004116C8(moby, 0, 30, state->verticalSpeed);
             if (state->leftUsed == state->rightUsed) {
-                if (!func_002A77E0(2)) state->projectile = 0;
-                else state->projectile = func_L16_004130B0(moby, 1);
+                u8 *projectile;
+                if (func_002A77E0(2)) projectile = func_L16_004130B0(moby, 1);
+                else projectile = 0;
+                state->projectile = projectile;
             } else if (!state->leftUsed) state->projectile = func_L16_004130B0(moby, 1);
             else state->projectile = 0;
         }
@@ -511,10 +521,10 @@ void func_L16_0040ECC0(u8 *moby)
             state->bodyMode = 1;
             if (state->verticalSpeed < 0.0f) state->verticalSpeed = 0.0f;
             sound = state->attackSound;
-            if (sound != -1 && *(u8 **)(D_00188660 + (sound * 112 + 0x88)) == state->body && D_00188660[sound * 112 + 0x74]) func_002E59F8(sound);
+            if (sound != -1 && ((SnivelakSoundView *)(D_00188660 + sound * 112))->owner88 == state->body && ((SnivelakSoundView *)(D_00188660 + sound * 112))->active74) func_002E59F8(sound);
             state->attackSound = -1;
             sound = state->bodySound;
-            if (sound != -1 && *(u8 **)(D_00188660 + (sound * 112 + 0x88)) == moby && D_00188660[sound * 112 + 0x74]) func_002E59F8(sound);
+            if (sound != -1 && ((SnivelakSoundView *)(D_00188660 + sound * 112))->owner88 == moby && ((SnivelakSoundView *)(D_00188660 + sound * 112))->active74) func_002E59F8(sound);
             state->bodySound = -1;
         }
         {
@@ -562,7 +572,7 @@ void func_L16_0040ECC0(u8 *moby)
     case 19:
         if (func_002B3868(moby)) {
             *(int *)(moby + 0x98) = 0;
-            *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) & 0xefff) | 0x41;
+            *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) | 0x41) & 0xefff;
             *(unsigned short *)(state->body + 0x34) |= 0x41;
             *(unsigned short *)(state->body + 0x34) &= 0xefff;
             *(int *)(state->body + 0x98) = 0;
@@ -578,11 +588,14 @@ void func_L16_0040ECC0(u8 *moby)
     }
     func_L16_00411480(moby);
     func_L16_00411600(moby);
-    sound = state->bodySound;
-    if (!state->bodyMode) {
-        if (sound != -1 && *(u8 **)(D_00188660 + (sound * 112 + 0x88)) == moby && D_00188660[sound * 112 + 0x74]) func_002E59F8(sound);
+    if (state->bodyMode) {
+        int bodySound = state->bodySound;
+        if (((SnivelakSoundView *)(D_00188660 + bodySound * 112))->owner88 != moby || !((SnivelakSoundView *)(D_00188660 + bodySound * 112))->active74)
+            state->bodySound = func_002E5CF8(10, 4, (char *)moby);
+    } else {
+        int bodySound = state->bodySound;
+        if (bodySound != -1 && ((SnivelakSoundView *)(D_00188660 + bodySound * 112))->owner88 == moby && ((SnivelakSoundView *)(D_00188660 + bodySound * 112))->active74)
+            func_002E59F8(bodySound);
         state->bodySound = -1;
-    } else if (*(u8 **)(D_00188660 + (sound * 112 + 0x88)) != moby || !D_00188660[sound * 112 + 0x74]) {
-        state->bodySound = func_002E5CF8(10, 4, (char *)moby);
     }
 }

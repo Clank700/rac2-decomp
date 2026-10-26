@@ -313,8 +313,19 @@ measured residuals rather than repeating the archived whole-object views.
 **Large Snivelak and Oozla source remedies, 25 October 2026:**
 `func_L16_0040ECC0` captures the actual yaw-field pointer before its eight
 angle calculations. This restores the observed object/state/constant register
-roles and 0x90 frame; the corrected C remains 6476/6484 bytes, 0/1 in each
-USA release, with PAL absent. `func_L16_00403900` now represents the four
+roles and 0x90 frame; that corrected baseline measured 6476/6484 bytes.
+The retained follow-up is **6464/6484 bytes**, still 0/1 in each USA release,
+with PAL absent. Three `MACRO_ADDR` declarations restore the observed mixed
+address forms. A partial sound-anchor view keeps the actual owner pointer
+at `+0x88` and active byte at `+0x74`, independently of the 112-byte index
+stride; it does not claim an array element extent. Real sound phase scopes,
+the projectile-result lifetime joined to one store, positive-first state4
+guard and state19 set/clear order retain the measured operations and unordered
+behavior. The first aligned operation difference moves from `+0x25C` to
+`+0x568`; state3 joins, FP scheduling and later allocation remain unresolved.
+Private diagnostic branch mapping still leaves seven targets unproved and
+cannot substitute for exact text or linked table equality.
+`func_L16_00403900` represents the four
 observed firing phases and two bone sites explicitly, instead of the old
 shared loop skeleton: 2816 becomes 4396/4444 bytes with the real 0x80 frame.
 It remains 0/1 USA v1.01, with the other identities absent. Seven ordered
