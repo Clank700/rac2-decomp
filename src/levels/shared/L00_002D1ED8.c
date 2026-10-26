@@ -140,7 +140,6 @@ void func_L00_002D2070(void)
     *(float *)(object + 0x48) = *(float *)(base + 0xC20);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002D20D0);
 
 INCLUDE_ASM("asm/levels", func_L00_002D2168);
 
