@@ -1,5 +1,6 @@
-/* func_L05_0041C1F0 near miss (twin func_L05_004260B8): 540/544 bytes at -G8 -mno-split-addresses, D_001A79F0/79FC/18D030 nosda.
-   Remaining: the lhu lands in $v0 not $v1, delay-slot fill of the else-arm a0=0xC, one extra nop. Without nosda the assembler turns later uses into $gp forms. */
+/* func_L05_0041C1F0: M3 2026-10-26: the sound pick was inverted: D_001A79FC == 0 tests D_0018D030 and D_001A79F0 == 0x19, else plays 0x1282. 540/544 at -G8 -mno-split-addresses; one instruction left: retail reads D_0018D030 split (lui in the bnez slot, lhu into $v1) while D_001A79F0/79FC stay tied macro reads.
+ */
+/* PERMUTE-FLAGS: -O2 -G8 -mno-split-addresses -ffunction-sections */
 #include "include_asm.h"
 
 extern int D_L05_001B1300 __attribute__((sda));
@@ -12,9 +13,9 @@ extern float func_00283B98(float, float);
 extern int func_002E5DA0(int, int, char *, int);
 extern void func_0029F338(void *);
 extern void func_L05_0041C4E8(char *);
-extern void func_0030C9D0(int, int);
-extern int func_0030CBA8(int);
-extern void func_00326198(int, int);
+extern int func_00288E18(int, int);
+extern int func_00288FB8(int);
+extern void func_L00_0030DD70(int, int);
 
 void func_L05_0041C1F0(char *object)
 {
@@ -45,10 +46,12 @@ void func_L05_0041C1F0(char *object)
         }
 check_scale:
         if (scale < 0.5f) {
-            if (D_001A79FC == 0 && D_0018D030 == 0 && D_001A79F0 == 0x19)
-                func_0030C9D0(0xA3B, 0x92);
-            else
-                func_00326198(func_0030CBA8(0x1282), -1);
+            if (D_001A79FC == 0) {
+                if (D_0018D030 == 0 && D_001A79F0 == 0x19)
+                    func_00288E18(0xA3B, 0x92);
+            } else {
+                func_L00_0030DD70(func_00288FB8(0x1282), -1);
+            }
             func_002E5DA0(0xC, 0, object, 0xFBF);
             D_001A79FC = D_001A79FC + 1;
             func_0029F338(object);

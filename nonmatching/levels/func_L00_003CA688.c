@@ -1,25 +1,28 @@
-INCLUDE_ASM("asm/levels", func_L00_003CA650);
+/* func_L00_003CA688: M3 2026-10-26: rewritten with a quad union under -frac2-zero-ti-por: 164/164 bytes; the prologue schedule differs (retail stores the zero quad before saving $s0/$ra). In the permuter queue.
+ */
+typedef int TI128 __attribute__((mode(TI)));
 
+typedef union {
+    TI128 q;
+    float f[4];
+} Quad_3CA688;
 
-extern void func_002EE5B0(void *a0, void *a1, void *a2);
-extern void func_002EE108(void *a0, void *a1, void *a2);
-extern void func_002EC608(void *a0, unsigned int a1);
-extern void func_002EC970(void *a0, void *a1, unsigned int a2, int a3, float f12, float f13);
+extern void func_00283098(void *, void *, void *);
+extern void func_00282CC0(void *, void *, void *);
+extern void func_L00_002EC608(void *, int);
+extern void func_L00_002EC970(void *, char *, int, int, float, float);
 
-/* Builds one 16-byte record (a default value with two angles overwritten) and walks it through three helpers. */
 void func_L00_003CA688(char *owner)
 {
-    Rac2Native_9cdc323a4d0c2fbd_Quad local;
-    TI128 blank;
+    Quad_3CA688 local;
     char *inner;
 
-    blank = 0;
-    local.q = blank;
-    local.vector.vector_00 = -0.3f;
-    local.vector.vector_0C = 1.0f;
-    func_002EE5B0(&local, &local, owner + 0xC0);
+    local.q = 0;
+    local.f[0] = -0.3f;
+    local.f[3] = 1.0f;
+    func_00283098(&local, &local, owner + 0xC0);
     inner = *(char **)(owner + 0x68);
-    func_002EE108(&local, &local, owner + 0x10);
-    func_002EC608(&local, 0x103080);
-    func_002EC970(&local, inner + 0x10, 0x103080, 4, *(float *)(inner + 0x64), 0.25f);
+    func_00282CC0(&local, &local, owner + 0x10);
+    func_L00_002EC608(&local, 0x103080);
+    func_L00_002EC970(&local, inner + 0x10, 0x103080, 4, *(float *)(inner + 0x64), 0.25f);
 }

@@ -1,17 +1,14 @@
-/* Near miss from src/levels/shared/L05_00428350.c: the build refuses this body at its
-   place — 200 bytes, expected 208. Kept as a starting point;
-   not linked, not counted. */
+/* func_L05_00432080: M3 2026-10-26: -frac2-qcopy unit: 208/208, 17 lines. Retail keeps the three-quadword copy loop counting up (slti 3); cc1 reverses it (int, unsigned, long, short, char counters tried).
+ */
+extern char * func_0029EFD0(int);
 
-/* Standalone declarations recovered from src/levels/shared/L05_00428350.c. */
-extern char *func_328508(char *);
-
-extern void func_32AF08(char *);
+extern void func_002A0F48(void *);
 
 typedef int TI128 __attribute__((mode(TI)));
 
 char *func_L05_00432080(char *a0, float f12)
 {
-    char *obj = func_328508((char *)0x10E3);
+    char *obj = func_0029EFD0(0x10E3);
 
     if (obj != 0) {
         int i;
@@ -37,7 +34,7 @@ char *func_L05_00432080(char *a0, float f12)
             } while (i < 3);
         }
         *(float *)(obj + 0x2C) = *(float *)(*(char **)(obj + 0x24) + 0x24) * f12;
-        func_32AF08(obj);
+        func_002A0F48(obj);
     }
     return obj;
 }
