@@ -760,7 +760,6 @@ void func_L00_0038D468(char *object)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0038D530);
 
 INCLUDE_ASM("asm/levels", func_L00_0038D650);
 

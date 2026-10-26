@@ -1094,3 +1094,6 @@ src/game/002B3BA8.c	-O2 -G0 -ffunction-sections
 src/game/00288F48.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L09_003F7840-por.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por -mno-split-addresses
 src/levels/shared/L09_003F9568-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L08_00425328.c	-O2 -G0 -ffunction-sections -ffast-math
+src/levels/shared/L04_00358AE8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L00_0038D530-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

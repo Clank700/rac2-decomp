@@ -208,7 +208,6 @@ INCLUDE_ASM("asm/levels", func_L18_0042F308);
 
 extern int *D_L18_001FE480[];
 
-INCLUDE_ASM("asm/levels", func_L18_0042F688);
 
 extern void func_002A7750(u8 *arg0, s32 arg1, s32 arg2);
 
