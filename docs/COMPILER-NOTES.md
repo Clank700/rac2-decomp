@@ -925,6 +925,21 @@ without the pre-`div.s` `nop` pair and matched once its file had `-g` in
 `config/cflags.txt`, with no change to the other nine functions of that unit.
 Before treating such a pair as unreachable, try `-g` on the file.
 
+The floor also holds when the label follows a compiler `.set noreorder` group.
+GCC writes every call with its delay slot inside one, so under `-g` the line
+label of the next statement comes right after an unreordered instruction, and
+gas's own `prev_insn_unreordered` reset used to cancel the floor there. Retail
+pads it: level 00 alone has 24 functions with jal, delay slot, nop, nop, div.s
+(func_L00_0040A4A8 at +0x200 among them), none of which had matched. The label
+test now runs after that reset (rule D in pad_div_erratum_nops.py). This is the
+assembler's default behaviour, not an option: no file needs a switch for it. A full strict
+build changed one matched function, func_002C3280, whose C had the second call and
+the division in separate statements; retail has no padding there, so the division
+now sits in the call's statement (no line label between), which matches with and
+without the change. A division emitted inside a noreorder region still gets no new
+floor. [test_div_label_after_call.py](../tests/test_div_label_after_call.py) covers
+the label, no-label and noreorder cases.
+
 The genuine SDK 3.01 oracle Ps2EeAs has SHA-256
 `cb5adda955e64626564212ef7e0c1434708c4e1ef423344a92ec8033306ed3aa`.
 The SN 2.0 full-image assembler has SHA-256
@@ -1048,6 +1063,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | gcse load kills | [test_gcse_store_kills_loads.py](../tests/test_gcse_store_kills_loads.py) |
 | Division-guard slot barrier | [test_trap_delay_barrier.py](../tests/test_trap_delay_barrier.py), [test_trap_redundant_barrier.py](../tests/test_trap_redundant_barrier.py) |
 | SDK assembler slot swaps | [test_swap_branch_slots.py](../tests/test_swap_branch_slots.py) |
+| Division label floor after a call | [test_div_label_after_call.py](../tests/test_div_label_after_call.py) |
 | No giv recombination | [test_no_recombine_givs.py](../tests/test_no_recombine_givs.py) |
 | Copies and RTL contract | [test_qcopy.py](../tests/test_qcopy.py), [test_qcopy_rtl.py](../tests/test_qcopy_rtl.py) |
 | Copy scheduling | [test_qcopy_barrier.py](../tests/test_qcopy_barrier.py) |

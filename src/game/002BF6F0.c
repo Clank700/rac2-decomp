@@ -519,7 +519,6 @@ void func_002C3280(u8 *self)
     char *s2 = (char *)self + 32;
     int n;
     float a;
-    float b;
 
     if (*(int *)(s2 + 28) == 1) {
         char *base = D_00189E20_18;
@@ -548,8 +547,9 @@ void func_002C3280(u8 *self)
 
     n = *(int *)(self + 4) & 0xFFFFFF;
     a = func_00283CE0_4(*(short *)(self + 10) - 1);
-    b = func_00283CE0_4(*(short *)(self + 10));
-    *(int *)(self + 4) = func_00283D38_3(n, *(int *)(self + 4), a / b);
+    /* One statement: retail has no line label between the second call and the
+       division, so no division padding (docs/COMPILER-NOTES.md). */
+    *(int *)(self + 4) = func_00283D38_3(n, *(int *)(self + 4), a / func_00283CE0_4(*(short *)(self + 10)));
 }
 
 INCLUDE_ASM("asm/game", func_002C3430);
