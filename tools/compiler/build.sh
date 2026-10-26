@@ -70,6 +70,7 @@ python3 $T/no_annulled_wide_stores.py gcc/reorg.c
 python3 $T/zero_ti_por.py gcc
 python3 $T/no_null_pointer_checks.py gcc
 python3 $T/gcse_store_kills_loads.py gcc/gcse.c
+python3 $T/reload_reg_used_guard.py gcc/reload1.c
 sha256sum --check --quiet <<'SUMS'
 78eba27106cd3a183125df8380d4ee19e38de6506d8fd416b34fb3460d142704  gcc/config/mips/mips.c
 e25f1a54bfdcc6c96e1c8ba9c9b977f15738ca8554393920e6af33c2d3a3f7bc  gcc/config/mips/mips.h
@@ -81,6 +82,7 @@ d75635500f55f4c7c626e925f6e8146c4e33d3865314eca4ae9bb3860fe7eeab  gcc/toplev.c
 feb3bd29dd08e1d1b1db78861d580c55f161a55e63cedd368e873c48bc36982d  gcc/gcse.c
 ba947e44256e3d5144e353a4976aac931a4941acc8dcb1dc0fda99fa8b7b504a  gcc/flow.c
 ee370b57eb9a898931d9a059d3f34e43bb4eec407c39d06e6624a7a85380db8f  gas/config/tc-mips.c
+a790ca0e7cc378af98fa3f942734c7217cc91f2d2db2f6c2d62d69de8780e1e6  gcc/reload1.c
 SUMS
 
 # bison 1.28: the 1999 grammars need its skeleton.
@@ -120,6 +122,7 @@ RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_qcopy_barrier.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_no_annulled_wide_stores.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_zero_ti_por.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_ti_one_gpr.py"
+RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_reload_reg_used_guard.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_no_null_pointer_checks.py"
 python3 "$ROOT/tests/test_qcopy_rtl.py"
 RAC2_COMPILER_ROOT="$OUT" python3 "$ROOT/tests/test_dli_masks.py"

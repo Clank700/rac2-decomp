@@ -467,6 +467,32 @@ checks authored controls: five reloaded zeros between calls rotate `$v1`, `$v0`,
 `$v1`, `$v0`, `$v1` (the pair model: `$a1`, `$v0`, ...), a shared stack zero beside a
 live call value takes `$v1` (pair model: `$a1`), and a lone zero keeps `$v0`.
 
+### Inheritance into a register the insn's pseudos hold
+
+[reload_reg_used_guard.py](../tools/compiler/transformers/reload_reg_used_guard.py) is
+unconditional. The archive's `reload_reg_free_for_value_p` returns 0 for a register in
+`reload_reg_used`, which `choose_reload_regs` fills with every register outside the insn's
+spill set (`IOR_COMPL_HARD_REG_SET (reload_reg_used, chain->used_spill_regs)`). Patch 0047,
+the GCC 2.95.2 reload1.c in Lombyte's stack, drops that test, so reload could inherit a
+spilled pseudo's value into a hard register that a pseudo of the same insn holds. The
+transformer restores the archive's test and leaves the rest of 0047 alone.
+
+The visible case is a count in a stack slot, incremented and then compared: the increment's
+output reload leaves the value in `$v0`, and local-alloc gives the `slt` result `$v0` too.
+Without the test the compare inherits it (`addiu $v0,$v0,1; sw $v0,n; slti $v0,$v0,128`);
+with it the compare reloads the slot (`sw $v0,n; lw $v1,n; slti $v0,$v1,128`), and the
+round-robin reload registers after it move on by one, as retail's do.
+
+Witnesses: `func_L00_003C5B88` (1,804 bytes) and its 22 copies in other levels are exact
+under it: the count reload after `n++` and the index reloads in `$a0` were their only
+differences. Every matched function of the 28 programs compiles to the same bytes with and
+without it (`tools/build.py all --strict`, 28 of 28). Of 625 profiled near misses in
+`nonmatching/`, 57 compile differently; 9 of their functions come closer to retail,
+3 move further and the rest are unchanged. [tests/test_reload_reg_used_guard.py](../tests/test_reload_reg_used_guard.py)
+checks the anchor and two authored controls: a count compared after its increment is
+reloaded into `$v1`, and an increment whose reload register is a spill register of the
+compare is still inherited.
+
 ### Clear scheduling and materialized stack zeros
 
 | Option | Effect | Limit |
@@ -820,6 +846,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | Annulled wide stores | [test_no_annulled_wide_stores.py](../tests/test_no_annulled_wide_stores.py) |
 | Stack por form | [test_zero_ti_por.py](../tests/test_zero_ti_por.py) |
 | TImode reload count | [test_ti_one_gpr.py](../tests/test_ti_one_gpr.py) |
+| Inheritance into non-spill registers | [test_reload_reg_used_guard.py](../tests/test_reload_reg_used_guard.py) |
 | Null-pointer-check pass | [test_no_null_pointer_checks.py](../tests/test_no_null_pointer_checks.py) |
 | Masks/sign seed | [test_dli_masks.py](../tests/test_dli_masks.py) |
 | Hazard labels | [test_hazard_labels.py](../tests/test_hazard_labels.py), [hazard_labels.s](../tests/fixtures/hazard_labels.s) |
