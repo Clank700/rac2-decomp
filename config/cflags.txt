@@ -1008,3 +1008,15 @@ src/core/001336C0.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L05_0037AC00.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L05_00432158.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-strength-reduce
 src/levels/shared/L02_002DCEA0.c	-O2 -G0 -ffunction-sections -g
+src/game/002C27B0.c	-O2 -G0 -ffunction-sections
+src/game/002CC550.c	-O2 -G0 -ffunction-sections
+src/game/00304F28.c	-O2 -G0 -ffunction-sections
+src/game/003076F0.c	-O2 -G0 -ffunction-sections
+src/game/00279B70.c	-O2 -G0 -ffunction-sections
+src/game/002D0F00-g8.c	-O2 -G8 -ffunction-sections
+src/game/002ACDE8.c	-O2 -G0 -ffunction-sections
+src/game/00312B70.c	-O2 -G0 -ffunction-sections
+src/game/003309A0-g8.c	-O2 -G8 -ffunction-sections
+src/game/0028DF80.c	-O2 -G0 -ffunction-sections
+src/game/002BD8B0.c	-O2 -G0 -ffunction-sections
+src/game/00313600-g8.c	-O2 -G8 -ffunction-sections

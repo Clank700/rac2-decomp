@@ -199,7 +199,6 @@ int func_00312B58(Level16VendorMoby *moby) {
 }
 
 
-INCLUDE_ASM("asm/game", func_00312B70);
 
 
 
@@ -233,7 +232,6 @@ void func_00313548(unsigned char *object, float *out, int index)
     out[2] += *(float *)data;
 }
 
-INCLUDE_ASM("asm/game", func_00313600);
 
 /* func_00313678 uses the profile in 0030F7B0-qcopy.c. */
 

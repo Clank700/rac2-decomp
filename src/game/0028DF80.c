@@ -1,4 +1,7 @@
-/* near miss: 428/436 B at -O2 -G0 (also with -fno-gcse). Retail loads the table pointer first (lui/lw a1 before the prologue stores), keeps t->f4 loads at the end of each arm and tests case 1 first with delay-slot loads; this cc1 hoists t->f4 into a2/a3 and gives 428 B. The switch is 0-3 with case 3 re-arming fC through func_002A77E0(30)+10. */
+/* func_0028DF80: the two globals are sda words, read with the lw macro as retail does.
+ * The frame number and the result are one variable (retail keeps both in $s0), and the
+ * ping-pong reflection and the re-arm time keep their sums in separate statements, so
+ * fold does not reassociate them: retail adds the 2 and the 10 first. */
 #include "include_asm.h"
 
 typedef unsigned char u8;
@@ -21,14 +24,13 @@ typedef struct Anim28DF80_State {
     s32 fC;
 } Anim28DF80_State;
 
-extern Anim28DF80_Frame *D_001B188C;
-extern s32 D_001B1688;
+extern Anim28DF80_Frame *D_001B188C __attribute__((sda));
+extern s32 D_001B1688 __attribute__((sda));
 extern s32 func_002A77E0(s32);
 
 /* Picks the frame of an animation record: clamp, loop, ping-pong or one-shot. */
 s32 func_0028DF80(Anim28DF80_State *a0) {
     s32 r = 0;
-    s32 i;
     Anim28DF80_Frame *t = D_001B188C + a0->f0;
 
     if (t->f0 != 0xFFFF) {
@@ -40,21 +42,28 @@ s32 func_0028DF80(Anim28DF80_State *a0) {
             r = t->f4 + (D_001B1688 - a0->fC) / t->f7 % t->f2;
             break;
         case 2:
-            i = (D_001B1688 - a0->fC) / t->f7 % (t->f2 * 2 - 2);
-            if (i >= t->f2)
-                i = t->f2 * 2 - (i + 2);
-            r = i + t->f4;
+            r = (D_001B1688 - a0->fC) / t->f7 % (t->f2 * 2 - 2);
+            if (r >= t->f2) {
+                s32 k = r + 2;
+                r = t->f2 * 2 - k;
+            }
+            r += t->f4;
             break;
         case 3:
             if (a0->fC < D_001B1688) {
-                i = (D_001B1688 - a0->fC) / t->f7;
-                if (i < t->f2 * 2 - 2) {
-                    if (i >= t->f2)
-                        i = t->f2 * 2 - (i + 2);
-                    r = i + t->f4;
+                r = (D_001B1688 - a0->fC) / t->f7;
+                if (r < t->f2 * 2 - 2) {
+                    if (r >= t->f2) {
+                        s32 k = r + 2;
+                        r = t->f2 * 2 - k;
+                    }
+                    r += t->f4;
                 } else {
                     r = t->f4;
-                    a0->fC = t->f2 * 2 + (func_002A77E0(30) + 10);
+                    {
+                        s32 k = func_002A77E0(30) + 10;
+                        a0->fC = t->f2 * 2 + k;
+                    }
                 }
             } else {
                 r = a0->f4;

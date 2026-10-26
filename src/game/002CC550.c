@@ -1,14 +1,5 @@
-/* Retained complete C repair, 2026-10-25; not linked or counted.
- * Profile: -O2 -G8 -ffunction-sections.
- * Private placement checks: us: 0/28, us2: absent, pal: absent.
- * The source includes its actual s32 typedef context. Both aggregate copies
- * remain eight ID words plus seven string words. The qualified US table has
- * its first ID sentinel at index 7, so this sentinel loop stays within both
- * copied objects.
- * Current code is 316/316 bytes; the first preheader high-address relocation
- * differs at +0xA0. Runtime changes to the supplied sentinel table and native
- * behavior are unqualified.
- */
+/* func_002CC550: the two byte tables are incomplete sda arrays, which -G0 addresses
+ * with the assembler's la macro (lui/addiu in one register), as retail does. */
 
 #include "common.h"
 
@@ -30,8 +21,8 @@ typedef struct {
 
 extern IdTable_1AB938 D_001AB938;
 extern StringTable_1AB958 D_001AB958;
-extern char D_001A7A40[];
-extern unsigned char D_001A7A50[];
+extern char D_001A7A40[] __attribute__((sda));
+extern unsigned char D_001A7A50[] __attribute__((sda));
 extern CheatEntry_25FC90 D_0025FC90[];
 
 int func_002CC550(void)

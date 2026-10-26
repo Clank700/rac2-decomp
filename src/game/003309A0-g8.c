@@ -1,4 +1,7 @@
-/* func_003309A0: near miss, 536 B vs 540 (one instruction plus constant-register order). Structure, vector locals (the last is a 0x30-byte matrix), calls and the alias pairs for the two globals read both absolutely and gp-relative (_1 with sda) match. Left: retail keeps 0.0f in $f20 and 1.0f in $f21 and schedules the object-record loads and the 0.7f multiply differently in the prologue; this build has the two constant registers the other way round. Own unit: -O2 -G8 -ffunction-sections. */
+/* func_003309A0: -G8 unit. The two globals are read both absolutely and through $gp, so
+ * each has an sda name (_1) for the $gp form. The aim vector d is a float[4] copied with
+ * qcopy(), which gives retail's frame (a, b, c, d, e, then the 0x30-byte matrix); one float
+ * carries the cosine and then the turn, so it lives in $f20 as retail has it. */
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
@@ -29,39 +32,41 @@ void func_003309A0(char *obj)
     float a[4] __attribute__((aligned(16)));
     float b[4] __attribute__((aligned(16)));
     float c[4] __attribute__((aligned(16)));
-    TI128 d __attribute__((aligned(16)));
+    float d[4] __attribute__((aligned(16)));
     float e[4] __attribute__((aligned(16)));
     float f[12] __attribute__((aligned(16)));
     char *rec = *(char **)(obj + 0x68);
     char *dir, *face;
-    float cosine, turn;
+    float cosine;
 
-    D_001B2854 = D_001B2854 * 0.7f;
-    D_001B2850_1 = 0;
     a[0] = *(float *)(rec + 0x50);
     a[1] = *(float *)(rec + 0x54);
+    D_001B2854 = D_001B2854 * 0.7f;
     a[2] = 0.0f;
     a[3] = 0.0f;
+    D_001B2850_1 = 0;
     if (func_00282DF0(a) != 0.0f) {
         dir = obj + 0xE0;
         face = obj + 0xC0;
         func_00282F20(a, a, 1.0f);
         func_00283098(a, a, D_001B5570);
-        func_00282D30(b, dir, func_00282DB0(a, dir));
+        cosine = func_00282DB0(a, dir);
+        func_00282D30(b, dir, cosine);
         func_00282CF0(a, a, b);
         func_00282F20(a, a, 1.0f);
         func_00282F20(c, a, 10.0f);
         func_00282CC0(c, c, obj + 0x10);
-        func_00282DD8(&d, face, a);
-        if (func_00282DF0(&d) == 0.0f)
-            d = *(TI128 *)face;
+        func_00282DD8(d, face, a);
+        if (func_00282DF0(d) == 0.0f)
+            qcopy(d, face);
         cosine = func_00282DB0(face, a);
         D_001B2854_1 = 1.0f - cosine;
         if (cosine > 0.75f)
             D_001B2850 = 1;
-        turn = (1.5707964f - func_002831B0(cosine)) * 0.1f;
-        func_00282D30(e, &d, func_00283198(turn));
-        e[3] = func_00283180(turn);
+        cosine = 1.5707964f - func_002831B0(cosine);
+        cosine = cosine * 0.1f;
+        func_00282D30(e, d, func_00283198(cosine));
+        e[3] = func_00283180(cosine);
         func_00283958(e, f);
         func_00283738(face, f, face);
     }

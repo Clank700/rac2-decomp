@@ -563,7 +563,6 @@ int func_002ACD38(void *object)
 }
 
 
-INCLUDE_ASM("asm/game", func_002ACDE8);
 
 extern void func_00282F20(float *dst, float *src, float scale);
 extern float func_00282C10(float x);

@@ -1,3 +1,6 @@
+/* func_00313600: -G8 unit, so the two float scales are $gp reads. func_002ACEC0 has its
+ * real prototype (the draft called it undeclared), and the loop indexes the two tables,
+ * which strength reduction turns into retail's pointer pair and %hi registers. */
 /* func_00313600 - 116 bytes, 1 place (the boot only).
    Retail at 0x00313600: the eight resident entries at 0x229B70 are turned
    around the axis at 0x229BF0 (func_002ACEC0 with the angle in small data,
@@ -17,17 +20,15 @@ extern char D_00229B70[];
 extern float D_001AF108 __attribute__((sda));
 extern float D_001AF130 __attribute__((sda));
 extern void func_00282F20(void *, void *, float);
+extern void func_002ACEC0(void *, void *, void *, float);
 
 void func_00313600(void)
 {
-    char *axis = D_00229BF0;
-    char *entry = D_00229B70;
     int i;
 
-    for (i = 7; i >= 0; i--) {
-        func_002ACEC0(entry, entry, axis, D_001AF108);
-        axis += 0x10;
+    for (i = 0; i < 8; i++) {
+        char *entry = D_00229B70 + i * 16;
+        func_002ACEC0(entry, entry, D_00229BF0 + i * 16, D_001AF108);
         func_00282F20(entry, entry, D_001AF130);
-        entry += 0x10;
     }
 }

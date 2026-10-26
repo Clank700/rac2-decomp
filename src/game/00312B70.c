@@ -1,30 +1,31 @@
-/* near miss: 480/472 B with -frac2-qcopy -frac2-qcopy-barrier. Retail keeps the descriptor pointer in a2 (the call's third argument) and reuses a1 = -1 for both the call and the 0x64 store; this cc1 puts it in t0 and loads -1 into a3 separately (+8 B). Same stores, same order. */
-#include "include_asm.h"
+/* func_00312B70: func_002A0F48 takes the object alone (every caller passes one argument);
+ * the three 16-byte copies are qcopy(), and the head stores are in the order whose
+ * schedule loads the descriptor pointer after the flag stores, as retail does. */
+#include "common.h"
 
-typedef int TI128 __attribute__((mode(TI)));
 
 extern char *func_0029EFD0(int);
-extern void func_002A0F48(char *, int, char *);
+extern void func_002A0F48(char *);
 extern void func_002AB650(char *);
 
 /* Spawns object 0x27F at the given position and fills its descriptor from a template record. */
-char *func_00312B70(char *tmpl, TI128 *pos, int value, TI128 *origin)
+char *func_00312B70(char *tmpl, void *pos, int value, void *origin)
 {
     char *obj = func_0029EFD0(0x27F);
     char *d;
 
     if (obj != 0) {
         *(unsigned char *)(obj + 0x30) = 0xFF;
-        *(unsigned char *)(obj + 0x31) = 1;
         *(unsigned short *)(obj + 0x34) = *(unsigned short *)(obj + 0x34) | 1;
+        *(unsigned char *)(obj + 0x31) = 1;
+        d = *(char **)(obj + 0x68);
         *(unsigned char *)(obj + 0x20) = 0;
         *(unsigned char *)(obj + 0xBC) = 0;
-        d = *(char **)(obj + 0x68);
-        *(TI128 *)(obj + 0x10) = *pos;
+        qcopy(obj + 0x10, pos);
         if (origin != 0)
-            *(TI128 *)d = *origin;
+            qcopy(d, origin);
         else
-            *(TI128 *)d = *(TI128 *)tmpl;
+            qcopy(d, tmpl);
         *(int *)(d + 0x20) = value;
         *(unsigned short *)(obj + 0x32) = *(unsigned char *)(tmpl + 0x3C);
         *(unsigned char *)(d + 0x24) = *(unsigned char *)(tmpl + 0x10);
@@ -58,9 +59,9 @@ char *func_00312B70(char *tmpl, TI128 *pos, int value, TI128 *origin)
         *(unsigned short *)(d + 0x72) = *(unsigned short *)(tmpl + 0x46);
         *(int *)(d + 0x48) = *(int *)(tmpl + 0x34);
         *(int *)(d + 0x4C) = *(int *)(tmpl + 0x38);
-        *(int *)(d + 0x64) = -1;
         *(unsigned char *)(d + 0x1C) = *(unsigned char *)(tmpl + 0x49);
-        func_002A0F48(obj, -1, d);
+        *(int *)(d + 0x64) = -1;
+        func_002A0F48(obj);
         func_002AB650(obj);
     }
     return obj;

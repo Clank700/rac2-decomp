@@ -656,7 +656,6 @@ INCLUDE_ASM("asm/game", func_002CC528);
 
 /* Near miss: nonmatching/game/func_002CC550.c (316/316 bytes; the two address
    materialisations in the loop preheader keep a separate %hi temporary). */
-INCLUDE_ASM("asm/game", func_002CC550);
 
 int func_002CC690(void) {
     return 0;

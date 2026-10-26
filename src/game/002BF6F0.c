@@ -472,7 +472,6 @@ void func_002C2658(char *obj)
                    D_001BF000, count, 0, 0x810001, 2, 1, 2.0f, 1.0f, 1.0f);
 }
 
-INCLUDE_ASM("asm/game", func_002C27B0);
 
 void func_002C28F8(char *object)
 {
