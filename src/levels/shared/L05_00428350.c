@@ -128,7 +128,7 @@ void func_L05_00430BF0(Vec16_Fc936841d *object, int index)
 /* Creates the 0x10E3 object and copies the caller's transforms into it. */
 INCLUDE_ASM("asm/levels", func_L05_00432080);
 
-INCLUDE_ASM("asm/levels", func_L05_00432158);
+/* func_L05_00432158 is matched in its own unit, src/levels/shared/L05_00432158.c (-frac2-qcopy -frac2-qcopy-barrier -fno-strength-reduce). */
 
 
 INCLUDE_ASM("asm/levels", func_L05_00441D40);

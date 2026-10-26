@@ -1004,3 +1004,7 @@ src/levels/shared/L00_003FC108.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2
 src/levels/shared/L00_003A9798.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L00_00310748.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
 src/levels/shared/L00_002FCF18.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/core/001336C0.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L05_0037AC00.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L05_00432158.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-strength-reduce
+src/levels/shared/L02_002DCEA0.c	-O2 -G0 -ffunction-sections -g
