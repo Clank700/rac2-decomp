@@ -26,6 +26,10 @@ The retail code was built with GNU EE-GCC 2.9-ee-991111b. `build.sh` rebuilds it
   every load, in place of this tree's alias-analysis queries; it is unconditional too.
   `trap_delay_barrier.py` ends reorg's backward delay-slot search at a division guard
   (`trap_if`), as at a jump, as retail's compiler does; it is unconditional too.
+  `swap_branch_slots.py` adds the opt-in assembler option `--r5900-swap-branch-slots`: gas
+  fills a reorder-mode delay slot from the previous instruction, as the GNU as that built the
+  SDK libraries does (this tree's swap guard reads `&&` for `&` and never swaps). SDK units
+  pass it as `-Wa,--r5900-swap-branch-slots` (docs/COMPILER-NOTES.md).
   `gcse_unsplit_edges.py` and `keep_block_order.py` add the opt-in
   `-frac2-gcse-unsplit-edges` and `-frac2-keep-block-order`, which leave out two
   Cygnus-local pieces of this tree that GCC 2.95 does not have.

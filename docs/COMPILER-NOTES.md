@@ -124,6 +124,7 @@ wrong profile with extra operations or knowingly false prototypes.
 | Public SDK/libgcc source differs under game compiler | sdk profile, accurate types and inline declarations | func_00122800, func_00122B00 |
 | Whole GPR save area uses sq/lq | -mastra-quad-saves | func_00119BC8, func_00115F28, func_00115C90 |
 | Two-word truncation cannot fill return slot | -mastra-split-trunc-slot | func_0012E8C8 |
+| SDK unit: a volatile access or sign extension fills a `jal`/`jr` slot | -Wa,--r5900-swap-branch-slots | func_001253A8, func_0012E378, func_0011C000 |
 | Arguments spilled and branch to common epilogue | Measured -O0 unit, not an invented varargs helper | func_001175F0 |
 | Absolute load must reuse its destination as address temporary | -mno-split-addresses and assembler symbol model | func_001339B0, func_L20_0043F460, func_L16_00411D00 |
 | Register addresses and grouped 16-byte transfer | -frac2-qcopy | func_L20_0039E158, func_L20_0039F210, func_00305058 (with -g for the pre-div.s nop pair) |
@@ -637,6 +638,49 @@ compiled differently. [tests/test_trap_delay_barrier.py](../tests/test_trap_dela
 checks the transformer and authored controls: an argument set above a guard stays there and the
 call keeps an empty slot, and without a division the call's slot is filled as before.
 
+### SDK objects: the assembler fills the slots the compiler leaves
+
+[swap_branch_slots.py](../tools/compiler/transformers/swap_branch_slots.py) adds the opt-in
+assembler option `--r5900-swap-branch-slots`, passed per file as
+`-Wa,--r5900-swap-branch-slots` after `sdk` in `config/cflags.txt`. It is an assembler
+profile, not a compiler change: the SDK compiler's output is identical either way.
+
+When reorg cannot fill a delay slot, cc1 writes the branch or call in `.set reorder` mode and
+leaves the slot to the assembler, which may swap the branch with the instruction before it
+(`append_insn` in gas/config/tc-mips.c). Reorg never fills a slot with a volatile memory
+reference (`resource_conflicts_p` treats a `volatil` resource as a conflict; 2.9-ee only marks
+the access with `#.set volatile` comments under GNU as) or with a two-word pattern such as
+`truncdisi2`'s `dsll 32; dsra 32` (`define_delay` asks for length 1). This tree's gas never
+swaps: the last guard reads `(prev_pinfo && INSN_SYNC)`, a logical `&&` where the bit test was
+meant, so every instruction refuses and a `nop` follows. The game's C, assembled that way,
+matches retail. With the option the guard tests `prev_pinfo & INSN_SYNC`, as GNU
+2.10-ee-001003-1 does; every other swap rule stays as it is.
+
+Retail evidence: the unmodified output of the SDK compiler, assembled by the original GNU
+2.10-ee-001003-1 or by the DTL-S13010 build of GNU as 2.9-ee-991111 (rac1-decomp's toolchain
+mirrors, docs/TOOLCHAIN.md there), gives retail's bytes for six boot functions in four Sony
+libraries, which this tree leaves one or two words long or orders differently:
+
+| Function | Library | Moved into the slot |
+| --- | --- | --- |
+| func_001253A8 | libcdvd (sceCdRead) | a volatile `lw` before `jal` |
+| func_0012E378, func_0012E608 | libipu | volatile IPU register stores before `jal` |
+| func_001307B0 | libmpeg | a volatile store before `jal` |
+| func_0012CDB0 | libmpeg (_pictureCodingExtension) | the `sw` half of a store to IPU_CTRL, a `lui $at` macro, before `jal` (three times) |
+| func_0011C000 | libc (printf's float helper) | the `dsra32` of a sign extension before `jr $ra` |
+
+The option on, these match, and so do the 17 functions already matched in their five units.
+On the whole objects of those five units, this tree's assembler with the option disassembles
+identically to the DTL-S13010 assembler (GNU 2.10-ee differs elsewhere in the printf unit).
+With the option on every one of the 112 SDK-profile units, only `func_00133988`
+(989snd's snd_GetDopplerPitchMod, `mflo` before `jr $ra`) changes: retail keeps its `nop`.
+rac1-decomp shows that 989snd was assembled with SN's ps2eeas, not GNU as, so the option is a
+per-object profile, like rac1's `gas210` column. Game C and 989snd units leave it off.
+[tests/test_swap_branch_slots.py](../tests/test_swap_branch_slots.py) checks the transformer
+and authored controls: without the option every slot gets a `nop`; with it a store, a load and
+a sign extension move into the slot, and a branch that reads the previous result or carries a
+label still gets a `nop`.
+
 ### Compiler control-flow passes
 
 [tidy_condjump_fallthru.py](../tools/compiler/transformers/tidy_condjump_fallthru.py)
@@ -886,6 +930,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | CSE edges/block order | [test_gcse_unsplit_edges.py](../tests/test_gcse_unsplit_edges.py), [test_keep_block_order.py](../tests/test_keep_block_order.py) |
 | gcse load kills | [test_gcse_store_kills_loads.py](../tests/test_gcse_store_kills_loads.py) |
 | Division-guard slot barrier | [test_trap_delay_barrier.py](../tests/test_trap_delay_barrier.py) |
+| SDK assembler slot swaps | [test_swap_branch_slots.py](../tests/test_swap_branch_slots.py) |
 | Copies and RTL contract | [test_qcopy.py](../tests/test_qcopy.py), [test_qcopy_rtl.py](../tests/test_qcopy_rtl.py) |
 | Copy scheduling | [test_qcopy_barrier.py](../tests/test_qcopy_barrier.py) |
 | Annulled wide stores | [test_no_annulled_wide_stores.py](../tests/test_no_annulled_wide_stores.py) |
