@@ -680,7 +680,36 @@ void func_002C4F08(char *self)
 
 
 
-INCLUDE_ASM("asm/game", func_002C5068);
+extern float func_00283CE0_2(int v);
+extern int func_00283CF0_6(float f);
+extern void func_00282CC0_17(char *dst, char *src, char *vec);
+extern int func_00282978_9(char *p);
+extern void func_002B9180_13(char *self);
+
+
+/* The particle update: the quad at 0x20 is copied to the stack, the value of
+   the helper at 0xA is divided by the copy's fourth float, the two scaled
+   results are packed into the word at 4 and the byte at 8. */
+void func_002C5068(char *self)
+{
+    V4_Fc3cb9262 vec;
+    float f3;
+    float f21;
+    int v;
+
+    vec = *(V4_Fc3cb9262 *)(self + 0x20);
+    f3 = ((float *)&vec)[3];
+    ((float *)&vec)[3] = 0.0f;
+    f21 = func_00283CE0_2(*(short *)(self + 0xA)) / f3;
+    v = func_00283CF0_6(f21 * 38.0f);
+    *(int *)(self + 4) = (v << 24) | 0x808080;
+    v = func_00283CF0_6(f21 * 33.0f);
+    *(char *)(self + 8) = (char)v;
+    func_00282CC0_17(self + 0x10, self + 0x10, (char *)&vec);
+    if (func_00282978_9(self + 0xA) != 0) {
+        func_002B9180_13(self);
+    }
+}
 
 INCLUDE_ASM("asm/game", func_002C5120);
 

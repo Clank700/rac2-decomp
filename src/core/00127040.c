@@ -99,7 +99,20 @@ int func_00127040(void *arg0) {
     return 0;
 }
 
-INCLUDE_ASM("asm/core", func_00127218);
+extern int func_00126ED8(int);
+
+extern void func_00126E60(void *);
+
+void func_00127218(int *p, int arg1) {
+    int r = func_00126ED8(arg1);
+
+    func_00126E60(p);
+    if ((unsigned int)p[12] != 0xFFFFFFFFU) {
+        p[12] = r;
+    }
+    p[8] = 0;
+    p[0] = (p[0] & ~0xC) | 0x105;
+}
 
 
 /* rac1-decomp src/core/00123168.c: func_00123650 */

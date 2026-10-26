@@ -577,8 +577,6 @@ void func_00270B58(float *out, float *p0, float *p1, float *dir0, float *dir1, f
 
 INCLUDE_ASM("asm/game", func_00270EE0);
 
-INCLUDE_ASM("asm/game", func_00271130);
-
 INCLUDE_ASM("asm/game", func_002712D8);
 
 /* func_002718B8 uses the quadword-copy profile in 0026EA00-qcopy.c. */

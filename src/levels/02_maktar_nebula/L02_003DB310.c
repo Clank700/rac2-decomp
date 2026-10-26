@@ -360,7 +360,55 @@ INCLUDE_ASM("asm/levels", func_L02_003EB258);
 
 /* func_L02_003EEAD8 is matched in L02_003EEAD8.c (built with -g). */
 
-INCLUDE_ASM("asm/levels", func_L02_003EEC58);
+typedef struct {
+    float x, y, z, w;
+} V4;
+
+typedef struct {
+    int count;
+    int pad[3];
+    V4 pts[1];
+} Entry;
+
+typedef struct {
+    int id;
+    char pad04[0x2C];
+    int idx;
+    float t;
+} State;
+
+extern char *D_L02_001FF1C0[];
+extern char D_00189EA0[];
+extern float func_00282E80(char *, char *);
+
+float func_L02_003EEC58(char *arg0) {
+    State *state = *(State **)(arg0 + 0x68);
+    Entry *entry = (Entry *)D_L02_001FF1C0[state->id];
+    float cur = func_00282E80(D_00189EA0, (char *)&entry->pts[state->idx]);
+    float d;
+
+    if (state->idx < entry->count - 1) {
+        d = func_00282E80(D_00189EA0, (char *)&entry->pts[state->idx + 1]);
+        if (d < cur) {
+            state->t += entry->pts[state->idx].w;
+            if (state->t > 14.0f)
+                state->t = 14.0f;
+            state->idx += 1;
+            return d;
+        }
+    }
+    if (state->idx > 0) {
+        d = func_00282E80(D_00189EA0, (char *)&entry->pts[state->idx - 1]);
+        if (d < cur) {
+            state->t -= entry->pts[state->idx].w;
+            if (state->t < 0.0f)
+                state->t = 0.0f;
+            state->idx -= 1;
+            return d;
+        }
+    }
+    return cur;
+}
 
 extern float func_00282C48(float);
 extern float func_00283248(float, float);

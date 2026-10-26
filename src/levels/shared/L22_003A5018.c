@@ -19,7 +19,7 @@ INCLUDE_ASM("asm/levels", func_L22_003A5018);
 
 INCLUDE_ASM("asm/levels", func_L22_003A5BD8);
 
-INCLUDE_ASM("asm/levels", func_L22_003A5F90);
+/* func_L22_003A5F90 is matched in L22_003A5F90.c. */
 
 extern int func_L22_003A48F8(int);
 

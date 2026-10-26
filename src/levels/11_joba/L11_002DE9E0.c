@@ -50,7 +50,6 @@ void func_L11_0030F060(void) {
         func_L00_002E6CF0(func_L11_0030ED58, 0);
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00332EE0);
 
 
 extern void func_00282CF0(void *, void *, void *);

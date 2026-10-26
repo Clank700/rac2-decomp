@@ -1,9 +1,5 @@
-/* Retained C reconstruction, 2026-10-23. Not linked or counted.
-   Profile: -O2 -G8 -ffunction-sections -fno-strength-reduce
-   USA: 288/284 bytes, 0/27 placements; size differs from retail.
-   us: 0/27, pal: 0/27, us2: 0/27.
-   Revisit loop-bound reloads and saved-register pressure.
-*/
+#include "include_asm.h"
+
 extern char *D_L00_001B1E9C;
 extern char *D_L00_001B1EA4;
 extern int D_L00_001AFD7C __attribute__((sda));

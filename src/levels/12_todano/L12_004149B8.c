@@ -177,7 +177,6 @@ void func_L12_004149B8(Ent49B8 *a0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L12_00414AB8);
 
 INCLUDE_ASM("asm/levels", func_L12_00414C60);
 

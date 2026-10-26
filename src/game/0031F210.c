@@ -178,7 +178,6 @@ INCLUDE_ASM("asm/game", func_00325430);
 INCLUDE_ASM("asm/game", func_00325638);
 
 
-INCLUDE_ASM("asm/game", func_003258C0);
 
 /* func_00325A88 (cursor bookkeeping and a 16-byte copy) is a near miss:
    nonmatching/game/func_00325A88.c */
