@@ -675,8 +675,6 @@ INCLUDE_ASM("asm/levels", func_L00_003F4210);
 
 /* func_L00_003F4B68 uses its dedicated quadword-copy profile. */
 
-INCLUDE_ASM("asm/levels", func_L00_003F4C68);
-
 
 /* Computes two sub-record addresses of a 192-byte block and hands three of its sub-records to four helpers, threading a second argument through two of them. */
 void func_L00_003F51A0(char *obj, char *arg)

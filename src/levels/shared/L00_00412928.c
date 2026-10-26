@@ -207,6 +207,4 @@ INCLUDE_ASM("asm/levels", func_L00_00419C98);
 
 /* func_L00_0041A490 is defined in L00_0041A490-dbg.c. */
 
-INCLUDE_ASM("asm/levels", func_L00_0041A500);
-
 INCLUDE_ASM("asm/levels", func_L00_0041A5C0);

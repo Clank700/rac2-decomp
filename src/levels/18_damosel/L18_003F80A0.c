@@ -59,8 +59,6 @@ INCLUDE_ASM("asm/levels", func_L18_003FB308);
 
 INCLUDE_ASM("asm/levels", func_L18_003FB620);
 
-INCLUDE_ASM("asm/levels", func_L18_003FB708);
-
 INCLUDE_ASM("asm/levels", func_L18_003FD858);
 
 extern u16 *D_L18_001FB320[];

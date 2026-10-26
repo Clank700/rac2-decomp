@@ -1,12 +1,6 @@
-/* Retained near miss (M4, 26 October 2026); not linked. Twin of func_L00_003A7C30 (matched).
- * Unit: src/levels/shared/L00_003F4C68-g8-dbg.c, profile -O2 -G8 -ffunction-sections -g.
- * 608/608 bytes, 0/27 places: one swapped store pair is left (retail stores state->target at
- * 0x1C before state->fadeFrames at 0x22). Closed here: -g (the pre-div.s nop pair), the speed
- * product as its own statement, literal header stores, a struct view of the state block, the
- * table entry as (D_L00_00262570 + D_0013957F[0])->speed, and D_L00_001B8DC0 + 0x230 for the
- * second camera vector. Store permutations with a temporary, field types and the twin's
- * statement forms all leave the same pair. Queued for the permuter.
- */
+/* Spawns a bolt effect moby (class 0xCF7) from a position and velocity: the state block holds its
+   frame count and rate, its fade, and a slot from a three-way counter; mode 1 aims it at the camera,
+   mode 2 first steps it once and flags a hit. Needs -g (pre-div.s nop pair). */
 #include "common.h"
 typedef int TI128 __attribute__((mode(TI)));
 extern int func_002B4038(int,int);
@@ -15,7 +9,7 @@ extern void func_003001E0(void *,void *,void *);
 extern int func_00283CF0(float);
 extern float func_00283CE0(int);
 extern char *func_L00_0032A088(int,int);
-extern int func_002AFFD8(void *,void *,int);
+extern void func_002AFFD8(void *,void *,int);
 extern void func_00282D30(void *,void *,float);
 extern void func_L00_003F51A0(char *,char *);
 extern void func_L00_003F5F90(char *);
@@ -64,7 +58,7 @@ char *func_L00_003F4C68(char *position,char *velocity,int id,int mode)
         qcopy(location,position);
         object[0x20]=0;
         func_003001E0(state,velocity,position);
-        frames=(D_L00_00262570 + D_0013957F[0])->speed*0.016666668f;
+        frames=0.016666668f * (D_L00_00262570 + D_0013957F[0])->speed;
         state->frames=func_00283CF0(128.0f / frames);
         frames=func_00283CE0(state->frames);
         state->id=id;
