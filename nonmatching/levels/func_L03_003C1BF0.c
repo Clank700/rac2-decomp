@@ -1,3 +1,22 @@
+/* Finisher F1 (2026-10-26, base f5fab978 with qzero_nc): 1391 of 1420 instructions aligned with
+ * registers (was 1363 on this head). What moved it:
+ *  - qzero_nc(&point) in state 22 (qzero(&other) keeps the clobber);
+ *  - the hero distance in state 4 through the union view (HERO->f[0x80 / 4], [0x84 / 4]):
+ *    retail addresses D_00189E20 with 0x80/0x84 offsets, not D_00189EA0;
+ *  - cases 19 and 20 read SP(0x358) inline instead of through `target` (its pointer then
+ *    takes $v0 as in retail);
+ *  - state 22's class switch has `case 0x93C:` with the default (0x93C is a class id from
+ *    state 1). A case below 0x940 that goes to the default gives retail's `slti 0x941` test:
+ *    emit_case_nodes only emits the bound test when the root's other child is not a single
+ *    value, and jump deletes the dead 0x93C compare;
+ *  - other.f[2] = height (no reload of point.f[2]);
+ *  - in the member loop the index store comes first (its D_L03_001B2A1C load is then in the
+ *    beqz slot as retail, before the two -1 stores).
+ * Left: state 0's two float temps (D_L03_001AFEE0 in $f1, 0.0016666667f in $f0 in retail:
+ * local-alloc tie, swapping the two statements breaks cross-jumping), and state 22's
+ * allocation: retail keeps &other in $s6 and spills object+0xC0 (sp+0x30) and object+0xF0
+ * (sp+0x34); here $s6 is object+0xC0 and the slots are swapped.
+ */
 /* Opus handoff (big8, 2026-10-26): func_L03_003C1BF0, 5680 bytes, 2 places
  * (L03 0x003C1BF0, L14 0x003C5250). Built on the earlier corrected draft (5552 bytes,
  * 0.66 aligned). Step 0: one function. Two jump tables: jtbl_L03_002A8F40 (9 entries,
@@ -25,22 +44,6 @@
  * Still off, all in state 22: retail's tree also tests <0x941 before 0x964 (GCC emits that
  * only when the right child is not a single value: a third case or range is missing),
  * object+0x10 kept in $fp, object+0xC0 / object+0xF0 spilled to sp+0x30/0x34, -1 and 0xF2D hoisted into s5/s7 for the member loop.
- * closer4 (2026-10-26): 5680 bytes (size equal), 33 lines differ in check.py --diff (was 126):
- *  - state 22's class switch has a third case, 0x93C, sharing the default body: with three
- *    nodes GCC roots the tree at 0x940, and the 0x93C test folds into the default jump, which
- *    leaves retail's `slti 0x941` test; other.f[2] takes `height` (no reload of point.f[2]);
- *  - pos = object + 0x10 after the qzeros for func_002A89A8 and the final func_00282CC0; the
- *    member loop keeps object + 0x10 (loop.c makes retail's s1 copy); the member index is a
- *    local computed before the -1 stores (retail's D_L03_001B2A1C read in the delay slot);
- *  - the states 6/8 heading reads HERO->f[0x80 / 4] and [0x84 / 4] (base + offset); states 18
- *    and 21 re-read SP(0x358) instead of the shared `target`.
- * Left: (1) state 1: retail's 0x144 value in $f1 and the 0.0016666667f in $f0 (local-alloc tie;
- *    no statement order moves it); (2) state 22: GCSE merges pos with the first call's
- *    object + 0x10 (ours s6 = s2+0x10 for both, retail a0 fresh and fp = s2+0x10), and retail
- *    keeps &other in s6 and spills the matrix pointer object+0xC0 to sp+0x30 (ours s7);
- *    -fno-gcse loses 24 bytes elsewhere.
- *    Measured in scratch only (the helper is pending): qzero_nc(&point) (big16's clobber-free
- *    clear, where cse flushes) gives retail's fresh a0 and fp = s2+0x10, 23 lines left.
  */
 #include "common.h"
 typedef int Quad __attribute__((mode(TI)));
@@ -425,8 +428,7 @@ void func_L03_003C1BF0(u8 *object)
             break;
         case 22:
             func_00282CC0(object + 0x10, object + 0x10, state + 0x1B0);
-            qzero(&point); qzero(&other);
-            pos = object + 0x10;
+            qzero_nc(&point); qzero(&other);
             height = 0.8f;
             switch (*(s16 *)(object + 0xAA)) {
             case 0x964:
@@ -447,14 +449,13 @@ void func_L03_003C1BF0(u8 *object)
                 if (OF(0xF4) > 0.0f) func_002AA548(object + 0xF4, state + 0x39C, 0, 0.006981317885220051f, 0.006981317885220051f, 0.41887909173965454f);
                 else OF(0xF4) = func_00283BE0(OF(0xF4), 0.41887909173965454f);
                 if (OF(0x18) < SF(0x3A0)) {
-                    floor = func_002A89A8(pos, 0, 0.5f);
+                    floor = func_002A89A8(object + 0x10, 0, 0.5f);
                     if (OF(0x18) <= floor) {
                         OF(0x18) = floor; func_002A7750(object, 4, 1);
                         for (member = D_L03_001B2A1C; member <= D_L03_001B2A20; member += 256) {
                             if (*(s16 *)(member + 0xAA) == 0xF2D && func_L03_00419C00(member, object + 0x10, object + 0x10)) {
-                                int index = (int)member - (int)D_L03_001B2A1C;
+                                SI(0x220) = ((int)member - (int)D_L03_001B2A1C) >> 8;
                                 SI(0x368) = -1; SI(0x36C) = -1;
-                                SI(0x220) = index >> 8;
                             }
                         }
                     }
@@ -465,7 +466,7 @@ void func_L03_003C1BF0(u8 *object)
             func_002833F0(mtx, object + 0xF0);
             func_00283098(&other, &other, mtx);
             func_00282CF0(&delta, &point, &other);
-            func_00282CC0(pos, pos, &delta);
+            func_00282CC0(object + 0x10, object + 0x10, &delta);
             break;
         }
     }
