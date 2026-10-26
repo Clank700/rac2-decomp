@@ -152,9 +152,9 @@ Current matched coverage (the three reports from validated builds):
 
 | Version | Release | Functions | Boot code | Level code | Total code |
 | --- | --- | ---: | ---: | ---: | ---: |
-| `SCUS_972.68` | USA v1.01 | 4,351 of 8,601 | 343,280 of 1,046,952 | 433,088 of 4,482,196 | 776,368 of 5,529,148 (14.04%) |
-| `SCES_516.07` | Europe/Australia v1.00 | 3,666 of 8,693 | 284,416 of 1,056,500 | 295,380 of 4,650,756 | 579,796 of 5,707,256 (10.16%) |
-| `SCUS_972.68_v2` | USA v2.00 (Greatest Hits) | 4,149 of 8,655 | 306,872 of 1,050,472 | 426,320 of 4,532,636 | 733,192 of 5,583,108 (13.13%) |
+| `SCUS_972.68` | USA v1.01 | 4,618 of 8,584 | 372,656 of 1,046,204 | 481,844 of 4,481,328 | 854,500 of 5,527,532 (15.46%) |
+| `SCES_516.07` | Europe/Australia v1.00 | 3,867 of 8,678 | 314,168 of 1,055,704 | 326,896 of 4,649,808 | 641,064 of 5,705,512 (11.24%) |
+| `SCUS_972.68_v2` | USA v2.00 (Greatest Hits) | 4,413 of 8,639 | 341,660 of 1,049,724 | 474,768 of 4,531,772 | 816,428 of 5,581,496 (14.63%) |
 
 `tools/progress.py --version us|pal|us2` maintains the corresponding coverage row.
 In the original layout sample, 1,036 of v1.01's then-matched functions differed in
