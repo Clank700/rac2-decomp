@@ -538,7 +538,6 @@ void func_0031EB00(char *position, int color, float scale, char *resource, float
     func_00280B90(work, work + 0x90, 0);
 }
 
-INCLUDE_ASM("asm/game", func_0031EC68);
 
 /* func_0031EFC8 uses the profile in 003173B0-qcopy.c. */
 

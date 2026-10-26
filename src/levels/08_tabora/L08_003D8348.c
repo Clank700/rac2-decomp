@@ -273,7 +273,6 @@ void func_L08_00422428(Ent *a0)
 }
 
 
-INCLUDE_ASM("asm/levels", func_L08_00422850);
 
 
 /* the entry's own two handles and its sound handle are released */

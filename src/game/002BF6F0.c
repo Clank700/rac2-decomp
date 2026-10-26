@@ -248,7 +248,6 @@ INCLUDE_ASM("asm/game", func_002C04C0);
 INCLUDE_ASM("asm/game", func_002C0E50);
 
 
-INCLUDE_ASM("asm/game", func_002C16C0);
 
 /* Updates one byte-addressed object by packing a converted short-ratio value with three bytes, applying the bound helper sequence to three stored floats, and accumulating one byte and one float. */
 void func_002C1840(char *self)
