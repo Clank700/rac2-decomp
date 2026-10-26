@@ -711,6 +711,37 @@ and authored controls: without the option every slot gets a `nop`; with it a sto
 a sign extension move into the slot, and a branch that reads the previous result or carries a
 label still gets a `nop`.
 
+### reorg: which global loads may fill a slot
+
+No compiler change: reorg.c, resource.c and jump.c in this tree are the 2.9-ee-991111b
+archive's apart from the documented RAC2 switches (the archive's reorg.c is stock GCC 2.95.2's
+plus Cygnus's `condjump_expect_p` prediction; its resource.c predates 2.95.2's volatile and
+`TRAP_IF` handling, and that is what retail used). When this cc1 and retail disagree about a
+slot that holds, or could hold, a global load, the cause so far has been the declaration, and
+the slot tells which one it was:
+
+- `define_delay` takes only length-1 insns. A load or store of a small-data symbol is length 1
+  only when the address is the bare `SYMBOL_REF` (`simple_memory_operand`, the Cygnus
+  "symbol_ref_5900" case); `symbol+offset` stays under the archive's `#if 0`, is the `m`
+  alternative and length 2, so it never fills a slot, from either thread. A `$gp` or macro
+  access in a retail slot is therefore a word with its own name (or element 0); a global
+  word retail never steals into a slot where this cc1 does was read at an offset from an
+  earlier symbol (an array element or a field).
+- A load through a register other than `$sp`/`$fp` may trap (`may_trap_p`), so
+  `fill_slots_from_thread` does not put it into a plain (non-annulled) slot from either
+  thread. If retail has one there, it came from `fill_simple_delay_slots`: the load stood
+  before the branch, so the source reads that value before the test.
+
+Witnesses: `func_L10_00425888` matches (1/1, all three releases) once its four clamped words
+are one block, the first an sda scalar and the other three read at +4/+8/+12 from the
+block's absolute name: retail's three branch slots hold the fall-through `li 127`, the fourth
+steals the bare `$gp` load from its target, exactly what this cc1 then does.
+`func_L11_0043E1A0`'s three wrong slots close the same way: the sound slot at 0x001B3774 is
+element 1 of a pair at 0x001B3770 (retail leaves the two owner-test slots empty, the bare
+element 0 is stolen), the height band's second bound at 0x001B1584 is its own sda scalar
+(retail fills the `bc1f` slot from the fall-through with it), and the `(u16)` class read that
+retail keeps in a `bnez` slot is read into a local before the wave test.
+
 ### loop: no giv recombination
 
 [no_recombine_givs.py](../tools/compiler/transformers/no_recombine_givs.py) is unconditional:
