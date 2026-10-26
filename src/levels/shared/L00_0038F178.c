@@ -206,7 +206,6 @@ void func_L00_00391310(char *arg0, char *arg1)
 
 
 
-INCLUDE_ASM("asm/levels", func_L00_00392530);
 
 /* Gates on the sub-object's tag byte, mirrors one status bit from that object into its own
  * halfword, clamps the wrapped value at +4 against a signed window and finishes with the

@@ -1108,3 +1108,5 @@ src/levels/shared/L09_003F7370.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L03_003D09D0.c	-O2 -G0 -ffunction-sections -g
 src/game/002BAE50.c	-O2 -G0 -ffunction-sections
 src/levels/08_tabora/L08_004237F0.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_00392530.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/00309718.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
