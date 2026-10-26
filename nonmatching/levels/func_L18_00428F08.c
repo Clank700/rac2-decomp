@@ -1,31 +1,33 @@
-/* func_L18_00428F08 (levels 18, 19, 20; 4,368 bytes): Opus big27 handoff, 2026-10-26.
+/* func_L18_00428F08 (levels 18, 19, 20; 4,368 bytes): Opus big27 handoff, closer9 near miss, 2026-10-26.
  * Profile: -O2 -G8 -ffunction-sections (a "-g8" sibling of src/levels/shared/L18_00427BE0.c).
- * 1,090/1,092 instructions; ~57 instructions differ (difflib on opcodes+registers,
- * relocation noise excluded). Frame (0xC0, s0-s5/ra/f20), both jump tables, every case
- * body and every call are retail's.
- * What made the difference so far:
+ * 1,092/1,092 instructions, 4,368/4,368 bytes; 5 instructions differ, all in switch 2 case 3.
+ * Frame (0xC0, s0-s5/ra/f20), both jump tables, every case body and every call are retail's.
+ * What made the difference:
  *  - sized `sda` scalars for the $gp words (D_L18_001B1230..129C) at -G8; MACRO_ADDR
- *    scalars for D_001A79F0, D_L18_001B2568, D_L18_001AFBB0 and the moby table word
- *    D_L18_001B281C (tied lui/lw; a scalar keeps the case-12 copy from reloading it);
+ *    scalars for D_001A79F0, D_L18_001AFBB0 and the moby table word D_L18_001B281C;
+ *  - closer9: the case-7 level word at 0x1B2568 is a field of a small-data object at a nonzero
+ *    offset (declared here as the sda array D_L18_001B2564[1]; the base is inferred, any
+ *    nonzero offset compiles the same). A gp symbol plus offset is not a simple_memory_operand,
+ *    so its store has length 2, stays out of the bne delay slot (lui $at; sw) and reorg steals
+ *    `li a1,7` from the target instead, as retail;
+ *  - closer9: D_L18_001A8F20 and D_L18_001B2660 are MACRO_ADDR (their `la` is an adjacent
+ *    lui/addiu macro, emitted late): fixes both func_002ABBB8 argument setups and case 11's
+ *    flag test registers;
+ *  - closer9: D_L18_0021DB40/D_L18_0021E7B0 are 2-D tables (u8 [][0x464]) indexed [1][h]:
+ *    get_inner_reference builds (base + h), retail's base-first addu (the flat [h + 0x464]
+ *    is reassociated by combine's split into (h + base));
+ *  - closer9: block-local nibble pointers in case 11 (one local per arm) give retail's $a0/$v1;
+ *  - closer9: func_002B5258 returns int (as in src/game/00322CC0.c): switch 2 case 2 tests the
+ *    halfword in $v1;
  *  - the moby table index summed as (idx << 8) + table (int), as retail's addu order;
- *  - one set of function-scope vector buffers (ref/a/ang/b/c = sp 0x20..0x60), case 4
- *    reusing ref; qcopy() for the D_L18_001B97C0 copy (register addresses), TImode
- *    struct copies elsewhere (displaced lq/sq), no -frac2-qcopy;
- *  - View/Hero union views (MEM_IN_STRUCT) so loads of globals move above moby stores;
- *  - measured statement orders in cases 11, 13, 14, 7 and 8.
- * Still open:
- *  - case 7: `D_L18_001B2568 = 0` lands in the bne delay slot ($gp form); retail keeps it
- *    out (lui $at; sw) and steals `li a1,7` from the join instead: the store is not
- *    delay-eligible in retail (length 2). No declaration tried (sda array, MACRO_ADDR,
- *    nosda, plain) gives a macro store of length 2 at -G8. 2 instructions of size.
- *  - argument setup order/registers for both func_002ABBB8 calls (stack-argument
- *    constants in t1/t3/t4 in retail) and the second func_002AAA00 call (switch 2 case 3);
- *    a local for the func_L18_004283F0 result changes nothing.
- *  - switch 2 case 2: retail tests 0x392 in $v1 (the $gp halfword already owns $v0).
- *  - case 11 tail: retail builds (table + index) with the base first for D_L18_0021DB40,
- *    D_L18_0021E7B0 and D_L18_001B2660 and gives the nibble pointer $a0; every spelling
- *    tried (int sums either way, pointer/array/view forms) compiles identically, so this
- *    is cse/local-alloc canonicalisation, not source order.
+ *  - one set of function-scope vector buffers, qcopy() for the D_L18_001B97C0 copy;
+ *  - View/Hero union views (MEM_IN_STRUCT) so loads of globals move above moby stores.
+ * Still open (switch 2 case 3, the second func_002AAA00 call): retail loads the float
+ * arguments as `lwc1 $f15,0x11C; move a0; lwc1 $f13,0x114; mov.s $f12; lwc1 $f14,0x118`, ours
+ * (and retail's identical case-7 call) `f13, a0, f14, f12, f15`. sched2 ties the three loads on
+ * priority, class and dependents and takes luid order; something gives retail's 0x11C load an
+ * edge here only. Tried: a local for the func_00283248 result, a local for the 0x11C value,
+ * byte-pointer and float-pointer reads, a void-cast result, a w = v alias: no change.
  */
 #include "common.h"
 
@@ -41,7 +43,7 @@ extern u8 D_00189EA0[];
 extern u8 D_0018C958[];
 extern u8 D_0019B2E8[];
 extern u8 D_0019B4A8[];
-extern u8 D_L18_001A8F20[];
+extern u8 D_L18_001A8F20[] MACRO_ADDR;
 extern s32 D_L18_001AFBB0 MACRO_ADDR;
 extern float D_L18_001B1230 __attribute__((sda));
 extern float D_L18_001B1238 __attribute__((sda));
@@ -55,12 +57,12 @@ extern s32 D_L18_001B1290 __attribute__((sda));
 extern float D_L18_001B1294 __attribute__((sda));
 extern float D_L18_001B1298 __attribute__((sda));
 extern float D_L18_001B129C __attribute__((sda));
-extern s32 D_L18_001B2568 MACRO_ADDR;
-extern u8 D_L18_001B2660[];
+extern s32 D_L18_001B2564[] __attribute__((sda));
+extern u8 D_L18_001B2660[] MACRO_ADDR;
 extern s32 D_L18_001B281C MACRO_ADDR;
 extern Vec4 D_L18_001B97C0[];
-extern u8 D_L18_0021DB40[];
-extern u8 D_L18_0021E7B0[];
+extern u8 D_L18_0021DB40[][0x464];
+extern u8 D_L18_0021E7B0[][0x464];
 extern u8 D_L18_002571A0[];
 
 extern s32 func_00282978(void *);
@@ -88,7 +90,7 @@ extern s32 func_002ACD38(void *);
 extern void func_002B0C28(s32, s32, s32);
 extern s32 func_002B1C20(void *, void *);
 extern s32 func_002B3890(void *);
-extern void func_002B5258(void *);
+extern s32 func_002B5258(void *);
 extern void func_002B5278(void *, float);
 extern void func_002B60B0(void *, float, float, float, float);
 extern void func_002E59F8(s32);
@@ -315,7 +317,7 @@ void func_L18_00428F08(u8 *a0) {
                       func_00283248(((Hero *)D_00189E20)->f[0x80 / 4] - ((View *)a0)->f[0x10 / 4],
                                     ((Hero *)D_00189E20)->f[0x84 / 4] - ((View *)a0)->f[0x14 / 4]),
                       ((View *)v)->f[0x114 / 4], ((View *)v)->f[0x118 / 4], ((View *)v)->f[0x11C / 4], v + 0x1B4, 0);
-        D_L18_001B2568 = 1;
+        D_L18_001B2564[1] = 1;
         qcopy(ref, D_L18_001B97C0);
         ((Hero *)D_00189E20)->h[0x1DC / 2] = 5;
         ((Hero *)D_00189E20)->h[0x1E0 / 2] = 10;
@@ -336,7 +338,7 @@ void func_L18_00428F08(u8 *a0) {
             func_L18_002CFD68(4, 0x8D, a0);
             ((Hero *)D_00189E20)->f[0x98 / 4] = f;
             ((View *)a0)->f[0xF8 / 4] = f;
-            D_L18_001B2568 = 0;
+            D_L18_001B2564[1] = 0;
             if (D_001A79F0 == 0x13) {
                 if (((View *)D_0018C958)->uh[0x504 / 2] == 0)
                     func_00288E18(0xA14, 0x6B);
@@ -462,17 +464,17 @@ void func_L18_00428F08(u8 *a0) {
         func_L18_00427010(a0);
         b2 = ((View *)a0)->uh[0xB2 / 2];
         if (b2 & 1) {
-            p = D_0019B4A8 + (((s16)b2 >> 1) + (D_001A79F0 << 10));
-            if (((*p >> 4) & 7) != 7)
-                *p += 0x10;
+            u8 *q = D_0019B4A8 + (((s16)b2 >> 1) + (D_001A79F0 << 10));
+            if (((*q >> 4) & 7) != 7)
+                *q += 0x10;
         } else {
-            p = D_0019B4A8 + (((s16)b2 >> 1) + (D_001A79F0 << 10));
-            if ((*p & 7) != 7)
-                *p += 1;
+            u8 *q = D_0019B4A8 + (((s16)b2 >> 1) + (D_001A79F0 << 10));
+            if ((*q & 7) != 7)
+                *q += 1;
         }
-        D_L18_0021DB40[((View *)a0)->h[0xB2 / 2] + 0x464] = ((View *)a0)->b[0xB0] + 2;
+        D_L18_0021DB40[1][((View *)a0)->h[0xB2 / 2]] = ((View *)a0)->b[0xB0] + 2;
         if (((View *)a0)->b[0xB0] == 0xFF || (!(D_L18_001B2660[((View *)a0)->b[0xB0]] & 0x80) && (D_0019B2E8[((View *)a0)->b[0xB0] + (D_001A79F0 << 4)] & 0x80)))
-            D_L18_0021E7B0[((View *)a0)->h[0xB2 / 2] + 0x464] = ((View *)a0)->b[0xB0] + 2;
+            D_L18_0021E7B0[1][((View *)a0)->h[0xB2 / 2]] = ((View *)a0)->b[0xB0] + 2;
         c = ((View *)v)->b[0x3B1];
         if (c != 0 && c != 0xFE
             && (((View *)a0)->b[0xB0] == 0xFF || !(D_0019B2E8[((View *)a0)->b[0xB0] + (D_001A79F0 << 4)] & 0x80))) {
