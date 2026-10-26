@@ -22,6 +22,17 @@
  *     self+0xE94 lands in $s2 here (spilled in retail), and the spill-slot order of the
  *     second-half pointers (it follows pseudo numbers, so it should follow once the
  *     expression set matches).
+ *
+ * closer3 (2026-10-26), the double-use colour: retail needs one SFmode pseudo set once from
+ * an SImode constant (lui/ori $v0, mtc1 $v0,$f20) and read twice. In this cc1 every
+ * spelling loses that pseudo: a union read `u.f` expands straight into $f13 and cse's
+ * fold_rtx SUBREG case (gen_lowpart_if_possible of the known SImode constant) turns it into
+ * a const_double (li.s); `f32 c = u.f` keeps a pseudo but cse folds it to a hoisted li.s; a
+ * pointer pun (local or inline, `*(s32 *)&c = X`) is purged to an SImode pseudo that lives in
+ * a saved GPR with an mtc1 per use. (Why denormals escape the fold is not checked yet.)
+ * Look at whether retail's cse folds a SUBREG of a constant into SFmode at all (patch 0048
+ * brings 2.95.2's cse.c), before more spellings. The giv-recombination change
+ * (no_recombine_givs.py) does not change this function.
  */
 #include "common.h"
 
