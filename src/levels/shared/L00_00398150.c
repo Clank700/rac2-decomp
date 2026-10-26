@@ -1,17 +1,6 @@
-/* Retained C reconstruction; not linked or counted.
- * Profile: -O2 -G0 -ffunction-sections.
- * 1724/1728 bytes. us: 0/27 places; us2: 0/27 places; pal: absent.
- * Remaining: The collision query and later attachment transform have disjoint lifetimes.
- * Their shared 96-byte union restores the exact 0x1B0 frame from 0x210 and
- * the measured B0/F0/100 attachment workspace; the 48-byte rotation, 96-byte
- * query and 64-byte transform retain their real sizes. Actor byte flags use
- * unsigned loads. Collision-case branch layout and ordinary scalar allocation
- * still differ; inverting the rare acceleration branch does not close them.
- * Reopen with: Independent collision-CFG/global temporary evidence. Retain the true
- * phase workspace instead of adding padding or making the query smaller.
- */
-
+/* func_L00_00398150: per-frame update of the level actor and its state block. */
 #include "common.h"
+
 typedef int Quad __attribute__((mode(TI)));
 typedef union { Quad quad; float f[4]; } Vector;
 typedef struct {
@@ -23,9 +12,9 @@ typedef struct {
     int flags, mask, response, surface, gravity;
     float maxTurn;
 } CollisionQuery;
-extern int D_L00_001A8FF4;
+extern int D_L00_001A8FF4 MACRO_ADDR;
 extern Vector D_L00_001BF240;
-extern u16 D_L00_001B1FF0[];
+extern u16 D_L00_001B1FF0[] MACRO_ADDR;
 extern void func_002A7470(char *, int, int, int), func_002FE8D8(void *, float *);
 extern void func_00282F20(void *, void *, float), func_00282DD8(void *, void *, void *);
 extern float func_00282DB0(void *, void *), func_00283198(float), func_00283180(float);

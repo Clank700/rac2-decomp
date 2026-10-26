@@ -1,13 +1,10 @@
-/* GNU game profile -O2 -G0, 576/576 bytes; us/us2/pal each 0/3 places.
- * The remaining differences are two loop-invariant zero-vector address clusters.
- * Struct/array globals and -g agree; -mno-split-addresses fixes the clusters but
- * changes the opening unaligned range copy. Reopen with mixed address formation
- * reproduced by ordinary C or an independently qualified compiler profile.
- */
+/* func_L03_003268C0: spawn the level's effect bursts over the configured range. */
+#include "common.h"
+
 typedef struct { float x, y, z, w; } L03EffectVector;
 typedef struct { float x, y; } L03EffectRange;
 extern L03EffectRange D_L03_001AA2E8;
-extern unsigned char D_L03_001A8F20[];
+extern unsigned char D_L03_001A8F20[] MACRO_ADDR;
 extern void func_002A7A00(L03EffectVector *, float, float);
 extern float func_002A7940(void);
 extern void func_00282C88(L03EffectVector *);

@@ -1,9 +1,11 @@
 /* Nonmatching C: Advance the projectile, process collision response and emit the sixteen-particle impact effect.
- * Tested profile: -O2 -G8 -ffunction-sections.
- * Measured US size: 1044 bytes; retail: 1044 bytes.
- * Placement checks: US and US2: 0/2 each; PAL: absent from the catalogue.
- * Remaining: The first placed instruction difference is at +0x230; later owner rejection and effect setup still differ.
- * Reopen with independent effect and owner lifetimes; preserve the complete request, all sixteen emissions and the pointer-returning particle allocator.
+ * Profile: -O2 -G8 -ffunction-sections. 1044/1044 bytes, US 0/2 (PAL absent).
+ * M8, 26 October 2026: 6 instructions off. Callees renamed to their catalogue names, the
+ * particle loop written ascending (for i = 0; i < 16; i++) fixes the loop-setup order, and the
+ * owner test compares the field against D_L15_001AC810. Left: at the 0x336 test retail loads
+ * D_L15_001AC810 first (lui/lw in $v1), the hit object into $a0 and its +0x64 field into $v0;
+ * this source loads the object into $a1 and the global into $a0. Local copies, nested ifs and
+ * operand order tie. Queued for the permuter.
  */
 #include "common.h"
 
@@ -94,7 +96,7 @@ void func_L15_003A9E80(unsigned char *object)
             effect = func_00312D58(effectPosition, 2.0f);
             if (effect)
                 effect[0x23] = 0x70;
-            for (i = 15; i >= 0; --i) {
+            for (i = 0; i < 16; i++) {
                 float angle = func_002A7940();
                 float speed = func_002A7878(0.0f, 0.05000000447034836f);
                 int life;
@@ -108,7 +110,7 @@ void func_L15_003A9E80(unsigned char *object)
             if ((D_L15_001BFC00.object == D_0018C0B0 || *(short *)(D_L15_001BFC00.object + 0xaa) == 0xc0) &&
                 *(int *)(state + 0x18) >= 0x122)
                 goto finished;
-            if (D_L15_001AC810 == *(void **)(D_L15_001BFC00.object + 0x64) &&
+            if (*(void **)(D_L15_001BFC00.object + 0x64) == D_L15_001AC810 &&
                 *(short *)(D_L15_001BFC00.object + 0xaa) != 0x336)
                 goto finished;
             object[0xbc] = 1;
