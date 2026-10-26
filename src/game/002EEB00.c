@@ -205,7 +205,7 @@ void func_002EF310(void)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002EF3B0);
+/* func_002EF3B0 is matched in its own unit, 002EF3B0.c. */
 
 ASM_FUNC("asm/game", func_002EF480);
 

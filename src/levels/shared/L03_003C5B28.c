@@ -43,7 +43,7 @@ INCLUDE_ASM("asm/levels", func_L03_003C9FB8);
 
 int func_L03_003CA138(unsigned char *p) { return p[0x20] == 1; }
 
-INCLUDE_ASM("asm/levels", func_L03_003CA148);
+/* func_L03_003CA148 is matched in its own unit, L03_003CA148.c. */
 
 void func_L03_003CA220(u8 *a0, f32 a1) {
     *(f32 *)(*(u8 **)(a0 + 0x68) + 0xA0) = a1;

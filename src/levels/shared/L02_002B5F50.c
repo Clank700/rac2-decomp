@@ -104,7 +104,7 @@ void func_L02_00327390(char *arg0, char *arg1, int arg2) {
         func_L00_0042A500(arg2);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_00329410);
+/* func_L02_00329410 is matched in its own unit, L02_00329410.c. */
 
 extern void func_00282C88(void *target);
 extern void func_00283098(float *out, const float *a, const float *b);

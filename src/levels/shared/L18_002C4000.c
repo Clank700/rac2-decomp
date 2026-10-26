@@ -48,7 +48,7 @@ void func_L18_002E4090(BatchA_A18_s32 a0) {
 
 /* func_L18_002E42F8 is defined in L18_002E42F8-flags-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L18_002F1098);
+/* func_L18_002F1098 is matched in its own unit, L18_002F1098-g8.c. */
 
 extern void func_0027F1D8(void *a0, void *a1, const char *a2);
 extern char D_L18_00296510[];

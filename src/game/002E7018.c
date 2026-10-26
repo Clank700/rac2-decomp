@@ -53,7 +53,7 @@ INCLUDE_ASM("asm/game", func_002E7090);
 
 INCLUDE_ASM("asm/game", func_002E71B8);
 
-INCLUDE_ASM("asm/game", func_002E7248);
+/* func_002E7248 is matched in its own unit, 002E7248-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002E7338);
 

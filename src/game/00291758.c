@@ -85,7 +85,7 @@ INCLUDE_ASM("asm/game", func_00291850);
 
 INCLUDE_ASM("asm/game", func_00291CA8);
 
-INCLUDE_ASM("asm/game", func_00291DE0);
+/* func_00291DE0 is matched in its own unit, 00291DE0.c. */
 
 INCLUDE_ASM("asm/game", func_00291EC0);
 
