@@ -1,13 +1,13 @@
-/* Complete nonmatching reconstruction: 1112/1104 bytes.
- * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Placement checks: US: 0/27; US2: 0/27; PAL absent from catalogue.
- * The fragment and particle loops preserve all RNG calls and particle inputs. Seven complete16-byte-aligned vectors remain. Retail clears drift unconditionally at+0x250 before its conditional scale; the older draft omitted it. jitter W remains subject to the measured caller pre-initialization constraint. Real origin-to-fragment+0x20 and direction snapshots use clobbering helpers. Capturing fragment+0x30 before the helper calls follows the observed field access but remains1112/1104 bytes, with the retail0xf0 frame. Scalar/vector live ranges, table bases and particle-call setup still differ; the semantically incomplete older1096-byte form is not substituted.
- * Reopen with independent effect-state ownership and actual phase-local pointer/FP lifetimes. Preserve the measured drift clear and RNG order; no unconditional jitter-W initialization is justified by this caller.
- */
+/* M5 (2026-10-26): 1104/1104 B under `-O2 -G8 -ffunction-sections -frac2-qcopy`, 0/27,
+   about 150 lines off (allocation of the loop invariants and the first loop's counter).
+   Fixed against the earlier draft: plain TI copies instead of the asm qcopy()/qzero()
+   helpers (not honest C), 0.3490659f (retail 0x3EB2B8C4, the draft's 0.3490659595f is
+   0x3EB2B8C6), D_0018A550/D_0018A560 one 8-float object (retail adds 0x10 to one base),
+   and the first loop as a do/while with the decrement at the bottom. */
 #include "common.h"
 typedef int VectorBits __attribute__((mode(TI)));
 typedef float Vector[4] __attribute__((aligned(16)));
-extern float D_0018A550[4], D_0018A560[4], D_00189F30[4];
+extern float D_0018A550[8], D_00189F30[4];
 extern int D_0018A160 NOT_SDA;
 extern float D_L00_001AF62C __attribute__((sda));
 extern float D_L00_001AF630 __attribute__((sda));
@@ -48,9 +48,10 @@ void func_L00_003A4480(char *moby)
     func_00283098(base, base, moby + 0xC0);
     func_00282CC0(origin, moby + 0x10, base);
     *(unsigned char *)(moby + 0xBC) = 6;
-    func_002ACEC0(base, D_0018A550, D_0018A560, 0.3490659595f);
-    qcopy(direction, base);
-    for (count = 19; count >= 0; count--) {
+    func_002ACEC0(base, D_0018A550, D_0018A550 + 4, 0.3490659f);
+    *(VectorBits *)(direction) = *(VectorBits *)(base);
+    count = 19;
+    do {
         char *fragment;
         angle = func_00283B98(angle, func_002A7878(0.0f, 0.6283186078f));
         func_00282D30(velocity, direction, func_002A7878(0.1000000089f, 0.3f));
@@ -59,7 +60,7 @@ void func_L00_003A4480(char *moby)
             char *tail = fragment + 0x30;
             func_00282D30(velocity, direction, 0.75f);
             func_00282CC0(fragment + 0x10, origin, velocity);
-            qcopy((fragment + 0x20), origin);
+            *(VectorBits *)(fragment + 0x20) = *(VectorBits *)(origin);
             *(float *)(tail + 0xC) = 2.0f;
             *(int *)(fragment + 0xC) = 0x307F7F7F;
             *(float *)(fragment + 0x1C) = 0.05f;
@@ -70,11 +71,11 @@ void func_L00_003A4480(char *moby)
             func_002AB668(rotation, (int)D_0018A550, angle);
             func_002ACDE8(direction, base, rotation);
         }
-    }
+    } while (--count >= 0);
     angle = 0.0f;
-    func_002ACEC0(base, D_0018A550, D_0018A560, D_L00_001AF62C * 0.017453294f);
-    qcopy(direction, base);
-    qzero(drift);
+    func_002ACEC0(base, D_0018A550, D_0018A550 + 4, D_L00_001AF62C * 0.017453294f);
+    *(VectorBits *)(direction) = *(VectorBits *)(base);
+    *(VectorBits *)(drift) = 0;
     if (D_0018A160)
         func_00282D30(drift, D_00189F30, 1.7f);
     for (count = 19; count >= 0; count--) {
