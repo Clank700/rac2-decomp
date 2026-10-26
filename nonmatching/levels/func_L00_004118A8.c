@@ -1,4 +1,4 @@
-/* near miss (about 8 instructions of scheduling): func_L00_004118A8; needs a -qcopy unit (-O2 -G0 -ffunction-sections -frac2-qcopy). Remaining: the owner store vs the addiu of the first quad copy, and the order of the 0xB8 store in the last block. */
+/* near miss (2 instructions): func_L00_004118A8; needs a qcopy unit with the barrier (-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier), which fixes the front. Remaining: the break jump's delay slot holds the 0xBC store here and retail's 0xC0 zero store; no order of the nine tail stores (all 720 of the last six, 2,500 of all nine) or zero-store type moves it. */
 #include "common.h"
 
 /* A -frac2-qcopy unit: the two 16-byte vectors copied into the record are lq/sq pairs. */
@@ -52,9 +52,9 @@ void func_L00_004118A8(char *owner, int a1, int a2, char *pos, char *vel, int t1
         *(int *)(slot + 0xB4) = a1;
         *(int *)(slot + 0xC4) = t1;
         *(float *)(slot + 0xC8) = scale;
+        *(int *)(slot + 0xBC) = t2;
         *(int *)(slot + 0xB8) = t2;
         *(int *)(slot + 0xA8) = t3;
-        *(int *)(slot + 0xBC) = t2;
         *(int *)(slot + 0xC0) = 0;
         break;
     }

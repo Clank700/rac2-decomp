@@ -1,10 +1,13 @@
+/* func_002ED6B0 in its own unit, so that its call to func_002ED870 (C in 002ED578.c)
+   is a plain external call. */
 #include "include_asm.h"
+
 typedef int s32;
 typedef unsigned char u8;
 extern int func_002ED688(unsigned char *);
-/* near: 7 instructions differ at the table-load prologue (+0x54..+0x70): retail loads D_001B1C54 into s0 first, we load the index first and use a0 for the lui. Everything else matches. */
 typedef struct { float lim; char pad[0x2c]; float v[4]; char pad2[0x40]; } Rec128;
-extern Rec128 *D_001B1C54[];
+/* Retail loads this pointer with the assembler's lui/lw macro (lui into the destination). */
+extern Rec128 *D_001B1C54[] __attribute__((sda));
 extern int D_00214F90[];
 extern void func_00282CC0(void *, void *, void *);
 extern void func_00282CF0(void *, void *, void *);
@@ -13,7 +16,8 @@ extern float func_00282DF0(void *);
 extern void func_00283028(void *, void *, void *);
 extern float func_002A7940(void);
 extern void func_002AF000(void *, float, float, float);
-extern void func_002C2210(void *, unsigned int, unsigned int, unsigned int, s32, s32, s32, float, float, float);
+/* The three floats come before the last int ($f14 is set before $t2 at every call). */
+extern void func_002C2210(void *, unsigned int, unsigned int, unsigned int, s32, float *, float, float, float, s32);
 extern unsigned int func_002ED870(void);
 extern int func_002EE6A8();
 
@@ -49,7 +53,7 @@ void func_002ED6B0(u8 *a0)
                 float a = func_002A7940();
                 float b = func_002A7940();
                 func_002AF000(w, 0.16666667f, a, b);
-                func_002C2210(a0 + 0x10, 0x3C, 0x4000FF7F, 0, 2, (s32)w, 0, 0.2f, 1.25f, 0.0f);
+                func_002C2210(a0 + 0x10, 0x3C, 0x4000FF7F, 0, 2, w, 0.2f, 1.25f, 0.0f, 0);
             }
         }
     }

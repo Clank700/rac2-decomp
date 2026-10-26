@@ -1,3 +1,4 @@
+/* func_L00_0033E220 in its own unit: its 16-byte copies are lq/sq pairs (-frac2-qcopy -frac2-qcopy-barrier). */
 #include "include_asm.h"
 
 typedef int s32;
@@ -33,9 +34,11 @@ typedef struct {
 } Obj_L00_0033E220;
 
 extern void *func_002B9030(s32 kind);
-extern s32 func_002EF250(f32 value);
-extern void func_002EE108(void *a, void *b);
-extern s32 func_0031A728(s32 range);
+extern s32 func_00283CF0(f32 value);
+/* The vector add takes the record's 0x30 vector as its third argument: retail keeps
+   that address in $a2 from the copy above. */
+extern void func_00282CC0(void *out, void *a, void *b);
+extern s32 func_002A77E0(s32 range);
 
 extern int *ref_L00_0033E220_00;
 
@@ -46,11 +49,11 @@ Obj_L00_0033E220 *func_L00_0033E220(V4_L00_0033E220 *vec, u8 *obj, u32 flags, s3
     if (o != 0) {
         f32 four = 4.0f;
         o->w4 = flags;
-        o->b9 = func_002EF250(four) + 0x40;
+        o->b9 = func_00283CF0(four) + 0x40;
         o->f_c = f12;
         o->b1 = 0;
         o->b3 = 0x48;
-        o->b8 = func_0031A728(0xFF);
+        o->b8 = func_002A77E0(0xFF);
         o->b2 = *((u8 *)ref_L00_0033E220_00 + index);
         o->s_a = idx2;
         o->sub.w0 = (u32)obj;
@@ -66,11 +69,11 @@ Obj_L00_0033E220 *func_L00_0033E220(V4_L00_0033E220 *vec, u8 *obj, u32 flags, s3
         }
         if (obj != 0) {
             o->v10 = *(V4_L00_0033E220 *)(obj + 0x10);
-            func_002EE108(&o->v10, &o->v10);
+            func_00282CC0(&o->v10, &o->v10, &o->v30);
             if (range > 0) {
-                o->b9 = ((range >> 5) << 4) + func_002EF250(four);
+                o->b9 = ((range >> 5) << 4) + func_00283CF0(four);
             } else {
-                o->b9 = (((s16)*(u16 *)(obj + 0x32) >> 5) << 4) + func_002EF250(four);
+                o->b9 = (((s16)*(u16 *)(obj + 0x32) >> 5) << 4) + func_00283CF0(four);
             }
         } else {
             o->v10 = *vec;

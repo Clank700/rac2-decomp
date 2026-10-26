@@ -570,7 +570,6 @@ extern float func_00282C10(float x);
 
 void func_002ACE78(float *p, float *src, float x) { func_00282F20(p, src, x); p[3] = func_00282C10(1.0f - x * x); }
 
-INCLUDE_ASM("asm/game", func_002ACEC0);
 
 INCLUDE_ASM("asm/game", func_002ACF68);
 

@@ -1,4 +1,6 @@
-/* Near miss (mid-15): -G32 -Wa,-G32 unit; all structure equal, only v0/v1 pseudo order differs in the case-3 and shared tail blocks. */
+/* func_002D01D0 in its own unit: retail reaches its small data through $gp, so the
+   file is compiled at -G32 (config/cflags.txt). D_001A7478 is read absolute (lui/lw)
+   and written through $gp, so it has a plain name and an sda name. */
 #include "include_asm.h"
 
 typedef struct { char prefix[0x14]; char *source; int value; char gap[0x118]; int fallback; } SelectionCallback;
@@ -19,7 +21,7 @@ extern int D_001B1580;
 extern int D_001A7478;
 extern int D_0025C2B8[];
 extern char D_001BAD40[];
-extern int func_002C9E60(int);
+extern void func_002C9E60(int);
 extern int func_002B49E0(int, int, int, int, int);
 extern int func_00288AA0(char *, int);
 extern int func_00288BE8(char *);
@@ -80,9 +82,9 @@ finish:
                 if (D_001ABA08[D_001ABA04] != 0) {
                     func_002C9E60(1);
                     a = 4;
+                    D_001B1580 = 2;
                     ((GameObj *)&D_001F2840)->f100 = ((GameObj *)&D_001F2840)->f14;
                     ((GameObj *)&D_001F2840)->f104 = ((GameObj *)&D_001F2840)->f08;
-                    D_001B1580 = 2;
                     func_002B49E0(9, 1, 0, 0, 0);
                 } else a = 5;
                 break;
@@ -96,11 +98,11 @@ finish:
             if (b != -1) {
                 char *obj;
                 func_002C9E60(0);
-                obj = D_001BAD40;
-                ((GameObj *)&D_001F2840)->f140 = D_001A7478;
                 ((GameObj *)&D_001F2840)->f100 = ((GameObj *)&D_001F2840)->f14;
                 ((GameObj *)&D_001F2840)->f104 = ((GameObj *)&D_001F2840)->f08;
+                ((GameObj *)&D_001F2840)->f140 = D_001A7478;
                 D_001A7478_sda = 2;
+                obj = D_001BAD40;
                 func_00288AA0(obj, b);
                 if (c != -1)
                     func_00288AA0(obj, c);

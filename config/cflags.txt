@@ -915,3 +915,8 @@ src/levels/shared/L05_0037D608.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L00_002E54E0-g8.c	-O2 -G8 -ffunction-sections
 src/levels/11_joba/L11_003973F8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/06_notak/L06_0041FC58-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/002D01D0-g32.c	-O2 -G32 -Wa,-G32 -ffunction-sections
+src/levels/shared/L00_0038B888-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/002BCF18-g8-qcopy.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/game/002ACEC0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/shared/L00_0033E220-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

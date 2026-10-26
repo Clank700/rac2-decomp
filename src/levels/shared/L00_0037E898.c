@@ -613,7 +613,6 @@ int func_L00_0038B848(void)
     return 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0038B888);
 
 INCLUDE_ASM("asm/levels", func_L00_0038BA80);
 

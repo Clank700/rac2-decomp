@@ -1,12 +1,12 @@
-/* Mid worker 7: near miss, boot func_002BCF18 (440 B), own unit, flags -O2 -G8 -ffunction-sections -frac2-qcopy.
-   Same size and every instruction except three in the tail: after the func_001163B0 call retail schedules
-   `lui a1,0x1F ; xori a2,s2,3 ; addiu v1,s0,0x20 ; lw a0,0x2580(a1)` and the movz select on the table pointer; this
-   cc1 emits `xori ; addiu ; lui v0` (different temp register) so one instruction and its register differ.
-   Tried: ternary spelling both ways, tab in a local before/after q, statement order, indexed select. */
+/* func_002BCF18 in its own unit: small data at -G8 and lq/sq quadword copies (-frac2-qcopy -frac2-qcopy-barrier). */
+#include "include_asm.h"
+
 typedef int TI128 __attribute__((mode(TI)));
 
 extern float D_001B168C;
-extern unsigned char *D_001F2580;
+/* Read through lui/lw with a separate address register: not small data, so an
+   incomplete array indexed [0]. */
+extern unsigned char *D_001F2580[];
 extern int func_002A77E0(int);
 extern char *func_002B9030(int);
 extern int func_00283CF0(float);
@@ -39,7 +39,7 @@ char *func_002BCF18(char *a0, char *a1, int a2, int a3, int t0, int t1, float f1
         p[9] = t;
         p[8] = func_001163B0();
         q = p + 0x20;
-        tab = D_001F2580;
+        tab = D_001F2580[0];
         p[2] = *((t1 != 3) ? tab + t1 : tab);
         *(short *)(p + 0xA) = t0;
         *(short *)(q + 0x18) = t0;

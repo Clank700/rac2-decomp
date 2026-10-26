@@ -45,7 +45,7 @@ s32 func_002ED688(u8 *a0) {
  return (*(s32 **)(a0+0x68))[5];
 }
 
-INCLUDE_ASM("asm/game", func_002ED6B0);
+/* func_002ED6B0 is in 002ED6B0.c: its call to func_002ED870 has to be an external one. */
 
 INCLUDE_ASM("asm/game", func_002ED848);
 
