@@ -1,3 +1,26 @@
+/* Targeted resident-field/lifetime follow-up, 2026-10-25; nonmatching, not linked.
+ * Profile: -O2 -G8 -ffunction-sections -Wall -Werror.
+ * Text: 37308/37268 bytes; frame 0x1A0 versus retail 0x1B0; six saved FPRs
+ * versus five. US remains 0/1; US2 and PAL lack this canonical identity.
+ * A partial resident view types only the measured float at +0xA2C and signed
+ * halfword at +0xADC. Its gaps locate these fields; no complete owner extent
+ * is inferred. All actual accesses, reloads and helper arguments are retained.
+ * The path/pose phase retains the table word's unconditional read, then captures
+ * its nonzero predicate combined with the type test, as retail does before
+ * the path calls. It does not retain two independent values across those calls.
+ * Together these changes recover the saved entry object in $fp, with unchanged
+ * twelve references and no artificial use. Isolated field/condition controls
+ * do not recover it; extending the view to entry fields is a negative control.
+ * The full 588-byte table still has 147 self-text R_MIPS_32 relocations, align16,
+ * and the retail's 63 destination equivalence classes. Text and linked table
+ * destinations remain different; topology alone is not matching credit.
+ * Remaining: frame/workspace layout, the extra saved FPR, entry-load order,
+ * address formation and later scheduling. Reopen with independent evidence for
+ * those real lifetimes/extents, without invented padding, references or pins.
+ * Prior 37336-byte/entry-spill and 37280-byte/62-class baselines are archived
+ * privately. The older baseline measurements below are historical. No native
+ * execution, gameplay, complete callee-ABI or linked-image equality is claimed.
+ */
 /* 2026-10-25 ADDRESS follow-up: retained best prior C, not matching.
  * Baseline reproduced 37280/37268 bytes, 0/1 US placement, frame 0x1A0
  * versus 0x1B0. A truthful typed entry-object/header view measured 37416;
@@ -47,6 +70,13 @@ typedef unsigned int U128 __attribute__((mode(TI)));
 typedef struct { float x, y, z, w; } Vec4 __attribute__((aligned(16)));
 
 extern unsigned char D_00189E20[];
+/* Partial view: only the two measured phase fields are typed. */
+typedef struct {
+    u8 prefixA2C[0xA2C];
+    float savedVerticalA2C;
+    u8 betweenA30_ADC[0xADC - 0xA30];
+    s16 anchorModeADC;
+} ResidentPhaseView;
 #define H(type, offset) (*(type *)(D_00189E20 + (offset)))
 #define HP(offset) ((void *)(D_00189E20 + (offset)))
 
@@ -572,7 +602,7 @@ case 0x32: case 0x33: case 0x34:
     func_002AA898(HP(0x94),HP(0xA28),0,steer,0.015f,0.2f,steeringLimit);
     pitchChange=func_00283BE0(H(float,0x94),oldPitch);
     func_L00_002B39F0(0,1.0f);func_L00_002B3EF8(0,0.007f,0.08f,0.087266475f);
-    H(float,0xA2C)=H(float,0x1A4);func_00282948(HP(0xA34));
+    ((ResidentPhaseView *)D_00189E20)->savedVerticalA2C=H(float,0x1A4);func_00282948(HP(0xA34));
     if (H(s32,0x2298)==1) H(float,0x1B0)=0.10000001f;
     else if (H(u32,0x2294)==0x34) H(float,0x1B0)=(D_00138320&10)?0.116666675f:0.04666667f;
     else H(float,0x1B0)=0.050000004f;
@@ -636,7 +666,7 @@ case 0x32: case 0x33: case 0x34:
             func_00282F20(HP(0x160),HP(0x160),speed);H(Vec4,0xF0)=H(Vec4,0x160);
         }
         func_L22_002B8E10(0);
-        rate=H(float,0xA2C)*func_00283180(angle)*-7.0f;
+        rate=((ResidentPhaseView *)D_00189E20)->savedVerticalA2C*func_00283180(angle)*-7.0f;
     }
     func_002AA898(HP(0x90),HP(0xA24),0,rate,0.007f,0.17f,0.020362178f);
     func_L00_002AB0C0(0.009f,0.22f);func_L00_002AB0D8(0.04f,0.2f);func_L00_002AB0F0(0.02f,0.2f);
@@ -921,7 +951,7 @@ case 0x2B:
     func_002AA898(HP(0x94),HP(0xA4),0,magnitude,0.04f,0.2f,0.15998854f);
     func_002AA898(HP(0x90),HP(0xA0),0,angle,0.04f,0.2f,0.15998854f);
     belowAnchor=H(float,0x88)<*(float*)(H(u8*,0xAD4)+0x18);
-    if (H(s16,0xADC)) {
+    if (((ResidentPhaseView *)D_00189E20)->anchorModeADC) {
         if (belowAnchor && H(s32,0x1B8)>40 && H(float,0x24B8)>0.25f) {
             func_L00_002B39F0(0,1.0f);
             magnitude=H(float,0x24B8)*0.0035f;
@@ -931,7 +961,7 @@ case 0x2B:
             workspace.state_2b.lateral.z=0.0f;
             func_00282CC0(HP(0xF0),HP(0xF0),&workspace.state_2b.lateral);
         }
-        if (H(s16,0xADC)) {
+        if (((ResidentPhaseView *)D_00189E20)->anchorModeADC) {
             distance=func_00282E80(HP(0x80),H(u8*,0xAD4)+0x10);
             if (distance<H(float,0xAE0)*1.57f || H(float,0x31C)>1.5f) {
                 func_L00_002D34C0(HP(0xF0),HP(0x110),0.011111111f);
@@ -979,7 +1009,7 @@ case 0x2B:
             func_00282CC0(HP(0xF0),HP(0xF0),&workspace.state_2b.lateral);
         }
     }
-    if (!H(s16,0xADC) || !H(s16,0x34E)) goto finish;
+    if (!((ResidentPhaseView *)D_00189E20)->anchorModeADC || !H(s16,0x34E)) goto finish;
     if ((oldVertical<0.0f && H(float,0xF8)>0.0f) || H(s16,0xAFC)) {
         float period;
         int forward;
@@ -1570,8 +1600,9 @@ case 0x27: case 0x28: case 0x29: case 0x2A: case 0x3E:
     }
     typeAllowsPose=H(s32,0x1248)!=13;
     configuration=*(s32*)(D_L22_0026460C+D_00139568[H(s32,0x1248)]*0xE0);
+    typeAllowsPose=typeAllowsPose && configuration;
     poseAvailable=0;
-    if (typeAllowsPose && configuration) poseAvailable=H(u8,0x22BA)!=0;
+    if (typeAllowsPose) poseAvailable=H(u8,0x22BA)!=0;
     func_L00_00341FA8(H(void*,0x630),HP(0x80),HP(0x5D0),HP(0x634),HP(0x638),H(s32,0x654),999.0f,2.0f,2.5f);
     if (H(s32,0x660))
         func_L00_00341FA8(H(void*,0x664),HP(0x80),HP(0x610),HP(0x668),HP(0x66C),H(s32,0x670),999.0f,2.0f,2.5f);
@@ -1610,7 +1641,7 @@ case 0x27: case 0x28: case 0x29: case 0x2A: case 0x3E:
             float horizontal=func_00282E20(HP(0x110));
             D_L22_0025DEF0=func_00283248(horizontal,H(float,0x118));
         }
-        if (typeAllowsPose && configuration) {
+        if (typeAllowsPose) {
             float poseScale=0.3f;
             func_L00_002AB0F0(0.017f,0.3f);
             func_L00_002AB0C0(0.027f,poseScale);
@@ -2180,7 +2211,10 @@ case 0x63:
 
 
 case 0x3C: case 100:
-    func_00282C88(HP(0xF0));goto finish;
+    func_00282C88(HP(0xF0));
+    if (entry_substate != H(int, 0x2298)) H(int, 0x1C0) = 0;
+    if (entry_animation != entry_object[0x43]) H(int, 0x1C4) = 0;
+    return;
 
 
 case 0x65:

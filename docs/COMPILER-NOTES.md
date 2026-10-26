@@ -15,15 +15,15 @@ linked build.
 
 Check the current RAC1 source **and its active build inputs** before rejecting a
 source method or adding a compiler mechanism. At revision
-[`b7d23028`](https://github.com/OpenRAC/rac1-decomp/tree/b7d2302814e50be29b8cd2848d21f47c4c5740d4),
+[`e7e787ed`](https://github.com/OpenRAC/rac1-decomp/tree/e7e787ed94f0d56c1ab617e7abdb83ac6db787ec),
 `config/text.objects` and `Makefile.sn` include these examples:
 
-- [`movie/vobuf.c`](https://github.com/OpenRAC/rac1-decomp/blob/b7d2302814e50be29b8cd2848d21f47c4c5740d4/src/game/movie/vobuf.c#L68)
-  and [`hud.c`](https://github.com/OpenRAC/rac1-decomp/blob/b7d2302814e50be29b8cd2848d21f47c4c5740d4/src/game/hud.c#L469)
+- [`movie/vobuf.c`](https://github.com/OpenRAC/rac1-decomp/blob/e7e787ed94f0d56c1ab617e7abdb83ac6db787ec/src/game/movie/vobuf.c#L68)
+  and [`hud.c`](https://github.com/OpenRAC/rac1-decomp/blob/e7e787ed94f0d56c1ab617e7abdb83ac6db787ec/src/game/hud.c#L469)
   use volatile memory fields to retain reloads. Such a field need not be MMIO:
   establish the actual access widths, offsets and ordering from the retail body.
   A synthetic volatile local or extra access is not equivalent evidence.
-- [`map.c`](https://github.com/OpenRAC/rac1-decomp/blob/b7d2302814e50be29b8cd2848d21f47c4c5740d4/src/game/map.c#L640)
+- [`map.c`](https://github.com/OpenRAC/rac1-decomp/blob/e7e787ed94f0d56c1ab617e7abdb83ac6db787ec/src/game/map.c#L642)
   declares the same target with different integer/FP interleavings. The EE assigns
   the two banks independently. A typed interleaving may change argument setup
   scheduling while preserving the call, provided order, count and widths within
@@ -302,6 +302,14 @@ matter; neither `sda` nor `nosda` is a universal opcode selector:
 - A body using both GP and absolute forms needs measured declarations/bindings,
   not a guessed global rule. Split-address uses can keep `%hi` in a saved register
   and add `%lo` at each use (`src/levels/shared/L00_002C2DE8.c`).
+  In retained `func_L01_003B5878` at `-G8`, one `MACRO_ADDR` declaration emits
+  an ordinary absolute load and a GP delay-slot load of the same frame counter.
+  Both retail addresses independently resolve to `0x001B2088` in both USA
+  releases. An additional C declaration with the same assembler name and
+  explicit `sda` instead forces both uses to GP. Adding `MACRO_ADDR` while
+  retaining that alias is object-neutral; removing the alias restores the
+  measured mix. Prefer a single truthful declaration before inventing bindings.
+  This fixes those accesses, not the full caller: it remains nonmatching.
 - Base evaluation and pointer construction can have different orders. In
   `func_002980D0`, forming both bases first and then the pointers preserves both.
 

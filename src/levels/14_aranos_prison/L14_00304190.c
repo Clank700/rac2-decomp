@@ -170,7 +170,7 @@ void func_L14_003CB608(char *self) {
 
 INCLUDE_ASM("asm/levels", func_L14_003CB868);
 
-INCLUDE_ASM("asm/levels", func_L14_003D18C8);
+/* func_L14_003D18C8 is defined in L14_003D18C8.c. */
 
 INCLUDE_ASM("asm/levels", func_L14_003D54A8);
 
