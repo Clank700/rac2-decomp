@@ -229,11 +229,105 @@ void func_002BF8F0(char *self)
 }
 
 
-INCLUDE_ASM("asm/game", func_002BFC50);
+static __inline__ void qcopy(void *dst, const void *src) {
+    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)"
+                         : : "r"(dst), "r"(src) : "$2", "memory");
+}
+
+extern int func_002761F8(void *, void *, int, void *, void *);
+extern int func_00278E78(void);
+extern void *func_002C19D8(void *, float, void *, float, int);
+extern void func_002C3D80(void *, int, float, float);
+typedef union { unsigned char b[0x2600]; int i[0x980]; float f[0x980]; } L_BFC50Hero;
+extern char D_00189E20[];
+extern void *D_001A9E74 __attribute__((section(".sdata")));
+extern float D_001BAF80[];
+extern char D_001BAFA0[];
+
+void func_002BFC50(char *self)
+{
+    char *s1 = self + 0x20;
+    float vec[4] __attribute__((aligned(16)));
+    int state = *(int *)(s1 + 0x10);
+
+    if (state == 0) {
+        func_00282CC0(self + 0x10, self + 0x10, s1);
+    } else if (state == 1) {
+        func_00282CC0((char *)vec, self + 0x10, s1);
+        if (func_002761F8(self + 0x10, vec, 2, 0, 0) == 0) {
+            goto copy;
+        }
+        if (func_00278E78() == 0) {
+            func_002C19D8(D_001BAFA0, 0.2f, D_001A9E74, 5250.0f, -1);
+        }
+        func_002B9180(self);
+        return;
+    } else if (state == 3) {
+        func_00282CC0(self + 0x10, self + 0x10, s1);
+        if (*(float *)(self + 0x18) < ((L_BFC50Hero *)D_00189E20)->f[0x330 / 4]) {
+            void *t = D_001A9E74;
+
+            *(float *)(self + 0x18) = ((L_BFC50Hero *)D_00189E20)->f[0x330 / 4];
+            func_002C19D8(self + 0x10, 0.2f, t, 5250.0f, -1);
+            func_002B9180(self);
+            return;
+        }
+    } else {
+        func_00282CC0((char *)vec, self + 0x10, s1);
+        if (func_002761F8(self + 0x10, vec, 2, 0, 0) == 0) {
+            goto copy;
+        }
+        if (func_00278E78() != 0) {
+            D_001BAF80[10] = D_001BAF80[10] + 0.05f;
+            func_002C3D80(&D_001BAF80[8], -1, 0.25f, 3150.0f);
+        }
+        func_002B9180(self);
+        return;
+copy:
+        qcopy(self + 0x10, vec);
+    }
+    *(float *)(s1 + 8) = *(float *)(s1 + 8) - *(float *)(s1 + 0x1C);
+    self[8] = self[8] + 2;
+    if (--*(int *)(s1 + 0x14) <= 0 || *(float *)(self + 0x18) < *(float *)(s1 + 0x18)) {
+        *(int *)(self + 4) = *(int *)(self + 4) - 0x10000000;
+        if (*(int *)(self + 4) < 0) {
+            func_002B9180(self);
+        }
+    }
+}
 
 /* func_002BFE80 is defined in 002BFE80-dbg.c. */
 
-INCLUDE_ASM("asm/game", func_002BFFE8);
+extern void func_00282CF0(void *, void *, void *);
+extern float func_00282DF0(void *);
+extern void func_00282D30(void *, void *, float);
+extern void func_00282F20(void *, void *, float);
+extern int func_L00_0031C998(int, int, float);
+extern char D_001B5340[];
+extern int abs(int);
+
+void func_002BFFE8(char *self)
+{
+    char *s1 = self + 0x20;
+    float vec[4];
+    int d;
+    float f;
+
+    if (func_00282978((short *)(self + 0xA)) != 0) {
+        func_002B9180(self);
+        return;
+    }
+    func_00282CF0(vec, D_001B5340, s1);
+    if (func_00282DF0(vec) > 5.0f) {
+        func_00282F20(vec, vec, 1.25f);
+    } else {
+        func_00282D30((char *)vec, (char *)vec, 0.25f);
+    }
+    func_00282CC0((char *)(self + 0x10), s1, (char *)vec);
+    d = abs(*(short *)(self + 0xA) - *(int *)(s1 + 0x14));
+    f = (float)(*(int *)(s1 + 0x14) - d) / (float)*(int *)(s1 + 0x14);
+    *(int *)(self + 4) = func_L00_0031C998(0, *(int *)(s1 + 0x10), f);
+}
 
 
 INCLUDE_ASM("asm/game", func_002C01F8);
@@ -294,7 +388,67 @@ void func_002C1840(char *self)
     *(float *)(self + 12) = *(float *)(self + 12) + *(float *)(s1 + 20);
 }
 
-INCLUDE_ASM("asm/game", func_002C19D8);
+typedef struct {
+    float vx;
+    float vy;
+    int f8;
+    int fC;
+    float spin;
+    void *owner;
+} L_C19D8Payload;
+typedef struct {
+    unsigned char b0, b1, b2, b3;
+    int color;
+    unsigned char seed, alpha;
+    unsigned short size;
+    float life;
+    float position[4];
+    L_C19D8Payload payload;
+} L_C19D8Particle;
+extern void *func_002B9030(int);
+extern int func_00283CF0(float);
+extern int func_002A77E0(int);
+extern int func_001163B0(void);
+extern float func_002A7940(void);
+extern float func_002A7878(float, float);
+extern float func_00283180(float);
+extern float func_00283198(float);
+extern unsigned char *D_001F25F4;
+
+void *func_002C19D8(void *position, float size, void *owner, float spin, int color)
+{
+    L_C19D8Particle *p = (L_C19D8Particle *)func_002B9030(0x2D);
+    L_C19D8Payload *out;
+    float angle;
+    float speed;
+    int c;
+
+    if (p) {
+        qcopy(p->position, position);
+        if (color == -1) {
+            c = ((func_002A77E0(6) + 0x14) << 24) | 0x808080;
+        } else {
+            c = color;
+        }
+        out = &p->payload;
+        p->color = c;
+        p->alpha = func_00283CF0(1.0f) + 32;
+        p->b3 = 0x48;
+        p->b1 = 1;
+        p->b2 = *D_001F25F4;
+        p->seed = func_001163B0();
+        p->size = 4;
+        p->life = size * 210000.0f;
+        angle = func_002A7940();
+        speed = func_002A7878(0.0015f, 0.0025f);
+        p->payload.vx = func_00283180(angle) * speed;
+        out->vy = func_00283198(angle) * speed;
+        out->owner = owner;
+        out->spin = spin;
+        out->f8 = 0;
+    }
+    return p;
+}
 
 /* func_002C1B38 is in the -G8 sibling. */
 

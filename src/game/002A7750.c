@@ -204,7 +204,41 @@ float func_002A7AA8(float a, float b, float c, float d, float t) {
     return p * t3 + q * t2 + (c - a) * t + b;
 }
 
-INCLUDE_ASM("asm/game", func_002A7AE0);
+static __inline__ void qcopy(void *dst, const void *src) {
+    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)"
+                         : : "r"(dst), "r"(src) : "$2", "memory");
+}
+
+void func_002A7AE0(f32 *out, f32 *a, f32 *b, f32 *c, f32 *d, float t)
+{
+    f32 t2;
+    f32 t3;
+    f32 k1, k2, k3;
+
+    if (t == 0.0f) {
+        qcopy(out, a);
+        return;
+    }
+    if (t == 1.0f) {
+        qcopy(out, b);
+        return;
+    }
+    t2 = t * t;
+    t3 = t2 * t;
+    k3 = (d[0] - b[0]) - (c[0] - a[0]);
+    k2 = (c[0] - a[0]) - k3;
+    k1 = b[0] - c[0];
+    out[0] = k3 * t3 + k2 * t2 + k1 * t + a[0];
+    k3 = (d[1] - b[1]) - (c[1] - a[1]);
+    k2 = (c[1] - a[1]) - k3;
+    k1 = b[1] - c[1];
+    out[1] = k3 * t3 + k2 * t2 + k1 * t + a[1];
+    k3 = (d[2] - b[2]) - (c[2] - a[2]);
+    k2 = (c[2] - a[2]) - k3;
+    k1 = b[2] - c[2];
+    out[2] = k3 * t3 + k2 * t2 + k1 * t + a[2];
+    out[3] = 0.0f;
+}
 
 /* Eased scalar interpolation between a and b: returns a for t==0.0, b for t==1.0, otherwise a + (b-a)*((1-cos(t*pi))*0.5). */
 f32 func_002A7C00 (f32 a, f32 b, f32 t)
