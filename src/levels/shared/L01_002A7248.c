@@ -161,7 +161,6 @@ void func_L01_002A84D8(void) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L01_002A8C48);
 
 void func_L01_002A9298(void) {
     char *b = D_L01_00189E20;

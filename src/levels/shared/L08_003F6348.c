@@ -1,18 +1,4 @@
-/* 0 of 2 places match - last line: 08_tabora and 17_smolg: instruction at +0x60 differs
-   (544 bytes, the same size as retail). The state-4 guard, the aim helper's distance
-   and its per-frame step, the 0x78/0x7C turn pair scaled through func_L08_0032A4D0 (the
-   16-byte input block is a TImode copy of s2+0x10 and the helper's float result is
-   the first half of a four-float local, index 0 in the turn branch and index 1 in the
-   state-4 branch), the 1.0f <= distance test with its func_002A7470(self, 2, 0, 0),
-   the state-4 flags/0xFA/0xB0/0xB4 stores and the func_002A6C58 tail all match.
-   Remaining difference: at +0x60 the outer `0.0f < distance` branch delay slot holds
-   `addiu $a1,$s0,0x50` in retail (the false path calls func_002AB8C0 with s0 + 0x50)
-   where this C gives `addiu $v0,$zero,0xFF`, and the final `sb self[0xA8]` /
-   `a1 = s0` order in the func_002AB8C0 block is swapped with it. Written as a shared
-   tail with `s0 += 0x50` in both arms the cc1 emits a bc1fl and 552 bytes; as two
-   separate tails it does not merge and gives 568. Next: a source shape that makes
-   the false path pass `s0 + 0x50` while the true path increments s0 and both share
-   one func_002AB8C0 call. */
+/* Aim-helper step: the shared func_002AB8C0 tail takes self + 0x50 on both paths. */
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef short s16;
@@ -72,10 +58,9 @@ void func_L08_003F6348(char *self, char *a1)
                 func_002A7470(self, 3, 0, 0);
             func_002A6C58(self, 0, 3);
         }
-        s0 += 0x50;
-        func_002AB800(self, s0);
+        func_002AB800(self, s0 + 0x50);
     }
     *(u8 *)(self + 0xA8) = 0xFF;
-    func_002AB8C0(self, s0);
+    func_002AB8C0(self, s0 + 0x50);
 }
 
