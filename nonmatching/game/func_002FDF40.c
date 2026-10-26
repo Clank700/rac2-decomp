@@ -1,13 +1,16 @@
 /* Manual reconstruction; not linked. Profile: -O2 -G8 -ffunction-sections -frac2-qcopy
  * -frac2-qcopy-barrier -g (split addresses; the earlier -mno-split-addresses trial was wrong).
- * 1620/1628 bytes, us 0/28. 26 October 2026 (M10): hero fields through the Hero union view
+ * 1628/1628 bytes, us 0/28. 26 October 2026 (M10): hero fields through the Hero union view
  * (retail's lui/addiu base + offset), D_00138320 outside small data, D_001B5340/D_001B5570 one
  * object (retail derives 0x1B5340 as the 0x1B5570 register - 0x230), and both if/else chains with
- * the complex arm first. Left: (1) retail's two-nop div.s floor after the func_00282DF0 call:
- * cc1 emits a line label right before that div.s, but our assembler model does not pad a label
- * that follows a .set noreorder call block (pad_div_erratum_nops.py) -- an assembler-model gap,
- * not source; (2) the prologue move order of sourceObject () against acceleration ();
- * (3) a few argument-move orders and clamp branch targets that follow from (1).
+ * the complex arm first. 26 October 2026 (integrate/holds): with the division label floor after
+ * a call (rule D, pad_div_erratum_nops.py) and the duration's call and division as two statements,
+ * the size is retail's and the pair before that div.s is in place; the jal at +0x1A8 is
+ * func_0026F748. Left: (1) the prologue move order of sourceObject () against acceleration ();
+ * (2) the camera-basis block's call/argument order near +0x1F4; (3) the reach clamp's branches
+ * target the div.s, where retail's label sits on the first of its two pad nops (the old and the
+ * new assembler give the same bytes there, so that is the branch-group padding rule, not rule D);
+ * (4) the gravity/reciprocal block's operand order near +0x58C.
  */
 typedef unsigned char u8;
 typedef int Quad __attribute__((mode(TI)));
@@ -21,7 +24,7 @@ extern float D_001B5340[];
 #define CAMERA_BASIS (&D_001B5340[0x230 / 4])
 extern void func_00282D30(void *,void *,float);
 extern void func_002AFFD8(char *,char *,int);
-extern unsigned int ref_002FDF40_00(int,int);
+extern unsigned int func_0026F748(int,int);
 extern void func_00282F20(void *,void *,float);
 extern float func_00282DB0(void *,void *);
 extern void func_00282CF0(void *,void *,void *);
@@ -66,7 +69,7 @@ void func_002FDF40(Vector *output, Vector *origin, char *targetObject,
     else func_002AFFD8((char *)&sourcePosition,(char *)&normal,0);
     reach=maximum;
     if(!targetObject) {
-        if(H->i[0x2294/4]==1) ref_002FDF40_00(29,1);
+        if(H->i[0x2294/4]==1) func_0026F748(29,1);
         if((D_00138320&4)!=0 && H->b[0x22bc]==0) {
             func_00282F20(&forward,CAMERA_BASIS,1.0f);
             func_00282D30(&temporary,&normal,func_00282DB0(&forward,&normal));
@@ -117,7 +120,8 @@ void func_002FDF40(Vector *output, Vector *origin, char *targetObject,
     func_00282D30(&temporary,&normal,func_00282DB0(&displacement,&normal));
     func_00282CF0(&projected,&displacement,&temporary);
     func_00282F20(output,&projected,speed);
-    duration=func_00282DF0(&projected)/speed;
+    duration=func_00282DF0(&projected);
+    duration=duration/speed;
     reciprocal=1.0f/duration;
     func_00282D30(&originProjection,&normal,func_00282DB0(origin,&normal));
     func_00282D30(&targetProjection,&normal,func_00282DB0(&target,&normal));

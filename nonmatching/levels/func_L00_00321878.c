@@ -9,10 +9,9 @@
  *
  * Status: 2920 of 2988 bytes, 730/747 instructions;
  * the control flow, call sequence, stack frame and spill slots agree. Left:
- *  - the (double)0.1f printf argument: cc1 emits `li.d $5,...`; retail synthesizes it
- *    inline (ori/dsll/ori/dsll) while this tree's gas pools it (lui/ld). Needs the
- *    opt-in `-Wa,--r5900-inline-li-d` from branch compiler/gas-inline-li-d (a644b0af):
- *    with `-O2 -G0 -ffunction-sections -Wa,--r5900-inline-li-d` the four words match.
+ *  - the (double)0.1f printf argument now matches: retail's inline ori/dsll/ori/dsll is
+ *    the assembler's default since integrate/holds (li.d into GPRs); measured 26 October
+ *    2026, 2920/2988 bytes at -O2 -G0 -ffunction-sections, the four words in place.
  *  - D_L00_001B1CE0[b0] index: the address temporary and the loaded byte swap v1/a0.
  *  - local-alloc order in the five capped split steps (constant v0/v1 against the
  *    compare result).
