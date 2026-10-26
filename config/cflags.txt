@@ -932,3 +932,4 @@ src/game/002E3478-g8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_00368F58-dbg.c	-O2 -G0 -ffunction-sections -g
 src/levels/09_dobbo/L09_003FEA48-zp-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
 src/game/0031F210-q.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por
+src/levels/18_damosel/L18_00430E58.c	-O2 -G0 -ffunction-sections -frac2-keep-block-order -frac2-hazard-labels
