@@ -1,30 +1,19 @@
-/* Nonmatching (Opus big20 handoff, 2026-10-26): 2577/2578 instructions (10308/10312 bytes),
- * 2566/2578 opcodes and 2556 full instructions aligned against L11 retail, frame 0x110.
- * Profile: own unit src/levels/11_joba/L11_0042F018-g8.c with the default -g8 flags
- * (-O2 -G8 -ffunction-sections); remove its INCLUDE_ASM from L11_00425F10.c. -g changes nothing.
- * What got it there (from 0.875): Hero union view of D_00189E20 for every hero access;
- * switch bodies in retail address order (0,1,2,4,3 / 1,2,3,5,6,7,13,11,12,14,15,19,20,27,
- * 16..25); then-arm-first spellings and cross-jumped tails written per arm; stack-slot reuse:
- * an addressed block local is kept until the end of the block one level up from its last
- * expression statement, so each case's vectors/requests sit in an inner block (case 19/20/27),
- * v0/v10 are declared in the enclosing block of the two AEB60 arms, and the 3..9 block is the
- * m2c nesting (t >= 3) { (t < 9) { (0x42 == 0xA) {...} } }; qcopy() where retail materialises
- * both addresses (0x110 copy, light records, scaled = dir); data + 0x230/0x240/0x250 written
- * as expressions so gcse makes retail's copies; light-record store order found by search
- * (1C,0,4,18,8,C gives retail's C,1C,0,4,18,8 / C,1C,0,18,4,8 in all four records).
- * Still different:
- *  - case 15 else arm: retail computes arg0+0x10 in $v0 and copies it to $a0 and $s0 (gcse
- *    copy after the argument move); here the value is computed straight into $a0 and the
- *    copy goes to $s1 (one instruction short, and s0/s1 swapped for the hero pointer).
- *  - 3..9 and 9..15 blocks: argument setup of the five func_002C2210 calls: retail moves the
- *    FP arguments that come from callee-saved registers (f13 = f, f12 = f*0.4f) right after the
- *    preceding mul.s, before the integer moves; this cc1 puts them after the integer moves.
- *    Statement orders, inline vs local products, -g, the qcopy/gcse profile flags and every
- *    int/FP interleaving of the prototype were tried (interleavings break the matched calls in
- *    case 18). Looks like a sched tie or FP-move priority difference in the model.
- */
-
 #include "common.h"
+
+/* func_L11_0042F018: the level's state-machine update (switch on 0x95), twin of func_L04_003E2438.
+   Its own -G8 unit with -frac2-hazard-labels (retail keeps the branch label on the mtc1 hazard
+   nop before the 9.0f compare). What it took:
+   - the hero block through the Hero union view; switch bodies in retail address order;
+     addressed block locals scoped so their stack slots are reused as retail does;
+   - func_002C2210 declared with its float parameters interleaved
+     (pos, size, f, f, color, mode, flag, vector, f, counter) and func_00277F48 as
+     (pos, f, flag, obj, req): EABI passes floats in their own registers, so only the
+     parameter order of the argument moves changes, and retail's order of those moves
+     follows this prototype;
+   - arg0 + 0x10 written out at each use in the 0x60 & 2 / 0x2AC|0x27C block instead of a
+     local, so gcse gives the expression one reaching register with several sets; with a
+     single set sched1's birthing-insn priority boost puts the reaching copy before the
+     argument move and local-alloc ties the value to $a0 (retail: $v0, copied to $a0 and $s0). */
 
 typedef int TI128 __attribute__((mode(TI)));
 typedef union { u8 b[0x2600]; s16 h[0x1300]; s32 i[0x980]; f32 f[0x980]; void *ptr[0x980]; } Hero;
@@ -70,13 +59,13 @@ extern f32 func_00283180(f32 a0);
 extern f32 func_00283198(f32 a0);
 extern void func_00282D30(void *, void *, f32);
 extern void func_002A8C00(void *, void *, s32, f32, void *);
-extern s32 func_00277F48(f32, void *, s32, void *, void *);
+extern s32 func_00277F48(void *, f32, s32, void *, void *);
 extern void func_00282CC0(void *, void *, void *);
 extern void func_00282CF0(void *, void *, void *);
 extern void func_00282F20(void *, void *, f32);
 extern s32 func_L02_00331440(u8 *, void *, f32, s32, f32, f32);
 extern f32 func_0029F530(u8 *);
-extern void func_002C2210(void *, u32, u32, u32, s32, void *, f32, f32, f32, s32);
+extern void func_002C2210(void *, u32, f32, f32, u32, u32, s32, void *, f32, s32);
 extern s32 func_002A8D70(void *, f32, f32, s32, s32, f32, s32, s32, s32);
 extern s32 func_002AEB60(u8 *, f32);
 extern void func_L00_003294F0(u8 *, s32);
@@ -396,7 +385,7 @@ void func_L11_0042F018(u8 *arg0) {
         req[0x19] = 1;
         *(u16 *)(req + 0x1A) = *(u16 *)(arg0 + 0xAA);
         req[0x18] = 0;
-        func_00277F48(1.3f, pos, 0, arg0, req);
+        func_00277F48(pos, 1.3f, 0, arg0, req);
         }
         break;
     }
@@ -441,7 +430,7 @@ void func_L11_0042F018(u8 *arg0) {
         req[0x19] = 1;
         *(u16 *)(req + 0x1A) = *(u16 *)(arg0 + 0xAA);
         req[0x18] = 0;
-        func_00277F48(1.3f, pos, 0, arg0, req);
+        func_00277F48(pos, 1.3f, 0, arg0, req);
         }
         break;
     }
@@ -513,8 +502,8 @@ void func_L11_0042F018(u8 *arg0) {
             n = func_002A77E0(2);
             if (n == 0)
                 n = n - 1;
-            func_002C2210(v0, 2, 0x804020FF, 0, n, D_L11_001A8F20, f * 0.3f, f, 0.0f, 0);
-            func_002C2210(v0, 2, 0x7F6F6FFF, 1, -n, D_L11_001A8F20, f * 0.04f, f * 0.4f, 0.0f, 0);
+            func_002C2210(v0, 2, f * 0.3f, f, 0x804020FF, 0, n, D_L11_001A8F20, 0.0f, 0);
+            func_002C2210(v0, 2, f * 0.04f, f * 0.4f, 0x7F6F6FFF, 1, -n, D_L11_001A8F20, 0.0f, 0);
             *(f32 *)(data + 0x288) = g;
         }
         if (arg0[0x60] & 2) {
@@ -552,9 +541,7 @@ void func_L11_0042F018(u8 *arg0) {
             func_L11_0042EF90(arg0, 6, 5, 0, 0xA);
         }
         if (arg0[0x60] & 2) {
-            u8 *p = arg0 + 0x10;
-
-            if (func_00282E80(p, &((Hero *)D_00189E20)->f[0x80 / 4]) < 25.0f && *(u8 **)(data + 0x27C) != 0 &&
+            if (func_00282E80(arg0 + 0x10, &((Hero *)D_00189E20)->f[0x80 / 4]) < 25.0f && *(u8 **)(data + 0x27C) != 0 &&
                 *(s32 *)(data + 0x2A0) < 3) {
                 if (func_00283C80(*(f32 *)(arg0 + 0xF8), func_00283248(((Hero *)D_00189E20)->f[0x80 / 4] - *(f32 *)(arg0 + 0x10),
                                                                      ((Hero *)D_00189E20)->f[0x84 / 4] - *(f32 *)(arg0 + 0x14))) > 0.087266475f) {
@@ -564,7 +551,7 @@ void func_L11_0042F018(u8 *arg0) {
                     func_L11_0042EF90(arg0, 9, 6, 0, 0xA);
                     func_002A7750(arg0, 0x12, -1);
                 }
-            } else if (func_00282E80(p, &((Hero *)D_00189E20)->f[0x80 / 4]) > 10.0f && *(u8 **)(data + 0x27C) != 0 &&
+            } else if (func_00282E80(arg0 + 0x10, &((Hero *)D_00189E20)->f[0x80 / 4]) > 10.0f && *(u8 **)(data + 0x27C) != 0 &&
                        *(s32 *)(data + 0x2A0) >= 3 && *(s32 *)(data + 0x2BC) == -1) {
                 func_L11_0042EF90(arg0, 3, 2, 0, 0xA);
                 func_002A7750(arg0, 0x17, -1);
@@ -614,7 +601,6 @@ void func_L11_0042F018(u8 *arg0) {
             } else {
                 s32 k;
                 u8 *l;
-                u8 *p = arg0 + 0x10;
 
                 func_0029FCC0(*(u32 *)(*(u8 **)(*(u8 **)(data + 0x27C) + 0x68) + 0x278), 0, v0);
                 v10[0] = func_00283180(*(f32 *)(arg0 + 0xF8)) * 0.1f;
@@ -626,11 +612,11 @@ void func_L11_0042F018(u8 *arg0) {
                 v10[0] = func_00283180(*(f32 *)(arg0 + 0xF8)) * 25.0f;
                 v10[1] = func_00283198(*(f32 *)(arg0 + 0xF8)) * 25.0f;
                 v10[2] = 0.0f;
-                func_00282CC0(v10, v10, p);
+                func_00282CC0(v10, v10, arg0 + 0x10);
                 func_00282CF0(data + 0x250, v10, v0);
                 *(f32 *)(data + 0x298) = 0.0f;
                 func_L00_003294F0(arg0, 0);
-                k = func_L00_002FCF18(p, 5.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+                k = func_L00_002FCF18(arg0 + 0x10, 5.0f, 0.0f, 1.0f, 0.0f, 0.0f);
                 *(s32 *)(data + 0x2B0) = k;
                 if (k >= 0) {
                     l = D_L11_001C8A40 + (k << 5);
@@ -662,8 +648,8 @@ void func_L11_0042F018(u8 *arg0) {
                 n = func_002A77E0(2);
                 if (n == 0)
                     n = n - 1;
-                func_002C2210(v0, 2, 0x804020FF, 0, n, D_L11_001A8F20, f * 0.3f, f, 0.0f, 0);
-                func_002C2210(v0, 2, 0x7F6F6FFF, 1, -n, D_L11_001A8F20, f * 0.04f, f * 0.4f, 0.0f, 0);
+                func_002C2210(v0, 2, f * 0.3f, f, 0x804020FF, 0, n, D_L11_001A8F20, 0.0f, 0);
+                func_002C2210(v0, 2, f * 0.04f, f * 0.4f, 0x7F6F6FFF, 1, -n, D_L11_001A8F20, 0.0f, 0);
                 *(f32 *)(data + 0x288) = *(f32 *)(data + 0x288) + 1.0f;
             }
         }
@@ -694,16 +680,16 @@ void func_L11_0042F018(u8 *arg0) {
             if (n == 0)
                 n = n - 1;
             qcopy(v30, data + 0x240);
-            f3 = f * 0.3f;
             v30[2] -= 0.1f;
-            func_002C2210(v30, 0x19, 0xFF000080, 0, n, D_L11_001A8F20, f3, f, 0.0f, 0);
+            f3 = f * 0.3f;
+            func_002C2210(v30, 0x19, f3, f, 0xFF000080, 0, n, D_L11_001A8F20, 0.0f, 0);
             n = -n;
             f04 = f * 0.04f;
             f4 = f * 0.4f;
-            func_002C2210(v30, 5, 0x7F6F6FFF, 1, n, D_L11_001A8F20, f04, f4, 0.0f, 0);
-            func_002C2210(v30, 0x14, 0xFF4080FF, 1, n, D_L11_001A8F20, f4, f * 0.2f, 0.0f, 0);
-            func_002C2210(data + 0x230, 0xA, 0x80CA00CB, 0, n, D_L11_001A8F20, f3, f, 0.0f, 0);
-            func_002C2210(data + 0x230, 0xA, 0x7F6F6FFF, 1, -n, D_L11_001A8F20, f04, f4, 0.0f, 0);
+            func_002C2210(v30, 5, f04, f4, 0x7F6F6FFF, 1, n, D_L11_001A8F20, 0.0f, 0);
+            func_002C2210(v30, 0x14, f4, f * 0.2f, 0xFF4080FF, 1, n, D_L11_001A8F20, 0.0f, 0);
+            func_002C2210(data + 0x230, 0xA, f3, f, 0x80CA00CB, 0, n, D_L11_001A8F20, 0.0f, 0);
+            func_002C2210(data + 0x230, 0xA, f04, f4, 0x7F6F6FFF, 1, -n, D_L11_001A8F20, 0.0f, 0);
             func_L00_002E6CF0(func_L11_00431E30, arg0);
             if (*(s32 *)(data + 0x2B0) >= 0) {
                 l = D_L11_001C8A40 + (*(s32 *)(data + 0x2B0) << 5);
@@ -748,11 +734,11 @@ void func_L11_0042F018(u8 *arg0) {
                     n = n - 1;
                 qcopy(v40, data + 0x240);
                 v40[2] -= 0.1f;
-                func_002C2210(v40, 0x19, 0xFF000080, 0, n, D_L11_001A8F20, f * 0.3f, f, 0.0f, 0);
+                func_002C2210(v40, 0x19, f * 0.3f, f, 0xFF000080, 0, n, D_L11_001A8F20, 0.0f, 0);
                 n = -n;
                 f4 = f * 0.4f;
-                func_002C2210(v40, 5, 0x7F6F6FFF, 1, n, D_L11_001A8F20, f * 0.04f, f4, 0.0f, 0);
-                func_002C2210(v40, 0x14, 0xFF4080FF, 1, n, D_L11_001A8F20, f4, f * 0.2f, 0.0f, 0);
+                func_002C2210(v40, 5, f * 0.04f, f4, 0x7F6F6FFF, 1, n, D_L11_001A8F20, 0.0f, 0);
+                func_002C2210(v40, 0x14, f4, f * 0.2f, 0xFF4080FF, 1, n, D_L11_001A8F20, 0.0f, 0);
                 func_L00_002E6CF0(func_L11_00431E30, arg0);
                 if (*(s32 *)(data + 0x2B0) >= 0) {
                     l = D_L11_001C8A40 + (*(s32 *)(data + 0x2B0) << 5);

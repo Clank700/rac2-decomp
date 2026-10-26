@@ -139,7 +139,6 @@ void func_L04_003E22B0(char *a0, int a1, int a2, int a3, int a4)
 
 INCLUDE_ASM("asm/levels", func_L04_003E2338);
 
-INCLUDE_ASM("asm/levels", func_L04_003E2438);
 
 INCLUDE_ASM("asm/levels", func_L04_003E4C00);
 

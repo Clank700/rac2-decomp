@@ -895,3 +895,5 @@ src/levels/10_hrugis_cloud/L10_00425798-flags.c	-O2 -G0 -ffunction-sections -mno
 src/levels/01_oozla/L01_003DBF38-qcopy-barrier.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-gcse -mno-split-addresses
 src/game/002BCB00-zero-ti-barrier.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-barrier
 src/levels/shared/L00_00404168-por.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/levels/11_joba/L11_0042F018-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels
+src/levels/04_barlow/L04_003E2438-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels

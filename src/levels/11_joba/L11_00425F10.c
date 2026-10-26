@@ -114,7 +114,6 @@ void func_L11_0042EF90(u8 *arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L11_0042F018);
 
 INCLUDE_ASM("asm/levels", func_L11_00431860);
 
