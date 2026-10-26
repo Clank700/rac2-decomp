@@ -57,7 +57,7 @@ INCLUDE_ASM("asm/game", func_002E7248);
 
 INCLUDE_ASM("asm/game", func_002E7338);
 
-INCLUDE_ASM("asm/game", func_002E7570);
+/* func_002E7570 is in 002E7018-qcopy.c (grouped lq/sq copies). */
 
 INCLUDE_ASM("asm/game", func_002E76C0);
 
