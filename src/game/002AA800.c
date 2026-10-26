@@ -750,7 +750,7 @@ void func_002AF000(float *p, float a, float b, float c)
 
 INCLUDE_ASM("asm/game", func_002AF0A8);
 
-INCLUDE_ASM("asm/game", func_002AF1D0);
+/* func_002AF1D0 is matched in its own unit, src/game/002AF1D0-qcopy.c (-frac2-qcopy -frac2-qcopy-barrier). */
 
 float func_002AF2E8(char *a0, char *a1, int *a2,
                                        float p1, float p2, float p3, float p4)
