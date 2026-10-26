@@ -1,16 +1,5 @@
-/* Complete retained reconstruction of the 32-record override selector.
- * Measured with -O2 -G8 -ffunction-sections. The default typed-array draft
- * was 1132/1104 bytes; the byte-offset record view below is 1108/1104 on
- * USA v1.01, 0/27 placements. First instruction difference is +0x4:
- * retail keeps the shared pool high address directly in s4, while this
- * draft materializes it in v0 and copies it to s4. Pool/index lifetimes,
- * branch delay slots and the return join also differ; this is not merely
- * one padding word. An unchanged C body with -fno-gcse is 1116 bytes;
- * disabling sched1 and changing scan/declaration spelling were neutral.
- * A positive selected guard plus a named zero produced 1112 bytes.
- * Reopen with a source-level global-address lifetime/coalescing hypothesis
- * supported by an independent control; do not add barriers or register pins.
- */
+/* Camera override selector: expires timed records, picks the highest
+ * priority active one and applies its settings. -O2 -G8 (27 places). */
 #include "include_asm.h"
 
 typedef struct {
@@ -50,12 +39,12 @@ extern float func_00282C48(float);
 
 int func_L00_002D71A0(void)
 {
-    OverrideRecord *scan = (OverrideRecord *)D_L00_001BB9F0;
     int i;
     int priority = -1;
     int selected = -1;
 
-    for (i = 0; i < 32; ++i, ++scan) {
+    for (i = 0; i < 32; ++i) {
+        OverrideRecord *scan = SLOT(i);
         if (scan->active != 0) {
             if (scan->expiry != 0 && --scan->expiry == 0) {
                 func_L00_002D7140(scan);
@@ -70,8 +59,7 @@ int func_L00_002D71A0(void)
         SLOT(selected)->blend < 0.0f)
         func_0026FF08(0, 3, 1.1243411f, 0.005f, 0.2f, 0.0f);
     D_L00_001B1884 = selected;
-    if (selected < 0)
-        return -1;
+    if (selected >= 0) {
 
     if (SLOT(selected)->primary >= 0.0f) {
         func_L00_00424A08(0, SLOT(selected)->primary, 0.001f);
@@ -117,4 +105,6 @@ int func_L00_002D71A0(void)
             SLOT(selected)->timer = SLOT(selected)->reset_timer;
     }
     return selected;
+    }
+    return -1;
 }
