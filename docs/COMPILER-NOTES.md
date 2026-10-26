@@ -201,6 +201,18 @@ matched function changes: `build.py all --strict` is OK with and without the pat
 Control: [test_block_move_loop.py](../tests/test_block_move_loop.py), where a
 four-word store loop keeps its three NOPs.
 
+The padding counts words, as the retail assembler does, for the two 16-byte copies too:
+[count_asm_words.py](../tools/compiler/transformers/count_asm_words.py) counts an asm
+statement by its instruction count (`qcopy` is `lq` plus `sq`) and the grouped
+`rac2_qcopy` pattern by its length of 2. Counted as one, a copy loop got one NOP too many.
+Retail evidence: in levels 0, 4 and 11, 44 seven-word loops holding an `lq`/`sq` pair
+(`lq ; lq ; sq ; sq ; addiu ; bne ; addiu`, `func_00288870`, `func_002DE990`) carry no pad,
+and six-word ones (`lq ; sq ; addiu ; addiu ; bgtz ; addiu`, `func_L00_003ABEC0`) carry
+exactly one. Witness: the three-row matrix copy in `func_L00_0041CB80` (27 places).
+It runs after count_block_move_length.py and extends the same counter condition.
+No matched function changes: `build.py all --strict` is OK with both patches.
+Test: [test_count_asm_words.py](../tests/test_count_asm_words.py).
+
 ### Quadword saves and return slots
 
 Patch 0058 enables `-mastra-quad-saves` per file: all GPR slots widen to TImode and
@@ -959,6 +971,7 @@ oracle, and a same-size draft screen is not a match or current progress.
 | Masks/sign seed | [test_dli_masks.py](../tests/test_dli_masks.py) |
 | Hazard labels | [test_hazard_labels.py](../tests/test_hazard_labels.py), [hazard_labels.s](../tests/fixtures/hazard_labels.s) |
 | Block-move loop padding | [test_block_move_loop.py](../tests/test_block_move_loop.py) |
+| Asm-word loop padding | [test_count_asm_words.py](../tests/test_count_asm_words.py) |
 
 Copy controls cover volatile/unaligned/scalar/quadword memory, calls, integer/FP
 branches, loop placement and complete pairs outside slots. Clear controls cover
