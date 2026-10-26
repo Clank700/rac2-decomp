@@ -367,8 +367,6 @@ void func_L00_0039E5B0(NativeUpdate775View *object)
 INCLUDE_ASM("asm/levels", func_L00_0039E7A8);
 
 
-INCLUDE_ASM("asm/levels", func_L00_0039F300);
-
 INCLUDE_ASM("asm/levels", func_L00_003A09F8);
 
 /* func_L00_003A0C00 is in L00_003A0C00.c. */

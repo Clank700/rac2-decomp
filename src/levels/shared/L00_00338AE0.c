@@ -1,15 +1,4 @@
-/* Bounded manual reconstruction, 2026-10-25; not linked.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * 288/288 bytes; us: 0/22 placements; us2: 0/22 placements; pal: 0/22 placements.
- * An actual payload view beginning at the second vector recovers the saved source/record register
- * reuse and the full prefix through +0xec. The tag-byte load precedes the halfword store, as
- * observed. Only the final integer-id and FP-rate stores remain reversed from +0xf0; equal size is
- * not a match.
- * Reopen with independently justified final payload field/lifetime evidence. An owner-field store
- * view gave identical bytes; avoid declaration permutations or fake dependencies.
- * Original complete variants and allocator diagnostics are preserved privately.
- * No candidate or linked-build credit is claimed.
- */
+/* func_L00_00338AE0 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections). */
 #include "common.h"
 
 typedef int V4 __attribute__((mode(TI)));
@@ -62,8 +51,8 @@ Obj_L00_00338AE0 *func_L00_00338AE0(char *src1, char *src2, s32 a2, f32 value, f
         r = func_002A7878(0.0f, 256.0f);
         payload->random = r;
         o->b8 = func_00283CF0(r);
-        payload->id = a2;
         payload->rate = value2;
+        payload->id = a2;
     }
     return o;
 }

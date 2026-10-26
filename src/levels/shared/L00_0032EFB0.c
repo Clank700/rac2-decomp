@@ -80,7 +80,6 @@ void func_L00_00336548(char *p)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00338AE0);
 
 /* func_L00_00338D28 is matched in L00_00338D28.c (built with -frac2-qcopy). */
 

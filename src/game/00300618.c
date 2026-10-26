@@ -707,8 +707,6 @@ void func_00306040(void *owner, float *position)
 
 
 
-INCLUDE_ASM("asm/game", func_00306318);
-
 
 
 INCLUDE_ASM("asm/game", func_00306680);

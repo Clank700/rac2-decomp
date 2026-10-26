@@ -396,8 +396,6 @@ void func_003355A8(int mode)
 
 INCLUDE_ASM("asm/game", func_003356E8);
 
-INCLUDE_ASM("asm/game", func_00335798);
-
 void func_00335840(void) {
     func_002704D0();
 }

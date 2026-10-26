@@ -1,25 +1,4 @@
-/* 2026-10-25 ADDRESS follow-up: retained best prior C, not matching.
- * Baseline reproduced 800/800 bytes, 0/27 US placements, first difference
- * +0x1F8: four non-relocated call-setup words exchange f15 zero/a2 direction.
- * A truthful attachment-prefix record, approved qcopy, no-sched-spec and
- * no-sched-interblock retain the same residue; no-force-mem gives 792 bytes.
- * A diagnostic compile with allocator dumps was byte-identical to the normal
- * complete object. Saved node/owner/angle/position pseudos map to hard regs
- * 16/17/19/18; direction/limit argument scheduling is the residual concern.
- * Reopen with an evidenced scheduler dependency/call-setup source idiom;
- * preserve the real direction-third helper ABI and all FP inputs.
- */
-/* Retained near miss: 800/800 bytes in US v1.01 and US v2.00, 0/27 places each.
- * No catalogue entry of this name exists in PAL.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * First difference: +0x1F8. Only four words differ: the zero move to f15 and
- * direction 2 in a2 exchange order in the first two func_002AA898 calls.
- * Idle-first AND tests preserve the retail NaN behavior and short-circuit order.
- * Scheduling disabled changes allocation; debug, named common parameters and
- * GCSE disabled leave the same residue. The canonical helper ABI is retained.
- * Reopen with an independently evidenced argument-setup scheduling/source idiom.
- */
-
+/* func_L00_002A5048 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier). */
 #include "include_asm.h"
 
 typedef unsigned char u8;
@@ -27,7 +6,7 @@ typedef int Quad __attribute__((mode(TI)));
 extern u8 D_0018C0D4;
 extern void *func_L00_002A4FE8(int);
 extern float func_00282C48(float);
-extern float func_002AA898(float *, float *, int, float, float, float, float);
+extern float func_002AA898(float *, float, float *, float, float, float, int);
 extern float func_002AA3A8(float *, float *, float, float, float, float);
 extern void func_0029F978(u8 *, unsigned int, u8 *);
 extern void func_0029F9F0(char *, char *);
@@ -68,12 +47,12 @@ void func_L00_002A5048(u8 *node)
     } else {
         angles = (float *)(node + 0x40);
         position = (Quad *)(node + 0x70);
-        func_002AA898(angles, (float *)(node + 0x50), 2,
-                     *(float *)(node + 0x60), *(float *)(node + 0xA4), *(float *)(node + 0xA8), 0.0f);
-        func_002AA898((float *)(node + 0x44), (float *)(node + 0x54), 2,
-                     *(float *)(node + 0x64), *(float *)(node + 0xA4), *(float *)(node + 0xA8), 0.0f);
-        func_002AA898((float *)(node + 0x48), (float *)(node + 0x58), 2,
-                     *(float *)(node + 0x68), *(float *)(node + 0xA4), *(float *)(node + 0xA8), 0.0f);
+        func_002AA898(angles, *(float *)(node + 0x60), (float *)(node + 0x50),
+                     *(float *)(node + 0xA4), *(float *)(node + 0xA8), 0.0f, 2);
+        func_002AA898((float *)(node + 0x44), *(float *)(node + 0x64), (float *)(node + 0x54),
+                     *(float *)(node + 0xA4), *(float *)(node + 0xA8), 0.0f, 2);
+        func_002AA898((float *)(node + 0x48), *(float *)(node + 0x68), (float *)(node + 0x58),
+                     *(float *)(node + 0xA4), *(float *)(node + 0xA8), 0.0f, 2);
         func_002AA3A8((float *)position, (float *)(node + 0x80),
                      *(float *)(node + 0x90), *(float *)(node + 0xA4), *(float *)(node + 0xA8), 0.0f);
         func_002AA3A8((float *)(node + 0x74), (float *)(node + 0x84),

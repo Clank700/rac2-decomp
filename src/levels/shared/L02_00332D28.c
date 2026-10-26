@@ -1,15 +1,4 @@
-/* Retained manual C reconstruction; not linked or counted.
- * Profile: -O2 -G0 -ffunction-sections
- * Retail: 456 bytes; compiled: 456 bytes.
- * Final coverage: us: 0/11; us2: 0/11; pal: 0/11.
- * Residual: 456/456 bytes; all instructions except the two FP/GPR argument setup words at
- * +0x12C/+0x130 agree in every carrying placement. Loop-phase initialization after the
- * real clear fixes the former early clear/loop differences.
- * Reopen: A measured source or scheduler witness for the truthful fourth pointer and fifth
- * float input of func_002AFEB8. Explicit local zero ties; no false prototype, pin or
- * artificial dependency.
-
- */
+/* func_L02_00332D28 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections). */
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
@@ -18,10 +7,10 @@ extern int func_L02_00333218(void *, void *);
 extern void func_00282CF0(void *, void *, void *);
 /* Canonical pointer inputs and float return are explicit. */
 extern float func_002AFF08(char *, char *, char *);
-extern void func_002AFE58(char *, char *, char *, char *, float);
+extern void func_002AFE58(char *, char *, char *, float, char *);
 extern float func_002B0360(char *);
-extern void func_002AFD88(float, float, float, char *, char *);
-extern void func_002AFEB8(char *, char *, char *, char *, float);
+extern void func_002AFD88(char *, char *, float, float, float);
+extern void func_002AFEB8(char *, char *, char *, float, char *);
 extern int func_00282948(void *);
 
 void func_L02_00332D28(char *object, char *data, void *originalPosition, void *scratch, char *transform) {
@@ -44,14 +33,14 @@ void func_L02_00332D28(char *object, char *data, void *originalPosition, void *s
             func_00282CF0(data + 0xA0, object + 0x10, originalPosition);
             speed = func_002AFF08(object, data + 0xA0, transform);
             if (*(float *)(data + 0xB0) < speed)
-                func_002AFE58(object, data + 0xA0, data + 0xA0, transform, *(float *)(data + 0xB0));
+                func_002AFE58(object, data + 0xA0, data + 0xA0, *(float *)(data + 0xB0), transform);
             else
                 *(float *)(data + 0xB0) = speed;
             height = func_002B0360(object + 0x10);
             if (height <= *(float *)(data + 0x90)) {
                 float zero = 0.0f;
-                func_002AFD88(zero, zero, *(float *)(data + 0x90) - height, object, object + 0x10);
-                func_002AFEB8(object, data + 0xA0, data + 0xA0, transform, zero);
+                func_002AFD88(object, object + 0x10, zero, zero, *(float *)(data + 0x90) - height);
+                func_002AFEB8(object, data + 0xA0, data + 0xA0, zero, transform);
             }
             if (*(float *)(data + 0xB0) < *(float *)(data + 0x28) * 0.5f)
                 *(int *)(data + 0x80) += 1;

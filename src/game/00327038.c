@@ -344,7 +344,6 @@ void func_00329630(char *self)
 
 INCLUDE_ASM("asm/game", func_00329768);
 
-INCLUDE_ASM("asm/game", func_00329CB8);
 
 INCLUDE_ASM("asm/game", func_00329DC0);
 

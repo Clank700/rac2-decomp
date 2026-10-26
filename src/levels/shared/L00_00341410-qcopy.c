@@ -1,20 +1,5 @@
-/* Readable C reconstruction, measured 2026-10-23.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * us: 0/27, us2: 0/27, pal: not carried.
- * 580 bytes, retail580. Raw US instruction diff shows three permuted argument moves at +0xF8; relocation derivation stops at that mismatch.
- * Tried: Scalar/vector union and partial owner types, source lifetime/colour store spelling and -g profile. Several final forms tie.
- * Reopen: A demonstrated argument scheduling remedy for the transform call.
- * Historical screening notes follow unchanged. No handwritten-assembly inference.
- */
-
-/* func_L00_00341410 - 580 bytes, 27 places (every level), retail at 0x00341410.
- *
- * Screened, not matched in wave 13 (worker s1): 15 call(s), no $gp-relative small-data
- * access, MMI words [lq $s6 / sq $v1].  The 16-byte copy is retail's
- * materialised-pointer form and the tested source forms folded a constant offset into the
- * lq/sq pair.  Twenty spellings were measured and all of them fold it.  No C was
- * written in this wave.
- */
+/* func_L00_00341410 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier). */
+#include "include_asm.h"
 
 typedef int Quadword __attribute__((mode(TI)));
 typedef union { Quadword q; float f[4]; } Vector;
@@ -55,12 +40,11 @@ unsigned char *func_L00_00341410(ParticleOwner *owner, Quadword *position,
         *(int *)(motion + 0x18) = *(short *)(particle + 0xA);
         *(float *)(particle + 0xC) = scale * 630000.0f;
         if (((float *)position)[3] == -1.0f) {
-            Vector *basis = &owner->position;
             func_00282C88(&direction.q);
             direction.f[3] = 1.0f;
             direction.f[0] = -0.3f;
             func_00283098(&direction, &direction, owner->matrix);
-            func_00282CC0(particle + 0x10, &direction, basis);
+            func_00282CC0(particle + 0x10, &direction, &owner->position);
         } else {
             *(Quadword *)(particle + 0x10) = *position;
         }

@@ -214,8 +214,6 @@ void func_L02_003D4FD0(char *arg0, TI128 *arg1, float arg2, float arg3) {
 
 /* func_L02_003D5118 is matched in L02_003D5118.c (built with -frac2-qcopy -frac2-qcopy-barrier). */
 
-INCLUDE_ASM("asm/levels", func_L02_003D52A8);
-
 void func_L02_003D5570(char *arg0) {
     char *state = *(char **)(arg0 + 0x68);
     char **slots = (char **)(state + 0x2A0);

@@ -1,8 +1,4 @@
-/* Retained plain-C attempt: 336/336 bytes; first difference +0x104.
- * us: 0/27, pal: 0/27, us2: 0/27.
- * Profile: -O2 -G8 -ffunction-sections -g.
- * Only the float target move and velocity-pointer setup exchange order at the correctly declared func_002AA898 call. Do not move direction to a false parameter position. Next: a natural argument-evaluation arrangement.
- */
+/* func_L00_003D5358 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections). */
 typedef int Quad __attribute__((mode(TI)));
 typedef union { Quad q; float v[4]; } Vector;
 extern float func_002A7878(float low, float high);
@@ -24,7 +20,7 @@ extern void func_00282CF0(void *out, void *left, void *right);
 extern void func_00282D30(void *out, void *vector, float scale);
 extern float func_00282DB0(void *left, void *right);
 extern float func_00282DF0(void *vector);
-extern float func_002AA898(float *position, float *velocity, int direction, float target, float acceleration, float damping, float limit);
+extern float func_002AA898(float *position, float target, float *velocity, float acceleration, float damping, float limit, int direction);
 
 
 extern float D_L00_001B03D4 __attribute__((sda));
@@ -54,6 +50,6 @@ void func_L00_003D5358(char *object, void *target, float *velocity, float accele
         angle = 1.5707964f - angle;
         if (func_00282DB0(&difference, *(char **)(base + 0x2290) + 0xd0) < zero)
             angle = -angle;
-        func_002AA898((float *)(object + 0xf8), velocity, 0, angle, acceleration, damping, limit);
+        func_002AA898((float *)(object + 0xf8), angle, velocity, acceleration, damping, limit, 0);
     }
 }

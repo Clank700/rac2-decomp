@@ -236,7 +236,27 @@ int func_00293CA8(int index)
 
 INCLUDE_ASM("asm/game", func_00293F98);
 
-INCLUDE_ASM("asm/game", func_00294070);
+struct SegTable {
+    int pad[0x1C];
+    int cur;
+    int entry[1];
+};
+
+extern struct SegTable ref_00294070_00;
+extern int ref_00294070_01;
+extern int ref_00294070_02 __attribute__((sda));
+extern void func_00293D30(void);
+
+/* Copy one entry of the segment table into its current slot, let the world
+   update run, then store the sum of the two counters there. */
+void func_00294070(int index)
+{
+    struct SegTable *p = &ref_00294070_00;
+
+    p->cur = p->entry[index];
+    func_00293D30();
+    p->cur = ref_00294070_01 + ref_00294070_02;
+}
 
 void func_002940C0(void)
 {

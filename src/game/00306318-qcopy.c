@@ -1,29 +1,6 @@
-/*
- * Retained handwritten near miss; historical evidence only.
- * No linked-image equality or complete retail semantics is established.
- * Compiler: game EE-GCC 2.9-ee-991111b (project profile).
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * Reported final C / retail: 872 / 872 bytes; size equality is not a match.
- * us: 0/28 placements.
- * us2: 0/28 placements.
- * pal: 0/28 placements.
- * Residual: Same size/frame but two adjacent stores differ; no exact claim.
- * Reopening condition: Reopen only after independent source, data-layout, ABI or compiler evidence specifically explains the residual above; then test that single hypothesis. Do not repeat tied source forms or flag sweeps.
- * Where listed, tools/check.py measurements predate retention; no compilation was rerun for this copy.
- */
+/* func_00306318 in its own unit (flags in config/cflags.txt: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier). */
+#include "common.h"
 
-/* Nonmatching ribbon reconstruction, 2026-10-23; 4 bounded meaningful trials.
- * Profile:-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * US/US2/PAL each:872/872 bytes, 0/28, check.py exit 1.
- * The measured frame is 0x1E0. Real packet extents, quadword copies and
- * width-clears are preserved. Remaining differences concern field/store order,
- * scalar lifetimes and allocation; no barrier or false prototype was added.
- * Reopen with measured constructor/store-scheduling evidence. The three packet
- * helpers matched separately; their 64-bit texture handles stay intact.
- */
-
-typedef unsigned char u8;
-typedef unsigned int u32;
 typedef int EffectWord __attribute__((mode(TI)));
 typedef struct { float x, y, z, w; } EffectVector __attribute__((aligned(16)));
 typedef struct {
@@ -71,8 +48,9 @@ void func_00306318(char *owner, float *start, float *end)
     wide.texture = func_0027C878(14);
     wide.mode = 0x0000ff9000000260UL;
     wide.registers = 0x0000008000000048UL;
-    wide.color[0] = wide.color[1] = 0x7f000080;
     wide.primitive = 0;
+    wide.color[1] = 0x7f000080;
+    wide.color[0] = 0x7f000080;
     *(EffectWord *)&thinWidth = 0;
     *(EffectWord *)&wideWidth = 0;
     thinWidth.w=1.0f; wideWidth.w=1.0f;
