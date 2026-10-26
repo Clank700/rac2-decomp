@@ -26,6 +26,7 @@ src/levels/02_maktar_nebula/L02_003DB158-g8.c	-O2 -G8 -ffunction-sections -frac2
 src/levels/02_maktar_nebula/L02_003D47B0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/26_jamming_array/L26_003D4930-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/12_todano/L12_00413CE0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/12_todano/L12_004149B8-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/23_damosel_orbit/L23_0041D0A0-g8.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/02_maktar_nebula/L02_00401BF8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/02_maktar_nebula/L02_003EE938.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
@@ -929,3 +930,5 @@ src/game/002ED948-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-
 src/levels/shared/L01_002B35E8-g8.c	-O2 -G8 -ffunction-sections
 src/game/002E3478-g8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_00368F58-dbg.c	-O2 -G0 -ffunction-sections -g
+src/levels/09_dobbo/L09_003FEA48-zp-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/game/0031F210-q.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -frac2-zero-ti-por

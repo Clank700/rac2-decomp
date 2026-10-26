@@ -87,7 +87,7 @@ void func_003220A8(char *p)
     *(float *)(p + 60) = 1.0f;
 }
 
-INCLUDE_ASM("asm/game", func_00322138);
+/* func_00322138 is in 0031F210-q.c. */
 
 INCLUDE_ASM("asm/game", func_00322340);
 

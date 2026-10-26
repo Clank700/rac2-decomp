@@ -154,6 +154,3 @@ void func_L11_00431E30(u8 *arg0) {
     func_L11_004320F8(s0, v);
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00431EE8);
-
-INCLUDE_ASM("asm/levels", func_L11_004320F8);

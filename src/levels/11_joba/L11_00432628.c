@@ -27,10 +27,6 @@ void func_L11_00434AA8(char *p)
     func_L11_00434D00(p, &v);
 }
 
-INCLUDE_ASM("asm/levels", func_L11_00434AF8);
-
-INCLUDE_ASM("asm/levels", func_L11_00434D00);
-
 INCLUDE_ASM("asm/levels", func_L11_00434F48);
 
 INCLUDE_ASM("asm/levels", func_L11_00435228);
