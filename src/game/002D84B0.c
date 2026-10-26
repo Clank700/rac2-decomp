@@ -1,16 +1,11 @@
-/* Complete manual reconstruction; not linked.
- * Profile: -O2 -G0 -ffunction-sections.
- * us: 0/28 placements; exit 1.
- * us2: catalogue absent (no credit).
- * pal: catalogue absent (no credit).
- * USA compiled 1280 bytes; retail 1316 bytes.
- * Entry save ordering, retained 24-byte rectangle copies and later row/colour lifetimes differ. Reopen with an independently supported source shape for the rectangle copies and full-width colour lifetime.
- */
-
+/* Menu list draw: one text row per entry with selection colours, check boxes and an
+   optional second line. Rows are reread through the list base each time; the
+   check-box globals are macro-addressed. */
+#include "common.h"
 typedef struct { short fields[12]; } MenuTextRectangle;
 extern char *D_001F2854;
 extern char D_00263B50[], D_00264290[], D_00263EF0[];
-extern unsigned char D_001A7A60[], D_001A7BB4;
+extern unsigned char D_001A7A60[] MACRO_ADDR, D_001A7BB4 MACRO_ADDR;
 extern void func_002FC560(unsigned int, unsigned long long);
 extern void func_0027C540(int);
 extern void *func_00115484(void *, int, int);
@@ -24,14 +19,14 @@ extern void func_0028FAB8(int, int, int, int, int, int);
 
 int func_002D84B0(char *object)
 {
-    MenuTextRectangle initial, rectangle;
+    MenuTextRectangle rectangle, initial;
     short *row;
-    char *font = D_00263B50;
     int height = 12, texture = 1, lineHeight, spacing, top;
     int count, index, selected, enabled, text;
     int active = *(char **)(D_001F2854 + 0xE8) == object;
+    char *font = D_00263B50;
     unsigned long textureWord;
-    long colour;
+    int colour;
     if (*(int *)(object + 0x30) & 4) { height = 14; font = D_00264290; texture = 3; }
     if (*(int *)(object + 0x30) & 8) { height = 11; font = D_00263EF0; texture = 2; }
     func_002FC560(66, 68);
@@ -41,8 +36,8 @@ int func_002D84B0(char *object)
     row = *(short **)(object + 0x34);
     count = 0;
     while (row[0]) { row += 6; count++; }
-    spacing = height + 3;
-    if (!(*(int *)(object + 0x30) & 16)) spacing = *(int *)(object + 0x24) / (count + 1);
+    if (*(int *)(object + 0x30) & 16) spacing = height + 3;
+    else spacing = *(int *)(object + 0x24) / (count + 1);
     top = spacing - height / 2;
     func_00115484(&initial, 0, 24);
     initial.fields[0] = 4;
@@ -52,15 +47,15 @@ int func_002D84B0(char *object)
     initial.fields[8] = lineHeight;
     rectangle = initial;
     textureWord = func_0027C878(texture);
-    for (index = 0; (row = *(short **)(object + 0x34) + index * 6)[0]; index++) {
+    for (index = 0; (*(short **)(object + 0x34))[index * 6]; index++) {
         selected = active && *(int *)(object + 0x40) == index;
-        enabled = row[1] != 0;
+        enabled = (*(short **)(object + 0x34))[index * 6 + 1] != 0;
         if (*(int *)(object + 0x30) & 2) colour = (int)0x80F0F0F0u;
         else if (selected) colour = enabled ? (int)0x8020FFFFu : (int)0x80006060u;
         else colour = enabled ? (int)0x80F0F0F0u : (int)0x80303030u;
         if (!(*(int *)(object + 0x30) & 0x10000) && selected && rectangle.fields[5] < 4)
             *(int *)(object + 0x44) -= 4;
-        text = func_00288FB8(row[0]);
+        text = func_00288FB8((*(short **)(object + 0x34))[index * 6]);
         rectangle.fields[4] = (*(int *)(object + 0x30) & 0xA00) ? 32 : 4;
         if (*(int *)(object + 0x30) & 0x400) {
             rectangle.fields[9] = 1;
@@ -73,10 +68,9 @@ int func_002D84B0(char *object)
             func_002D9CF8(15, rectangle.fields[5] + 9, D_001A7A60[index] != 0);
         if (*(int *)(object + 0x30) & 0x800)
             func_002D9CF8(15, rectangle.fields[5] + 9, D_001A7BB4 == *(int *)(*(short **)(object + 0x34) + index * 6 + 2));
-        row = *(short **)(object + 0x34) + index * 6;
         rectangle.fields[5] += rectangle.fields[7];
-        if (row[4]) {
-            text = func_00288FB8(row[4]);
+        if ((*(short **)(object + 0x34))[index * 6 + 4]) {
+            text = func_00288FB8((*(short **)(object + 0x34))[index * 6 + 4]);
             rectangle.fields[4] = 20;
             if (*(int *)(object + 0x30) & 0x20) {
                 int x, y;

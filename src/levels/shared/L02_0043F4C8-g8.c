@@ -1,32 +1,20 @@
-/*
- * Retained complete manual C reconstruction; not linked or counted.
- * Profile: -O2 -G8 -ffunction-sections -frac2-zero-ti-por -g
- * 1480/1484 bytes.
- * us: 0/2 placements; us2: 0/2 placements; pal: absent from catalogue.
- * Residual: The phase union retains all 64 bytes written by 83698. Its tilt angle and three-
- * row rotation die before the inverse phase; the real 0xC0 frame is recovered. The effect
- * +0x50 field is an int32 table index. Position phase scopes improve 1476 to1480 bytes, but
- * pointer allocation, state-1 scheduling and the counter mixed absolute/GP access still
- * differ.
- * Reopen: Independent state-specific pointer and counter-address generation evidence; preserve
- * the full inverse output and the true index guard without fabricated datum aliases.
- * Trial-only source markers and profiles are restored after checking.
- */
-
+/* Hovering object: idle, launch and impact states.
+   The hit counter is one macro-addressed word ($gp only in delay slots), the two
+   spin ranges are (low, high) small-data pairs whose high halves take the macro
+   form, and the player record is read through a pointer local. */
 #include "common.h"
 
 typedef int Quad __attribute__((mode(TI)));
 typedef union { Quad q; float f[4]; } Vector;
-extern int D_L02_001AEC78 __attribute__((sda));
-extern float ref_L02_0043F4C8_1 __attribute__((sda));
-extern float ref_L02_0043F4C8_2 __attribute__((sda));
-extern float D_L02_001B2A54 __attribute__((nosda));
-extern float D_L02_001B2A5C __attribute__((nosda));
+extern int D_L02_001AEC78 MACRO_ADDR;
+/* Two (low, high) spin-rate ranges in small data. */
+extern float ref_L02_0043F4C8_1[] __attribute__((sda));
+extern float ref_L02_0043F4C8_2[] __attribute__((sda));
 extern float ref_L02_0043F4C8_3 __attribute__((sda));
 extern float ref_L02_0043F4C8_4 __attribute__((sda));
 extern float ref_L02_0043F4C8_5 __attribute__((sda));
 extern u8 D_00189E20[];
-extern u8 D_L02_001A8F20[];
+extern u8 D_L02_001A8F20[] MACRO_ADDR;
 extern float func_002A7940(void);
 extern float func_002A78D8(float,float);
 extern int func_002A77E0(int);
@@ -76,8 +64,8 @@ void func_L02_0043F4C8(u8 *object)
         qcopy(effect,object+0x10);
         *(float *)(effect+0x10)=func_002A7940();
         *(float *)(effect+0x14)=func_002A7940();
-        *(float *)(effect+0x18)=func_002A78D8(ref_L02_0043F4C8_1,D_L02_001B2A54)*0.00029088825f;
-        *(float *)(effect+0x1C)=func_002A78D8(ref_L02_0043F4C8_2,D_L02_001B2A5C)*0.00029088825f;
+        *(float *)(effect+0x18)=func_002A78D8(ref_L02_0043F4C8_1[0],ref_L02_0043F4C8_1[1])*0.00029088825f;
+        *(float *)(effect+0x1C)=func_002A78D8(ref_L02_0043F4C8_2[0],ref_L02_0043F4C8_2[1])*0.00029088825f;
         *(int *)(effect+0x40)=0;
         *(float *)(effect+0x4C)=0.104719773f;
         object[0x40]=func_002A77E0((*(u8 **)(*(u8 **)(object+0x24)+0x48))[0x10]);
@@ -96,13 +84,13 @@ void func_L02_0043F4C8(u8 *object)
             workspace.tilt.angles.q=0;
             workspace.tilt.angles.f[0]=*(float *)(effect+0x10);
             workspace.tilt.angles.f[2]=*(float *)(effect+0x14);
-            qcopy(&delta,&workspace.tilt.angles);
+            delta.q=workspace.tilt.angles.q;
             func_002833F0(workspace.tilt.rotation,&delta);
             func_00282D30(position,&workspace.tilt.rotation[1],ref_L02_0043F4C8_5);
             func_00282CC0(position,position,effect);
         }
         if(*(short *)(effect+0x3E)) {
-            if(*(u8 **)(D_00189E20+0x33C)==object && *(int *)(D_00189E20+0x340)) *(short *)(effect+0x3E)=2;
+            u8 *player=D_00189E20; if(*(u8 **)(player+0x33C)==object && *(int *)(player+0x340)) *(short *)(effect+0x3E)=2;
             if(*(short *)(effect+0x3E)==2) {
                 *(float *)(effect+8)-=0.06666667f;
                 if(*(int *)(effect+0x50) && func_L00_003206B8(object+0x10,*(int *)(effect+0x50))) func_002A7750(object,3,-1);
@@ -112,19 +100,18 @@ void func_L02_0043F4C8(u8 *object)
         hit=func_002A9640(object,0x4210000,0);
         if(!hit) break;
         {
-        u8 *position=object+0x10;
         D_L02_001AEC78--;
         *(short *)(effect+0x4A)=func_002A7820(30,60);
         qcopy(effect+0x20,hit+0x10);
         func_00282F20(effect+0x20,effect+0x20,0.25f);
-        func_00282CF0(&delta,hit,position);
+        func_00282CF0(&delta,hit,object+0x10);
         func_00283698(workspace.inverse,object+0xC0);
         func_002830C0(&delta,&delta,workspace.inverse);
         *(float *)(effect+0x30)=-(func_00282C68(delta.f[2],-1.0f,1.0f)*0.069813184f);
         *(float *)(effect+0x34)=func_00282C68(delta.f[1],-1.0f,1.0f)*0.052359886f;
         func_00282D30(&destination,effect+0x20,(float)*(short *)(effect+0x4A));
-        func_00282CC0(&destination,position,&destination);
-        if(func_002761F8(position,&destination,2,0,0)) *(short *)(effect+0x3C)=1;
+        func_00282CC0(&destination,object+0x10,&destination);
+        if(func_002761F8(object+0x10,&destination,2,0,0)) *(short *)(effect+0x3C)=1;
         if(*(short *)(effect+0x3C)) func_002A7750(object,3,-1);
         else func_002A7750(object,2,-1);
         }
@@ -136,7 +123,7 @@ void func_L02_0043F4C8(u8 *object)
         delta.f[2]=0.06666667f;
         workspace.tilt.angles.f[2]=-0.5f;
         func_00282CC0(&workspace.tilt.angles,&workspace.tilt.angles,object+0x10);
-        if(!func_002A77E0(2)) func_L01_002E1680(&workspace.tilt.angles,&delta,1,0x40F0F0F0,1,0.006666667f,0.9f,1.04f);
+        if(!func_002A77E0(2)) func_L01_002E1680(&workspace.tilt.angles,&delta,1,0x40F0F0F0,1,0.0066666673f,0.9f,1.04f);
         *(float *)(object+0xF4)=func_00283B98(*(float *)(object+0xF4),*(float *)(effect+0x30));
         *(float *)(object+0xF8)=func_00283B98(*(float *)(object+0xF8),*(float *)(effect+0x34));
         func_00282CC0(object+0x10,object+0x10,effect+0x20);

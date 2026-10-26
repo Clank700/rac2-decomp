@@ -577,7 +577,6 @@ void func_L00_0038AA40(char *p)
 
 /* func_L00_0038AAD0 is defined in L00_0038AAD0.c. */
 
-INCLUDE_ASM("asm/levels", func_L00_0038ADD0);
 
 INCLUDE_ASM("asm/levels", func_L00_0038B208);
 

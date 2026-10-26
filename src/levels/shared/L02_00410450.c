@@ -119,7 +119,6 @@ void func_L02_0042ED48(u8 *a0) {
 
 /* func_L02_0042EDD0 is matched in L02_0042EDD0-g8.c (built with -frac2-no-annulled-wide-stores -frac2-zero-ti-barrier). */
 
-INCLUDE_ASM("asm/levels", func_L02_0043F4C8);
 
 /* Picks the evasive state the object should take while the resident timer runs. */
 void func_L02_0043FA98(u8 *a0) {

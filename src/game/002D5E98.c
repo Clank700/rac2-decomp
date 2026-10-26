@@ -200,7 +200,6 @@ int func_002D82C8(char *object)
 
 INCLUDE_ASM("asm/game", func_002D8338);
 
-INCLUDE_ASM("asm/game", func_002D84B0);
 
 INCLUDE_ASM("asm/game", func_002D89D8);
 
