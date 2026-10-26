@@ -983,3 +983,4 @@ src/levels/shared/L00_003EE920-g8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L00_004118A8.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/20_yeedil/L20_00442890.c	-O2 -G8 -ffunction-sections
 src/levels/02_maktar_nebula/L02_0040A4A8-gu.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/levels/shared/L00_003918C8-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels

@@ -206,7 +206,6 @@ void func_L00_00391310(char *arg0, char *arg1)
 
 INCLUDE_ASM("asm/levels", func_L00_003914E0);
 
-INCLUDE_ASM("asm/levels", func_L00_003918C8);
 
 INCLUDE_ASM("asm/levels", func_L00_00392530);
 
