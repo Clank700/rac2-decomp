@@ -1,3 +1,13 @@
+/* Opus big19, 2026-10-26: 348/352 bytes (was 340), 86/88 opcodes aligned, profile -O2 -G8
+ * -ffunction-sections. What moved it: func_002AAA00's float (out, f12..f15, in, int) prototype;
+ * one name for D_L20_001B9E80 used twice (retail keeps the base in $s1, %hi in a scratch: the
+ * split form, so no second name is needed); the object and the state's +0x70 pointer read
+ * before the first distance call, the pointer reusing the object's variable, and the 0x160 pair
+ * relative to it (+0x1C0 only for the two final stores); the hero position through a struct.
+ * Left: retail keeps the pair's address (addiu $v0,$s0,0x160) and reads the second float as
+ * 0x4($v0), where cse/combine here fold it to 0x164($s0) whatever the spelling (p[1],
+ * *(float *)((char *)p + 4), p[0] through p), which is the 4 missing bytes; and the $f0/$f1
+ * choice of the object's 0x10/0x14 loads. */
 /* Wave 4 (worker 04): the candidate below is the wave-4 one - 348 bytes against
    the retail's 352, one instruction short.  See the wave-4 note at the end. */
 /* func_L20_00442890 (352 bytes, level 20): near miss, 86 of 88 words differ.
@@ -43,9 +53,9 @@ typedef int s32;
 typedef float f32;
 
 extern char D_L20_001B9E80[];
-extern char D_L20_001B9E80_b[];
 
-extern float D_189E20[];
+typedef struct { char pad[0x80]; float pos[4]; } HeroView;
+extern HeroView D_00189E20;
 
 extern float D_L20_001B2150 __attribute__((sda));
 extern float D_L20_001B2154 __attribute__((sda));
@@ -59,17 +69,17 @@ extern void func_L00_00424A88(int, float, float);
 extern float func_00283248(float, float);
 extern float func_00283B98(float, float);
 extern float func_00283BE0(float, float);
-extern int func_002AAA00(char *, char *, int, float, float, float, float);
+extern float func_002AAA00(void *, float, float, float, float, void *, int);
 
 void func_L20_00442890(char *arg0)
 {
     char *s0 = arg0;
-    char *s1 = (char *)D_L20_001B9E80;
-    char *v1 = *(char **)(s1 + 0x190);
+    char *base = D_L20_001B9E80;
+    char *s1;
     float *p;
     float r, q, w;
 
-    if (*(short *)(v1 + 0x86) != 0) {
+    if (*(short *)(*(char **)(base + 0x190) + 0x86) != 0) {
         return;
     }
     func_L00_00424A08(0, D_L20_001B2158, 0.003f);
@@ -79,18 +89,19 @@ void func_L20_00442890(char *arg0)
         *(unsigned char *)(s0 + 0x95) == 2) {
         return;
     }
-    r = func_00283248(*(float *)(s0 + 0x10) - *(float *)((char *)D_189E20 + 0x80),
-                      *(float *)(s0 + 0x14) - *(float *)((char *)D_189E20 + 0x84));
     s1 = *(char **)(s0 + 0x68);
-    s0 = *(char **)(*(char **)((char *)D_L20_001B9E80_b + 0x190) + 0x70) + 0x1C0;
+    s0 = *(char **)(*(char **)(base + 0x190) + 0x70);
+    r = func_00283248(*(float *)(arg0 + 0x10) - D_00189E20.pos[0],
+                      *(float *)(arg0 + 0x14) - D_00189E20.pos[1]);
     p = (float *)(s0 + 0x160);
-    q = func_00283248(p[0], *(float *)((char *)p + 4));
+    q = func_00283248(*(float *)(s0 + 0x160), *(float *)((char *)p + 4));
     q = func_00283B98(q, 3.1415927f);
+    s0 += 0x1C0;
     w = func_00283BE0(r, q);
-    func_002AAA00((char *)&w, s1 + 0x17F0, 0, 0.0f,
+    func_002AAA00((char *)&w, 0.0f,
                    D_L20_001B2150 * 4.84813745e-06f,
                    D_L20_001B2150 * 4.84813745e-06f,
-                   D_L20_001B2154 * 0.000290888245f);
+                   D_L20_001B2154 * 0.000290888245f, s1 + 0x17F0, 0);
     *(float *)(s0 + 0x1C) = 1.0f;
     *(float *)(s0 + 0x14) = -*(float *)(s1 + 0x17F0);
 }

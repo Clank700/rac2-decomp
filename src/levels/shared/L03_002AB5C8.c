@@ -182,7 +182,6 @@ void func_L03_00393228(unsigned char *a0) {
             func_2B8300(1, 0x3F, a0);
 }
 
-INCLUDE_ASM("asm/levels", func_L03_003A40A0);
 
 int func_L03_003A4978(unsigned char *p) { return p[0x20] == 1; }
 

@@ -598,7 +598,6 @@ int func_L09_003F7A88(char *object, int index) {
     return entry;
 }
 
-INCLUDE_ASM("asm/levels", func_L09_003F7B28);
 
 
 INCLUDE_ASM("asm/levels", func_L09_003F7CE0);
