@@ -264,7 +264,6 @@ void func_L00_003BC998(char *owner, char *arg1)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003BCC10);
 
 extern void func_L00_003BCE28(char *a0, char *a1);
 

@@ -1189,3 +1189,4 @@ src/game/002BDBC0.c	-O2 -G0 -ffunction-sections -g
 src/game/003348A8.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/game/002B0520.c	-O2 -G0 -ffunction-sections -g
 src/levels/shared/L09_003FDD80.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L18_0043FB08-zp.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
