@@ -41,6 +41,73 @@ void func_L10_0042BE20(u8 *a0) {
     func_00301B98(D_L10_0042BEE0, s0);
 }
 
+extern int D_L10_001B13A4 __attribute__((sda));
+typedef struct { int idx; u8 pad[0x28]; int f2C; } G221CD0;
+extern G221CD0 D_L10_00221CD0;
+extern u8 *D_001B2614;
+extern void func_002B7320(void);
+extern void func_L05_0037B210(void);
+extern void func_L05_00379F18(int);
+extern u8 **func_L05_00379EB8(void);
+extern int func_L00_004272A0(void);
+extern void func_L05_0037B280(void *, int);
+extern void func_L05_0037CEE0(void *, void *, f32);
+extern void func_L05_0037D608(void *, void *, f32);
+extern void func_L10_00419188(void *);
+extern void func_L10_00425798(void);
+extern void func_L10_00425410(int, int);
+extern void *func_L05_00379ED0(int);
+extern int func_L10_0037D200(void *);
+extern void func_L10_00423DC8(void *, int);
+extern int func_L05_0037B3A0(void *);
+extern void func_0027D330(int);
+extern void func_L05_00379F48(int);
+extern void func_L10_00423500(void *);
+
+void func_L10_00424290(u8 *a0) {
+    u8 **p;
+    int n;
+    int i;
+    u8 *o;
+    void *v;
+    int r;
+
+    if (D_L10_001B13A4 == 0) {
+        D_L10_001B13A4 = 1;
+        D_L10_00221CD0.f2C = 0;
+        func_002B7320();
+        func_L05_0037B210();
+        func_L05_00379F18(0);
+        p = func_L05_00379EB8();
+        n = func_L00_004272A0();
+        for (i = 0; i < n; i++) {
+            o = p[i];
+            switch (*(short *)(o + 0xAA)) {
+            case 0xCBE:
+                func_L05_0037B280(o, 1);
+                break;
+            case 0xF93:
+                func_L05_0037B280(o, 1);
+                func_L05_0037CEE0(p[i], D_001B2614 + D_L10_00221CD0.idx * 128 + 0x30, 64.0f);
+                func_L05_0037D608(p[i], D_001B2614 + D_L10_00221CD0.idx * 128 + 0x30, 64.0f);
+                func_L10_00419188(p[i]);
+                break;
+            }
+        }
+        func_L10_00425798();
+        func_L10_00425410(0x2D, 12);
+    }
+    v = func_L05_00379ED0(0xF93);
+    r = v ? func_L10_0037D200(v) : 0;
+    if (r == 0) {
+        func_L10_00423DC8(a0, 1);
+    }
+    if (func_L05_0037B3A0(func_L05_00379ED0(0xCBE)) == 0) {
+        func_0027D330(0x1E);
+        func_L05_00379F48(0);
+        func_L10_00423500(a0);
+    }
+
 extern int func_002A7820(int low, int high);
 extern f32 func_002A7878(f32 low, f32 high);
 extern f32 func_002A7940(void);

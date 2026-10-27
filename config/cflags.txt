@@ -1313,3 +1313,13 @@ src/game/002F8768-g16.c	-O2 -G16 -ffunction-sections -Wa,-G16
 src/levels/shared/L00_0040B838-g8.c	-O2 -G8 -ffunction-sections -g
 src/levels/shared/L00_00428CE0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/game/00335C60-nosplit.c	-O2 -G0 -mno-split-addresses -ffunction-sections
+src/levels/12_todano/L12_0041E3E8-g8.c	-O2 -G8 -ffunction-sections -mno-split-addresses -g -frac2-zero-ti-por
+src/levels/12_todano/L12_0041E3E8-split-g8.c	-O2 -G8 -ffunction-sections -g -frac2-zero-ti-por
+src/levels/06_notak/L06_00420548-g.c	-O2 -G0 -ffunction-sections -g -frac2-hazard-labels
+src/levels/14_aranos_prison/L14_003F4F98-zp-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/10_hrugis_cloud/L10_003170D0-zp.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L09_003B6550-zp-g8.c	-O2 -G8 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L09_003F65E0-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels
+src/levels/12_todano/L12_00414028-g8.c	-O2 -G8 -ffunction-sections -frac2-hazard-labels
+src/levels/01_oozla/L01_003D26C0-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L22_003F52D8-g8.c	-O2 -G8 -ffunction-sections -g -frac2-zero-ti-por

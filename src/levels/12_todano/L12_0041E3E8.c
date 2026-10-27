@@ -43,9 +43,9 @@ void func_L12_0041E8F8(u8 *a0) {
 
 INCLUDE_ASM("asm/levels", func_L12_0041EA18);
 
-INCLUDE_ASM("asm/levels", func_L12_0041EDB8);
+/* func_L12_0041EDB8 is defined in L12_0041E3E8-split-g8.c (this unit keeps split addresses). */
 
-INCLUDE_ASM("asm/levels", func_L12_00420660);
+/* func_L12_00420660 is defined in L12_0041E3E8-g8.c. */
 
 /* func_L12_00420838 is defined in L12_00420838-flags-g8.c. */
 
@@ -53,7 +53,7 @@ INCLUDE_ASM("asm/levels", func_L12_00420950);
 
 INCLUDE_ASM("asm/levels", func_L12_00420B78);
 
-INCLUDE_ASM("asm/levels", func_L12_00421110);
+/* func_L12_00421110 is defined in L12_0041E3E8-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L12_004212C0);
 
@@ -140,4 +140,4 @@ INCLUDE_ASM("asm/levels", func_L12_004293A0);
 
 INCLUDE_ASM("asm/levels", func_L12_00429610);
 
-INCLUDE_ASM("asm/levels", func_L12_00429868);
+/* func_L12_00429868 is defined in L12_0041E3E8-g8.c. */
