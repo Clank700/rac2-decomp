@@ -26,7 +26,7 @@ extern s32 D_L22_001AFA00 __attribute__((sda));
 extern s32 D_L22_001AFA04 __attribute__((sda));
 
 /* the object the alternate key aims at */
-extern u8 *D_L22_001AF314;
+extern u8 *ref_L22_003B9128_00;
 
 /* the facing and range limits of the alternate key's aim */
 extern float D_L22_001AF9E4 __attribute__((sda));
@@ -86,7 +86,7 @@ void func_L22_003B9128(u8 *arg0, TI128 *arg1, s32 arg2) {
             return;
         }
         if (D_L22_001A8FF0 != 0) {
-            target = D_L22_001AF314;
+            target = ref_L22_003B9128_00;
             if (target == 0) {
                 *(s32 *)(payload + 0x48) = 0;
             } else if ((hero = (u8 *)D_0018C0B0[0]) == 0) {
