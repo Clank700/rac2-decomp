@@ -325,7 +325,7 @@ void func_002BFFE8(char *self)
 }
 
 
-INCLUDE_ASM("asm/game", func_002C01F8);
+/* func_002C01F8 is in 002BF6F0-c01f8-g8.c. */
 
 /* func_002C02F0 uses the quadword-copy profile in 002C02F0-qcopy.c. */
 
@@ -800,7 +800,7 @@ void func_002C4B10(u8 *a0)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002C4B50);
+/* func_002C4B50 is in 002BF6F0-c4b50.c. */
 
 INCLUDE_ASM("asm/game", func_002C4D18);
 
@@ -923,7 +923,7 @@ void func_002C64D8(char *s1)
                        + (func_00283CF0(func_00282C48(func_00283CE0(*(int *)(s0 + 0xC)) * t)) << 24);
 }
 
-INCLUDE_ASM("asm/game", func_002C65A0);
+/* func_002C65A0 is in 002BF6F0-c65a0.c. */
 
 /* If a probe call on a sub-object returns zero, folds a byte counter into the top byte of a packed word, rebuilds a 16-byte vector from two sub-records for a helper, then clamps a running float against a limit and accumulates two sub-record fields into the object. */
 void func_002C6748(char *obj)
