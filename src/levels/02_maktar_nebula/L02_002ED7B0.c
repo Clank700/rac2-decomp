@@ -329,7 +329,6 @@ u8 *func_L02_003CD5B0(int group) {
 
 INCLUDE_ASM("asm/levels", func_L02_003CFAC8);
 
-INCLUDE_ASM("asm/levels", func_L02_003D0238);
 
 INCLUDE_ASM("asm/levels", func_L02_003D0408);
 

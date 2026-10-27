@@ -1296,3 +1296,4 @@ src/levels/shared/L00_00311080-g.c	-O2 -G0 -ffunction-sections -g
 src/game/002FED90-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/shared/L00_00429048-g8.c	-O2 -G8 -ffunction-sections
 src/game/00332590-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/02_maktar_nebula/L02_003D0238-g8.c	-O2 -G8 -ffunction-sections -mno-split-addresses

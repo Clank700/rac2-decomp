@@ -129,7 +129,6 @@ INCLUDE_ASM("asm/game", func_003281F0);
 
 /* func_003285C0 is matched in its own unit, src/game/003285C0-qcopy.c (-frac2-qcopy -frac2-qcopy-barrier). */
 
-INCLUDE_ASM("asm/game", func_003286D0);
 
 void func_00328758(char *self)
 {
@@ -343,7 +342,6 @@ void func_00329630(char *self)
 INCLUDE_ASM("asm/game", func_00329768);
 
 
-INCLUDE_ASM("asm/game", func_00329DC0);
 
 /* Per frame: scales the value one helper returns by the factor another helper returns, stores both scaled samples and a third sample into a three-float record, and hands the record to a setter with two selector results. */
 void func_00329E60(char *a0)
