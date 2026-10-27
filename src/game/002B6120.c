@@ -161,7 +161,6 @@ int func_002B6318(unsigned char *object)
     return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002B63C0);
 
 INCLUDE_ASM("asm/game", func_002B6480);
 
