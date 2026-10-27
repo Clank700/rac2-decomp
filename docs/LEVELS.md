@@ -108,6 +108,8 @@ Three more rows were corrected on 26 October 2026: `func_00120354` and `func_001
 entry), and `func_0028FF50` skips 8 (a leftover `sw $v0,0x6C($a1)` and a nop after the
 previous body's completed return) in the boot and its 27 level copies, in USA v1.01 and
 v2.00 (PAL has no such row). Each prefix follows a completed `jr $ra` and its delay slot.
+`func_L00_00428EE0` skips 24 bytes of filler in all 15 of its levels and in every release,
+leaving an 8-byte `return 0` method that a data pointer in each level reaches.
 
 Release-specific rows have their own named corrections. `tools/carry.py --entries`
 repairs established extents while retaining their existing identities and kinds,
