@@ -864,8 +864,6 @@ src/game/002BE7E8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-
 src/game/0032B190-dbg.c	-O2 -G0 -ffunction-sections -g
 src/game/002BFE80-dbg.c	-O2 -G0 -ffunction-sections -g
 src/game/0031E560-dbg.c	-O2 -G0 -ffunction-sections -g
-src/levels/03_endako/L03_00384340-g8.c	-O2 -G8 -ffunction-sections -ffast-math
-src/game/002D1E70-g8.c	-O2 -G8 -fno-expensive-optimizations -ffunction-sections -fno-builtin
 src/levels/02_maktar_nebula/L02_0042E988-flags-g8.c	-O2 -G8 -ffunction-sections
 src/levels/shared/L01_00318638-qcopy-barrier.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -g
 src/levels/shared/L01_002C2CF0-keep-block-order.c	-O2 -G0 -ffunction-sections -frac2-keep-block-order
