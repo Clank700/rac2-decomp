@@ -259,8 +259,6 @@ INCLUDE_ASM("asm/levels", func_L05_003CF350);
 
 INCLUDE_ASM("asm/levels", func_L05_003CFAB8);
 
-INCLUDE_ASM("asm/levels", func_L05_003CFB90);
-
 int func_L05_003CFC28(int a0)
 {
     if (a0 == 0x971)

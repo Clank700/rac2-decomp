@@ -1242,3 +1242,4 @@ src/levels/shared/L00_00410508-g64.c	-O2 -G64 -Wa,-G64 -mno-split-addresses -ffu
 src/levels/shared/L00_00428F00-q.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L00_00384D40-g8q.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L00_002F59A8.c	-O2 -G0 -ffunction-sections
+src/levels/19_grelbin/L19_00422178-q.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
