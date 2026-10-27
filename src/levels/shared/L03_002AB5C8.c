@@ -139,7 +139,6 @@ INCLUDE_ASM("asm/levels", func_L03_0038AB30);
 
 /* func_L03_0038B238 is defined in L03_002AB5C8-g8.c (this unit has no $gp access for it). */
 
-INCLUDE_ASM("asm/levels", func_L03_0038B2E8);
 
 void func_L03_0038B390(unsigned char *a0, int a1, int a2, int a3) {
     unsigned char *p = a0;

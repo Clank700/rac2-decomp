@@ -96,7 +96,6 @@ s32 func_L08_00425518(s32 a0) {
     return 1;
 }
 
-INCLUDE_ASM("asm/levels", func_L08_00425568);
 
 extern f32 func_002A7878(f32, f32);
 extern f32 func_00283180(f32);

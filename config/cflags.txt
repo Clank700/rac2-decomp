@@ -1267,3 +1267,5 @@ src/levels/01_oozla/L01_003BC490-qcopy-barrier.c	-O2 -G0 -ffunction-sections -fr
 src/levels/08_tabora/L08_003D3D80-qcopy-barrier.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L08_003CDB38.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L08_003D4600.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L05_00441EA0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L03_0038B2E8.c	-O2 -G0 -ffunction-sections -mno-split-addresses

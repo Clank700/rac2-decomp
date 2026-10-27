@@ -226,7 +226,6 @@ void func_L05_0041C410(char *object)
 
 INCLUDE_ASM("asm/levels", func_L05_0041C708);
 
-INCLUDE_ASM("asm/levels", func_L05_0041C7E8);
 
 /* func_L05_0041D498 is defined in L05_003D33E8-g8.c (this unit has no $gp access for it). */
 

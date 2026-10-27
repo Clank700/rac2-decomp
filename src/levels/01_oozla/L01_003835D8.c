@@ -38,7 +38,6 @@ void func_L01_003A6448(float *arg0, float *arg1) {
         *arg1 = -1.0f;
 }
 
-INCLUDE_ASM("asm/levels", func_L01_003A64F0);
 
 INCLUDE_ASM("asm/levels", func_L01_003A6638);
 
