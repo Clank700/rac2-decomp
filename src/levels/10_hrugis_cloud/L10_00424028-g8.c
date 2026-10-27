@@ -40,3 +40,31 @@ void func_L10_0042BE20(u8 *a0) {
     }
     func_00301B98(D_L10_0042BEE0, s0);
 }
+
+extern int func_002A7820(int low, int high);
+extern f32 func_002A7878(f32 low, f32 high);
+extern f32 func_002A7940(void);
+extern void func_00281EB8(void *at, int kind, unsigned int colour, int count, f32 size,
+                          f32 rate, f32 spin);
+extern f32 func_00283CE0(int);
+extern u8 D_L10_001C7800[];
+
+/* The cloud puff's burst: three layers of particles at the object's position, coloured
+   0x800000, 0x808080 and 0x804040 under random alphas, then the entry of D_L10_001C7800
+   named by D_L10_001B1648 takes half of a value for the first alpha at +0x1C. */
+void func_L10_0042BEE0(u8 *object)
+{
+    int alpha;
+    u8 *entry;
+
+    alpha = func_002A7820(1, 0x80) << 24;
+    object += 0x10;
+    func_00281EB8(object, 0xB, (func_002A7820(0x20, 0x80) << 24) | 0x800000, 1,
+                  func_002A7878(8.0f, 15.0f), 0.01f, func_002A7940());
+    func_00281EB8(object, 0xB, alpha | 0x808080, 1, func_002A7878(4.0f, 12.0f), 0.025f,
+                  func_002A7940());
+    func_00281EB8(object, 0xB, (func_002A7820(0, 0x80) << 24) | 0x804040, 1,
+                  func_002A7878(8.0f, 17.0f), 0.05f, func_002A7940());
+    entry = D_L10_001C7800 + (D_L10_001B1648 << 5);
+    *(f32 *)(entry + 0x1C) = func_00283CE0(alpha >> 24) * 0.5f;
+}
