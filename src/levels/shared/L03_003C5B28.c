@@ -368,7 +368,6 @@ void func_L03_00419818(u8 *a0, u32 a1) {
         func_002A7750(a0, 3, -1);
 }
 
-INCLUDE_ASM("asm/levels", func_L03_00419850);
 
 extern void func_0029F338(u8 *);
 
