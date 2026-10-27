@@ -229,11 +229,6 @@ void func_002BF8F0(char *self)
 }
 
 
-static __inline__ void qcopy(void *dst, const void *src) {
-    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)"
-                         : : "r"(dst), "r"(src) : "$2", "memory");
-}
-
 extern int func_002761F8(void *, void *, int, void *, void *);
 extern int func_00278E78(void);
 extern void *func_002C19D8(void *, float, void *, float, int);
@@ -303,7 +298,7 @@ extern float func_00282DF0(void *);
 extern void func_00282D30(void *, void *, float);
 extern void func_00282F20(void *, void *, float);
 extern int func_L00_0031C998(int, int, float);
-extern char D_001B5340[];
+extern float D_001B5340[];
 extern int abs(int);
 
 void func_002BFFE8(char *self)
