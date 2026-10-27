@@ -212,8 +212,6 @@ extern SibRec128 *D_L07_001B23CC;
 
 INCLUDE_ASM("asm/levels", func_L07_003F8C38);
 
-INCLUDE_ASM("asm/levels", func_L07_003F8CD0);
-
 INCLUDE_ASM("asm/levels", func_L07_003F8D90);
 
 extern void func_002A7470(u8 *a0, s32 a1, s32 a2, s32 a3);

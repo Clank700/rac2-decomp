@@ -163,7 +163,6 @@ void func_L03_0038B390(unsigned char *a0, int a1, int a2, int a3) {
 
 INCLUDE_ASM("asm/levels", func_L03_0038B408);
 
-INCLUDE_ASM("asm/levels", func_L03_0038B4E8);
 
 
 INCLUDE_ASM("asm/levels", func_L03_0038B5D8);

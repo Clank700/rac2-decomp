@@ -1257,3 +1257,5 @@ src/levels/shared/L08_003F6568-g8.c	-O2 -G8 -ffunction-sections
 src/levels/15_gorn/L15_00436C68.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/game/002B6120-hz.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
 src/levels/01_oozla/L01_003CE7D8-g.c	-O2 -G0 -ffunction-sections -g
+src/levels/shared/L05_0037AC40.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L03_0038B4E8-g8q.c	-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

@@ -1,15 +1,11 @@
-/* Near miss from src/levels/shared/L03_002AB5C8.c: the build refuses this body at its
-   place — 184 bytes, expected 192. Kept as a starting point;
-   not linked, not counted. */
-
-/* Standalone declarations recovered from src/levels/shared/L03_002AB5C8.c. */
+#include "include_asm.h"
 typedef int TI128 __attribute__((mode(TI)));
 
 extern int D_001AEF60 __attribute__((sda));
 
 void func_L03_0038B4E8(unsigned char *a0) {
+    unsigned char *p = *(unsigned char **)(a0 + 0x68);
     unsigned char *q = a0;
-    unsigned char *p = *(unsigned char **)(q + 0x68);
     int v;
 
     v = *(int *)(p + 0x9C);
@@ -23,11 +19,11 @@ void func_L03_0038B4E8(unsigned char *a0) {
     *(int *)(p + 0xC0) = 0x80004880;
     *(float *)(p + 0xA4) = 1.0f;
     *(float *)(p + 0xA0) = 0.25f;
-    *(int *)(p + 0x68) = 0x807F0000;
-    *(int *)(p + 0x6C) = 0x8000007F;
     *(int *)(p + 0xA8) = 0;
     *(int *)(p + 0x60) = 0x807F0000;
     *(int *)(p + 0x64) = 0x8000007F;
+    *(int *)(p + 0x68) = 0x807F0000;
+    *(int *)(p + 0x6C) = 0x8000007F;
     q += 0x10;
     *(TI128 *)(p + 0xE0) = *(TI128 *)q;
     *(int *)(p + 0xD8) = -1;

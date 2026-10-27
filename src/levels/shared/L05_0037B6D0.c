@@ -272,8 +272,6 @@ INCLUDE_ASM("asm/levels", func_L05_003CFCF0);
 
 INCLUDE_ASM("asm/levels", func_L05_003CFF90);
 
-INCLUDE_ASM("asm/levels", func_L05_003D02C8);
-
 extern int D_L05_00221D10[];
 
 extern char *D_L05_001B2614 __attribute__((sda));

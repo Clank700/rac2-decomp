@@ -196,8 +196,6 @@ INCLUDE_ASM("asm/levels", func_L04_0032F62C);
 INCLUDE_ASM("asm/levels", func_L04_0032F994);
 
 
-INCLUDE_ASM("asm/levels", func_L04_0033CB08);
-
 /* sched1 hoists the last statement of */
 void func_L04_0033CB88(char *p)
 {
