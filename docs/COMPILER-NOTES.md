@@ -136,6 +136,10 @@ wrong profile with extra operations or knowingly false prototypes.
 | Register addresses and grouped 16-byte transfer | -frac2-qcopy | func_L20_0039E158, func_L20_0039F210, func_00305058 (with -g for the pre-div.s nop pair) |
 | Correct copy, wrong motion across it | -frac2-qcopy-barrier, with qcopy | func_002B5E48, func_002EE988 |
 | Stack quadword zero kept as `por` + `sq` beside a qcopy | -frac2-zero-ti-por | func_L04_0046D6A8 |
+| Absolute load must reuse its destination as address temporary | -mno-split-addresses and assembler symbol model | func_001339B0, func_L20_0043F460, func_L16_00411D00 |
+| Nop pair before div.s (float rounding helper) | -g | func_002AEAE0 |
+| Register addresses and grouped 16-byte transfer | -frac2-qcopy | func_L20_0039E158, func_L20_0039F210, func_00305058 (with -g for the pre-div.s nop pair) |
+| Correct copy, wrong motion across it | -frac2-qcopy-barrier, with qcopy | func_002B5E48, func_002EE988, func_L01_003BC490, func_L08_003D3D80 |
 | Float min/max expands into compare and branch | -ffast-math; optimization level still affects allocation | func_L01_003BD560, func_L00_002EE050 |
 
 `-G8` can change allocation even without GP accesses: `func_L17_003BCBC8` puts

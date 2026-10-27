@@ -688,7 +688,6 @@ int func_002AE730(float *v, int *out)
 
 /* func_002AE8C0 uses the quadword-copy profile in 002AE8C0-qcopy.c. */
 
-INCLUDE_ASM("asm/game", func_002AEAE0);
 
 extern float func_0029F530(void *);
 extern float func_002AEAE0(int, float);
