@@ -103,6 +103,12 @@ the same way. Each prefix follows a completed `jr $ra` and its delay slot, holds
 filler (0xCDCDCDCD) or unreachable leftovers, and every jump, address pair or data pointer that
 reaches the function already targets the shortened entry.
 
+Three more rows were corrected on 26 October 2026: `func_00120354` and `func_00130A8C` skip
+4 bytes (one 0xCDCDCDCD fill word; two data words point at `func_00120354`'s shortened
+entry), and `func_0028FF50` skips 8 (a leftover `sw $v0,0x6C($a1)` and a nop after the
+previous body's completed return) in the boot and its 27 level copies, in USA v1.01 and
+v2.00 (PAL has no such row). Each prefix follows a completed `jr $ra` and its delay slot.
+
 Release-specific rows have their own named corrections. `tools/carry.py --entries`
 repairs established extents while retaining their existing identities and kinds,
 rather than renaming them for the new address or merging identical short methods.

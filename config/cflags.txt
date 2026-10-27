@@ -1301,3 +1301,4 @@ src/levels/shared/L00_002EA668.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit
 src/levels/shared/L04_002CC748-pre.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
 src/levels/shared/L01_002A7248-pre.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
 src/levels/shared/L01_00323310-pre.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
+src/core/00120354.c	sdk -O2 -G2 -ffunction-sections -fexceptions
