@@ -436,7 +436,7 @@ void func_L06_00456EE0(void)
 
 /* func_L06_00456F08 is defined in L06_00456F08.c. */
 
-INCLUDE_ASM("asm/levels", func_L06_00457270);
+/* func_L06_00457270 is in L06_00457270.c: its zeroed vector is a por. */
 
 INCLUDE_ASM("asm/levels", func_L06_004573E8);
 

@@ -83,7 +83,8 @@ INCLUDE_ASM("asm/levels", func_L18_0042B008);
 
 INCLUDE_ASM("asm/levels", func_L18_0043EA90);
 
-INCLUDE_ASM("asm/levels", func_L18_0043EDE8);
+/* func_L18_0043EDE8 lives in the sibling small-data unit (L18_00427BE0-g8.c): its spin limits are read through $gp. */
+
 
 /* func_L18_0043EF40 is written with its sibling func_L18_0043F040 above. */
 

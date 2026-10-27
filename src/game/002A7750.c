@@ -432,7 +432,70 @@ int func_002A8D70(float x, float y, float z, void *object, int bone, int mode, i
 }
 
 
-INCLUDE_ASM("asm/game", func_002A8E20);
+typedef struct {
+    u8 pad0[0x10];
+    f32 pos[4];
+    s32 i20;
+    s32 flags;
+    u8 b28;
+    u8 b29;
+    unsigned short h2A;
+    f32 f2C;
+    s32 i30;
+    f32 f34;
+    u8 *owner;
+    s32 i3C;
+} L_A8E20Entry;
+
+typedef struct {
+    f32 pos[4];
+    s32 i10;
+    s32 flags;
+    u8 b18;
+    u8 b19;
+    unsigned short h1A;
+    f32 f1C;
+    s32 i20;
+    f32 f24;
+} L_A8E20Req;
+
+extern void func_00282C88(void *);
+extern s32 D_001BAF80[];
+extern L_A8E20Entry D_001BF200[];
+
+void func_002A8E20(u8 *m, L_A8E20Req *r)
+{
+    s32 idx = D_001BAF80[5];
+    s32 flags = 0;
+    L_A8E20Entry *e;
+
+    if (m[0xA8] != 0xFF) {
+        L_A8E20Entry *p = &D_001BF200[m[0xA8]];
+
+        if (p->owner == m) {
+            if (p->f2C > r->f1C) {
+                p->flags = p->flags | r->flags;
+                return;
+            }
+            flags = p->flags;
+        }
+    }
+    e = &D_001BF200[idx];
+    func_00282C88(e);
+    qcopy(D_001BF200[idx].pos, r->pos);
+    e->flags = r->flags | flags;
+    e->i20 = r->i10;
+    e->b28 = r->b18;
+    e->b29 = r->b19;
+    e->h2A = r->h1A;
+    e->f2C = r->f1C;
+    e->f34 = r->f24;
+    e->i30 = r->i20;
+    e->owner = m;
+    e->i3C = 0;
+    m[0xA8] = idx;
+    D_001BAF80[5] = (idx + 1) & 0x3F;
+}
 
 INCLUDE_ASM("asm/game", func_002A8F70);
 

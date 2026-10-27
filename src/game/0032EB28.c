@@ -175,6 +175,7 @@ INCLUDE_ASM("asm/game", func_0032FDC0);
 
 /* func_0032FEA8 uses small data in 0032EB28-g8.c. */
 
+
 INCLUDE_ASM("asm/game", func_0032FFD8);
 
 INCLUDE_ASM("asm/game", func_00330150);
@@ -306,7 +307,52 @@ INCLUDE_ASM("asm/game", func_00334550);
 
 
 
-INCLUDE_ASM("asm/game", func_00334730);
+static __inline__ void qcopy(void *dst, const void *src) {
+    __asm__ __volatile__("lq $2,0x0(%1)\n\tsq $2,0x0(%0)"
+                         : : "r"(dst), "r"(src) : "$2", "memory");
+}
+
+typedef int L_34730TI __attribute__((mode(TI)));
+typedef union { unsigned char b[0x2600]; short h[0x1300]; int i[0x980]; float f[0x980]; } L_34730Hero;
+extern L_34730TI func_00334710(int, L_34730TI *);
+extern int func_002761F8(void *, void *, int, void *, void *);
+extern void func_00282CC0(void *, void *, void *);
+extern void func_00282D30(void *, void *, float);
+extern char D_001B53A0[];
+extern float D_001BAFA0[];
+
+int func_00334730(float *out, int flag)
+{
+    float base[4] __attribute__((aligned(16)));
+    float near[4] __attribute__((aligned(16)));
+    float far[4] __attribute__((aligned(16)));
+    float ofs[4] __attribute__((aligned(16)));
+    L_34730Hero *hero = (L_34730Hero *)&D_00189E20;
+    float f;
+    char *cam = D_001B53A0;
+
+    if (hero->h[0x34C / 2] == 0) {
+        func_00334710(((int *)cam)[-4], (L_34730TI *)out);
+        return 1;
+    }
+    func_00334710(((int *)cam)[-4], (L_34730TI *)base);
+    f = hero->f[0x31C / 4];
+    if (f >= 30.0f || flag == 0) {
+        func_00282D30(ofs, cam + 0x30, 0.2f);
+        func_00282CC0(near, base, ofs);
+        func_00282D30(ofs, cam + 0x30, -30.0f);
+        func_00282CC0(far, base, ofs);
+        if (func_002761F8(near, far, 0x12, (void *)hero->i[0x2290 / 4], 0) != 0) {
+            qcopy(out, D_001BAFA0);
+            return 0;
+        }
+        qcopy(out, base);
+        return -1;
+    }
+    func_00282D30(near, cam + 0x30, -f);
+    func_00282CC0(out, base, near);
+    return 1;
+}
 
 
 
@@ -358,6 +404,7 @@ INCLUDE_ASM("asm/game", func_00335270);
 /* func_00335370 is defined in 00335370-copy.c. */
 
 /* func_003353C8 uses the quadword-copy profile in 0032EB28-qcopy.c. */
+
 
 
 INCLUDE_ASM("asm/game", func_00335438);
