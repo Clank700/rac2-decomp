@@ -1302,3 +1302,4 @@ src/levels/shared/L04_002CC748-pre.c	-O2 -G0 -ffunction-sections -frac2-gcse-uns
 src/levels/shared/L01_002A7248-pre.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
 src/levels/shared/L01_00323310-pre.c	-O2 -G0 -ffunction-sections -frac2-gcse-unsplit-edges
 src/core/00120354.c	sdk -O2 -G2 -ffunction-sections -fexceptions
+src/game/00335C60-nosplit.c	-O2 -G0 -mno-split-addresses -ffunction-sections
