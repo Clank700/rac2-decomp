@@ -2310,6 +2310,17 @@ attributed for provenance, not exclusive ownership.
 
 </details>
 
+One more row outside the census above, because its first leading word is a store
+(DrLegitamate, 28 October 2026, USA v1.01): `func_L12_0035A838` (288 bytes, one
+placement) begins with `sw $t3,0x40($v1) ; nop ; addiu $sp,$sp,0x20 ; nop`, the previous
+body's tail, and its leaf body starts at `0x0035A848`. The word at `12:00288180` points
+to `0x0035A848`; no code label, `jal` or aligned word in the level's files reaches
+`0x0035A838`..`0x0035A844`. Adding `(12, 0x0035A838): 16` to `LEVEL_ENTRY_OFFSETS` and
+rerunning `catalogue` changes exactly that row, to `func_L12_0035A848` (272 bytes). Not
+applied: the PAL and v2.00 catalogues and reports name the row `func_L12_0035A838` at
+their own addresses, so the repair should be carried to all three releases together
+(`tools/carry.py --entries`).
+
 ## Shared hero table and object helpers
 
 The retained `func_L00_002D1DA0` attempt now passes its input to the canonical
