@@ -23,6 +23,7 @@ of semantic correctness or matching credit without a strict linked build.
 | [`func_002BC768`](game/func_002BC768.c) | 380 | 26 October 2026 (M32): 380/380, one store scheduled two slots late (as func_002BDCE8); in the permuter. See source. |
 | [`func_002C7748`](game/func_002C7748.c) | 320 | 26 October 2026 (M32): 320/320 at -G8 with qcopy; $s0/$s1 swapped only; in the permuter. See source. |
 | [`func_002BDCE8`](game/func_002BDCE8.c) | 452 | 26 October 2026 (M32): 452/452, one store scheduled two slots late; in the permuter. See source. |
+| [`func_00326EC0`](game/func_00326EC0.c) | 376 | G8 candidate is 380 bytes; 0/1 places. Loop shape: retail tests `i < 4` at the iteration head; registers rotated. |
 | [`func_00341030`](game/func_00341030.c) | 380 | 26 October 2026 (M32): 368/380; the decrements' extra copy to a test register is not reproduced. See source. |
 | [`func_00270EE0`](game/func_00270EE0.c) | 588 | 26 October 2026 (M32): rac1 start_camera_blend port, exact at all 28 places only with -fno-gcse (gcse keeps the entry %hi of D_001B5490 for the final phase store); not landed. See source. |
 | [`func_0028B3D0`](game/func_0028B3D0.c) | 264 | 26 October 2026 (M32): 268/264, one extra argument copy from register choice (frame counter in $a0, retail $v0); in the permuter. See source. |
