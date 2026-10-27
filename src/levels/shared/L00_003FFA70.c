@@ -131,7 +131,7 @@ extern int func_0031A728(int range);
 extern void func_L00_00403900(int value);
 extern void func_L00_00403C68(int value);
 
-INCLUDE_ASM("asm/levels", func_L00_00403CB8);
+/* func_L00_00403CB8 is matched in its own unit, src/levels/shared/L00_00403CB8.c (default flags). */
 
 extern void func_002EE108(char *a, int *b, char *c);
 extern void func_0037F9A0(char *a, char *b);
