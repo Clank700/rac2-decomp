@@ -21,7 +21,6 @@ typedef struct {
     s32 extra;
 } PackedHeaderCountView;
 
-INCLUDE_ASM("asm/levels", func_L04_002CC748);
 
 typedef struct {
     u8 pad00[0x7A8];

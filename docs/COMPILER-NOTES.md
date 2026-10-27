@@ -814,7 +814,7 @@ input load. The rule follows GCC fixes from April/August 1999; witnesses include
 
 | Per-file option | Change | Witnesses |
 | --- | --- | --- |
-| -frac2-gcse-unsplit-edges | Build predecessor/successor lists without Cygnus critical-edge splitting; PRE inserts at the preceding block | func_L02_003E79F8, 352 bytes/1 place; func_002CD720, 340/28 |
+| -frac2-gcse-unsplit-edges | Build predecessor/successor lists without Cygnus critical-edge splitting; PRE inserts at the preceding block | func_L02_003E79F8, 352 bytes/1 place; func_002CD720, 340/28; a shared high half hoisted above the first branch, each block forming its own low half: func_L00_002EA668 160/5, func_L04_002CC748 144/2, func_L01_002A7248 128/4, func_L01_00323310 112/18 |
 | -frac2-keep-block-order | Skip cygnus_merge_blocks; keep default-last switch body and its branch | func_L18_004283F0, 56 bytes/3 places |
 | Both | Compose the two independent changes | func_L02_003FCCA0 |
 | -frac2-no-null-pointer-checks | Skip the Cygnus delete_null_pointer_checks calls (after jump1 and after the jump pass behind cse); with keep-block-order no block count runs before cse | func_L20_002CD928 case 0x7C, 34,964 bytes/1 place |

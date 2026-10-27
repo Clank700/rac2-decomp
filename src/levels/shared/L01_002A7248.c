@@ -136,7 +136,6 @@ extern unsigned char D_L01_001395B8[];
 
 extern void func_003907B8(int a0, int a1, int a2);
 
-INCLUDE_ASM("asm/levels", func_L01_002A7248);
 
 void func_L01_002A84D8(void) {
     char *p;
@@ -375,7 +374,6 @@ int func_L01_00322288(int a0, float f12) {
 }
 
 
-INCLUDE_ASM("asm/levels", func_L01_00323310);
 
 /* shared native body of family d1b66aa7f0ecd20d */
 void func_L01_003242C8(char *dst, int x, int idx)
