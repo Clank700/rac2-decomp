@@ -105,7 +105,7 @@ void func_L22_00335078(u8 *a0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L22_003398B8);
+/* func_L22_003398B8 is in the sibling file L22_002D0C98-g8.c (it reads $gp data). */
 
 INCLUDE_ASM("asm/levels", func_L22_0039CDC0);
 
