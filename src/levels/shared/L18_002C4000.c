@@ -436,8 +436,6 @@ void func_L18_003F8FA8(BatchA_A18_u8 *a0) {
 
 INCLUDE_ASM("asm/levels", func_L18_003F9DA0);
 
-INCLUDE_ASM("asm/levels", func_L18_003F9E50);
-
 
 extern void func_L18_003FC9B8(unsigned char *a0);
 extern void func_L18_003F7988(unsigned char *a0);
