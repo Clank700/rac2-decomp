@@ -37,8 +37,6 @@ void func_L08_00424ED0(char *a0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L08_00424F40);
-
 INCLUDE_ASM("asm/levels", func_L08_00424FF8);
 
 /* Not C: the success arm is the single word 0x4600A028 (COP1 fmt=S funct=0x28,
@@ -262,10 +260,6 @@ extern void func_00291450(s32 a0);
 /* Near miss: nonmatching/levels/func_L08_004290E8.c - the first test's branch and
    the callee-saved allocation differ. */
 INCLUDE_ASM("asm/levels", func_L08_004290E8);
-
-/* Near miss: nonmatching/levels/func_L08_00429408.c - the address materialisation order
-   in the prologue differs (0x1B39E0 / 0x1B39A0 / 0x1B3A30 are grouped differently). */
-INCLUDE_ASM("asm/levels", func_L08_00429408);
 
 INCLUDE_ASM("asm/levels", func_L08_004294A0);
 

@@ -133,9 +133,6 @@ int func_L14_003C9548(char *arg0) {
     return (arg0[0x95] ^ 1) == 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L14_003C9658);
-
-
 INCLUDE_ASM("asm/levels", func_L14_003CB258);
 
 /* func_L14_003CB4D8 is defined in L14_003CB4D8-g8.c. */

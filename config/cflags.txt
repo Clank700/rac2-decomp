@@ -1269,3 +1269,5 @@ src/levels/shared/L08_003CDB38.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2
 src/levels/shared/L08_003D4600.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L05_00441EA0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/levels/shared/L03_0038B2E8.c	-O2 -G0 -ffunction-sections -mno-split-addresses
+src/levels/14_aranos_prison/L14_003C9658-q.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
+src/levels/shared/L05_00445A98-q.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier

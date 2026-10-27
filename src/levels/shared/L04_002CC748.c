@@ -570,8 +570,6 @@ s32 func_L04_003A1540(const PackedHeaderCountView *header) {
     return ((total + 15) / 16) * 4;
 }
 
-INCLUDE_ASM("asm/levels", func_L04_003A1578);
-
 INCLUDE_ASM("asm/levels", func_L04_003A15C0);
 
 INCLUDE_ASM("asm/levels", func_L04_003A1868);
