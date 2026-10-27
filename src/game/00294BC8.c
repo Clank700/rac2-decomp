@@ -104,7 +104,6 @@ void func_00294BC8(int id, int arg)
 
 INCLUDE_ASM("asm/game", func_00294C40);
 
-INCLUDE_ASM("asm/game", func_00294D80);
 
 s32 func_00294E48(s32 index)
 {

@@ -1295,3 +1295,4 @@ src/game/002EF010-g32.c	-O2 -G32 -ffunction-sections -Wa,-G32
 src/levels/shared/L00_00311080-g.c	-O2 -G0 -ffunction-sections -g
 src/game/002FED90-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
 src/levels/shared/L00_00429048-g8.c	-O2 -G8 -ffunction-sections
+src/game/00332590-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
