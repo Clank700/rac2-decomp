@@ -2319,7 +2319,10 @@ to `0x0035A848`; no code label, `jal` or aligned word in the level's files reach
 rerunning `catalogue` changes exactly that row, to `func_L12_0035A848` (272 bytes). Not
 applied: the PAL and v2.00 catalogues and reports name the row `func_L12_0035A838` at
 their own addresses, so the repair should be carried to all three releases together
-(`tools/carry.py --entries`).
+(`tools/carry.py --entries`). The same body, with the same 16 leading bytes, is the row
+`func_L05_00367340` (pointer at `05:0029D4F0` -> `0x00367350`) and `func_L20_0036AE68`
+(pointer at `20:00292390` -> `0x0036AE78`), likewise unreferenced in their leading
+words; once all three are corrected they may be one shared function.
 
 ## Shared hero table and object helpers
 
