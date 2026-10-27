@@ -111,6 +111,11 @@ v2.00 (PAL has no such row). Each prefix follows a completed `jr $ra` and its de
 `func_L00_00428EE0` skips 24 bytes of filler in all 15 of its levels and in every release,
 leaving an 8-byte `return 0` method that a data pointer in each level reaches.
 
+One open row is two functions and still needs a split: `func_00115E28` (64 bytes) is
+`abort` at +0 followed by a separate noreturn assert-style printer at `00115E38`, which
+four `jal`s reach. Splitting it adds a boot row and changes the function count, so it
+is left as one row for now.
+
 Release-specific rows have their own named corrections. `tools/carry.py --entries`
 repairs established extents while retaining their existing identities and kinds,
 rather than renaming them for the new address or merging identical short methods.
