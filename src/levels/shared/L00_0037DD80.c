@@ -52,8 +52,6 @@ s32 func_L00_0037DDE8(u32 key,u32 owner) {
     return -1;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_0037DE30);
-
 extern int func_L00_0037DD80(int a0, int a1);
 extern int func_L00_0037DE30(char *a0, char **a1, int a2, int a3);
 
