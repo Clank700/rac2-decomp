@@ -107,6 +107,7 @@ void func_L10_00424290(u8 *a0) {
         func_L05_00379F48(0);
         func_L10_00423500(a0);
     }
+}
 
 extern int func_002A7820(int low, int high);
 extern f32 func_002A7878(f32 low, f32 high);
