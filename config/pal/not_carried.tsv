@@ -2,6 +2,7 @@
 func_0029B720	boot: instruction at +0x1c differs
 func_0029B758	00_aranos_tutorial: instruction at +0x18 differs
 func_0029B780	00_aranos_tutorial: instruction at +0x18 differs
+func_0029B7C0	boot: instruction at +0x38 differs
 func_0029C1A8	boot: instruction at +0x18 differs
 func_0029C1D8	boot: instruction at +0x18 differs
 func_0029C208	boot: instruction at +0x24 differs
