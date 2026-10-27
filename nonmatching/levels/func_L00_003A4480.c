@@ -1,3 +1,4 @@
+/* 26 October 2026 (M24): -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier (no -mno-split-addresses: retail keeps the hero %hi in a saved register and adds %lo at each use), 1104/1104 bytes, 96 lines off: retail hoists 0.5f out of the first fragment loop as well as 2.0f and 0.05f; store order and a fragment struct view do not move it. */
 /* Complete nonmatching reconstruction: 1112/1104 bytes.
  * Profile: -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
  * Placement checks: US: 0/27; US2: 0/27; PAL absent from catalogue.
@@ -5,10 +6,14 @@
  * Reopen with independent effect-state ownership and actual phase-local pointer/FP lifetimes. Preserve the measured drift clear and RNG order; no unconditional jitter-W initialization is justified by this caller.
  */
 #include "common.h"
+typedef int HeroQ __attribute__((mode(TI)));
+typedef union { unsigned char b[0x2600]; signed char c[0x2600]; short h[0x1300]; unsigned short uh[0x1300]; int i[0x980]; unsigned int u[0x980]; float f[0x980]; char *ptr[0x980]; HeroQ q[0x260]; } Hero;
+extern unsigned char D_00189E20[];
+#define H ((Hero *)D_00189E20)
 typedef int VectorBits __attribute__((mode(TI)));
 typedef float Vector[4] __attribute__((aligned(16)));
-extern float D_0018A550[4], D_0018A560[4], D_00189F30[4];
-extern int D_0018A160 NOT_SDA;
+
+
 extern float D_L00_001AF62C __attribute__((sda));
 extern float D_L00_001AF630 __attribute__((sda));
 extern int D_L00_001AF634 __attribute__((sda));
@@ -48,7 +53,7 @@ void func_L00_003A4480(char *moby)
     func_00283098(base, base, moby + 0xC0);
     func_00282CC0(origin, moby + 0x10, base);
     *(unsigned char *)(moby + 0xBC) = 6;
-    func_002ACEC0(base, D_0018A550, D_0018A560, 0.3490659595f);
+    func_002ACEC0(base, (&H->f[460]), (&H->f[464]), 0.34906590f);
     qcopy(direction, base);
     for (count = 19; count >= 0; count--) {
         char *fragment;
@@ -67,16 +72,16 @@ void func_L00_003A4480(char *moby)
             *(int *)(fragment + 4) = 0x307F7F7F;
         }
         if (func_00282C48(angle) > 0.00001f) {
-            func_002AB668(rotation, (int)D_0018A550, angle);
+            func_002AB668(rotation, (int)(&H->f[460]), angle);
             func_002ACDE8(direction, base, rotation);
         }
     }
     angle = 0.0f;
-    func_002ACEC0(base, D_0018A550, D_0018A560, D_L00_001AF62C * 0.017453294f);
+    func_002ACEC0(base, (&H->f[460]), (&H->f[464]), D_L00_001AF62C * 0.017453294f);
     qcopy(direction, base);
     qzero(drift);
-    if (D_0018A160)
-        func_00282D30(drift, D_00189F30, 1.7f);
+    if (H->i[208])
+        func_00282D30(drift, (&H->f[68]), 1.7f);
     for (count = 19; count >= 0; count--) {
         unsigned int color;
         int spin;
@@ -95,7 +100,7 @@ void func_L00_003A4480(char *moby)
         func_002C16C0(jitter, velocity, color, D_L00_001AF634, D_L00_001AF638, spin,
                       size, D_L00_001AF654, D_L00_001AF640, 0.0f, 0.0f);
         if (func_00282C48(angle) > 0.00001f) {
-            func_002AB668(rotation, (int)D_0018A550, angle);
+            func_002AB668(rotation, (int)(&H->f[460]), angle);
             func_002ACDE8(direction, base, rotation);
         }
     }

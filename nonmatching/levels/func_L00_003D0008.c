@@ -12,6 +12,13 @@
  * differ. Equal-size scope/mixed/overlay forms are not byte-identical.
  * Reopen with: Allocator or source lifetime evidence explaining the short-lived constructor result
  * and the state-3 FP comparison/order, without pins or prototype changes.
+ * M34 2026-10-26: now 2312/2312 (first difference +0x70, branch offsets only until +0x108):
+ *   the state-3 test reads F(obj,0x18) first (`F(obj,0x18) > F(ctx,0x98)`), the brightness clamp
+ *   is `if (value > 208) value = 208; else if (value < 80) value = 80;` (retail's slti 0xD1
+ *   first), and the constructor result has its own local (`made`; retail keeps it in $v1).
+ *   Left: argument-register numbering in case 0 (retail a2/a3/a1 where this gives a1/a2/a0),
+ *   the brightness or-chain grouping (twelve spellings tried, none exact), the sound-handle
+ *   index scaling (retail mult by 0x70 before the table base), and a few delay-slot fills.
  * Whole-behavior and strict linked-image qualification remain unverified.
  * Failed SRC unit/marker/profile are restored after these private per-function checks.
  */
@@ -37,7 +44,7 @@ extern int func_002E5DA0(int,int,void *,int);
 #define SET_ACTIVE(s) func_002A7750(obj,s,-1); I(P(ctx,0x9C),0x78)=0x8000DF2A; func_002E5DA0(0,0,obj,0x8A1); I(P(ctx,0x9C),0x98)=0
 void func_L00_003D0008(char *obj) {
     struct { Vec old,rotation,delta,offset; } frame;
-    char *ctx=P(obj,0x68),*child;
+    char *ctx=P(obj,0x68),*child,*made;
     unsigned int brightness;
     int value,handle;
     qcopy(&frame.old,obj+0x10); qcopy(&frame.rotation,obj+0xF0);
@@ -47,9 +54,9 @@ void func_L00_003D0008(char *obj) {
         if(!I(ctx,0x90)) { F(ctx,0x94)=F(ctx,0x68); F(ctx,0x98)=F(ctx,0x8C); I(ctx,0x80)=0; }
         else { I(ctx,0x80)=1; F(ctx,0x94)=F(ctx,0x8C); F(ctx,0x98)=F(ctx,0x68); }
         I(ctx,0x84)=0; I(ctx,0x88)=-1;
-        child=func_0029EFD0(0xC16); P(ctx,0x9C)=child;
-        if(!child) { func_0029F338(obj); return; }
-        child[0x30]=obj[0x30]; *(short *)(P(ctx,0x9C)+0x32)=*(short *)(obj+0x32); P(ctx,0x9C)[0x31]=1;
+        made=func_0029EFD0(0xC16); P(ctx,0x9C)=made;
+        if(!made) { func_0029F338(obj); return; }
+        made[0x30]=obj[0x30]; *(short *)(P(ctx,0x9C)+0x32)=*(short *)(obj+0x32); P(ctx,0x9C)[0x31]=1;
         *(long long *)(P(ctx,0x9C)+0x38)=*(long long *)(obj+0x38);
         child=P(ctx,0x9C); qcopy(child+0x10,obj+0x10); F(child,0x18)+=0.25f;
         frame.delta.f[0]=func_00283180(F(obj,0xF8)); frame.delta.f[1]=func_00283198(F(obj,0xF8)); frame.delta.f[2]=0;
@@ -58,7 +65,7 @@ void func_L00_003D0008(char *obj) {
     case 1:
         F(ctx,0xA0)=func_00283B98(F(ctx,0xA0),0.10471977f);
         value=func_00283CF0((func_00283198(F(ctx,0xA0))*4.0f-3.0f)*208.0f);
-        if(value<209) { if(value<80) value=80; } else value=208;
+        if(value>208) value=208; else if(value<80) value=80;
         brightness=value; I(P(ctx,0x9C),0x78)=brightness<<16|brightness<<8|0x80000000|brightness;
         if(func_L00_00324120((int)P(ctx,0x9C))) {
             if(!I(ctx,0x80)) { SET_ACTIVE(3); }
@@ -76,7 +83,7 @@ void func_L00_003D0008(char *obj) {
         } else { if(I(ctx,0x84)>0) { func_002E5CF8(1,0,obj); I(ctx,0x84)=0; } STOP_SOUND(); }
         break;
     case 3:
-        if(F(ctx,0x98)<F(obj,0x18)) {
+        if(F(obj,0x18)>F(ctx,0x98)) {
             if(F(obj,0x18)-D_00189EA0.f[2]<1.8f && D_00189EA0.f[2]<F(obj,0x18)) {
                 if(func_002ACBC8(&D_00189EA0,I(ctx,0xA4))) break;
                 func_002AA3A8(obj+0x18,ctx+0xA8,F(ctx,0x98),0.02f,0.3f,0.10000001f);

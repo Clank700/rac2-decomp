@@ -7,7 +7,6 @@ INCLUDE_ASM("asm/levels", func_L06_0033BDC0);
 
 /* func_L06_003660F0 is matched in L06_003660F0.c (built with -mno-split-addresses). */
 
-INCLUDE_ASM("asm/levels", func_L06_0037E6B0);
 
 INCLUDE_ASM("asm/levels", func_L06_00396268);
 
@@ -97,7 +96,6 @@ void func_L06_003F4020(char *a0, char *a1)
     func_0029F338(a0);
 }
 
-INCLUDE_ASM("asm/levels", func_L06_003F4080);
 
 extern int D_L06_001B3760[];
 
@@ -131,7 +129,6 @@ INCLUDE_ASM("asm/levels", func_L06_00402230);
 
 /* func_L06_00403F60 is matched in L06_0033BDC0-g8.c (it reaches a global through $gp). */
 
-INCLUDE_ASM("asm/levels", func_L06_0040C270);
 
 INCLUDE_ASM("asm/levels", func_L06_00419CA8);
 
@@ -150,4 +147,3 @@ void func_L06_0041CAB0(char *a0, char *a1)
     func_0029F338(a0);
 }
 
-INCLUDE_ASM("asm/levels", func_L06_0041CB10);

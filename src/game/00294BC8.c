@@ -157,7 +157,6 @@ int func_00295680(int arg)
     return -1;
 }
 
-INCLUDE_ASM("asm/game", func_002956E8);
 
 void func_00295788(int a0, int a1)
 {
@@ -308,7 +307,7 @@ int func_00295C70(void)
     return D_001C4FA0[0x9] != 0;
 }
 
-INCLUDE_ASM("asm/game", func_00295D00);
+/* func_00295D00 is defined in 00295D00-g8.c (-G8 -g). */
 
 INCLUDE_ASM("asm/game", func_00295F60);
 

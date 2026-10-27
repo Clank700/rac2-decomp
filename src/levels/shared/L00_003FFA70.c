@@ -146,9 +146,9 @@ extern void func_L00_00403F90(char *arg, void *p);
 /* func_L00_00403D58 is matched in L00_003FFA70-qcopy.c (built with -frac2-qcopy
    -frac2-qcopy-barrier). */
 
-INCLUDE_ASM("asm/levels", func_L00_00403F90);
+/* func_L00_00403F90 is matched in L00_00403F90.c. */
 
-INCLUDE_ASM("asm/levels", func_L00_00404168);
+/* func_L00_00404168 is matched in L00_00404168-por.c (-frac2-zero-ti-por). */
 
 INCLUDE_ASM("asm/levels", func_L00_00404368);
 
@@ -166,14 +166,12 @@ extern void func_0035F450(int a, int b, void *c, int d);
 
 INCLUDE_ASM("asm/levels", func_L00_00404ED8);
 
-INCLUDE_ASM("asm/levels", func_L00_004051C8);
 
 INCLUDE_ASM("asm/levels", func_L00_00405808);
 
 INCLUDE_ASM("asm/levels", func_L00_00406040);
 
 
-INCLUDE_ASM("asm/levels", func_L00_00406150);
 
 INCLUDE_ASM("asm/levels", func_L00_00406FB0);
 
@@ -189,7 +187,6 @@ INCLUDE_ASM("asm/levels", func_L00_00408800);
 
 INCLUDE_ASM("asm/levels", func_L00_00408E58);
 
-INCLUDE_ASM("asm/levels", func_L00_00409480);
 
 /* shared native body of family af5b3bc3a678ed5c */
 void func_L00_00409420(char *object)

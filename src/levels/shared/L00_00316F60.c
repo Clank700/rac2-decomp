@@ -566,7 +566,7 @@ void func_L00_003294F0(unsigned char *entity, int enabled) {
         entity[0xBE] &= 0xFB;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00329520);
+/* func_L00_00329520 is in L00_00329520.c. */
 
 INCLUDE_ASM("asm/levels", func_L00_003296C0);
 

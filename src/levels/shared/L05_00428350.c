@@ -113,7 +113,7 @@ void func_L05_0042E4E8(char *a0)
 
 INCLUDE_ASM("asm/levels", func_L05_0042F4E8);
 
-INCLUDE_ASM("asm/levels", func_L05_00430318);
+/* func_L05_00430318 is defined in x-qcopy.c. */
 
 /* Derives a 16-byte element at index-1 from its index-2 and index-3 neighbours through two bound helpers; original game role is unknown. */
 void func_L05_00430BF0(Vec16_Fc936841d *object, int index)
@@ -128,7 +128,7 @@ void func_L05_00430BF0(Vec16_Fc936841d *object, int index)
 /* Creates the 0x10E3 object and copies the caller's transforms into it. */
 INCLUDE_ASM("asm/levels", func_L05_00432080);
 
-INCLUDE_ASM("asm/levels", func_L05_00432158);
+/* func_L05_00432158 is matched in its own unit, src/levels/shared/L05_00432158.c (-frac2-qcopy -frac2-qcopy-barrier -fno-strength-reduce). */
 
 
 INCLUDE_ASM("asm/levels", func_L05_00441D40);
@@ -146,7 +146,7 @@ INCLUDE_ASM("asm/levels", func_L05_00442560);
 
 /* func_L05_00442720 is matched in L05_00442720.c (built with -mno-split-addresses). */
 
-INCLUDE_ASM("asm/levels", func_L05_004427A8);
+/* func_L05_004427A8 is defined in L05_004427A8-flags.c. */
 
 INCLUDE_ASM("asm/levels", func_L05_00442828);
 

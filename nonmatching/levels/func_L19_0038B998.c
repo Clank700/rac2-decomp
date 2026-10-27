@@ -1,3 +1,4 @@
+/* M33 2026-10-26: 748 -> 776/776 B, 104 -> 11 lines. Same collision tail as func_L19_0038B580: D_L19_001AC790 NOT_SDA, contact->hit re-read with the contact pointer set again before the second test, the normal scale written in each arm, and the weapon record read as (&D_L19_00265870[0] + D_00139574)->power (that spelling fixes the record-read registers here). Left: in the contact tests retail has hit in $a1 and the kept %hi copy in $a0 (here swapped), and loads D_L19_001AC790 before re-reading hit. Profile -O2 -G0 -ffunction-sections -frac2-zero-ti-por. In the permuter. */
 /* Retained C reconstruction; not linked or counted.
  * Profile: -O2 -G0 -ffunction-sections -frac2-zero-ti-por.
  * 748/776 bytes. us: 0/1 places; us2: 0/1 places; pal: absent.
@@ -28,7 +29,7 @@ typedef struct {
 
 extern u8 D_00139574;
 extern u8 *D_0018C0B0 NOT_SDA;
-extern void *D_L19_001AC790;
+extern void *D_L19_001AC790 NOT_SDA;
 typedef struct { u8 prefix[0x70]; float power; u8 tail[0x6c]; } WeaponRecord;
 extern WeaponRecord D_L19_00265870[];
 typedef struct { u8 prefix[0x18]; u8 *hit; int count; Vector point; u8 gap[0x10]; Vector normal; } Collision;
@@ -70,7 +71,7 @@ void func_L19_0038B998(u8 *actor)
     if (*(int *)(state + 0x18) < 0x122)
         request.flags = 0x830001;
     request.mode = 1;
-    request.power = D_L19_00265870[D_00139574].power;
+    request.power = (&D_L19_00265870[0] + D_00139574)->power;
     qcopy(&request.velocity, state);
     func_00282F70(&request.velocity, &request.velocity, 1.0f);
     request.kind = 2;
@@ -81,17 +82,18 @@ void func_L19_0038B998(u8 *actor)
     *(int *)(state + 0x14) += 1;
     if (func_002761F8(&previous, position, 0x10, actor, &request)) {
         Collision *contact = &D_L19_001BFE80;
-        u8 *hit = contact->hit;
-        if (hit) {
-            if ((hit == D_0018C0B0 || *(short *)(hit + 0xaa) == 0xc0) &&
+        if (contact->hit) {
+            if ((contact->hit == D_0018C0B0 || *(short *)(contact->hit + 0xaa) == 0xc0) &&
                     *(int *)(state + 0x18) >= 0x122)
                 goto finish;
-            if (*(void **)(hit + 0x64) == D_L19_001AC790 && *(short *)(hit + 0xaa) != 0x336)
+            contact = &D_L19_001BFE80;
+            if (*(void **)(contact->hit + 0x64) == D_L19_001AC790 && *(short *)(contact->hit + 0xaa) != 0x336)
                 goto finish;
             actor[0xbc] = 1;
             qcopy((actor + 0x10), &contact->point);
             func_00283028(&impulse, state, &contact->normal);
             func_00282F20(&impulse, &impulse, 1.0f / 30.0f);
+            func_00282F20(&normal, &contact->normal, 1.0f);
         } else {
             if (contact->count <= 0)
                 goto finish;
@@ -99,8 +101,8 @@ void func_L19_0038B998(u8 *actor)
             qcopy(position, &contact->point);
             func_00283028(&impulse, state, &contact->normal);
             func_00282F20(&impulse, &impulse, 1.0f / 30.0f);
+            func_00282F20(&normal, &contact->normal, 1.0f);
         }
-        func_00282F20(&normal, &contact->normal, 1.0f);
     } else if (func_00282948((int *)(state + 0x18))) {
         actor[0xbc] = 1;
         func_00282CC0(&impulse, &impulse, state);

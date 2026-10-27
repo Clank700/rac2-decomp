@@ -8,6 +8,10 @@
  * vector copies and both 20-point strands remain. FP/copy allocation and scheduling differ.
  * Reopen only for: A measured lifetime/container hypothesis after the real table extent is
  * qualified; preserve the corrected call input and return width.
+ * M34 2026-10-26: now 1724/1720. `length = D * 0.05f` in both arms (retail keeps 0.05 in $f20
+ * and multiplies early), the hero vectors through the D_00189E20 view, and the strand span its
+ * own local (retail tests it in $f0). Left: one more saved float here ($f25), the state pointer
+ * in $s6 (retail $s4) and one more stack slot; the rest follows from that allocation.
  * Older notes below are historical. Marker and trial-only profiles were restored.
  */
 
@@ -25,7 +29,8 @@ extern float D_L02_001B0CAC __attribute__((sda));
 extern int D_L02_001B0C7C __attribute__((sda));
 extern float D_L02_00249090[2][20][4];
 extern float D_L02_00249310[20], D_L02_00249360[20][4], D_L02_002494A0[20];
-extern char D_0018A0E0[], D_0018A560[], D_0018A570[];
+typedef union { char b[0x2600]; float f[0x980]; Quad q[0x260]; } Hero;
+extern char D_00189E20[];
 extern char D_L02_001A8F20[] __attribute__((sda));
 extern float func_00283B98(float, float), func_00283BE0(float, float);
 extern int func_002AB1F0(void *);
@@ -46,8 +51,8 @@ extern void func_002C2210(void *, int, int, int, int, void *, int, float, float,
 void func_L02_003E91F0(char *actor) {
     char *state = *(char **)(actor + 0x68);
     float endpoint[4], direction[4], delta[4], blended[4], tangent[4], sideways[4], toward[4];
-    float length = D_L02_001B0BA8;
-    float phase, height, distance, weight, oscillation, lateral, heading, width, radius;
+    float length = D_L02_001B0BA8 * 0.05f;
+    float phase, height, span, distance, weight, oscillation, lateral, heading, width, radius;
     int i, spin;
     D_L02_001B0C28 = func_00283B98(D_L02_001B0C28, D_L02_001B0C2C);
     D_L02_001B0C30 = func_00283BE0(D_L02_001B0C30, D_L02_001B0C34);
@@ -56,14 +61,13 @@ void func_L02_003E91F0(char *actor) {
         char *settings = (char *)func_002AB1F0(*(char **)(state + 0x4C));
         qcopy(endpoint, *(char **)(state + 0x4C) + 0x10);
         endpoint[2] += *(float *)(settings + 0x10);
-        length = func_00282E48(state + 0x20, endpoint);
+        length = func_00282E48(state + 0x20, endpoint) * 0.05f;
     }
-    length *= 0.05f;
     *(int *)(state + 0x50) = 20;
     func_00282CF0(direction, state + 0x30, state + 0x20);
     func_00282F20(direction, direction, 1.0f);
     if (*(char **)(state + 0x4C)) {
-        func_00282DD8(delta, direction, D_0018A0E0);
+        func_00282DD8(delta, direction, &((Hero *)D_00189E20)->q[0x2C0 / 16]);
         func_002ACEC0(direction, direction, delta, 0.17453295f);
     }
     func_00282D30(tangent, direction, length);
@@ -80,10 +84,10 @@ void func_L02_003E91F0(char *actor) {
         D_L02_00249310[i] = height;
         func_00282CF0(delta, point, previous);
         func_00282D08(blended, delta, tangent, 0.85f);
-        distance = func_00282DF0(blended);
-        if (distance == 0.0f) qcopy(point, previous);
+        span = func_00282DF0(blended);
+        if (span == 0.0f) qcopy(point, previous);
         else {
-            func_00282D30(blended, blended, length / distance);
+            func_00282D30(blended, blended, length / span);
             func_00282CC0(point, previous, blended);
             qcopy(tangent, blended);
         }
@@ -121,8 +125,8 @@ void func_L02_003E91F0(char *actor) {
     oscillation = func_002A78D8(0.52359885f, 1.0471977f);
     phase = func_002A7878(-0.52359885f, 1.0471977f);
     func_00282D30(toward, direction, D_L02_001B0CAC);
-    func_002ACEC0(toward, toward, D_0018A560, phase);
-    func_002ACEC0(toward, toward, D_0018A570, oscillation);
+    func_002ACEC0(toward, toward, &((Hero *)D_00189E20)->q[0x740 / 16], phase);
+    func_002ACEC0(toward, toward, &((Hero *)D_00189E20)->q[0x750 / 16], oscillation);
     spin = func_002A7820(1, 8);
     if (func_002A77E0(2)) spin = -spin;
     radius = func_002A7878(0.2f, 0.6f);

@@ -91,7 +91,7 @@ void func_L14_00304280(void) {
     func_385CB8(0x4E, 0x1000000 | (D_001A72E0 >> 13));
 }
 
-INCLUDE_ASM("asm/levels", func_L14_003E5030);
+/* func_L14_003E5030 is matched in its own unit, src/levels/shared/L14_003E5030-g8.c (-O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier). */
 
 void func_L14_003DF100(char *arg0, int arg1) {
     float a[4];

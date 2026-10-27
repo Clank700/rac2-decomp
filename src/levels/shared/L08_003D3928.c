@@ -58,21 +58,18 @@ s32 func_L08_003DB4E8(void)
 
 INCLUDE_ASM("asm/levels", func_L08_003DB518);
 
-INCLUDE_ASM("asm/levels", func_L08_003DB8E8);
+/* func_L08_003DB8E8 is matched in its own unit, L08_003DB8E8-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L08_003DE5E8);
 
 INCLUDE_ASM("asm/levels", func_L08_003E5BB8);
 
-INCLUDE_ASM("asm/levels", func_L08_003F6018);
 
-INCLUDE_ASM("asm/levels", func_L08_003F6348);
 
 INCLUDE_ASM("asm/levels", func_L08_003F6568);
 
 INCLUDE_ASM("asm/levels", func_L08_003F6610);
 
-INCLUDE_ASM("asm/levels", func_L08_0041E4F8);
+/* func_L08_0041E4F8 is defined in L08_0041E4F8-flags-g8.c. */
 
 /* shared native body of family c459a266b43242d6 */
 void func_L08_0041E630(float *a0, float *a1, float *a2, float *a3, float *p4)

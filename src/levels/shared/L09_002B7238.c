@@ -381,12 +381,11 @@ void func_L09_003AF6B0(char *object)
     func_L09_003AF9E8(object, pos);
 }
 
-INCLUDE_ASM("asm/levels", func_L09_003AF9E8);
 
 INCLUDE_ASM("asm/levels", func_L09_003B6550);
 
 /* snapshots the object's frame and re-seeds its four steering angles from the new one */
-INCLUDE_ASM("asm/levels", func_L09_003E99E0);
+/* func_L09_003E99E0 is matched in its own unit, src/levels/shared/L09_003E99E0-qcopy.c (-frac2-qcopy -frac2-qcopy-barrier). */
 
 INCLUDE_ASM("asm/levels", func_L09_003E9AA0);
 
@@ -470,7 +469,7 @@ void func_L09_003F7158(char *object)
 /* func_L09_003F72A8 is defined in L09_002B7238-g8.c (it reads the group count through $gp). */
 
 /* spawns one measured stage with the object's placement lifted by DY */
-INCLUDE_ASM("asm/levels", func_L09_003F7370);
+/* func_L09_003F7370 is matched in its own unit, src/levels/shared/L09_003F7370.c (default flags). */
 
 void func_L09_003F73E8(char *object)
 {
@@ -581,7 +580,6 @@ void func_L09_003F77D0(char *object)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L09_003F7840);
 
 /* reports whether the index still names a reachable entry, or whether the frame moved close enough */
 int func_L09_003F7A88(char *object, int index) {
@@ -598,7 +596,6 @@ int func_L09_003F7A88(char *object, int index) {
     return entry;
 }
 
-INCLUDE_ASM("asm/levels", func_L09_003F7B28);
 
 
 INCLUDE_ASM("asm/levels", func_L09_003F7CE0);
@@ -633,8 +630,6 @@ void func_L09_003F8858(char *object)
 }
 
 /* func_L09_003F8898 lives in the L09_002B7238-g8.c sibling: its four counters are small data. */
-
-INCLUDE_ASM("asm/levels", func_L09_003F8960);
 
 INCLUDE_ASM("asm/levels", func_L09_003F8AE0);
 

@@ -305,6 +305,6 @@ INCLUDE_ASM("asm/levels", func_L09_0040B0C8);
 
 INCLUDE_ASM("asm/levels", func_L09_0041D650);
 
-INCLUDE_ASM("asm/levels", func_L09_00421B80);
+/* func_L09_00421B80 is in L09_003FEA48-zp-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L09_00421D60);

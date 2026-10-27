@@ -237,11 +237,10 @@ INCLUDE_ASM("asm/levels", func_L08_003CC4B8);
 extern u8 *D_0018C0B0;
 extern void func_002A0F48();
 
-INCLUDE_ASM("asm/levels", func_L08_003CD600);
+/* func_L08_003CD600 and func_L08_003CD6C8 are matched in L08_003CD600-qcopy.c. */
 
 /* Defined in L08_003CD648.c. */
 
-INCLUDE_ASM("asm/levels", func_L08_003CD6C8);
 
 INCLUDE_ASM("asm/levels", func_L08_003CD708);
 

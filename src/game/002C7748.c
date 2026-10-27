@@ -166,11 +166,34 @@ void func_002C7D58(char *self)
     *(float *)(p + 8) -= *(float *)(p + 12);
 }
 
-INCLUDE_ASM("asm/game", func_002C7E28);
+/* func_002C7E28 is defined in 002C7E28-qcopy.c. */
 
 INCLUDE_ASM("asm/game", func_002C7F78);
 
-INCLUDE_ASM("asm/game", func_002C8348);
+extern float func_00283B98(float, float);
+extern float func_00283180(float);
+extern float func_00283198(float);
+extern float func_00283C80(float, float);
+extern float func_00282C48(float);
+extern void func_002B9180(char *);
+
+void func_002C8348(char *a0)
+{
+    char *s1 = a0;
+    char *s0 = s1 + 0x20;
+    float t;
+
+    *(u8 *)(s1 + 8) = *(u8 *)(s1 + 8) + *(u8 *)(s0 + 0x14);
+    *(float *)(s0 + 8) = func_00283B98(*(float *)(s0 + 8), *(float *)(s0 + 0xC));
+    *(float *)(s1 + 0xC) = *(float *)(s1 + 0xC) + *(float *)(s0 + 0x10);
+    *(float *)(s1 + 0x10) = *(float *)(*(char **)(s1 + 0x20)) +
+                            *(float *)(s0 + 4) * func_00283180(*(float *)(s0 + 8));
+    *(float *)(s1 + 0x18) = *(float *)(*(char **)(s1 + 0x20) + 8) +
+                            *(float *)(s0 + 4) * func_00283198(*(float *)(s0 + 8));
+    t = func_00283C80(*(float *)(s0 + 8), *(float *)(*(char **)(s1 + 0x20) + 0x10));
+    if (t < func_00282C48(*(float *)(s0 + 0xC) + *(float *)(s0 + 0xC)))
+        func_002B9180(s1);
+}
 
 extern float Fbdd4a4aa_FUN_002A89A8(char *a, int b, float f);
 
@@ -233,7 +256,7 @@ void func_002C85D8(char *p)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002C8610);
+/* func_002C8610 is in 002C8610.c. */
 
 void func_002C87B0(char *a0)
 {
@@ -263,7 +286,6 @@ void func_002C87B0(char *a0)
     *(float *)(s1 + 12) = *(float *)(s1 + 12) + *(float *)(s0 + 16);
 }
 
-INCLUDE_ASM("asm/game", func_002C8880);
 
 INCLUDE_ASM("asm/game", func_002C8A38);
 
@@ -297,14 +319,47 @@ void func_002C8F40(int *obj)
         Fbdd4a4aa_FUN_002B9180((char *)obj);
 }
 
-INCLUDE_ASM("asm/game", func_002C9098);
+extern float func_00283CE0(int a);
+extern int func_00283CF0(float f);
+extern int func_00283D38(int a, int b, float f);
+extern float func_002A7878(float a, float b);
+extern void func_00282CC0(char *a, char *b, char *c);
+extern void func_00282D30(char *a, char *b, float f);
+extern void func_00300190(char *a, char *b);
+extern void func_00300248(char *a, char *b);
+extern int func_00282978(char *p);
+
+void func_002C9098(char *p)
+{
+    char *s0 = p + 32;
+    char *s3 = p + 16;
+    float r1, r2, r3, r4;
+    int x, y;
+
+    r1 = func_00283CE0(*(short *)(p + 10));
+    r2 = func_00283CE0(*(int *)(s0 + 24));
+    r1 = r1 / r2;
+    r3 = func_00283CE0(*(int *)(s0 + 16));
+    x = func_00283CF0(r3 * r1);
+    y = func_00283D38(0, *(int *)(s0 + 20), r1 * 0.5f);
+    *(char *)(p + 8) = *(unsigned char *)(p + 8) + 1;
+    r4 = func_002A7878(0.004f, 0.012f);
+    *(float *)(p + 12) = *(float *)(p + 12) + r4 * 210000.0f;
+    func_00282CC0(s3, s3, s0);
+    func_00282D30(s0, s0, 0.99f);
+    func_00300190(s3, s3);
+    func_00300248(s0, s0);
+    *(int *)(p + 4) = y | (x << 24);
+    if (func_00282978(p + 10) != 0) {
+        func_002B9180(p);
+    }
+}
 
 
 INCLUDE_ASM("asm/game", func_002C9218);
 
 INCLUDE_ASM("asm/game", func_002C94C8);
 
-INCLUDE_ASM("asm/game", func_002C96F8);
 
 
 INCLUDE_ASM("asm/game", func_002C9828);
@@ -397,13 +452,54 @@ int func_002C9C20(void)
 
 /* func_002C9C60 is matched in 002C9C60.c (built with -g). */
 
-INCLUDE_ASM("asm/game", func_002C9C90);
 
 INCLUDE_ASM("asm/game", func_002C9CF8);
 
-INCLUDE_ASM("asm/game", func_002C9E60);
+/* Uploads the saved screen image back to VRAM in 0x4000-byte strips (0x600 bytes per
+   line of the current height), from the start buffer or, when a0 is set, ending at
+   0x3FB000, after setting the restore mode (2 with a0, else 1) and bumping the frame
+   counter. */
+typedef struct { long q[12]; } GsLoadImage2C9E60 __attribute__((aligned(16)));
+#ifndef MACRO_ADDR
+#define MACRO_ADDR __attribute__((section(".sdata")))
+#endif
+extern int D_001B1598 MACRO_ADDR;
+extern int D_001A7344 MACRO_ADDR;
+extern int D_001A72D4 __attribute__((sda));
+extern void func_002FC3C0(int);
+extern int func_001261F0(int);
+extern int func_00126288(GsLoadImage2C9E60 *, short, short, short, short, short, short, short);
+extern void func_0011AEA0(int);
+extern int func_001265B0(GsLoadImage2C9E60 *, void *);
+extern int func_001244B8(int, int);
 
-INCLUDE_ASM("asm/game", func_002C9F68);
+void func_002C9E60(int a0)
+{
+    GsLoadImage2C9E60 li;
+    int remaining;
+    int dest;
+    char *src;
+    char *state = D_001F2840;
+
+    *(int *)(state + 0xD0) = a0 != 0 ? 2 : 1;
+    func_002FC3C0(1);
+    func_001261F0(0);
+    D_001B1598++;
+    remaining = D_001A7344 * 0x600;
+    src = *(char **)(state + 0x20);
+    dest = D_001A72D4;
+    if (a0 != 0)
+        dest = 0x3FB000 - remaining;
+    for (; remaining >= 0; remaining -= 0x4000) {
+        func_00126288(&li, dest >> 8, 1, 0, 0, 0, 64, 64);
+        dest += 0x4000;
+        func_0011AEA0(0);
+        func_001265B0(&li, src);
+        src += 0x4000;
+        func_001244B8(0, 0);
+    }
+}
+
 
 INCLUDE_ASM("asm/game", func_002CA070);
 
@@ -600,7 +696,6 @@ INCLUDE_ASM("asm/game", func_002CC528);
 
 /* Near miss: nonmatching/game/func_002CC550.c (316/316 bytes; the two address
    materialisations in the loop preheader keep a separate %hi temporary). */
-INCLUDE_ASM("asm/game", func_002CC550);
 
 int func_002CC690(void) {
     return 0;
@@ -685,7 +780,6 @@ int func_002CD220(void)
   return 0;
 }
 
-INCLUDE_ASM("asm/game", func_002CD250);
 
 INCLUDE_ASM("asm/game", func_002CD3C0);
 

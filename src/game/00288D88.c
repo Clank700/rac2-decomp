@@ -129,7 +129,6 @@ void func_00288EA0(void)
     D_00254E78.timer = 0;
 }
 
-INCLUDE_ASM("asm/game", func_00288F48);
 
 
 
@@ -158,7 +157,28 @@ int func_00289FC8(short key, int field, unsigned short *out)
     return -1;
 }
 
-INCLUDE_ASM("asm/game", func_0028A030);
+extern unsigned char D_0018D0E8[];
+extern int D_001A7C04_sda __attribute__((sda));
+extern int D_001A7C04[] __attribute__((sda));
+
+void func_0028A030(short id)
+{
+    int val = func_00289FC8(id, 1, 0);
+    int i;
+
+    if (val == -1)
+        return;
+    for (i = 0; D_0018D0E8[i] != val && i < D_001A7C04_sda; i++) {
+    }
+    if (i < D_001A7C04_sda) {
+        for (; i < D_001A7C04_sda - 1; i++)
+            D_0018D0E8[i] = D_0018D0E8[i + 1];
+        D_0018D0E8[i] = 0;
+        D_001A7C04[0]--;
+    }
+    D_0018D0E8[D_001A7C04[0]] = val;
+    D_001A7C04[0]++;
+}
 
 void
 func_0028A130(int param_1)
@@ -180,16 +200,13 @@ INCLUDE_ASM("asm/game", func_0028A2F8);
 INCLUDE_ASM("asm/game", func_0028A670);
 
 
-INCLUDE_ASM("asm/game", func_0028AB20);
 
 INCLUDE_ASM("asm/game", func_0028AB70);
 
 
 INCLUDE_ASM("asm/game", func_0028ACB0);
 
-INCLUDE_ASM("asm/game", func_0028AE88);
 
-INCLUDE_ASM("asm/game", func_0028AFE8);
 
 INCLUDE_ASM("asm/game", func_0028B160);
 

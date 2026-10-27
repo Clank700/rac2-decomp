@@ -63,11 +63,9 @@ INCLUDE_ASM("asm/levels", func_L00_003B3450);
 
 INCLUDE_ASM("asm/levels", func_L00_003B39D0);
 
-INCLUDE_ASM("asm/levels", func_L00_003B3AF8);
 
 INCLUDE_ASM("asm/levels", func_L00_003B3C40);
 
-INCLUDE_ASM("asm/levels", func_L00_003B3E78);
 
 INCLUDE_ASM("asm/levels", func_L00_003B4018);
 
@@ -87,9 +85,7 @@ INCLUDE_ASM("asm/levels", func_L00_003B58B8);
 
 INCLUDE_ASM("asm/levels", func_L00_003B5BF8);
 
-INCLUDE_ASM("asm/levels", func_L00_003B60E8);
 
-INCLUDE_ASM("asm/levels", func_L00_003B6158);
 
 INCLUDE_ASM("asm/levels", func_L00_003B63D8);
 
@@ -204,6 +200,5 @@ INCLUDE_ASM("asm/levels", func_L00_003B84F0);
 
 INCLUDE_ASM("asm/levels", func_L00_003B8E58);
 
-INCLUDE_ASM("asm/levels", func_L00_003B9170);
 
 INCLUDE_ASM("asm/levels", func_L00_003B9310);

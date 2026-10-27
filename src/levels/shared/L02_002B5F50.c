@@ -1,10 +1,8 @@
 #include "include_asm.h"
 
-INCLUDE_ASM("asm/levels", func_L02_002B5F50);
 
-INCLUDE_ASM("asm/levels", func_L02_002DCEA0);
+/* func_L02_002DCEA0 is matched in its own unit, src/levels/shared/L02_002DCEA0.c (-g). */
 
-INCLUDE_ASM("asm/levels", func_L02_002EF388);
 
 /* func_L02_002EF968 is defined in L02_002EF968-helpers.c. */
 
@@ -104,7 +102,7 @@ void func_L02_00327390(char *arg0, char *arg1, int arg2) {
         func_L00_0042A500(arg2);
 }
 
-INCLUDE_ASM("asm/levels", func_L02_00329410);
+/* func_L02_00329410 is matched in its own unit, L02_00329410.c. */
 
 extern void func_00282C88(void *target);
 extern void func_00283098(float *out, const float *a, const float *b);
@@ -277,9 +275,6 @@ int func_L02_003329C8(char *a0, char *a1, float f12, float f13) {
 
 INCLUDE_ASM("asm/levels", func_L02_00332A80);
 
-INCLUDE_ASM("asm/levels", func_L02_00332D28);
-
-INCLUDE_ASM("asm/levels", func_L02_00332EF0);
 
 INCLUDE_ASM("asm/levels", func_L02_00333218);
 

@@ -221,8 +221,6 @@ void func_L02_003C46E0(struct Outer *p)
 
 INCLUDE_ASM("asm/levels", func_L02_003C49A0);
 
-INCLUDE_ASM("asm/levels", func_L02_003C4C80);
-
 /* Reads three angles through a helper, bends the object's own angle at +0xF8 into the same
    range, converts all four and hands them to the four-argument report, then applies the
    same bend to the local angles. */
@@ -416,7 +414,6 @@ void func_L02_003CD4A8(struct L02GroupObject *arg0)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L02_003CD758);
 
 extern int D_L02_001B35B8 __attribute__((sda));
 
@@ -484,7 +481,7 @@ void func_L02_003CE908(char *a0) {
    compiler gives the kind byte the other register. 116 bytes against 124.
    wave5-09: same wall from a -G8 unit (needs the .extern for the one-instruction $gp load);
    candidate 128 bytes, the same two register copies plus a `nop` the retail loop does not have. */
-INCLUDE_ASM("asm/levels", func_L02_003CE9A8);
+/* func_L02_003CE9A8 is defined in L02_003CE9A8-g8.c. */
 
 INCLUDE_ASM("asm/levels", func_L02_003CEA28);
 

@@ -1239,6 +1239,15 @@ compiler folds it away"); `func_L18_00432E28`; `func_L12_00404778` (the same mas
 
 **Current conclusion:** consult each matched source/profile. Those earlier folds did not prove every legal extension form would fail. Other bodies need their own measurements.
 
+**Byte range tests (2026-10-26):** `x == 6 || x == 7` on a byte becomes `(u8)(x - 6) <= 1`, and
+combine's stock range fold (simplify_comparison, SUBREG case) drops the `andi 0xFF` whenever
+the byte's nonzero bits are known, which is what retail shows at most sites. In the moby
+animation idiom (the anim byte re-read at the join after two call arms, an `== K` test,
+then the range test) retail keeps the `andi`: re-read the field in both tests instead of
+caching it in a local (`if (*(u8 *)(self + 0x43) == 0xB) ... else if (*(u8 *)(self + 0x43) == 6
+|| *(u8 *)(self + 0x43) == 7)`). Measured in func_00322CC0; the same idiom is in
+func_L04_003E2438, func_L04_0044C598, func_L11_0042F018 and func_L17_003E31E8.
+
 <a id="blocker-28"></a>
 
 ## 28. Commutative `addu`: base first against index first

@@ -45,7 +45,6 @@ INCLUDE_ASM("asm/levels", func_L15_00434610);
 
 INCLUDE_ASM("asm/levels", func_L15_00434D28);
 
-INCLUDE_ASM("asm/levels", func_L15_00434F90);
 
 typedef struct GornEffectCamera {
     char pad00[0x140];

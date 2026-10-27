@@ -164,7 +164,7 @@ void func_L00_003BC080(char *p)
 
 INCLUDE_ASM("asm/levels", func_L00_003BC108);
 
-INCLUDE_ASM("asm/levels", func_L00_003BC228);
+/* func_L00_003BC228 is defined in x-qcopy.c. */
 
 /* Derives a 16-byte element at index-1 from its index-2 and index-3 neighbours through two bound helpers; original game role is unknown. */
 void func_L00_003BC400(Vec16_Fc936841d *object, int index)
@@ -264,7 +264,6 @@ void func_L00_003BC998(char *owner, char *arg1)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003BCC10);
 
 extern void func_L00_003BCE28(char *a0, char *a1);
 
@@ -438,7 +437,6 @@ void func_L00_003C2F10(unsigned char *a0) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003C2FC8);
 
 /* When the context flag at offset 0x24 is nonzero, pass scale 1.0, the context, its vector at offset 0x10 and mode zero to the bound helper; original game role is unknown. */
 void func_L00_003C33E0(Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner *owner)
@@ -449,7 +447,6 @@ void func_L00_003C33E0(Rac2Native_9cdc323a4d0c2fbd_AnalysisOwner *owner)
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L00_003C3418);
 
 /* The 0x68 context block starts with two words and a halfword that this body clears. */
 void func_L00_003C37A0(char *p)

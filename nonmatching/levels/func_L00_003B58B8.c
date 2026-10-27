@@ -1,14 +1,11 @@
-/* Bounded complete manual reconstruction, 2026-10-25; not linked or counted.
+/* Bounded complete manual reconstruction, 2026-10-26 (M10); not linked.
  * Profile: -O2 -G8 -ffunction-sections.
- * 828/828 bytes; us: 0/27 placements; us2: 0/27 placements; pal: absent from catalogue.
- * Both pose captures use qcopy and both rotation outputs remain aligned 48-byte objects. The real
- * flag store uses absolute addressing, so D_L00_001B1BE8 is NOT_SDA without changing its four-byte
- * extent. This restores 828 bytes from 824, but all placements differ first at +0xC8 in setup/store
- * scheduling. Frame 0x110 agrees. Targeted unsplit addressing gave 832 bytes and was reverted.
- * Reopen with: Independent flag-store/call-setup scheduling and camera temporary lifetime evidence.
- * Do not force a containing object, volatile access, barrier or smaller matrix.
- * Original drafts, useful variants and diagnostics remain private.
- * No linked-image equality or complete native behavior is established.
+ * 828/828 bytes, one swapped pair left (us 0/27). The flag store is field +8 of a small-data
+ * block at D_L00_001B1BE0 (three shorts read elsewhere, then the int): retail's lui $at/sw is the
+ * length-2 sda-with-offset store, which closes the +0xC8 store/call-setup scheduling.
+ * Left: before func_00282E48(&position, &D_L00_001B1B10) retail sets $a1 (lui, addiu) and then
+ * $a0 = $sp in the delay slot; ours puts the $a0 move between lui and addiu. Tried: array form,
+ * a target pointer local, const/Vector prototypes, nested call forms. Permuter queued.
  */
 #include "common.h"
 typedef unsigned int TI128 __attribute__((mode(TI)));
@@ -19,7 +16,8 @@ typedef struct {unsigned char reserved[0x1A0];unsigned int held,pressed;} Partia
 extern PartialInput D_00138180;
 typedef struct {unsigned char reserved[0x1FB0];float pitch,yaw;unsigned char middle[0x24B8-0x1FB8];float delta;} PartialRoot;
 extern PartialRoot D_00189E20;
-extern int D_L00_001B1BE8 NOT_SDA;
+typedef struct { short vector[4]; int active; } PartialCameraLock;
+extern PartialCameraLock D_L00_001B1BE0 __attribute__((sda));
 extern int D_L00_001A8FF0;
 extern Vector D_L00_001B1B10;
 extern float D_L00_001AFA30 __attribute__((sda));
@@ -49,7 +47,7 @@ void func_L00_003B58B8(unsigned char *object)
         if(D_00138180.pressed&0x200) {func_003355A8(0);func_L00_002C42E0(0,1);func_002A7750(object,1,-1);}
         func_L00_002F46C8();
         object[0x31]=0;*(unsigned short *)(object+0x34)|=1;
-        D_L00_001B1BE8=1;
+        D_L00_001B1BE0.active=1;
         func_002B0CE0(6,0,1);
         qcopy(&position,&D_L00_001B8DC0.position);
         qcopy(&angles,&D_L00_001B8DC0.angles);

@@ -34,8 +34,6 @@ extern void func_L04_003A02A0(void *, int);
 
 extern void func_0029FCC0(void *, int, void *);
 
-INCLUDE_ASM("asm/levels", func_L08_002D90C8);
-
 INCLUDE_ASM("asm/levels", func_L08_00308888);
 
 void func_L08_00329EC0(float value, float *object) {
@@ -202,7 +200,6 @@ void func_L08_003D7E68(void *arg0) {
     } while (i >= 0);
 }
 
-INCLUDE_ASM("asm/levels", func_L08_003D7FB8);
 
 /* func_L08_003D8290 is defined in L08_003D8290-qcopy.c. */
 

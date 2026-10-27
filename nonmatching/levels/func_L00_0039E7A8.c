@@ -8,18 +8,24 @@
  * the same 840-byte extent, not an exact match.
  */
 
+/* M12, 2026-10-26: 852/872 bytes (-O2 -G8). D_001A79F0 is a plain scalar ($gp in delay slots,
+ * lui/lw elsewhere); D_0019B2E8/D_0019B4A8 are MACRO_ADDR; the two flag tables are la'd at
+ * 0x21D140 and 0x21DDB0 with the field offset 0x464 left in the load (this cc1 folds it into the
+ * la in every spelling tried: struct field, [id + 0x464], local struct pointer). The inactive test
+ * branches directly as retail. Residual: that fold, the flags copy register and a few schedules.
+ */
 #include "common.h"
 typedef int Quad __attribute__((mode(TI)));
 extern int D_L00_001B19C8;
 extern unsigned char D_0018C0D4 NOT_SDA;
 extern u32 D_0018C0BC NOT_SDA;
 extern int D_0018C0B4 NOT_SDA;
-extern int D_001A79F0 __attribute__((sda));
-extern unsigned char D_0019B2E8[], D_0019B4A8[];
-extern unsigned char D_L00_0021E214[], D_L00_0021D5A4[];
+extern int D_001A79F0;
+extern unsigned char D_0019B2E8[] MACRO_ADDR, D_0019B4A8[] MACRO_ADDR;
+extern u8 D_L00_0021D140[] MACRO_ADDR, D_L00_0021DDB0[] MACRO_ADDR;
 extern float D_00189EA0[4];
 extern char *D_L00_001AF440 __attribute__((sda));
-extern void func_L00_0042A500(int);
+extern void func_L00_0042A500(int arg0);
 extern int func_00282948(int *), func_002ACBC8(void *, int);
 extern void func_002A0430(unsigned int);
 extern float func_002A89A8(void *, int, float), func_00282C48(float);
@@ -30,7 +36,7 @@ void func_L00_0039E7A8(char *actor) {
     unsigned int flags;
     unsigned short id;
     unsigned char *packed;
-    unsigned char bits;
+    int bits;
     int active;
     float point[4];
     if (*(u8 *)(actor + 0x30) < 0x20) *(u8 *)(actor + 0x30) = 0x20;
@@ -39,8 +45,8 @@ void func_L00_0039E7A8(char *actor) {
     if (flags & 8) return;
     if (*(u8 *)(actor + 0xBC) == 0) {
         *(u8 *)(actor + 0xBC) = 1;
-        state[8] = 0;
         state[7] = 0;
+        state[8] = 0;
         return;
     }
     if (state[6] != -1 && !(D_0019B2E8[state[6] + D_001A79F0 * 16] & 0x80)) return;
@@ -52,16 +58,15 @@ void func_L00_0039E7A8(char *actor) {
     active = func_002ACBC8(D_00189EA0, state[0]);
     if (!active) {
         id = *(u16 *)(actor + 0xB2);
-        if (D_L00_0021E214[id]) active = 1;
-        else {
-            bits = D_0019B4A8[(id >> 1) + D_001A79F0 * 0x400];
-            if (id & 1) active = ((bits >> 4) & 7) != 0;
-            else active = (bits & 7) != 0;
+        if (!D_L00_0021DDB0[(short)id + 0x464]) {
+            bits = D_0019B4A8[((short)id >> 1) + D_001A79F0 * 0x400];
+            if (id & 1 ? !((bits >> 4) & 7) : !(bits & 7)) {
+                if (state[3]) state[3] = 2;
+                goto finish;
+            }
         }
     }
-    if (!active) {
-        if (state[3]) state[3] = 2;
-    } else {
+    {
         if (state[3] && (state[4] == 0 || state[8] != 0)) goto finish;
         state[3] = 1;
         func_002A0430(*(u8 *)(actor + 0xB0));
@@ -69,8 +74,8 @@ void func_L00_0039E7A8(char *actor) {
         point[2] = func_002A89A8(point, 0, 0.5f);
         if (func_00282C48(*(float *)(actor + 0x18) - point[2]) > 2.0f) point[2] = *(float *)(actor + 0x18);
         func_002DF3F8(point, actor + 0xF0);
-        D_L00_0021D5A4[*(short *)(actor + 0xB2)] = 0;
-        D_L00_0021E214[*(short *)(actor + 0xB2)] = 0;
+        D_L00_0021D140[*(short *)(actor + 0xB2) + 0x464] = 0;
+        D_L00_0021DDB0[*(short *)(actor + 0xB2) + 0x464] = 0;
         packed = D_0019B4A8 + ((*(short *)(actor + 0xB2)) >> 1) + D_001A79F0 * 0x400;
         bits = *packed;
         if (*(u16 *)(actor + 0xB2) & 1) *packed = bits & 0x8F;

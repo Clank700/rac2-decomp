@@ -1,51 +1,63 @@
-/* Bounded manual reconstruction, 2026-10-25; not linked.
- * Profile: -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier.
- * 384/384 bytes; us: 0/27 placements; us2: 0/27 placements; pal: 0/27 placements.
- * The full position/velocity copies use the reviewed helper. Integer input widths, three FP inputs,
- * distance-dependent alpha, random seed and all payload stores remain. Size agrees, but saved
- * integer/FP allocation and payload store ordering still differ.
- * Reopen with real payload-pointer and argument live-range evidence; preserve complete copied
- * vectors and actual pointer-return allocation.
- * Original complete variants and allocator diagnostics are preserved privately.
- * No candidate or linked-build credit is claimed.
+/* func_L00_0033AA40 (384 bytes, 27 places) - NEAR MISS (M22, 2026-10-26).
+ * Profile: the default "-O2 -G0 -ffunction-sections" (qcopy() helper), as
+ * src/levels/shared/L00_0033AA40.c.  384/384, 8 words off: only two register
+ * pairs are swapped - size/value get $s5/$s6 the wrong way round and a/b get
+ * $f21/$f22 the wrong way round (retail: value $s5, size $s6, a $f22, b $f21).
+ * The D_L00_001FEA40 pointer moves between levels, so it is a ref_ name.
+ * Storing b before a fixes the float pair but reverses the two stores; storing
+ * value after size fixes the int pair but swaps $s6/$s7.  On the permuter.
  */
+#include "include_asm.h"
 #include "common.h"
 
 typedef int Quad __attribute__((mode(TI)));
-/* Known effect header and payload prefix; total allocation extent is unspecified. */
-typedef struct { unsigned char b0,b1,b2,b3; int color; unsigned char seed,alpha; unsigned short size; float life; union { Quad q; float f[4]; } position; float payload[8]; } Particle;
-extern Particle *func_002B9030(int);
+
+/* A spawned particle: header, position, then the payload its update reads. */
+typedef struct {
+    unsigned char b0, b1, b2, b3;
+    int color;
+    unsigned char seed, alpha;
+    unsigned short size;
+    float life;
+    union { Quad q; float f[4]; } position;
+    float payload[8];
+} L00_0033AA40_Particle;
+
+extern L00_0033AA40_Particle *func_002B9030(int);
 extern int func_00283CF0(float);
-extern int func_001163B0(void);
-extern float func_00283CE0(int);
-extern float func_00282E80(void *,void *);
-extern float func_002A7878(float,float);
-extern int func_002A77E0(int);
-extern s32 func_002AB1F0(u8 *);
-extern void func_00282CF0(float *,void *,void *);
-extern void func_00283698(void *,void *);
-extern void func_002830C0(float *,float *,void *);
-extern unsigned char *D_L00_001FEA68,*D_L00_001FEAAC,*D_L00_001FEA40,*D_L00_001FEA78;
+extern float func_00282E80(void *, void *);
+extern float func_002A7878(float, float);
+extern unsigned char *ref_L00_0033AA40_00[];
 extern char D_00189EA0[];
 
-Particle *func_L00_0033AA40(float life,float a,float b,Quad *position,Quad *velocity,unsigned int size,int color,int value,int flag)
+L00_0033AA40_Particle *func_L00_0033AA40(float life, float a, float b, Quad *position, Quad *velocity,
+                                         unsigned int size, int color, int value, int flag)
 {
-    Particle *p=func_002B9030(0x40);
-    if(p) {
-        float *out=p->payload;
+    L00_0033AA40_Particle *p = func_002B9030(0x40);
+
+    if (p) {
+        float *out = p->payload;
+
         qcopy(&p->position, position);
-        if(func_00282E80(D_00189EA0,position)<80.0f) p->alpha=func_00283CF0(1.0f)+48;
-        else p->alpha=func_00283CF0(1.0f)+32;
-        p->b3=flag?0x48:0x44;
-        p->b1=0;
-        p->b2=D_L00_001FEA40[1];
-        p->color=color;
-        p->life=life*210000.0f;
-        { float random=func_002A7878(0.0f,255.0f);
-          p->size=size; p->seed=(int)random; }
+        if (func_00282E80(D_00189EA0, position) < 80.0f)
+            p->alpha = func_00283CF0(1.0f) + 48;
+        else
+            p->alpha = func_00283CF0(1.0f) + 32;
+        p->b3 = flag ? 0x48 : 0x44;
+        p->b1 = 0;
+        p->b2 = ref_L00_0033AA40_00[0][1];
+        p->color = color;
+        p->life = life * 210000.0f;
+        {
+            float random = func_002A7878(0.0f, 255.0f);
+
+            p->size = size;
+            p->seed = (int)random;
+        }
         qcopy(out, velocity);
-        out[4]=a;out[5]=b;
-        *(int *)(out+6)=value;
+        out[4] = a;
+        out[5] = b;
+        *(int *)(out + 6) = value;
     }
     return p;
 }

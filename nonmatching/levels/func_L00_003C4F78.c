@@ -10,21 +10,24 @@
  * Original complete variants and allocator diagnostics are preserved privately.
  * No candidate or linked-build credit is claimed.
  */
+/* M12, 2026-10-26: the four tables declared MACRO_ADDR (as func_L00_003C3A70 needs for the same
+ * tables) take the real-diff count from 91 to 62 lines; still 904/916 bytes. Residual: loop counter
+ * registers, the history-row address arithmetic (mult/madd placement) and the effect-field schedule. */
 #include "common.h"
 
 
 typedef int UiQuadword __attribute__((mode(TI)));
 typedef union { UiQuadword bits; float f[4]; } UiHistoryPoint;
-extern int D_L00_001B2940[];
-extern UiHistoryPoint D_L00_0023FB80[][20];
-extern UiHistoryPoint D_L00_001B2900[];
+extern int D_L00_001B2940[] MACRO_ADDR;
+extern UiHistoryPoint D_L00_0023FB80[][20] MACRO_ADDR;
+extern UiHistoryPoint D_L00_001B2900[] MACRO_ADDR;
 extern float D_L00_001AFF4C __attribute__((sda));
 extern int D_L00_001AFF50 __attribute__((sda));
 extern int D_L00_001AFF54 __attribute__((sda));
 extern int D_L00_001AFF58 __attribute__((sda));
 extern float D_L00_001AFF5C __attribute__((sda));
 extern float D_L00_001AFF60 __attribute__((sda));
-extern char D_L00_001FE940[];
+extern char D_L00_001FE940[] MACRO_ADDR;
 extern void func_00282CC0(void *, void *, void *);
 /* The second integer-bank input is forwarded as the axis vector pointer. */
 extern void func_002AB668(void *, void *, float);

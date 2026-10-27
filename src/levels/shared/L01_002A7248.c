@@ -161,7 +161,6 @@ void func_L01_002A84D8(void) {
     }
 }
 
-INCLUDE_ASM("asm/levels", func_L01_002A8C48);
 
 void func_L01_002A9298(void) {
     char *b = D_L01_00189E20;
@@ -187,11 +186,10 @@ INCLUDE_ASM("asm/levels", func_L01_002B0318);
 
 INCLUDE_ASM("asm/levels", func_L01_002B3458);
 
-INCLUDE_ASM("asm/levels", func_L01_002B35E8);
 
 INCLUDE_ASM("asm/levels", func_L01_002B3788);
 
-INCLUDE_ASM("asm/levels", func_L01_002B3D28);
+/* func_L01_002B3D28 is defined in L01_002B3D28.c. */
 
 INCLUDE_ASM("asm/levels", func_L01_002B46A0);
 
@@ -211,7 +209,7 @@ void func_L01_002C1988(unsigned long x) {
         func_002BEB90(0, mode);
 }
 
-INCLUDE_ASM("asm/levels", func_L01_002C2CF0);
+/* func_L01_002C2CF0 is defined in L01_002C2CF0-keep-block-order.c. */
 
 INCLUDE_ASM("asm/levels", func_L01_002C81D0);
 
@@ -234,7 +232,7 @@ void func_L01_002C98B8(void) {
 INCLUDE_ASM("asm/levels", func_L01_002E1510);
 
 
-INCLUDE_ASM("asm/levels", func_L01_002E1680);
+/* func_L01_002E1680 is defined in L01_002E1680.c. */
 
 INCLUDE_ASM("asm/levels", func_L01_002E2608);
 
@@ -245,7 +243,6 @@ INCLUDE_ASM("asm/levels", func_L01_002EABA8);
 
 INCLUDE_ASM("asm/levels", func_L01_002F1588);
 
-INCLUDE_ASM("asm/levels", func_L01_002F1F70);
 
 INCLUDE_ASM("asm/levels", func_L01_002F1FD0);
 
@@ -310,7 +307,7 @@ void func_L01_00316C48(void *a0, void *a1, void *a2, void *a3, void *t0) {
     func_002E3470(a1, v, a2);
 }
 
-INCLUDE_ASM("asm/levels", func_L01_00318638);
+/* func_L01_00318638 is defined in L01_00318638-qcopy-barrier.c. */
 
 void func_L01_0031A278(char *a0, float *a1, float f12, float f13, float f14) {
     a1[0] = f12;
@@ -433,8 +430,6 @@ int func_L01_003246F8(int key) {
 
 INCLUDE_ASM("asm/levels", func_L01_00326DD8);
 
-INCLUDE_ASM("asm/levels", func_L01_0032EF38);
-
 INCLUDE_ASM("asm/levels", func_L01_00331CA0);
 
 INCLUDE_ASM("asm/levels", func_L01_00331E08);
@@ -473,7 +468,6 @@ float func_L01_003377C8(unsigned char *a0) {
 
 INCLUDE_ASM("asm/levels", func_L01_00337888);
 
-INCLUDE_ASM("asm/levels", func_L01_00337A60);
 
 
 
