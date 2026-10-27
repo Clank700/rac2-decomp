@@ -52,7 +52,6 @@ void func_L08_0030A8F8(s32 x) {
     func_002934B8(D_L08_001DAC40[D_L08_001DB5E7], D_L08_001BFEF4);
 }
 
-INCLUDE_ASM("asm/levels", func_L08_00318F90);
 f32 func_L08_003277C0(s32 n, f32 x) {
     f32 r;
     if (n < 2)

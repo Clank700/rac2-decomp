@@ -573,9 +573,7 @@ INCLUDE_ASM("asm/levels", func_L00_00329E90);
 
 /* func_L00_00329FF0 is defined in L00_00329FF0-g.c. */
 
-INCLUDE_ASM("asm/levels", func_L00_0032A088);
 
-INCLUDE_ASM("asm/levels", func_L00_0032A0B8);
 
 void func_L00_0032A0E8(void) {
     u8 *current = &D_L00_00268E20;

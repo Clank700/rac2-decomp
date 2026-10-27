@@ -464,7 +464,6 @@ void func_L00_00429020(int i) {
     q[0x39] = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00429048);
 
 INCLUDE_ASM("asm/levels", func_L00_004290C0);
 
