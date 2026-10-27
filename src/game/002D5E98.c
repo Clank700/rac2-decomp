@@ -169,7 +169,6 @@ INCLUDE_ASM("asm/game", func_002D7B18);
 
 INCLUDE_ASM("asm/game", func_002D7DB8);
 
-INCLUDE_ASM("asm/game", func_002D8120);
 
 int func_002D81A8(void) {
     return 0;
@@ -349,8 +348,6 @@ int func_002D9600(EffectSlots_2D9600 *o)
     }
     return 4;
 }
-
-INCLUDE_ASM("asm/game", func_002D9730);
 
 int func_002D9798(int *arg0)
 {

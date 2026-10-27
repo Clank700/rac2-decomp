@@ -1,8 +1,6 @@
 #include "include_asm.h"
 #include "common.h"
 
-INCLUDE_ASM("asm/levels", func_L19_002A88C8);
-
 /* func_L19_002B0148 is defined in L19_002B0148-flags.c. */
 
 

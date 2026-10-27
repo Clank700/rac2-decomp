@@ -272,7 +272,6 @@ int func_L00_0031C998(int from, int to, float fraction)
 }
 
 
-INCLUDE_ASM("asm/levels", func_L00_0031CDD0);
 
 
 int func_L00_0031D620(int a0, int a1, float x) {
@@ -533,7 +532,6 @@ void func_L00_00326048(char *a0, f32 *a1, s32 a2, s32 a3, f32 f) {
 
 
 
-INCLUDE_ASM("asm/levels", func_L00_00326110);
 
 void func_L00_00326200(void)
 {
@@ -574,9 +572,7 @@ INCLUDE_ASM("asm/levels", func_L00_00329E90);
 
 /* func_L00_00329FF0 is defined in L00_00329FF0-g.c. */
 
-INCLUDE_ASM("asm/levels", func_L00_0032A088);
 
-INCLUDE_ASM("asm/levels", func_L00_0032A0B8);
 
 void func_L00_0032A0E8(void) {
     u8 *current = &D_L00_00268E20;

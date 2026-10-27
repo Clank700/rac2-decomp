@@ -84,7 +84,6 @@ void func_002DE3A0(s32 param)
     }
 }
 
-INCLUDE_ASM("asm/game", func_002DE550);
 
 INCLUDE_ASM("asm/game", func_002DE618);
 

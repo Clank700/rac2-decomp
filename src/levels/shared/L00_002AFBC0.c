@@ -349,7 +349,6 @@ void func_L00_002B39D8(void)
 
 INCLUDE_ASM("asm/levels", func_L00_002B39F0);
 
-INCLUDE_ASM("asm/levels", func_L00_002B3D10);
 
 /* builds one 64-byte block from a 3-float vector of the incoming scalars and another from a static table record one element in, combines them, then scales the result again from that record */
 void func_L00_002B3DC0(f32 a1, f32 a2, f32 a3) {
@@ -435,7 +434,6 @@ void func_L00_002B54F8(float x, float y) {
         func_00282F20(p, p, r - y);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002B5590);
 
 INCLUDE_ASM("asm/levels", func_L00_002B55F0);
 

@@ -32,8 +32,6 @@ extern float D_L20_0023E670[];
 
 extern char *func_0029EFD0(int);
 
-INCLUDE_ASM("asm/levels", func_L20_0039C540);
-
 INCLUDE_ASM("asm/levels", func_L20_0039C5D0);
 
 /* func_L20_0039C8C8 is defined in L20_0039C8C8.c. */

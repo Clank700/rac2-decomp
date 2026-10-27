@@ -112,8 +112,6 @@ void func_L19_00420EF0(char *obj)
 
 /* func_L19_00421E80 is defined in L19_00421E80-g8.c. */
 
-INCLUDE_ASM("asm/levels", func_L19_00422178);
-
 INCLUDE_ASM("asm/levels", func_L19_00422238);
 
 extern u16 *D_L19_001FB5A0[];

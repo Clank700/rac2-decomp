@@ -201,8 +201,6 @@ INCLUDE_ASM("asm/levels", func_L16_004117A8);
 
 /* Builds a 16-byte query record from the game speed and the handle's byte field and
    hands it with a prepared buffer to the generic path. */
-INCLUDE_ASM("asm/levels", func_L16_00411ED0);
-
 INCLUDE_ASM("asm/levels", func_L16_00411F80);
 
 INCLUDE_ASM("asm/levels", func_L16_00412560);

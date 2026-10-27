@@ -436,7 +436,11 @@ void func_L00_00428EB0(char *a0)
     ref_L00_00428EB0_01(a0);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00428EE0);
+/* A method that does nothing and returns 0, reached through a data pointer in every
+   level that has it. Its entry is 24 bytes into the catalogued row, after linker fill. */
+int func_L00_00428EE0(void) {
+    return 0;
+}
 
 
 /* When the global identity differs from the signed owner identity at offset 0x86 and the global mode is not 6, clear the owner byte at offset 0x7D and write signed short value 3 at offset 0x7E. */
@@ -464,7 +468,6 @@ void func_L00_00429020(int i) {
     q[0x39] = 0;
 }
 
-INCLUDE_ASM("asm/levels", func_L00_00429048);
 
 INCLUDE_ASM("asm/levels", func_L00_004290C0);
 

@@ -11,9 +11,6 @@ extern float D_L12_001AD234;
 /* func_L12_002FFF88 is in the sibling file L12_002CF7B0-g8.c: it reads a
    small-data global through $gp. */
 
-/* Refresh the two tuning factors, or zero them on the two states that ask for it. */
-INCLUDE_ASM("asm/levels", func_L12_00300138);
-
 INCLUDE_ASM("asm/levels", func_L12_00300410);
 
 INCLUDE_ASM("asm/levels", func_L12_0035A838);

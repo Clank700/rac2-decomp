@@ -49,7 +49,6 @@ int func_002880E0(int x)
 INCLUDE_ASM("asm/game", func_00288208);
 
 
-INCLUDE_ASM("asm/game", func_002883E8);
 
 /* search56 byte-mapped E0 records by U16class3C, return opaque32 marker0 elsezero */
 unsigned int func_002884B0(unsigned int key)

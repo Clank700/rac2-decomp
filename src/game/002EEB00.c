@@ -174,8 +174,6 @@ int func_002EEFE0(unsigned int arg0) {
     return r1_D_001DD568[arg0].qwc;
 }
 
-INCLUDE_ASM("asm/game", func_002EF010);
-
 
 /* func_002EF1E8 is in 002EEB00-g8.c. */
 

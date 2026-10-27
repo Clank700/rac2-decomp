@@ -199,7 +199,6 @@ INCLUDE_ASM("asm/levels", func_L09_00403398);
 /* func_L09_00403700: 152 bytes, one register off - the loop's trip test compares
    into $v0 where retail compares into $v1.  Deposited in
    nonmatching/levels/func_L09_00403700.c. */
-INCLUDE_ASM("asm/levels", func_L09_00403700);
 
 INCLUDE_ASM("asm/levels", func_L09_00403798);
 

@@ -328,7 +328,6 @@ int func_L00_003046D0(int index)
 
 /* func_L00_00304AE8 is defined in L00_002FC7A0-g8.c (-G8 small data). */
 
-INCLUDE_ASM("asm/levels", func_L00_00305600);
 
 
 INCLUDE_ASM("asm/levels", func_L00_003080D0);
@@ -1048,8 +1047,6 @@ void func_L00_00310C88(LvlSlotCtx *ctx, LvlSlotNode **handle)
 }
 
 INCLUDE_ASM("asm/levels", func_L00_00310D30);
-
-INCLUDE_ASM("asm/levels", func_L00_00311080);
 
 INCLUDE_ASM("asm/levels", func_L00_003110E8);
 

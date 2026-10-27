@@ -39,8 +39,6 @@ void func_L08_003D3EB8(u8 *a0)
 
 INCLUDE_ASM("asm/levels", func_L08_003D4190);
 
-INCLUDE_ASM("asm/levels", func_L08_003D4600);
-
 INCLUDE_ASM("asm/levels", func_L08_003D4690);
 
 /* The same resident word, but the 8 case falls through to a 1/2 selector. */
@@ -65,7 +63,6 @@ INCLUDE_ASM("asm/levels", func_L08_003E5BB8);
 
 
 
-INCLUDE_ASM("asm/levels", func_L08_003F6568);
 
 INCLUDE_ASM("asm/levels", func_L08_003F6610);
 

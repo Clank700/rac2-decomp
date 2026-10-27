@@ -91,7 +91,6 @@ INCLUDE_ASM("asm/game", func_00291EC0);
 
 INCLUDE_ASM("asm/game", func_00292078);
 
-INCLUDE_ASM("asm/game", func_00292328);
 
 extern void func_00292078(void *);
 extern void func_00292328(void *);

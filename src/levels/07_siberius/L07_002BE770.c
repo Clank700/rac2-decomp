@@ -1,7 +1,6 @@
 #include "include_asm.h"
 
 
-INCLUDE_ASM("asm/levels", func_L07_002E2090);
 
 /* func_L07_002F2C70 is defined in L07_002BE770-g8.c (it reads small data through $gp). */
 

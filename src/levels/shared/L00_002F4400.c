@@ -50,7 +50,7 @@ void func_L00_002F5890(int a0) {
         func_2F4490(0xA01, 0x58);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002F59A8);
+/* func_L00_002F59A8 is matched in its own unit, src/levels/shared/L00_002F59A8.c (default flags). */
 
 
 /* func_L00_002F6B90 is matched in L00_002F6B90.c. */

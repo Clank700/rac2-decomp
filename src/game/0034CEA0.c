@@ -131,8 +131,6 @@ void *func_0034E5B8(void *object) {
 
 INCLUDE_ASM("asm/game", func_0034E5C0);
 
-INCLUDE_ASM("asm/game", func_0034EB20);
-
 void func_0034EBE0(void)
 {
     float *p = (float *)F45821cfb_D_001C2740;

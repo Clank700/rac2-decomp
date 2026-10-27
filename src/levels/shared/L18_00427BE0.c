@@ -10,7 +10,6 @@ typedef signed int s32;
 
 INCLUDE_ASM("asm/levels", func_L18_00427BE0);
 
-INCLUDE_ASM("asm/levels", func_L18_00428048);
 
 /* Reports zero after handing the level's measured list to the shared test. */
 extern void func_L00_003B9310(void *);

@@ -21,7 +21,6 @@ typedef struct {
     s32 extra;
 } PackedHeaderCountView;
 
-INCLUDE_ASM("asm/levels", func_L04_002CC748);
 
 typedef struct {
     u8 pad00[0x7A8];
@@ -195,9 +194,6 @@ INCLUDE_ASM("asm/levels", func_L04_0032F62C);
 
 INCLUDE_ASM("asm/levels", func_L04_0032F994);
 
-INCLUDE_ASM("asm/levels", func_L04_0033C420);
-
-INCLUDE_ASM("asm/levels", func_L04_0033CB08);
 
 /* sched1 hoists the last statement of */
 void func_L04_0033CB88(char *p)
@@ -572,8 +568,6 @@ s32 func_L04_003A1540(const PackedHeaderCountView *header) {
     s32 total = header->data_offset + fixed + header->length;
     return ((total + 15) / 16) * 4;
 }
-
-INCLUDE_ASM("asm/levels", func_L04_003A1578);
 
 INCLUDE_ASM("asm/levels", func_L04_003A15C0);
 

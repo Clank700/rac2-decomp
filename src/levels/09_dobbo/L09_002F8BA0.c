@@ -242,7 +242,6 @@ INCLUDE_ASM("asm/levels", func_L09_003FB788);
 /* Same release at its own place in the level, on the id byte of a slot rather
    than a live id: both halves and the slot's live word are cleared and the two
    handles are given back. */
-INCLUDE_ASM("asm/levels", func_L09_003FB860);
 
 
 INCLUDE_ASM("asm/levels", func_L09_003FB908);
