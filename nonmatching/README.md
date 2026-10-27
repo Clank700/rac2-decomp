@@ -447,7 +447,6 @@ of semantic correctness or matching credit without a strict linked build.
 | [`func_L05_00426B08`](levels/func_L05_00426B08.c) | 212 | M15 2026-10-26: 212/212, 4 lines off under -O2 -G8 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier: a Moby struct view fixes the 0xF8 store against the $gp read, and D_L05_001B2528 as an .sdata macro word gives the tied read. Left: retail loads 0xFBF into a register before the loop (xor), cc1 folds it to xori (permuter queued).
 | [`func_L05_0042BCE0`](levels/func_L05_0042BCE0.c) | 200 | Recorded candidate is 188 bytes. [Alternative field order](levels/alternatives/func_L05_0042BCE0.c) rechecked on 2026-10-15: 188 bytes, 0/4 placements; saved-register set and frame differ. |
 | [`func_L05_00432080`](levels/func_L05_00432080.c) | 208 | M15 2026-10-26: with -fno-strength-reduce (as func_L05_00432158) the three-quadword copy loop counts up like retail (slti 3): 208/208 under -O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier -fno-strength-reduce, 18 lines, all register choice and store schedule (best of 24 store orders x 2 loop forms). Earlier (M3): cc1 reversed the loop under every counter type.
-| [`func_L05_004424B8`](levels/func_L05_004424B8.c) | 168 | Recorded candidate is 180 bytes. [Four-argument call alternative](levels/alternatives/func_L05_004424B8.c) rechecked on 2026-10-15: 168 bytes, 0/4 placements; first instruction difference at +0x14. |
 | [`func_L05_00445F90`](levels/func_L05_00445F90.c) | 160 | Recorded candidate is 164 bytes; size does not match retail. |
 | [`func_L07_003F68F0`](levels/func_L07_003F68F0.c) | 108 | Recorded G8 candidate is 128 bytes; size does not match retail. |
 | [`func_L07_003F6CF0`](levels/func_L07_003F6CF0.c) | 208 | Recorded G8 candidate is 220 bytes; size does not match retail. |
@@ -455,7 +454,6 @@ of semantic correctness or matching credit without a strict linked build.
 | [`func_L07_0040F6B8`](levels/func_L07_0040F6B8.c) | 164 | Recorded G8 instruction mismatch at +0x30. |
 | [`func_L11_00340500`](levels/func_L11_00340500.c) | 72 | Recorded instruction mismatch at +0x8: retail copies the incoming pointer into `$s1` between the two callee-saved stores, this cc1 copies it after them; three source spellings (plain, a local for `a0 + 0x10`, a local per pointer) all give the same bytes |
 | [`func_L11_003F2C28`](levels/func_L11_003F2C28.c) | 240 | Recorded G8 candidate is 252 bytes; size does not match retail. |
-| [`func_L12_00300138`](levels/func_L12_00300138.c) | 108 | Recorded candidate is 100 bytes; size does not match retail. |
 | [`func_L13_00409840`](levels/func_L13_00409840.c) | 348 | M3 2026-10-26: rewritten (the old draft mixed up the arms): 348/348, 13 register-only lines, only the two parameters swap $s1/$s2. Callee func_L13_004094C0 is func_L00_003BFF58. In the permuter queue. |
 | [`func_L13_0040DE50`](levels/func_L13_0040DE50.c) | 228 | M3 2026-10-26: needs a -G8 unit (sda); 228/228, register allocation only ($s0-$s2 roles, $f20/$f21). In the permuter queue. |
 | [`func_L14_003DE908`](levels/func_L14_003DE908.c) | 136 | Recorded candidate is 132 bytes; size does not match retail. |

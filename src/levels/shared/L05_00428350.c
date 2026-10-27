@@ -139,9 +139,6 @@ INCLUDE_ASM("asm/levels", func_L05_00441F30);
 
 INCLUDE_ASM("asm/levels", func_L05_00442398);
 
-/* Blends the negated angle into the object's transform through the level's matrix table. */
-INCLUDE_ASM("asm/levels", func_L05_004424B8);
-
 INCLUDE_ASM("asm/levels", func_L05_00442560);
 
 /* func_L05_00442720 is matched in L05_00442720.c (built with -mno-split-addresses). */
