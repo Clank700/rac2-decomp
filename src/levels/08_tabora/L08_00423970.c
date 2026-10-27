@@ -254,7 +254,6 @@ INCLUDE_ASM("asm/levels", func_L08_00426730);
 
 INCLUDE_ASM("asm/levels", func_L08_00429238);
 
-INCLUDE_ASM("asm/levels", func_L08_00429350);
 
 extern s32 D_L08_001B39A0[];
 extern s32 D_L08_001B39E0[];
