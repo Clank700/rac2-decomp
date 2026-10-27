@@ -1,14 +1,6 @@
-/* func_L08_0042F938 (392 bytes, 1 place) - NEAR MISS, 2 instructions (M22, 2026-10-26).
- *
- * Measured as its own unit src/levels/08_tabora/L08_0042F938-g8.c with
- * "-O2 -G8 -ffunction-sections -frac2-zero-ti-por" (the por qzero of the vector).
- * Ported from func_L06_00402440 / func_L20_00449178.  Every word matches except
- * the two constants of func_L00_0032A258's stack arguments: retail puts 0xFFFF in
- * $v1 and 0xFF in $v0, this C gives the siblings' $v0/$v1.  Not moved by 255,
- * a char parameter, u16/u8 parameters or the add's operand order.  Queued on the
- * permuter.
- */
-#include "include_asm.h"
+/* func_L08_0042F938 (392 bytes): a moby's three states, idle, waiting for its model, and
+   burst (ported from func_L06_00402440 / func_L20_00449178). func_0032C700 returns a
+   pointer; declared void it swaps the two stack constants of the next call. */
 #include "common.h"
 
 typedef int TI128 __attribute__((mode(TI)));
@@ -16,7 +8,7 @@ typedef int TI128 __attribute__((mode(TI)));
 extern void func_002A7750(void *, int, int);
 extern int func_002A9640(void *, int, int);
 extern void func_00282CC0(void *, void *, void *);
-extern void func_0032C700(void *, int, int, int, int, int, int, int, float, float, int, int, int, int);
+extern void *func_0032C700(void *, int, int, int, int, int, int, int, float, float, int, int, int, int);
 extern void func_L00_0032A258(void *, void *, void *, void *, int, int, int, int,
                               int, int, int);
 extern void func_L00_00326110(void *, int, float);
