@@ -322,7 +322,6 @@ void func_L00_002D3CF8(float *dst, void *src, float scale)
 
 INCLUDE_ASM("asm/levels", func_L00_002D3D98);
 
-INCLUDE_ASM("asm/levels", func_L00_002D3EA8);
 
 #ifndef RAC2_T_ENTRY_262570
 #define RAC2_T_ENTRY_262570

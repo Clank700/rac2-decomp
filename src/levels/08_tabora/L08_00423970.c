@@ -45,7 +45,6 @@ INCLUDE_ASM("asm/levels", func_L08_00424FF8);
    fd=$f0 fs=$f0 ft=$f20). See nonmatching/levels/func_L08_00425328.c - this cc1 has no
    max.s pattern, so the ternary and the if-assignment both come out eight bytes larger. */
 
-INCLUDE_ASM("asm/levels", func_L08_00425398);
 
 void func_L08_00425448(char *a0) {
     char *s0;

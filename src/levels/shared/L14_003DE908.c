@@ -15,7 +15,6 @@ extern int D_L14_001BF958;
 extern char *D_L14_001FE1C0[];
 extern f32 func_00282E80(char *, char *);
 
-INCLUDE_ASM("asm/levels", func_L14_003DE908);
 
 /* func_L14_003F0E68 is built with -G8: see L14_003DE908-g8.c. */
 

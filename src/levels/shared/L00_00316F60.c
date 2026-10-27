@@ -272,7 +272,6 @@ int func_L00_0031C998(int from, int to, float fraction)
 }
 
 
-INCLUDE_ASM("asm/levels", func_L00_0031CDD0);
 
 
 int func_L00_0031D620(int a0, int a1, float x) {
