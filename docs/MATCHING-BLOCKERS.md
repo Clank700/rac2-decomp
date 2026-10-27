@@ -2322,7 +2322,12 @@ their own addresses, so the repair should be carried to all three releases toget
 (`tools/carry.py --entries`). The same body, with the same 16 leading bytes, is the row
 `func_L05_00367340` (pointer at `05:0029D4F0` -> `0x00367350`) and `func_L20_0036AE68`
 (pointer at `20:00292390` -> `0x0036AE78`), likewise unreferenced in their leading
-words; once all three are corrected they may be one shared function.
+words. Measured with all three `LEVEL_ENTRY_OFFSETS` entries and the three
+`FUNCTION_RESIDUES` above applied: `catalogue` changes exactly those six rows and the three
+bodies stay separate rows (272 bytes each; their data references differ), unit tests pass,
+but `tests/check_repository.py` reports that the PAL and v2.00 catalogues still name all six
+rows, so the repair needs `tools/carry.py` with those releases' dumps. The L20 row is also
+described as a catalogue defect in `nonmatching/README.md`.
 
 ## Shared hero table and object helpers
 
