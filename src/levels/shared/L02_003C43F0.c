@@ -933,7 +933,6 @@ void func_L02_004012A0(char *a0) {
 
 /* func_L02_004013C0 lives in the -g8 sibling: it reads a $gp-relative scalar. */
 
-INCLUDE_ASM("asm/levels", func_L02_00401480);
 
 INCLUDE_ASM("asm/levels", func_L02_00401530);
 
