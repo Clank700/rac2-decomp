@@ -145,7 +145,6 @@ INCLUDE_ASM("asm/levels", func_L05_00442560);
 
 /* func_L05_004427A8 is defined in L05_004427A8-flags.c. */
 
-INCLUDE_ASM("asm/levels", func_L05_00442828);
 
 INCLUDE_ASM("asm/levels", func_L05_00442880);
 
