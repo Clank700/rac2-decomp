@@ -427,7 +427,6 @@ INCLUDE_ASM("asm/levels", func_L00_00428588);
 
 INCLUDE_ASM("asm/levels", func_L00_004287E8);
 
-INCLUDE_ASM("asm/levels", func_L00_00428CE0);
 
 /* runs a fixed pair of callees on the same object handle */
 void func_L00_00428EB0(char *a0)
