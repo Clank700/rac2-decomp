@@ -1,3 +1,12 @@
+src/levels/shared/L04_0043BEE8-g8.c	-O2 -G8 -ffunction-sections -mno-split-addresses
+src/levels/shared/L03_003CC238.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por -g
+src/game/0034A808.c	-O2 -G0 -ffunction-sections -frac2-hazard-labels
+src/levels/shared/L00_003C58E8-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/shared/L05_003D0960-g8.c	-O2 -G8 -ffunction-sections -g -frac2-qcopy
+src/levels/shared/L04_0035F3E0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/levels/shared/L04_00363690-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy
+src/game/00312EB0-qcopy.c	-O2 -G0 -ffunction-sections -frac2-qcopy -ffast-math
+src/game/002AA548.c	-O2 -G0 -ffunction-sections -g
 src/game/0032EB28-g8.c	-O2 -G8 -ffunction-sections -Wa,-G32
 src/game/002BF6F0.c	-O2 -G0 -ffunction-sections -g
 src/game/002AA800.c	-O2 -G0 -ffunction-sections -g -ffast-math
