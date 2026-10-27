@@ -428,7 +428,6 @@ void func_002AB8C0(void *owner, u8 *obj)
 }
 
 
-INCLUDE_ASM("asm/game", func_002ABB18);
 
 
 extern char *g_mobyTableBase __attribute__((sda));
