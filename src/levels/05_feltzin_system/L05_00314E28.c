@@ -262,8 +262,6 @@ char *func_L05_00416D68(char *a0, int a1)
     return obj;
 }
 
-INCLUDE_ASM("asm/levels", func_L05_00416E08);
-
 /* Builds the sub-record's three planes and blends them onto the object's transform. */
 
 /* Blends the sub-record into the object's transform once three guards clear. */
