@@ -435,7 +435,6 @@ void func_L00_002B54F8(float x, float y) {
         func_00282F20(p, p, r - y);
 }
 
-INCLUDE_ASM("asm/levels", func_L00_002B5590);
 
 INCLUDE_ASM("asm/levels", func_L00_002B55F0);
 

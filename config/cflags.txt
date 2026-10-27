@@ -1282,3 +1282,11 @@ src/levels/09_dobbo/L09_00403700.c	-O2 -G0 -ffunction-sections
 src/levels/shared/L03_0042B868-q.c	-O2 -G0 -ffunction-sections -frac2-qcopy -frac2-qcopy-barrier
 src/game/00303DA8.c	-O2 -G0 -ffunction-sections
 src/levels/07_siberius/L07_003F8C38.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L00_002FC058-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L08_0036F030.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L08_0036EFC8.c	-O2 -G0 -ffunction-sections
+src/levels/shared/L03_003E3750-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L00_003B5210-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L00_003B0CE8-g8.c	-O2 -G8 -ffunction-sections
+src/levels/shared/L01_002F1FD0.c	-O2 -G0 -ffunction-sections -frac2-zero-ti-por
+src/levels/shared/L00_002B5590.c	-O2 -G0 -ffunction-sections
