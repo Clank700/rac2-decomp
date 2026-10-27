@@ -69,7 +69,7 @@ INCLUDE_ASM("asm/levels", func_L10_0042BCA0);
 
 /* func_L10_0042BE20 is defined in L10_00424028-g8.c (this unit has no $gp access for it). */
 
-INCLUDE_ASM("asm/levels", func_L10_0042BEE0);
+/* func_L10_0042BEE0 is in the sibling file L10_00424028-g8.c (it reads $gp data). */
 
 INCLUDE_ASM("asm/levels", func_L10_0042DF10);
 
