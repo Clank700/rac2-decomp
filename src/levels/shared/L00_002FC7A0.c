@@ -1048,8 +1048,6 @@ void func_L00_00310C88(LvlSlotCtx *ctx, LvlSlotNode **handle)
 
 INCLUDE_ASM("asm/levels", func_L00_00310D30);
 
-INCLUDE_ASM("asm/levels", func_L00_00311080);
-
 INCLUDE_ASM("asm/levels", func_L00_003110E8);
 
 /* scales a float field by 1/1024, fills a 64-byte stack buffer from the object, then applies three per-element helper calls over n 64-byte records. */
